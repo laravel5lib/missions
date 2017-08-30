@@ -1,9 +1,32 @@
 @extends('site.layouts.default')
-
+@section('scripts')
+<script>
+$('.launch-modal').on('click', function(e){
+    e.preventDefault();
+    $( '#' + $(this).data('video-modal') ).modal();
+});
+$('.video-modal').on('hide.bs.modal', function(e) {    
+    var $if = $(e.delegateTarget).find('iframe');
+    var src = $if.attr("src");
+    $if.attr("src", '/empty.html');
+    $if.attr("src", src);
+});
+</script>
+@endsection
 @section('content')
 <div class="content-page-header" style="max-height:500px;">
     <img class="img-responsive" src="images/projects/projects-header.jpg" alt="Projects">
 </div><!-- end c-page-header -->
+<div class="gray-lighter-bg">
+    <div class="content-section" style="padding:0;">
+      <div class="row" style="margin-left:0;margin-right:0;">
+        <div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center home-vision">
+          <h4>Bold opportunity, it's yours to lose. <a style="margin-left:10px;" class="btn btn-primary-hollow btn-sm launch-modal" data-toggle="modal" data-target="#video-modal"><i class="fa fa-play"></i></a></h4>
+        </div><!-- end col -->
+      </div><!-- end row -->
+    </div><!-- end content-section -->
+  <hr style="margin-top:0;margin-bottom:0;" class="divider xs">
+</div><!-- end white-bg -->
 <div class="white-bg">
 	<div class="container">
 		<div class="content-section">
@@ -23,7 +46,7 @@
 					<hr class="divider lg inv visible-xs">
 					</div><!-- end col -->
 					<div class="col-sm-6 col-md-offset-2">
-						<img class="img-responsive" src="images/projects/need-thumb.png" alt="Need">
+						<a style="margin-left:10px;" class="launch-modal" data-toggle="modal" data-target="#video-modal"><img class="img-responsive" src="images/projects/need-thumb.png" alt="Need"></a>
 					</div><!-- end col -->
 				</div><!-- end row -->
 		</div><!-- end content-section -->
@@ -128,4 +151,25 @@
 		</div><!-- end content-section -->
 	</div><!-- end container -->
 </div><!-- end white-bg -->
+<!-- MODAL -->
+<div class="modal video-modal fade" id="video-modal" tabindex="-1" role="dialog" aria-labelledby="modal-video-label">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-video">
+                    <div class="video-outer">
+                      <div class="video-inner">
+                        <iframe src="https://player.vimeo.com/video/223502805?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

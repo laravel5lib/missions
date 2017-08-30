@@ -8,6 +8,10 @@ return [
                 'url' => 'details'
             ],
             [
+                'label' => 'My Squad',
+                'url' => 'squads'
+            ],
+            [
                 'label' => 'Costs / Payments',
                 'url' => 'dues'
             ],

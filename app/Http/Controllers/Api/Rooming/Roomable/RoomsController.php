@@ -67,7 +67,7 @@ class RoomsController extends Controller
 
     public function destroy($roomableType, $roomableId, $id)
     {
-        DB::transaction(function () use ($request, $roomableType, $roomableId, $id) 
+        DB::transaction(function () use ($roomableType, $roomableId, $id)
         {
             $this->room
                  ->filter([$roomableType => $roomableId])

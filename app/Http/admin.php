@@ -19,6 +19,7 @@ Route::get('campaigns', 'CampaignsController@index');
 Route::get('campaigns/create', 'CampaignsController@create');
 Route::get('campaigns/{id}/edit', 'CampaignsController@edit');
 Route::get('campaigns/{id}/{tab?}', 'CampaignsController@show');
+Route::get('campaigns/{id}/{tab?}/{tabId}', 'CampaignsController@show');
 
 Route::get('trips/{id}/{tab?}', 'TripsController@show');
 Route::resource('trips', 'TripsController');

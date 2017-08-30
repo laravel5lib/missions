@@ -21,6 +21,7 @@ class ActivitiesController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -36,12 +37,12 @@ class ActivitiesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  $request
      * @return \Illuminate\Http\Response
      */
     public function store(ActivityRequest $request)
     {
-        $activity = $this->activity->create([
+        $activity = $this->activity->firstOrCreate([
             'name' => $request->json('name'),
             'description' => $request->json('description'),
             'occurred_at' => $request->json('occurred_at'),
@@ -49,6 +50,18 @@ class ActivitiesController extends Controller
             'participant_type' => $request->json('participant_type'),
             'activity_type_id' => $request->json('activity_type_id')
         ]);
+
+        if ($request->json('itinerary_id')) {
+            $activity->itineraries()->sync([$request->json('itinerary_id')], false);
+        }
+
+        if ($request->json('transport_id')) {
+            $activity->transports()->sync([$request->json('transport_id')], false);
+        }
+
+        if ($request->json('hub_id')) {
+            $activity->hubs()->sync([$request->json('hub_id')], false);
+        }
 
         return $this->response->item($activity, new ActivityTransformer);
     }
@@ -69,8 +82,8 @@ class ActivitiesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  $request
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
     public function update(ActivityRequest $request, $id)
@@ -86,13 +99,25 @@ class ActivitiesController extends Controller
             'activity_type_id' => $request->json('activity_type_id', $activity->activity_type_id)
         ]);
 
+        if ($request->json('itinerary_id')) {
+            $activity->itineraries()->sync([$request->json('itinerary_id')], false);
+        }
+
+        if ($request->json('transport_id')) {
+            $activity->transports()->sync([$request->json('transport_id')], false);
+        }
+
+        if ($request->json('hub_id')) {
+            $activity->hubs()->sync([$request->json('hub_id')], false);
+        }
+
         return $this->response->item($activity, new ActivityTransformer);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

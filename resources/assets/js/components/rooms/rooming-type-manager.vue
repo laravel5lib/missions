@@ -62,6 +62,10 @@
 				</div>
 			</div>
 
+			<div class="col-xs-12 text-center">
+				<pagination :pagination.sync="roomTypesPagination" :callback="getRoomTypes"></pagination>
+			</div>
+
 		</div>
 		<div class="col-md-7 col-md-pull-5">
 			<template v-if="currentType">
@@ -125,6 +129,7 @@
                 editTypeMode: false,
                 showTypeDeleteModal: false,
                 roomTypes: [],
+                roomTypesPagination: { current_page: 1 },
                 roomTypeResource: this.$resource('rooming/types{/id}')
             }
         },
@@ -203,7 +208,8 @@
                     });
             },
             getRoomTypes() {
-                return this.roomTypeResource.get({campaign: this.campaignId}).then(function (response) {
+                return this.roomTypeResource.get({campaign: this.campaignId, page: this.roomTypesPagination.current_page }).then(function (response) {
+                    this.roomTypesPagination = response.body.meta.pagination;
                     return this.roomTypes = response.body.data;
                 }, function (error) {
                     console.log(error);

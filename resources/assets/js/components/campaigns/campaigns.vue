@@ -6,8 +6,8 @@
 				<div class="carousel-caption">
 					<h6 class="text-uppercase">Nicaragua</h6>
 					<h3>1Nation1Day 2017</h3>
-					<p>1Nation1Day Nicaragua will be the largest global missions outreach in history.</p>
-					<a href="/1n1d17" class="btn btn-primary btn-sm">More Details</a>
+					<p>July 29, 2017 marked the day that the hand of God touched the nation of Nicaragua in epic proportions.</p>
+					<a href="http://1nation1day.com" class="btn btn-primary btn-sm">Learn About 1N1D17</a>
 				</div>
 			</div>
 		</div>
@@ -16,16 +16,18 @@
 		</div>
 	</div><!-- end carousel -->
 	<hr class="divider inv xlg">
-	<div class="container">
-		<div class="col-xs-12">
-			<h4>Current Campaigns</h4>
-			<hr class="divider">
-		</div>
-		<div class="col-xs-6 text-right">
-			<a v-if="campaigns.length > 3" @click="seeAll" class="btn btn-primary btn-sm">See All</a>
-		</div>
-	</div>
-	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+
+	<div class="container" v-if="campaigns.length < 1">
+		<div class="col-sm-8 col-sm-offset-2 text-center">
+			<h3>Looking for 2018 trips?</h3>
+			<hr class="divider inv sm">
+			<p>Be the first on the list to know about 2018 trips.</p>
+			<hr class="divider inv">
+			<a href="http://eepurl.com/cZnArz" target="_blank" class="btn btn-primary">Notify Me!</a>
+		</div><!-- end col -->
+	</div><!-- end container -->
+
+	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;" v-if="campaigns.length > 0">
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<div class="col-xs-12 col-sm-6 col-md-4" v-for="campaign in campaigns|limitBy campaignsLimit" style="display:flex">
 			<div class="panel panel-default">
@@ -472,7 +474,7 @@
 			    e.preventDefault();
 			    $( '#' + $(this).data('video-modal') ).modal();
 			});
-			$('.video-modal').on('hide.bs.modal', function(e) {    
+			$('.video-modal').on('hide.bs.modal', function(e) {
 			    var $if = $(e.delegateTarget).find('iframe');
 			    var src = $if.attr("src");
 			    $if.attr("src", '/empty.html');

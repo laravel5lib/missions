@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<validator name="TravelTransport" v-if="transport">
+		<div v-if="transport">
+			<validator name="TravelTransport">
 				<form id="TravelTransportForm" novalidate >
 					<section>
 						<div class="form-group" v-error-handler="{ value: transport, client: 'transporttype' }">
@@ -18,22 +19,28 @@
 
 						<template v-if="transport && transport.type === 'flight'">
 							<div class="form-group" v-error-handler="{ value: transport.name, client: 'airline' }">
-								<label for="travel_methodA">Airline</label>
-								<v-select @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
-								          :value.sync="selectedAirlineObj" :options="airlinesOptions" label="name"
-								          placeholder="Select Airline" v-if="editMode"></v-select>
+								<label v-if="!manualAirlineData" for="travel_methodA">Airline</label>
+								<template v-if="editMode">
+									<v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
+									          :value.sync="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
+									          placeholder="Select Airline"></v-select>
+									<select v-if="!manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate:airline="['required']"
+									        v-model="transport.name">
+										<option :value="airline.name" v-for="airline in UTILITIES.airlines">
+											{{airline.extended_name | capitalize}}
+										</option>
+									</select>
+									<label><input type="checkbox" v-model="manualAirlineData"> Airline not listed</label>
+								</template>
 								<p v-else>{{ transport.name | uppercase }}</p>
-								<select class="form-control hidden" name="airline" id="airline" v-validate:airline="['required']"
-								        v-model="transport.name">
-									<option :value="airline.name" v-for="airline in airlinesOptions">
-										{{airline.name | capitalize}}
-									</option>
-									<option value="other">Other</option>
-								</select>
-								<template v-if="selectedAirlineObj && selectedAirlineObj.name === 'Other'">
+								<template v-if="manualAirlineData && editMode">
 									<div class="form-group">
 										<label for="">Airline</label>
 										<input type="text" class="form-control" v-model="transport.name" v-if="editMode">
+										<p v-else>{{ transport.name | uppercase }}</p>
+									<div class="form-group">
+										<label for="">Callsign</label>
+										<input type="text" class="form-control" v-model="transport.call_sign" v-if="editMode">
 										<p v-else>{{ transport.name | uppercase }}</p>
 									</div>
 								</template>
@@ -92,17 +99,20 @@
 						</template>
 					</section>
 				</form>
-		</validator>
+			</validator>
+		</div>
+
 	</div>
 </template>
 <style></style>
 <script type="text/javascript">
 	import _ from 'underscore';
     import errorHandler from'../error-handler.mixin';
+    import utilities from'../utilities.mixin';
     import vSelect from 'vue-select';
     export default{
         name: 'travel-transport',
-        mixins: [errorHandler],
+        mixins: [utilities, errorHandler],
         components: {vSelect},
         props: {
             reservationId: {
@@ -135,7 +145,6 @@
 
                 //logic variables
                 travelTypeOptions: ['flight', 'bus', 'vehicle', 'train'],
-                airlinesOptions: [],
                 trainOptions: [
                     'Amtrak', 'BNSF Railway', 'Canadian National Railway', 'Canadian Pacific Railway',
                     'CSX Transportation', 'Kansas City Southern Railway', 'Norfolk Southern Railway',
@@ -143,6 +152,7 @@
                 ],
                 vehicleOptions: ['Taxi', 'Uber', 'Metro Car', 'Personal', 'Other'],
                 selectedAirlineObj: null,
+                manualAirlineData: false,
 	            LABELS: {
                     method: '',
 		            vehicle: '',
@@ -187,24 +197,6 @@
             }
         },
         methods: {
-            getAirlines(search, loading){
-                loading ? loading(true) : void 0;
-                return this.$http.get('utilities/airlines', { params: {search: search, sort: 'name'} }).then(function (response) {
-                    this.airlinesOptions = response.body.data;
-                    this.airlinesOptions.push({
-	                    name: 'Other',
-	                    call_sign: ''
-                    });
-                    if (loading) {
-                        loading(false);
-                    } else {
-                        return this.airlinesOptions;
-                    }
-                },
-                    function (response) {
-                        console.log(response);
-                    });
-            },
             getAirline(reference){
                 return this.$http.get('utilities/airlines/' + reference).then(function (response) {
                     return response.body.data;
@@ -225,14 +217,21 @@
         ready(){
             let self = this;
             let promises = [];
-            promises.push(this.getAirlines(this.transport.name, false));
+            if (this.transport.type === 'flight')
+	            promises.push(this.getAirlines(this.transport.name, false));
 
             Promise.all(promises).then(function (values) {
                 // Update state data
                 if (self.isUpdate) {
                     // select airline
-                    self.selectedAirlineObj = _.findWhere(self.airlinesOptions, { name: self.transport.name });
-                    //console.log(self.selectedAirlineObj);
+                    let airline = _.findWhere(self.UTILITIES.airports, { name: self.transport.name });
+                    if (airline) {
+                        self.selectedAirportObj = airline
+                    } else {
+                        if (self.editMode && self.transport.name !== '')
+                            self.manualAirlineData = true;
+                    }
+	                //console.log(self.selectedAirlineObj);
                 }
                 self.$nextTick(function () {
                     if (_.isFunction(self.$validate))

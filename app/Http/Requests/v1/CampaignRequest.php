@@ -50,6 +50,10 @@ class CampaignRequest extends FormRequest
             'description'      => 'string|max:120',
             'published_at'     => 'date',
             'tags'             => 'array',
+            'publish_squads'   => 'boolean',
+            'publish_rooms'    => 'boolean',
+            'publish_regions'  => 'boolean',
+            'publish_transports' => 'boolean'
         ];
 
         return $rules = $required + $optional;

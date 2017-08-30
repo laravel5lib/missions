@@ -285,7 +285,8 @@
                     cardholder: null,
                     number: null,
                     exp_year: null,
-                    exp_month: null
+                    exp_month: null,
+                    zip: null
                 },
                 monthList: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
                 transfer_type: 'to',
@@ -360,7 +361,8 @@
                     number: null,
                     cvc: null,
                     exp_month: null,
-                    exp_year: null
+                    exp_year: null,
+                    zip: null
                 };
             },
             cancel() {
@@ -446,6 +448,7 @@
                     data.type = this.transaction.type;
                     data.amount = this.transaction.amount;
                     data.comment = this.transaction.comment;
+                    data.anonymous = this.transaction.anonymous;
                     data.fund_id = this.fundId;
                     if (this.selectedDonor && this.selectedDonor.id) {
                         data.donor_id = this.selectedDonor.id;
@@ -459,6 +462,7 @@
                     }
                     if (this.transaction.details.type == 'card') {
                         data.card = this.card;
+                        data.card.zip = this.selectedDonor.zip
                     }
                 }
 

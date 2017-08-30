@@ -31,7 +31,7 @@
                 <div class="panel">
                   <img class="img-responsive" src="images/about-mm/nations-thumb.jpg" alt="">
                   <div class="panel-body">
-                    <h6 class="text-uppercase text-center">1Nation1Day</h6> 
+                    <h6 class="text-uppercase text-center">1Nation1Day</h6>
                   </div>
                 </div>
               </div><!-- end col -->
@@ -73,7 +73,7 @@
                 <div class="panel">
                   <img class="img-responsive" src="images/about-mm/trafficking-thumb.jpg" alt="">
                   <div class="panel-body">
-                    <h6 class="text-uppercase text-center">Trafficking Rescue</h6> 
+                    <h6 class="text-uppercase text-center">Trafficking Rescue</h6>
                   </div>
                 </div>
               </div><!-- end col -->
@@ -91,7 +91,7 @@
                 <div class="panel">
                   <img class="img-responsive" src="images/about-mm/leadership-thumb.jpg" alt="">
                   <div class="panel-body">
-                    <h6 class="text-uppercase text-center">Leadership Centers</h6> 
+                    <h6 class="text-uppercase text-center">Leadership Centers</h6>
                   </div>
                 </div>
               </div><!-- end col -->
@@ -133,11 +133,11 @@
               <li class="text-primary-darker">'09 Managua, Nicaragua</li>
               <li class="text-primary-darker">'09 Petionville, Haiti</li>
               <li class="text-primary-darker">'10 Kurnool, India</li>
+              <li class="text-primary-darker">'10 San Cristobal, Dominican Rep.</li>
             </ul>
           </div><!-- end col -->
           <div class="col-md-4 col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
               <ul class="list-unstyled">
-                <li class="text-primary-darker">'10 San Cristobal, Dominican Rep.</li>
                 <li class="text-primary-darker">'10 Lima, Peru</li>
                 <li class="text-primary-darker">'10 Warangal, India</li>
                 <li class="text-primary-darker">'11 Meteti, Panama</li>
@@ -154,12 +154,12 @@
                 <li class="text-primary-darker">'12 Lima, Peru</li>
                 <li class="text-primary-darker">'12 Hyderabad, India</li>
                 <li class="text-primary-darker">'13 Patna, India</li>
+                <li class="text-primary-darker">'13 1Nation1Day Honduras</li>
+                <li class="text-primary-darker">'13 Hyderabad, India</li>
               </ul>
           </div><!-- end col -->
           <div class="col-md-4 col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
               <ul class="list-unstyled">
-                <li class="text-primary-darker">'13 1Nation1Day Honduras</li>
-                <li class="text-primary-darker">'13 Hyderabad, India</li>
                 <li class="text-primary-darker">'14 Yoro, Honduras</li>
                 <li class="text-primary-darker">'14 Roatan, Honduras</li>
                 <li class="text-primary-darker">'14 Kumasi, Ghana</li>
@@ -174,6 +174,8 @@
                 <li class="text-primary-darker">‘16 Honduras 1N1D Follow up</li>
                 <li class="text-primary-darker">‘16 Nepal</li>
                 <li class="text-primary-darker">‘16 Christmas in India</li>
+                <li class="text-primary-darker">‘17 India</li>
+                <li class="text-primary-darker">‘17 1Nation1Day Nicaragua</li>
               </ul>
           </div><!-- end col -->
         </div><!-- end row -->
@@ -243,8 +245,8 @@
           </div>
           <div class="col-sm-6 col-sm-offset-1 col-xs-10 col-xs-offset-1">
             <h1 class="text-primary">Our Founders</h1>
-            <p>Dominic Russo is a speaker, a humanitarian, and an innovator in international missions. At the young age of 20, Dominic founded Missions.Me and began organizing strategic outreach campaigns in cities across Latin America. These multifaceted campaigns include hundreds of missionary volunteers, large-scale relief projects, and collaborative partnerships with local political and religious leaders. In 2011, Dominic launched the “1Nation1Day” vision in Honduras – a project that attracted the largest foreign missions team in history and was officially declared a national holiday by the Honduran President. On the week of July 20, 2013 more than 1 million Hondurans were personally reached through the 1Nation1Day outreaches and every national newspaper announced “We Have A New Honduras.”</p>
-            <p id="collapseOne" class="panel-collapse collapse">Dominic authored the book Do Not Say I Am Too Young to motivate people to seize their destiny regardless of their age. Dominic’s story reverberates with inspiration and stirs hearts to dream of a life fully dedicated to impacting people. In 2010, Dominic’s wife Lindsay founded Angel House – an organization that has provided 72 permanent rescue homes for over 1,800 abandoned orphans in India and a safe house for 30 victims of human trafficking in Nepal. Together, they reside in Rochester, Michigan with their sons Mason and Jude.</p>
+            <p>Dominic Russo is a speaker, a humanitarian, and an innovator in international missions. At the young age of 20, Dominic founded Missions.Me and began organizing strategic outreach campaigns in cities across Latin America. These multifaceted campaigns include hundreds of missionary volunteers, large-scale relief projects, and collaborative partnerships with local political and religious leaders. In 2011, Dominic launched the “<a href="http://1nation1day.com">1Nation1Day</a>” vision in Honduras – a project that attracted the largest foreign missions team in history and was officially declared a national holiday by the Honduran President. On the week of July 20, 2013 more than 1 million Hondurans were personally reached through the <a href="http://1nation1day.com">1Nation1Day</a> outreaches and every national newspaper announced “We Have A New Honduras.”</p>
+            <p id="collapseOne" class="panel-collapse collapse">Dominic authored the book Do Not Say I Am Too Young to motivate people to seize their destiny regardless of their age. Dominic’s story reverberates with inspiration and stirs hearts to dream of a life fully dedicated to impacting people. In 2010, Dominic’s wife Lindsay founded <a href="http://angelhouse.me">Angel House</a> – an organization that has provided 136 Angel Houses, home to over 3,100 children in India and a safe house for 30 victims of human trafficking in Nepal. Together, they reside in Southern California with their sons Mason and Jude.</p>
             <h6 class="bold uppercaseit"><a class="branding-red" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Read More <i class="fa fa-angle-down"></i></a></h6>
             <ul class="list-unstyled list-inline">
               <li><h6>D &middot;</h6></li>
@@ -297,7 +299,7 @@
                   </div>
                   <div id="collapseThree" class="panel-collapse collapse">
                     <div class="panel-body">
-                      <p class="small">From print marketing to video production, Matt has had his hand in every creative project Missions.Me has produced since its foundation.  Along with a passion for media, Matt strangely has a large space in his heart for missions logistics.  Getting teams from the comfort of their home to the hurting peoples of the world, then handing them compelling content to impact hearts and minds is what gets him hyped. After the 2013 1Nation1Day Honduras project, Matt not only could tell you the exact driving distance from Ocotepeque to Choluteca but he also moved into a new role as Chief Operations Officer.  Matt graduated from Oral Roberts University with a bachelor's degree in Business Finance.  Matt’s wife Melissa serves as a M.M Project Director and together they reside in Oakland, MI with their two kids Emma and Brady.</p>
+                      <p class="small">From print marketing to video production, Matt has had his hand in every creative project Missions.Me has produced since its foundation. Along with a passion for media, Matt strangely has a large space in his heart for missions logistics. Getting teams from the comfort of their home to the hurting peoples of the world, then handing them compelling content to impact hearts and minds is what gets him hyped. After the 2013 1Nation1Day Honduras project, Matt not only could tell you the exact driving distance from Ocotepeque to Choluteca but he also moved into a new role as Chief Operations Officer. Matt graduated from Oral Roberts University with a bachelor's degree in Business Finance. Matt’s wife Melissa serves as a M.M Project Director and together they reside in San Clemente, CA with their three kids Emma, Brady, and Ellie.</p>
                     </div><!-- end panel-bio -->
                   </div><!-- end panel-collapse -->
                 </div><!-- end panel -->
@@ -312,7 +314,7 @@
                   </div>
                   <div id="collapseFour" class="panel-collapse collapse">
                     <div class="panel-body">
-                      <p class="small">Jedidiah is an emerging voice with a desire to ignite passionate cultural catalysts and activate the destinies of this generation’s world changers. Jedidiah travels both nationally and internationally ministering at churches, schools, conferences, and city-wide crusades.  With a heart and call to disciple nations Jedidiah joined Missions.Me as a director in 2012 – A missions organization that annually sends thousands of people on life-transforming missions trips worldwide and organizes innovative international outreaches and humanitarian campaigns. Jedidiah and his wife, Amber, their beautiful daughter, Aniya, and son Daylen serve locally as Pastors at Oakland Church in Rochester, MI.</p>
+                      <p class="small">Jedidiah is an emerging voice with a desire to ignite passionate cultural catalysts and activate the destinies of this generation’s world changers. Jedidiah travels both nationally and internationally ministering at churches, schools, conferences, and city-wide crusades. With a heart and call to disciple nations Jedidiah joined Missions.Me as a director in 2012. Jedidiah and his wife, Amber, their beautiful children, Aniya, Daylen Justice, and Cayden James live in sunny San Clemente, CA.</p>
                     </div><!-- end panel-bio -->
                   </div><!-- end panel-collapse -->
                 </div><!-- end panel -->
@@ -337,12 +339,12 @@
                   <img class="img-responsive" src="images/about-mm/staff/gonzales.jpg">
                   <div class="panel-body">
                     <h5>Libby Gonzales</h5>
-                    <p class="small">Director of Team Relations</p>
+                    <p class="small">Director Of Team Relations</p>
                     <h6 class="bold uppercaseit"><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix">Read Bio</a></h6>
                   </div>
                   <div id="collapseSix" class="panel-collapse collapse">
                     <div class="panel-body">
-                      <p class="small">Libby has had a deep passion for the nations since the age of 14, when she went on her first missions trip. Since then, she has traveled to over 30 countries as a missionary, group leader, team leader, photographer and project director. She has been apart of Missions.Me for 9 years, both volunteering and on staff. Some of her favs are Starbucks iced coffees, chap stick, chocolate, country music, and flowers. Libby resides with her husband and 2 kids, Ruby and Jax in Lake Orion, Michigan.</p>
+                      <p class="small">Libby has had a deep passion for the nations since the age of 14, when she went on her first missions trip. Since then, she has traveled to over 30 countries as a missionary, group leader, team leader, photographer and project director. She has been apart of Missions.Me for over 9 years, both volunteering and on staff. Some of her favs are Starbucks iced coffees, chap stick, chocolate, country music, and flowers. Libby resides with her husband and 2 kids, Ruby and Jax in Lake Orion, MI.</p>
                     </div><!-- end panel-body -->
                   </div><!-- end panel-collapse -->
                 </div><!-- end panel -->
@@ -357,7 +359,7 @@
                   </div>
                   <div id="collapseSeven" class="panel-collapse collapse">
                     <div class="panel-body">
-                      <p class="small">The only thing Neil loves more than turning caffeine into code is his passion for the church and it's global mission. Neil is the director of web development and actively volunteers at Oakland Church. He loves to read, watch documentaries, and might be a bit of a Star Wars fan. Born and raised in sunny San Diego, CA he now resides in Rochester, MI with his wife, Cathleen.</p>
+                      <p class="small">The only thing Neil loves more than turning caffeine into code is his passion for the church and it's global mission. Neil is the director of web development and actively volunteers at his local church. He loves to read, watch documentaries, and might be a bit of a Star Wars fan. Born and raised in sunny San Diego, CA he now resides in San Clemente, CA with his wife, Cat.</p>
                     </div><!-- end panel-body -->
                   </div><!-- end panel-collapse -->
                 </div><!-- end panel -->
@@ -384,12 +386,12 @@
                   <img class="img-responsive" src="images/about-mm/staff/rossi.jpg">
                   <div class="panel-body">
                     <h5>Cathleen Keena</h5>
-                    <p class="small">Missions.Me College Director</p>
+                    <p class="small">Director Of Missions.Me College</p>
                     <h6 class="bold uppercaseit"><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine">Read Bio</a></h6>
                   </div>
                   <div id="collapseNine" class="panel-collapse collapse">
                     <div class="panel-body">
-                      <p class="small">Cat’s love for people and passion for restoring lives are at the core of all she does. Cat is the director of our Missions.Me College and actively volunteers at Oakland Church. She studied at Central Michigan University earning a bachelor's degree in Family Studies and Psychology. Some of Cat’s favorite things are tacos, Honduran coffee, reading, and going on adventures. Cat currently resides in Rochester, MI with her husband, Neil.</p>
+                      <p class="small">Cat’s love for people and passion for restoring lives are at the core of all she does. Cat is the director of our Missions.Me College and actively volunteers at her local church. She studied at Central Michigan University earning a bachelor's degree in Family Studies and Psychology. Some of Cat’s favorite things are tacos, Honduran coffee, reading, and going on adventures. Cat currently resides in San Clemente, CA with her husband, Neil.</p>
                     </div><!-- end panel-body -->
                   </div><!-- end panel-collapse -->
                 </div><!-- end panel -->

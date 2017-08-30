@@ -2,8 +2,10 @@
 
 namespace App\Models\v1;
 
+use App\CampaignTransport;
 use App\UuidForKey;
 use EloquentFilter\Filterable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Passenger extends Model
@@ -19,6 +21,21 @@ class Passenger extends Model
         'created_at', 'updated_at'
     ];
 
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // only get passenger with active reservation
+        static::addGlobalScope('active', function(Builder $builder) {
+            $builder->has('reservation');
+        });
+    }
+
     public function reservation()
     {
         return $this->belongsTo(Reservation::class);
@@ -27,5 +44,40 @@ class Passenger extends Model
     public function transport()
     {
         return $this->belongsTo(Transport::class);
+    }
+
+    public function campaignTransport()
+    {
+        return $this->belongsTo(CampaignTransport::class, 'transport_id');
+    }
+
+    public function transportCompanions()
+    {
+        return $this->reservation
+            ->companionReservations()
+            ->whereHas('transports', function ($transport) {
+                return $transport->where('transports.id', $this->transport_id);
+            })
+            ->get([
+                'reservations.id',
+                'reservations.given_names',
+                'reservations.surname'
+            ]);
+    }
+
+    public function validate($transportId, $reservationId)
+    {
+        $transport = Transport::with('passengers')->find($transportId);
+
+        if (in_array($reservationId, $transport->passengers->pluck('reservation_id')->all()))
+            abort(422, 'Passenger is already on this transport.');
+
+        $reservation = Reservation::find($reservationId);
+        $designations = $reservation->transports->pluck('designation')->all();
+
+        if (in_array($transport->designation, $designations))
+            abort(422, "Passenger is already on a $transport->designation transport");
+
+        return true;
     }
 }

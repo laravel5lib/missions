@@ -50,3 +50,23 @@ $factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator
         'email'    => 'admin@admin.com'
     ]);
 });
+
+/**
+ * New User
+ */
+$factory->defineAs(App\Models\v1\User::class, 'new', function (Faker\Generator $faker)
+{
+    return [
+        'id'               => $faker->unique()->uuid,
+        'name'             => $faker->firstName. ' '.$faker->lastName,
+        'email'            => $faker->unique()->safeEmail,
+        'password'         => bcrypt('secret'),
+        'gender'           => $faker->randomElement(['male', 'female']),
+        'status'           => $faker->randomElement(['single', 'married']),
+        'birthday'         => $faker->dateTimeBetween('-60 years', '-12 years'),
+        'country_code'     => $faker->randomElement(explode(',', App\Utilities\v1\Country::codes())),
+        'timezone'         => 'America/Detroit',
+        'created_at'       => \Carbon\Carbon::now(),
+        'updated_at'       => \Carbon\Carbon::now()
+    ];
+});

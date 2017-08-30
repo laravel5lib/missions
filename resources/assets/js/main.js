@@ -89,6 +89,7 @@ import campaignCreate from './components/campaigns/admin-campaign-create.vue';
 import campaignEdit from './components/campaigns/admin-campaign-edit.vue';
 import adminCampaignsList from './components/campaigns/admin-campaigns-list.vue';
 import adminCampaignDetails from './components/campaigns/admin-campaign-details.vue';
+import visibilityControls from './components/campaigns/visibility-controls.vue';
 import campaignTripCreateWizard from './components/trips/admin-trip-create.vue';
 import campaignTripEditWizard from './components/trips/admin-trip-edit.vue';
 import adminCampaignTrips from './components/campaigns/admin-campaign-trips.vue';
@@ -143,9 +144,13 @@ import fundManager from './components/financials/funds/fund-manager.vue';
 import companionManager from './components/reservations/companion-manager.vue';
 import promotionals from './components/admin/promotionals.vue';
 import transports from './components/admin/transports.vue';
+import transportsDetails from './components/admin/transports-details.vue';
 import roomingAccommodations from './components/rooms/rooming-accommodations.vue';
 import regionsAccommodations from './components/regions/regions-accommodations.vue';
 import restoreFund from './components/financials/funds/restore-fund.vue';
+
+// filter components
+import reservationsFilters from './components/filters/reservations-filters.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -226,7 +231,7 @@ Vue.http.options.root = '/api';
 Vue.http.interceptors.push(function(request, next) {
 
     // modify request
-    var token, headers;
+    let token, headers;
 
     token = $.cookie('api_token') ? $.cookie('api_token').indexOf('Bearer') !== -1 ? $.cookie('api_token') : 'Bearer ' + $.cookie('api_token') : null;
 
@@ -255,46 +260,19 @@ Vue.http.interceptors.push(function(request, next) {
     }
 
     // Only POST and PUT Requests to our API
-    if (_.contains(['POST', 'PUT'], request.method) && request.root === '/api') {
-        console.log(this);
-        console.log(request);
+    //if (_.contains(['POST', 'PUT'], request.method) && request.root === '/api') {
+        // console.log(this);
+        // console.log(request);
 
         /*
          * Date Conversion: Local to UTC
          */
         // search nested objects/arrays for dates to convert
         // YYYY-MM-DD
-        let dateRegex = /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/;
+        //let dateRegex = /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/;
         // YYYY-MM-DD HH:MM:SS
-        let dateTimeRegex = /^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])$/;
-        searchObjAndConvertDates(request.data);
-
-        function searchObjAndConvertDates(obj) {
-            _.each(obj, function (value, key) {
-                // nested search
-                if (_.isObject(value) || _.isArray(value))
-                    searchObjAndConvertDates(value);
-
-                let testDate = _.isString(value) && value.length === 10 && dateRegex.test(value);
-                let testDateTime = _.isString(value) && value.length === 19 && dateTimeRegex.test(value);
-
-
-                if (testDate) {
-                    // console.log('then: ', value);
-                    obj[key] = moment(value).startOf('day').utc().format('YYYY-MM-DD');
-                    // console.log('now: ', value);
-                }
-
-                if (testDateTime) {
-                    // console.log('then: ', value);
-                    obj[key] = moment(value).utc().format('YYYY-MM-DD HH:mm:ss');
-                    // console.log('now: ', value);
-                }
-
-
-            });
-        }
-    }
+        //let dateTimeRegex = /^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])$/;
+    //}
 
     // continue to next interceptor
     next(function(response) {
@@ -326,7 +304,7 @@ Vue.http.interceptors.push(function(request, next) {
 // Register email validator function.
 Vue.validator('email', function (val) {
     if (! val) return true;
-    
+
     return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
 });
 // Validate datetime inputs
@@ -382,7 +360,7 @@ Vue.filter('moment', {
         }
 
         // console.log('before: ', val);
-        let date = moment.utc(val).local().format(format || 'LL');
+        let date = moment.utc(val, 'YYYY-MM-DD HH:mm:ss').local().format(format || 'LL');
 
         if (diff) {
             date = moment.utc(val).local().fromNow();
@@ -391,11 +369,21 @@ Vue.filter('moment', {
 
         return date;
     },
-    write: function (val, oldVal) {
-        let format = 'YYYY-MM-DD HH:mm:ss';
+    write: function (val, oldVal, format = 'YYYY-MM-DD HH:mm:ss', diff = false, noLocal = false) {
+        // let format = 'YYYY-MM-DD HH:mm:ss';
         // let format = val.length > 10 ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
         if (!val) return val;
-            return moment(val).local().utc().format(format);
+
+        if (noLocal) {
+            // interpret as still UTC
+            // format does not need to change (obviously...)
+            // console.log('Date: ', val);
+            //return val;
+            // console.log(moment.utc(val).format(format));
+            return moment(val).format(format || 'LL'); // do not convert to local
+        }
+
+        return moment(val, 'YYYY-MM-DD HH:mm:ss').local().utc().format(format);
     }
 });
 
@@ -437,72 +425,6 @@ Vue.filter('mFormat', {
 
 Vue.filter('underscoreToSpace', function (value) {
     return value.replace(/_/g, ' ');
-});
-
-Vue.directive('crop', {
-
-    acceptStatement: true,
-
-    bind: function () {
-        let event = this.arg;
-
-        let slimEvents = [
-            'didInit',                  // Initialized
-            'didLoad',                  // Image Loaded
-            'didTransform',             // Image Transformed
-            'didCancel',                // Image Editor Cancelled
-            'didConfirm',               // Image Editor Confirmed
-            'didSave',                  // Image Saved
-            'didRemove',                // Image Removed
-            'didUpload',                // Image Uploaded
-            'didReceiveServerError',    // Error Received from Server During Upload
-        ];
-
-        if (event && !_.contains(slimEvents, event)) {
-            console.warn('Invalid slim event: ' + event);
-            return;
-        }
-
-        if (this.vm.slim) return;
-
-        let self = this;
-        let vm = this.vm;
-        /*self.waitForLibrary = function() {
-            if (_.isFunction(Slim)) {
-                let $wrapper = self.el;
-                //debugger;
-                vm.slimAPI = new Slim($wrapper);
-                // send api to active componant
-                vm.$dispatch('slim-api', vm.slimAPI);
-            } else {
-                setTimeout(self.waitForLibrary, 1000);
-            }
-        };*/
-        
-        if (!_.contains(['file', 'video'], this.vm.type)) {
-            // debugger;
-            // this.waitForLibrary();
-        }
-    },
-
-    update: function (callback) {
-        let $wrapper = self.el;
-        if (!_.contains(['file', 'video'], this.vm.type)) {
-            //$wrapper.on('crop' + this.arg, callback)
-        }
-    },
-
-    unbind: function () {
-        let $wrapper = self.el;
-        if (!_.contains(['file', 'video'], this.vm.type)) {
-            $wrapper.off('crop' + this.arg);
-
-            if (this._watcher.id != 1) return;
-
-            $wrapper.slim('destroy');
-            this.vm.slimAPI = null
-        }
-    }
 });
 
 Vue.directive('tour-guide', {
@@ -912,6 +834,7 @@ new Vue({
         campaignEdit,
         adminCampaignsList,
         adminCampaignDetails,
+        visibilityControls,
         campaignTripCreateWizard,
         campaignTripEditWizard,
         adminCampaignTrips,
@@ -966,7 +889,10 @@ new Vue({
         companionManager,
         promotionals,
         transports,
+        transportsDetails,
         roomingAccommodations,
+
+        reservationsFilters,
     },
     http: {
         headers: {
@@ -1058,6 +984,22 @@ new Vue({
 
         startTour(){
             window.tour.start();
+        },
+
+        // Simple error handlers for API calls
+        handleApiSoftError(response) {
+            console.error(response.body.message ? response.body.message : response.body);
+        },
+        handleApiError(response) {
+            console.error(response.body.message ? response.body.message : response.body);
+            this.$root.$emit('showError', response.body.message)
+        },
+        convertSearchToObject() {
+            let search = location.search.substring(1);
+            return search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
+                function (key, value) {
+                    return key === "" ? value : decodeURIComponent(value)
+                }) : {};
         }
 
     },

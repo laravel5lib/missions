@@ -3,7 +3,7 @@
 		<template v-if="itinerary && itinerary.id">
 			<h6 class="text-uppercase">
 				<i class="fa fa-plane"></i> {{itinerary.name}}
-				<button class="btn btn-xs btn-default-hollow pull-right" @click="toggleEditMode" v-if="! editMode"><i class="fa fa-pencil"></i> Change</button>
+				<button class="btn btn-xs btn-default-hollow pull-right" @click="toggleResetModal" v-if="! editMode && ! isLocked"><i class="fa fa-pencil"></i> Change</button>
 			</h6>
 			<hr class="divider lg">
 		</template>
@@ -62,9 +62,9 @@
 					</template>
 				</div>
 
-				<modal title="Start Over" small :show.sync="showResetModal" ok-text="Confirm" :callback="resetItinerary">
+				<modal title="Make Changes" small :show.sync="showResetModal" ok-text="Confirm" :callback="resetItinerary">
 					<div slot="modal-body" class="modal-body">
-						This action can't be undone.
+						In order to make changes to a travel itinerary, you will need to start over and submit a new one. This action can't be undone. Do you want to continue making changes?
 					</div>
 				</modal>
 
@@ -93,6 +93,10 @@
             document: {
                 type: Object,
             },
+            locked: {
+                type: Boolean,
+                default: false
+            }
         },
         data(){
             return {
@@ -150,7 +154,13 @@
                     }
                     return false;
                 }.bind(this));
-            }
+            },
+			'isLocked': function() {
+				if (this.isAdminRoute)
+					return false;
+
+				return this.locked;
+			}
 		},
         methods: {
             isArrival(item) {
@@ -406,7 +416,6 @@
                     if ( _.isFunction(this.$validate) )
                         this.$validate(true);
                 }.bind(this));
-
 	        },
             toggleResetModal(){
 	            this.showResetModal = !this.showResetModal;

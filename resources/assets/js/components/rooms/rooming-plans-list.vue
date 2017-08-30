@@ -5,9 +5,9 @@
 			<form class="col-sm-12">
 				<div class="form-group">
 					<label>Travel Group</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
-					          :value.sync="filters.group" :options="groupsOptions" label="name"
-					          placeholder="Filter by Group"></v-select>
+					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+					          :value.sync="filters.groups" :options="groupsOptions" label="name"
+					          placeholder="Filter by Groups"></v-select>
 				</div>
 
 				<hr class="divider inv sm">
@@ -38,10 +38,7 @@
 						<button class="btn btn-primary btn-sm" type="button" @click="openNewPlanModal">
 							Create a plan
 						</button>
-                        <export-utility url="rooming/plans/export"
-                                        :options="exportOptions"
-                                        :filters="exportFilters">
-                        </export-utility>
+						<rooming-reports :filters="filters" :search="search" :campaign="campaignId"></rooming-reports>
 					</form>
 				</div>
 			</div>
@@ -67,9 +64,15 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <h4 class="list-group-item-heading">
-                            <a @click="loadManager(plan)">{{ plan.name }}</a>
+                            <i class="fa fa-lock text-muted" v-if="plan.locked"></i> <a @click="loadManager(plan)">{{ plan.name }}</a>
                             <span class="badge">{{ plan.occupants_count }} occupants</span>
-                            <br /><small>{{ plan.group.data.name }}</small>
+                            <br />
+	                        <small>
+		                        <template v-for="group in plan.groups.data">
+			                        {{ group.name }}
+			                        <template v-if="($index + 1) < plan.groups.data.length">&middot;</template>
+		                        </template>
+	                        </small>
                         </h4>
                         <p class="list-group-item-text">{{ plan.short_desc }}</p>
                     </div>
@@ -124,13 +127,22 @@
 						</div>
 
 						<div class="form-group" :class="{'has-error': $PlanCreate.teamgroup.invalid}" v-if="isAdminRoute">
-							<label>Travel Group</label>
-							<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
-							          :value.sync="selectedNewPlan.group" :options="groupsOptions" label="name"
-							          placeholder="Assign Travel Group"></v-select>
-							<select class="hidden" v-model="selectedNewPlan.group" v-validate:teamgroup="['required']">
+							<label>Travel Groups</label>
+							<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+							          :value.sync="selectedNewPlan.groups" :options="groupsOptions" label="name"
+							          placeholder="Assign Travel Groups"></v-select>
+							<select class="hidden" v-model="selectedNewPlan.groups" multiple v-validate:teamgroup="['required']">
 								<option :value="group" v-for="group in groupsOptions">{{group.name | capitalize}}</option>
 							</select>
+						</div>
+
+						<div class="row">
+							<div class="form-group" v-for="type in roomTypes">
+							<label :for="'settingsType-' + type.id" class="col-sm-6 control-label" v-text="type.name"></label>
+								<div class="col-sm-6">
+									<input type="number" number class="form-control" :id="'settingsType-' + type.id" v-model="selectedNewPlan.room_types_settings[type.id]" min="0">
+								</div>
+							</div>
 						</div>
 					</form>
 				</validator>
@@ -150,11 +162,30 @@
 							<textarea autosize="selectedPlanSettings.short_desc" class="form-control" id="updatePlanDesc" v-model="selectedPlanSettings.short_desc" v-validate:plandesc="['required']"></textarea>
 						</div>
 
+						<div class="form-group" :class="{'has-error': $PlanSettings.teamgroup.invalid}" v-if="isAdminRoute">
+							<label>Travel Groups</label>
+							<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+							          :value.sync="selectedPlanSettings.groups" :options="groupsOptions" label="name"
+							          placeholder="Assign Travel Groups"></v-select>
+							<select class="hidden" v-model="selectedPlanSettings.groups" multiple v-validate:teamgroup="['required']">
+								<option :value="group" v-for="group in groupsOptions">{{group.name | capitalize}}</option>
+							</select>
+						</div>
+
 						<div class="form-group" v-for="type in roomTypes">
 							<label :for="'settingsType-' + type.id" class="col-sm-6 control-label" v-text="type.name"></label>
 							<div class="col-sm-6">
 								<input type="number" number class="form-control" :id="'settingsType-' + type.id" v-model="selectedPlanSettings[type.id]" min="0">
 							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="">Locked</label>
+							<select v-if="isAdminRoute" class="form-control" v-model="selectedPlanSettings.locked">
+								<option :value="true">Yes</option>
+								<option :value="false">No</option>
+							</select>
+							<!--<p v-else v-text="selectedPlanSettings.locked ? 'Yes' : 'No'"></p>-->
 						</div>
 					</form>
 				</validator>
@@ -176,9 +207,10 @@
     import _ from 'underscore';
     import vSelect from 'vue-select';
     import exportUtility from '../export-utility.vue';
+    import roomingReports from '../admin/reporting/rooming-reports.vue';
     export default{
         name: 'rooming-plans-list',
-	    components: {vSelect, exportUtility},
+	    components: {vSelect, exportUtility, roomingReports},
         props: {
             userId: {
                 type: String,
@@ -204,7 +236,7 @@
                 campaignsOptions: [],
                 roomTypes: [],
 	            filters: {
-		            group: null,
+		            groups: null,
 	            },
                 pagination: {current_page: 1},
                 showPlanSettingsModal: false,
@@ -217,7 +249,9 @@
                     rooms: [],
                     locked: false,
                     campaign_id: this.$parent.campaignId,
-                    group_id: this.$parent.groupId,
+                    groups: [],
+                    group_ids: [this.$parent.groupId],
+                    room_types_settings: {},
                 },
 	            selectedPlan: null,
                 selectedPlanSettings: null,
@@ -231,6 +265,7 @@
                     updated_at: 'Updated At'
                 },
                 exportFilters: {},
+
             }
         },
 	    watch: {
@@ -257,7 +292,7 @@
                 this.$dispatch('rooming-wizard:plan-selected', plan);
             },
             getRoomTypes(){
-                return this.$http.get('rooming/types')
+                return this.$http.get('rooming/types', { params: { campaign: this.campaignId, per_page: 100 }})
 	                .then(function (response) {
                         return this.roomTypes = response.body.data;
                     },
@@ -271,19 +306,19 @@
                     include: '',
                 };
                 params = _.extend(params, {
-                    group: this.filters.group ? this.filters.group.id : null,
+                    groups: _.pluck(this.filters.groups, 'id'),
 	                search: this.search,
 	                per_page: this.per_page,
 					page: this.pagination.current_page,
 					sort: 'created_at|desc',
-                    include: 'group'
+                    include: 'groups'
                 });
                 
                 if (this.isAdminRoute) {
 					params.campaign = this.campaignId;
                 } else {
                     params.campaign = this.campaignId;
-                    params.group = this.groupId;
+                    params.groups = [this.groupId];
 
                 }
                 this.exportFilters = params;
@@ -291,6 +326,7 @@
                 return this.PlansResource.get(params).then(function (response) {
 	                this.pagination = response.body.meta.pagination;
 	                this.plans = response.body.data;
+	                return this.plans;
                 })
 	        },
             getGroups(search, loading){
@@ -321,6 +357,8 @@
                 let settings = {
                     short_desc: plan.short_desc,
                     name: plan.name,
+	                locked: plan.locked,
+	                groups: plan.groups.data,
                 };
 
                 // We need to loop through each room type to create an object to reference the plan types present
@@ -338,35 +376,29 @@
                 this.showPlanDeleteModal = true;
                 this.selectedDeletePlan = plan;
             },
-            updatePlanSettings() {
-                let promises = [];
-
-                // update name and short_desc properties
-	            promises.push(this.PlansResource.update({ plan: this.selectedPlan.id},
-		            { name: this.selectedPlanSettings.name, short_desc: this.selectedPlanSettings.short_desc}));
-
-                _.each(this.selectedPlanSettings, function (val, property) {
+	        handleRoomTypeSettings(plan, settings, promises) {
+                _.each(settings, function (val, property) {
                     let promise;
-					if (property.indexOf('_method') === -1 && !_.contains(['short_desc', 'name'], property)) {
-					    if (this.selectedPlanSettings[property + '_method'] === 'PUT') {
-					        if (val > 0) {
+                    if (property.indexOf('_method') === -1 && !_.contains(['short_desc', 'name', 'groups', 'group_ids', 'locked'], property)) {
+                        if (settings[property + '_method'] === 'PUT') {
+                            if (val > 0) {
                                 promise = this.PlansResource.update({
-	                                plan: this.selectedPlan.id, path: 'types', pathId: property
+                                    plan: plan.id, path: 'types', pathId: property
                                 }, { available_rooms: val });
                             } else {
-					            // if val is 0 we should simply delete the room type setting
+                                // if val is 0 we should simply delete the room type setting
                                 promise = this.PlansResource.delete({
-                                    plan: this.selectedPlan.id, path: 'types', pathId: property
+                                    plan: plan.id, path: 'types', pathId: property
                                 });
-					        }
+                            }
 
-					    } else {
-					        // only create setting if val > 0
+                        } else {
+                            // only create setting if val > 0
                             if (val > 0)
-	                            promise = this.PlansResource.save({ plan: this.selectedPlan.id, path: 'types'}, {
-	                                room_type_id: property,
-	                                available_rooms: val
-	                            });
+                                promise = this.PlansResource.save({ plan: plan.id, path: 'types'}, {
+                                    room_type_id: property,
+                                    available_rooms: val
+                                });
                         }
                         if (promise) {
                             // we only need to catch errors here
@@ -375,9 +407,21 @@
                             });
                             promises.push(promise);
                         }
-					}
+                    }
 
                 }.bind(this));
+	        },
+            updatePlanSettings() {
+                let promises = [];
+                let settingsData = _.extend({}, this.selectedPlanSettings);
+                settingsData.group_ids = _.pluck(settingsData.groups, 'id');
+                delete settingsData.groups;
+
+                // update name and short_desc properties
+	            promises.push(this.PlansResource.update({ plan: this.selectedPlan.id},
+		            { name: settingsData.name, short_desc: settingsData.short_desc, group_ids: settingsData.group_ids, locked: settingsData.locked}));
+
+	            this.handleRoomTypeSettings(this.selectedPlan, settingsData, promises);
 
                 Promise.all(promises).then(function () {
                     this.showPlanSettingsModal = false;
@@ -401,27 +445,49 @@
             },
             openNewPlanModal(){
                 this.showPlanModal = true;
-                this.selectedNewPlan = {
+                 let obj = {
                     name: '',
                     short_desc: '',
                     rooms: [],
                     locked: false,
                     campaign_id: this.$parent.campaignId,
                     group_id: this.$parent.groupId,
+                    room_types_settings:{}
+
                 };
+
+                // We need to loop through each room type to create an object to reference the plan types present
+                _.each(this.roomTypes, function (type) {
+                    // the settings will be traced by the type ids
+                    // then we will attempt to find the assignment in the current plan's settings (expecting a number) or set to 0
+                    obj.room_types_settings[type.id] = 0;
+                    // we are using method to track which room types need to be updated or posted
+                    obj.room_types_settings[type.id + '_method'] = 'POST';
+                }.bind(this));
+                this.selectedNewPlan = obj;
             },
             newPlan() {
                 if (this.isAdminRoute && _.isObject(this.selectedNewPlan.group)) {
                     this.selectedNewPlan.group_id = this.selectedNewPlan.group.id;
                 }
                 let data = _.extend({}, this.selectedNewPlan);
-                delete data.group;
+                let room_types_settings = _.extend({}, data.room_types_settings);
+                delete data.room_types_settings;
+                data.group_ids = _.pluck(data.groups, 'id');
+                delete data.groups;
 
                 if (this.$PlanCreate.valid) {
                     return this.PlansResource.save(data, { include: 'group' }).then(function (response) {
                         let plan = response.body.data;
-                        this.plans.push(plan);
-                        this.showPlanModal = false;
+
+                        // update created plan with
+                        let promises = [];
+                        this.handleRoomTypeSettings(plan, room_types_settings, promises);
+                        Promise.all(promises).then(function () {
+                            this.getRoomingPlans();
+                            this.$root.$emit('showSuccess', data.name + ' created successfully');
+                            this.showPlanModal = false;
+                        }.bind(this));
                     }, function (response) {
                         console.log(response);
                         this.$root.$emit('showError', response.body.message);
@@ -431,12 +497,27 @@
                     this.$root.$emit('showError', 'Please provide a name for the new plan');
                 }
             },
+	        handlePlanGroupAssociations(){
+
+	        },
         },
         ready(){
             if (this.isAdminRoute) {
                 this.getGroups();
             }
-			this.getRoomingPlans();
+			this.getRoomingPlans().then(function (plans) {
+				if (this.isAdminRoute && location.search.length > 1) {
+                    let plan;
+                    let searchObj = this.$root.convertSearchToObject();
+                    // https://stackoverflow.com/questions/8648892/convert-url-parameters-to-a-javascript-object
+                    if (searchObj.hasOwnProperty('plan')) {
+                        plan = _.findWhere(plans, {id: searchObj.plan});
+                        if (plan)
+                            this.loadManager(plan);
+                    }
+                }
+
+            });
 			this.getRoomTypes();
 
             this.$root.$on('campaign-scope', function (val) {

@@ -24,13 +24,13 @@
 					<label for="" class="control-label">Type</label>
 					<select class="form-control" v-model="squadsFilters.type">
 						<option :value="">-- Select --</option>
-						<option :value="type.id" v-for="type in squadTypes">{{type.name | capitalize}}</option>
+						<option :value="type.name" v-for="type in squadTypes">{{type.name | capitalize}}</option>
 					</select>
 				</div>
 
 				<div class="form-group">
 					<label>Travel Group</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
 					          :value.sync="squadsFilters.group" :options="groupsOptions" label="name"
 					          placeholder="Filter by Group"></v-select>
 				</div>
@@ -67,13 +67,12 @@
 							<div class="col-sm-12">
 								<label>Region Squads <span v-if="currentRegion.teams" class="badge badge-primary" v-text="currentRegion.teams.data.length"></span></label>
 								<hr class="divider sm">
-								<template v-if="currentRegion.teams.data.length">
-
+								<template v-if="currentRegion.teams && currentRegion.teams.data.length">
 									<div class="list-group">
 										<div class="list-group-item" v-for="team in currentRegion.teams.data">
 											<div class="row list-group-item-heading">
 												<div class="col-xs-6">
-													{{ team.callsign | capitalize }}
+													<a :href="'/admin/campaigns/' + campaignId + '/squads?squad=' + team.id" target="_blank">{{ team.callsign | capitalize }}</a>
 													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name | capitalize"></span>
 													<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 												</div>
@@ -138,11 +137,19 @@
 										<div class="row">
 											<div class="col-xs-9">
 												<a role="button" @click="makeCurrentRegion(region)">
-													{{ region.name | capitalize }} <span class="small">&middot; {{ region.teams && region.teams.data.length ? region.teams.data.length : 0 }} Squads</span><br>
-													<label>{{ region.country.name }}</label>
+													<h4>{{ region.name | capitalize }}</h4>
+													<p>
+					                                    <span v-if="region.callsign">
+					                                        <span class="label label-default" :style="'color: #FFF !important; background-color: ' + region.callsign" v-text="region.callsign|capitalize"></span>
+					                                    </span>
+														<span class="small">{{ region.country.name | capitalize }}</span>
+													</p>
 												</a>
 											</div>
 											<div class="col-xs-3 text-right action-buttons">
+												<span class="badge badge-danger" style="background-color: #F6323E;">
+													{{region.teams && region.teams.data.length ? region.teams.data.length : 0}}
+												</span>
 												<dropdown type="default">
 													<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
 														<span class="fa fa-ellipsis-h"></span>
@@ -162,27 +169,24 @@
 								</div>
 								<div :id="'regionItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 									<div class="panel-body">
-										<div class="row">
-											<div class="col-sm-6">
-												<label>Travel Groups</label>
-											</div><!-- end col -->
-											<div class="col-sm-6">
-												<ul style="margin:3px 0;" v-if="region.teams && region.teams.data.length">
-													<template v-for="team in region.teams.data">
-														<template v-if="team.groups">
-															<li class="small" v-for="group in team.groups.data">
-																{{ group.name | capitalize }}
-															</li>
-														</template>
-
-													</template>
-												</ul>
-												<p class="small" v-else>None</p>
-											</div><!-- end col -->
-										</div><!-- end row -->
-										<hr class="divider sm">
-									</div><!-- end panel-body -->
+										<label>Travel Groups In this Region</label>
+									</div>
+									<ul class="list-group" style="margin:3px 0;" v-if="region.teams && region.teams.data.length">
+										<template v-for="team in region.teams.data">
+											<template v-if="team.groups">
+												<li class="list-group-item" v-for="group in team.groups.data">
+													{{ group.name | capitalize }}
+												</li>
+											</template>
+										</template>
+									</ul>
+									<div class="panel-body text-center" v-else>
+                                        No Groups Found
+                                    </div>
 								</div>
+							</div>
+							<div class="col-xs-12 text-center">
+								<pagination :pagination.sync="regionsPagination" :callback="getRegions"></pagination>
 							</div>
 						</div>
 					</template>
@@ -220,7 +224,7 @@
 							<div class="list-group-item" v-for="team in squads">
 								<div class="row list-group-item-heading">
 									<div class="col-xs-6">
-										{{ team.callsign | capitalize }}
+										<a :href="'/admin/campaigns/' + campaignId + '/squads?squad=' + team.id" target="_blank">{{ team.callsign | capitalize }}</a>
 										<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name | capitalize"></span>
 										<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 									</div>
@@ -474,7 +478,7 @@
                 });
             },
             getTeamTypes() {
-                return this.$http.get('teams/types').then(function (response) {
+                return this.$http.get('teams/types', { params: { campaign: this.campaignId } }).then(function (response) {
                     return this.squadTypes = response.body.data;
                 }, function (error) {
                     console.log(error);

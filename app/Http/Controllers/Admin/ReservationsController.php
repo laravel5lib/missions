@@ -45,11 +45,13 @@ class ReservationsController extends Controller
     {
         $this->authorize('view', $this->reservation);
 
-        $reservation = $this->api->get('reservations/'.$id, ['include' => 'trip.campaign,fundraisers,costs.payments']);
+        $reservation = $this->api->get('reservations/'.$id, ['include' => 'trip.campaign,fundraisers,costs.payments,squads.team,rooms.type, rooms.accommodations']);
 
         $rep = $reservation->rep ? $reservation->rep : $reservation->trip->rep;
 
-        return view('admin.reservations.' . $tab, compact('reservation', 'rep', 'tab'));
+        $locked = $reservation->trip->campaign->reservations_locked;
+
+        return view('admin.reservations.' . $tab, compact('reservation', 'rep', 'tab', 'locked'));
     }
 
     /**

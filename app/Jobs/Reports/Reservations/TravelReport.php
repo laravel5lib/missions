@@ -6,6 +6,7 @@ use App\Jobs\Job;
 use App\Models\v1\Itinerary;
 use App\Models\v1\Reservation;
 use App\Services\Reports\CSVReport;
+use App\Services\Transportation;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -20,7 +21,8 @@ class TravelReport extends Job implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param $request
+     * @param $user
      */
     public function __construct($request, $user)
     {
@@ -31,14 +33,18 @@ class TravelReport extends Job implements ShouldQueue
     /**
      * Execute the job.
      *
+     * @param Reservation $reservation
      * @return void
      */
     public function handle(Reservation $reservation)
     {
-        $reservations = $reservation->filter($this->request)
-                             ->with('requirements.document', 'trip.group',
-                                'trip.campaign', 'trip.rep', 'rep',
-                                'designation', 'squads.team.regions')
+        $reservations = $reservation->filter(array_filter($this->request))
+                             ->with(
+                                 'requirements.document', 'trip.group',
+                                 'trip.campaign', 'trip.rep', 'rep',
+                                 'designation', 'squads.team.regions',
+                                 'transports.departureHub', 'transports.arrivalHub'
+                             )
                              ->get();
 
         $data = $this->columnize($reservations);
@@ -48,6 +54,12 @@ class TravelReport extends Job implements ShouldQueue
         (new CSVReport($data, $this->user))->make($filename)->notify();
     }
 
+    /**
+     * Organize collection into columns
+     *
+     * @param $reservations
+     * @return mixed
+     */
     private function columnize($reservations)
     {
 
@@ -77,6 +89,7 @@ class TravelReport extends Job implements ShouldQueue
             $data = collect($data)
                         ->merge($this->passport($reservation))
                         ->merge($this->itinerary($reservation))
+                        ->merge($this->internationalTravel($reservation))
                         ->all();
 
             return $data;
@@ -84,6 +97,12 @@ class TravelReport extends Job implements ShouldQueue
         })->all();
     }
 
+    /**
+     * Get passport columns
+     *
+     * @param $reservation
+     * @return \Illuminate\Support\Collection
+     */
     private function passport($reservation)
     {
         $requirement = $reservation->requirements
@@ -102,6 +121,12 @@ class TravelReport extends Job implements ShouldQueue
         ]);
     }
 
+    /**
+     * Get itinerary columns
+     *
+     * @param $reservation
+     * @return \Illuminate\Support\Collection
+     */
     private function itinerary($reservation)
     {
         $requirement = $reservation->requirements->where('document_type', 'travel_itineraries')->first();
@@ -121,7 +146,41 @@ class TravelReport extends Job implements ShouldQueue
             'Departure Location' => null,
             'Departure At' => null,
             'Departure Transportation' => null,
-            'Departure Transport No.' => null,
+            'Departure Transport No.' => null
+        ]);
+
+        if (!$itinerary) return $travel;
+
+        $itinerary->activities->each(function($act) use($travel) {
+            if ($act->type->name == 'arrival') {
+                $travel['Arrival Method'] = $act->transports->first() ? $act->transports->first()->type : null;
+                $travel['Arrival Location'] = $act->hubs->first() ? $act->hubs->first()->name : null;
+                $travel['Arrival At'] = $act->occurred_at ? $act->occurred_at->format('F d, Y h:i a') : null;
+                $travel['Arrival Transportation'] = $act->transports->first() ? $act->transports->first()->name : null;
+                $travel['Arrival Transport No.'] = $act->transports->first() ? $act->transports->first()->vessel_no : null;
+            }
+
+            if ($act->type->name === 'departure') {
+                 $travel['Departure Method'] = $act->transports->first() ? $act->transports->first()->type : null;
+                 $travel['Departure Location'] = $act->hubs->first() ? $act->hubs->first()->name : null;
+                 $travel['Departure At'] = $act->occurred_at ? $act->occurred_at->format('F d, Y h:i a') : null;
+                 $travel['Departure Transportation'] = $act->transports->first() ? $act->transports->first()->name : null;
+                 $travel['Departure Transport No.'] = $act->transports->first() ? $act->transports->first()->vessel_no : null;
+            }
+        });
+
+        return $travel;
+    }
+
+    /**
+     * Get international travel columns
+     *
+     * @param $reservation
+     * @return \Illuminate\Support\Collection
+     */
+    private function internationalTravel($reservation)
+    {
+        $transports = collect([
             'Intl Departure Location' => null,
             'Intl Departure At' => null,
             'Intl Departure Transportation' => null,
@@ -132,26 +191,34 @@ class TravelReport extends Job implements ShouldQueue
             'Intl Return Transport No.' => null,
         ]);
 
-        if (!$itinerary) return $travel;
+        $flights = array_values($reservation->transports()->orderBy('depart_at', 'asc')->get()->filter(function ($transport) {
+            return $transport->domestic == false && $transport->departureHub && $transport->arrivalHub;
+        })->all());
 
-        $itinerary->activities->each(function($act) use($travel) {
-            if ($act->type->name == 'arrival') {
-                $travel['Arrival Method'] = $act->transports->first() ? $act->transports->first()->type : null;
-                $travel['Arrival Location'] = $act->hubs->first() ? $act->hubs->first()->name : null;
-                $travel['Arrival At'] = $act->occurred_at ? $act->occurred_at->timezone('America/Detroit')->format('F d, Y h:i a') : null;
-                $travel['Arrival Transportation'] = $act->transports->first() ? $act->transports->first()->name : null;
-                $travel['Arrival Transport No.'] = $act->transports->first() ? $act->transports->first()->vessel_no : null;
-            }
+        collect($flights)
+            ->filter(function ($transport) {
+                return $transport->designation == 'outbound';
+            })
+            ->each(function ($transport) use($transports)
+            {
+                $transports['Intl Departure Location'] = $transport->departureHub->name;
+                $transports['Intl Departure At'] = $transport->depart_at->toDateTimeString();
+                $transports['Intl Departure Transportation'] = $transport->name;
+                $transports['Intl Departure Transport No.'] = $transport->vessel_no;
+            });
 
-            if ($act->type->name === 'departure') {
-                 $travel['Departure Method'] = $act->transports->first() ? $act->transports->first()->type : null;
-                 $travel['Departure Location'] = $act->hubs->first() ? $act->hubs->first()->name : null;
-                 $travel['Departure At'] = $act->occurred_at ? $act->occurred_at->timezone('America/Detroit')->format('F d, Y h:i a') : null;
-                 $travel['Departure Transportation'] = $act->transports->first() ? $act->transports->first()->name : null;
-                 $travel['Departure Transport No.'] = $act->transports->first() ? $act->transports->first()->vessel_no : null;
-            }
-        });
+        collect($flights)
+            ->filter(function ($transport) {
+                return $transport->designation == 'return';
+            })
+            ->each(function ($transport) use($transports)
+            {
+                $transports['Intl Return Location'] = $transport->departureHub->name;
+                $transports['Intl Return At'] = $transport->depart_at->toDateTimeString();
+                $transports['Intl Return Transportation'] = $transport->name;
+                $transports['Intl Return Transport No.'] = $transport->vessel_no;
+            });
 
-        return $travel;
+        return $transports;
     }
 }

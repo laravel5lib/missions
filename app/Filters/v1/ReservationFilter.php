@@ -1,5 +1,6 @@
 <?php namespace App\Filters\v1;
 
+use App\Utilities\v1\TeamRole;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -101,7 +102,7 @@ class ReservationFilter extends Filter
     /**
      * By reps.
      *
-     * @param $ids
+     * @param $id
      * @return mixed
      */
     public function rep($id)
@@ -420,7 +421,7 @@ class ReservationFilter extends Filter
         }
 
         // if no value exists after the "|" pipe, only use first value
-        return $this->has($param[0]);
+        return $this->has('rooms');
     }
 
     /**
@@ -437,17 +438,16 @@ class ReservationFilter extends Filter
         // check for existence of value after "|" pipe
         if (isset($param[1])) {
             // query reservations that have rooms
-            return $this->whereHas('rooms', function($room) use ($param) {
+            return $this->whereDoesntHave('rooms', function($room) use ($param) {
                 // query a room in plan or accomodation
                 return $room->whereHas($param[0], function($query) use($param) {
-                    return $query->where('id', '<>', $param[1]);
+                    return $query->where('id', '=', $param[1]);
                 });
-                // or query reservations that do not have rooms
-            })->orHas('rooms', '<', 1);
+            });
         }
 
         // if no value exists after the "|" pipe, only use first value
-        return $this->has($param[0], '<', 1);
+        return $this->doesntHave('rooms');
     }
 
     public function inSquad()
@@ -458,5 +458,117 @@ class ReservationFilter extends Filter
     public function noSquad()
     {
         return $this->has('squads', '<', 1);
+    }
+
+    public function notInTransport($transportId)
+    {
+        if ($transportId === 'true')
+            return $this->doesntHave('transports');
+
+        return $this->whereDoesntHave('transports', function ($transport) use ($transportId) {
+            return $transport->where('transports.id', $transportId);
+        });
+    }
+
+    public function inTransport($transportId)
+    {
+        if ($transportId === 'true')
+            return $this->has('transports');
+
+        return $this->whereHas('transports', function ($transport) use ($transportId) {
+            return $transport->where('transports.id', $transportId);
+        });
+    }
+
+    public function notTraveling($designation)
+    {
+        return $this->whereDoesntHave('transports', function ($transport) use ($designation) {
+            return $transport->where('transports.designation', $designation);
+        });
+    }
+
+    public function traveling($designation)
+    {
+        return $this->whereHas('transports', function ($transport) use ($designation) {
+            return $transport->where('transports.designation', $designation);
+        });
+    }
+
+    public function region($id)
+    {
+        return $this->whereHas('squads.team.regions', function ($region) use ($id) {
+            return $region->where('id', $id);
+        });
+    }
+
+    /*
+     * Search Improvements
+     */
+
+    public function name($value)
+    {
+        $searchTerms = collect(explode(' ', $value));
+
+        $first = $searchTerms->first();
+        $last = $searchTerms->last();
+
+        $this->when(($searchTerms->count() > 1), function ($query) use ($searchTerms, $first, $last) {
+            return $query->where('surname', 'LIKE', "%$last%")->where('given_names', 'LIKE', "%$first%");
+        })->when(($searchTerms->count() < 2), function ($query) use ($searchTerms, $first) {
+            return $query->where('given_names', 'LIKE', "%$first%")
+                ->orWhere('surname', 'LIKE', "%$first%");
+        })->current();
+    }
+
+    public function givenNames($value)
+    {
+        return $this->where('given_names', 'LIKE', "%$value%");
+    }
+
+    public function surname($value)
+    {
+        return $this->where('surname', 'LIKE', "%$value%");
+    }
+
+    public function email($value)
+    {
+        return $this->where('email', 'LIKE', "%$value%");
+    }
+
+    public function phone($value)
+    {
+        return $this->where('phone_one', 'LIKE', "%$value%")
+            ->orWhere('phone_two', 'LIKE', "%$value%");;
+    }
+
+    public function phoneOne($value)
+    {
+        return $this->where('phone_one', 'LIKE', "%$value%");
+    }
+
+    public function phoneTwo($value)
+    {
+        return $this->where('phone_two', 'LIKE', "%$value%");
+    }
+
+    public function teamRole($value)
+    {
+        $code = TeamRole::get_code($value);
+
+        return $this->where('desired_role', $code);
+    }
+
+    public function checkedIn()
+    {
+        $this->whereHas('todos', function($query) {
+            $query->where('task', 'hq check in')->whereNotNull('completed_at');
+        });
+    }
+
+    public function checkedOut()
+    {
+        $this->whereDoesntHave('todos', function($query) {
+            $query->where('task', 'hq check in')->whereNotNull('completed_at');
+        });
     }
 }

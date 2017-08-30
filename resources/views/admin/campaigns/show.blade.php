@@ -36,25 +36,23 @@
                 <li role="presentation" class="{{ ($tab == 'squads' || $tab == 'squad-types') ? 'active' : '' }} dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Squads <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        {{-- <li><a href="#">Overview</a></li> --}}
                         <li class="{{ $tab == 'squads' ? 'active' : '' }}"><a href="{{ url('admin/campaigns/'.$campaign->id.'/squads') }}">Rosters</a></li>
                         <li class="{{ $tab == 'squad-types' ? 'active' : '' }}">
                             <a href="{{ url('admin/campaigns/'.$campaign->id.'/squad-types') }}">Squad Types</a>
                         </li>
                     </ul>
                 </li>
-                 <li role="presentation" class="dropdown">
+                 <li role="presentation" class="{{ $tab == 'accommodations' || $tab == 'rooming-manager' || $tab == 'room-types' ? 'active' : '' }} dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Rooming <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        {{-- <li><a href="#">Overview</a></li> --}}
-                        <li><a href="{{ url('admin/campaigns/'.$campaign->id.'/rooming-manager') }}">Room Assignments</a></li>
-                        <li class="{{ $tab == 'squad-types' ? 'active' : '' }}">
+                        <li class="{{ $tab == 'rooming-manager' ? 'active' : '' }}"><a href="{{ url('admin/campaigns/'.$campaign->id.'/rooming-manager') }}">Room Assignments</a></li>
+                        <li class="{{ $tab == 'room-types' ? 'active' : '' }}">
                             <a href="{{ url('admin/campaigns/'.$campaign->id.'/room-types') }}">Room Types</a>
                         </li>
-                        {{-- <li><a href="{{ url('admin/campaigns/'.$campaign->id.'/accommodations') }}">Accommodations</a></li> --}}
+                        <li class="{{ $tab == 'accommodations' ? 'active' : '' }}"><a href="{{ url('admin/campaigns/'.$campaign->id.'/accommodations') }}">Accommodations</a></li>
                     </ul>
                 </li>
-                {{-- <li role="presentation" class="{{ $tab == 'regions' ? 'active' : '' }} dropdown">
+                <li role="presentation" class="{{ $tab == 'regions' || $tab == 'region-accommodations' ? 'active' : '' }} dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                       Regions <span class="caret"></span>
                     </a>
@@ -64,20 +62,13 @@
                             <a href="{{ url('admin/campaigns/'.$campaign->id.'/regions') }}">Squad Assignments</a>
                         </li>
                     </ul>
-                </li> --}}
-                {{-- <li role="presentation" class="{{ $tab == 'transports' ? 'active' : '' }} dropdown">
+                </li>
+                <li role="presentation" class="{{ $tab == 'transports' ? 'active' : '' }} dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Transportation <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Overview</a></li>
                         <li class="{{ $tab == 'transports' ? 'active' : '' }}"><a href="{{ url('admin/campaigns/'.$campaign->id.'/transports') }}">Transports</a></li>
                     </ul>
-                </li> --}}
-                {{-- <li role="presentation" class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Itineraries <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Overview</a></li>
-                    </ul>
-                </li> --}}
+                </li>
                 <li role="presentation" class="{{ $tab == 'details' ? 'active' : '' }}">
                     <a href="{{ url('admin/campaigns/'.$campaign->id.'/details') }}">Details</a>
                 </li>

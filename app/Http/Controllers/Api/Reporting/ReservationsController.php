@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api\Reporting;
 
-use App\Http\Requests;
+use App\Jobs\Reports\Reservations\ItineraryReport;
+use App\Jobs\Reports\Reservations\MedicalInfo;
+use App\Jobs\Reports\Reservations\RoomingReport;
 use App\Models\v1\User;
 use Illuminate\Http\Request;
-use App\Models\v1\Reservation;
 use App\Http\Controllers\Controller;
 use App\Jobs\Reports\Reservations\BasicReport;
 use App\Jobs\Reports\Reservations\FundsReport;
@@ -14,12 +15,10 @@ use App\Jobs\Reports\Reservations\RequirementsReport;
 
 class ReservationsController extends Controller
 {
-    protected $reservation;
     protected $user;
     
-    function __construct(Reservation $reservation, User $user)
+    function __construct(User $user)
     {
-        $this->reservation = $reservation;
         $this->user = $user;
     }
 
@@ -42,7 +41,10 @@ class ReservationsController extends Controller
             'basic' => BasicReport::class,
             'funds' => FundsReport::class,
             'requirements' => RequirementsReport::class,
-            'travel' => TravelReport::class
+            'travel' => TravelReport::class,
+            'rooming' => RoomingReport::class,
+            'itinerary' => ItineraryReport::class,
+            'medical' => MedicalInfo::class
         ];
 
         return $reports[$type];

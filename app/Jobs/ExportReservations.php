@@ -8,7 +8,7 @@ class ExportReservations extends Exporter
 {
     public function data(array $request)
     {
-        $reservations = Reservation::filter($request)
+        $reservations = Reservation::filter(array_filter($request))
             ->with('user', 'trip.campaign', 'trip.group', 'requirements.requirement', 'costs', 'dues.payment', 'deadlines', 'promocodes')
             ->get();
 

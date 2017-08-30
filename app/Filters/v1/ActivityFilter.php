@@ -25,6 +25,17 @@ class ActivityFilter extends Filter
     public $searchable = ['name'];
 
     /**
+     * Filter by type.
+     *
+     * @param $type
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function type($id)
+    {
+        return $this->where('activity_type_id', $id);
+    }
+
+    /**
      * At given date and after.
      *
      * @param $date

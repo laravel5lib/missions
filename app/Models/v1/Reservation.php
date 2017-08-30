@@ -2,6 +2,7 @@
 
 namespace App\Models\v1;
 
+use App\Models\Presenters\ReservationPresenter;
 use Carbon\Carbon;
 use App\UuidForKey;
 use App\Traits\Rewardable;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey, Taggable, Rewardable;
+    use SoftDeletes, Filterable, UuidForKey, Taggable, Rewardable, ReservationPresenter;
 
     /**
      * The table associated with the model.
@@ -322,6 +323,11 @@ class Reservation extends Model
         return $this->belongsToMany(Room::class, 'occupants')
                     ->withPivot('room_leader')
                     ->withTimestamps();
+    }
+
+    public function questionnaires()
+    {
+        return $this->hasMany(Questionnaire::class);
     }
 
     /**
@@ -738,6 +744,7 @@ class Reservation extends Model
             // remove the current resources
             $this->costs()->detach();
             $this->requirements()->delete();
+            $this->questionnaires()->delete();
             $this->todos()->delete();
             $this->squads()->detach();
 

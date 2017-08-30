@@ -45,7 +45,7 @@
 				<div class="form-group" v-error-handler="{ value: name, handle: 'name' }" v-show="!uiLocked || allowName">
 					<label for="name" class="control-label">Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="name"
-							   placeholder="Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
+							   placeholder="Name" v-validate:name="{ required: true, maxlength:100 }"
 							   maxlength="100" minlength="1" required>
 				</div>
 				<div class="form-group" v-error-handler="{ value: tags, handle: 'tags' }" v-show="!uiLocked" >
@@ -332,12 +332,14 @@
 					case 'avatar':
 						this.selectedAvatar = data;
 						this.avatar_upload_id = data.id;
-						jQuery('#avatarCollapse').collapse('hide');
+						if (_.isFunction(jQuery.fn.collapse))
+							jQuery('#avatarCollapse').collapse('hide');
 						break;
 					case 'banner':
 						this.selectedBanner = data;
 						this.banner_upload_id = data.id;
-						jQuery('#bannerCollapse').collapse('hide');
+                        if (_.isFunction(jQuery.fn.collapse))
+                            jQuery('#bannerCollapse').collapse('hide');
 						break;
 				}
 				this.reset();
@@ -420,12 +422,8 @@
 				if (!this.constrained && this.slimAPI) {
                     this.slimAPI[0].ratio = w + ':' + h;
                 }
-//				this.vueCropApi.setSelect([this.coords.x, this.coords.y, w, h]);
+				// this.vueCropApi.setSelect([this.coords.x, this.coords.y, w, h]);
 			},
-            /*checkForError(field){
-                // if upload clicked submit button while the field is invalid trigger error styles 
-                return this.$CreateUpload[field].invalid && this.attemptSubmit;
-            },*/
             submit(){
 				this.resetErrors();
                 if (this.$CreateUpload.valid) {
@@ -457,12 +455,16 @@
 					    params.type = 'other';
 					}
 
-                    this.resource.save(null, params).then(function (resp) {
-						this.handleSuccess(resp)
+                    return this.resource.save(null, params).then(function (resp) {
+						return this.handleSuccess(resp);
                     }, function (error) {
                         this.errors = error.data.errors;
                         console.log(error);
                     });
+                } else {
+                    console.error(this.$CreateUpload.errors);
+                    this.$root.$emit('showError', 'Please check form.');
+                    return false;
                 }
             },
             update(){
@@ -482,13 +484,17 @@
                         params.type = 'other';
                     }
 
-                    this.resource.update({id:this.uploadId}, params).then(function (resp) {
-						this.handleSuccess(resp)
+                    return this.resource.update({id:this.uploadId}, params).then(function (resp) {
+						return this.handleSuccess(resp)
 					}, function (error) {
                         this.errors = error.data.errors;
                         console.log(error);
 					});
-				}
+                } else {
+                    console.error(this.$CreateUpload.errors);
+                    this.$root.$emit('showError', 'Please check form.');
+                    return false;
+                }
             },
 			handleSuccess(response){
 				if(this.isChild) {
@@ -499,6 +505,7 @@
 					window.location.href = '/admin/uploads';
 					// window.location.href = '/admin' + response.body.data.links[0].uri;
 				}
+				return response.body.data;
 			},
 			handleImage(e){
 				let self = this;
@@ -543,14 +550,11 @@
 					tags: this.tags
 				};
 
-				this.$http.get('uploads', { params: params }).then(function (response) {
+				return this.$http.get('uploads', { params: params }).then(function (response) {
 					this.uploads = response.body.data;
 					this.pagination = response.body.meta.pagination;
 					return this.uploads;
-				}, function (response) {
-                    console.log(response);
-                    return response
-                });
+				}, this.$root.handleApiError);
 			},
 			selectExisting(upload){
 				// Assumes this is a child component

@@ -41,7 +41,7 @@ class DonationTransaction extends TransactionHandler
             ]]);
 
             // capture the charge
-            $this->merchant->captureCharge($charge['id'], $request->all());
+            $this->merchant->captureCharge($charge['id']);
 
             // rebuild the payment array with new details
             $request->merge(['details' => [

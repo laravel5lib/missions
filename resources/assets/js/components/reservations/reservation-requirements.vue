@@ -30,12 +30,18 @@
                             </div>
                             <div class="col-xs-4 text-right">
                                 <label style="margin:13px 0px;">
+                                    <span v-show="isLocked">
+                                        <i class="fa fa-lock"></i> Locked &middot;
+                                    </span>
                                     Due {{ requirement.due_at | moment 'lll' }}
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="panel-body">
+                        <div class="alert alert-warning" v-if="! isAdminRoute && isLocked">
+                            This requirement is locked and can no longer be modified.
+                        </div>
                         <p>{{ requirement.short_desc }}</p>
                         <hr class="divider sm">
                     </div>
@@ -43,7 +49,8 @@
                         <document-manager :reservation-id="id"
                                           :requirement-id="requirement.id"
                                           :requirement="requirement"
-                                          :user-id="userId">
+                                          :user-id="userId"
+                                          :locked="isLocked">
                         </document-manager>
                     </div>
                     <div class="panel-footer">
@@ -111,6 +118,10 @@
             'userId': {
                 type: String,
                 required: true
+            },
+            'locked': {
+                type: Number,
+                default: 0
             }
         },
         computed: {
@@ -121,6 +132,12 @@
                 // }
 
                 return false;
+            },
+            'isLocked': function() {
+                if (this.isAdminRoute)
+                    return false;
+
+                return this.locked == 1 ? true: false;
             }
         },
         watch: {

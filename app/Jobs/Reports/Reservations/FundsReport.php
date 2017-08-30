@@ -34,7 +34,7 @@ class FundsReport extends Job implements ShouldQueue
      */
     public function handle(Reservation $reservation)
     {
-        $reservations = $reservation->filter($this->request)
+        $reservations = $reservation->filter(array_filter($this->request))
                              ->with('costs', 'dues.payment.cost')
                              ->get();
 

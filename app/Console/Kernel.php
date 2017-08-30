@@ -13,18 +13,24 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\SendEmails::class,
-        Commands\SendWelcomeEmails::class,
-        Commands\SendReservationConfirmationEmail::class,
-        Commands\SendReceiptEmail::class,
-        Commands\HandleLatePayments::class,
-        Commands\TransferData::class,
-        Commands\UsePromoCode::class,
-        Commands\AddRoleToTrips::class,
-        Commands\AddTodoToTrips::class,
-        Commands\AddRequirementToTrips::class,
-        Commands\ExtractAccounting::class,
-        Commands\ArchiveOldFunds::class
+        Commands\SendEmails::class, //Commands/Emails/Send
+        Commands\SendWelcomeEmails::class, //Emails/Users/SendWelcome
+        Commands\SendReservationConfirmationEmail::class, //Commands/Emails/Reservations/SendConfirmation
+        Commands\SendReceiptEmail::class, //Commands/Email/SendReceipt
+        Commands\HandleLatePayments::class, //Commands/Payments/Penalize
+//        Commands\TransferData::class, // TODO delete
+        Commands\UsePromoCode::class, //Commands/PromoCodes/UseCode
+        Commands\AddRoleToTrips::class, //Commands/Roles/Add
+        Commands\AddTodoToTrips::class, //Commands/Tasks/Add
+        Commands\AddRequirementToTrips::class, //Commands/Requirements/Add
+//        Commands\ExtractAccounting::class, // TODO delete
+        Commands\ArchiveOldFunds::class, //Commands/Funds/Archive
+        Commands\Requirements\Add::class,
+        Commands\Requirements\Remove::class,
+        Commands\Utilities\UpdateRoomingPlansToMultiGroups::class,
+        Commands\Utilities\ExportReservationProfilePics::class,
+        \Bugsnag\BugsnagLaravel\Commands\DeployCommand::class,
+        Commands\RunScenario::class
     ];
 
     /**

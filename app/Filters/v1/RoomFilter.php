@@ -8,7 +8,10 @@ class RoomFilter extends Filter
     *
     * @var array
     */
-    public $relations = [];
+    public $relations = [
+        'plans' => ['campaign', 'group'],
+        'accommodations' => ['region']
+    ];
 
     /**
      * Default sortable fields.
@@ -26,7 +29,7 @@ class RoomFilter extends Filter
 
     /**
      * Filter rooms assigned to plans.
-     * 
+     *
      * @param  array|integer $ids
      * @return query
      */
@@ -58,9 +61,18 @@ class RoomFilter extends Filter
         });
     }
 
+    public function notInUse($regionId = null)
+    {
+        if (! $regionId) return $this->has('accommodations', '<', 1);
+
+        return $this->whereDoesntHave('accommodations', function($query) use ($regionId) {
+            return $query->where('region_id', $regionId);
+        });
+    }
+
     /**
      * Filter by room type.
-     * 
+     *
      * @param  string $type
      * @return query
      */

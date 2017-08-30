@@ -1,5 +1,5 @@
 <template>
-    {{text}}{{text ? separator: ''}}
+    {{text}}
 </template>
 <script type="text/javascript">
     export default{

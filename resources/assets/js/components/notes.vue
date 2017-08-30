@@ -159,6 +159,7 @@
                 this.fetch();
             },
             'id': function (val, oldVal) {
+                this.selectedNote.noteable_id = val;
                 this.fetch();
             }
         },
@@ -246,7 +247,7 @@
                     // reset selected
                     this.reset();
                     // re-fetch list
-                    // this.fetch();
+                    this.fetch();
                     this.$dispatch('showSuccess', 'Note deleted.');
                 }, function () {
                     this.$dispatch('showError', 'Unable to delete note.');

@@ -14,5 +14,6 @@ const vm = new Vue(RootInstance).$mount('app');
 let userProfileTripHistory = vm.$refs.testComponent;
 
 test('trip history accolades object check', (t) => {
-    t.true(userProfileTripHistory.accolades.name === 'trip_history' && _.isArray(userProfileTripHistory.accolades.items));
+    t.is(userProfileTripHistory.accolades.name, 'trip_history');
+    t.not(userProfileTripHistory.accolades.items, null);
 });

@@ -17,7 +17,7 @@
 	</div><!-- end carousel -->
 	<hr class="divider inv xlg">
 
-	<div class="container">
+	<div class="container" v-if="campaigns.length < 1">
 		<div class="col-sm-8 col-sm-offset-2 text-center">
 			<h3>Looking for 2018 trips?</h3>
 			<hr class="divider inv sm">

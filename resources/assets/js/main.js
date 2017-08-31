@@ -1020,6 +1020,5 @@ new Vue({
         // check if impersonated data is no longer needed
         if (this.$cookie.get('impersonate') === null)
             localStorage.removeItem('impersonatedUser');
-
     }
 });

@@ -181,11 +181,11 @@
                 Payment Method
                 <i class="fa fa-close"></i>
             </span>
-            <span style="margin-right:2px;" class="label label-default" v-show="filters.minDate" @click="filters.minDate = null" >
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.minDate" @click="filters.minDate = ''" >
                 From Date
                 <i class="fa fa-close"></i>
             </span>
-            <span style="margin-right:2px;" class="label label-default" v-show="filters.maxDate" @click="filters.maxDate = null" >
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.maxDate" @click="filters.maxDate = ''" >
                 To Date
                 <i class="fa fa-close"></i>
             </span>
@@ -358,6 +358,7 @@
                 activeFields: ['description', 'type', 'amount', 'donor', 'created_at'],
                 maxActiveFields: 6,
                 maxActiveFieldsOptions: [3, 4, 5, 6, 7, 8],
+
                 // filter vars
                 donorsOptions: [],
                 donorObj: null,
@@ -505,6 +506,7 @@
                 };
 
                 $.extend(params, this.filters);
+
                 this.exportFilters = params;
 
                 return params;
@@ -533,7 +535,7 @@
             }
         },
         events: {
-            'refreshTransactions'() {
+            'refreshTransactions': function() {
                 this.searchTransactions();
             }
         },

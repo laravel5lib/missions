@@ -398,7 +398,7 @@
 						 window.location.reload();
 						 }*/
                         if (response.data.redirect_to)
-                            this.getUserData(response.data.redirect_to, response.data.ignore_redirect || false);
+                            this.getUserData('/dashboard', response.data.ignore_redirect || false);
                     })
                     .catch((response) => {
 	                        debugger;
@@ -433,7 +433,7 @@
             },
 
             getUserData(redirectTo, ignoreRedirect) {
-                return this.$http.get('users/me?include=roles,abilities')
+                return this.$http.get('users/me?include=roles,permissions')
                     .then((response) => {
                             this.$root.$emit('userHasLoggedIn', response.data.data);
 

@@ -479,6 +479,7 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
+<<<<<<< HEAD
 					</div>
 					<div class="modal-body">
 						<div class="modal-video">
@@ -489,6 +490,18 @@
 							</div>
 						</div>
 					</div>
+=======
+					</div>
+					<div class="modal-body">
+						<div class="modal-video">
+							<div class="video-outer">
+								<div class="video-inner">
+									<iframe src="https://player.vimeo.com/video/187199859?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+>>>>>>> origin/vue2
 				</div>
 			</div>
 		</div><!-- end modal -->

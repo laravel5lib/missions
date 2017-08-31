@@ -77,7 +77,7 @@
                     {name: 'Review', view: 'step3', complete:false}
                 ],
                 currentStep: null,
-                canContinue: false,
+//                canContinue: false,
                 trip: {},
                 tripCosts: {},
                 deadlines:[],

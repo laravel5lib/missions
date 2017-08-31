@@ -62,7 +62,7 @@
                 attemptedContinue: false,
                 groups: [],
                 groupObj: null,
-                group_id: null,
+//                group_id: null,
                 type: '',
                 trip: null
             }

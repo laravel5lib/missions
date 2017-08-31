@@ -7,7 +7,6 @@ import Vue from 'vue';
 window.Vue =  Vue;
 // import aside from './components/aside.vue';
 import pagination from './components/pagination.vue';
-import login from './components/login.vue';
 import topNav from './components/top-nav.vue';
 import markdownExampleModal from './components/markdown-example-modal.vue';
 import contactForm from './components/contact-form.vue';
@@ -663,7 +662,6 @@ Vue.mixin({
 new Vue({
     el: '#app',
     components: {
-        login,
         topNav,
         markdownExampleModal,
         contactForm,

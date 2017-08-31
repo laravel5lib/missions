@@ -43,7 +43,8 @@ class GuardServiceProvider extends Authorization
      */
     public function authenticate(Request $request, Route $route)
     {
-        if (! $user = $this->auth->user()) {
+        $user = !is_null($this->auth->user()) ? $this->auth->user() :$request->user();
+        if (! $user ) {
             throw new UnauthorizedHttpException(
                 get_class($this),
                 'Unable to authenticate with invalid API key and token.'

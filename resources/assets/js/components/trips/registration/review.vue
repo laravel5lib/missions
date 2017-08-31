@@ -137,7 +137,6 @@
 		watch:{
 			'review'(val, oldVal) {
                 this.$emit('step-completion', val);
-//                this.$emit('review', val)
 			},
 			'$parent.paymentErrors'(val) {
                 if (val.length > 0) {

@@ -6,9 +6,9 @@
             <hr class="divider inv sm" />
 
 				<form novalidate name="AdditionalOptionsForm">
-					<div class="" v-for="option in optionalCosts">
-						<label style="display:block" :for="'option' + $index">
-							<input type="radio" :id="'option' + $index" v-model="selectedOptions" :value="option" name="additional" v-validate="$index === 0 ? 'required' : ''">
+					<div class="" v-for="(option, index) in optionalCosts">
+						<label style="display:block" :for="'option' + index">
+							<input type="radio" :id="'option' + index" v-model="selectedOptions" :value="option" name="additional" v-validate="index === 0 ? 'required' : ''">
 							{{option.name}}
 							<span class="pull-right">{{currency(option.amount)}}</span>
 						</label>
@@ -25,13 +25,14 @@
 </template>
 <script type="text/javascript">
 	import _ from 'underscore';
+	import errorHandler from '../../error-handler.mixin'
 
 	export default{
 		name: 'additional-trip-options',
+		mixins: [errorHandler],
 		data(){
 			return {
 				title: 'Additional Trip Options',
-				atoComplete: true,
 //				optionalCosts: [],
 				selectedOptions: null
 			}
@@ -40,31 +41,22 @@
 			optionalCosts(){
 			    let arr = this.$parent.tripCosts.optional || [];
 			    if (!arr.length) {
-//                    this.$emit('ato-complete', true);
                     this.$emit('step-completion', true);
                 }
 				return _.sortBy(arr, 'name');
 			}
 		},
 		watch:{
-			'atoComplete'(val, oldVal) {
-//				this.$emit('ato-complete', val)
-                this.$emit('step-completion', val);
-            },
-			'selectedOptions'(val, oldVal) {
+
+			selectedOptions(val, oldVal) {
 				this.$parent.selectedOptions = val;
-			}
-		},
-		methods: {
-            onValid(){
-//                this.$emit('ato-complete', true);
+			},
+            isFormDirty() {
                 this.$emit('step-completion', true);
             },
-
-        },
-		mounted(){
-
 		},
+		methods: {},
+		mounted(){},
 		activated(){
 			$('html, body').animate({scrollTop : 200},300);
 		}

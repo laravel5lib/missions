@@ -903,16 +903,14 @@ new Vue({
             let token, csrfToken;
 
             csrfToken = document.head.querySelector('meta[name="csrf-token"]').content;
-            config.headers.common['X-CSRF-TOKEN'] = csrfToken;
-
-            token = $.cookie('api_token') ? $.cookie('api_token').indexOf('Bearer') !== -1 ? $.cookie('api_token') : 'Bearer ' + $.cookie('api_token') : null;
-
-            if (token !== null && token !== 'undefined') {
-                // this.$http.defaults.headers.common['Authorization'] = token;
-                config.headers.common['Authorization'] = token;
-                //headers.set('Authorization', token);
+            if (csrfToken !== null && csrfToken !== 'undefined') {
+                config.headers.common['X-CSRF-TOKEN'] = csrfToken;
             }
 
+            token = $.cookie('api_token') ? $.cookie('api_token').indexOf('Bearer') !== -1 ? $.cookie('api_token') : 'Bearer ' + $.cookie('api_token') : null;
+            if (token !== null && token !== 'undefined') {
+                config.headers.common['Authorization'] = token;
+            }
 
             // Show Spinners in all components where they exist
             if (_.contains(['GET', 'POST', 'PUT'], config.method.toUpperCase())) {
@@ -971,7 +969,7 @@ new Vue({
             return Promise.reject(error);
         });
 
-        // this.user = this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : this.fetchUser();
+        this.user = this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : this.fetchUser();
 
         // if api_token cookie doesn't exist user data will be cleared if they do exist
         /*if (this.$cookie.get('api_token') === null) {

@@ -34,9 +34,9 @@
             </a>
           </li>
 
-          @can ('access_backend')
-            <li><a href="{{ url('/admin') }}">Admin</a></li>
-          @endcan
+          @hasanyrole('super_admin|admin')
+            <li><a href="{{ url('/admin') }}"><i class="fa fa-gears"></i> Admin</a></li>
+          @endhasanyrole
 
           <li role="separator" class="divider"></li>
 

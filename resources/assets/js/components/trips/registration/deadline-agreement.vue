@@ -111,10 +111,6 @@
 			return {
 				title: 'Deadline Agreement',
 				deadlineAgree: false,
-				deadlines:[],
-				costs: [],
-				selectedOptionalCosts: [],
-
 			}
 		},
 		computed:{
@@ -122,16 +118,16 @@
                 return _.sortBy(this.requirements, 'due_at');
             },
 			deadlines(){
-				return this.$parent.deadlines;
+				return this.$parent.deadlines || [];
 			},
 			requirements(){
 				return this.$parent.requirements;
 			},
 			costs(){
-				return this.$parent.tripCosts;
+				return this.$parent.tripCosts || [];
 			},
 			selectedOptionalCosts(){
-				return [this.$parent.selectedOptions];
+				return [this.$parent.selectedOptions] || [];
 			}
 		},
 		methods:{
@@ -140,8 +136,7 @@
 			}
 		},
 		watch:{
-			'deadlineAgree'(val, oldVal) {
-//				this.$emit('deadline-agree', val)
+			deadlineAgree(val, oldVal) {
                 this.$emit('step-completion', val);
             }
 		},

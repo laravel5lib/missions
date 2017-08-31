@@ -90,7 +90,17 @@
 	export default{
 		name: 'trip-registration-wizard',
 		props: ['tripId', 'stripeKey'],
-		data(){
+        components: {
+            'step1': login,
+            'step2': tos,
+            'step3': roca,
+            'step4': basicInfo,
+            'step5': additionalOptions,
+            'step6': paymentDetails,
+            'step7': deadlineAgreement,
+            'step8': review,
+        },
+        data(){
 			return {
 				stepList:[
 					{name: 'Login/Register', view: 'step1', complete:false}, // login component skipped for now
@@ -166,10 +176,9 @@
 				let thisChild;
 				switch (this.currentStep.view) {
 					case 'step4':
-
 						// find child
 						this.$children.forEach(function (child) {
-							if (child.hasOwnProperty('$BasicInfo'))
+							if (child.hasOwnProperty('handle') && child.handle === 'BasicInfo')
 								thisChild = child;
 						});
 
@@ -179,15 +188,16 @@
                                 thisChild.attemptedContinue = true;
                                 return false;
                             }
+                            this.userInfo = thisChild.userInfo;
+                            this.nextStepCallback();
                         });
 
-						this.nextStepCallback();
 						break;
 					case 'step6':
 						// find child
 						if (this.upfrontTotal > 0) {
                             this.$children.forEach(function (child) {
-                                if (child.hasOwnProperty('$PaymentDetails'))
+                                if (child.hasOwnProperty('handle') && child.handle === 'PaymentDetails')
                                     thisChild = child;
                             });
                             // promise needed to wait for async response from stripe
@@ -213,42 +223,42 @@
 				}, this);
 			},
 			finish(){
-				this.$refs.reservationspinner.show();
-
-				let data = {
-					// reservation data
-					height_a: this.userInfo.heightA,
-					height_b: this.userInfo.heightB,
-					weight: this.userInfo.weight,
-					desired_role: this.userInfo.desired_role.value,
-					given_names: this.userInfo.firstName,
-					surname: this.userInfo.lastName,
-					gender: this.userInfo.gender,
-					status: this.userInfo.relationshipStatus,
-					shirt_size: this.userInfo.size,
-					birthday: moment(this.userInfo.dobMonth + '-' + this.userInfo.dobDay + '-' + this.userInfo.dobYear, 'MM-DD-YYYY').format('YYYY-MM-DD'),
-					address: this.userInfo.address,
-					city: this.userInfo.city,
-					state: this.userInfo.state,
-					zip: this.userInfo.zipCode,
-					country_code: this.userInfo.country,
-					email: this.userInfo.email,
-					phone_one: this.userInfo.phone,
-					phone_two: this.userInfo.mobile,
-					user_id: this.userData.id,
-					avatar_upload_id: this.userInfo.avatar_upload_id,
+                let data = {
+                    // reservation data
+                    height_a: this.userInfo.heightA,
+                    height_b: this.userInfo.heightB,
+                    weight: this.userInfo.weight,
+                    desired_role: this.userInfo.desired_role.value,
+                    given_names: this.userInfo.firstName,
+                    surname: this.userInfo.lastName,
+                    gender: this.userInfo.gender,
+                    status: this.userInfo.relationshipStatus,
+                    shirt_size: this.userInfo.size,
+                    birthday: moment(this.userInfo.dobMonth + '-' + this.userInfo.dobDay + '-' + this.userInfo.dobYear, 'MM-DD-YYYY').format('YYYY-MM-DD'),
+                    address: this.userInfo.address,
+                    city: this.userInfo.city,
+                    state: this.userInfo.state,
+                    zip: this.userInfo.zipCode,
+                    country_code: this.userInfo.country,
+                    email: this.userInfo.email,
+                    phone_one: this.userInfo.phone,
+                    phone_two: this.userInfo.mobile,
+                    user_id: this.userData.id,
+                    avatar_upload_id: this.userInfo.avatar_upload_id,
 //					trip_id: this.tripId,
-					companion_limit: this.companion_limit,
-					costs: this.prepareFinalCosts(),
+                    companion_limit: this.companion_limit,
+                    costs: this.prepareFinalCosts(),
 
-					// payment data
-					amount: this.upfrontTotal,
-					description: 'Reservation payment',
-					currency: 'USD', // determined from card token,
+                    // payment data
+                    amount: this.upfrontTotal,
+                    description: 'Reservation payment',
+                    currency: 'USD', // determined from card token,
 
                     promocode: this.promocode,
 
-				};
+                };
+                this.$refs.reservationspinner.show();
+
 				if (this.upfrontTotal > 0) {
 				    _.extend(data, {
                         token: this.paymentInfo.token,
@@ -266,7 +276,7 @@
 				} else {
 					data.donor = {
 						name: this.userInfo.firstName + ' ' + this.userInfo.lastName,
-						company: '',
+						// company: null,
 						email: this.userInfo.email,
 						phone: this.userInfo.phone,
 						zip: this.userInfo.zipCode,
@@ -327,16 +337,6 @@
                 if (this.currentStep.view === 'step8')
                     this.wizardComplete = val;
 			},
-		},
-		components: {
-			'step1': login,
-			'step2': tos,
-			'step3': roca,
-			'step4': basicInfo,
-			'step5': additionalOptions,
-			'step6': paymentDetails,
-			'step7': deadlineAgreement,
-			'step8': review,
 		},
 		created(){
 			// login component skipped for now

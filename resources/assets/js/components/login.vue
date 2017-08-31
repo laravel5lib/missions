@@ -318,6 +318,7 @@
     import vSelect from "vue-select";
     import utilities from './utilities.mixin';
     import errorHandler from'./error-handler.mixin';
+    import qs from 'qs';
     export default {
         name: 'login',
 	    mixins: [utilities, errorHandler],
@@ -379,24 +380,20 @@
                         this.$root.$emit('showError', 'Please check the form.');
                         return false;
                     }
-                        debugger;
-
-//                    let loginHttp = this.$http.create({ baseURL: '', headers: {} });
-                    this.$http.post('/oauth/token', {
+                    this.$http.post('/oauth/token', qs.stringify({
                         grant_type: 'password',
-                        client_id: 2,
-                        client_secret: 'NvqY1KwxVL7PfkS5lxZ6Ha2fss9TpglGAH0oOquR',
+                        client_id: 1,
+                        client_secret: 'x8NFHoYH0z5FP5P6TW9mBrOf8FbX2iekZIa0VAbs',
                         username: this.user.email,
                         password: this.user.password,
                         scope: '*',
-                    }).then((response) => {
+                    }), { baseURL: '' }).then((response) => {
                         // set cookie - name, token
-                        debugger;
-                        this.$cookie.set('api_token', response.data.token);
-                        // reload to set cookie
-                        /*if (this.isChildComponent) {
-						 window.location.reload();
-						 }*/
+                        this.$cookie.set('api_token', response.data.access_token);
+
+                        if (this.isChildComponent) {
+                            this.getUserData();
+                        }
                         if (response.data.redirect_to)
                             this.getUserData('/dashboard', response.data.ignore_redirect || false);
                     })

@@ -7,7 +7,7 @@
 			<div class="row visible-xs-block">
 				<div class="col-xs-12">
 					<div class="btn-group btn-group-justified btn-group-xs" style="display:block;" role="group" aria-label="...">
-						<a @click="backStep" class="btn btn-default" :class="{'disabled': currentStep.view === 'step1' }" role="button">
+						<a @click="backStep" class="btn btn-default" :class="{'disabled': currentStep.view === 'step2' }" role="button">
 							<i class="fa fa-chevron-left"></i>
 						</a>
 						<div class="btn-group" role="group">
@@ -60,7 +60,7 @@
 		<div class="panel-footer text-right">
 			<div class="btn-group btn-group" role="group" aria-label="...">
 				<!--<a class="btn btn-link" data-dismiss="modal">Cancel</a>-->
-				<a class="btn btn-default" @click="backStep" :class="{'disabled': currentStep.view === 'step1' }">Back</a>
+				<a class="btn btn-default" @click="backStep" :class="{'disabled': currentStep.view === 'step2' }">Back</a>
 				<a class="btn btn-primary" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep">Continue</a>
 				<a class="btn btn-primary" v-else @click="finish">Finish</a>
 			</div>
@@ -75,11 +75,8 @@
 	.fade-enter, .fade-leave {
 		opacity: 0;
 	}
-
-	.step1 {}
 </style>
 <script type="text/javascript">
-	import login from '../login.vue';
 	import tos from './registration/tos.vue';
 	import roca from './registration/roca.vue';
 	import basicInfo from './registration/basic-info.vue';
@@ -91,7 +88,6 @@
 		name: 'trip-registration-wizard',
 		props: ['tripId', 'stripeKey'],
         components: {
-            'step1': login,
             'step2': tos,
             'step3': roca,
             'step4': basicInfo,
@@ -103,7 +99,6 @@
         data(){
 			return {
 				stepList:[
-					{name: 'Login/Register', view: 'step1', complete:false}, // login component skipped for now
 					{name: 'Legal (Terms of Service)', view: 'step2', complete:false},
 					{name: 'Rules of Conduct Agreement', view: 'step3', complete:false},
 					{name: 'Basic Traveler Information', view: 'step4', complete:false},
@@ -113,7 +108,6 @@
 					{name: 'Review', view: 'step8', complete:false}
 				],
 				currentStep: null,
-//				canContinue: false,
 				trip: {},
 				tripCosts: {},
 				deadlines:[],

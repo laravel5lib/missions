@@ -76,14 +76,19 @@
 <script type="text/javascript">
 	export default{
 		name: 'group-trips',
-		props: ['id', 'campaignId'],
+		props: ['groupId', 'campaign'],
 		data(){
 			return {
 				group:{},
 				trips: [],
 				page: 1,
-				pagination: { current_page: 1 }
+				pagination: { current_page: 1 },
 			}
+		},
+		computed: {
+            currentView() {
+                return this.$parent.currentView;
+            }
 		},
 		methods: {
             limitedProspects(propects, limit) {
@@ -94,7 +99,7 @@
 					include: "costs",
 					onlyPublished: true,
 					onlyPublic: true,
-					groups: new Array(this.id),
+					groups: new Array(this.groupId),
 					campaign: this.campaignId,
 					sort: 'spots|desc',
 					//per_page: 8,
@@ -128,17 +133,19 @@
             }
 		},
 		mounted(){
-			if (this.id && this.campaignId && this.id.length>0 && !this.$parent.currentView) {
+            this.$http.get('groups/' + this.groupId).then((response) => {
+                this.group = response.data.data;
+            });
+            this.getTrips();
+
+			if (this.groupId && this.campaignId && this.groupId.length>0 && !this.$parent.currentView) {
 				this.getTrips();
 			}
 		},
 		activated(){
-			this.id = this.$parent.groupId;
-			this.campaignId = this.$parent.campaignId;
-			this.$http.get('groups/' + this.id).then((response) => {
-				this.group = response.data.data;
-			});
-			this.getTrips();
+//			this.groupId = this.$parent.groupId;
+//			this.campaign = this.$parent.campaignId;
+
 		}
 	}
 </script>

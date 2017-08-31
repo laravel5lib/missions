@@ -99,7 +99,7 @@ Auth::routes();
 $this->get('/donate/{recipient?}', 'DonationsController@show');
 $this->get('/referrals/{id}', 'ReferralsController@show');
 $this->get('/trips/{id}', 'TripsController@show');
-$this->get('/trips/{id}/register', 'TripsController@register');
+$this->get('/trips/{id}/register', 'TripsController@register')->middleware('auth');
 $this->get('/fundraisers', 'FundraisersController@index');
 $this->get('/groups', 'GroupsController@index');
 $this->get('/campaigns', 'CampaignsController@index');

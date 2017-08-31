@@ -31,7 +31,7 @@
 								<a role="button" @click="selectGroup(group)">
 									<h5 style="margin:0px;">
 									<img :src="group.avatar" :alt="group.name" class="av-left img-circle img-xs">
-									{{group.name | truncate (30, '...')}}
+									{{group.name | truncate(30, '...')}}
 									</h5>
 								</a>
 								</div><!-- end panel-body -->
@@ -63,13 +63,13 @@
 	import _ from 'underscore';
 	export default {
 		name: 'campaign-groups',
-		props: ['id'],
+		props: ['campaign'],
 		data(){
 			return {
 				groups: [],
 				page: 1,
 				pagination: {current_page: 1},
-				searchText: ''
+				searchText: '',
 			}
 		},
 		watch: {
@@ -93,7 +93,7 @@
 					include: "group",
 					onlyPublished: true,
 					onlyPublic: true,
-					campaign: this.id,
+					campaign: this.campaign,
 					per_page: 12,
 					search: this.searchText,
 					page: this.pagination.current_page
@@ -113,9 +113,7 @@
 					this.groups = _.filter(arr, function(group) {
 						return group['public'] == true;
 					});
-				}, (error) =>  {
-					//TODO error alert message
-				});
+				}, this.$root.handleApiError);
 			},
 			selectGroup(group) {
 				if (this.$parent.currentView) {
@@ -128,7 +126,7 @@
 			this.searchGroups();
 		},
 		activated(){
-			this.id = this.$parent.campaignId;
+//			this.campaign = this.$parent.campaignId;
 		}
 	}
 </script>

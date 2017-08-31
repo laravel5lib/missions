@@ -19,10 +19,11 @@
                 <div class="form-group">
                     <select id="type" class="form-control input-sm" v-model="filters.trip_type" >
                         <option value="">Any Trip Type</option>
-                        <option value="full">Full</option>
+                        <option value="ministry">Ministry</option>
                         <option value="media">Media</option>
                         <option value="medical">Medical</option>
-                        <option value="short">Short</option>
+                        <option value="leader">Leader</option>
+                        <option value="family">Family</option>
                     </select>
                 </div>
                 <div class="form-group">

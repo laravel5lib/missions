@@ -11,37 +11,62 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\v1\User::class, 'admin')->create()->each(function ($user) {
-            $user->assignRole('super_admin');
-            $user->slug()
-                 ->save(factory(App\Models\v1\Slug::class)
-                 ->make(['url' => str_slug($user->name)]));
-            $user->links()->saveMany([
-                factory(App\Models\v1\Link::class)->make(['name' => 'facebook', 'url' => 'https://facebook.com']),
-                factory(App\Models\v1\Link::class)->make(['name' => 'twitter', 'url' => 'https://twitter.com']),
-                factory(App\Models\v1\Link::class)->make()
-            ]);
-            $user->stories()->saveMany(factory(App\Models\v1\Story::class, 3)->make(['author_id' => $user->id, 'author_type' => 'users']));
-            $user->accolades()->save(factory(App\Models\v1\Accolade::class)->make());
-            $user->accolades()->save(factory(App\Models\v1\Accolade::class, 'trip_history')->make());
-            $user->essays()->save(factory(App\Models\v1\Essay::class)->make());
-            $user->passports()->save(factory(App\Models\v1\Passport::class)->make());
-            $user->visas()->save(factory(App\Models\v1\Visa::class)->make());
-            $user->referrals()->save(factory(App\Models\v1\Referral::class)->make());
-            $user->medicalReleases()->save(factory(App\Models\v1\MedicalRelease::class)->make());
-        });
-        // factory(App\Models\v1\User::class, config('seeders.users'))->create()->each(function($user) {
-        //     $user->slug()
-        //          ->save(factory(App\Models\v1\Slug::class)
-        //          ->make(['url' => str_slug($user->name)]));
-        //     $user->stories()->saveMany(factory(App\Models\v1\Story::class, 2)->make(['author_id' => $user->id, 'author_type' => 'users']));
-        //     $user->accolades()->save(factory(App\Models\v1\Accolade::class)->make());
-        //     $user->accolades()->save(factory(App\Models\v1\Accolade::class, 'trip_history')->make());
-        //     $user->essays()->save(factory(App\Models\v1\Essay::class)->make());
-        //     $user->passports()->save(factory(App\Models\v1\Passport::class)->make());
-        //     $user->visas()->save(factory(App\Models\v1\Visa::class)->make());
-        //     $user->referrals()->save(factory(App\Models\v1\Referral::class)->make());
-        //     $user->medicalReleases()->save(factory(App\Models\v1\MedicalRelease::class)->make());
-        // });
+        (new AdminWithEverything)->create(['name' => 'Neil Keena', 'email' => 'neil@missions.me']);
+
+        // interns
+        (new InternWithEverything)->create([
+            'name' => 'Taylor Jensen', 'email' => 'tjensen@missions.me'
+        ]);
+        (new InternWithEverything)->create([
+            'name' => 'Esther Gualtieri', 'email' => 'egualtieri@missions.me'
+        ]);
+        (new InternWithEverything)->create([
+            'name' => 'Cooper Moore', 'email' => 'cmoore@missions.me'
+        ]);
+        (new InternWithEverything)->create([
+            'name' => 'Ethan Erway', 'email' => 'eerway@missions.me'
+        ]);
+        (new InternWithEverything)->create([
+            'name' => 'Joshua Hughes', 'email' => 'jhughes@missions.me'
+        ]);
+        (new InternWithEverything)->create([
+            'name' => 'Sergio Fielder', 'email' => 'sfielder@missions.me'
+        ]);
+        (new InternWithEverything)->create([
+            'name' => 'Julia Muccini', 'email' => 'jmuccini@missions.me'
+        ]);
+        (new InternWithEverything)->create([
+            'name' => 'Brittany Chamberlain', 'email' => 'bchamberlain@missions.me'
+        ]);
+        (new InternWithEverything)->create([
+            'name' => 'Abigail Davenport', 'email' => 'adavenport@missions.me'
+        ]);
+        (new InternWithEverything)->create([
+            'name' => 'Gloria Rodgers', 'email' => 'grodgers@missions.me'
+        ]);
+        (new InternWithEverything)->create([
+            'name' => 'Victoria Keller', 'email' => 'vkeller@missions.me'
+        ]);
+        (new InternWithEverything)->create([
+            'name' => 'Taja Titus', 'email' => 'ttitus@missions.me'
+        ]);
+        (new InternWithEverything)->create([
+            'name' => 'Jackie Rios', 'email' => 'jrios@missions.me'
+        ]);
+        (new InternWithEverything)->create([
+            'name' => 'Sara Kate Warner', 'email' => 'swarner@missions.me'
+        ]);
+
+        (new UserWithEverything)->times(10)->create();
+        (new NewUser)->times(10)->create();
+
+        (new CurrentCampaignWithTripsAndInterests)->create(['name' => 'The New Honduras', 'country_code' => 'hn']);
+        (new CurrentCampaignWithTripsAndInterests)->create(['name' => 'The Best Dominican', 'country_code' => 'do']);
+        (new CurrentCampaignWithTripsAndInterests)->create(['name' => 'Nicaragua Shines', 'country_code' => 'ni']);
+        // (new ArchivedCampaignWithTripsAndReservations)->times(3)->create();
+
+        (new NewReservation)->times(20)->create();
+        (new InProgressReservation)->times(70)->create();
+        // (new TravelReadyReservation)->times(10)->create();
     }
 }

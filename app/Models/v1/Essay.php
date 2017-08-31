@@ -1,6 +1,6 @@
 <?php
 
-namespace App\models\v1;
+namespace App\Models\v1;
 
 use App\UuidForKey;
 use App\Models\v1\User;

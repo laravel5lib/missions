@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Auth;
 
 use App\Models\v1\User;
+use Illuminate\Http\Request;
 use App\Utilities\v1\Country;
 use App\Jobs\SendWelcomeEmail;
 use App\Http\Controllers\Controller;
@@ -147,5 +148,17 @@ class RegisterController extends Controller
         dispatch(new SendWelcomeEmail($user));
 
         return $user;
+    }
+
+     /**
+     * The user has been registered.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    public function registered(Request $request)
+    {
+        return redirect()->intended($this->redirectPath());
     }
 }

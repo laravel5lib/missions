@@ -6,12 +6,8 @@
 $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker) {
     return [
         'id'              => $faker->unique()->uuid,
-        'group_id'        => function () {
-            return factory(App\Models\v1\Group::class)->create()->id;
-        },
-        'campaign_id'     => function () {
-            return factory(App\Models\v1\Campaign::class)->create()->id;
-        },
+        'group_id'        => $faker->uuid,
+        'campaign_id'     => $faker->uuid,
         'spots'           => random_int(10, 500),
         'companion_limit' => random_int(0, 3),
         'country_code'    => function (array $trip) {
@@ -31,13 +27,11 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker) {
             'adults', 'teens', 'men', 'women', 'medical professionals',
             'media professionals', 'business professionals', 'pastors',
             'families'], 4),
-        'rep_id'           => function () {
-            return factory(App\Models\v1\User::class)->create()->id;
-        },
+        'rep_id'           => $faker->uuid,
         'description'      => file_get_contents(resource_path('assets/sample_trip.md')),
         'public'           => $faker->boolean(95),
         'published_at'     => function (array $trip) {
-            return App\Models\v1\Campaign::find($trip['campaign_id'])->published_at->addMonth();
+            return App\Models\v1\Campaign::find($trip['campaign_id'])->published_at;
         },
         'closed_at'        => function (array $trip) {
             return App\Models\v1\Campaign::find($trip['campaign_id'])->started_at->subDays(7);

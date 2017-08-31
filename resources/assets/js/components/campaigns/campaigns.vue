@@ -1,19 +1,91 @@
 <template>
-	<div>
-		<div id="carousel-example-generic" class="carousel slide campaign-carousel" data-ride="carousel">
-			<div class="carousel-inner">
-				<div class="item active">
-					<img src="/images/1n1d17/1n1d17-campaign-banner.jpg" alt="#1N1D17">
-					<div class="carousel-caption">
-						<h6 class="text-uppercase">Nicaragua</h6>
-						<h3>1Nation1Day 2017</h3>
-						<p>1Nation1Day Nicaragua will be the largest global missions outreach in history.</p>
-						<a href="/1n1d17" class="btn btn-primary btn-sm">More Details</a>
-					</div>
+<div>
+	<div id="carousel-example-generic" class="carousel slide campaign-carousel" data-ride="carousel">
+		<div class="carousel-inner">
+			<div class="item active">
+				<img src="/images/1n1d17/1n1d17-campaign-banner.jpg" alt="#1N1D17">
+				<div class="carousel-caption">
+					<h6 class="text-uppercase">Nicaragua</h6>
+					<h3>1Nation1Day 2017</h3>
+					<p>July 29, 2017 marked the day that the hand of God touched the nation of Nicaragua in epic proportions.</p>
+					<a href="http://1nation1day.com" class="btn btn-primary btn-sm">Learn About 1N1D17</a>
 				</div>
 			</div>
-			<div class="featured-tag">
-				<a class="btn btn-info btn-sm hidden-xs" style="border-radius:50px;"><i class="fa fa-bolt icon-left"></i> Featured</a>
+		</div>
+		<div class="featured-tag">
+			<a class="btn btn-info btn-sm hidden-xs" style="border-radius:50px;"><i class="fa fa-bolt icon-left"></i> Featured</a>
+		</div>
+	</div><!-- end carousel -->
+	<hr class="divider inv xlg">
+
+	<div class="container" v-if="campaigns.length < 1">
+		<div class="col-sm-8 col-sm-offset-2 text-center">
+			<h3>Looking for 2018 trips?</h3>
+			<hr class="divider inv sm">
+			<p>Be the first on the list to know about 2018 trips.</p>
+			<hr class="divider inv">
+			<a href="http://eepurl.com/cZnArz" target="_blank" class="btn btn-primary">Notify Me!</a>
+		</div><!-- end col -->
+	</div><!-- end container -->
+
+	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;" v-if="campaigns.length > 0">
+		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<div class="col-xs-12">
+			<h4>Current Campaigns</h4>
+			<hr class="divider">
+		</div>
+		<div class="col-xs-6 text-right">
+			<a v-if="campaigns.length > 3" @click="seeAll" class="btn btn-primary btn-sm">See All</a>
+		</div>
+	</div>
+	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
+		<div class="col-xs-12 col-sm-6 col-md-4" v-for="campaign in limitBy(campaigns, campaignsLimit)" style="display:flex">
+			<div class="panel panel-default">
+				<a class="hidden-xs hidden-sm" :href="campaign.page_url" role="button">
+					<img :src="campaign.avatar+'?w=400&h=400&fit=stretch'" :alt="campaign.name" class="img-responsive">
+				</a>
+				<div style="min-height:220px;" class="panel-body">
+					<h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;"><i
+							class="fa fa-map-marker"></i> {{campaign.country}}</h6>
+					<a :href="campaign.page_url" role="button">
+						<h5 style="text-transform:capitalize;" class="text-primary">{{campaign.name}}</h5>
+					</a>
+					<h6 style="font-size:12px;">
+						{{campaign.started_at | moment('ll')}} -
+						{{campaign.ended_at | moment('ll')}}
+					</h6>
+					<hr class="divider lg"/>
+					<p style="font-size:12px;" class="small">{{campaign.description}}</p>
+				</div><!-- end panel-body -->
+			</div><!-- end panel -->
+		</div><!-- end col -->
+	</div>
+	<hr class="divider inv xlg">
+	<div class="white-bg">
+		<div class="container">
+			<div class="content-section">
+				<div class="row">
+					<div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center">
+						<h2 class="text-primary">Missions.Me provides a custom opportunity. We create experiences that maximize your gifts and are tailored to your passion.</h2>
+					</div><!-- end col -->
+				</div><!-- end row -->
+			</div><!-- end content-section -->
+		</div><!-- end container -->
+	</div><!-- end white-bg -->
+	<div class="white-bg">
+		<div class="row row-no-margin">
+			<div class="col-sm-2 col-xs-4 col-no-padding">
+				<img class="img-responsive" src="images/why-mm/collage/collage1.jpg" alt="">
+			</div>
+			<div class="col-sm-2 col-xs-4 col-no-padding">
+				<img class="img-responsive" src="images/why-mm/collage/collage3.jpg" alt="">
+			</div>
+			<div class="col-sm-2 col-xs-4 col-no-padding">
+				<img class="img-responsive" src="images/why-mm/collage/collage4.jpg" alt="">
+			</div>
+			<div class="col-sm-2 col-xs-4 col-no-padding">
+				<img class="img-responsive" src="images/why-mm/collage/collage5.jpg" alt="">
 			</div>
 		</div><!-- end carousel -->
 		<hr class="divider inv xlg">
@@ -407,6 +479,7 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
+<<<<<<< HEAD
 					</div>
 					<div class="modal-body">
 						<div class="modal-video">
@@ -417,6 +490,18 @@
 							</div>
 						</div>
 					</div>
+=======
+					</div>
+					<div class="modal-body">
+						<div class="modal-video">
+							<div class="video-outer">
+								<div class="video-inner">
+									<iframe src="https://player.vimeo.com/video/187199859?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+>>>>>>> origin/vue2
 				</div>
 			</div>
 		</div><!-- end modal -->
@@ -442,6 +527,7 @@
 			</div>
 		</div><!-- end modal -->
 	</div>
+</div>
 </template>
 <script type="text/javascript">
 	import $ from 'jquery';
@@ -471,9 +557,8 @@
 			    e.preventDefault();
 			    $( '#' + $(this).data('video-modal') ).modal();
 			});
-
 			//set src for video playher in modal
-			$('.video-modal').on('hide.bs.modal', function(e) {    
+			$('.video-modal').on('hide.bs.modal', function(e) {
 			    let $if = $(e.delegateTarget).find('iframe');
 			    let src = $if.attr("src");
 			    $if.attr("src", '/empty.html');

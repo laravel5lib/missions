@@ -7,9 +7,7 @@ $factory->define(App\Models\v1\Slug::class, function (Faker\Generator $faker) {
     return [
         'url' => $faker->unique()->slug,
         'slugable_type' => 'users',
-        'slugable_id' => function () {
-            return factory(App\Models\v1\User::class)->create()->id;
-        }
+        'slugable_id' => $faker->uuid
     ];
 });
 
@@ -21,9 +19,7 @@ $factory->defineAs(App\Models\v1\Slug::class, 'group', function (Faker\Generator
 
     return array_merge($slug, [
         'slugable_type' => 'groups',
-        'slugable_id' => function () {
-            return factory(App\Models\v1\Group::class)->create()->id;
-        }
+        'slugable_id' => $faker->uuid
     ]);
 });
 
@@ -35,8 +31,6 @@ $factory->defineAs(App\Models\v1\Slug::class, 'campaign', function (Faker\Genera
 
     return array_merge($slug, [
         'slugable_type' => 'campaigns',
-        'slugable_id' => function () {
-            return factory(App\Models\v1\Campaign::class)->create()->id;
-        }
+        'slugable_id' => $faker->uuid
     ]);
 });

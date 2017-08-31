@@ -33,7 +33,7 @@
                 <todos type="trip_interests"
                        id="{{ $interest->id }}"
                        user_id="{{ auth()->user()->id }}"
-                       :can-modify="{{ auth()->user()->can('modify-todos') }}">
+                       :can-modify="{{ auth()->user()->can('modify-todos')?1:0 }}">
                 </todos>
             </div>
         </div>
@@ -43,7 +43,7 @@
                        id="{{ $interest->id }}"
                        user_id="{{ auth()->user()->id }}"
                        :per_page="3"
-                       :can-modify="{{ auth()->user()->can('modify-notes') }}">
+                       :can-modify="{{ auth()->user()->can('modify-notes')?1:0 }}">
                 </notes>
             </div>
         </div>

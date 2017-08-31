@@ -14,7 +14,7 @@
             <reservation-requirements id="{{ $reservation->id }}"
                                       user-id="{{ $reservation->user_id }}" 
                                       :age="{{ $reservation->age }}"
-                                      :locked="{{ $locked }}">
+                                      :locked="{{ $locked?'true':'false' }}">
             </reservation-requirements>
         </div>
     </div>

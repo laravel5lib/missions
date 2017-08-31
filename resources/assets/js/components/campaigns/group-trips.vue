@@ -65,7 +65,7 @@
 
 			<div class="container">
 				<div class="col-sm-12 text-center">
-					<pagination :pagination="pagination" :callback="getTrips"></pagination>
+					<pagination :pagination="pagination" pagination-key="pagination" :callback="getTrips"></pagination>
 				</div>
 			</div><!-- end container -->
 			<hr class="divider inv xlg">

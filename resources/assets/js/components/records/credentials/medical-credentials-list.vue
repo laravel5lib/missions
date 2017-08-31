@@ -57,7 +57,7 @@
 			</div>
 		</div>
 		<div class="col-xs-12 text-center">
-			<pagination :pagination="pagination" :callback="searchMedicals"></pagination>
+			<pagination :pagination="pagination" pagination-key="pagination" :callback="searchMedicals"></pagination>
 		</div>
 		<modal :value="deleteModal" title="Remove Medical Credential" :small="true">
 			<div slot="modal-body" class="modal-body">Delete this Medical Credential?</div>

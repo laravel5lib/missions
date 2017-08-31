@@ -36,7 +36,7 @@
 					</div><!-- end panel -->
 				</div><!-- end col -->
 				<div class="col-xs-12 text-center">
-					<pagination :pagination="pagination" :callback="searchUploads"></pagination>
+					<pagination :pagination="pagination" pagination-key="pagination" :callback="searchUploads"></pagination>
 				</div>
 			</div>
 		</div>

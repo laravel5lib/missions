@@ -50,7 +50,7 @@
 				</form>
 			</mm-aside>
 			<mm-aside :show="showReservationsFilters" @open="showReservationsFilters=true" @close="showReservationsFilters=false" placement="left" header="Reservation Filters" :width="375">
-				<reservations-filters ref="filters" v-model="reservationFilters" :reset-callback="resetFilter" :pagination="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" teams></reservations-filters>
+				<reservations-filters ref="filters" v-model="reservationFilters" :reset-callback="resetFilter" :pagination="reservationsPagination" pagination-key="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" teams></reservations-filters>
 			</mm-aside>
 			<mm-aside :show="showMembersFilters" @open="showMembersFilters=true" @close="showMembersFilters=false" placement="left" header="Members Filters" :width="375">
 				<hr class="divider inv sm">
@@ -523,7 +523,7 @@
 										</a>
 									</ul>
 									<div class="col-xs-12 text-center">
-										<pagination :pagination="teamsPagination" :callback="getTeams"></pagination>
+										<pagination :pagination="teamsPagination" pagination-key="teamsPagination" :callback="getTeams"></pagination>
 									</div>
 
 								</template>
@@ -687,7 +687,7 @@
 									</div>
 								</div>
 								<div class="col-sm-12 text-center">
-									<pagination :pagination="reservationsPagination" :callback="searchReservations"></pagination>
+									<pagination :pagination="reservationsPagination" pagination-key="reservationsPagination" :callback="searchReservations"></pagination>
 								</div>
 							</div>
 						</div>

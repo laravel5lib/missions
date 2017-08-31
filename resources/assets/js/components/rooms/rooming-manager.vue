@@ -2,7 +2,7 @@
 	<div>
 		<div class="row" style="position:relative;">
 			<mm-aside :show="showReservationsFilters" @open="showReservationsFilters=true" @close="showReservationsFilters=false" placement="left" header="Reservation Filters" :width="375">
-				<reservations-filters ref="filters" v-model="reservationFilters" :reset-callback="resetReservationFilter" :pagination="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" rooms></reservations-filters>
+				<reservations-filters ref="filters" v-model="reservationFilters" :reset-callback="resetReservationFilter" :pagination="reservationsPagination" pagination-key="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" rooms></reservations-filters>
 			</mm-aside>
 
 			<template v-if="currentPlan">
@@ -226,7 +226,7 @@
 											</div>
 										</div>
 										<div class="col-sm-12 text-center">
-											<pagination :pagination="roomsPagination" :callback="getRooms"></pagination>
+											<pagination :pagination="roomsPagination" pagination-key="roomsPagination" :callback="getRooms"></pagination>
 										</div>
 									</template>
 									<template v-else>
@@ -390,7 +390,7 @@
 						</div>
 					</div>
 					<div class="col-sm-12 text-center">
-						<pagination :pagination="reservationsPagination" :callback="searchReservations"></pagination>
+						<pagination :pagination="reservationsPagination" pagination-key="reservationsPagination" :callback="searchReservations"></pagination>
 					</div>
 				</div>
 			</template>

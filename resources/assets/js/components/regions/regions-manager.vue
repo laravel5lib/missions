@@ -184,7 +184,7 @@
 								</div>
 							</div>
 							<div class="col-xs-12 text-center">
-								<pagination :pagination="regionsPagination" :callback="getRegions"></pagination>
+								<pagination :pagination="regionsPagination" pagination-key="regionsPagination" :callback="getRegions"></pagination>
 							</div>
 						</div>
 					</template>
@@ -239,7 +239,7 @@
 							</div>
 						</div>
 						<div class="col-xs-12 text-center">
-							<pagination :pagination="squadsPagination" :callback="getSquads"></pagination>
+							<pagination :pagination="squadsPagination" pagination-key="squadsPagination" :callback="getSquads"></pagination>
 						</div>
 					</template>
 					<template v-else>

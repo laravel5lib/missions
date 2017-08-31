@@ -118,7 +118,7 @@
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-                        <pagination :pagination="pagination"
+                        <pagination :pagination="pagination" pagination-key="pagination"
                                     :callback="searchInitiatives"
                                     size="small">
                         </pagination>

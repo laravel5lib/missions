@@ -65,7 +65,7 @@
                     </div>
                 </div>
                 <div class="col-sm-12 text-center">
-                    <pagination :pagination="pagination" :callback="getProjects"></pagination>
+                    <pagination :pagination="pagination" pagination-key="pagination" :callback="getProjects"></pagination>
                 </div>
             </template>
             </div>

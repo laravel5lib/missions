@@ -61,7 +61,7 @@
 			</div>
 
 			<div class="col-xs-12 text-center">
-				<pagination :pagination="roomTypesPagination" :callback="getRoomTypes"></pagination>
+				<pagination :pagination="roomTypesPagination" pagination-key="roomTypesPagination" :callback="getRoomTypes"></pagination>
 			</div>
 
 		</div>

@@ -407,6 +407,8 @@
                 hasTransportation: null,
                 traveling: null,
                 filters: {},
+                hasRoomInPlan: false,
+                noRoomInPlan: false,
             }
         },
 	    computed: {

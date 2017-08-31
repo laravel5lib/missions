@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="col-sm-12 text-center">
-                    <pagination :pagination="pagination" :callback="searchEssays"></pagination>
+                    <pagination :pagination="pagination" pagination-key="pagination" :callback="searchEssays"></pagination>
                 </div>
             </div>
         </div>

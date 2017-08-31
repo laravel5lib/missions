@@ -77,7 +77,7 @@
             </div>
         </div>
         <div class="col-xs-12 text-center">
-            <pagination :pagination="pagination" :callback="searchReferrals"></pagination>
+            <pagination :pagination="pagination" pagination-key="pagination" :callback="searchReferrals"></pagination>
         </div>
         <modal :value="deleteModal" title="Remove Referral" :small="true">
             <div slot="modal-body" class="modal-body text-center">Delete this Referral?</div>

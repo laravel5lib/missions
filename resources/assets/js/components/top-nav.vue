@@ -29,7 +29,7 @@
 					</template>
 				</ul>
 				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding:10px 40px;" href="/login">Login</a></li>
-				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding: 10px 34px;border-left: 1px solid #242424;" href="/login">Sign Up</a></li>
+				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding: 10px 34px;border-left: 1px solid #242424;" href="/register">Sign Up</a></li>
 
 				<template v-if="isDashboard()">
 					<li class="navlabel">User</li>

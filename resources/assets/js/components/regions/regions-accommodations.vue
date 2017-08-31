@@ -317,7 +317,7 @@
 								</panel>
 							</accordion>
 							<div class="col-xs-12 text-center">
-								<pagination :pagination="accommodationsPagination" :callback="getAccommodations"></pagination>
+								<pagination :pagination="accommodationsPagination" pagination-key="accommodationsPagination" :callback="getAccommodations"></pagination>
 							</div>
 						</template>
 						<template v-else>
@@ -398,7 +398,7 @@
 							</a>
 						</div>
 						<div class="col-xs-12 text-center">
-							<pagination :pagination="regionsPagination" :callback="getRegions"></pagination>
+							<pagination :pagination="regionsPagination" pagination-key="regionsPagination" :callback="getRegions"></pagination>
 						</div>
 					</template>
 					<template v-else>

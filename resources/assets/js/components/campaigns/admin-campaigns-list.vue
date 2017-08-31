@@ -57,7 +57,7 @@
 				<tfoot>
 				<tr>
 					<td colspan="10" class="text-center">
-						<pagination :pagination="pagination" :callback="searchCampaigns"></pagination>
+						<pagination :pagination="pagination" pagination-key="pagination" :callback="searchCampaigns"></pagination>
 					</td>
 				</tr>
 				</tfoot>

@@ -82,7 +82,7 @@
         </div>
         <div class="row">
             <div class="col-sm-12 text-center">
-                <pagination :pagination="pagination" :callback="fetch"></pagination>
+                <pagination :pagination="pagination" pagination-key="pagination" :callback="fetch"></pagination>
             </div>
         </div>
 

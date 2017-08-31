@@ -221,7 +221,7 @@
                 <tr>
                     <td colspan="8">
                         <div class="col-sm-12 text-center">
-                            <pagination :pagination="pagination"
+                            <pagination :pagination="pagination" pagination-key="pagination"
                                         :callback="searchInterests"
                                         size="small">
                             </pagination>

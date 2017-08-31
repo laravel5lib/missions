@@ -971,7 +971,7 @@ new Vue({
             return Promise.reject(error);
         });
 
-        this.user = this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : this.fetchUser();
+        // this.user = this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : this.fetchUser();
 
         // if api_token cookie doesn't exist user data will be cleared if they do exist
         /*if (this.$cookie.get('api_token') === null) {

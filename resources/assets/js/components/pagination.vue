@@ -34,6 +34,10 @@
                 type: Object,
                 required: true
             },
+            paginationKey: {
+                type: String,
+                required: true
+            },
             callback: {
                 type: Function,
                 required: true
@@ -109,12 +113,20 @@
                 return this.config.alwaysShowPrevNext || this.pagination.current_page < this.pagination.total_pages;
             },
             changePage (page) {
+                // Sort of hacky way to paginate without having to alter a lot of files
+                let parent = this.findParent(this.$parent);
                 if (this.pagination.current_page === page) {
                     return;
                 }
-
-                this.$set('pagination.current_page', page);
+                parent[this.paginationKey].current_page = page;
+                this.$emit('paginate', page);
                 this.callback();
+            },
+            findParent(parent) {
+                // conditionally recursive function that locates the parent containing the matching pagination object
+                if (parent[this.paginationKey] && parent[this.paginationKey] === this.pagination)
+                    return parent;
+                return this.findParent(parent.$parent)
             }
         },
 		mounted() {

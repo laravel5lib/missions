@@ -139,7 +139,7 @@
 				</div>
 			</div>
 				<div class="col-xs-12 text-center">
-					<pagination :pagination="activitiesPagination" :callback="getActivities"></pagination>
+					<pagination :pagination="activitiesPagination" pagination-key="activitiesPagination" :callback="getActivities"></pagination>
 				</div>
 		</template>
 		<!-- Activities List Empty State -->

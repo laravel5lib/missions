@@ -4,7 +4,7 @@
             <div class="col-sm-12">
                 <spinner ref="spinner" size="sm" text="Loading"></spinner>
                 <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Transport Filters" :width="375">
-                    <transports-filters :filters="filters" :reset-callback="resetFilters" :pagination="pagination" :callback="fetch"></transports-filters>
+                    <transports-filters :filters="filters" :reset-callback="resetFilters" :pagination="pagination" pagination-key="pagination" :callback="fetch"></transports-filters>
                 </mm-aside>
 
                 <div class="row">
@@ -110,7 +110,7 @@
                     </div>
                 </div>
                 <div class="col-sm-12 text-center">
-                    <pagination :pagination="pagination" :callback="fetch"></pagination>
+                    <pagination :pagination="pagination" pagination-key="pagination" :callback="fetch"></pagination>
                 </div>
             </div>
         </div>

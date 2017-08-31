@@ -7,7 +7,6 @@ use App\Models\v1\Cost;
 use App\Models\v1\Todo;
 use App\Models\v1\Trip;
 use App\Models\v1\User;
-use App\Models\v1\Group;
 use App\Models\v1\Upload;
 use App\Models\v1\Payment;
 use App\Models\v1\Group;
@@ -16,9 +15,6 @@ use App\Models\v1\ProjectCause;
 use App\Models\v1\TripInterest;
 use App\Jobs\SendReferralRequestEmail;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
-use App\Models\v1\Trip;
-use App\Models\v1\Upload;
-use App\Models\v1\User;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 

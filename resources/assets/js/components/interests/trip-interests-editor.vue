@@ -61,7 +61,7 @@
                 </div>
                 <div class="col-sm-6">
                     <label>Phone</label>
-                    <input class="form-control" v-model="interest.phone" v-if="editMode">
+                    <phone-input v-model="interest.phone" v-if="editMode"></phone-input>
                     <p v-else>{{ interest.phone }}</p>
                 </div>
             </div>

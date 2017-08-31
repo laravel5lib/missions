@@ -47,12 +47,13 @@ export default {
         },
         getRoles(conditionArray, loading){
             loading ? loading(true) : void 0;
-            return this.$http.get('utilities/team-roles').then((response) => {
+            return this.$http.get('utilities/team-roles').then(response => {
                 let arr = [];
-                _.each(response.data.roles, function (name, key) {
+                _.each(response.data.roles, (name, key) => {
                     if (conditionArray && _.isArray(conditionArray)) {
-                        if (_.contains(conditionArray, key))
-                            this.UTILITIES.roles.push({ value: key, name: name});
+                        if (_.contains(conditionArray, key)) {
+                            arr.push({value: key, name: name});
+                        }
                     } else
                         arr.push({ value: key, name: name});
                 });

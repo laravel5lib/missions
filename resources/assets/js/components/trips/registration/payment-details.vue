@@ -77,7 +77,7 @@
 							</tr>
 							<tr>
 								<td>Up-front Charges</td>
-								<td class="text-danger text-right">{{-currency(upfrontTotal)}}</td>
+								<td class="text-danger text-right">-{{currency(upfrontTotal)}}</td>
 							</tr>
 							<tr v-if="promoValid">
 								<td>Promo Credit</td>
@@ -173,13 +173,13 @@
 									<div class="col-sm-7">
 										<div class="form-group" :class="{ 'has-error': errors.has('email') }">
 											<label for="infoEmailAddress">Billing Email Address</label>
-											<input type="text" class="form-control input-sm" v-model="cardEmail" name="email="['email']" id" v-validate="infoEmailAddress">
+											<input type="text" class="form-control input-sm" v-model="cardEmail" name="email" id="infoEmailAddress" v-validate="'email'">
 										</div>
 									</div>
 									<div class="col-sm-5">
 										<div class="form-group" :class="{ 'has-error': errors.has('zip') }">
 											<label for="infoZip">Billing ZIP/Postal Code</label>
-											<input type="text" class="form-control input-sm" v-model="cardZip" name="zip="'required'" id="infoZip" placeholder" v-validate="12345">
+											<input type="text" class="form-control input-sm" v-model="cardZip" name="zip" id="infoZip" placeholder="12345" v-validate="'required'">
 										</div>
 									</div>
 									<!--<div class="col-sm-12">-->
@@ -210,8 +210,23 @@
 <script type="text/javascript">
 	export default{
 		name: 'payment-details',
+        props: {
+            showButton: {
+                'default': true
+            },
+            callback: {
+                required: false
+            },
+            showLabels: {
+                'default': false
+            },
+            devMode: {
+                'default': true
+            }
+        },
 		data(){
 			return {
+			    handle: 'PaymentDetails',
 				title: 'Payment Details',
 				paymentComplete: false,
 				//staticCosts: [],
@@ -236,7 +251,6 @@
 				cardSave: false,
 
 				// stripe vars
-				stripeKey: null,
 				stripeError: null,
 				monthList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
 				placeholders: {
@@ -256,6 +270,105 @@
 				stripeDeferred: {},
 			}
 		},
+        computed: {
+            fundraisingGoal(){
+                return this.totalCosts - this.upfrontTotal;
+            },
+            staticCosts(){
+                return this.$parent.tripCosts.static || [];
+            },
+            incrementalCosts(){
+                return this.$parent.tripCosts.incremental || [];
+            },
+            selectedOptions(){
+                return this.$parent.selectedOptions || null;
+            },
+            totalCosts(){
+                let amount = 0;
+                // add static costs if they exists
+                if(this.staticCosts && this.staticCosts.constructor === Array) {
+                    this.staticCosts.forEach(function (cost) {
+                        amount += parseFloat(cost.amount);
+                    });
+                }
+                // add optional costs if they exists
+                if (this.selectedOptions && _.isObject(this.selectedOptions)) {
+//					this.selectedOptions.forEach(function (cost) {
+                    amount += parseFloat(this.selectedOptions.amount);
+//					});
+                }
+
+                // add incremental costs if they exists
+                if (this.incrementalCosts && this.incrementalCosts.constructor === Array) {
+                    this.incrementalCosts.forEach(function (cost) {
+                        amount += parseFloat(cost.amount);
+                    });
+                }
+
+                return amount;
+            },
+            upfrontTotal(){
+                let amount = 0;
+                // add static costs if they exists
+                if(this.staticCosts && this.staticCosts.constructor === Array) {
+                    this.staticCosts.forEach(function (cost) {
+                        cost.payments.data.forEach(function (payment) {
+                            if (payment.upfront) {
+                                amount += parseFloat(payment.amount_owed);
+                            }
+                        });
+
+                    });
+                }
+                // add optional costs if they exists
+                if (this.selectedOptions && _.isObject(this.selectedOptions)) {
+                    //this.selectedOptions.forEach(function (cost) {
+                    this.selectedOptions.payments.data.forEach(function (payment) {
+                        if (payment.upfront) {
+                            amount += parseFloat(payment.amount_owed);
+                        }
+                    });
+                    //});
+                }
+
+                // add incremental costs if they exists
+                if (this.incrementalCosts && this.incrementalCosts.constructor === Array) {
+                    this.incrementalCosts.forEach(function (cost) {
+                        cost.payments.data.forEach(function (payment) {
+                            if (payment.upfront) {
+                                amount += parseFloat(payment.amount_owed);
+                            }
+                        });
+                    });
+                }
+                this.$parent.upfrontTotal = amount;
+                return amount;
+            },
+            yearList() {
+                let num, today, years, yyyy;
+                today = new Date;
+                yyyy = today.getFullYear();
+                years = (() =>  {
+                    let i, ref, ref1, results;
+                    results = [];
+                    for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
+                        results.push(num);
+                    }
+                    return results;
+                })();
+                return years;
+            },
+            cardParams() {
+                return {
+                    cardholder: this.cardHolderName,
+                    number: this.cardNumber,
+                    exp_month: this.cardMonth,
+                    exp_year: this.cardYear,
+                    cvc: this.cardCVC,
+                    zip: this.cardZip
+                };
+            },
+        },
 		watch: {
 			'paymentComplete'(val, oldVal) {
 //				this.$emit('payment-complete', val)
@@ -272,10 +385,10 @@
             }
 		},
 		events: {
-			'VueStripe::create-card-token': () =>  {
+			'VueStripe::create-card-token'()  {
 				return this.createToken();
 			},
-			'VueStripe::reset-form': () =>  {
+			'VueStripe::reset-form'()  {
 				return this.resetCaching();
 			},
             'payment-complete'(val, oldVal) {
@@ -291,179 +404,46 @@
                 }
             }
 		},
-		mounted() {
-//			this.$emit('payment-complete', true);
-            this.$emit('step-completion', true);
-            if (this.devMode) {
-				this.cardNumber = '';
-				this.cardCVC = '';
-				this.cardYear = '2019';
-				return this.cardMonth = '1';
-			}
-		},
-		props: {
-			showButton: {
-				'default': true
-			},
-			callback: {
-				required: false
-			},
-			showLabels: {
-				'default': false
-			},
-			devMode: {
-				'default': true
-			}
-		},
-		computed: {
-			stripeKey() {
-				return this.$parent.stripeKey || null;
-			},
-			fundraisingGoal(){
-				return this.totalCosts - this.upfrontTotal;
-			},
-			staticCosts(){
-				return this.$parent.tripCosts.static || [];
-			},
-			incrementalCosts(){
-				return this.$parent.tripCosts.incremental || [];
-			},
-			selectedOptions(){
-				return this.$parent.selectedOptions || null;
-			},
-			totalCosts(){
-				var amount = 0;
-				// add static costs if they exists
-				if(this.staticCosts && this.staticCosts.constructor === Array) {
-					this.staticCosts.forEach(function (cost) {
-						amount += parseFloat(cost.amount);
-					});
-				}
-				// add optional costs if they exists
-				if (this.selectedOptions && _.isObject(this.selectedOptions)) {
-//					this.selectedOptions.forEach(function (cost) {
-						amount += parseFloat(this.selectedOptions.amount);
-//					});
-				}
-
-				// add incremental costs if they exists
-				if (this.incrementalCosts && this.incrementalCosts.constructor === Array) {
-					this.incrementalCosts.forEach(function (cost) {
-						amount += parseFloat(cost.amount);
-					});
-				}
-
-				return amount;
-			},
-			upfrontTotal(){
-				var amount = 0;
-				// add static costs if they exists
-				if(this.staticCosts && this.staticCosts.constructor === Array) {
-					this.staticCosts.forEach(function (cost) {
-						cost.payments.data.forEach(function (payment) {
-							if (payment.upfront) {
-								amount += parseFloat(payment.amount_owed);
-							}
-						});
-
-					});
-				}
-				// add optional costs if they exists
-				if (this.selectedOptions && _.isObject(this.selectedOptions)) {
-					//this.selectedOptions.forEach(function (cost) {
-					this.selectedOptions.payments.data.forEach(function (payment) {
-						if (payment.upfront) {
-							amount += parseFloat(payment.amount_owed);
-						}
-					});
-					//});
-				}
-
-				// add incremental costs if they exists
-				if (this.incrementalCosts && this.incrementalCosts.constructor === Array) {
-					this.incrementalCosts.forEach(function (cost) {
-						cost.payments.data.forEach(function (payment) {
-							if (payment.upfront) {
-								amount += parseFloat(payment.amount_owed);
-							}
-						});
-					});
-				}
-                this.$parent.upfrontTotal = amount;
-				return amount;
-			},
-			yearList() {
-				var num, today, years, yyyy;
-				today = new Date;
-				yyyy = today.getFullYear();
-				years = (() =>  {
-					var i, ref, ref1, results;
-					results = [];
-					for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
-						results.push(num);
-					}
-					return results;
-				})();
-				return years;
-			},
-			cardParams() {
-				return {
-					cardholder: this.cardHolderName,
-					number: this.cardNumber,
-					exp_month: this.cardMonth,
-					exp_year: this.cardYear,
-					cvc: this.cardCVC,
-					zip: this.cardZip
-				};
-			},
-		},
-		methods: {
-			onValid(){
-				//this.$emit('payment-complete', true)
-			},
-			onInvalid(){
-				// for now allow to continue
-				//this.$emit('payment-complete', true)
-			},
-			toDate(date){
-				if(date) {
-					return moment(date).format('LL');
-				} else {
-					return 'Now';
-				}
-			},
-			resetCaching() {
-				console.log('resetting');
-				this.cardMonth = '';
-				this.cardCVC = '';
-				this.cardYear = '';
-				this.cardNumber = '';
-				return this.card = null;
-			},
-			formatCard(event) {
-				var output;
-				output = this.cardNumber.split('-').join('');
-				if (output.length > 0) {
-					output = output.replace(/[^\d]+/g, '');
-					output = output.match(new RegExp('.{1,4}', 'g'));
-					if (output) {
-						return this.cardNumber = output.join('-');
-					} else {
-						return this.cardNumber = '';
-					}
-				}
-			},
-			checkPromo(){
+        methods: {
+            toDate(date){
+                if(date) {
+                    return moment(date).format('LL');
+                } else {
+                    return 'Now';
+                }
+            },
+            resetCaching() {
+                console.log('resetting');
+                this.cardMonth = '';
+                this.cardCVC = '';
+                this.cardYear = '';
+                this.cardNumber = '';
+                return this.card = null;
+            },
+            formatCard(event) {
+                let output;
+                output = this.cardNumber.split('-').join('');
+                if (output.length > 0) {
+                    output = output.replace(/[^\d]+/g, '');
+                    output = output.match(new RegExp('.{1,4}', 'g'));
+                    if (output) {
+                        return this.cardNumber = output.join('-');
+                    } else {
+                        return this.cardNumber = '';
+                    }
+                }
+            },
+            checkPromo(){
                 this.$http.post('trips/'+ this.$parent.tripId +'/promo', {promocode: this.promo} ).then((response) => {
                     this.promoValid = parseInt(response.data.replace(/,+/, ''));
                 }, function(error) {
                     this.promoError = error.data.message;
                     this.promoValid = false;
                 });
-			},
-			createToken() {
-				this.stripeDeferred = $.Deferred();
-				this.$validator.validateAll().then(result => {
+            },
+            createToken() {
+                this.stripeDeferred = $.Deferred();
+                this.$validator.validateAll().then(result => {
                     if (!result) {
                         this.attemptedCreateToken = true;
                         this.stripeDeferred.reject(false);
@@ -479,50 +459,60 @@
                                     this.$parent.$refs.validationSpinner.hide();
                                 });
                     }
-				})
+                })
 
-				return this.stripeDeferred.promise();
-			},
-			createTokenCallback(resp) {
-				//console.log(status);
-				console.log(resp);
-				this.validationErrors = {
-					cardNumber: '',
-					cardCVC: '',
-					cardYear: '',
-					cardMonth: ''
-				};
-				this.stripeError = resp.error;
-				if (this.stripeError) {
-					if (this.stripeError.param === 'number') {
-						this.validationErrors.cardNumber = 'error';
-					}
-					if (this.stripeError.param === 'exp_year') {
-						this.validationErrors.cardYear = 'error';
-					}
-					if (this.stripeError.param === 'exp_month') {
-						this.validationErrors.cardMonth = 'error';
-					}
-					if (this.stripeError.param === 'cvc') {
-						this.validationErrors.cardCVC = 'error';
-					}
-					this.stripeDeferred.reject(false);
-				}
-				if (resp.status === 200) {
-					this.card = this.cardParams;
-					// send payment data to parent
-					this.$parent.paymentInfo = {
-						token: resp.data,
-						card: this.cardParams,
-						save: this.cardSave,
-						email: this.cardEmail,
-						address_zip: this.cardZip
-					};
-					this.$parent.upfrontTotal = this.upfrontTotal;
-					this.$parent.fundraisingGoal = this.fundraisingGoal;
-					this.$parent.promocode = this.promoValid ? this.promo : null;
-					this.stripeDeferred.resolve(true);
-				}
+                return this.stripeDeferred.promise();
+            },
+            createTokenCallback(resp) {
+                //console.log(status);
+                console.log(resp);
+                this.validationErrors = {
+                    cardNumber: '',
+                    cardCVC: '',
+                    cardYear: '',
+                    cardMonth: ''
+                };
+                this.stripeError = resp.error;
+                if (this.stripeError) {
+                    if (this.stripeError.param === 'number') {
+                        this.validationErrors.cardNumber = 'error';
+                    }
+                    if (this.stripeError.param === 'exp_year') {
+                        this.validationErrors.cardYear = 'error';
+                    }
+                    if (this.stripeError.param === 'exp_month') {
+                        this.validationErrors.cardMonth = 'error';
+                    }
+                    if (this.stripeError.param === 'cvc') {
+                        this.validationErrors.cardCVC = 'error';
+                    }
+                    this.stripeDeferred.reject(false);
+                }
+                if (resp.status === 200) {
+                    this.card = this.cardParams;
+                    // send payment data to parent
+                    this.$parent.paymentInfo = {
+                        token: resp.data,
+                        card: this.cardParams,
+                        save: this.cardSave,
+                        email: this.cardEmail,
+                        address_zip: this.cardZip
+                    };
+                    this.$parent.upfrontTotal = this.upfrontTotal;
+                    this.$parent.fundraisingGoal = this.fundraisingGoal;
+                    this.$parent.promocode = this.promoValid ? this.promo : null;
+                    this.stripeDeferred.resolve(true);
+                }
+            }
+        },
+        mounted() {
+//			this.$emit('payment-complete', true);
+            this.$emit('step-completion', true);
+            if (this.devMode) {
+				this.cardNumber = '';
+				this.cardCVC = '';
+				this.cardYear = '2019';
+				return this.cardMonth = '1';
 			}
 		},
 		activated(){

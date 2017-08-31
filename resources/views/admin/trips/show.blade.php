@@ -85,12 +85,15 @@
         </div>
 
     </div>
+@endsection
+
+@push('styles')
     <style>
         .panel dd {
             text-transform: capitalize;
         }
     </style>
-@endsection
+@endpush
 
 @section('scripts')
     <script type="text/javascript">

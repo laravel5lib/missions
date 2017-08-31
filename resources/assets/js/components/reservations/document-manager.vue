@@ -51,12 +51,13 @@
         <div class="col-sm-12" v-if="changeState && list" transition="fade">
             <div class="row">
                 <div class="col-sm-12">
-                    <keep-alive><component :is="list"
-                                           :user-id="managingUserId"
-                                           @set-decument="setDocument"
-                                           @unset-decument="removeDocument"
-                                           selector>
-                    </component></keep-alive>
+                    <keep-alive>
+                        <component :is="list"
+                                   :user-id="managingUserId"
+                                   @set-decument="setDocument"
+                                   @unset-decument="removeDocument"
+                                   selector></component>
+                    </keep-alive>
 
                 </div>
             </div>
@@ -133,7 +134,7 @@
                 documents: [],
                 requirement: {},
                 //logic vars
-                requirementResource: this.$resource('reservations/{reservationId}/requirements/{requirementId}'),
+                requirementResource: this.$resource('reservations{/reservationId}/requirements{/requirementId}'),
                 loaded: false,
                 newState: false,
                 changeState: false,
@@ -150,12 +151,12 @@
             }
         },
         computed: {
-            'managingUserId': function() {
+            managingUserId() {
                 if (this.userId) return this.userId;
 
                 return this.$root.user.id;
             },
-            'isLocked': function() {
+            isLocked() {
                 if (this.isAdminRoute)
                     return false;
 
@@ -163,14 +164,14 @@
             }
         },
         watch:{
-            'search'(val, oldVal) {
+            search(val, oldVal) {
                 this.page = 1;
                 this.fetch();
             },
-            'page'(val, oldVal) {
+            page(val, oldVal) {
                 this.fetch();
             },
-            'per_page'(val, oldVal) {
+            per_page(val, oldVal) {
                 this.fetch();
             },
             'requirement.document_type'(val, oldVal) {
@@ -300,14 +301,6 @@
                 });
             },
         },
-        /*events: {
-            'set-document': function(document) {
-                this.setDocument(document);
-            },
-            'unset-document': function(document) {
-                this.removeDocument(document);
-            }
-        },*/
         mounted(){
             this.fetch();
         }

@@ -34,8 +34,8 @@
             </a>
           </li>
 
-          @can ('access_backend')
-            <li><a href="{{ url('/admin') }}">Admin</a></li>
+          @can('access_backend')
+            <li><a href="{{ url('/admin') }}"><i class="fa fa-gears"></i> Admin</a></li>
           @endcan
 
           <li role="separator" class="divider"></li>

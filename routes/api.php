@@ -26,29 +26,8 @@ $api->version('v1', [
         ];
     });
 
-    $api->group(['prefix' => 'utilities'], function ($api) {
-        $api->get('team-roles/{type?}', 'UtilitiesController@getTeamRoles');
-        $api->get('airlines/', 'AirlineController@index');
-        $api->get('airlines/{id}', 'AirlineController@show');
-        $api->get('airports/', 'AirportController@index');
-        $api->get('airports/{iata}', 'AirportController@show');
-        $api->get('countries', 'UtilitiesController@getCountries');
-        $api->get('countries/{code}', 'UtilitiesController@getCountry');
-        $api->get('timezones/{country_code?}', 'UtilitiesController@getTimezones');
-        $api->get('past-trips', 'UtilitiesController@getPastTrips');
-        $api->get('activities/types', 'UtilitiesController@getActivityTypes');
-        $api->get('make-slug/{string}', function ($string) {
-            return ['slug' => generate_slug($string)];
-        });
-        $api->get('make-fundraiser-slug/{string}', function ($string) {
-            return ['slug' => generate_fundraiser_slug($string)];
-        });
-        $api->get('make-fund-slug/{string}', function ($string) {
-            return ['slug' => generate_fundraiser_slug($string)];
-        });
-    });
 
-    $api->group(['middleware' => ['api']], function($api) {
+    $api->group(['middleware' => ['api.auth']], function($api) {
 
         $api->resource('uploads', 'UploadsController');
         $api->get('images/{path}', 'UploadsController@display')->where('path', '.+');
@@ -271,6 +250,42 @@ $api->version('v1', [
             return $exitCode;
         });
     });
+
+    $api->group(['prefix' => 'utilities'], function ($api) {
+        $api->get('team-roles/{type?}', 'UtilitiesController@getTeamRoles');
+        $api->get('airlines/', 'AirlineController@index');
+        $api->get('airlines/{id}', 'AirlineController@show');
+        $api->get('airports/', 'AirportController@index');
+        $api->get('airports/{iata}', 'AirportController@show');
+        $api->get('countries', 'UtilitiesController@getCountries');
+        $api->get('countries/{code}', 'UtilitiesController@getCountry');
+        $api->get('timezones/{country_code?}', 'UtilitiesController@getTimezones');
+        $api->get('past-trips', 'UtilitiesController@getPastTrips');
+        $api->get('activities/types', 'UtilitiesController@getActivityTypes');
+        $api->get('make-slug/{string}', function ($string) {
+            return ['slug' => generate_slug($string)];
+        });
+        $api->get('make-fundraiser-slug/{string}', function ($string) {
+            return ['slug' => generate_fundraiser_slug($string)];
+        });
+        $api->get('make-fund-slug/{string}', function ($string) {
+            return ['slug' => generate_fundraiser_slug($string)];
+        });
+    });
+
+    $api->get('images/{path}', 'UploadsController@display')->where('path', '.+');
+    $api->get('groups', 'GroupsController@index');
+    $api->get('groups/{group}', 'GroupsController@show');
+    $api->get('stories', 'StoriesController@index');
+    $api->get('trips', 'TripsController@index');
+    $api->get('trips/{trip}', 'TripsController@show');
+    $api->get('fundraisers', 'FundraisersController@index');
+    $api->get('fundraisers/{id}/donors', 'FundraisersController@donors');
+    $api->get('fundraisers/{id}/donations', 'FundraisersController@donations');
+    $api->get('campaigns', 'CampaignsController@index');
+    $api->resource('funds', 'FundsController'); // TODO restrict to get for queries like `funds/(recipient||general)`
+    $api->get('causes', 'ProjectCausesController@index');
+
 
 
 });

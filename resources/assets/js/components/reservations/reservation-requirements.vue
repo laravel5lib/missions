@@ -114,17 +114,17 @@
                 type: String,
                 required: true
             },
-            'age': {
-                type: Number,
-                default: 100
-            },
             'userId': {
                 type: String,
                 required: true
             },
-            'locked': {
+            'age': {
                 type: Number,
-                default: 0
+                default: 100
+            },
+            'locked': {
+                type: Boolean,
+                default: false
             }
         },
         computed: {
@@ -140,7 +140,7 @@
                 if (this.isAdminRoute)
                     return false;
 
-                return this.locked == 1 ? true: false;
+                return this.locked;
             }
         },
         watch: {
@@ -206,7 +206,7 @@
                 };
 
                 this.$http.get('reservations/' + this.id + '/requirements', { params: params }).then((response) => {
-                    this.requirements = response.data.data
+                    this.requirements = response.data.data;
                     this.pagination = response.data.meta.pagination;
                 });
             },

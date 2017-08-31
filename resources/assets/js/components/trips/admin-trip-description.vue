@@ -17,7 +17,7 @@
                             </div>
                             <div class="col-sm-12">
                                 <textarea rows="5" v-autosize="description" v-model="description" class="form-control"
-                                          name="description" placeholder="Please add a description" v-validate="'required'" v-html="description"></textarea>
+                                          name="description" placeholder="Please add a description" v-validate="'required'" v-html="descriptionHTML"></textarea>
                             </div>
                         </div>
                     </div>
@@ -46,12 +46,14 @@
                 editMode: false,
                 description: '',
                 resource: this.$resource('trips{/id}'),
-                showSuccess: false
+                showSuccess: false,
             }
         },
-        filters: {
-            marked: marked,
-        },
+	    computed: {
+            descriptionHTML() {
+                return this.description;
+            }
+	    },
         methods: {
             update(){
                 // this.$refs.spinner.show();
@@ -63,14 +65,15 @@
                     // this.$refs.spinner.hide();
                     this.showSuccess = true;
                 });
-            }
+            },
+            marked: marked
         },
         mounted(){
+            let self = this;
             this.resource.get({ id: this.id }).then((response) => {
                 // this.trip = response.data.data;
                 this.description = response.data.data.description;
             });
-            var self = this;
             this.$root.$on('toggleMode', () =>  {
                 self.editMode = !self.editMode;
             });

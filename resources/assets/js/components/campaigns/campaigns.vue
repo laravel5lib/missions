@@ -1,8 +1,9 @@
 <template>
+<div>
 	<div id="carousel-example-generic" class="carousel slide campaign-carousel" data-ride="carousel">
 		<div class="carousel-inner">
 			<div class="item active">
-				<img src="../images/1n1d17/1n1d17-campaign-banner.jpg" alt="#1N1D17">
+				<img src="/images/1n1d17/1n1d17-campaign-banner.jpg" alt="#1N1D17">
 				<div class="carousel-caption">
 					<h6 class="text-uppercase">Nicaragua</h6>
 					<h3>1Nation1Day 2017</h3>
@@ -39,7 +40,7 @@
 	</div>
 	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
 		<spinner ref="spinner" size="sm" text="Loading"></spinner>
-		<div class="col-xs-12 col-sm-6 col-md-4" v-for="campaign in campaigns|limitBy campaignsLimit" style="display:flex">
+		<div class="col-xs-12 col-sm-6 col-md-4" v-for="campaign in limitBy(campaigns, campaignsLimit)" style="display:flex">
 			<div class="panel panel-default">
 				<a class="hidden-xs hidden-sm" :href="campaign.page_url" role="button">
 					<img :src="campaign.avatar+'?w=400&h=400&fit=stretch'" :alt="campaign.name" class="img-responsive">
@@ -513,6 +514,7 @@
 			</div>
 		</div><!-- end modal -->
 	</div>
+</div>
 </template>
 <script type="text/javascript">
 	import $ from 'jquery';

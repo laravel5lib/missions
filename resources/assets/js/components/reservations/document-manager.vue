@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <!--<section>
     <div class="row" v-if="loaded" style="position:relative">
         <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="col-sm-12 tour-step-attach">
@@ -29,7 +29,7 @@
                                :locked="isLocked"
                                keep-alive>
                     </component>
-                </div><!-- end panel-body -->
+                </div>&lt;!&ndash; end panel-body &ndash;&gt;
             </div>
             <div v-if="questionnaire">
                 <div>
@@ -51,63 +51,64 @@
         <div class="col-sm-12" v-if="changeState && list" transition="fade">
             <div class="row">
                 <div class="col-sm-12">
-                    <keep-alive><component :is="list"
-                                           :user-id="managingUserId"
-                                           @set-decument="setDocument"
-                                           @unset-decument="removeDocument"
-                                           selector>
-                    </component></keep-alive>
+                    <keep-alive>
+                        <component :is="list"
+                                   :user-id="managingUserId"
+                                   @set-decument="setDocument"
+                                   @unset-decument="removeDocument"
+                                   selector></component>
+                    </keep-alive>
 
                 </div>
             </div>
         </div>
     </div>
-    </section>
+    </section>-->
 </template>
 <script>
-    import passportsList from '../records/passports/passports-list.vue';
-    import passport from '../records/passports/passport.vue';
-    import visasList from '../records/visas/visas-list.vue';
-    import visa from '../records/visas/visa.vue';
-    import essaysList from '../records/essays/essays-list.vue';
-    import influencerQuestionnairesList from '../records/influencers/influencer-questionnaires-list.vue';
-    import influencerQuestionnaire from '../records/influencers/influencer-questionnaire.vue';
-    import essay from '../records/essays/essay.vue';
-    import medicalsList from '../records/medicals/medicals-list.vue';
-    import medical from '../records/medicals/medical.vue';
-    import travelItineraries from '../reservations/travel-itineraries.vue';
-    import medicalCredentialsList from '../records/credentials/medical-credentials-list.vue';
-    import medicalCredential from '../records/credentials/medical-credential.vue';
-    import mediaCredentialsList from '../records/credentials/media-credentials-list.vue';
-    import mediaCredential from '../records/credentials/media-credential.vue';
-    import arrivalDesignation from '../reservations/arrival-designation.vue';
-    import airportPreference from '../reservations/airport-preference.vue';
-    import referralsList from '../records/referrals/referrals-list.vue';
-    import minorRelease from '../reservations/minor-release.vue';
-    import referral from '../records/referrals/referral.vue';
+//    import passportsList from '../records/passports/passports-list.vue';
+//    import passport from '../records/passports/passport.vue';
+//    import visasList from '../records/visas/visas-list.vue';
+//    import visa from '../records/visas/visa.vue';
+//    import essaysList from '../records/essays/essays-list.vue';
+//    import influencerQuestionnairesList from '../records/influencers/influencer-questionnaires-list.vue';
+//    import influencerQuestionnaire from '../records/influencers/influencer-questionnaire.vue';
+//    import essay from '../records/essays/essay.vue';
+//    import medicalsList from '../records/medicals/medicals-list.vue';
+//    import medical from '../records/medicals/medical.vue';
+//    import travelItineraries from '../reservations/travel-itineraries.vue';
+//    import medicalCredentialsList from '../records/credentials/medical-credentials-list.vue';
+//    import medicalCredential from '../records/credentials/medical-credential.vue';
+//    import mediaCredentialsList from '../records/credentials/media-credentials-list.vue';
+//    import mediaCredential from '../records/credentials/media-credential.vue';
+//    import arrivalDesignation from '../reservations/arrival-designation.vue';
+//    import airportPreference from '../reservations/airport-preference.vue';
+//    import referralsList from '../records/referrals/referrals-list.vue';
+//    import minorRelease from '../reservations/minor-release.vue';
+//    import referral from '../records/referrals/referral.vue';
     export default{
         name: 'document-manager',
         components: {
-            passportsList,
-            passport,
-            visasList,
-            visa,
-            essaysList,
-            influencerQuestionnairesList,
-            influencerQuestionnaire,
-            essay,
-            medicalsList,
-            medical,
-            referralsList,
-            referral,
-            arrivalDesignation,
-            travelItineraries,
-            airportPreference,
-            minorRelease,
-            medicalCredentialsList,
-            medicalCredential,
-            mediaCredentialsList,
-            mediaCredential
+//            passportsList,
+//            passport,
+//            visasList,
+//            visa,
+//            essaysList,
+//            influencerQuestionnairesList,
+//            influencerQuestionnaire,
+//            essay,
+//            medicalsList,
+//            medical,
+//            referralsList,
+//            referral,
+//            arrivalDesignation,
+//            travelItineraries,
+//            airportPreference,
+//            minorRelease,
+//            medicalCredentialsList,
+//            medicalCredential,
+//            mediaCredentialsList,
+//            mediaCredential
         },
         props:{
             'reservationId': {

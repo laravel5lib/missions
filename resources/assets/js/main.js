@@ -300,7 +300,16 @@ axios.defaults.baseURL = '/api';
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
 };
+/**
+ * We will register the CSRF Token as a common header with Axios so that all outgoing HTTP requests automatically have
+ * it attached. This is just a simple convenience so we don't have to attach every token manually.
+ */
+let csrfToken = document.head.querySelector('meta[name="csrf-token"]').content;
+if (csrfToken) {
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+}
 Vue.prototype.$http = axios;
+
 // Resource duplicate of vue-resource for axios
 // Inspired by https://github.com/pagekit/vue-resource/blob/develop/src/resource.js
 let URI = require('urijs');
@@ -802,6 +811,12 @@ new Vue({
 
         reservationsFilters,
     },
+    propsData: {
+        auth: {
+            type: Boolean,
+            default: false
+        }
+    },
     data: {
         datePickerSettings: {
             type: 'min',
@@ -825,15 +840,6 @@ new Vue({
         impersonatedToken() {
             return this.$cookie.get('impersonate');
         },
-        /*user: {
-            get () {
-                debugger
-                return this.fetchUser();
-            },
-            set (newValue) {
-
-            }
-        },*/
     },
     methods: {
         setUser(user) {
@@ -900,12 +906,7 @@ new Vue({
         // Add a request interceptor
         this.$http.interceptors.request.use((config) => {
             // modify request
-            let token, csrfToken;
-
-            csrfToken = document.head.querySelector('meta[name="csrf-token"]').content;
-            if (csrfToken !== null && csrfToken !== 'undefined') {
-                config.headers.common['X-CSRF-TOKEN'] = csrfToken;
-            }
+            let token;
 
             token = $.cookie('api_token') ? $.cookie('api_token').indexOf('Bearer') !== -1 ? $.cookie('api_token') : 'Bearer ' + $.cookie('api_token') : null;
             if (token !== null && token !== 'undefined') {
@@ -969,18 +970,19 @@ new Vue({
             return Promise.reject(error);
         });
 
-        this.user = this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : this.fetchUser();
-
         // if api_token cookie doesn't exist user data will be cleared if they do exist
-        /*if (this.$cookie.get('api_token') === null) {
+
+        if ( $('#app').data('auth') ) {
+            this.authenticated = true;
+            this.user = this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : this.fetchUser();
+        } else {
             if (localStorage.hasOwnProperty('user'))
                 localStorage.removeItem('user');
             if (localStorage.hasOwnProperty('impersonatedUser'))
                 localStorage.removeItem('impersonatedUser');
-        } else {
-            // because user is computed, this must be called to initiate impersonation or normal user before anything else
-            this.user;
-        }*/
+        }
+
+
     },
     mounted() {
         // Track window resizing

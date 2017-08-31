@@ -50,7 +50,7 @@
 					<spinner ref="validationSpinner" size="xl" :fixed="false" text="Validating"></spinner>
 					<spinner ref="reservationspinner" size="xl" :fixed="true" text="Creating Reservation"></spinner>
 					<keep-alive>
-						<component :is="currentStep.view" transition="fade" transition-mode="out-in" @step-completion="stepCompleted"></component>
+						<component :is="currentStep.view"  transition="fade" transition-mode="out-in" @step-completion="stepCompleted"></component>
 					</keep-alive>
 
 				</div>

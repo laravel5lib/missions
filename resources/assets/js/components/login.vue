@@ -4,7 +4,8 @@
 			<h6 class="text-uppercase text-center">Welcome To Missions.Me</h6>
 			<hr class="divider inv">
 			<template v-if="currentState==='login'">
-				<form class="form-horizontal" role="form" name="LoginForm" @submit.prevent="attempt" novalidate>
+				<form class="form-horizontal" method="post" action="/login" name="LoginForm" novalidate>
+					<input type="hidden" name="_token" :value="user._token">
 						<div id="alerts" v-if="messages.length > 0">
 							<div v-for="message in messages" :class="'alert alert-' + message.type + ' alert-dismissible'"
 							     role="alert">
@@ -364,10 +365,10 @@
         },
 
         watch: {
-            'countryCodeObj'(val) {
+            countryCodeObj(val) {
                 this.newUser.country_code = _.isObject(val) ? val.code : null;
             },
-            'currentState'(val) {
+            currentState(val) {
                 this.messages = [];
             }
         },
@@ -501,6 +502,7 @@
             // Enable child component behavior
             if (this.$parent != this.$root) {
                 this.isChildComponent = true;
+                this.getUserData(false);
             }
         },
         mounted() {
@@ -514,7 +516,7 @@
             if (this.isChildComponent) {
                 // After reload from login / registration
                 // Check if user is logged in
-                if (this.$cookie.get('api_token'))
+                if (this.authenticated && !this.$root.user)
                     this.getUserData(false);
             }
 

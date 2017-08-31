@@ -96,6 +96,7 @@
 				type: String,
 				default: '0',
 			},
+
 		},
 		data(){
 			return {
@@ -130,7 +131,7 @@
 				return this.admin && window.location.pathname.split('/')[1] === 'admin';
 			},
 			logout(){
-			    this.$http.post('/logout');
+			    this.$http.post('/logout', null, {baseURL: ''});
 			}
 		},
 		mounted(){

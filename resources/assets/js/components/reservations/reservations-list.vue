@@ -1,7 +1,7 @@
 <template>
     <div>
         <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
-            <reservations-filters ref="filters" v-model="filters" :reset-callback="resetFilter" :pagination="pagination" :callback="getReservations" storage="DashboardReservations" :starter="startUp" :facilitator="isFacilitator" :trip-specific="!!tripId"></reservations-filters>
+            <reservations-filters ref="filters" v-model="filters" :reset-callback="resetFilter" :pagination="pagination" pagination-key="pagination" :callback="getReservations" storage="DashboardReservations" :starter="startUp" :facilitator="isFacilitator" :trip-specific="!!tripId"></reservations-filters>
         </mm-aside>
         <div class="row">
             <div class="col-xs-12 tour-step-find">
@@ -133,7 +133,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12 text-center">
-                            <pagination :pagination="pagination" :callback="getReservations"></pagination>
+                            <pagination :pagination="pagination" pagination-key="pagination" :callback="getReservations"></pagination>
                         </div>
                     </div>
                 </template>

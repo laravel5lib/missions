@@ -94,7 +94,7 @@
 									</div>
 								</div>
 								<div class="text-center">
-									<pagination :pagination="currentAccommodationRoomsPagination"
+									<pagination :pagination="currentAccommodationRoomsPagination" pagination-key="currentAccommodationRoomsPagination"
 									            :callback="getCurrentAccommodationRooms"
 									            size="small">
 									</pagination>
@@ -137,7 +137,7 @@
                         </ul>
 					</div>
 					<div class="text-center">
-						<pagination :pagination="regionsPagination"
+						<pagination :pagination="regionsPagination" pagination-key="regionsPagination"
 									:callback="getRegions"
 									size="small">
 						</pagination>
@@ -204,7 +204,7 @@
 							</panel>
 						</accordion>
 						<div class="text-center">
-							<pagination :pagination="accommodationsPagination"
+							<pagination :pagination="accommodationsPagination" pagination-key="accommodationsPagination"
 							            :callback="getAccommodations"
 							            size="small">
 							</pagination>
@@ -301,7 +301,7 @@
 								</div>
 
 								<div class="text-center">
-									<pagination :pagination="plansPagination" :callback="getRoomingPlans"
+									<pagination :pagination="plansPagination" pagination-key="plansPagination" :callback="getRoomingPlans"
 									            size="small">
 									</pagination>
 								</div>

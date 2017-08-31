@@ -46,7 +46,7 @@
                     </div><!-- end panel -->
                 </div><!-- end col -->
                 <div class="col-xs-12 text-center">
-                    <pagination :pagination="pagination" :callback="searchFundraisers"></pagination>
+                    <pagination :pagination="pagination" pagination-key="pagination" :callback="searchFundraisers"></pagination>
                 </div>
             </template>
             <template v-else>

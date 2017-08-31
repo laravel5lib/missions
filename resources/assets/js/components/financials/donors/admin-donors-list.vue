@@ -239,7 +239,7 @@
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-                        <pagination :pagination="pagination" class="small" :callback="searchDonors"></pagination>
+                        <pagination :pagination="pagination" pagination-key="pagination" class="small" :callback="searchDonors"></pagination>
                     </div>
                 </td>
             </tr>

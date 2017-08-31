@@ -329,7 +329,7 @@
 			<tr>
 				<td colspan="7">
 					<div class="col-sm-12 text-center">
-						<pagination :pagination="pagination" :callback="searchUsers"></pagination>
+						<pagination :pagination="pagination" pagination-key="pagination" :callback="searchUsers"></pagination>
 					</div>
 				</td>
 			</tr>

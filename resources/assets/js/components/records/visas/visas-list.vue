@@ -90,7 +90,7 @@
             </div>
         </div>
         <div class="col-xs-12 text-center">
-            <pagination :pagination="pagination" :callback="searchVisas"></pagination>
+            <pagination :pagination="pagination" pagination-key="pagination" :callback="searchVisas"></pagination>
 
         </div>
         <modal :value="deleteModal" title="Remove Visa" :small="true">

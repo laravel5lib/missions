@@ -100,7 +100,7 @@
                 </div>
               </div>
               <div class="text-center">
-                  <pagination :pagination="pagination"
+                  <pagination :pagination="pagination" pagination-key="pagination"
                               :callback="getRoomingPlans"
                               size="small">
                   </pagination>

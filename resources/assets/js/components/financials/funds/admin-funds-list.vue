@@ -193,7 +193,7 @@
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-                        <pagination :pagination="pagination" size="small" :callback="searchFunds"></pagination>
+                        <pagination :pagination="pagination" pagination-key="pagination" size="small" :callback="searchFunds"></pagination>
                     </div>
                 </td>
             </tr>

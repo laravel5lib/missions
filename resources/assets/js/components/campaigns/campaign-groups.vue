@@ -54,7 +54,7 @@
 
 		<div class="container">
 			<div class="col-sm-12 text-center">
-				<pagination :pagination="pagination" :callback="searchGroups"></pagination>
+				<pagination :pagination="pagination" pagination-key="pagination" :callback="searchGroups"></pagination>
 			</div>
 		</div><!-- end container -->
 	</div>

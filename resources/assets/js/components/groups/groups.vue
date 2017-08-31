@@ -187,7 +187,7 @@
                     </div><!-- end panel -->
                 </div><!-- end col -->
                 <div class="col-xs-12 text-center" v-if="groups.length">
-                    <pagination :pagination="pagination" :callback="searchGroups"></pagination>
+                    <pagination :pagination="pagination" pagination-key="pagination" :callback="searchGroups"></pagination>
                 </div>
             </template>
             <template v-else>

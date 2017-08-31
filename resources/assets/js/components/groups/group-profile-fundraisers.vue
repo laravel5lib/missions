@@ -20,7 +20,7 @@
                 </div><!-- end panel -->
             </div><!-- end col -->
             <div class="col-xs-12 text-center">
-                <pagination :pagination="pagination" :callback="getFundraisers"></pagination>
+                <pagination :pagination="pagination" pagination-key="pagination" :callback="getFundraisers"></pagination>
             </div>
         </template>
         <template v-else>

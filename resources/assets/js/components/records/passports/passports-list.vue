@@ -110,7 +110,7 @@
         </div>
 
         <div class="col-xs-12 text-center">
-            <pagination :pagination="pagination" :callback="searchPassports"></pagination>
+            <pagination :pagination="pagination" pagination-key="pagination" :callback="searchPassports"></pagination>
 
         </div>
         <modal :value="deleteModal" title="Remove Passport" :small="true">

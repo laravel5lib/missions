@@ -116,7 +116,7 @@
             </div>
         </div>
         <div class="col-sm-12 text-center">
-            <pagination :pagination="pagination" :callback="searchStories"></pagination>
+            <pagination :pagination="pagination" pagination-key="pagination" :callback="searchStories"></pagination>
         </div>
 
         <modal v-if="isUser" :value="deleteModal" @closed="deleteModal=false" title="Remove Passport" :small="true">

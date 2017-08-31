@@ -57,7 +57,7 @@
 			</div>
 		</div>
 		<div class="col-xs-12 text-center">
-			<pagination :pagination="pagination" :callback="searchMedias"></pagination>
+			<pagination :pagination="pagination" pagination-key="pagination" :callback="searchMedias"></pagination>
 
 		</div>
 		<modal :value="deleteModal" title="Remove Media Credential" :small="true">

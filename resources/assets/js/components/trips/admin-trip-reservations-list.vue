@@ -455,7 +455,7 @@
                 <tfoot>
                 <tr>
                     <td colspan="10" class="text-center">
-                        <pagination :pagination="pagination"
+                        <pagination :pagination="pagination" pagination-key="pagination"
                                     :callback="searchReservations"
                                     size="small">
                         </pagination>

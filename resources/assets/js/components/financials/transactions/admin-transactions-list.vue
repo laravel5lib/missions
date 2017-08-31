@@ -302,7 +302,7 @@
                 <tr>
                     <td colspan="7">
                         <div class="col-sm-12 text-center">
-                            <pagination :pagination="pagination" size="small" :callback="searchTransactions"></pagination>
+                            <pagination :pagination="pagination" pagination-key="pagination" size="small" :callback="searchTransactions"></pagination>
                         </div>
                     </td>
                 </tr>

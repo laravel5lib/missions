@@ -28,6 +28,7 @@ $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $fa
         },
         'avatar_upload_id'   => function () {
             return factory(App\Models\v1\Upload::class, 'avatar')->create()->id;
-        }
+        },
+        'created_at'         => $faker->dateTimeThisYear()
     ];
 });

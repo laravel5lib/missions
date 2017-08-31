@@ -108,7 +108,7 @@
             </div>
         </div>
         <div class="col-sm-12 text-center">
-            <pagination :pagination="pagination" :callback="searchStories"></pagination>
+            <pagination :pagination="pagination" pagination-key="pagination" :callback="searchStories"></pagination>
         </div>
 
         <modal class="text-center" v-if="isManager" :value="deleteModal" @closed="deleteModal=false" title="Delete Story" :small="true">

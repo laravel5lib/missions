@@ -62,7 +62,7 @@
         </div>
         <div class="row">
           <div class="col-xs-12 text-center">
-              <pagination :pagination="pagination"
+              <pagination :pagination="pagination" pagination-key="pagination"
                           :callback="fetch"
                           size="small">
               </pagination>

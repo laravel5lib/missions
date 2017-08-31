@@ -23,7 +23,7 @@
                 </div><!-- end panel -->
             </div><!-- end col -->
             <div v-if="trips.length" class="col-sm-12 text-center">
-                <pagination :pagination="pagination" :callback="searchTrips"></pagination>
+                <pagination :pagination="pagination" pagination-key="pagination" :callback="searchTrips"></pagination>
             </div>
         </div><!-- end row -->
     </div>

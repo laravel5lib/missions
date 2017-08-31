@@ -70,7 +70,7 @@
             </div>
         </div>
         <div class="col-xs-12 text-center">
-            <pagination :pagination="pagination" :callback="searchEssays"></pagination>
+            <pagination :pagination="pagination" pagination-key="pagination" :callback="searchEssays"></pagination>
         </div>
         <modal :value="deleteModal" title="Remove Essay" :small="true">
             <div slot="modal-body" class="modal-body text-center">Delete this Essay?</div>

@@ -73,7 +73,7 @@
             </div>
         </div>
         <div class="col-xs-12 text-center">
-            <pagination :pagination="pagination" :callback="searchInfluencers"></pagination>
+            <pagination :pagination="pagination" pagination-key="pagination" :callback="searchInfluencers"></pagination>
         </div>
         <modal :value="deleteModal" title="Remove Influencer" :small="true">
             <div slot="modal-body" class="modal-body text-center">Delete this Influencer?</div>

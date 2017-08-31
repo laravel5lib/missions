@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<mm-aside :show="showPassengersFilters" @open="showPassengersFilters=true" @close="showPassengersFilters=false" placement="left" header="Passengers Filters" :width="375">
-			<reservations-filters ref="filters" v-model="passengersFilters" :reset-callback="resetPassengerFilters" :pagination="passengersPagination" :callback="getPassengers" :campaign-id="campaignId" storage="" transports></reservations-filters>
+			<reservations-filters ref="filters" v-model="passengersFilters" :reset-callback="resetPassengerFilters" :pagination="passengersPagination" pagination-key="passengersPagination" :callback="getPassengers" :campaign-id="campaignId" storage="" transports></reservations-filters>
 		</mm-aside>
 		<mm-aside :show="showReservationsFilters" @open="showReservationsFilters=true" @close="showReservationsFilters=false" placement="left" header="Reservations Filters" :width="375">
-			<reservations-filters ref="filters" v-model="reservationFilters" :reset-callback="resetReservationFilters" :pagination="reservationsPagination" :callback="searchReservations" :campaign-id="campaignId" storage="" teams></reservations-filters>
+			<reservations-filters ref="filters" v-model="reservationFilters" :reset-callback="resetReservationFilters" :pagination="reservationsPagination" pagination-key="reservationsPagination" :callback="searchReservations" :campaign-id="campaignId" storage="" teams></reservations-filters>
 		</mm-aside>
 
 		<div class="row">
@@ -106,7 +106,7 @@
 					</div>
 				</div>
 				<div class="col-sm-12 text-center">
-					<pagination :pagination="passengersPagination" :callback="getPassengers"></pagination>
+					<pagination :pagination="passengersPagination" pagination-key="passengersPagination" :callback="getPassengers"></pagination>
 				</div>
 
 			</div>
@@ -207,7 +207,7 @@
 							</div>
 						</div>
 						<div class="col-sm-12 text-center">
-							<pagination :pagination="reservationsPagination" :callback="searchReservations"></pagination>
+							<pagination :pagination="reservationsPagination" pagination-key="reservationsPagination" :callback="searchReservations"></pagination>
 						</div>
 					</div>
 				</div>

@@ -48,7 +48,7 @@
 
                             <div class="col-md-6">
                                 <label class="radio-inline lightcolor">
-                                    <input name="gender" type="radio" value="male" id="gender" @if(old('gender') == 'male') checked @endif" required>
+                                    <input name="gender" type="radio" value="male" id="gender" @if(old('gender') == 'male') checked @endif required>
                                     Male
                                 </label>
                                 <label class="radio-inline lightcolor">

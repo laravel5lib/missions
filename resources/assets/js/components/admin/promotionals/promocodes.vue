@@ -57,7 +57,7 @@
     <div class="panel-footer">
         <div class="row">
             <div class="col-xs-12 text-center">
-                <pagination :pagination="pagination" :callback="fetch"></pagination>
+                <pagination :pagination="pagination" pagination-key="pagination" :callback="fetch"></pagination>
             </div>
         </div>
     </div>

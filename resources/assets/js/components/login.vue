@@ -275,7 +275,7 @@
 								<label for="country" class="control-label">Country</label>
 								<v-select @keydown.enter.prevent="" class="form-control" id="country"
 								          v-model="countryCodeObj" name="country"
-								          :options="countries" label="name"></v-select>
+								          :options="UTILITIES.countries" label="name"></v-select>
 							</div>
 						</div>
 						<div class="form-group" :class="{ 'has-error': registerErrors.timezone }">
@@ -283,7 +283,7 @@
 								<label for="timezone" class="control-label">Timezone</label>
 								<v-select @keydown.enter.prevent="" class="form-control" id="timezone"
 								          v-model="newUser.timezone" name="timezone"
-								          :options="timezones"></v-select>
+								          :options="UTILITIES.timezones"></v-select>
 							</div>
 						</div>
 
@@ -316,10 +316,11 @@
     import moment from 'moment';
     import timezone from 'moment-timezone';
     import vSelect from "vue-select";
-    import errorHandler from'./error-handler.mixin'
+    import utilities from './utilities.mixin';
+    import errorHandler from'./error-handler.mixin';
     export default {
         name: 'login',
-	    mixins: [errorHandler],
+	    mixins: [utilities, errorHandler],
         components: {vSelect},
         data() {
             return {
@@ -372,16 +373,25 @@
         computed: {},
         methods: {
             attempt(e) {
-	                this.$validator.validateAll().then(result => {
-	                    if (!result) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
                         this.messages = [{type: 'warning', message: 'Please check the form'}];
                         this.$root.$emit('showError', 'Please check the form.');
                         return false;
                     }
+                        debugger;
 
 //                    let loginHttp = this.$http.create({ baseURL: '', headers: {} });
-                    this.$http.post('/login', this.user, { baseURL: '' }).then((response) => {
+                    this.$http.post('/oauth/token', {
+                        grant_type: 'password',
+                        client_id: 2,
+                        client_secret: 'NvqY1KwxVL7PfkS5lxZ6Ha2fss9TpglGAH0oOquR',
+                        username: this.user.email,
+                        password: this.user.password,
+                        scope: '*',
+                    }).then((response) => {
                         // set cookie - name, token
+                        debugger;
                         this.$cookie.set('api_token', response.data.token);
                         // reload to set cookie
                         /*if (this.isChildComponent) {
@@ -391,6 +401,7 @@
                             this.getUserData(response.data.redirect_to, response.data.ignore_redirect || false);
                     })
                     .catch((response) => {
+	                        debugger;
                         this.messages = [];
                         if (response.status) {
                             switch (response.status) {
@@ -500,19 +511,8 @@
                 this.currentState = 'create';
             }
 
-            this.$http.get('utilities/countries').then((response) => {
-                this.countries = response.data.countries;
-            },
-                (response) =>  {
-                    console.log(response);
-                });
-
-            this.$http.get('utilities/timezones').then((response) => {
-                this.timezones = response.data.timezones;
-            },
-                (response) =>  {
-                    console.log(response);
-                });
+            this.getCountries();
+            this.getTimezones();
 
             if (this.isChildComponent) {
                 // After reload from login / registration

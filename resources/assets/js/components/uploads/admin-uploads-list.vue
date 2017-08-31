@@ -110,7 +110,7 @@
                 <tr>
                     <td colspan="7">
                         <div class="col-sm-12 text-center">
-                            <pagination :pagination="pagination" :callback="searchUploads"></pagination>
+                            <pagination :pagination="pagination" pagination-key="pagination" :callback="searchUploads"></pagination>
                         </div>
                     </td>
                 </tr>

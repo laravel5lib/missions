@@ -29,18 +29,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ActivityTypeSeeder::class);
         $this->call(RoomTypesTableSeeder::class);
 
-        // Passport Password Grant Client
-        // DOCS: https://laravel.com/docs/5.4/passport#password-grant-tokens
-        DB::table('oauth_clients')->insert([
-            'id'        => 1,
-            'name'      => 'Missions.Me Password Grant Client',
-            'secret'    => 'x8NFHoYH0z5FP5P6TW9mBrOf8FbX2iekZIa0VAbs',
-            'redirect'  => app()->environment('local') ? 'http://missions.dev' : 'https://missions.me',
-            'personal_access_client'  => 0,
-            'password_client'  => 1,
-            'revoked'   => 0
-        ]);
-
         config(['mail.driver' => 'smtp']);
         config(['queue.default' => 'sqs']);
     }

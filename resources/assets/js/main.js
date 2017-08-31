@@ -487,7 +487,7 @@ Vue.directive('tour-guide', {
         // Initialize the tour
         let completed = JSON.parse(localStorage.getItem('ToursCompleted')) || [];
         if (!_.contains(completed, location.pathname)) {
-            this.tour.start();
+            // this.tour.start();
         }
 
         this.tour.on('cancel', function () {

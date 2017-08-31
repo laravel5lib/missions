@@ -90,7 +90,7 @@
                 // mixin settings
                 validatorHandle: 'AddFacilitator',
 
-                user_id: null,
+//                user_id: null,
 				facilitators: [],
 				users: [],
 				trip: null,

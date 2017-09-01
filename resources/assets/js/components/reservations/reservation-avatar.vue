@@ -43,6 +43,11 @@
                 resource: this.$resource('reservations{/id}')
             }
         },
+        computed: {
+            name() {
+                return this.reservation ? this.reservation.given_names + ' ' + this.reservation.surname : '';
+            }
+        },
         methods: {
             uploadsComplete(data){
                 switch(data.type){

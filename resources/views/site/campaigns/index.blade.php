@@ -1,24 +1,24 @@
 @extends('site.layouts.default')
 
 @section('content')
-    <div id="carousel-example-generic" class="carousel slide campaign-carousel" data-ride="carousel">
-        <div class="carousel-inner">
-            <div class="item active">
-                <img src="/images/1n1d17/1n1d17-campaign-banner.jpg" alt="#1N1D17">
-                <div class="carousel-caption">
-                    <h6 class="text-uppercase">Nicaragua</h6>
-                    <h3>1Nation1Day 2017</h3>
-                    <p>July 29, 2017 marked the day that the hand of God touched the nation of Nicaragua in epic proportions.</p>
-                    <a href="http://1nation1day.com" class="btn btn-primary btn-sm">Learn About 1N1D17</a>
-                </div>
+    @component('carousel', ['id' => 'carousel-example-generic', 'class' => 'campaign-carousel' ])
+        <div class="item active">
+            <img src="/images/1n1d17/1n1d17-campaign-banner.jpg" alt="#1N1D17">
+            <div class="carousel-caption">
+                <h6 class="text-uppercase">Nicaragua</h6>
+                <h3>1Nation1Day 2017</h3>
+                <p>July 29, 2017 marked the day that the hand of God touched the nation of Nicaragua in epic proportions.</p>
+                <a href="http://1nation1day.com" class="btn btn-primary btn-sm">Learn About 1N1D17</a>
             </div>
         </div>
-    </div><!-- end carousel -->
+    @endcomponent
+
     <hr class="divider inv xlg">
 
     <campaigns></campaigns>
 
     <hr class="divider inv xlg">
+
     @component('section', ['class' => 'white-bg'])
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center">
@@ -27,7 +27,7 @@
         </div><!-- end row -->
     @endcomponent
 
-    <div class="white-bg">
+    @component('section-full-width', ['class' => 'white-bg'])
         <div class="row row-no-margin">
             <div class="col-sm-2 col-xs-4 col-no-padding">
                 <img class="img-responsive" src="images/why-mm/collage/collage1.jpg" alt="">
@@ -48,9 +48,9 @@
                 <img class="img-responsive" src="images/why-mm/collage/collage9.jpg" alt="">
             </div>
         </div>
-    </div><!-- end white-bg -->
+    @endcomponent
 
-    <div class="white-bg">
+    @component('section-full-width', ['class' => 'white-bg'])
         <div class="row row-no-margin">
             <div class="col-sm-2 col-xs-4 col-no-padding">
                 <img class="img-responsive" src="images/why-mm/collage/collage10.jpg" alt="">
@@ -71,7 +71,7 @@
                 <img class="img-responsive" src="images/why-mm/collage/collage18.jpg" alt="">
             </div>
         </div>
-    </div><!-- end white-bg -->
+    @endcomponent
 
     @component('section', ['class' => 'gray-lighter-bg'])
         <div class="row">
@@ -194,7 +194,7 @@
         </div><!-- end row -->
     @endcomponent
 
-    <div class="white-bg">
+    @component('section-full-width', ['class' => 'white-bg'])
         <div class="row row-no-margin">
             <div class="col-sm-6 col-no-padding">
                 <img class="img-responsive" src="images/why-mm/miami-lawn.jpg" alt="">
@@ -203,7 +203,7 @@
                 <img class="img-responsive" src="images/why-mm/miami-conf.jpg" alt="">
             </div>
         </div>
-    </div><!-- end white-bg -->
+    @endcomponent
 
     @component('section', ['class' => 'bg-primary'])
         <div class="row">

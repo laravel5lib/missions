@@ -14,7 +14,7 @@
 
 
                     <div class="row">
-                        <div class="col-sm-12 form-group" v-validate-class>
+                        <div class="col-sm-12 form-group">
                             <label for="file" class="control-label">File</label>
                             <input type="file" id="file" accept=".csv" :value="importFile" @change="handleFile" class="form-control" name="file" v-validate="'mimes:text/csv'">
                             <span class="help-block">.csv files only</span>

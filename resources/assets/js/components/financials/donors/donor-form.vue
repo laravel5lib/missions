@@ -8,7 +8,7 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-6" v-validate-class>
+                    <div class="col-md-6">
                         <label>Name</label>
                         <input type="text" class="form-control" v-model="donor.name" name="name" v-validate="'required'">
                     </div>
@@ -23,7 +23,7 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-6" v-validate-class>
+                    <div class="col-md-6">
                         <label>Email</label>
                         <input type="text" class="form-control" v-model="donor.email" name="email" v-validate="'email'">
                     </div>
@@ -49,12 +49,12 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6" v-validate-class>
+                    <div class="col-md-6">
                         <label>Zip/Postal Code</label>
                         <input type="text" class="form-control" v-model="donor.zip"
                                name="zip" v-validate="'required'">
                     </div>
-                    <div class="col-md-6" v-validate-class>
+                    <div class="col-md-6">
                         <label>Country</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="country" :debounce="250"
                                   v-model="countryCodeObj" :options="countries" label="name"

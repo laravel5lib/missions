@@ -26,7 +26,7 @@ class InternWithEverything extends FactoryStory
     {
         $user = factory(User::class)->create($params);
 
-        $user->assign('intern');
+        $user->assignRole('intern');
 
         $user->slug()
             ->save(factory(Slug::class)

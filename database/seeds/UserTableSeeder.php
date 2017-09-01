@@ -59,14 +59,5 @@ class UserTableSeeder extends Seeder
 
         (new UserWithEverything)->times(10)->create();
         (new NewUser)->times(10)->create();
-
-        (new CurrentCampaignWithTripsAndInterests)->create(['name' => 'The New Honduras', 'country_code' => 'hn']);
-        (new CurrentCampaignWithTripsAndInterests)->create(['name' => 'The Best Dominican', 'country_code' => 'do']);
-        (new CurrentCampaignWithTripsAndInterests)->create(['name' => 'Nicaragua Shines', 'country_code' => 'ni']);
-        // (new ArchivedCampaignWithTripsAndReservations)->times(3)->create();
-
-        (new NewReservation)->times(20)->create();
-        (new InProgressReservation)->times(70)->create();
-        // (new TravelReadyReservation)->times(10)->create();
     }
 }

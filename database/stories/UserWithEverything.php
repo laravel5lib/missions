@@ -26,8 +26,6 @@ class UserWithEverything extends FactoryStory
     {
         $user = factory(User::class)->create();
 
-        $user->assign('member');
-
         $user->slug()
             ->save(factory(Slug::class)->make([
                 'url' => str_slug($user->name)

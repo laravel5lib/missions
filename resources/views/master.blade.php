@@ -46,7 +46,7 @@
 
         <div class="shepherd-backdrop"></div>
 
-        <alert v-model="showSuccess"
+        <alert v-model="showSuccess" v-cloak
                placement="top-right"
                :duration="3000"
                type="success"
@@ -57,7 +57,7 @@
             <p>@{{ message }}</p>
         </alert>
 
-        <alert v-model="showInfo"
+        <alert v-model="showInfo" v-cloak
                placement="top-right"
                :duration="3000"
                type="info"
@@ -68,7 +68,7 @@
             <p>@{{ message }}</p>
         </alert>
 
-        <alert v-model="showError"
+        <alert v-model="showError" v-cloak
                placement="top-right"
                :duration="0"
                type="danger"

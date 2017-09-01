@@ -26,21 +26,21 @@ class DonorRequest extends FormRequest
     {
         $rules = [
             'name'         => 'required|string',
-            'company'      => 'string',
-            'email'        => 'email',
-            'phone'        => 'string',
-            'address'      => 'string',
-            'city'         => 'string',
-            'state'        => 'string',
+            'company'      => 'nullable|string',
+            'email'        => 'nullable|email',
+            'phone'        => 'nullable|string',
+            'address'      => 'nullable|string',
+            'city'         => 'nullable|string',
+            'state'        => 'nullable|string',
             'zip'          => 'required|string',
             'country_code' => 'required|in:' . Country::codes(),
-            'account_id'   => 'string|unique:donors',
+            'account_id'   => 'nullable|string|unique:donors',
             'account_type' => 'in:users,groups',
             'tags'         => 'array'
         ];
 
         if ($this->isMethod('put')) {
-            $rules['account_id'] = 'string|unique:donors,account_id,' . $this->donors;
+            $rules['account_id'] = 'nullable|string|unique:donors,account_id,' . $this->donors;
         }
 
         return $rules;

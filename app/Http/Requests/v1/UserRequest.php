@@ -28,20 +28,20 @@ class UserRequest extends FormRequest
             'name'             => 'required|max:100',
             'email'            => 'required|email|unique:users,email,NULL,id,deleted_at,NULL',
             'password'         => 'required|confirmed|min:8',
-            'alt_email'        => 'email|unique:users,alt_email',
+            'alt_email'        => 'nullable|email|unique:users,alt_email',
             'gender'           => 'in:Male,male,Female,female',
-            'status'           => 'string',
-            'birthday'         => 'date',
-            'street'           => 'string|max:100',
-            'city'             => 'string|max:100',
-            'zip'              => 'string|max:10',
+            'status'           => 'nullable|string',
+            'birthday'         => 'nullable|date',
+            'street'           => 'nullable|string|max:100',
+            'city'             => 'nullable|string|max:100',
+            'zip'              => 'nullable|string|max:10',
             'country_code'     => 'required|in:' . Country::codes(),
             'timezone'         => 'required|max:25',
-            'url'              => 'string|unique:slugs,url',
+            'url'              => 'nullable|string|unique:slugs,url',
             'public'           => 'boolean',
-            'bio'              => 'string|max:120',
-            'banner_upload_id' => 'string|exists:uploads,id',
-            'avatar_upload_id' => 'string|exists:uploads,id'
+            'bio'              => 'nullable|string|max:120',
+            'banner_upload_id' => 'nullable|string|exists:uploads,id',
+            'avatar_upload_id' => 'nullable|string|exists:uploads,id'
         ];
 
         if ($this->isMethod('put')) {
@@ -53,9 +53,9 @@ class UserRequest extends FormRequest
             $rules['url'] = 'unique:slugs,url,'.$user_id.',slugable_id';
             $rules['country_code'] = 'sometimes|required|in:' . Country::codes();
             $rules['timezone'] = 'sometimes|required|max:25';
-            $rules['links'] = 'array';
-            $rules['links.*.name'] = 'string';
-            $rules['links.*.url'] = 'string';
+            $rules['links'] = 'nullable|array';
+            $rules['links.*.name'] = 'nullable|string';
+            $rules['links.*.url'] = 'nullable|string';
         }
 
         return $rules;

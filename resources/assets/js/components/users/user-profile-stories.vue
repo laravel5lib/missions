@@ -2,7 +2,7 @@
     <div style="position:relative;">
         <spinner ref="spinner" size="sm" text="Loading"></spinner>
 
-	        <template v-if="isUser">
+        <template v-if="isUser">
             <div class="row hidden-xs">
                 <div class="col-sm-8">
                     <h5>Share your stories with the world</h5>
@@ -99,7 +99,7 @@
 	                    </div>
 	                </div>
 	                <hr class="divider inv">
-	                    <p class="small">{{ marked(story.content) }}</p>
+	                    <p class="small" v-html="marked(story.content)"></p>
                 </div>
                 <div class="panel-body" v-if="editMode === story.id">
                     <form>

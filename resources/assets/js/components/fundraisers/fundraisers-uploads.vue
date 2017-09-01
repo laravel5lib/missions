@@ -80,11 +80,11 @@
             <!-- Indicators -->
             <ol class="carousel-indicators">
                 <!--<li data-target="#uploads-carousel" data-slide-to="0" class="active"></li>-->
-                <li data-target="#uploads-carousel" :class="{'active' : index == 0}" :data-slide-to="index" v-for="(upload, index) in fundraiser.uploads.data"></li>
+                <li data-target="#uploads-carousel" v-for="(upload, index) in fundraiser.uploads.data" :data-slide-to="index" :class="{'active' : index == 0}"></li>
             </ol>
             <!-- Wrapper for slides -->
             <div class="carousel-inner" role="listbox">
-                <div class="item" :class="{'active' : index == 0}" v-for="upload in fundraiser.uploads.data">
+                <div class="item" :class="{'active' : index == 0}" v-for="(upload, index) in fundraiser.uploads.data">
                     <template v-if="upload.type === 'video'">
                         <video :id="upload.id" class="video-js vjs-default-skin vjs-big-play-centered" width="620">
                             <p class="vjs-no-js">

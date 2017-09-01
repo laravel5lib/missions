@@ -17,7 +17,7 @@ import actionDropdownSelect from './components/action-dropdown-select.vue';
 import actionSelect from './components/action-select.vue';
 import listenText from './components/listen-text.vue';
 import donate from './components/donate.vue';
-// import modalDonate from './components/modal-donate.vue';
+import modalDonate from './components/modal-donate.vue';
 import campaigns from './components/campaigns/campaigns.vue';
 import groups from './components/groups/groups.vue';
 import fundraisers from './components/fundraisers/fundraisers.vue';
@@ -691,7 +691,7 @@ new Vue({
         actionSelect,
         listenText,
         donate,
-        // modalDonate,
+        modalDonate,
         notes,
         todos,
         userPermissions,

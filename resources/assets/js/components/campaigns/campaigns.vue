@@ -11,7 +11,7 @@
 	</div><!-- end container -->
 
 	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;" v-if="campaigns.length > 0">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="col-xs-12">
 			<h4>Current Campaigns</h4>
 			<hr class="divider">

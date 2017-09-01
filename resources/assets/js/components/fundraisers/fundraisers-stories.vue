@@ -130,7 +130,7 @@
     </div>
 </template>
 <script type="text/javascript">
-    var marked = require('marked');
+    let marked = require('marked');
     export default{
         name: 'fundraisers-stories',
         props:['id', 'sponsorId'],
@@ -164,11 +164,8 @@
                 return this.$root.user && this.sponsorId === this.$root.user.id;
             },
         },
-        filters: {
-            marked: marked,
-        },
         methods:{
-            removeStory(story){
+            marked: marked, removeStory(story){
                 if(story) {
                     this.$http.delete('stories/' + story.id).then((response) => {
                         this.stories = _.reject(this.stories, (item) => {

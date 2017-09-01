@@ -6,7 +6,7 @@
         <hr class="divider inv sm">
         <div class="panel panel-default collapse" id="collapseDonate">
             <div class="panel-body">
-                <donate :donation-state="donationState" :sub-state="subState" :attempt-submit="attemptSubmit" :title="title"
+                <donate ref="donator" :donation-state="donationState" :sub-state="subState" :attempt-submit="attemptSubmit" :title="title"
                         :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" :fund-id="fundId" :recipient="recipient" identifier="modal"></donate>
                 <!--<button type="button" class="btn btn-default btn-xs" @click="donationState='form',subState=1" v-if="!isState('form', 1)">Reset</button>-->
                 <div class="text-center">
@@ -104,9 +104,10 @@
                         break;
                     case 'review':
                         this.attemptSubmit = true;
-                        if (this.$Donation.valid) {
-                            this.donationState = state;
-                        }
+                        this.$refs.donator.$validator.validateAll('form-2').then(result => {
+                            if(result)
+                                this.donationState = state;
+                        });
                         break;
                 }
             },
@@ -133,11 +134,12 @@
                 this.widthChange();
             },
             done(){
+                let t;
                 this.donateModalOpen = false;
                 this.showModal = false;
                 this.showRight = false;
                 $('#collapseDonate').collapse('hide');
-                let t = setTimeout(this.resetState, 1000);
+                t = setTimeout(this.resetState, 1000);
             }
         },
         mounted() {

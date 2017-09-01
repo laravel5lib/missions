@@ -158,9 +158,13 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
 
         // create roles and assign existing permissions
         $role = Role::create(['name' => 'super_admin']);
+        $role->givePermissionTo([
+            'access_backend'
+        ]);
 
         $role = Role::create(['name' => 'admin']);
         $role->givePermissionTo([
+            'access_backend',
             'add_campaigns',
             'edit_campaigns',
             'delete_campaigns',

@@ -27,26 +27,6 @@
                 </div>
             </div>
         </div>
-        <!--<div class="panel-heading" v-if="showPermissions">
-            <h5 class="panel-header">Permissions</h5>
-        </div>
-        <div class="panel-body" v-if="showPermissions">
-            <div class="row">
-                <div class="col-xs-12" v-for="(ability, key) in permissionsList">
-                    <h5>{{ key|capitalize }}</h5>
-                    <p v-for="item in ability">
-                        {{ item.name|capitalize }}
-                        <button class="btn btn-xs btn-default-hollow pull-right"
-                                v-if="! hasAbility(item)"
-                                @click="allow(item)">Allow</button>
-                        <button class="btn btn-xs btn-default pull-right" :disabled="hasAbilityByRole(item)"
-                                v-if="hasAbility(item)"
-                                @click="deny(item)">Deny&nbsp;</button>
-                        <hr class="divider" />
-                    </p>
-                </div>
-            </div>
-        </div>-->
     </div>
 </template>
 <script type="text/javascript">

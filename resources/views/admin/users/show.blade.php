@@ -84,22 +84,22 @@
                     <div class="col-sm-4 panel panel-default text-center">
                         <div class="panel-body">
                             <label>Phone 1</label>
-                            <p>{{ $user->phone_one }}</p>
+                            <p>{{ $user->phone_one or '-' }}</p>
 
                             <label>Phone 2</label>
-                            <p>{{ $user->phone_two }}</p>
+                            <p>{{ $user->phone_two or '-' }}</p>
 
                             <label>Street</label>
-                            <p>{{ $user->address }}</p>
+                            <p>{{ $user->address or '-' }}</p>
 
                             <label>City</label>
-                            <p>{{ $user->city }}</p>
+                            <p>{{ $user->city or '-' }}</p>
 
                             <label>State</label>
-                            <p>{{ $user->state }}</p>
+                            <p>{{ $user->state or '-' }}</p>
 
                             <label>Zip</label>
-                            <p>{{ $user->zip }}</p>
+                            <p>{{ $user->zip or '-' }}</p>
 
                             <label>Country</label>
                             <p>{{ country($user->country_code) }}</p>

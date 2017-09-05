@@ -54,12 +54,6 @@
             }
         },
         computed: {
-            /*roles() {
-                return _.intersection(
-                    _.pluck(this.availableRoles, 'id'),
-                    _.pluck(this.selectedRoles, 'id')
-                );
-            },*/
             permissions() {
                 return _.intersection(
                     _.pluck(this.availablePermissions, 'id'),
@@ -72,16 +66,7 @@
                 });
             }
         },
-	    /*watch: {
-            availableRoles(val) {
-
-            }
-	    },*/
         methods: {
-            /*hasRole(role)
-            {
-                return _.contains(this.roles, role.id);
-            },*/
             hasAbility(ability)
             {
                 return _.contains(this.permissions, ability.id);
@@ -111,7 +96,6 @@
                     this.$http.get('users/' + this.user_id + '?include=roles').then((response) => {
                         let user = response.data.data;
                         let currentRoleIds = _.pluck(user.roles.data, 'id');
-                        // this.selectedRoles = user.roles.data;
 
                         // We will alter the availableRoles array so we can watch for changes when (de)selecting a role
                         _.each(roles, role => {

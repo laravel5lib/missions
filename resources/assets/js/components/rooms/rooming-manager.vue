@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<div class="row" style="position:relative;">
-			<mm-aside :show="showReservationsFilters" @open="showReservationsFilters=true" @close="showReservationsFilters=false" placement="left" header="Reservation Filters" :width="375">
+			<!--<mm-aside :show="showReservationsFilters" @open="showReservationsFilters=true" @close="showReservationsFilters=false" placement="left" header="Reservation Filters" :width="375">
 				<reservations-filters ref="filters" v-model="reservationFilters" :reset-callback="resetReservationFilter" :pagination="reservationsPagination" pagination-key="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" rooms></reservations-filters>
-			</mm-aside>
+			</mm-aside>-->
 
 			<template v-if="currentPlan">
 				<div class="col-xs-12" v-if="currentPlan">
@@ -241,6 +241,72 @@
 
 				<!-- Teams Select & Members List -->
 				<div class="col-sm-4">
+					<reservations-list-slot>
+						<template slot="action-buttons" scope="{ reservation }">
+							<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+								<span slot="button" class="fa fa-ellipsis-h"></span>
+								<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+									<li class="dropdown-header">Assign To Room</li>
+									<li role="separator" class="divider"></li>
+									<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(reservation, true, currentRoom)">{{(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} as leader</a></li>
+									<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(reservation, false, currentRoom)">{[(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}}</a></li>
+									<li v-if="!currentRoom"><a @click=""><em>Please select a room first.</em></a></li>
+								</ul>
+							</dropdown>
+						</template>
+						<template slot="details" scope="{ reservation }">
+							<div class="row">
+								<div class="col-sm-4">
+									<label>Gender</label>
+									<p class="small">{{ reservation.gender|capitalize }}</p>
+								</div>
+								<div class="col-sm-4">
+									<label>Marital Status</label>
+									<p class="small">{{ reservation.status|capitalize }}</p>
+								</div>
+								<div class="col-sm-4">
+									<label>Age</label>
+									<p class="small">{{reservation.age}}</p>
+								</div>
+								<div class="col-sm-6">
+									<label>Travel Group</label>
+									<p class="small">{{reservation.trip.data.group.data.name}}</p>
+								</div><!-- end col -->
+								<div class="col-sm-6">
+									<label>Designation</label>
+									<p class="small">
+										{{ reservation.arrival_designation|capitalize }}
+									</p>
+								</div>
+								<div class="col-sm-12">
+									<label>Rooming Cost</label>
+									<p class="small">
+												<span v-for="cost in reservation.costs.data">{{cost.name}}
+												<span v-if="!$last && reservation.costs.data.length > 1">, </span></span>
+									</p>
+								</div>
+								<div class="col-sm-12">
+									<label>Companions</label>
+									<ul class="list-unstyled" v-if="reservation.companions.data.length">
+										<li v-for="companion in reservation.companions.data">
+											<i :class="getGenderStatusIcon(companion)"></i>
+											{{ companion.surname|capitalize }}, {{ companion.given_names|capitalize }} <span class="text-muted">({{ companion.relationship|capitalize }})</span>
+										</li>
+									</ul>
+									<p class="small" v-else>None</p>
+								</div><!-- end col -->
+								<div class="col-sm-6">
+									<label>Squad Groups</label>
+									<p class="small" v-if="reservation.squads.data.length">
+										<span v-for="squad in reservation.squads.data">{{squad.callsign}} <span v-if="squad.team">({{ squad.team.data.callsign }})</span><span v-if="!$last && reservation.squads.data.length > 1">, </span></span>
+									</p>
+									<p clas="small" v-else>
+										Unassigned
+									</p>
+								</div><!-- end col -->
+							</div><!-- end row -->
+						</template>
+					</reservations-list-slot>
 					<!-- Search and Filter -->
 					<form class="form-inline row">
 						<div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
@@ -677,7 +743,8 @@
                     status: '',
                     hasCompanions: null,
                     role: null,
-                    designation: ''
+                    designation: '',
+		                age: [0, 120]
                 };
             },
             getRoomLeader(room) {
@@ -830,9 +897,6 @@
                 };
 
                 params = _.extend(params, this.reservationFilters);
-                params = _.extend(params, {
-                    age: [this.ageMin, this.ageMax]
-                });
 
                 if (_.isObject(this.reservationFilters.role)) {
                     params.role = this.reservationFilters.role.value;
@@ -1164,7 +1228,7 @@
 
             this.$root.$on('campaign-scope', (val) =>  {
                 this.campaignId = val ? val.id : '';
-                this.$emit('plan-selection');
+                this.$root.$emit('plan-selection');
             });
 
             this.$root.$on('plan-scope', (val) =>  {

@@ -49,9 +49,6 @@
 					<button class="btn btn-default btn-sm btn-block" type="button" @click="resetTeamFilter()"><i class="fa fa-times"></i> Reset Team Filters</button>
 				</form>
 			</mm-aside>
-			<mm-aside :show="showReservationsFilters" @open="showReservationsFilters=true" @close="showReservationsFilters=false" placement="left" header="Reservation Filters" :width="375">
-				<reservations-filters ref="filters" v-model="reservationFilters" :reset-callback="resetFilter" :pagination="reservationsPagination" pagination-key="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" teams></reservations-filters>
-			</mm-aside>
 			<mm-aside :show="showMembersFilters" @open="showMembersFilters=true" @close="showMembersFilters=false" placement="left" header="Members Filters" :width="375">
 				<hr class="divider inv sm">
 				<form class="col-sm-12">
@@ -103,7 +100,7 @@
 									</template>
 
 									<!-- Squad Leaders Group -->
-									<template v-for="(squad, tgIndex) in currentSquadGroupsFiltered">
+									<template v-for="(squad, teamGroupIndex) in currentSquadGroupsFiltered">
 										<template v-if="squad.callsign === 'Squad Leaders'">
 											<div class="panel panel-default">
 												<div class="panel-heading">
@@ -116,93 +113,26 @@
 													<div class="alert alert-success" v-if="squad.members_count >= currentTeam.type.data.rules.max_leaders">
 														Complete! You've filled all the positions.
 													</div>
-													<div class="panel-group" id="SquadLeaderAccordion" role="tablist" aria-multiselectable="true">
-														<div class="panel panel-default" v-for="(member, memberIndex) in sortByLeader(squad.members)">
-															<div class="panel-heading" role="tab" id="headingOne">
-																<h4 class="panel-title">
-																	<div class="row">
-																		<div class="col-xs-9">
-																			<div class="media">
-																				<div class="media-left" style="padding-right:0;">
-																					<a :href="getReservationLink(member)" target="_blank">
-																						<img :src="member.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member && member.leader">GL</span>
-																					</a>
-																				</div>
-																				<div class="media-body" style="vertical-align:middle;">
-																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
-																					<i :class="getGenderStatusIcon(member)"></i>
-																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
-																					<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group}}</span></p>
-																				</div><!-- end media-body -->
-																			</div><!-- end media -->
-																		</div>
-																		<div class="col-xs-3 text-right action-buttons">
-																			<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
-																				<span slot="button" class="fa fa-ellipsis-h"></span>
-																				<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-																					<template v-for="subSquad in currentSquadGroupsOrdered">
-																						<template v-if="subSquad.callsign !== 'Squad Leaders'">
-																							<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Squad Leaders</a></li>
-																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad, subSquad)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
-																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
-																						</template>
-																					</template>
-																					<li :class="{'disabled': isLocked}" role="separator" class="divider"></li>
-																					<!--<li :class="{'disabled': isLocked}" v-if="member && member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>-->
-																					<!--<li :class="{'disabled': isLocked}" v-if="member && !member.leader && !squadHasLeader(squad)"<a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>-->
-																					<li :class="{'disabled': isLocked}"><a @click="removeFromSquad(member, squad)">Remove</a></li>
-																				</ul>
-																			</dropdown>
-																			<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + memberIndex" aria-expanded="true" aria-controls="collapseOne">
-																				<i class="fa fa-angle-down"></i>
-																			</a>
-																		</div>
-																	</div>
-																</h4>
-															</div>
-															<div :id="'squadLeaderItem' + memberIndex" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-																<div class="panel-body">
-																	<div class="row">
-																		<div class="col-sm-6">
-																			<label>Gender</label>
-																			<p class="small">{{ member.gender | capitalize }}</p>
-																			<label>Marital Status</label>
-																			<p class="small">{{ member.status | capitalize }}</p>
-																		</div><!-- end col -->
-																		<div class="col-sm-6">
-																			<label>Age</label>
-																			<p class="small">{{member.age}}</p>
-																			<label>Travel Group</label>
-																			<p class="small">{{member.trip.data.group.data.name}}</p>
-																		</div><!-- end col -->
-																	</div><!-- end row -->
-																	<div class="col-sm-12">
-																		<label>Companions</label>
-																		<ul class="list-unstyled" v-if="member.companions.data.length">
-																			<li v-for="companion in member.companions.data">
-																				<i :class="getGenderStatusIcon(companion)"></i>
-																				{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
-																				<span class="text-muted">({{ companion.relationship | capitalize }})</span>
-																			</li>
-																		</ul>
-																		<p class="small" v-else>None</p>
-																	</div>
-																	<div class="col-sm-6">
-																		<label>Trip Type</label>
-																		<p class="small">{{ member.trip.data.type | capitalize }}</p>
-																	</div>
-																	<div class="col-sm-6">
-																		<label>Designation</label>
-																		<p class="small">{{ member.arrival_designation }}</p>
-																	</div>
-																</div>
-															</div>
-															<div class="panel-footer small clearfix" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
-																<i class=" fa fa-info-circle"></i> {{member.present_companions}} companions not in group &middot; {{companionsPresentTeam(member)}} not on this squad.
-																<button type="button" class="btn btn-xs btn-default-hollow pull-right" @click="addCompanionsToSquad(member, squad)"><i class="fa fa-plus-circle"></i> Companions</button>
-															</div>
-														</div>
-													</div>
+													<members-list-slot :members="sortByLeader(squad.members)" list-id="SquadLeaderAccordion" :list-index="teamGroupIndex">
+														<template slot="action-buttons" scope="props">
+															<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+																<span slot="button" class="fa fa-ellipsis-h"></span>
+																<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+																	<template v-for="subSquad in currentSquadGroupsOrdered">
+																		<template v-if="subSquad.callsign !== 'Squad Leaders'">
+																			<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(subSquad)"><a @click="moveToSquad(props.member, squad, subSquad, false)">Move to Squad Leaders</a></li>
+																			<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad, subSquad)"><a @click="moveToSquad(props.member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
+																			<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad)"><a @click="moveToSquad(props.member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
+																		</template>
+																	</template>
+																	<li :class="{'disabled': isLocked}" role="separator" class="divider"></li>
+																	<!--<li :class="{'disabled': isLocked}" v-if="member && member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>-->
+																	<!--<li :class="{'disabled': isLocked}" v-if="member && !member.leader && !squadHasLeader(squad)"<a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>-->
+																	<li :class="{'disabled': isLocked}"><a @click="removeFromSquad(props.member, squad)">Remove</a></li>
+																</ul>
+															</dropdown>
+														</template>
+													</members-list-slot>
 												</div>
 											</div>
 										</template>
@@ -212,7 +142,7 @@
 									</p>
 									<hr class="divider sm">
 									<!-- Other Groups -->
-									<template v-for="(squad, tgIndex) in currentSquadGroupsOrderedFiltered">
+									<template v-for="(squad, teamGroupIndex) in currentSquadGroupsOrderedFiltered">
 										<template v-if="squad.callsign !== 'Squad Leaders'">
 											<div class="panel panel-default">
 												<div class="panel-heading">
@@ -224,7 +154,7 @@
 																<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 																	<li :class="{'disabled': isLocked}"><a @click="showSquadUpdateModal = true,selectedSquadObj = squad">Edit</a></li>
 																	<template v-for="subTeam in teams">
-																		<li role="separator" class="divider" v-if="tgIndex === 0 && teams.length > 1"></li>
+																		<li role="separator" class="divider" v-if="teamGroupIndex === 0 && teams.length > 1"></li>
 																		<li v-if="subTeam.id !== squad.team_id" :class="{'disabled': isLocked}"><a @click="moveToTeam(squad, subTeam)">Move group to {{subTeam.callsign}}</a></li>
 																	</template>
 																	<li role="separator" class="divider"></li>
@@ -241,105 +171,38 @@
 													<div class="alert alert-success" v-if="squad.members_count >= currentTeam.type.data.rules.max_group_members">
 														Complete! You've filled all the positions.
 													</div>
-													<div class="panel-group" :id="'membersAccordion' + tgIndex" role="tablist" aria-multiselectable="true">
-														<div class="panel panel-default" v-for="(member, memberIndex) in sortByLeader(squad.members)">
-															<div class="panel-heading" role="tab" id="headingOne">
-																<h4 class="panel-title">
-																	<div class="row">
-																		<div class="col-xs-9">
-																			<div class="media">
-																				<div class="media-left" style="padding-right:0;">
-																					<a :href="getReservationLink(member)" target="_blank">
-																						<img :src="member.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member && member.leader">GL</span>
-																					</a>
-																				</div>
-																				<div class="media-body" style="vertical-align:middle;">
-																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
-																					<i :class="getGenderStatusIcon(member)"></i>
-																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
-																					<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group }}</span></p>
-																				</div><!-- end media-body -->
-																			</div><!-- end media -->
-																		</div>
-																		<div class="col-xs-3 text-right action-buttons">
-																			<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
-																				<span slot="button" class="fa fa-ellipsis-h"></span>
-																				<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-																					<template v-for="subSquad in currentSquadGroupsOrdered">
-																						<template v-if="subSquad.callsign === 'Squad Leaders'">
-																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
-																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
-																							<li role="separator" class="divider"></li>
-																						</template>
-																						<template v-else>
-																							<template v-if="subSquad.id !== squad.id">
-																								<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Squad Leaders</a></li>
-																								<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
-																								<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
-																								<li role="separator" class="divider"></li>
-																							</template>
-																						</template>
-																					</template>
-																					<li :class="{'disabled': isLocked}" v-if="member && member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>
-																					<li :class="{'disabled': isLocked}" v-if="member && !member.leader && !squadHasLeader(squad)"><a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>
-																					<li :class="{'disabled': isLocked}"><a @click="removeFromSquad(member, squad)">Remove</a></li>
-																					<li role="separator" class="divider"></li>
-																					<li class="dropdown-header">Change Role</li>
-																					<li role="separator" class="divider"></li>
-																					<li v-if="member.desired_role.name !== 'Squad Leader'"><a @click="updateRole(member, 'Squad Leader')">Squad Leader</a></li>
-																					<li v-if="member.desired_role.name !== 'Group Leader'"><a @click="updateRole(member, 'Group Leader')">Group Leader</a></li>
-																				</ul>
-																			</dropdown>
-																			<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + memberIndex" aria-expanded="true" aria-controls="collapseOne">
-																				<i class="fa fa-angle-down"></i>
-																			</a>
-																		</div>
-																	</div>
-																</h4>
-															</div>
-															<div :id="'memberItem' + tgIndex + memberIndex" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-																<div class="panel-body">
-																	<div class="row">
-																		<div class="col-sm-6">
-																			<label>Gender</label>
-																			<p class="small">{{ member.gender | capitalize }}</p>
-																			<label>Marital Status</label>
-																			<p class="small">{{ member.status | capitalize }}</p>
-																		</div><!-- end col -->
-																		<div class="col-sm-6">
-																			<label>Age</label>
-																			<p class="small">{{member.age}}</p>
-																			<label>Travel Group</label>
-																			<p class="small">{{member.trip.data.group.data.name}}</p>
-																		</div><!-- end col -->
-																		<div class="col-sm-12">
-																			<label>Companions</label>
-																			<ul class="list-unstyled" v-if="member.companions.data.length">
-																				<li v-for="companion in member.companions.data">
-																					<i :class="getGenderStatusIcon(companion)"></i>
-																					{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
-																					<span class="text-muted">({{ companion.relationship | capitalize }})</span>
-																				</li>
-																			</ul>
-																			<p class="small" v-else>None</p>
-																		</div>
-																		<div class="col-sm-6">
-																			<label>Trip Type</label>
-																			<p class="small">{{ member.trip.data.type | capitalize }}</p>
-																		</div>
-																		<div class="col-sm-6">
-																			<label>Designation</label>
-																			<p class="small">{{ member.arrival_designation }}</p>
-																		</div>
-																	</div><!-- end row -->
-																</div><!-- end panel-body -->
-															</div>
-															<div class="panel-footer small clearfix" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
-																<i class=" fa fa-info-circle"></i> {{member.present_companions}} companions not in this group &middot; {{companionsPresentTeam(member)}} not on this squad.
-																<button type="button" class="btn btn-xs btn-default-hollow pull-right" @click="addCompanionsToSquad(member, squad)"><i class="fa fa-plus-circle"></i> Companions</button>
-															</div>
-														</div>
-													</div>
+													<members-list-slot :members="sortByLeader(squad.members)" list-id="memberAccordion" :list-index="teamGroupIndex">
+														<template slot="action-buttons" scope="props">
+															<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+																<span slot="button" class="fa fa-ellipsis-h"></span>
+																<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+																	<template v-for="subSquad in currentSquadGroupsOrdered">
+																		<template v-if="subSquad.callsign === 'Squad Leaders'">
+																			<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad) && isLeadership(props.member)"><a @click="moveToSquad(props.member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
+																			<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad) && isLeadership(props.member)"><a @click="moveToSquad(props.member, squad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
+																			<li role="separator" class="divider"></li>
+																		</template>
+																		<template v-else>
+																			<template v-if="subSquad.id !== squad.id">
+																				<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(subSquad)"><a @click="moveToSquad(props.member, squad, subSquad, false)">Move to Squad Leaders</a></li>
+																				<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad) && isLeadership(props.member)"><a @click="moveToSquad(props.member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
+																				<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad)"><a @click="moveToSquad(props.member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
+																				<li role="separator" class="divider"></li>
+																			</template>
+																		</template>
+																	</template>
+																	<li :class="{'disabled': isLocked}" v-if="props.member && props.member.leader"><a @click="demoteToMember(props.member, squad)">Demote to Group Member</a></li>
+																	<li :class="{'disabled': isLocked}" v-if="props.member && !props.member.leader && !squadHasLeader(squad)"><a @click="promoteToLeader(props.member, squad)">Promote to Group Leader</a></li>
+																	<li :class="{'disabled': isLocked}"><a @click="removeFromSquad(props.member, squad)">Remove</a></li>
+																	<li role="separator" class="divider"></li>
+																	<li class="dropdown-header">Change Role</li>
+																	<li role="separator" class="divider"></li>
+																	<li v-if="props.member.desired_role.name !== 'Squad Leader'"><a @click="updateRole(props.member, 'Squad Leader')">Squad Leader</a></li>
+																	<li v-if="props.member.desired_role.name !== 'Group Leader'"><a @click="updateRole(props.member, 'Group Leader')">Group Leader</a></li>
+																</ul>
+															</dropdown>
+														</template>
+													</members-list-slot>
 												</div>
 											</div>
 										</template>
@@ -475,7 +338,7 @@
 						<a href="#teams" data-toggle="pill">Squads <span class="badge" v-text="teamsPagination.total"></span></a>
 					</li>
 					<li role="presentation">
-						<a href="#reservations" data-toggle="pill">Reservations <span class="badge" v-text="reservationsPagination.total"></span></a>
+						<a href="#reservations" data-toggle="pill">Reservations <span class="badge" v-if="$refs.reservations" v-text="$refs.reservations.reservationsPagination.total"></span></a>
 					</li>
 				</ul>
 
@@ -537,160 +400,31 @@
 						</div>
 					</div>
 					<div role="tabpanel" class="tab-pane" id="reservations">
-						<!-- Search and Filter -->
-						<form class="form-inline row">
-							<div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
-								<div class="input-group input-group-sm col-xs-12">
-									<input type="text" class="form-control" v-model="reservationsSearch" @keyup="debouncedSearchReservations" placeholder="Search">
-									<span class="input-group-addon"><i class="fa fa-search"></i></span>
-								</div>
-							</div><!-- end col -->
-							<div class="form-group col-lg-5 col-md-5 col-sm-6 col-xs-12">
-								<button class="btn btn-default btn-sm btn-block" type="button" @click="showReservationsFilters=!showReservationsFilters">
-									Filters
-									<i class="fa fa-filter"></i>
-								</button>
-							</div>
-							<div class="col-xs-12">
-								<hr class="divider inv">
-								<div>
-									<label>Active Filters</label>
-									<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.type != ''" @click="reservationFilters.type = ''" >
-									Trip Type
-									<i class="fa fa-close"></i>
-								</span>
-									<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.groups.length" @click="reservationFilters.groups = []" >
-									Travel Group
-									<i class="fa fa-close"></i>
-								</span>
-									<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.hasCompanions !== null" @click="reservationFilters.hasCompanions = null" >
-									Companions
-									<i class="fa fa-close"></i>
-								</span>
-									<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.role !== ''" @click="reservationFilters.role = ''" >
-									Role
-									<i class="fa fa-close"></i>
-								</span>
-									<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.gender != ''" @click="reservationFilters.gender = ''" >
-									Gender
-									<i class="fa fa-close"></i>
-								</span>
-									<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.status != ''" @click="reservationFilters.status = ''" >
-									Status
-									<i class="fa fa-close"></i>
-								</span>
-									<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.age[0] != 0" @click="reservationFilters.age[0] = 0" >
-									Min. Age
-									<i class="fa fa-close"></i>
-								</span>
-									<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.age[1] != 120" @click="reservationFilters.age[1] = 120" >
-									Max. Age
-									<i class="fa fa-close"></i>
-								</span>
-								</div>
-							</div>
-						</form>
-						<!-- Reservation Lists and Pagination -->
-						<div class="row">
-							<div class="col-xs-12">
-								<div class="panel-group" id="reservationsAccordion" role="tablist" aria-multiselectable="true">
-									<div class="panel panel-default" v-for="(reservation, reservationIndex) in reservations">
-										<div class="panel-heading" role="tab" id="headingOne">
-											<h4 class="panel-title">
-												<div class="row">
-													<div class="col-xs-9">
-														<div class="media">
-															<div class="media-left" style="padding-right:0;">
-																<a :href="getReservationLink(reservation)" target="_blank">
-																	<img :src="reservation.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member && member.leader">GL</span>
-																</a>
-															</div>
-															<div class="media-body" style="vertical-align:middle;">
-																<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
-																<i :class="getGenderStatusIcon(reservation)"></i>
-																<a :href="getReservationLink(reservation)" target="_blank">
-																{{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}</a></h6>
-																<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ reservation.desired_role.name }} <span class="text-muted">&middot; {{ reservation.trip.data.group.data.name }}</span></p>
-															</div><!-- end media-body -->
-														</div><!-- end media -->
-													</div>
-													<div class="col-xs-3 text-right action-buttons">
-														<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
-															<span slot="button" class="fa fa-ellipsis-h"></span>
-															<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-																<li class="dropdown-header">Assign To Squad</li>
-																<li role="separator" class="divider"></li>
-																<template v-for="squad in currentSquadGroupsOrdered">
-																	<template v-if="squad.callsign === 'Squad Leaders'">
-																		<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(squad) && isLeadership(reservation)"><a @click="assignToSquad(reservation, squad, false)">Squad Leader</a></li>
-																	</template>
-																	<template v-else>
-																		<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(squad) && isLeadership(reservation)"><a @click="assignToSquad(reservation, squad, true)" v-text="squad.callsign + ' Leader'"></a></li>
-																		<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(squad)"><a @click="assignToSquad(reservation, squad, false)" v-text="squad.callsign"></a></li>
-																	</template>
-																</template>
-																<li role="separator" class="divider"></li>
-																<li class="dropdown-header">Change Role</li>
-																<li role="separator" class="divider"></li>
-																<li v-if="reservation.desired_role.name !== 'Squad Leader'"><a @click="updateRole(reservation, 'Squad Leader')">Squad Leader</a></li>
-																<li v-if="reservation.desired_role.name !== 'Group Leader'"><a @click="updateRole(reservation, 'Group Leader')">Group Leader</a></li>
-
-															</ul>
-														</dropdown>
-														<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + reservationIndex" aria-expanded="true" aria-controls="collapseOne">
-															<i class="fa fa-angle-down"></i>
-														</a>
-													</div>
-												</div>
-
-											</h4>
-										</div>
-										<div :id="'reservationItem' + reservationIndex" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-											<div class="panel-body">
-												<div class="row">
-													<div class="col-sm-6">
-														<label>Gender</label>
-														<p class="small">{{ reservation.gender | capitalize }}</p>
-														<label>Marital Status</label>
-														<p class="small">{{ reservation.status | capitalize }}</p>
-													</div><!-- end col -->
-													<div class="col-sm-6">
-														<label>Age</label>
-														<p class="small">{{reservation.age}}</p>
-														<label>Travel Group</label>
-														<p class="small">{{reservation.trip.data.group.data.name}}</p>
-													</div><!-- end col -->
-													<div class="col-sm-12">
-														<label>Companions</label>
-														<ul class="list-unstyled" v-if="reservation.companions.data.length">
-															<li v-for="companion in reservation.companions.data">
-																<i :class="getGenderStatusIcon(companion)"></i>
-																{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} <span class="text-muted">({{ companion.relationship | capitalize }})</span>
-															</li>
-														</ul>
-														<p class="small" v-else>None</p>
-													</div>
-													<div class="col-sm-6">
-														<label>Trip Type</label>
-														<p class="small">{{ reservation.trip.data.type | capitalize }}</p>
-													</div>
-													<div class="col-sm-6">
-														<label>Designation</label>
-														<p class="small">{{ reservation.arrival_designation | capitalize }}</p>
-													</div>
-												</div><!-- end row -->
-											</div>
-										</div>
-										<div class="panel-footer" v-if="reservation.companions.data.length">
-											I have {{reservation.companions.data.length}} companions.
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-12 text-center">
-									<pagination :pagination="reservationsPagination" pagination-key="reservationsPagination" :callback="searchReservations"></pagination>
-								</div>
-							</div>
-						</div>
+						<reservations-list-slot v-if="!startUp" ref="reservations">
+							<template slot="action-buttons" scope="props">
+								<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+									<span slot="button" class="fa fa-ellipsis-h"></span>
+									<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+										<li class="dropdown-header">Assign To Squad</li>
+										<li role="separator" class="divider"></li>
+										<template v-for="squad in currentSquadGroupsOrdered">
+											<template v-if="squad.callsign === 'Squad Leaders'">
+												<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(squad) && isLeadership(props.reservation)"><a @click="assignToSquad(props.reservation, squad, false)">Squad Leader</a></li>
+											</template>
+											<template v-else>
+												<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(squad) && isLeadership(props.reservation)"><a @click="assignToSquad(props.reservation, squad, true)" v-text="squad.callsign + ' Leader'"></a></li>
+												<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(squad)"><a @click="assignToSquad(props.reservation, squad, false)" v-text="squad.callsign"></a></li>
+											</template>
+										</template>
+										<li role="separator" class="divider"></li>
+										<li class="dropdown-header">Change Role</li>
+										<li role="separator" class="divider"></li>
+										<li v-if="props.reservation.desired_role.name !== 'Squad Leader'"><a @click="updateRole(props.reservation, 'Squad Leader')">Squad Leader</a></li>
+										<li v-if="props.reservation.desired_role.name !== 'Group Leader'"><a @click="updateRole(props.reservation, 'Group Leader')">Group Leader</a></li>
+									</ul>
+								</dropdown>
+							</template>
+						</reservations-list-slot>
 					</div>
 				</div>
 			</div>
@@ -780,10 +514,11 @@
 	import vSelect from 'vue-select';
 	import notes from '../notes.vue';
 	import utilities from '../utilities.mixin';
-	import reservationsFilters from '../filters/reservations-filters.vue';
+	import reservationsListSlot from '../slots/reservations-list-slot.vue';
+	import membersListSlot from '../slots/members-list-slot.vue';
     export default{
         name: 'team-manager',
-	    components: {vSelect, notes, reservationsFilters},
+	    components: {vSelect, notes, reservationsListSlot, membersListSlot},
 	    mixins: [utilities],
 	    props: {
             userId: {
@@ -805,12 +540,8 @@
                 teamTypes: [],
                 teams: [],
                 teamsPagination: { current_page: 1 },
-                reservations: [],
                 membersSearch: '',
                 teamsSearch: '',
-                reservationsSearch: '',
-                reservationsPerPage: 10,
-                reservationsPagination: { current_page: 1 },
 	            currentTeam: null,
 	            currentSquadGroups: [],
                 squadsPagination: { current_page: 1 },
@@ -835,8 +566,6 @@
                 showTeamDeleteModal: false,
                 showSquadDeleteModal: false,
 
-                lastReservationRequest: null,
-
 	            // squad dis/association vars
                 addAssociationData: {
                     type: null,
@@ -849,7 +578,6 @@
                 },
 	            // Filters vars
                 showTeamsFilters: false,
-                showReservationsFilters: false,
                 showMembersFilters: false,
                 campaignsArr: [],
                 groupsArr: [],
@@ -860,18 +588,6 @@
                 teamFilters: {
                     group: '',
 	                campaign: null
-                },
-
-                // reservations filters
-	            reservationFilters: {
-                    type: '',
-		            groups: [],
-		            gender: '',
-		            status: '',
-                    hasCompanions: null,
-                    role: '',
-                    designation: '',
-		            age: [0, 120],
                 },
 
 	            // members filters
@@ -900,33 +616,19 @@
                 },
                 deep: true
             },
-            'reservationFilters': {
-                handler(val, oldVal) {
-                    this.reservationsPagination.current_page = 1;
-                    this.searchReservations();
-                },
-                deep: true
-            },
             'groupsArr'(val, oldVal) {
                 this.reservationFilters.groups = _.pluck(val, 'id') || '';
-//				this.searchReservations();
+                this.$root.$emit('Reservations::refresh');
             },
             'groupObj'(val, oldVal) {
                 this.teamFilters.group = val ? val.id : '';
-//				this.searchReservations();
+                this.$root.$emit('Reservations::refresh');
             },
             'teamsSearch'(val, oldVal) {
                 this.teamsPagination.current_page = 1;
 //                this.getTeams();
             },
-            'reservationsSearch'(val, oldVal) {
-                this.reservationsPagination.current_page = 1;
-//                this.searchReservations();
-            },
-		    'excludeReservationIds'(val, oldVal) {
-                this.reservationsPagination.current_page = 1;
-                this.searchReservations();
-            },
+
 		    'currentTeam'(val, oldVal) {
                 if (val && val.id) {
                     this.getSquads();
@@ -966,6 +668,7 @@
 	                _.each(this.currentSquadGroups, (squad) => {
 		                IDs = _.union(IDs, _.pluck(squad.members, 'id'));
 	                });
+                this.$root.$emit('Reservations::exclusions', _.uniq(IDs));
                 return _.uniq(IDs);
             },
 		    leaderSquad() {
@@ -1082,12 +785,14 @@
                 this.reservationsSearch = null;
                 this.$root.$emit('reservations-filters:reset');
                 this.reservationFilters = {
+                    type: '',
                     groups: [],
                     gender: '',
                     status: '',
                     hasCompanions: null,
-	                role: '',
-                    designation: ''
+                    role: '',
+                    designation: '',
+                    age: [0, 120],
                 }
             },
             resetTeamFilter(){
@@ -1170,6 +875,7 @@
                     squad.members = response.data.data;
                     squad.members_count = squad.members.length;
                     this.currentTeam.members_count++;
+                    this.$root.$emit('Reservations::refresh');
                 });
             },
             assignMassToSquad(reservations, squad) {
@@ -1187,6 +893,7 @@
 	                { params: { include: 'companions,trip.group'} }).then((response) => {
                     squad.members = response.data.data;
                     squad.members_count = squad.members.length
+                    this.$root.$emit('Reservations::refresh');
                 });
             },
             moveToSquad(reservation, oldSquad, newSquad, leader) {
@@ -1289,49 +996,6 @@
                         squad.members_count = squad.members.length;
                         this.currentTeam.members_count--;
                     });
-            },
-	        debouncedSearchReservations: _.debounce(function () {
-		        this.searchReservations();
-            }, 250),
-            searchReservations(){
-                let params = {
-                    include: 'trip.campaign,trip.group,user,companions',
-                    search: this.reservationsSearch,
-                    per_page: this.reservationsPerPage,
-                    page: this.reservationsPagination.current_page,
-	                current: true,
-	                ignore: this.excludeReservationIds,
-                    noSquad: true,
-                    designation: this.reservationFilters.designation,
-                };
-
-                if (this.isAdminRoute) {
-                    params.campaign = this.campaignId;
-                } else {
-                    params.campaign = this.campaignId;
-                    params.groups = new Array(this.groupId);
-                    params.trip = this.reservationsTrips.length ? this.reservationsTrips : new Array();
-                }
-
-                $.extend(params, this.reservationFilters);
-                $.extend(params, {
-                    age: [this.ageMin, this.ageMax]
-                });
-
-                // this.$refs.spinner.show();
-                return this.$http.get('reservations', { params: params, before: function(xhr) {
-                    if (this.lastReservationRequest) {
-                        this.lastReservationRequest.abort();
-                    }
-                    this.lastReservationRequest = xhr;
-                } }).then((response) => {
-                    this.reservations = response.data.data;
-                    this.reservationsPagination = response.data.meta.pagination;
-                    // this.$refs.spinner.hide();
-                }, (error) =>  {
-                    // this.$refs.spinner.hide();
-                    //TODO add error alert
-                });
             },
             debouncedTeamsSearch: _.debounce(function() { this.getTeams(); }, 300),
             getTeams(){
@@ -1769,7 +1433,6 @@
 
             Promise.all(promises).then((values) => {
                 this.startUp = false;
-                this.searchReservations();
 
                 // load view state
                 if (localStorage[this.storageName]) {
@@ -1800,7 +1463,7 @@
                     this.getTeams();
                     $('.nav-tabs a[href="#teams"]').tab('show');
                 }
-                this.searchReservations();
+                this.$root.$emit('Reservations::refresh');
             });
 
             $('#collapseHints')

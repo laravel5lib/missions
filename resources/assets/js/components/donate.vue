@@ -457,7 +457,7 @@
                     anonymous: this.anonymous,
                     currency: 'USD', // determined from card token
                     description: 'Donation to ' + this.title,
-                    // comment: null,
+	                comment: null,
                     fund_id: this.fundId,
                     token: this.token,
                     details: {

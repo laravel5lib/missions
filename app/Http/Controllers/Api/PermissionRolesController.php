@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Silber\Bouncer\Database\Role;
+use Spatie\Permission\Models\Role;
 
 class PermissionRolesController extends Controller
 {
@@ -28,7 +28,7 @@ class PermissionRolesController extends Controller
 
     public function index()
     {
-        $roles = $this->role->with('abilities')->get();
+        $roles = $this->role->with('permissions')->get();
 
         return $this->response->collection($roles, new RoleTransformer());
     }

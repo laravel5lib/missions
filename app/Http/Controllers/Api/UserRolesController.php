@@ -42,11 +42,11 @@ class UserRolesController extends Controller
      * @param $id
      * @return array
      */
-    public function destroy($id)
+    public function destroy($id, $role)
     {
         $user = $this->user->findOrFail($id);
 
-        if ($user->removeRole(request()->get('name'))) {
+        if ($user->removeRole($role)) {
             return ['message' => 'Role revoked.'];
         }
 

@@ -26,7 +26,8 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\v1\Passenger' => 'App\Policies\PassengerPolicy',
         'App\Models\v1\Region' => 'App\Policies\RegionPolicy',
         'App\Models\v1\Accommodation' => 'App\Policies\AccommodationPolicy',
-        'App\Models\v1\Team' => 'App\Policies\TeamPolicy'
+        'App\Models\v1\Team' => 'App\Policies\TeamPolicy',
+        'App\Models\v1\User' => 'App\Policies\UserPolicy'
     ];
 
     /**

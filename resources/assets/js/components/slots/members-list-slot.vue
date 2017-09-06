@@ -112,17 +112,19 @@
                 return `${this.isAdminRoute ? '/admin' : '/dashboard'}/reservations/${reservation.id}`;
             },
             getGenderStatusIcon(reservation){
-                if (reservation.gender == 'male') {
-                    if (reservation.status == 'married') {
-                        return 'fa fa-venus-mars text-info';
-                    }
-                    return 'fa fa-mars text-info';
+                switch (reservation.gender) {
+                    case 'male':
+                        if (reservation.status == 'married') {
+                            return 'fa fa-venus-mars text-info';
+                        }
+                        return 'fa fa-mars text-info';
+                    case 'female':
+                    default:
+                        if (reservation.status == 'married') {
+                            return 'fa fa-venus-mars text-danger';
+                        }
+                        return 'fa fa-venus text-danger';
                 }
-
-                if (reservation.status == 'married') {
-                    return 'fa fa-venus-mars text-danger';
-                }
-                return 'fa fa-venus text-danger';
             },
         },
         mounted() {

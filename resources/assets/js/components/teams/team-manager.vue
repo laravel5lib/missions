@@ -400,7 +400,7 @@
 						</div>
 					</div>
 					<div role="tabpanel" class="tab-pane" id="reservations">
-						<reservations-list-slot v-if="!startUp" ref="reservations">
+						<reservations-list-slot v-if="!startUp" ref="reservations" :params="reservationsParams" >
 							<template slot="action-buttons" scope="props">
 								<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
 									<span slot="button" class="fa fa-ellipsis-h"></span>
@@ -695,13 +695,29 @@
 		    },
             unassociatedGroups() {
 		        return _.difference(this.groupsOptions, this.currentTeam.groups.data);
-		    }
+		    },
+            reservationsParams() {
+                let params = {
+                    include: 'trip.campaign,trip.group,user,companions',
+                    current: true,
+                    ignore: this.excludeReservationIds,
+                    noSquad: true,
+                };
+
+                if (this.isAdminRoute) {
+                    params.campaign = this.campaignId;
+                } else {
+                    params.campaign = this.campaignId;
+                    params.groups = new Array(this.groupId);
+                    params.trip = this.reservationsTrips.length ? this.reservationsTrips : new Array();
+                }
+                return params;
+            }
 	    },
         methods: {
             sortByLeader(members) {
                 return members ? _.sortBy(members, 'leader') : [];
             },
-
             getRuleLabel(key){
                 switch(key) {
 	                case 'min_members':

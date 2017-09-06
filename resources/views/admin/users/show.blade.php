@@ -124,7 +124,7 @@
                 <hr class="divider">
                 <send-email label="Resend Welcome Email"
                                  icon="fa fa-envelope icon-left"
-                                 class="btn btn-default btn-md btn-block"
+                                 classes="btn btn-default btn-md btn-block"
                                  command="email:send-welcome"
                                  :parameters="{id: '{{ $user->id }}', email: '{{ $user->email }}'}">
                 </send-email>

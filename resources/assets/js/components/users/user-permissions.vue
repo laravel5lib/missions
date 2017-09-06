@@ -17,7 +17,7 @@
                     </div>
                     <div :id="'roleItem' + index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                         <div class="panel-body">
-                            <h5>Permissions</h5>
+                            <h5>This Role has Permission to:</h5>
                             <ul class="list-unstyled small" v-if="role.permissions.data.length > 0">
                                 <li v-for="permission in role.permissions.data">{{ permission.name|underscoreToSpace|capitalize }}</li>
                             </ul>

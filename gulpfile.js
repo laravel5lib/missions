@@ -28,4 +28,7 @@ elixir(function(mix) {
     // move fonts to public folder
     mix.copy('node_modules/font-awesome/fonts', 'public/build/fonts');
     mix.version(['css/app.css', 'js/main.js']);
+    mix.browserSync({
+        proxy: 'missions.dev'
+    });
 });

@@ -1,6 +1,5 @@
 <template>
-
-		<div class="panel-group" :id="listId + listIndex" role="tablist" aria-multiselectable="true">
+	<div class="panel-group" :id="listId + listIndex" role="tablist" aria-multiselectable="true">
 		<div class="panel panel-default" v-for="(member, memberIndex) in members">
 			<div class="panel-heading" role="tab" id="headingOne">
 				<h4 class="panel-title">
@@ -9,7 +8,10 @@
 							<div class="media">
 								<div class="media-left" style="padding-right:0;">
 									<a :href="getReservationLink(member)" target="_blank">
-										<img :src="member.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member && member.leader">GL</span>
+										<img :src="member.avatar" class="img-circle img-xs av-left" style="margin-right: 10px">
+										<slot name="leader" :member="member">
+											<span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member && member.leader">GL</span>
+										</slot>
 									</a>
 								</div>
 								<div class="media-body" style="vertical-align:middle;">
@@ -44,10 +46,13 @@
 						<div class="col-sm-6">
 							<label>Age</label>
 							<p class="small">{{member.age}}</p>
-							<label>Travel Group</label>
-							<p class="small">{{member.trip.data.group.data.name}}</p>
+							<template v-if="member.trip && member.trip.data.group">
+								<label>Travel Group</label>
+								<p class="small">{{member.trip.data.group.data.name}}</p>
+							</template>
+
 						</div><!-- end col -->
-						<div class="col-sm-12">
+						<div class="col-sm-12" v-if="member.companions">
 							<label>Companions</label>
 							<ul class="list-unstyled" v-if="member.companions.data.length">
 								<li v-for="companion in member.companions.data">
@@ -58,7 +63,7 @@
 							</ul>
 							<p class="small" v-else>None</p>
 						</div>
-						<div class="col-sm-6">
+						<div class="col-sm-6" v-if="member.trip">
 							<label>Trip Type</label>
 							<p class="small">{{ member.trip.data.type | capitalize }}</p>
 						</div>
@@ -70,20 +75,33 @@
 					</slot>
 				</div><!-- end panel-body -->
 			</div>
-			<div class="panel-footer small clearfix" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
-				<i class=" fa fa-info-circle"></i> {{member.present_companions}} companions not in this group &middot; {{companionsPresentTeam(member)}} not on this squad.
-				<button type="button" class="btn btn-xs btn-default-hollow pull-right" @click="addCompanionsToSquad(member, squad)"><i class="fa fa-plus-circle"></i> Companions</button>
-			</div>
+			<slot name="companions" :member="member">
+				<div class="panel-footer small clearfix" style="background-color: #ffe000;" v-if="member.companions && member.companions.data.length && companionsPresentSquad(member, squad)">
+					<i class=" fa fa-info-circle"></i> {{member.present_companions}} companions not in this group &middot; {{companionsPresentTeam(member)}} not on this squad.
+					<button type="button" class="btn btn-xs btn-default-hollow pull-right" @click="addCompanionsToSquad(member, squad)"><i class="fa fa-plus-circle"></i> Companions</button>
+				</div>
+			</slot>
 		</div>
 	</div>
-
 </template>
 <style></style>
 <script type="text/javascript">
 	import _ from 'underscore';
     export default {
-        name: 'reservations-list-slot',
-	    props: ['members', 'listId', 'listIndex'],
+        name: 'members-list-slot',
+	    props: {
+            members: {
+                type: Array,
+	            required: true
+            },
+            'list-id': {
+                type: String
+            },
+            'list-index': {
+                type: Number,
+	            default: Number(_.uniqueId())
+            },
+	    },
         data() {
             return {
 
@@ -91,7 +109,7 @@
         },
         methods: {
             getReservationLink(reservation){
-                return (this.isAdminRoute ? '/admin/reservations/' : '/dashboard/reservations/') + reservation.id;
+                return `${this.isAdminRoute ? '/admin' : '/dashboard'}/reservations/${reservation.id}`;
             },
             getGenderStatusIcon(reservation){
                 if (reservation.gender == 'male') {

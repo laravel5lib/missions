@@ -62,114 +62,86 @@
 										</div>
 										<hr class="divider sm">
 										<template v-if="currentRoom.occupants && currentRoom.occupants.length">
-											<div class="panel-group" id="occupantsAccordion" role="tablist" aria-multiselectable="true">
-												<div class="row">
-												<div class="col-sm-12" v-for="(member, memberIndex) in currentRoomOccupantsOrdered">
-													<div class="panel panel-default" style="margin-bottom:8px;">
-														<div class="panel-heading" role="tab" id="headingOne">
-															<h5 class="panel-title">
-																<div class="row">
-																	<div class="col-xs-8">
-																		<div class="media">
-																			<div class="media-left" style="padding-right:0;">
-																				<a :href="getReservationLink(member)" target="_blank">
-																					<img :src="member.avatar" class="media-object img-circle img-xs av-left"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member.room_leader">RL</span>
-																				</a>
-																			</div>
-																			<div class="media-body" style="vertical-align:middle;">
-																				<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
-																				<i :class="getGenderStatusIcon(member)"></i>
-																				<a :href="getReservationLink(member)" target="_blank">{{ member.surname|capitalize }}, {{ member.given_names|capitalize }}</a></h6>
-																				<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group }}</span></p>
-																			</div><!-- end media-body -->
-																		</div><!-- end media -->
-																	</div>
-																	<div class="col-xs-4 text-right action-buttons">
-																		<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
-																			<span slot="button" class="fa fa-ellipsis-h"></span>
-																			<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-																				<li v-if="member.room_leader" :class="{'disabled': isLocked}"><a @click="demoteToOccupant(member)">Demote to Occupant</a></li>
-																				<li v-if="!member.room_leader && !currentRoomHasLeader" :class="{'disabled': isLocked}"><a @click="promoteToLeader(member)">Promote to Room Leader</a></li>
-																				<li v-if="member.room_leader || (!member.room_leader && !currentRoomHasLeader)" role="separator" class="divider"></li>
-																				<li :class="{'disabled': isLocked}"><a @click="removeFromRoom(member, this.currentRoom)">Remove</a></li>
-																			</ul>
-																		</dropdown>
-																		<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#occupantItem' + memberIndex" aria-expanded="true" aria-controls="collapseOne">
-																			<i class="fa fa-angle-down"></i>
-																		</a>
-																	</div>
-																</div>
-															</h5>
+											<members-list-slot :members="currentRoomOccupantsOrdered" list-id="occupantsAccordion">
+												<template slot="leader" scope="{ member }">
+													<span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member.room_leader">RL</span>
+												</template>
+												<template slot="action-buttons" scope="{ member }">
+													<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+														<span slot="button" class="fa fa-ellipsis-h"></span>
+														<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+															<li v-if="member.room_leader" :class="{'disabled': isLocked}"><a @click="demoteToOccupant(member)">Demote to Occupant</a></li>
+															<li v-if="!member.room_leader && !currentRoomHasLeader" :class="{'disabled': isLocked}"><a @click="promoteToLeader(member)">Promote to Room Leader</a></li>
+															<li v-if="member.room_leader || (!member.room_leader && !currentRoomHasLeader)" role="separator" class="divider"></li>
+															<li :class="{'disabled': isLocked}"><a @click="removeFromRoom(member, this.currentRoom)">Remove</a></li>
+														</ul>
+													</dropdown>
+												</template>
+												<template slot="details" scope="{ member }">
+													<div class="row">
+														<div class="col-sm-3">
+															<label>Age</label>
+															<p class="small">{{member.age}}</p>
+														</div><!-- end col -->
+														<div class="col-sm-3">
+															<label>Gender</label>
+															<p class="small">{{ member.gender|capitalize }}</p>
+														</div><!-- end col -->
+														<div class="col-sm-6">
+															<label>Marital Status</label>
+															<p class="small">{{ member.status|capitalize }}</p>
 														</div>
-														<div :id="'occupantItem' + memberIndex" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-															<div class="panel-body">
-																<div class="row">
-																	<div class="col-sm-3">
-																		<label>Age</label>
-																		<p class="small">{{member.age}}</p>
-																	</div><!-- end col -->
-																	<div class="col-sm-3">
-																		<label>Gender</label>
-																		<p class="small">{{ member.gender|capitalize }}</p>
-																	</div><!-- end col -->
-																	<div class="col-sm-6">
-																		<label>Marital Status</label>
-																		<p class="small">{{ member.status|capitalize }}</p>
-																	</div>
-																</div><!-- end row -->
-																<div class="row">
-																	<div class="col-sm-6">
-																		<label>Travel Group</label>
-																		<p class="small">{{member.travel_group}}</p>
-																	</div>
-																	<div class="col-sm-6">
-																		<label>Designation</label>
-																		<p class="small">{{ member.arrival_designation|capitalize }}</p>
-																	</div>
-																</div>
-																<div class="row">
-																	<div class="col-sm-6">
-																		<label>Companions</label>
-																		<ul class="list-unstyled small" v-if="member.companions.data.length">
-																			<li v-for="companion in member.companions.data">
-																				<i :class="getGenderStatusIcon(companion)"></i>
-																				{{ companion.surname|capitalize }}, {{ companion.given_names|capitalize }}
-																				<span class="text-muted">({{ companion.relationship }})</span>
-																			</li>
-																		</ul>
-																		<p class="small" v-else>None</p>
-																	</div><!-- end col -->
-																	<div class="col-sm-6">
-																		<label>Squad Groups</label>
-																		<p class="small" v-if="member.squads.data.length">
-																			<span v-for="squad in member.squads.data">{{squad.callsign}} <span v-if="squad.team">({{ squad.team.data.callsign }})</span><span v-if="!$last && member.squads.data.length > 1">, </span></span>
-																		</p>
-																		<p clas="small" v-else>
-																			Unassigned
-																		</p>
-																	</div><!-- end col -->
-																</div><!-- end row -->
-																<div class="row">
-																	<div class="col-sm-12">
-																		<label>Rooming Cost</label>
-																		<p class="small">
-																			<span v-for="cost in member.costs.data">{{cost.name}}
-																			<span v-if="!$last && member.costs.data.length > 1">, </span></span>
-																		</p>
-																	</div>
-																</div>
-															</div><!-- end panel-body -->
+													</div><!-- end row -->
+													<div class="row">
+														<div class="col-sm-6">
+															<label>Travel Group</label>
+															<p class="small">{{member.travel_group}}</p>
 														</div>
-														<!-- </div> -->
-														<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions && member.companions.data.length && companionsPresentRoom(member, currentRoom)">
-															<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this room.
-															<button type="button" class="btn btn-xs btn-default-hollow pull-right" @click="addCompanionsToRoom(member, currentRoom)"><i class="fa fa-plus-circle"></i>
-															<span class="hidden-xs">Companions</span></button>
+														<div class="col-sm-6">
+															<label>Designation</label>
+															<p class="small">{{ member.arrival_designation|capitalize }}</p>
 														</div>
 													</div>
-												</div><!-- end row -->
-											</div>
-											</div>
+													<div class="row">
+														<div class="col-sm-6" v-if="member.companions">
+															<label>Companions</label>
+															<ul class="list-unstyled small" v-if="member.companions.data.length">
+																<li v-for="companion in member.companions.data">
+																	<i :class="getGenderStatusIcon(companion)"></i>
+																	{{ companion.surname|capitalize }}, {{ companion.given_names|capitalize }}
+																	<span class="text-muted">({{ companion.relationship }})</span>
+																</li>
+															</ul>
+															<p class="small" v-else>None</p>
+														</div><!-- end col -->
+														<div class="col-sm-6" v-if="member.squads">
+															<label>Squad Groups</label>
+															<p class="small" v-if="member.squads.data.length">
+																<span v-for="(squad, index) in member.squads.data">{{squad.callsign}} <span v-if="squad.team">({{ squad.team.data.callsign }})</span><span v-if="!(member.squads.data.length - 1 === index) && member.squads.data.length > 1">, </span></span>
+															</p>
+															<p clas="small" v-else>
+																Unassigned
+															</p>
+														</div><!-- end col -->
+													</div><!-- end row -->
+													<div class="row">
+														<div class="col-sm-12" v-if="member.costs">
+															<label>Rooming Cost</label>
+															<p class="small">
+																<span v-for="(cost, index) in member.costs.data">{{cost.name}}
+																<span v-if="!(member.costs.data.length - 1 === index) && member.costs.data.length > 1">, </span></span>
+															</p>
+														</div>
+													</div>
+												</template>
+												<template slot="companions" scope="member">
+													<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions && member.companions.data.length && companionsPresentRoom(member, currentRoom)">
+														<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this room.
+														<button type="button" class="btn btn-xs btn-default-hollow pull-right" @click="addCompanionsToRoom(member, currentRoom)"><i class="fa fa-plus-circle"></i>
+															<span class="hidden-xs">Companions</span></button>
+													</div>
+												</template>
+											</members-list-slot>
 										</template>
 										<template v-else>
 											<hr class="divider inv">
@@ -241,7 +213,7 @@
 
 				<!-- Teams Select & Members List -->
 				<div class="col-sm-4">
-					<reservations-list-slot>
+					<reservations-list-slot :filters="reservationFilters" ref="reservations" :params="reservationsParams">
 						<template slot="action-buttons" scope="{ reservation }">
 							<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
 								<span slot="button" class="fa fa-ellipsis-h"></span>
@@ -249,7 +221,7 @@
 									<li class="dropdown-header">Assign To Room</li>
 									<li role="separator" class="divider"></li>
 									<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(reservation, true, currentRoom)">{{(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} as leader</a></li>
-									<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(reservation, false, currentRoom)">{[(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}}</a></li>
+									<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(reservation, false, currentRoom)">{{(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}}</a></li>
 									<li v-if="!currentRoom"><a @click=""><em>Please select a room first.</em></a></li>
 								</ul>
 							</dropdown>
@@ -281,8 +253,8 @@
 								<div class="col-sm-12">
 									<label>Rooming Cost</label>
 									<p class="small">
-												<span v-for="cost in reservation.costs.data">{{cost.name}}
-												<span v-if="!$last && reservation.costs.data.length > 1">, </span></span>
+										<span v-for="(cost, index) in reservation.costs.data">{{cost.name}}
+										<span v-if="!(reservation.costs.data.length - 1 === index) && reservation.costs.data.length > 1">, </span></span>
 									</p>
 								</div>
 								<div class="col-sm-12">
@@ -298,7 +270,7 @@
 								<div class="col-sm-6">
 									<label>Squad Groups</label>
 									<p class="small" v-if="reservation.squads.data.length">
-										<span v-for="squad in reservation.squads.data">{{squad.callsign}} <span v-if="squad.team">({{ squad.team.data.callsign }})</span><span v-if="!$last && reservation.squads.data.length > 1">, </span></span>
+										<span v-for="(squad, index) in reservation.squads.data">{{squad.callsign}} <span v-if="squad.team">({{ squad.team.data.callsign }})</span><span v-if="!(reservation.squads.data.length - 1 === index) && reservation.squads.data.length > 1">, </span></span>
 									</p>
 									<p clas="small" v-else>
 										Unassigned
@@ -308,13 +280,13 @@
 						</template>
 					</reservations-list-slot>
 					<!-- Search and Filter -->
-					<form class="form-inline row">
+					<!--<form class="form-inline row">
 						<div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
 							<div class="input-group input-group-sm col-xs-12">
 								<input type="text" class="form-control" v-model="reservationsSearch" @keyup="debouncedReservationsSearch" placeholder="Search">
 								<span class="input-group-addon"><i class="fa fa-search"></i></span>
 							</div>
-						</div><!-- end col -->
+						</div>&lt;!&ndash; end col &ndash;&gt;
 						<div class="form-group col-lg-5 col-md-5 col-sm-6 col-xs-12">
 							<button class="btn btn-default btn-sm btn-block" type="button" @click="showReservationsFilters=!showReservationsFilters">
 								Filters
@@ -375,8 +347,8 @@
 														<a :href="getReservationLink(reservation)" target="_blank">
 															{{ reservation.surname|capitalize }}, {{ reservation.given_names|capitalize }}</a></h6>
 													<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ reservation.desired_role.name }} <span class="text-muted">&middot; {{ reservation.trip.data.group.data.name }}</span></p>
-												</div><!-- end media-body -->
-											</div><!-- end media -->
+												</div>&lt;!&ndash; end media-body &ndash;&gt;
+											</div>&lt;!&ndash; end media &ndash;&gt;
 										</div>
 										<div class="col-xs-3 text-right action-buttons">
 											<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
@@ -414,7 +386,7 @@
 										<div class="col-sm-6">
 											<label>Travel Group</label>
 											<p class="small">{{reservation.trip.data.group.data.name}}</p>
-										</div><!-- end col -->
+										</div>&lt;!&ndash; end col &ndash;&gt;
 										<div class="col-sm-6">
 											<label>Designation</label>
 											<p class="small">
@@ -437,7 +409,7 @@
 												</li>
 											</ul>
 											<p class="small" v-else>None</p>
-										</div><!-- end col -->
+										</div>&lt;!&ndash; end col &ndash;&gt;
 										<div class="col-sm-6">
 											<label>Squad Groups</label>
 											<p class="small" v-if="reservation.squads.data.length">
@@ -446,8 +418,8 @@
 											<p clas="small" v-else>
 												Unassigned
 											</p>
-										</div><!-- end col -->
-									</div><!-- end row -->
+										</div>&lt;!&ndash; end col &ndash;&gt;
+									</div>&lt;!&ndash; end row &ndash;&gt;
 								</div>
 							</div>
 							<div class="panel-footer" v-if="reservation.companions.data.length">
@@ -457,7 +429,7 @@
 					</div>
 					<div class="col-sm-12 text-center">
 						<pagination :pagination="reservationsPagination" pagination-key="reservationsPagination" :callback="searchReservations"></pagination>
-					</div>
+					</div>-->
 				</div>
 			</template>
 			<template v-else>
@@ -525,10 +497,12 @@
     import _ from 'underscore';
     import vSelect from 'vue-select';
     import reservationsFilters from '../filters/reservations-filters.vue';
+    import reservationsListSlot from '../slots/reservations-list-slot.vue';
+    import membersListSlot from '../slots/members-list-slot.vue';
     import utilities from '../utilities.mixin';
     export default{
         name: 'rooming-manager',
-        components: {vSelect, reservationsFilters},
+        components: {vSelect, reservationsFilters, reservationsListSlot, membersListSlot},
 	    mixins: [utilities],
         props: {
             userId: {
@@ -707,6 +681,18 @@
                     return this.getRoomLeader(this.currentRoom);
                 } else return false;
 		    },
+            reservationsParams() {
+                let params = {
+                    include: 'trip.campaign,trip.group,user,companions,squads.team,costs:type(optional)',
+                    campaign: this.campaignId,
+                    current: true,
+                    noRoom: 'plans|' + this.currentPlan.id,
+                };
+
+                params.groups = _.pluck(this.currentPlan.groups.data, 'id');
+
+                return params;
+            }
         },
         methods: {
             getReservationLink(reservation){
@@ -905,7 +891,6 @@
 	            if (this.reservationFilters.groups.length)
                     params.groups = _.union(params.groups, _.pluck(this.reservationFilters.groups, 'id'));
 
-	                // this.$refs.spinner.show();
                 return this.$http.get('reservations', { params: params, before: function(xhr) {
                     if (this.lastReservationRequest) {
                         this.lastReservationRequest.abort();

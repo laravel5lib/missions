@@ -7,7 +7,7 @@
 		<form class="form-inline row">
 			<div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
 				<div class="input-group input-group-sm col-xs-12">
-					<input type="text" class="form-control" v-model="reservationsSearch" @keyup="debouncedSearchReservations" placeholder="Search">
+					<input type="text" class="form-control" v-model="reservationFilters.search" @keyup="debouncedSearchReservations" placeholder="Search">
 					<span class="input-group-addon"><i class="fa fa-search"></i></span>
 				</div>
 			</div><!-- end col -->
@@ -148,23 +148,18 @@
 <script type="text/javascript">
 	import _ from 'underscore';
     import reservationsFilters from '../filters/reservations-filters.vue';
-    import reservationsListSlot from '../slots/reservations-list-slot.vue';
-    import membersListSlot from '../slots/members-list-slot.vue';
     export default {
         name: 'reservations-list-slot',
-	    components: {reservationsFilters, reservationsListSlot},
+	    components: {reservationsFilters},
 	    props: {
-
-	    },
-        data() {
-            return {
-                reservations: [],
-                reservationsSearch: '',
-                reservationsPerPage: 10,
-                reservationsPagination: { current_page: 1 },
-                lastReservationRequest: null,
-                showReservationsFilters: false,
-                reservationFilters: {
+            params: {
+                type: Object,
+	            default() { return {}; }
+            },
+            filters: {
+                type: Object,
+	            default() { return {
+                    search: '',
                     type: '',
                     groups: [],
                     gender: '',
@@ -173,33 +168,47 @@
                     role: '',
                     designation: '',
                     age: [0, 120],
-                },
-
-                excludeReservationIds: [],
-
+	            }; }
+            },
+	    },
+        data() {
+            return {
+                reservations: [],
+                reservationsPerPage: 10,
+                reservationsPagination: { current_page: 1 },
+                lastReservationRequest: null,
+                showReservationsFilters: false,
+	            reservationFilters: {
+                    type: '',
+                    groups: [],
+                    gender: '',
+                    status: '',
+                    hasCompanions: null,
+                    role: '',
+                    designation: '',
+                    age: [0, 120],
+                }
             }
         },
 	    watch: {
-            reservationFilters: {
+            filters: {
                 handler(val, oldVal) {
                     this.reservationsPagination.current_page = 1;
                     this.searchReservations();
                 },
                 deep: true
             },
-            reservationsSearch(val, oldVal) {
-                this.reservationsPagination.current_page = 1;
-//                this.searchReservations();
-            },
-            excludeReservationIds(val, oldVal) {
-                this.reservationsPagination.current_page = 1;
-                this.searchReservations();
-            },
+            params: {
+                handler(val) {
+                     this.searchReservations();
+                },
+	            deep: true
+            }
 
         },
         methods: {
             getReservationLink(reservation){
-                return (this.isAdminRoute ? '/admin/reservations/' : '/dashboard/reservations/') + reservation.id;
+                return `${this.isAdminRoute ? '/admin' : '/dashboard'}/reservations/${reservation.id}`;
             },
             getGenderStatusIcon(reservation){
                 if (reservation.gender == 'male') {
@@ -226,35 +235,31 @@
                     role: '',
                     designation: '',
                     age: [0, 120],
-                }
+                };
             },
             debouncedSearchReservations: _.debounce(function () {
                 this.searchReservations();
             }, 250),
             searchReservations(){
                 let params = {
-                    include: 'trip.campaign,trip.group,user,companions',
-                    search: this.reservationsSearch,
                     per_page: this.reservationsPerPage,
                     page: this.reservationsPagination.current_page,
-                    current: true,
-                    ignore: this.excludeReservationIds,
-                    noSquad: true,
-                    designation: this.reservationFilters.designation,
                 };
 
-                if (this.isAdminRoute) {
-                    params.campaign = this.$parent.campaignId;
-                } else {
-                    params.campaign = this.$parent.campaignId;
-                    params.groups = new Array(this.$parent.groupId);
-                    params.trip = this.$parent.reservationsTrips.length ? this.$parent.reservationsTrips : new Array();
+                $.extend(params, this.params);
+                $.extend(params, this.filters, this.reservationFilters);
+
+
+                // For Rooming Manager
+                if (_.isObject(this.reservationFilters.role)) {
+                    params.role = this.reservationFilters.role.value;
                 }
 
-                $.extend(params, this.reservationFilters);
+                // For Rooming Manager
+                if (this.reservationFilters.groups.length)
+                    params.groups = _.union(params.groups, _.pluck(this.reservationFilters.groups, 'id'));
 
-                // this.$refs.spinner.show();
-                return this.$http.get('reservations', { params: params, before:(xhr) => {
+                return this.$http.get('reservations', { params: params, before: function (xhr) {
                     if (this.lastReservationRequest) {
                         this.lastReservationRequest.abort();
                     }
@@ -262,19 +267,15 @@
                 } }).then((response) => {
                     this.reservations = response.data.data;
                     this.reservationsPagination = response.data.meta.pagination;
-                    // this.$refs.spinner.hide();
-                }, (error) =>  {
-                    // this.$refs.spinner.hide();
-                    //TODO add error alert
-                });
+                }, this.$root.handleApiError);
             },
 
         },
         mounted() {
             this.searchReservations();
+
             this.$root.$on('Reservations::exclusions', val => {
-                this.excludeReservationIds = val;
-                this.searchReservations();
+//                this.searchReservations();
             });
             this.$root.$on('Reservations::refresh', () => {
                 this.searchReservations();

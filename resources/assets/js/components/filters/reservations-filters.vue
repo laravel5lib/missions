@@ -424,15 +424,15 @@
 
                     if (val.campaign) {
                         if (this.campaignObj === null) {
-                            this.campaignObj = _.findWhere(this.campaignOptions, {id: val.campaign});
+                            this.campaignObj = _.findWhere(this.campaignOptions, { id: val.campaign });
                         }
                     }
 
-                    if (val !== oldVal) {
+                    //if (val !== oldVal) {
                         this.filters = val;
                         this.pagination.current_page = 1;
                         this.callback();
-                    }
+                    //}
                 },
                 deep: true
             },
@@ -440,50 +440,55 @@
                 handler(val, oldVal) {
                     if (val !== oldVal) {
                         this.$emit('input', val);
+                        this.$emit('update:value', val);
                     }
                 },
 			    deep: true
 		    },
-            'campaignObj' (val) {
+            campaignObj (val) {
 		        this.filters.campaign = val ? val.id : null;
 		        if (val)
                     this.getRegions();
             },
-            'campaignId' (val) {
+            campaignId(val) {
                 this.getRegions();
             },
-		    'shirtSizeArr' (val) {
-		        this.filters.shirtSize = _.pluck(val, 'id') || [];
+		    shirtSizeArr (val) {
+                if ( this.propertyExists('shirtSize') )
+                    this.filters.shirtSize = _.pluck(val, 'id') || [];
 		     },
-		    'groupsArr' (val) {
-		        this.filters.groups = _.pluck(val, 'id') || [];
+		    groupsArr(val) {
+                if ( this.propertyExists('groups') )
+                    this.filters.groups = _.pluck(val, 'id') || [];
 		     },
-		    'usersArr' (val) {
-		        this.filters.user = _.pluck(val, 'id') || [];
+		    usersArr (val) {
+                if ( this.propertyExists('user') )
+		            this.filters.user = _.pluck(val, 'id') || [];
 		     },
-            'roleObj' (val) {
-                this.filters.role = val ? val.value : '';
+            roleObj (val) {
+                if ( this.propertyExists('role') )
+                    this.filters.role = val ? val.value : '';
             },
-            'facilitator' (val) {
+            facilitator (val) {
                 if (val) {
                     this.getRoles();
                 }
             },
-            'hasRoomInPlan' (val, oldVal) {
+            hasRoomInPlan (val, oldVal) {
                 if (val) {
                     this.filters.hasRoom = 'plans';
                 } else {
                     this.filters.hasRoom = null;
                 }
             },
-            'noRoomInPlan' (val, oldVal) {
+            noRoomInPlan (val, oldVal) {
                 if (val) {
                     this.filters.noRoom = 'plans';
                 } else {
                     this.filters.noRoom = null;
                 }
             },
-            'hasTransportation' (val, oldVal) {
+            hasTransportation (val, oldVal) {
                 if (val === 'yes') {
                     this.filters.inTransport = true;
                     this.filters.notInTransport = null;
@@ -495,7 +500,7 @@
                     this.filters.notInTransport = null;
                 }
             },
-            'traveling' (val, oldVal) {
+            traveling (val, oldVal) {
                 if (this.hasTransportation === 'yes') {
                     this.filters.traveling = val;
                     this.filters.notTraveling = null;
@@ -511,7 +516,6 @@
                     this.filters.notTraveling = null;
                 }
             }
-
 	    },
         methods: {
             propertyExists(property) {

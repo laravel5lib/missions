@@ -64,11 +64,11 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<label>Card Holder Name</label>
-							<p>{{paymentInfo.card.cardholder}}</p>
+							<p>{{paymentInfo.card.name}}</p>
 						</div><!-- end col -->
 						<div class="col-sm-6">
 							<label>Card Number</label>
-							<p>&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; {{paymentInfo.card.number.substr(-4)}}</p>
+							<p>&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; {{paymentInfo.card.last4}}</p>
 						</div><!-- end col -->
 					</div><!-- end row -->
 					<div class="row">
@@ -84,7 +84,7 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<label>Billing Zip</label>
-							<p>{{paymentInfo.address_zip}}</p>
+							<p>{{paymentInfo.card.address_zip}}</p>
 						</div><!-- end col -->
 						<div class="col-sm-6">
 							<label>Save Payment Method</label>

@@ -115,7 +115,6 @@
 				wizardComplete: false,
 
 				// user generated data
-				userData: null,
 				selectedOptions: null,
 				userInfo: {},
 				paymentInfo: {},
@@ -130,7 +129,10 @@
 		computed: {
 			canContinue(){
 				return this.currentStep.complete;
-			}
+			},
+            userData(){
+			    return this.$root.user;
+            }
 		},
 		methods: {
 			toStep(step){

@@ -42,14 +42,14 @@
             </div>
             <div id="collapseDetails" class="collapse">
                 <div class="col-xs-12">
-                    {% $trip->description %}
+                    {!! Markdown::convertToHtml($trip->description) !!}
                     <hr class="divider inv" />
                 </div><!-- end col -->
             </div><!-- end collapse -->
         </div><!-- end visible-xs -->
         <div class="col-sm-7 col-md-7 col-lg-8 hidden-xs">
 
-            {% $trip->description %}
+            {!! Markdown::convertToHtml($trip->description) !!}
 
             <hr class="divider inv" />
 

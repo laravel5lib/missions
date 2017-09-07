@@ -26,7 +26,7 @@ class RoleTransformer extends TransformerAbstract
 
     public function includePermissions(Role $role)
     {
-        $permissions = $role->permission;
+        $permissions = $role->permissions;
 
         return $this->collection($permissions, new PermissionTransformer);
     }

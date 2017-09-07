@@ -90,6 +90,48 @@ return [
         ]
     ],
     'admin' => [
+        'toolbar' => [
+            [
+                'icon' => 'globe',
+                'label' => 'Campaigns',
+                'url' => 'admin/campaigns'
+            ],
+            [
+                'icon' => 'ticket',
+                'label' => 'Reservations',
+                'url' => 'admin/reservations'
+            ],
+            [
+                'icon' => 'users',
+                'label' => 'Groups',
+                'url' => 'admin/groups'
+            ],
+            [
+                'icon' => 'user',
+                'label' => 'Users',
+                'url' => 'admin/users'
+            ],
+            [
+                'icon' => 'usd',
+                'label' => 'Transactions',
+                'url' => 'admin/transactions'
+            ],
+            [
+                'icon' => 'tint',
+                'label' => 'Projects',
+                'url' => 'admin/projects'
+            ],
+            [
+                'icon' => 'archive',
+                'label' => 'Records',
+                'url' => 'admin/records'
+            ],
+            [
+                'icon' => 'line-chart',
+                'label' => 'Reports',
+                'url' => 'admin/reports'
+            ],
+        ],
         'project' => [
             [
                 'label' => 'Details',

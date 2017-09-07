@@ -22,7 +22,7 @@ class UsersController extends Controller
 
     public function index()
     {
-        // $this->authorize('view', $this->user);
+        $this->authorize('view', $this->user);
 
         return view('admin.users.index');
     }
@@ -31,7 +31,8 @@ class UsersController extends Controller
     {
         $this->authorize('view', $this->user);
 
-        $user = $this->api->get('users/'.$id, ['include' => '']);
+        $user = User::findOrFail($id);
+
         return view('admin.users.show')->with('user', $user);
     }
 

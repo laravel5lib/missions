@@ -1,7 +1,7 @@
 <template>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h5 class="panel-header">Assign Roles to User</h5>
+            <h5 class="panel-header">Assign Roles</h5>
         </div>
         <div class="panel-body">
             <div class="panel-group" id="rolesAccordion" role="tablist" aria-multiselectable="true">
@@ -17,7 +17,7 @@
                     </div>
                     <div :id="'roleItem' + index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                         <div class="panel-body">
-                            <h5>Permissions</h5>
+                            <h5>This Role has Permission to:</h5>
                             <ul class="list-unstyled small" v-if="role.permissions.data.length > 0">
                                 <li v-for="permission in role.permissions.data">{{ permission.name|underscoreToSpace|capitalize }}</li>
                             </ul>
@@ -120,9 +120,7 @@
                 });
             },
             revoke(role) {
-                this.$http.delete('users/' + this.user_id + '/roles', {
-                    name: role.name
-                }).then((response) => {
+                this.$http.delete('users/' + this.user_id + '/roles/' + role.name).then((response) => {
                     this.$root.$emit('showSuccess', 'User permissions updated.')
                 });
             },

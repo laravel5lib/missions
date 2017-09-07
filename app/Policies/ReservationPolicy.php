@@ -14,7 +14,7 @@ class ReservationPolicy extends BasePolicy
      * @param  \App\Models\v1\Reservation  $reservation
      * @return mixed
      */
-    public function view(User $user, Reservation $reservation)
+    public function view(User $user, Reservation $reservation = null)
     {
         return $user->can('view_reservations');
     }

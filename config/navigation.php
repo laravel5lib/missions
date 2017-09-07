@@ -94,42 +94,58 @@ return [
             [
                 'icon' => 'globe',
                 'label' => 'Campaigns',
-                'url' => 'admin/campaigns'
+                'url' => 'admin/campaigns',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Campaign'
             ],
             [
                 'icon' => 'ticket',
                 'label' => 'Reservations',
-                'url' => 'admin/reservations'
+                'url' => 'admin/reservations',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Reservation'
             ],
             [
                 'icon' => 'users',
                 'label' => 'Groups',
-                'url' => 'admin/groups'
+                'url' => 'admin/groups',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Group'
             ],
             [
                 'icon' => 'user',
                 'label' => 'Users',
-                'url' => 'admin/users'
+                'url' => 'admin/users',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\User'
             ],
             [
                 'icon' => 'usd',
                 'label' => 'Transactions',
-                'url' => 'admin/transactions'
+                'url' => 'admin/transactions',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Transaction'
             ],
             [
                 'icon' => 'tint',
                 'label' => 'Projects',
-                'url' => 'admin/projects'
+                'url' => 'admin/causes',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Project'
             ],
             [
                 'icon' => 'archive',
                 'label' => 'Records',
-                'url' => 'admin/records'
+                'url' => 'admin/records',
+                'action' => 'view',
+                'policy' => ''
             ],
             [
                 'icon' => 'line-chart',
                 'label' => 'Reports',
-                'url' => 'admin/reports'
+                'url' => 'admin/reports',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Report'
             ],
         ],
         'project' => [

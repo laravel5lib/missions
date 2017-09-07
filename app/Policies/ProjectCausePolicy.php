@@ -14,7 +14,7 @@ class ProjectCausePolicy extends BasePolicy
      * @param  \App\Models\v1\ProjectCause  $projectCause
      * @return mixed
      */
-    public function view(User $user, ProjectCause $projectCause)
+    public function view(User $user)
     {
         return $user->can('view_causes');
     }

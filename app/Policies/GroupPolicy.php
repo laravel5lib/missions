@@ -14,14 +14,14 @@ class GroupPolicy extends BasePolicy
      * @param  \App\Models\v1\Group  $group
      * @return mixed
      */
-    public function view(User $user, Group $group)
+    public function view(User $user, Group $group = null)
     {
         if ($user->can('view_groups')) {
             return true;
         }
 
         // only group managers can view the group.
-        return in_array($user->id, $group->managers()->get('id')->toArray());
+        return $group ? in_array($user->id, $group->managers()->get('id')->toArray()) : false;
     }
 
     /**

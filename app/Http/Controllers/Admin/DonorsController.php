@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
+use App\Models\v1\Donor;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class DonorsController extends Controller
@@ -18,6 +18,8 @@ class DonorsController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('view', Donor::class);
+
         $donors = $this->api->get('donors?page=' . $request->get('page', 1));
 
         $donors->setPath('/admin/donors');
@@ -32,6 +34,8 @@ class DonorsController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Donor::class);
+
         return view('admin.financials.donors.create');
     }
 
@@ -43,6 +47,8 @@ class DonorsController extends Controller
      */
     public function show($id)
     {
+        $this->authorize('view', Donor::class);
+
         $donor = $this->api->get('donors/' . $id);
 
         return view('admin.financials.donors.show', compact('donor'));
@@ -56,6 +62,8 @@ class DonorsController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('update', Donor::class);
+
         return view('admin.financials.donors.edit', compact('id'));
     }
 }

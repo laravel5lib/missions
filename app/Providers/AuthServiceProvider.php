@@ -27,7 +27,11 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\v1\Region' => 'App\Policies\RegionPolicy',
         'App\Models\v1\Accommodation' => 'App\Policies\AccommodationPolicy',
         'App\Models\v1\Team' => 'App\Policies\TeamPolicy',
-        'App\Models\v1\User' => 'App\Policies\UserPolicy'
+        'App\Models\v1\User' => 'App\Policies\UserPolicy',
+        'App\Models\v1\Transaction' => 'App\Policies\TransactionPolicy',
+        'App\Models\v1\Fund' => 'App\Policies\FundPolicy',
+        'App\Models\v1\Donor' => 'App\Policies\DonorPolicy',
+        'App\Models\v1\Report' => 'App\Policies\ReportPolicy'
     ];
 
     /**

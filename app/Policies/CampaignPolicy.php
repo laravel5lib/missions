@@ -14,7 +14,7 @@ class CampaignPolicy extends BasePolicy
      * @param  \App\Models\v1\Campaign  $campaign
      * @return mixed
      */
-    public function view(User $user, Campaign $campaign)
+    public function view(User $user)
     {
         return $user->can('view_campaigns');
     }
@@ -37,7 +37,7 @@ class CampaignPolicy extends BasePolicy
      * @param  \App\Models\v1\Campaign  $campaign
      * @return mixed
      */
-    public function update(User $user, Campaign $campaign)
+    public function update(User $user)
     {
         return $user->can('edit_campaigns');
     }
@@ -49,7 +49,7 @@ class CampaignPolicy extends BasePolicy
      * @param  \App\Models\v1\Campaign  $campaign
      * @return mixed
      */
-    public function delete(User $user, Campaign $campaign)
+    public function delete(User $user)
     {
         return $user->can('delete_campaigns');
     }

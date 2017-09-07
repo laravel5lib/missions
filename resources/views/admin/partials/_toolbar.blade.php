@@ -10,12 +10,14 @@
     </li>
 
   @foreach(config('navigation.admin.toolbar') as $link)
-    <li @if(request()->is($link['url']) or request()->is($link['url'] . '/*'))class="active"@endif>
-        <a href="{{ url($link['url']) }}">
-          <i class="menu-icon fa fa-{{ $link['icon'] }}"></i>
-          <span class="text-label">{{ $link['label'] }}</span>
-        </a>
-    </li>
+    @can($link['action'], $link['policy'])
+      <li @if(request()->is($link['url']) or request()->is($link['url'] . '/*'))class="active"@endif>
+          <a href="{{ url($link['url']) }}">
+            <i class="menu-icon fa fa-{{ $link['icon'] }}"></i>
+            <span class="text-label" style="padding-left: 5px">{{ $link['label'] }}</span>
+          </a>
+      </li>
+    @endcan
   @endforeach
 
   </ul>

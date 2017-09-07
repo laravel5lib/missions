@@ -10,7 +10,7 @@ $dispatcher = app('Dingo\Api\Dispatcher');
 
 $this->get('/', function () {
     return view('admin.index');
-});
+})->middleware(['can:access_backend']);
 
 $this->get('users/stop', 'UsersController@stopImpersonate');
 $this->get('users/{id}/impersonate', 'UsersController@impersonate');
@@ -120,7 +120,7 @@ $this->get('records/referrals/{id}/edit', function ($id) {
 
 $this->get('reports', function () {
     return view('admin.reports.index');
-});
+})->middleware('can:view,App\Models\v1\Report');
 
 $this->resource('records/medical-credentials', 'MedicalCredentialsController', [
     'except' => ['index', 'destroy']

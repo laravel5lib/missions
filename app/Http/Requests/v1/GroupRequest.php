@@ -47,21 +47,21 @@ class GroupRequest extends FormRequest
         }
 
         $optional = [
-            'description'      => 'string',
-            'address_one'      => 'string',
-            'address_two'      => 'string',
-            'city'             => 'string',
-            'state'            => 'string',
-            'zip'              => 'string',
-            'phone_one'        => 'string',
-            'phone_two'        => 'string',
-            'email'            => 'email',
+            'description'      => 'nullable|string',
+            'address_one'      => 'nullable|string',
+            'address_two'      => 'nullable|string',
+            'city'             => 'nullable|string',
+            'state'            => 'nullable|string',
+            'zip'              => 'nullable|string',
+            'phone_one'        => 'nullable|string',
+            'phone_two'        => 'nullable|string',
+            'email'            => 'nullable|email',
             'public'           => 'boolean',
-            'managers'         => 'array',
-            'tags'             => 'array',
-            'avatar_upload_id' => 'string|exists:uploads,id',
-            'banner_upload_id' => 'string|exists:uploads,id',
-            'status'           => 'in:pending,approved'
+            'managers'         => 'nullable|array',
+            'tags'             => 'nullable|array',
+            'avatar_upload_id' => 'nullable|string|exists:uploads,id',
+            'banner_upload_id' => 'nullable|string|exists:uploads,id',
+            'status'           => 'nullable|in:pending,approved'
         ];
 
         return $rules = $required + $optional;

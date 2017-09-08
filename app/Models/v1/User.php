@@ -780,4 +780,16 @@ class User extends Authenticatable
 
         return $this->id === $project->sponsor_id;
     }
+
+    public function doesManage($resource)
+    {
+        $class = get_class($resource);
+
+        $resourceIds = (new $class)
+            ->filter(['manager' => $this->id])
+            ->pluck('id')
+            ->toArray();
+
+        return in_array($resource->id, $resourceIds);
+    }
 }

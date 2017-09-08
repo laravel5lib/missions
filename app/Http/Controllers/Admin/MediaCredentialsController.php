@@ -2,24 +2,27 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
+use App\Models\v1\Credential;
 use App\Http\Controllers\Controller;
 
 class MediaCredentialsController extends Controller
 {
     public function create()
     {
+        $this->authorize('create', Credential::class);
+
         return view('admin.records.media-credentials.create');
     }
-    
+
     public function show($id)
     {
+        $credential = Credential::media()->findOrFail($id);
+
+        $this->authorize('view', $credential);
+
         // maybe there is a better way to filter conditional content
-        $credential = $this->api->get('credentials/media/' . $id);
         $new_content = [];
-        foreach ($credential['content'] as $index => $content) {
+        foreach ($credential->content as $index => $content) {
             if (isset($content['conditions'])) {
                 if (isset($content['conditions']['role'])) {
                     if ($credential['content'][0]['a'] === $content['conditions']['role']) {
@@ -36,8 +39,10 @@ class MediaCredentialsController extends Controller
         return view('admin.records.media-credentials.show', compact('credential'));
     }
 
-    public function edit($id)
+    public function edit(Credential $credential)
     {
-        return view('admin.records.media-credentials.edit', compact('id'));
+        $this->authorize('update', $credential);
+
+        return view('admin.records.media-credentials.edit')->with('id', $credential->id);
     }
 }

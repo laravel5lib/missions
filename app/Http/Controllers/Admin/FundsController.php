@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
+use App\Models\v1\Fund;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class FundsController extends Controller
@@ -16,6 +16,8 @@ class FundsController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('view', Fund::class);
+
         $funds = $this->api->get('funds?page=' . $request->get('page', 1));
 
         $funds->setPath('/admin/funds');
@@ -31,6 +33,8 @@ class FundsController extends Controller
      */
     public function show($id)
     {
+        $this->authorize('view', Fund::class);
+
         $fund = $this->api->get('funds/' . $id);
 
         return view('admin.financials.funds.show', compact('fund'));

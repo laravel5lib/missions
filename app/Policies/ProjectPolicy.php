@@ -14,14 +14,14 @@ class ProjectPolicy extends BasePolicy
      * @param  \App\Models\v1\Project  $project
      * @return mixed
      */
-    public function view(User $user, Project $project)
+    public function view(User $user, Project $project = null)
     {
         if ($user->can('view_projects')) {
             return true;
         }
 
         // only the sponsor can view the project
-        return $user->isSponsor($project);
+        return $project ? $user->isSponsor($project) : false;
     }
 
     /**

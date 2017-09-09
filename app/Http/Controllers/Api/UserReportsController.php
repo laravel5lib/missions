@@ -29,14 +29,16 @@ class UserReportsController extends Controller
      * @param  Request $request
      * @return response
      */
-    public function index($userId, Request $request)
+    public function index($userId)
     {
+        $this->authorize('view');
+
         $reports = $this->user
-             ->findOrFail($userId)
-             ->reports()
-             ->filter($request->all())
-             ->orderBy('created_at', 'desc')
-             ->paginate($request->get('per_page', 10));
+            ->findOrFail($userId)
+            ->reports()
+            ->filter(request()->all())
+            ->orderBy('created_at', 'desc')
+            ->paginate(request()->get('per_page', 10));
 
         return $this->response->paginator($reports, new ReportTransformer);
     }
@@ -51,10 +53,12 @@ class UserReportsController extends Controller
     {
         $report = $this->report->findOrFail($id);
 
+        $this->authorize('delete', $report);
+
         Storage::disk('s3')->delete($report->source);
 
         $report->delete();
-        
+
         return $this->response->noContent();
     }
 }

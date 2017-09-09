@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-
+use App\Models\v1\Transaction;
 use App\Http\Controllers\Controller;
 
 class TransactionsController extends Controller
@@ -17,6 +17,8 @@ class TransactionsController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('view', Transaction::class);
+
         $transactions = $this->api->get('transactions?page=' . $request->get('page', 1));
 
         $transactions->setPath('/admin/transactions');
@@ -32,6 +34,8 @@ class TransactionsController extends Controller
      */
     public function show($id)
     {
+        $this->authorize('view', Transaction::class);
+
         $transaction = $this->api->get('transactions/' . $id);
 
         return view('admin.financials.transactions.show', compact('transaction'));
@@ -45,6 +49,8 @@ class TransactionsController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('view', Transaction::class);
+
         $transaction = $this->api->get('transactions/' . $id);
 
         return view('admin.financials.transactions.edit', compact('transaction'));

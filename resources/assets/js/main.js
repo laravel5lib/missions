@@ -901,6 +901,7 @@ new Vue({
 
     },
     created() {
+        let self = this;
         // Add a request interceptor
         this.$http.interceptors.request.use((config) => {
             // modify request
@@ -940,8 +941,8 @@ new Vue({
         // Add a response interceptor
         this.$http.interceptors.response.use((response) => {
             // Hide Spinners in all components where they exist
-            if (this.$refs.spinner && !_.isUndefined(this.$refs.spinner._started)) {
-                this.$refs.spinner.hide();
+            if (self.$refs.spinner && !_.isUndefined(self.$refs.spinner._started)) {
+                self.$refs.spinner.hide();
             }
 
             if (response.status) {

@@ -18,44 +18,7 @@
 				</button>
 			</div>
 			<div class="col-xs-12">
-				<hr class="divider inv">
-				<div>
-					<label>Active Filters</label>
-					<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.type != ''" @click="reservationFilters.type = ''" >
-									Trip Type
-									<i class="fa fa-close"></i>
-								</span>
-					<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.groups.length" @click="reservationFilters.groups = []" >
-									Travel Group
-									<i class="fa fa-close"></i>
-								</span>
-					<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.hasCompanions !== null" @click="reservationFilters.hasCompanions = null" >
-									Companions
-									<i class="fa fa-close"></i>
-								</span>
-					<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.role !== ''" @click="reservationFilters.role = ''" >
-									Role
-									<i class="fa fa-close"></i>
-								</span>
-					<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.gender != ''" @click="reservationFilters.gender = ''" >
-									Gender
-									<i class="fa fa-close"></i>
-								</span>
-					<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.status != ''" @click="reservationFilters.status = ''" >
-									Status
-									<i class="fa fa-close"></i>
-								</span>
-					<template v-if="reservationFilters.age">
-									<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.age[0] != 0" @click="reservationFilters.age[0] = 0" >
-										Min. Age
-										<i class="fa fa-close"></i>
-									</span>
-						<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.age[1] != 120" @click="reservationFilters.age[1] = 120" >
-										Max. Age
-										<i class="fa fa-close"></i>
-									</span>
-					</template>
-				</div>
+				<filters-indicator :filters.sync="reservationFilters"></filters-indicator>
 			</div>
 		</form>
 		<!-- Reservation Lists and Pagination -->
@@ -148,9 +111,10 @@
 <script type="text/javascript">
 	import _ from 'underscore';
     import reservationsFilters from '../filters/reservations-filters.vue';
+    import filtersIndicator from'../filters/filters-indicator.vue';
     export default {
         name: 'reservations-list-slot',
-	    components: {reservationsFilters},
+	    components: {reservationsFilters, filtersIndicator},
 	    props: {
             params: {
                 type: Object,

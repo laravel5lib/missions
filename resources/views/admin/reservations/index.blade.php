@@ -44,7 +44,9 @@
                     <li><a href="#current" role="tab" data-toggle="tab">Current</a></li>
                     <li><a href="#archived" role="tab" data-toggle="tab">Archived</a></li>
                     <li><a href="#dropped" role="tab" data-toggle="tab">Dropped</a></li>
-                    <li><a href="#prospects" role="tab" data-toggle="tab">Prospects</a></li>
+                    @can('view', \App\Models\v1\TripInterest::class)
+                        <li><a href="#prospects" role="tab" data-toggle="tab">Interests</a></li>
+                    @endcan
                 </ul>
                 <!-- TAB CONTENT -->
                 <div class="tab-content">

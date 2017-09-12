@@ -113,10 +113,12 @@
                         Filters
                         <i class="fa fa-filter"></i>
                     </button>
-                    <export-utility url="interests/export"
-                                    :options="exportOptions"
-                                    :filters="exportFilters">
-                    </export-utility>
+                    <template v-if="app.user.can.create_reports">
+                        <export-utility url="interests/export"
+                                        :options="exportOptions"
+                                        :filters="exportFilters">
+                        </export-utility>
+                    </template>
                 </form>
             </div>
         </div>
@@ -242,6 +244,7 @@
         components: {vSelect, exportUtility},
         data(){
             return{
+                app: MissionsMe,
                 interests: [],
                 orderByField: 'name',
                 direction: 1,

@@ -17,8 +17,18 @@
                 <hr class="divider inv xs">
                 <hr class="divider inv sm">
                 <div class="btn-group" role="group">
-                    <a href="{{ url('admin/campaigns') }}" class="btn btn-primary-darker"><span class="fa fa-chevron-left icon-left"></span></a>
-                    <a href="{{ url('admin/campaigns/'.$campaign->id.'/edit') }}" class="btn btn-primary">Edit</a>
+                    <a href="{{ url('admin/campaigns') }}" class="btn btn-primary-darker">
+                        <span class="fa fa-chevron-left icon-left"></span>
+                        @cannot('update', \App\Models\v1\Campaign::class)
+                            Back
+                        @endcannot
+                    </a>
+                    @can('update', \App\Models\v1\Campaign::class)
+                        <a href="{{ url('admin/campaigns/'.$campaign->id.'/edit') }}"
+                           class="btn btn-primary">
+                            Edit
+                        </a>
+                    @endcan
                 </div>
             </div>
         </div>

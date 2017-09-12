@@ -39,6 +39,8 @@
         ga('require', 'GTM-P4Q7LGP');
         ga('send', 'pageview');
     </script>
+
+    @include('vars')
 </head>
 <body>
     <div id="app" data-auth="{{ auth()->check() ? 'true' : 'false' }}">

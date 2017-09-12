@@ -10,7 +10,7 @@
                 <div class="col-xs-6 text-right">
                     <button class="btn btn-xs btn-default-hollow"
                             @click="editMode = !editMode"
-                            v-if="!editMode">
+                            v-if="!editMode && app.user.can.update_trip_interests">
                         Edit
                     </button>
                     <button class="btn btn-xs btn-default-hollow"
@@ -111,6 +111,7 @@
     export default{
         data() {
             return {
+                app: MissionsMe,
                 interest: {},
                 showSuccess: false,
                 message: '',

@@ -135,11 +135,13 @@
 						Filters
 						<i class="fa fa-filter"></i>
 					</button>
-					<export-utility url="reservations/export"
-									:options="exportOptions"
-									:filters="exportFilters">
-					</export-utility>
-					<reservation-reports :filters="exportFilters" :search="search"></reservation-reports>
+					<template v-if="app.user.can.create_reports">
+						<export-utility url="reservations/export"
+										:options="exportOptions"
+										:filters="exportFilters">
+						</export-utility>
+						<reservation-reports :filters="exportFilters" :search="search"></reservation-reports>
+					</template>
                 </form>
             </div>
         </div>
@@ -339,6 +341,7 @@
 		},
 		data(){
 			return {
+				app: MissionsMe,
 				reservations: [],
 				orderByField: 'surname',
 				direction: 1,
@@ -455,7 +458,7 @@
 			// 	return this.reservation.rep.data.name;
 			// 	// if (this.reservation.rep)
 			// 	// 	return this.reservation.rep.data.name;
-				
+
 			// 	// return 'none';
 			// }
 		},

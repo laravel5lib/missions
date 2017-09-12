@@ -544,12 +544,6 @@ Vue.directive('tour-guide', {
             })
         }
 
-        // Initialize the tour
-        let completed = JSON.parse(localStorage.getItem('ToursCompleted')) || [];
-        if (!_.contains(completed, location.pathname)) {
-            tour.start();
-        }
-
         tour.on('cancel', storeTourRecord);
 
         tour.on('complete',storeTourRecord)
@@ -873,15 +867,17 @@ new Vue({
                     });
             }
         },
-        hasAbility(ability) {
+        can(permission) {
             let permissions = _.pluck(this.user.permissions.data, 'name');
-            return this.user ? _.contains(permissions, ability) : false;
+            return this.user ? _.contains(permissions, permission) : false;
         },
-
+        cannot(permission) {
+            let permissions = _.pluck(this.user.permissions.data, 'name');
+            return this.user ? ! _.contains(permissions, permission) : false;
+        },
         startTour() {
             window.tour.start();
         },
-
         // Simple error handlers for API calls
         handleApiSoftError(error) {
             console.error(error.response.data.message ? error.response.data.message : error.response.data);

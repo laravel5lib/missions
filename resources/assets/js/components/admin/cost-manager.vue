@@ -23,12 +23,11 @@
                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
             </div>
             <button class="btn btn-default btn-sm" type="button" @click="showFilters=true">Filters</button>
-            <!-- <import-utility title="Import Costs" 
-              url="costs/import"
-              :required-fields="importRequiredFields"
-              :optional-fields="importOptionalFields">
-            </import-utility> -->
-            <a class="btn btn-primary btn-sm" @click="showAddModal=true">New <i class="fa fa-plus"></i></a>
+            <a class="btn btn-primary btn-sm"
+               @click="showAddModal=true"
+               v-if="app.user.can.create_costs">
+               New <i class="fa fa-plus"></i>
+           </a>
         </form>
         <hr class="divider sm">
         <template v-for="(cost, index) in costs">
@@ -40,18 +39,42 @@
                     <div class="col-sm-6 text-right hidden-xs">
                         <div style="padding: 0;">
                             <div role="group" aria-label="...">
-                                <a class="btn btn-xs btn-default-hollow small" @click="addPayment(cost)"><i class="fa fa-plus"></i> New Payment</a>
-                                <a class="btn btn-xs btn-default-hollow small" @click="editCost(cost)"><i class="fa fa-pencil"></i> Edit</a>
-                                <a class="btn btn-xs btn-default-hollow small" @click="confirmRemove(cost)"><i class="fa fa-trash"></i> Delete</a>
+                                <a class="btn btn-xs btn-default-hollow small"
+                                   @click="addPayment(cost)"
+                                   v-if="app.user.can.create_costs || app.user.can.update_costs">
+                                   <i class="fa fa-plus"></i> New Payment
+                                </a>
+                                <a class="btn btn-xs btn-default-hollow small"
+                                   @click="editCost(cost)"
+                                   v-if="app.user.can.update_costs">
+                                   <i class="fa fa-pencil"></i> Edit
+                                </a>
+                                <a class="btn btn-xs btn-default-hollow small"
+                                   @click="confirmRemove(cost)"
+                                   v-if="app.user.can.delete_costs">
+                                   <i class="fa fa-trash"></i> Delete
+                                </a>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-6 text-center visible-xs">
                         <div style="padding: 0;">
                             <div role="group" aria-label="...">
-                                <a class="btn btn-xs btn-default-hollow small" @click="addPayment(cost)"><i class="fa fa-plus"></i> New Payment</a>
-                                <a class="btn btn-xs btn-default-hollow small" @click="editCost(cost)"><i class="fa fa-pencil"></i> Edit</a>
-                                <a class="btn btn-xs btn-default-hollow small" @click="confirmRemove(cost)"><i class="fa fa-trash"></i> Delete</a>
+                                <a class="btn btn-xs btn-default-hollow small"
+                                   @click="addPayment(cost)"
+                                   v-if="app.user.can.create_costs || app.user.can.update_costs">
+                                   <i class="fa fa-plus"></i> New Payment
+                                </a>
+                                <a class="btn btn-xs btn-default-hollow small"
+                                   @click="editCost(cost)"
+                                   v-if="app.user.can.update_costs">
+                                   <i class="fa fa-pencil"></i> Edit
+                                </a>
+                                <a class="btn btn-xs btn-default-hollow small"
+                                   @click="confirmRemove(cost)"
+                                   v-if="app.user.can.delete_costs">
+                                   <i class="fa fa-trash"></i> Delete
+                               </a>
                             </div>
                         </div>
                     </div>
@@ -180,8 +203,6 @@
                                                 <label for="selectedCost_active_at">Active</label>
                                                 <br>
                                                 <date-picker input-sm v-model="selectedCost.active_at" :view-format="['YYYY-MM-DD HH:mm:ss']" data-vv-value-path="model" name="costActive" v-validate="'required'"></date-picker>
-                                                <!--<input type="datetime" id="selectedCost_active_at" class="form-control hidden"
-                                                       v-model="selectedCost.active_at" name="costActive" v-validate="'required'">-->
                                             </div>
 
                                         </div>
@@ -219,24 +240,6 @@
             </div>
         </modal>
 
-        <!--<div class="modal fade" tabindex="-1" role="deleteDialog" :show="showDeleteModal">
-            <div class="modal-dialog modal-sm" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" @click="showDeleteModal = false,selectedCost = null"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Delete Cost</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p v-if="selectedCost" class="text-center">Delete {{ selectedCost.name }}?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false,selectedCost = null'>Keep</button>
-                        <button type="button" class="btn btn-primary btn-sm" @click='doRemove(selectedCost)'>Delete</button>
-                    </div>
-                </div>&lt;!&ndash; /.modal-content &ndash;&gt;
-            </div>&lt;!&ndash; /.modal-dialog &ndash;&gt;
-        </div>&lt;!&ndash; /.modal &ndash;&gt;-->
-
     </section>
 </template>
 <script type="text/javascript">
@@ -249,6 +252,7 @@
         components: { paymentManager, importUtility },
         data(){
             return {
+                app: MissionsMe,
                 costs: [],
                 selectedCost: null,
                 showReminder: null,

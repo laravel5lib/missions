@@ -176,6 +176,7 @@ return [
         App\Providers\PromocodesServiceProvider::class,
         App\Providers\BackendServiceProvider::class,
         App\Providers\AccountingServiceProvider::class,
+        App\Providers\ComposerServiceProvider::class,
 
         /*
          * Third Party Providers...
@@ -192,6 +193,7 @@ return [
         FactoryStories\Providers\StoryFactoryServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Laracademy\Commands\MakeServiceProvider::class,
+        Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class
     ],
 
     /*

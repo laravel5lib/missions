@@ -37,7 +37,12 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\v1\Essay' => 'App\Policies\EssayPolicy',
         'App\Models\v1\MedicalRelease' => 'App\Policies\MedicalReleasePolicy',
         'App\Models\v1\Referral' => 'App\Policies\ReferralPolicy',
-        'App\Models\v1\Credential' => 'App\Policies\CredentialPolicy'
+        'App\Models\v1\Credential' => 'App\Policies\CredentialPolicy',
+        'App\Models\v1\Note' => 'App\Policies\NotePolicy',
+        'App\Models\v1\Cost' => 'App\Policies\CostPolicy',
+        'App\Models\v1\Todo' => 'App\Policies\TodoPolicy',
+        'App\Models\v1\Requirement' => 'App\Policies\RequirementPolicy',
+        'App\Models\v1\TripInterest' => 'App\Policies\TripInterestPolicy'
     ];
 
     /**

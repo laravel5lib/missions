@@ -37,7 +37,6 @@ class TripsController extends Controller
 
     public function create($campaignId)
     {
-        // $campaign = Campaign::findOrFail($campaignId);
         $campaign = $this->api->get('campaigns/'.$campaignId);
         return view('admin.trips.create')->with('campaign', $campaign);
     }

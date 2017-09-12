@@ -18,6 +18,7 @@ Route::get('users/{id}/impersonate', 'UsersController@impersonate');
 Route::get('campaigns', 'CampaignsController@index');
 Route::get('campaigns/create', 'CampaignsController@create');
 Route::get('campaigns/{id}/edit', 'CampaignsController@edit');
+Route::get('campaigns/{id}/trips/create', 'TripsController@create');
 Route::get('campaigns/{id}/{tab?}', 'CampaignsController@show');
 Route::get('campaigns/{id}/{tab?}/{tabId}', 'CampaignsController@show');
 

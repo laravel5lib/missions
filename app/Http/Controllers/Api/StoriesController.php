@@ -23,7 +23,7 @@ class StoriesController extends Controller
     public function __construct(Story $story)
     {
         $this->story = $story;
-        $this->middleware('auth:api');
+        $this->middleware('auth:api', ['except' => ['index']]);
     }
 
     /**

@@ -28,7 +28,7 @@ class FundraisersController extends Controller
     {
         $this->fundraiser = $fundraiser;
 
-//        $this->middleware('api.auth', ['only' => ['store','update','destroy']]);
+        $this->middleware('api.auth', ['only' => ['store','update','destroy']]);
     }
 
     /**

@@ -279,7 +279,7 @@ $api->version('v1', [
     $api->get('stories', 'StoriesController@index');
     $api->get('trips', 'TripsController@index');
     $api->get('trips/{trip}', 'TripsController@show');
-    $api->get('fundraisers', 'FundraisersController@index');
+    $api->resource('fundraisers', 'FundraisersController');
     $api->get('fundraisers/{id}/donors', 'FundraisersController@donors');
     $api->get('fundraisers/{id}/donations', 'FundraisersController@donations');
     $api->get('campaigns', 'CampaignsController@index');

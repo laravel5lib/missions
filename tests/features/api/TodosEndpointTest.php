@@ -6,6 +6,8 @@ use App\Models\v1\Reservation;
 
 class TodosEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /**
      * @test
      */

@@ -7,6 +7,7 @@ use App\Models\v1\Reservation;
 
 class ReservationsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
 
     /** @test */
     public function creates_reservation()

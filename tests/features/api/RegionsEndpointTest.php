@@ -5,6 +5,8 @@ use App\Models\v1\Campaign;
 
 class RegionsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /** @test */
     public function gets_all_regions()
     {

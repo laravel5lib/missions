@@ -5,6 +5,7 @@ use App\Models\v1\Essay;
 
 class EssaysEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
 
     /**
      * @test

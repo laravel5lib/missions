@@ -5,6 +5,7 @@ use App\Models\v1\MedicalRelease;
 
 class MedicalReleasesEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
 
     /**
      * @test

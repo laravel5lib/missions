@@ -11,7 +11,7 @@ class CreateUserAccountTest extends BrowserKitTestCase
     {
          $this->visit('/')
               ->click('Sign Up')
-              ->seePageIs('/login?action=signup');
+              ->seePageIs('/register');
     }
 
     /**

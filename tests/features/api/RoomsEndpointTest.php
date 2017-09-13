@@ -2,6 +2,8 @@
 
 class RoomsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /** @test */
     public function fetches_all_rooms()
     {

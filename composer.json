@@ -55,6 +55,7 @@
         "classmap": [
             "tests/TestCase.php",
             "tests/DatabaseSetup.php",
+            "tests/AuthenticatedUserSetup.php",
             "tests/BrowserKitTestCase.php"
         ]
     },

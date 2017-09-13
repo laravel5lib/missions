@@ -6,6 +6,8 @@ use App\Models\v1\Reservation;
 
 class RequirementEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /**
      * @test
      */

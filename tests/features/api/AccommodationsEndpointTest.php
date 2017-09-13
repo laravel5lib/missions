@@ -6,13 +6,15 @@ use App\Models\v1\Accommodation;
 
 class AccommodationsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /** @test */
     public function gets_accommodations()
     {
         $campaign = factory(Campaign::class)->create();
         $region = factory(Region::class)->create(['campaign_id' => $campaign->id]);
         $accommodation = factory(Accommodation::class)->create(['region_id' => $region->id]);
-        
+
         $this->get('/api/regions/'. $region->id .'/accommodations')
              ->assertResponseOk()
              ->seeJsonStructure([

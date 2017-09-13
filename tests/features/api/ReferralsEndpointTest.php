@@ -5,6 +5,7 @@ use App\Models\v1\Referral;
 
 class ReferralsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
 
     /**
      * @test

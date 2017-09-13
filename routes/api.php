@@ -26,6 +26,9 @@ $api->version('v1', [
         ];
     });
 
+    $api->get('campaigns/{campaign}', 'CampaignsController@show');
+    $api->get('trips/{trip}', 'TripsController@show');
+
 
     $api->group(['middleware' => ['api.auth']], function($api) {
 
@@ -72,10 +75,10 @@ $api->version('v1', [
         $api->post('groups/submit', 'GroupsController@submit');
         $api->post('groups/export', 'GroupsController@export');
         $api->post('groups/import', 'GroupsController@import');
-        $api->resource('campaigns', 'CampaignsController');
+        $api->resource('campaigns', 'CampaignsController', ['except' => ['show']]);
         $api->post('campaigns/export', 'CampaignsController@export');
         $api->post('campaigns/import', 'CampaignsController@import');
-        $api->resource('trips', 'TripsController');
+        $api->resource('trips', 'TripsController', ['except' => ['show']]);
         $api->post('trips/duplicate', 'TripsController@duplicate');
         $api->post('trips/export', 'TripsController@export');
         $api->post('trips/import', 'TripsController@import');

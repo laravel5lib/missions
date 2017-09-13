@@ -31,8 +31,6 @@ class UserReportsController extends Controller
      */
     public function index($userId)
     {
-        $this->authorize('view');
-
         $reports = $this->user
             ->findOrFail($userId)
             ->reports()
@@ -52,8 +50,6 @@ class UserReportsController extends Controller
     public function destroy($id)
     {
         $report = $this->report->findOrFail($id);
-
-        $this->authorize('delete', $report);
 
         Storage::disk('s3')->delete($report->source);
 

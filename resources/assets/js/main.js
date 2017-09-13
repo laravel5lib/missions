@@ -946,14 +946,6 @@ new Vue({
             }
 
             if (response.status) {
-                if (response.status === 401) {
-                    $.removeCookie('api_token');
-                    console.log('not logged in');
-                    // window.location.replace('/logout');
-                }
-                if (response.status === 500) {
-                    console.log('Oops! Something went wrong with the server.')
-                }
                 if (response.headers['Authorization']) {
                     $.cookie('api_token', response.headers['Authorization']);
                 }
@@ -965,7 +957,17 @@ new Vue({
             return response;
         }, (error) => {
             // Do something with response error
-            // debugger;
+            if (error.response) {
+                if (error.response.status === 401) {
+                    $.removeCookie('api_token');
+                    console.log('not logged in');
+                    // window.location.replace('/logout');
+                }
+                if (error.response.status === 500) {
+                    console.log('Oops! Something went wrong with the server.')
+                }
+
+            }
             return Promise.reject(error);
         });
 

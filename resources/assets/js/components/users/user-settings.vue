@@ -46,12 +46,18 @@
                                 </div>
                             </div><!-- end row -->
 
-                                <div class="row form-group" v-error-handler="{ value: name, handle: 'name' }">
+                                <div class="row form-group">
                                     <div class="col-sm-12">
-                                        <label for="name">Name</label>
-                                        <input type="text" class="form-control" name="name" id="name" v-model="name"
-                                               placeholder="User Name" v-validate="'required|min:1|max:100'"
-                                               maxlength="100" minlength="1" required>
+                                        <div class="row">
+                                            <div class="col-md-6" v-error-handler="{ value: first_name, client: 'firstname' }">
+                                                <label>First Name</label>
+                                                <input type="text" class="form-control" v-model="first_name" name="firstname" v-validate="'required|min:1|max:100'">
+                                            </div>
+                                            <div class="col-md-6" v-error-handler="{ value: last_name, client: 'lastname' }">
+                                                <label>Last Name</label>
+                                                <input type="text" class="form-control" v-model="last_name" name="lastname" v-validate="'required|min:1|max:100'">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row form-group" v-error-handler="{ value: email, handle: 'email' }">
@@ -353,7 +359,8 @@
                 id: this.$root.user.id,
                 avatar: '',
                 banner: '',
-                name: '',
+                first_name: '',
+                last_name: '',
                 email: '',
                 alt_email: '',
                 password: null,
@@ -383,8 +390,6 @@
 
                 // logic variables
                 startUp: true,
-//                typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
-//                attemptSubmit: false,
                 countryCodeObj: null,
                 changePassword: false,
                 showPassword: false,
@@ -392,7 +397,6 @@
                 dobMonth: null,
                 dobDay: null,
                 dobYear: null,
-                // errors: {},
                 showError: false,
                 showSuccess: false,
                 showSaveAlert: false,
@@ -462,7 +466,8 @@
                     }
 
                     this.$http.put(`users/${this.$root.user.id}?include=links`, {
-                        name: this.name,
+                        first_name: this.first_name,
+                        last_name: this.last_name,
                         email: this.email,
                         alt_email: this.alt_email,
                         password: this.changePassword ? this.password : undefined,
@@ -547,7 +552,8 @@
                 this.id = user.id;
                 this.avatar = user.avatar;
                 this.banner = user.banner;
-                this.name = user.name;
+                this.first_name = user.first_name;
+                this.last_name = user.last_name;
                 this.bio = user.bio;
                 this.type = user.type;
                 this.countryCodeObj = _.findWhere(this.UTILITIES.countries, {code: user.country_code});

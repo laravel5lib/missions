@@ -25,6 +25,8 @@
                 <trip-interest-editor id="{{ $interest->id }}"></trip-interest-editor>
             </div>
         </div>
+
+        @can('view', \App\Models\v1\Todo::class)
         <div class="row">
             <div class="col-md-offset-2 col-md-8">
                 <todos type="trip_interests"
@@ -34,6 +36,9 @@
                 </todos>
             </div>
         </div>
+        @endcan
+
+        @can('view', \App\Models\v1\Note::class)
         <div class="row">
             <div class="col-md-offset-2 col-md-8">
                 <notes type="trip_interests"
@@ -44,5 +49,6 @@
                 </notes>
             </div>
         </div>
+        @endcan
     </div>
 @endsection

@@ -27,6 +27,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\v1\Region' => 'App\Policies\RegionPolicy',
         'App\Models\v1\Accommodation' => 'App\Policies\AccommodationPolicy',
         'App\Models\v1\Team' => 'App\Policies\TeamPolicy',
+        'App\Models\v1\TeamType' => 'App\Policies\TeamTypePolicy',
         'App\Models\v1\User' => 'App\Policies\UserPolicy',
         'App\Models\v1\Transaction' => 'App\Policies\TransactionPolicy',
         'App\Models\v1\Fund' => 'App\Policies\FundPolicy',
@@ -37,7 +38,15 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\v1\Essay' => 'App\Policies\EssayPolicy',
         'App\Models\v1\MedicalRelease' => 'App\Policies\MedicalReleasePolicy',
         'App\Models\v1\Referral' => 'App\Policies\ReferralPolicy',
-        'App\Models\v1\Credential' => 'App\Policies\CredentialPolicy'
+        'App\Models\v1\Credential' => 'App\Policies\CredentialPolicy',
+        'App\Models\v1\Note' => 'App\Policies\NotePolicy',
+        'App\Models\v1\Cost' => 'App\Policies\CostPolicy',
+        'App\Models\v1\Todo' => 'App\Policies\TodoPolicy',
+        'App\Models\v1\Requirement' => 'App\Policies\RequirementPolicy',
+        'App\Models\v1\TripInterest' => 'App\Policies\TripInterestPolicy',
+        'App\Models\v1\Promotional' => 'App\Policies\PromotionalPolicy',
+        'App\Models\v1\Room' => 'App\Policies\RoomPolicy',
+        'App\Models\v1\RoomType' => 'App\Policies\RoomTypePolicy'
     ];
 
     /**

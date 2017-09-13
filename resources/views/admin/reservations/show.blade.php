@@ -23,11 +23,19 @@
                             Manage <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu">
+                            @can('update', $reservation)
                             <li><a href="{{ url('admin/reservations/'.$reservation->id.'/edit') }}">Edit</a></li>
-                            <li><a data-toggle="modal" data-target="#transferModal">Transfer</a></li>
+                            @endcan
+
+                            @can('transfer', $reservation)
+                                <li><a data-toggle="modal" data-target="#transferModal">Transfer</a></li>
+                            @endcan
+
                             @unless($reservation->deleted_at)
-                            <li role="separator" class="divider"></li>
-                            <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Drop</a></li>
+                                @can('delete', $reservation)
+                                    <li role="separator" class="divider"></li>
+                                    <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Drop</a></li>
+                                @endcan
                             @endunless
                         </ul>
                     </div><!-- end btn-group -->
@@ -41,10 +49,8 @@
     <div class="container">
         <div class="col-sm-8 text-center">
             <hr class="divider inv sm">
-            {{-- <hr class="divider inv sm"> --}}
             <h5>This reservation was dropped and is no longer active.</h5>
             <hr class="divider inv sm">
-            {{-- <hr class="divider inv sm hidden-xs"> --}}
         </div>
         <div class="col-sm-4 text-center">
             <hr class="divider inv sm hidden-xs">
@@ -69,14 +75,14 @@
     </div>
 </div>
 
-<admin-delete-modal 
-    id="{{ $reservation->id }}" 
-    resource="reservation" 
-    label="Drop reservation?" 
+<admin-delete-modal
+    id="{{ $reservation->id }}"
+    resource="reservation"
+    label="Drop reservation?"
     action="Drop">
 </admin-delete-modal>
 <restore-reservation id="{{ $reservation->id }}"></restore-reservation>
-<transfer-reservation id="{{ $reservation->id }}" 
+<transfer-reservation id="{{ $reservation->id }}"
                       campaign-id="{{ $reservation->trip->campaign_id }}">
 </transfer-reservation>
 @endsection

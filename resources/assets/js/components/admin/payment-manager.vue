@@ -19,8 +19,14 @@
                 <td v-else>Upfront</td>
                 <td>{{ payment.upfront ? 'N/A' : payment.grace_period }} {{ payment.upfront ? '' : (payment.grace_period > 1 ? 'days' : 'day') }}</td>
                 <td>
-                    <a class="btn btn-default btn-xs" @click="editPayment(payment)"><i class="fa fa-pencil"></i></a>
-                    <a class="btn btn-danger btn-xs" @click="confirmRemove(payment)"><i class="fa fa-times"></i></a>
+                    <template v-if="app.user.can.create_costs || app.user.can.update_costs">
+                        <a class="btn btn-default btn-xs" @click="editPayment(payment)">
+                           <i class="fa fa-pencil"></i>
+                        </a>
+                        <a class="btn btn-danger btn-xs" @click="confirmRemove(payment)">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </template>
                 </td>
             </tr>
             </tbody>
@@ -60,7 +66,6 @@
                             <div class="form-group">
                                 <label for="dueAt">Due</label><br />
                                 <date-picker input-sm v-model="newPayment.due_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
-                                <!--<input id="dueAt" class="form-control input-sm hidden" type="datetime" v-model="newPayment.due_at" required>-->
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -119,7 +124,6 @@
                                 <div class="form-group">
                                     <label for="dueAt">Due</label><br />
                                     <date-picker input-sm v-model="selectedPayment.due_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
-                                    <!--<input id="dueAt" class="form-control input-sm hidden" type="datetime" v-model="selectedPayment.due_at" required>-->
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -159,6 +163,7 @@
         name: 'payment-manager',
         data(){
             return {
+                app: MissionsMe,
                 attemptedAddPayment: false,
                 toggleNewPayment: false,
                 showAddModal: false,
@@ -175,43 +180,6 @@
             }
         },
         watch: {
-            /*'selectedPayment': {
-                handler(val, oldVal) {
-                    console.log(val);
-                    if(val && val.amount_owed) {
-                        let max = this.calculateMaxAmount(val);
-                        if (val.amount_owed > max)
-                            val.amount_owed = this.cost.amount;
-                        val.percent_owed = (val.amount_owed / this.cost.amount) * 100;
-
-
-                    }
-
-                    if(val && val.percent_owed) {
-                        let max = this.calculateMaxPercent(val);
-                        if (val.percent_owed > max)
-                            val.percent_owed = max;
-                        val.amount_owed = (val.percent_owed / 100) * this.cost.amount;
-
-
-                    }
-                },
-                deep: true
-            },
-            'newPayment': {
-                handler(val, oldVal) {
-                    console.log(val);
-                    if(val && val.percent_owed) {
-                        let max = this.calculateMaxPercent(val);
-                        if (val.percent_owed > max)
-                            val.percent_owed = max;
-                        val.amount_owed = (val.percent_owed / 100) * this.cost.amount;
-
-
-                    }
-                },
-                deep: true
-            },*/
             'showEditModal'(val, oldVal) {
                 this.$nextTick(() =>  {
                     // if edit modal closes, reset data

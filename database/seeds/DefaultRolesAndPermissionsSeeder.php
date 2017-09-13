@@ -228,7 +228,13 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
             'view_fundraisers',
             'add_fundraisers',
             'edit_fundraisers',
-            'delete_fundraisers'
+            'delete_fundraisers',
+            'view_transactions',
+            'add_credit_transactions',
+            'view_donors',
+            'add_donors',
+            'edit_donors',
+            'view_funds'
         ]);
 
         $role = Role::create(['name' => 'staff_accounting']);
@@ -341,7 +347,13 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
             'edit_reservations',
             'view_groups',
             'view_users',
-            'edit_users'
+            'edit_users',
+            'view_transactions',
+            'add_credit_transactions',
+            'view_donors',
+            'add_donors',
+            'edit_donors',
+            'view_funds'
         ]);
 
         $role = Role::create(['name' => 'group_manager']);

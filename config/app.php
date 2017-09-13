@@ -176,6 +176,7 @@ return [
         App\Providers\PromocodesServiceProvider::class,
         App\Providers\BackendServiceProvider::class,
         App\Providers\AccountingServiceProvider::class,
+        App\Providers\ComposerServiceProvider::class,
 
         /*
          * Third Party Providers...
@@ -189,9 +190,10 @@ return [
         Barryvdh\Cors\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
-        FactoryStories\Providers\StoryFactoryServiceProvider::class,
+        FactoryStories\Providers\ServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Laracademy\Commands\MakeServiceProvider::class,
+        Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class
     ],
 
     /*

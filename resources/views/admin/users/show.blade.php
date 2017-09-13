@@ -22,11 +22,16 @@
                                 Manage <i class="fa fa-angle-down"></i>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="create">New</a></li>
-                                <li><a href="{{ Request::url() }}/edit">Edit</a></li>
-                                {{--<li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>--}}
-                                <li role="separator" class="divider"></li>
-                                <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
+                                @can('create', $user)
+                                    <li><a href="create">New</a></li>
+                                @endcan
+                                @can('update', $user)
+                                    <li><a href="{{ Request::url() }}/edit">Edit</a></li>
+                                @endcan
+                                @can('delete', $user)
+                                    <li role="separator" class="divider"></li>
+                                    <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
+                                @endcan
                             </ul>
                         </div>
                     </div>
@@ -111,12 +116,13 @@
                     </div><!-- end panel body -->
                 </div><!-- end panel -->
 
-                <notes type="users"
-                       id="{{ $user->id }}"
-                       user_id="{{ auth()->user()->id }}"
-                       :per_page="3"
-                       :can-modify="{{ auth()->user()->can('modify-notes')?1:0 }}">
-                </notes>
+                @can('view', \App\Models\v1\Note::class)
+                    <notes type="users"
+                           id="{{ $user->id }}"
+                           user_id="{{ auth()->user()->id }}"
+                           :per_page="3">
+                    </notes>
+                @endcan
             </div>
 
             <div class="col-sm-4">
@@ -128,12 +134,18 @@
                                  command="email:send-welcome"
                                  :parameters="{id: '{{ $user->id }}', email: '{{ $user->email }}'}">
                 </send-email>
+                @hasanyrole('super_admin|admin|staff_general|intern')
                 <a href="{{ url('admin/users/'.$user->id.'/impersonate') }}"
                    class="btn btn-default btn-md btn-block">
                    <i class="fa fa-user-secret"></i> Temporarily Login As This User
                 </a>
+                @endhasanyrole
                 <hr class="divider inv">
-                <user-permissions user_id="{{ $user->id }}" user-roles="{{ $user->roles->pluck('name') }}"></user-permissions>
+                @hasanyrole('super_admin|admin')
+                    <user-permissions user_id="{{ $user->id }}"
+                                      user-roles="{{ $user->roles->pluck('name') }}">
+                    </user-permissions>
+                @endhasanyrole
             </div>
 
         </div>

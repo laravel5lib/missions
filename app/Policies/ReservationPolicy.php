@@ -58,4 +58,16 @@ class ReservationPolicy extends BasePolicy
     {
         return $user->can('delete_reservations');
     }
+
+    /**
+     * Determine whether the user can transfer the reservation.
+     *
+     * @param  \App\Models\v1\User  $user
+     * @param  \App\Models\v1\Reservation  $reservation
+     * @return mixed
+     */
+    public function transfer(User $user, Reservation $reservation)
+    {
+        return $user->can('transfer_reservations');
+    }
 }

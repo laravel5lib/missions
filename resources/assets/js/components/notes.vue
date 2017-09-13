@@ -6,7 +6,7 @@
                 <div class="col-xs-6">
                     <h5>Notes</h5>
                 </div>
-                <div class="col-xs-6 text-right" v-if="canModify">
+                <div class="col-xs-6 text-right" v-if="app.user.can.create_notes">
                     <button class="btn btn-primary btn-xs" @click="prepareNew">
                         <span v-if="! newMode">New <i class="fa fa-plus"></i></span>
                         <span v-if="newMode">List <i class="fa fa-list-ul"></i></span>
@@ -58,11 +58,15 @@
                             </small>
                         </h5>
                     </div>
-                    <div class="col-xs-4 text-right" v-if="note.user.data.id === user_id">
-                        <button class="btn btn-xs btn-link" @click="prepareEdit(note)">
+                    <div class="col-xs-4 text-right">
+                        <button class="btn btn-xs btn-link"
+                                @click="prepareEdit(note)"
+                                v-if="note.user.data.id === user_id">
                             <i class="fa fa-pencil"></i>
                         </button>
-                        <button class="btn btn-xs btn-link" @click="selectedNote.id = note.id,deleteModal = true">
+                        <button class="btn btn-xs btn-link"
+                                @click="selectedNote.id = note.id,deleteModal = true"
+                                v-if="note.user.data.id === user_id || app.user.can.delete_notes">
                             <i class="fa fa-times"></i>
                         </button>
                     </div>
@@ -145,7 +149,8 @@
                 showSuccess: false,
                 showError: false,
                 deleteModal: false,
-                message: null
+                message: null,
+                app: MissionsMe
             }
         },
         watch : {
@@ -245,8 +250,6 @@
             },
             remove(note) {
                 this.$http.delete('notes/' + note.id).then(() => {
-                    // remove note from collection
-                    this.notes.$remove(note.id);
                     // reset selected
                     this.reset();
                     // re-fetch list
@@ -259,6 +262,7 @@
         },
         mounted() {
             this.fetch()
+            console.log(MissionsMe.user.can.create_notes);
         }
     }
 </script>

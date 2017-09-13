@@ -9,7 +9,11 @@
             </div>
             <div class="col-sm-4 text-right">
                 <hr class="divider inv sm">
-                <a href="/admin/campaigns/create" class="btn btn-primary"><i class="fa fa-plus icon-left"></i> New</a>
+                @can('create', \App\Models\v1\Campaign::class)
+                    <a href="/admin/campaigns/create" class="btn btn-primary">
+                        <i class="fa fa-plus icon-left"></i> New
+                    </a>
+                @endcan
             </div>
         </div>
         <div class="row visible-xs">

@@ -2,6 +2,8 @@
 
 class SquadMembersEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /** @test */
     public function fetches_all_squad_members()
     {

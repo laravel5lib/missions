@@ -6,8 +6,12 @@
 $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker) {
     return [
         'id'              => $faker->unique()->uuid,
-        'group_id'        => $faker->uuid,
-        'campaign_id'     => $faker->uuid,
+        'group_id'        => function() {
+            return factory(App\Models\v1\Group::class)->create()->id;
+        },
+        'campaign_id'     => function() {
+            return factory(App\Models\v1\Campaign::class)->create()->id;
+        },
         'spots'           => random_int(10, 500),
         'companion_limit' => random_int(0, 3),
         'country_code'    => function (array $trip) {

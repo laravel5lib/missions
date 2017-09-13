@@ -2,6 +2,8 @@
 
 class TransportsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /** @test */
     public function gets_all_transports()
     {

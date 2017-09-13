@@ -60,7 +60,7 @@ class TripDetailsPageTest extends BrowserKitTestCase
 
         $this->visit('trips/'.$trip->id)
              ->click('Register Now')
-             ->seePageIs('trips/'.$trip->id.'/register');
+             ->seePageIs('/login');
     }
 
     /**

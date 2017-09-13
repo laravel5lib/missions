@@ -2,6 +2,8 @@
 
 class TeamSquadsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /** @test */
     public function fetches_all_squads_in_team()
     {

@@ -2,6 +2,8 @@
 
 class GroupsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /**
      * @test
      */

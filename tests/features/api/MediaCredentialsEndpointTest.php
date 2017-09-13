@@ -2,6 +2,7 @@
 
 class MediaCredentialsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
 
     /**
      * @test

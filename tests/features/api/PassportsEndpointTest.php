@@ -5,6 +5,7 @@ use App\Models\v1\Passport;
 
 class PassportsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
 
     /**
      * @test

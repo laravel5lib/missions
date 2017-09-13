@@ -6,6 +6,8 @@ use App\Models\v1\ActivityType;
 
 class ActivitiesEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /** @test */
     public function gets_all_activities()
     {

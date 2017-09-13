@@ -239,7 +239,7 @@ class Trip extends Model
         $todos = collect($value)->transform(function ($item) {
             return trim(strtolower($item));
         });
-        
+
         $this->attributes['todos'] = json_encode($todos);
     }
 
@@ -394,7 +394,7 @@ class Trip extends Model
         $this->published_at->isFuture() ? 'scheduled' : $status;
 
         // close it if no more spots are available
-        $status = $this->spots === 0 ? 'closed' : $status;
+        $status = $this->spots == 0 ? 'closed' : $status;
 
         // close it if past closing date
         $status = $this->closed_at->isPast() ? 'closed' : $status;

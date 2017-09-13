@@ -2,6 +2,8 @@
 
 class ReportsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /** @test */
     public function fetches_all_reports_by_user()
     {

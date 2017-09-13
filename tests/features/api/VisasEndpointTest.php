@@ -5,6 +5,7 @@ use App\Models\v1\Visa;
 
 class VisasEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
 
     /**
      * @test

@@ -2,6 +2,8 @@
 
 class TeamablesEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /** @test */
     public function add_teams_to_group()
     {

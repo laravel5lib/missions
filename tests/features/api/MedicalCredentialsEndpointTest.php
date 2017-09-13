@@ -2,6 +2,7 @@
 
 class MedicalCredentialsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
 
     /**
      * @test

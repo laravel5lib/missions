@@ -8,24 +8,23 @@
 					<h3>1Nation1Day 2017</h3>
 					<p>July 29, 2017 marked the day that the hand of God touched the nation of Nicaragua in epic proportions.</p>
 					<a href="http://1nation1day.com" class="btn btn-primary btn-sm">Learn About 1N1D17</a>
-				</div>
-			</div>
-		</div>
+				</div><!-- end carousel -->
+			</div><!-- end item -->
+		</div><!-- end carousel-inner -->
 		<div class="featured-tag">
 			<a class="btn btn-info btn-sm hidden-xs" style="border-radius:50px;"><i class="fa fa-bolt icon-left"></i> Featured</a>
-		</div>
+		</div><!-- end featured-tag -->
 	</div><!-- end carousel -->
 	<hr class="divider inv xlg">
 
-	<div class="container">
 	<div class="container" v-if="campaigns.length < 1">
-		<div class="col-sm-8 col-sm-offset-2 text-center">
-			<h3>Looking for 2018 trips?</h3>
-			<hr class="divider inv sm">
-			<p>Be the first on the list to know about 2018 trips.</p>
-			<hr class="divider inv">
-			<a href="http://eepurl.com/cZnArz" target="_blank" class="btn btn-primary">Notify Me!</a>
-		</div><!-- end col -->
+			<div class="col-sm-8 col-sm-offset-2 text-center">
+				<h3>Looking for 2018 trips?</h3>
+				<hr class="divider inv sm">
+				<p>Be the first on the list to know about 2018 trips.</p>
+				<hr class="divider inv">
+				<a href="http://eepurl.com/cZnArz" target="_blank" class="btn btn-primary">Notify Me!</a>
+			</div><!-- end col -->
 	</div><!-- end container -->
 
 	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;" v-if="campaigns.length > 0">

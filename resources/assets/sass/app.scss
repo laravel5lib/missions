@@ -877,6 +877,49 @@ img.onenation-logo {
   background-size: cover;
   padding: 200px 0 200px;
 }
+img.adv-mark {
+  width:400px;
+  height:400px;
+  margin-top: -200px;
+  @media screen and (max-width: 991px) {
+    width:300px;
+  height:300px;
+  margin-top: -100px;
+  }
+  @media screen and (max-width: 767px) {
+    width:200px;
+    height:200px;
+    margin-top: -100px;
+    margin-left: 10px;
+  }
+}
+.hondo-vision {
+  color:#fff;
+  background: #fff url(../../images/advance/hondo/stadium-drone.jpg) no-repeat center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  padding: 60px 0 60px;
+}
+.dr-vision {
+  color:#fff;
+  background: #fff url(../../images/advance/dr/team.jpg) no-repeat center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  padding: 60px 0 60px;
+}
+.nica-vision {
+  color:#fff;
+  background: #fff url(../../images/advance/nica/teen-boy-baseball.jpg) no-repeat center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  padding: 60px 0 60px;
+}
 .row-no-margin {
     margin-left: 0;
     margin-right: 0;

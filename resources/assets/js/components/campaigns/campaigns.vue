@@ -2,12 +2,12 @@
 	<div id="carousel-example-generic" class="carousel slide campaign-carousel" data-ride="carousel">
 		<div class="carousel-inner">
 			<div class="item active">
-				<img src="../images/1n1d17/1n1d17-campaign-banner.jpg" alt="#1N1D17">
+				<img src="../images/advance/adv-2018-header.jpg" alt="Advance 2018">
 				<div class="carousel-caption">
-					<h6 class="text-uppercase">Nicaragua</h6>
-					<h3>1Nation1Day 2017</h3>
-					<p>July 29, 2017 marked the day that the hand of God touched the nation of Nicaragua in epic proportions.</p>
-					<a href="http://1nation1day.com" class="btn btn-primary btn-sm">Learn About 1N1D17</a>
+					<h6 class="text-uppercase">Advance 2018</h6>
+					<h3>3 Nations 1 Generation</h3>
+					<p>On July 21-29, 2018 we will take the next step in discipling nations by returning to all 3 1Nation1Day nations.</p>
+					<!--<a href="http://1nation1day.com" class="btn btn-primary btn-sm">Learn About 2018 Trips</a>-->
 				</div><!-- end carousel -->
 			</div><!-- end item -->
 		</div><!-- end carousel-inner -->

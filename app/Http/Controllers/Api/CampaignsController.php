@@ -70,6 +70,8 @@ class CampaignsController extends Controller
     {
         $campaign = Campaign::create($request->all());
 
+        $campaign->slug()->create(['url' => $request->get('page_url')]);
+
         return $this->response->item($campaign, new CampaignTransformer);
     }
 
@@ -85,6 +87,11 @@ class CampaignsController extends Controller
         $campaign = $this->campaign->findOrFail($id);
 
         $campaign->update($request->all());
+        $campaign->slug()->update([
+            'url' => $request->get('page_url', $campaign->slug->url)
+        ]);
+
+        $campaign->load(['slug']);
 
         return $this->response->item($campaign, new CampaignTransformer);
     }
@@ -121,7 +128,7 @@ class CampaignsController extends Controller
 
     /**
      * Import a list of Campaigns.
-     * 
+     *
      * @param  CampaignListImport $import
      * @return response
      */

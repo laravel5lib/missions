@@ -1,154 +1,165 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-	<div>
+	<div class="panel panel-default">
 		<validator name="UpdateCampaign" @touched="onTouched">
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
-		<form id="UpdateCampaignForm" class="form-horizontal" novalidate>
-			<div class="row">
-				<div class="col-sm-12">
-					<a class="pull-right" data-toggle="modal" data-target="#deleteConfirmationModal"><h6><i
-							class="fa fa-trash"></i> Delete</h6></a>
-				</div>
+
+			<div class="panel-heading">
+				<h3>Edit Campaign</h3>
 			</div>
-			<div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
-				<div class="col-sm-12">
-					<label for="name">Name</label>
-					<input type="text" class="form-control" name="name" id="name" v-model="name"
-						   placeholder="Campaign Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
-						   maxlength="100" minlength="1" required>
-				</div>
-			</div>
-			<div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
-				<div class="col-sm-12">
-					<label for="country">Country</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
-							  label="name"></v-select>
-					<select hidden name="country" id="country" class="hidden" v-model="country_code"
-							v-validate:country="{ required: true }">
-						<option :value="country.code" v-for="country in countries">{{country.name}}</option>
-					</select>
-				</div>
-			</div>
-			<div class="form-group" v-error-handler="{ value: description, handle: 'description' }">
-				<div class="col-sm-12">
-					<label for="description">Description</label>
-					<textarea name="short_desc" id="description" rows="2" v-model="short_desc" class="form-control"
-							  v-validate:description="{ required: true, minlength:1, maxlength:255 }" maxlength="255"
-							  minlength="1"></textarea>
-					<div v-if="short_desc" class="help-block">{{short_desc.length}}/255 characters remaining</div>
-				</div>
-			</div>
-			<div class="form-group" :class="{ 'has-error': (checkForError('start') || checkForError('end')) }">
-				<div class="col-sm-12">
-					<label for="started_at">Dates</label>
+
+			<form id="UpdateCampaignForm" class="form-horizontal" novalidate>
+
+				<div class="panel-body">
+
 					<div class="row">
-						<div class="col-sm-6">
-							<date-picker addon="Start" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }" :model.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-							<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
-							       v-validate:start="{ required: true }" required>
-							<!--<div class="input-group" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }">
-								<span class="input-group-addon">Start</span>
-							</div>-->
-							<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>
+						<div class="col-sm-4">
+							<h5>Campaign Details</h5>
+							<p class="text-muted">These details appear to the end-user in the <a href="/campaigns" target="_blank">campaign cards</a>.</p>
 						</div>
-						<div class="col-sm-6">
-							<date-picker addon="End" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-							<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
-							       v-validate:end="{ required: true }" required>
-							<!--<div class="input-group" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }">
-								<span class="input-group-addon">End</span>
-								<date-picker v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-							</div>-->
-							<div v-if="errors.ended_at" class="help-block">{{errors.ended_at.toString()}}</div>
+						<div class="col-sm-8">
+							<div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
+								<div class="col-xs-12">
+									<label for="name">Name</label>
+									<input type="text" class="form-control" name="name" id="name" v-model="name"
+										   placeholder="Campaign Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
+										   maxlength="100" minlength="1" required>
+							    </div>
+							</div>
+							<div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
+								<div class="col-sm-12 col-md-8 col-lg-6">
+									<label for="country">Country</label>
+									<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
+											  label="name"></v-select>
+									<select hidden name="country" id="country" class="hidden" v-model="country_code"
+											v-validate:country="{ required: true }">
+										<option :value="country.code" v-for="country in countries">{{country.name}}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group" v-error-handler="{ value: description, handle: 'description' }">
+								<div class="col-xs-12">
+									<label for="description">Description</label>
+									<textarea name="short_desc" id="description" rows="5" v-model="short_desc" class="form-control"
+											  v-validate:description="{ required: true, minlength:1, maxlength:255 }" maxlength="255"
+											  minlength="1"></textarea>
+									<div v-if="short_desc" class="help-block">{{short_desc.length}}/255 characters remaining</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-xs-12">
+									<h5>
+										<img class="av-left img-md"
+											:src="selectedAvatar.source ? (selectedAvatar.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100">
+										<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
+											data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
+											<i class="fa fa-camera icon-left"></i> Set Thumbnail
+										</button>
+									</h5>
+									<div class="collapse" id="avatarCollapse">
+										<div class="well">
+											<upload-create-update type="avatar" :lock-type="true" :is-child="true"
+																  :tags="['campaign']"></upload-create-update>
+										</div>
+									</div>
+								</div>
+							</div>
+
 						</div>
 					</div>
-				</div>
-			</div>
 
+					<hr class="divider">
+
+					<div class="row">
+						<div class="col-sm-4">
+							<h5>Campaign Dates</h5>
+							<p class="text-muted">The start and end of the campaign. <br />These dates are visible to the end-user.</p>
+						</div>
+						<div class="col-sm-8">
+							<div class="form-group" :class="{ 'has-error': checkForError('start') }">
+								<div class="col-sm-12 col-md-8 col-lg-6">
+									<label for="started_at">Start</label>
+									<date-picker v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }" :model.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+									<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
+									       v-validate:start="{ required: true }" required>
+									<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>
+								</div>
+							</div>
+							<div class="form-group" :class="{ 'has-error': checkForError('end') }">
+								<div class="col-sm-12 col-md-8 col-lg-6">
+									<label for="started_at">End</label>
+									<date-picker v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+									<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
+									       v-validate:end="{ required: true }" required>
+									<div v-if="errors.ended_at" class="help-block">{{errors.ended_at.toString()}}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<hr class="divider">
+
+					<div class="row">
+						<div class="col-sm-4">
+							<h5>Campaign Page</h5>
+							<p class="text-muted">The public-facing campaign landing page.</p>
+						</div>
+						<div class="col-sm-8">
+							<div class="form-group">
+								<div class="col-sm-12 col-md-8 col-lg-6">
+									<label for="published_at">Publish Date</label>
+									<date-picker :model.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+									<input type="datetime" class="form-control hidden"
+										   v-model="published_at|moment 'YYYY-MM-DD HH:mm:ss'" id="published_at">
+								    <span class="help-block">Publish now, in the future, or leave blank to save it as a "draft".</span>
+								</div>
+							</div>
+							<template v-if="published_at">
+								<div class="form-group" v-error-handler="{ value: page_url, client: 'url', server: 'page_url' }">
+									<div class="col-sm-12">
+										<label for="description">Page Url</label>
+										<div class="input-group">
+											<span class="input-group-addon">www.missions.me/campaigns/</span>
+											<input type="text" id="page_url" v-model="page_url" class="form-control"
+												   v-validate:url="{ required: false }"/>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group" v-error-handler="{ value: page_src, client: 'src', server: 'page_src' }">
+									<div class="col-sm-12">
+										<label for="description">Page Source</label>
+										<div class="input-group">
+											<input type="text" id="page_src" v-model="page_src" class="form-control"
+												   v-validate:src="{ required: false }"/>
+											<span class="input-group-addon">.blade.php</span>
+										</div>
+										<span class="help-block">The filename located at: <code>/resources/views/sites/campaigns/partials/</code>
+									</div>
+								</div>
+							</template>
+						</div>
+					</div>
+
+		</div>
+		<div class="panel-footer">
 			<div class="form-group">
-				<div class="col-sm-12">
-					<label for="published_at">Published Date</label>
-					<date-picker :model.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-					<!--<div class="input-group">
-						<span class="input-group-btn">
-							<button type="button" class="btn btn-default" @click="published_at = ''"><i class="fa fa-close"></i></button>
-						</span>
-					</div>-->
-					<input type="datetime" class="form-control hidden"
-						   v-model="published_at|moment 'YYYY-MM-DD HH:mm:ss'" id="published_at">
+				<hr class="divider inv md">
+				<div class="col-xs-4">
+					<button @click.prevent class="btn btn-link"
+					   data-toggle="modal"
+					   data-target="#deleteConfirmationModal">
+				   		<i class="fa fa-trash"></i> Delete
+			   		</button>
+				</div>
+				<div class="col-xs-8 text-right">
+					<a @click.prevent="back()" class="btn btn-default">Go Back</a>
+					<a @click.prevent="update()" class="btn btn-primary">Save Changes</a>
 				</div>
 			</div>
 
-			<template v-if="published_at">
-				<div class="form-group" v-error-handler="{ value: page_url, client: 'url', server: 'page_url' }">
-					<div class="col-sm-12">
-						<label for="description">Page Url</label>
-						<div class="input-group">
-							<span class="input-group-addon">www.missions.me/campaigns/</span>
-							<input type="text" id="page_url" v-model="page_url" class="form-control"
-								   v-validate:url="{ required: false }"/>
-						</div>
-						<!--<div v-if="errors.page_url" class="help-block">{{errors.page_url.toString()}}</div>-->
-					</div>
-				</div>
-
-				<div class="form-group" v-error-handler="{ value: page_src, client: 'src', server: 'page_src' }">
-					<div class="col-sm-12">
-						<label for="description">Page Source</label>
-						<div class="input-group">
-							<span class="input-group-addon">/resources/views/sites/campaigns/partials/</span>
-							<input type="text" id="page_src" v-model="page_src" class="form-control"
-								   v-validate:src="{ required: false }"/>
-							<span class="input-group-addon">.blade.php</span>
-						</div>
-					</div>
-				</div>
-			</template>
-
-			<div class="row">
-				<div class="col-sm-6">
-					<h5>
-						<img class="av-left img-circle img-md"
-							:src="selectedAvatar.source ? (selectedAvatar.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100">
-						<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
-							data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
-							<i class="fa fa-camera icon-left"></i> Set Avatar
-						</button>
-					</h5>
-					<div class="collapse" id="avatarCollapse">
-						<div class="well">
-							<upload-create-update type="avatar" :lock-type="true" :is-child="true"
-												  :tags="['campaign']"></upload-create-update>
-						</div>
-					</div>
-				</div><!-- end col -->
-				<div class="col-sm-6">
-					<h5>
-						<img class="av-left img-rounded img-md"
-							:src="selectedBanner.source ? (selectedBanner.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100">
-						<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
-							data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
-								<i class="fa fa-camera icon-left"></i> Set Banner
-						</button>
-					</h5>
-
-					<div class="collapse" id="bannerCollapse">
-						<div class="well">
-							<upload-create-update type="banner" :lock-type="true" :is-child="true"
-												  :tags="['campaign']"></upload-create-update>
-						</div>
-					</div>
-				</div><!-- end col -->
-			</div><!-- end row -->
-			<hr class="divider inv lg">
-
-			<div class="form-group">
-				<div class="col-sm-12 text-center">
-					<!--<a href="/admin/campaigns/{{campaignId}}" class="btn btn-default">Cancel</a>-->
-					<a @click="back()" class="btn btn-default">Cancel</a>
-					<a @click="update()" class="btn btn-primary">Update</a>
-				</div>
-			</div>
+		</div>
 		</form>
+		</validator>
 
 		<alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
 			<span class="icon-ok-circled alert-icon-float-left"></span>
@@ -179,8 +190,8 @@
 						<p class="text-center">Delete this campaign?</p>
 						<div class="row">
 							<div class="col-sm-12 text-center">
-								<a class="btn btn-sm btn-default" data-dismiss="modal">No</a>
-								<a @click="deleteCampaign()" class="btn btn-sm btn-primary">Yes</a>
+								<a class="btn btn-link" data-dismiss="modal">Keep</a>
+								<a @click="deleteCampaign()" class="btn btn-primary">Delete</a>
 							</div>
 						</div>
 					</div>
@@ -189,7 +200,6 @@
 			</div>
 		</div>
 
-	</validator>
 	</div>
 </template>
 <script type="text/javascript">
@@ -234,13 +244,6 @@
 				return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
 			}
 		},
-		watch:{
-			'name': function (val) {
-				if(typeof val === 'string') {
-					this.page_url = this.convertToSlug(val);
-				}
-			}
-		},
 		methods: {
 			checkForError(field){
 				// if user clicked submit button while the field is invalid trigger error styles 
@@ -257,7 +260,7 @@
 					this.showSaveAlert = true;
 					return false;
 				}
-				window.location.href = '/admin/campaigns/';
+				window.location.href = '/admin/campaigns/' + this.campaignId;
 			},
 			forceBack(){
 				return this.back(true);
@@ -351,7 +354,6 @@
 				this.banner_upload_id = campaign.banner_upload_id;
 				this.selectedAvatar.source = campaign.avatar;
 				this.selectedBanner.source = campaign.banner;
-				// this.$refs.spinner.hide();
 			}, function (response) {
                 console.log(response);
                 return response

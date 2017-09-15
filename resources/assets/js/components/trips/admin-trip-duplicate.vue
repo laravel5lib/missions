@@ -34,6 +34,7 @@
                                             <option value="medical">Medical</option>
                                             <option value="international">International</option>
                                             <option value="leader">Leader</option>
+                                            <option value="sports">Sports</option>
                                         </select>
                                     </div>
                                 </div>

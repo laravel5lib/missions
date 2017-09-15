@@ -440,8 +440,7 @@
 	                    </div>
 	                </div>
 	            </div>
-	        </div>
-	    </div>
+	        </div>	    </div>
 	</div><!-- end modal -->
 </template>
 <script type="text/javascript">

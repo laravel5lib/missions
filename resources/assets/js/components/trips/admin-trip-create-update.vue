@@ -11,7 +11,7 @@
                         </div>
                     </div>
                     <div class="form-group" :class="{ 'has-error': checkForError('group') }">
-                        <div class="col-sm-12">	
+                        <div class="col-sm-12">
                         	<label class="control-label">Group</label>
                             <v-select @keydown.enter.prevent=""  class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups" label="name"></v-select>
                             <select hidden v-model="group_id" v-validate:group="{ required: true}">
@@ -43,6 +43,7 @@
 									<option value="media">Media</option>
 									<option value="medical">Medical</option>
 									<option value="leader">Leader</option>
+									<option value="sports">Sports</option>
 								</select>
 							</div>
 						</div><!-- end col -->
@@ -185,7 +186,7 @@
 				</form>
 
 			</validator>
-			
+
 				</div>
 			</div>
 		</div>

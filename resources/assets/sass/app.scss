@@ -9,7 +9,7 @@
 /*
  * Variables...
  */
- 
+
 $active-icon-color: #6CC94D;
 /*$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 $fa-font-path: "~font-awesome/fonts/";*/
@@ -140,6 +140,10 @@ p.large-line-height {
 }
 .panel-leader {
   background-color: $brand-leader !important;
+  color: #fff !important;
+}
+.panel-sports {
+  background-color: $brand-sports !important;
   color: #fff !important;
 }
 
@@ -273,7 +277,7 @@ body:not(.modal-open) {
     @media screen and (max-width: 767px) {
       left: 5%;
       right: 5%;
-      bottom: 5%; 
+      bottom: 5%;
       padding-bottom: 0px;
     }
   }
@@ -527,7 +531,7 @@ body:not(.modal-open) {
 .navbar-toggle {
   display: inline;
 }
-@media screen and (min-width: 767px) { 
+@media screen and (min-width: 767px) {
     .navbar-toggle {
       display: inline;
       padding: 10px 10px;
@@ -535,7 +539,7 @@ body:not(.modal-open) {
       margin: 10.5px 15px 15.5px 0px;
     }
 }
-@media screen and (max-width: 767px) { 
+@media screen and (max-width: 767px) {
     .navbar-toggle {
       display: inline;
       padding: 9px 10px;
@@ -1150,8 +1154,8 @@ h1.home-college-header {
   overflow: hidden;
 }
 
-.video-inner iframe,  
-.video-inner object,  
+.video-inner iframe,
+.video-inner object,
 .video-inner embed {
   position: absolute;
   top: 0;
@@ -1462,13 +1466,13 @@ a.btn-college-nav {
       }
     }
   }
-  &:hover .equals-icon { 
+  &:hover .equals-icon {
     -o-transform: translateX(0px);
     -ms-transform: translateX(0px);
     -moz-transform: translateX(0px);
     -webkit-transform: translateX(0px);
   }
-  &:hover .view { 
+  &:hover .view {
     -o-transform: translateX(250px);
     -ms-transform: translateX(250px);
     -moz-transform: translateX(250px);

@@ -11,7 +11,13 @@
                 <div class="col-sm-4 text-right">
                     <hr class="divider inv sm">
                     <div class="btn-group">
-                        <a href="{{ url('admin/transactions') }}" class="btn btn-primary-darker"><i class="fa fa-chevron-left"></i></a>
+                        <a href="{{ url('admin/transactions') }}" class="btn btn-primary-darker">
+                            <i class="fa fa-chevron-left"></i>
+                            @cannot('update', \App\Models\v1\Transaction::class)
+                                &nbsp; Back
+                            @endcannot
+                        </a>
+                        @can('update', \App\Models\v1\Transaction::class)
                         <button type="button"
                                 class="btn btn-primary"
                                 data-toggle="dropdown"
@@ -23,8 +29,13 @@
                             @if($transaction->type == 'donation')
                                 <li><a data-toggle="modal" data-target="#refund">Refund Transaction</a></li>
                             @endif
-                            <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
+                            @can('delete', \App\Models\v1\Transaction::class)
+                                <li>
+                                    <a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a>
+                                </li>
+                            @endcan
                         </ul>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -187,10 +198,10 @@
                     </div>
                     <div class="panel-footer text-center">
                         <hr class="divider inv sm">
-                        <send-email label="Resend Receipt Email" 
+                        <send-email label="Resend Receipt Email"
                                  icon="fa fa-envelope icon-left"
-                                 class="btn btn-default btn-sm"
-                                 command="email:send-receipt" 
+                                 classes="btn btn-default btn-sm"
+                                 command="email:send-receipt"
                                  :parameters="{id: '{{ $transaction->id }}', email: '{{ $transaction->donor->email }}'}">
                         </send-email>
                     </div>
@@ -199,16 +210,17 @@
         </div>
         @endif
 
+        @can('view', \App\Models\v1\Note::class)
         <div class="row">
             <div class="col-sm-offset-2 col-sm-8">
                 <notes type="transactions"
                        id="{{ $transaction->id }}"
                        user_id="{{ auth()->user()->id }}"
-                       :per_page="3"
-                       :can-modify="{{ auth()->user()->can('modify-notes')?1:0 }}">
+                       :per_page="3">
                 </notes>
             </div>
         </div>
+        @endcan
     </div>
 
     @if($transaction->type == 'donation')

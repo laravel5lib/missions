@@ -53,8 +53,7 @@
                 <notes type="funds"
                        id="{{ $fund->id }}"
                        user_id="{{ auth()->user()->id }}"
-                       :per_page="3"
-                       :can-modify="{{ auth()->user()->can('modify-notes')?1:0 }}">
+                       :per_page="3">
                 </notes>
             </fund-manager>
             <restore-fund id="{{ $fund->id }}"></restore-fund>

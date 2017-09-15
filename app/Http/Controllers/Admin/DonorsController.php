@@ -42,14 +42,12 @@ class DonorsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  Donor $donor
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Donor $donor)
     {
-        $this->authorize('view', Donor::class);
-
-        $donor = $this->api->get('donors/' . $id);
+        $this->authorize('view', $donor);
 
         return view('admin.financials.donors.show', compact('donor'));
     }
@@ -57,13 +55,13 @@ class DonorsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  Donor $donor
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Donor $donor)
     {
-        $this->authorize('update', Donor::class);
+        $this->authorize('update', $donor);
 
-        return view('admin.financials.donors.edit', compact('id'));
+        return view('admin.financials.donors.edit')->with('id', $donor->id);
     }
 }

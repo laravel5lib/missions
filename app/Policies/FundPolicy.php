@@ -13,8 +13,18 @@ class FundPolicy extends BasePolicy
      * @param  \App\Models\v1\User  $user
      * @return mixed
      */
-    public function view(User $user)
+    public function view(User $user, Fund $fund = null)
     {
+        if (! $fund) {
+            return $user->can('view_funds');
+        }
+
+        // is trip rep
+        if ($fund->fundable_type == 'reservations' && $fund->fundable->trip->rep->id == $user->id) {
+            return true;
+        }
+
+        // or has permission to view all funds
         return $user->can('view_funds');
     }
 

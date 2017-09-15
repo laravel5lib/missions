@@ -26,8 +26,8 @@
                         <label>Transaction Type</label>
                         <select v-model="transaction.type" class="form-control" :disabled="editing">
                             <option value="donation">Donation</option>
-                            <option value="transfer">Transfer</option>
-                            <option value="credit">Credit</option>
+                            <option value="transfer" v-if="app.user.can.add_transfer_transactions">Transfer</option>
+                            <option value="credit" v-if="app.user.can.add_credit_transactions">Credit</option>
                         </select>
                     </div>
                     <div class="col-xs-6">
@@ -74,15 +74,15 @@
                                       placeholder="Select a donor"></v-select>
                             <span class="help-block small">
                                 <a href="#" v-show="selectedDonor" @click="donorInfoMode"><i class="fa fa-info-circle"></i> View Donor Details</a>
-                                <a href="#" v-show="!selectedDonor" @click="newDonorMode"><i class="fa fa-plus-circle"></i> Create New Donor</a>
+                                <a href="#" v-show="!selectedDonor" @click="newDonorMode" v-if="app.user.can.create_donors"><i class="fa fa-plus-circle"></i> Create New Donor</a>
                             </span>
                         </div>
                         <div class="col-xs-6">
                             <label>Payment Method</label>
                             <select class="form-control" v-model="transaction.details.type" :disabled="editingCreditCard">
                                 <option value="card">Credit Card</option>
-                                <option value="check">Check</option>
-                                <option value="cash">Cash</option>
+                                <option value="check" v-if="app.user.can.add_check_transactions">Check</option>
+                                <option value="cash" v-if="app.user.can.add_cash_transactions">Cash</option>
                             </select>
                         </div>
                         <div class="col-xs-12">
@@ -268,6 +268,7 @@
         },
         data() {
             return {
+                app: MissionsMe,
                 transaction: {
                     type: 'donation',
                     anonymous: false,

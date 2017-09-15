@@ -12,7 +12,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-8">
-                <h3>Users <small>&middot; Edit</small></h3>
+                <h3>Edit User</h3>
             </div>
             <div class="col-sm-4">
                 <hr class="divider inv sm">

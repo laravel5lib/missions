@@ -28,14 +28,12 @@ class FundsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param Fund $fund
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Fund $fund)
     {
-        $this->authorize('view', Fund::class);
-
-        $fund = $this->api->get('funds/' . $id);
+        $this->authorize('view', $fund);
 
         return view('admin.financials.funds.show', compact('fund'));
     }

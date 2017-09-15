@@ -20,6 +20,7 @@
   @include button-size($padding-base-vertical, $padding-base-horizontal*2, $font-size-base, $line-height-base, $btn-border-radius-base);
   @include user-select(none);
   @include transition(all .2s ease-in-out);
+  @include box-shadow(0 2px 4px rgba(0,0,0,.18));
 
   &,
   &:active,
@@ -95,7 +96,7 @@ a.btn {
 // Danger and error appear as red
 .btn-danger {
   @include button-variant($btn-danger-color, $btn-danger-bg, $btn-danger-border);
-} 
+}
 
 // Hollow buttons
 // -------------------------
@@ -174,7 +175,7 @@ a.btn {
     border-color: lighten($btn-danger-border, 10%) !important;
     text-decoration: none;
   }
-} 
+}
 
 
 // Link buttons

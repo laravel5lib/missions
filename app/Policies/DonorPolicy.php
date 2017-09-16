@@ -13,7 +13,7 @@ class DonorPolicy extends BasePolicy
      * @param  \App\Models\v1\User  $user
      * @return mixed
      */
-    public function view(User $user)
+    public function view(User $user, Donor $donor = null)
     {
         return $user->can('view_donors');
     }

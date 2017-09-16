@@ -11,10 +11,9 @@ class AccommodationPolicy extends BasePolicy
      * Determine whether the user can view the accommodation.
      *
      * @param  \App\Models\v1\User  $user
-     * @param  \App\App\Models\v1\Accommodation  $accommodation
      * @return mixed
      */
-    public function view(User $user, Accommodation $accommodation)
+    public function view(User $user)
     {
         return $user->can('view_accommodations');
     }
@@ -34,10 +33,9 @@ class AccommodationPolicy extends BasePolicy
      * Determine whether the user can update the accommodation.
      *
      * @param  \App\Models\v1\User  $user
-     * @param  \App\App\Models\v1\Accommodation  $accommodation
      * @return mixed
      */
-    public function update(User $user, Accommodation $accommodation)
+    public function update(User $user)
     {
         return $user->can('edit_accommodations');
     }
@@ -46,10 +44,9 @@ class AccommodationPolicy extends BasePolicy
      * Determine whether the user can delete the accommodation.
      *
      * @param  \App\Models\v1\User  $user
-     * @param  \App\App\Models\v1\Accommodation  $accommodation
      * @return mixed
      */
-    public function delete(User $user, Accommodation $accommodation)
+    public function delete(User $user)
     {
         return $user->can('delete_accommodations');
     }

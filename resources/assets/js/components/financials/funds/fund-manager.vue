@@ -3,7 +3,7 @@
         <div class="col-md-4">
             <fund-editor :id="id"></fund-editor>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-8" v-if="app.user.can.view_transactions">
             <div class="collapse" id="createTransaction">
                 <transaction-form :fund-id="id"></transaction-form>
             </div>
@@ -17,7 +17,9 @@
                     </admin-transactions-list>
                 </div><!-- end panel-body -->
             </div>
-            <slot></slot>
+            <template v-if="app.user.can.view_notes">
+                <slot></slot>
+            </template>
         </div>
     </section>
 </template>
@@ -35,7 +37,7 @@
         },
         data(){
             return{
-
+                app: MissionsMe
             }
         },
         components:{

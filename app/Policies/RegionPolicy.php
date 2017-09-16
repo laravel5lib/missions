@@ -11,10 +11,9 @@ class RegionPolicy extends BasePolicy
      * Determine whether the user can view the region.
      *
      * @param  \App\Models\v1\User  $user
-     * @param  \App\App\Models\v1\Region  $region
      * @return mixed
      */
-    public function view(User $user, Region $region)
+    public function view(User $user)
     {
         return $user->can('view_regions');
     }
@@ -34,10 +33,9 @@ class RegionPolicy extends BasePolicy
      * Determine whether the user can update the region.
      *
      * @param  \App\Models\v1\User  $user
-     * @param  \App\App\Models\v1\Region  $region
      * @return mixed
      */
-    public function update(User $user, Region $region)
+    public function update(User $user)
     {
         return $user->can('edit_regions');
     }
@@ -46,10 +44,9 @@ class RegionPolicy extends BasePolicy
      * Determine whether the user can delete the region.
      *
      * @param  \App\Models\v1\User  $user
-     * @param  \App\App\Models\v1\Region  $region
      * @return mixed
      */
-    public function delete(User $user, Region $region)
+    public function delete(User $user)
     {
         return $user->can('delete_regions');
     }

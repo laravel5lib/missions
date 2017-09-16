@@ -18,7 +18,7 @@ class TripPolicy extends BasePolicy
      * @param  \App\Models\v1\Trip  $trip
      * @return mixed
      */
-    public function view(User $user, Trip $trip)
+    public function view(User $user, Trip $trip = null)
     {
         switch (request()->route('tab')) {
             case 'pricing':
@@ -38,10 +38,15 @@ class TripPolicy extends BasePolicy
                 break;
 
             default:
+                if (! $trip) {
+                    return $user->can('view_trips');
+                }
+
                 return $user->can('view_trips') ?: (
                     $trip->group->managers->contains('id', $user->id) ?:
                     $trip->facilitators->contains('id', $user->id)
                 );
+
                 break;
         }
     }

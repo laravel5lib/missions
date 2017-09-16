@@ -26,30 +26,28 @@ class TransactionPolicy extends BasePolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->can('add_credit_card_transactions');
     }
 
     /**
      * Determine whether the user can update the transaction.
      *
      * @param  \App\Models\v1\User  $user
-     * @param  \App\Transaction  $transaction
      * @return mixed
      */
-    public function update(User $user, Transaction $transaction)
+    public function update(User $user)
     {
-        //
+        return $user->can('edit_transactions');
     }
 
     /**
      * Determine whether the user can delete the transaction.
      *
      * @param  \App\Models\v1\User  $user
-     * @param  \App\Transaction  $transaction
      * @return mixed
      */
-    public function delete(User $user, Transaction $transaction)
+    public function delete(User $user)
     {
-        //
+        return $user->can('delete_transactions');
     }
 }

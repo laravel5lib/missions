@@ -6,7 +6,7 @@
                 <div class="col-xs-4">
                     <h5 class="panel-header">Details</h5>
                 </div>
-                <div class="col-xs-8 text-right" v-if=" ! readOnly">
+                <div class="col-xs-8 text-right" v-if=" ! readOnly && app.user.can.update_funds">
                     <button class="btn btn-xs btn-default-hollow" @click="reconcile" v-if="!editMode">
                         <i class="fa fa-calculator"></i> Reconcile
                     </button>
@@ -72,16 +72,16 @@
             <p>{{ fund.updated_at | moment('lll') }}</p>
 
         </div>
-        <div class="panel-footer text-right">
+        <div class="panel-footer text-right" v-if="app.user.can.delete_funds">
             <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#deleteConfirmationModal">
                 <i class="fa fa-archive"></i> Archive
             </a>
         </div>
 
-        <admin-delete-modal 
-            :id="id" 
-            resource="fund" 
-            label="Archive this Fund?" 
+        <admin-delete-modal
+            :id="id"
+            resource="fund"
+            label="Archive this Fund?"
             action="Archive">
         </admin-delete-modal>
     </div>
@@ -103,6 +103,7 @@
         },
         data(){
             return{
+                app: MissionsMe,
                 fund: {},
                 editMode: false,
                 accountingClasses: [],
@@ -161,7 +162,7 @@
         },
         mounted() {
             this.fetch();
-            
+
             this.$http.get('accounting/classes').then((response) => {
                 this.accountingClasses = response.data.data;
             });

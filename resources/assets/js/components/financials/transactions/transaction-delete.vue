@@ -9,8 +9,8 @@
                 <div class="modal-body">
                     <p>Delete this transaction?</p>
                     <div class="row">
-                        <div class="col-xs-6"><a class="btn btn-sm btn-block btn-default" data-dismiss="modal">No</a></div>
-                        <div class="col-xs-6"><a @click="remove" class="btn btn-sm btn-block btn-primary">Yes</a></div>
+                        <div class="col-xs-6"><a class="btn btn-sm btn-block btn-link" data-dismiss="modal">Keep</a></div>
+                        <div class="col-xs-6"><a @click="remove" class="btn btn-sm btn-block btn-primary">Delete</a></div>
                     </div>
                 </div>
 

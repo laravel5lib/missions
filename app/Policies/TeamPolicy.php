@@ -11,12 +11,11 @@ class TeamPolicy extends BasePolicy
      * Determine whether the user can view the team.
      *
      * @param  \App\Models\v1\User  $user
-     * @param  \App\App\Models\v1\Team  $team
      * @return mixed
      */
-    public function view(User $user, Team $team)
+    public function view(User $user)
     {
-        return $user->can('view_teams');
+        return $user->can('view_squads');
     }
 
     /**
@@ -27,30 +26,28 @@ class TeamPolicy extends BasePolicy
      */
     public function create(User $user)
     {
-        return $user->can('add_teams');
+        return $user->can('add_squads');
     }
 
     /**
      * Determine whether the user can update the team.
      *
      * @param  \App\Models\v1\User  $user
-     * @param  \App\App\Models\v1\Team  $team
      * @return mixed
      */
-    public function update(User $user, Team $team)
+    public function update(User $user)
     {
-        return $user->can('edit_teams');
+        return $user->can('edit_squads');
     }
 
     /**
      * Determine whether the user can delete the team.
      *
      * @param  \App\Models\v1\User  $user
-     * @param  \App\App\Models\v1\Team  $team
      * @return mixed
      */
-    public function delete(User $user, Team $team)
+    public function delete(User $user)
     {
-        return $user->can('delete_teams');
+        return $user->can('delete_squads');
     }
 }

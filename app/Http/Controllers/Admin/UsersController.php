@@ -38,7 +38,7 @@ class UsersController extends Controller
 
     public function edit($id)
     {
-        $this->authorize('edit', $this->user);
+        $this->authorize('update', $this->user);
 
         return view('admin.users.edit', compact('id'));
     }

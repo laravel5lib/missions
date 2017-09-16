@@ -8,9 +8,9 @@
   color: $text-color;
   margin-bottom: $line-height-computed;
   background-color: $panel-bg;
-  border: 1px solid transparent;
+  border: none;
   border-radius: $panel-border-radius;
-  @include box-shadow(0 1px 1px rgba(0,0,0,.05));
+  @include box-shadow(0 2px 4px rgba(0,0,0,.18));
   overflow: visible;
 }
 
@@ -29,7 +29,7 @@
   padding: 10px 15px;
   border-bottom: 1px solid transparent;
   @include border-top-radius(($panel-border-radius - 1));
-  
+
   > .dropdown .dropdown-toggle {
     color: inherit;
   }

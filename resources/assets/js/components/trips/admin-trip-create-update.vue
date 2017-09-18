@@ -41,6 +41,7 @@
 								<option value="media">Media</option>
 								<option value="medical">Medical</option>
 								<option value="leader">Leader</option>
+                                <option value="sports">Sports</option>
 							</select>
 						</div>
 					</div><!-- end col -->

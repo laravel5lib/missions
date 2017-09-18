@@ -12,6 +12,7 @@
                         <option value="media">Media</option>
                         <option value="medical">Medical</option>
                         <option value="leader">Leader</option>
+                        <option value="sports">Sports</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -34,7 +35,7 @@
                         <h5>Trips</h5>
                     </div>
                     <div class="col-sm-4 text-right">
-                        <a class="btn btn-primary btn-sm" :href="campaignId+'/trips/create'"><i class="fa fa-plus icon-left"></i> New</a>
+                        <a class="btn btn-primary btn-sm" :href="'/admin/campaigns/'+campaignId+'/trips/create'"><i class="fa fa-plus icon-left"></i> New</a>
                     </div>
                 </div>
             </div><!-- end panel-heading -->

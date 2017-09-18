@@ -49,5 +49,7 @@ class UserWithEverything extends FactoryStory
         $user->visas()->save(factory(Visa::class)->make());
         $user->referrals()->save(factory(Referral::class)->make());
         $user->medicalReleases()->save(factory(MedicalRelease::class)->make());
+
+        return $user;
     }
 }

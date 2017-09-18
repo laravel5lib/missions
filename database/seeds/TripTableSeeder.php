@@ -34,7 +34,7 @@ class TripTableSeeder extends Seeder
         // (new ArchivedCampaignWithTripsAndReservations)->times(3)->create();
 
         (new NewReservation)->times(20)->create();
-        (new InProgressReservation)->times(70)->create();
+        (new InProgressReservation)->times(30)->create();
         // (new TravelReadyReservation)->times(10)->create();
     }
 }

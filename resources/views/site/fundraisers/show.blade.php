@@ -35,16 +35,18 @@
                         <h1 class="text-center text-success">${{ $fundraiser->raisedAsDollars() }} <span style="font-size: 18px;">Raised</span></h1>
                         @unless($fundraiser->isClosed())
                         <h4 class="text-center">${{ $fundraiser->goalAmountAsDollars() }} <span style="font-size: 14px;">Goal</span></h4>
-                        <div class="panel panel-default" style="background-color: #f7f7f7">
-                            <div class="panel-body">
+                        <div class="col-xs-12 clearfix">
+                            <div class="row" style="background: #f5f5f5">
                                 <user-profile-fundraisers-progress :now="{{ $fundraiser->getPercentRaised() }}"></user-profile-fundraisers-progress>
                             </div>
+                            <hr class="divider sm inv">
                         </div>
-                        {{-- <h6 class="text-center small text-muted"><i class="fa fa-calendar"></i> Closes {{ $fundraiser->ended_at->format('M j, Y h:i a') }}</h6> --}}
                         <h6 class="text-center small text-muted">Ends {{ $fundraiser->ended_at->diffForHumans() }}</h6>
                         <div>
-                            <modal-donate title="{{ $fundraiser->fund->name }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}" auth="{{ auth()->check() ? 1 : 0 }}"
-                              type="{{ $type or '' }}" type-id="{{ $slug or '' }}" fund-id="{{ $fundraiser->fund->id }}" recipient="{{ $fundraiser->fund->name }}"></modal-donate>
+                            <div class="text-center">
+                            <a class="btn btn-success" data-toggle="collapse" href="#collapseDonate" aria-expanded="false" aria-controls="collapseDonate">Donate Now</a>
+                            </div>
+                            <hr class="divider inv sm">
                         </div>
                         @endunless
 
@@ -57,6 +59,10 @@
                         @endunless
                     </div>
                 </div>
+
+                <modal-donate title="{{ $fundraiser->fund->name }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}" auth="{{ auth()->check() ? 1 : 0 }}"
+                              type="{{ $type or '' }}" type-id="{{ $slug or '' }}" fund-id="{{ $fundraiser->fund->id }}" recipient="{{ $fundraiser->fund->name }}"></modal-donate>
+
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                     <user-profile-fundraisers-donors id="{{ $fundraiser->id }}"></user-profile-fundraisers-donors>
                 </div><!-- end panel-group -->
@@ -65,8 +71,8 @@
                 <fundraisers-uploads id="{{ $fundraiser->id }}" sponsor-id="{{ $fundraiser->sponsor_id }}" auth-id="{{ (auth()->check() ? auth()->id() : '') }}"></fundraisers-uploads>
                 <hr class="divider inv">
                 <ul class="nav nav-tabs">
-                    <li role="presentation" class="active"><a href="#desc" data-toggle="tab">Description</a></li>
-                    <li role="presentation"><a href="#stories" data-toggle="tab">Updates</a>
+                    <li role="presentation" class="active"><a href="#desc" data-toggle="tab">The Story</a></li>
+                    <li role="presentation"><a href="#stories" data-toggle="tab">Fundraiser Updates</a>
                     </li>
                 </ul>
                 <div class="tab-content">

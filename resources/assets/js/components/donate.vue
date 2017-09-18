@@ -21,7 +21,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12" :class="{ 'has-error': errors.has('donor', 'form-1')}">
-                        <label>Donor Name</label>
+                        <label>Donor's Name</label>
                         <input type="text" class="form-control" v-model="donor" name="donor" data-vv-scope="form-1" v-validate="'required|alpha_spaces|min:1'">
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div style="margin-bottom:0;" class="form-group" :class="{ 'has-error': errors.has('cardHolderName', 'form-2') }">
-                            <label for="cardHolderName">Card Holder's Name</label>
+                            <label for="cardHolderName">Name on Card</label>
                             <div class="input-group">
                                 <span class="input-group-addon input input-sm"><span class="fa fa-user"></span></span>
                                 <input type="text" class="form-control input input-sm" id="cardHolderName" placeholder="Name on card"
@@ -69,7 +69,7 @@
                         <div style="margin-bottom:0;" class="form-group" :class="{ 'has-error': errors.has('cardNumber', 'form-2') || validationErrors.cardNumber }">
                             <label for="cardNumber">Card Number</label>
                             <div class="input-group">
-                                <span class="input-group-addon input input-sm"><span class="fa fa-lock"></span></span>
+                                <span class="input-group-addon input input-sm"><span class="fa fa-credit-card"></span></span>
                                 <input type="text" class="form-control input input-sm" id="cardNumber" placeholder="Valid Card Number"
                                        v-model="cardNumber" name="cardNumber" data-vv-scope="form-2" v-validate="'required|max:19'"
                                        @keyup="formatCard($event)" maxlength="19"/>
@@ -118,8 +118,7 @@
                     <div class="col-sm-6">
                         <div :class="{ 'has-error': errors.has('phone', 'form-2') }">
                             <label for="infoPhone">Billing Phone</label>
-                            <phone-input v-model="cardPhone" name="phone" id="infoPhone" data-vv-scope="form-2" v-validate="cardEmail !== ''?'':'required'"></phone-input>
-                            <!--<input type="tel" class="form-control input input-sm" v-model="cardPhone | phone" name="phone=" id="infoPhone">-->
+                            <phone-input v-model="cardPhone" classes="form-control input input-sm" name="phone" id="infoPhone" data-vv-scope="form-2" v-validate="cardEmail !== ''?'':'required'"></phone-input>
                         </div>
                     </div>
                     <div class="col-sm-6">

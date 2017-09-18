@@ -5,12 +5,16 @@ let $, jQuery, moment, timezone;
 $ = jQuery = window.$;
 moment = window.moment = require('moment');
 timezone = window.timezone = require('moment-timezone');
-require('eonasdan-bootstrap-datetimepicker');
+_ = window._ = require('underscore');
+window.marked = require('marked');
+window.Slim = require('../vendors/slim.commonjs.js');
 
 let localStorage = window.localStorage;
 
 import _ from 'underscore';
 import Vue from 'vue';
+import pagination from '../components/pagination.vue';
+import reservationsFilters from '../components/filters/reservations-filters.vue';
 
 Vue.use(require('vue-cookie'));
 Vue.use(require('vue-resource'));
@@ -19,113 +23,338 @@ import MockData from './mock-api'
 Vue.use(VueResourceMock, { routes: MockData, matchOptions: {
     segmentValueCharset: 'a-zA-Z0-9.,-_%',
 }});
-Vue.http.options.root = '/api';
-Vue.http.interceptors.push(function(request, next) {
-
-    // modify request
-    var token, headers;
-
-    token = 'Bearer ' + $.cookie('api_token');
-
-    headers = request.headers || (request.headers = {});
-
-    if (token !== null && token !== 'undefined') {
-        headers.set('Authorization', token);
-    }
-
-    // Only POST and PUT Requests to our API
-    if (_.contains(['POST', 'PUT'], request.method) && request.root === '/api') {
-        // console.log(this);
-        // console.log(request);
-
-        /*
-         * Date Conversion: Local to UTC
-         */
-        // search nested objects/arrays for dates to convert
-        // YYYY-MM-DD
-        let dateRegex = /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/;
-        // YYYY-MM-DD HH:MM:SS
-        let dateTimeRegex = /^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])$/;
-        searchObjAndConvertDates(request.data);
-
-        function searchObjAndConvertDates(obj) {
-            _.each(obj, function (value, key) {
-                // nested search
-                if (_.isObject(value) || _.isArray(value))
-                    searchObjAndConvertDates(value);
-
-                let testDate = _.isString(value) && value.length === 10 && dateRegex.test(value);
-                let testDateTime = _.isString(value) && value.length === 19 && dateTimeRegex.test(value);
-
-
-                if (testDate) {
-                    // console.log('then: ', value);
-                    obj[key] = moment(value).startOf('day').utc().format('YYYY-MM-DD');
-                    // console.log('now: ', value);
-                }
-
-                if (testDateTime) {
-                    // console.log('then: ', value);
-                    obj[key] = moment(value).utc().format('YYYY-MM-DD HH:mm:ss');
-                    // console.log('now: ', value);
-                }
-
-
-            });
-        }
-    }
-
-    // continue to next interceptor
-    next(function(response) {
-
-        // Hide Spinners in all components where they exist
-        if (this.$refs.spinner && !_.isUndefined(this.$refs.spinner._started)) {
-            this.$refs.spinner.hide();
-        }
-
-        if (response.status && response.status === 401) {
-            $.removeCookie('api_token');
-            console.log('not logged in');
-            // window.location.replace('/logout');
-        }
-        if (response.status && response.status === 500) {
-            console.log('Oops! Something went wrong with the server.')
-        }
-        if (response.headers && response.headers.has('Authorization')) {
-            $.cookie('api_token', response.headers.get('Authorization'));
-        }
-        if (response.data && response.data.token && response.data.token.length > 10) {
-            $.cookie('api_token', response.data.token);
-        }
-
-    });
-});
 
 // Global Components
-import VueStrap from 'vue-strap/dist/vue-strap.min';
+import VueStrap from 'vue-strap/dist/vue-strap';
 // Vue.component('tour-guide', tourGuide);
-import pagination from '../components/pagination.vue';
 Vue.component('pagination', pagination);
 Vue.component('modal', VueStrap.modal);
 Vue.component('accordion', VueStrap.accordion);
 Vue.component('alert', VueStrap.alert);
-Vue.component('aside', VueStrap.aside);
+Vue.component('mm-aside', VueStrap.aside);
+Vue.component('button-group', VueStrap.buttonGroup);
 Vue.component('panel', VueStrap.panel);
+Vue.component('radio', VueStrap.radio);
 Vue.component('checkbox', VueStrap.checkbox);
 Vue.component('progressbar', VueStrap.progressbar);
-Vue.component('dropdown', VueStrap.dropdown);
+Vue.component('dropdown', require('../components/dropdown.vue'));
+Vue.component('strap-select', VueStrap.select);
 Vue.component('spinner', VueStrap.spinner);
 Vue.component('popover', VueStrap.popover);
 Vue.component('tabs', VueStrap.tabset);
 Vue.component('tab', VueStrap.tab);
 Vue.component('tooltip', VueStrap.tooltip);
-// Vue.component('vSelect', require('vue-select'));
-// import myDatepicker from 'vue-datepicker/vue-datepicker-1.vue'
+Vue.component('vSelect', require('vue-select'));
+Vue.component('phone-input', {
+    template: '<div><label for="infoPhone" v-if="label" v-text="label"></label><input ref="input" type="text" id="infoPhone" class="form-control" :value="value" @input="updateValue($event.target.value)" @focus="selectAll" @blur="formatValue" :placeholder="placeholder"></div>',
+    props: {
+        value: { type: String, default: '' },
+        label: { type: String, default: '' },
+        placeholder: { type: String, default: '(123) 456-7890' },
+
+    },
+    methods: {
+        updateValue(value) {
+            if (value === '') {
+                this.$refs.input.value = value;
+            } else {
+                this.$refs.input.value = value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+            }
+            this.$emit('input', this.$refs.input.value);
+        },
+        formatValue() {
+            if (this.value === '') {
+                this.$refs.input.value = this.value;
+            } else {
+                this.$refs.input.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+            }
+        },
+        selectAll(event) {
+            // Workaround for Safari bug
+            // http://stackoverflow.com/questions/1269722/selecting-text-on-focus-using-jquery-not-working-in-safari-and-chrome
+            setTimeout(function () {
+                event.target.select()
+            }, 0)
+        }
+    }
+});
+// import myDatepicker from './components/date-picker.vue'
 import myDatepicker from '../components/date-picker.vue'
 Vue.component('date-picker', myDatepicker);
-
+// Vue.component('date-picker', require('vue-datetime-picker/src/vue-datetime-picker.js'));
+Vue.component('bootstrap-alert-error', {
+    props: ['field', 'validator', 'message'],
+    template: '<div><div :class="\'alert alert-danger alert-dismissible error-\' + field + \'-\' + validator" role="alert" v-bind="message"></div></div>',
+});
+// Vue Cookie
+Vue.use(require('vue-cookie'));
 // Vue Validator
-Vue.use(require('vue-validator'));
+Vue.use(require('vee-validate'));
+// Vue Textarea Autosize
+Vue.use(require('vue-autosize'));
+// Vue Truncate
+Vue.use(require('vue-truncate'));
+
+import axios from 'axios';
+axios.defaults.baseURL = '/api';
+axios.defaults.headers.common = {
+    'X-Requested-With': 'XMLHttpRequest',
+};
+/**
+ * We will register the CSRF Token as a common header with Axios so that all outgoing HTTP requests automatically have
+ * it attached. This is just a simple convenience so we don't have to attach every token manually.
+ */
+let csrfToken = document.head.querySelector('meta[name="csrf-token"]').content;
+if (csrfToken) {
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+}
+Vue.prototype.$http = axios;
+
+// Resource duplicate of vue-resource for axios
+// Inspired by https://github.com/pagekit/vue-resource/blob/develop/src/resource.js
+let URI = require('urijs');
+let URITemplate = require('urijs/src/URITemplate');
+function Resource (url, params, actions, options) {
+    let resource = {};
+    actions = Object.assign({},
+        Resource.actions,
+        actions
+    );
+
+    _.each(actions, (action, name) => {
+        action = merge({url, params: Object.assign({}, params)}, options, action);
+
+        resource[name] = function () {
+            if (options)
+                debugger;
+            let args = opts(action, arguments);
+            return (Vue.prototype.$http)(args);
+        };
+    });
+
+    return resource;
+}
+function merge(target) {
+    let ref = [], slice = ref.slice;
+    let args = slice.call(arguments, 1);
+
+    args.forEach(source => {
+        merger(target, source, true);
+    });
+
+    return target;
+}
+function merger(target, source, deep) {
+    let key;
+    for (key in source) {
+        if (deep && (_.isObject(source[key]) || _.isArray(source[key]))) {
+            if (_.isObject(source[key]) && !_.isObject(target[key])) {
+                target[key] = {};
+            }
+            if (_.isArray(source[key]) && !_.isArray(target[key])) {
+                target[key] = [];
+            }
+            merger(target[key], source[key], deep);
+        } else if (source[key] !== undefined) {
+            target[key] = source[key];
+        }
+    }
+}
+function opts(action, args) {
+    let options = Object.assign({}, action), params = {}, body;
+    // Use URI Template
+    let template = new URITemplate(options.url);
+    switch (args.length) {
+
+        case 2:
+            params = args[0];
+            body = args[1];
+            break;
+
+        case 1:
+            if (/^(POST)$/i.test(options.method)) {
+                body = args[0];
+            } else if (/^(PUT|PATCH)$/i.test(options.method)) {
+                params = args[1];
+            } else {
+                params = args[0];
+            }
+
+            break;
+
+        case 0:
+
+            break;
+
+        default:
+
+            throw 'Expected up to 2 arguments [params, body], got ' + args.length + ' arguments';
+    }
+
+    options.data = body;
+    options.params = Object.assign({}, action.params, options.params, params);
+    options.url = template.expand(options.params);
+
+    // clean variables from params if used in url template
+    let usedParams = _.isObject(template.parts[1]) ? _.pluck(template.parts[1].variables, 'name') : [];
+    _.each(usedParams, function (param) {
+        delete options.params[param]
+    });
+
+    return options;
+}
+Resource.actions = {
+    get: {method: 'GET'},
+    post: {method: 'POST'},
+    save: {method: 'POST'},
+    query: {method: 'GET'},
+    update: {method: 'PUT'},
+    put: {method: 'PUT'},
+    remove: {method: 'DELETE'},
+    delete: {method: 'DELETE'}
+
+};
+// Resource END
+Vue.prototype.$resource = Resource;
+
+Vue.filter('phone', (phone) => {
+    phone = phone || '';
+    if (phone === '') return phone;
+    return phone.replace(/[^0-9]/g, '')
+        .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+});
+
+Vue.filter('number', (number, decimals) => {
+    return isNaN(number) || number === 0 ? number : number.toFixed(decimals);
+});
+
+Vue.filter('percentage', (number, decimals) => {
+    return isNaN(number) || number === 0 ? number : number.toFixed(decimals) + '%';
+});
+
+// MVC concept of handling dates
+// Model/Server -> UTC | Vue Model/Controller -> UTC | View/Template -> Local
+// This filter should convert date assigned property from UTC to local when being displayed -> read()
+// This filter should convert date assigned property from Local to UTC when being changed via input -> writer5
+Vue.filter('moment', (val, format, diff = false, noLocal = false) => {
+    if (!val) return val;
+
+    if (noLocal) {
+        return moment(val).format(format || 'LL'); // do not convert to local
+    }
+
+    // console.log('before: ', val);
+    let date = moment.utc(val, 'YYYY-MM-DD HH:mm:ss').local().format(format || 'LL');
+
+    if (diff) {
+        date = moment.utc(val).local().fromNow();
+    }
+    // console.log('after: ', date);
+
+    return date;
+});
+
+Vue.filter('mDateToDatetime', (value, format) => {
+    return moment.utc(value).local().format(format || 'LL');
+});
+
+Vue.filter('mUTC', (value) => {
+    return moment.utc(value);
+});
+
+Vue.filter('mLocal', (value) => {
+    return moment.isMoment(value) ? value.local() : null;
+});
+
+Vue.filter('mFormat', (value, format) => {
+    return moment(value).format(format);
+});
+
+Vue.filter('underscoreToSpace', (value) => {
+    return value.replace(/_/g, ' ');
+});
+
+Vue.filter('capitalize', (string) => {
+    if (!string) return string;
+    if (!_.isString(string)) string = string.toString();
+    return string.replace(/\w\S*/g, function(txt){
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+});
+
+Vue.directive('tour-guide', {
+    inserted(el, binding, vnode) {
+
+        function topScrollHandler (element){
+            if (element) {
+                let $element = window.jQuery(element);
+                let topOfElement = $element.offset().top;
+                let heightOfElement = $element.height();
+                window.jQuery('html, body').animate({
+                    scrollTop: topOfElement - heightOfElement
+                }, {
+                    duration: 1000
+                });
+            }
+        }
+
+        function storeTourRecord () {
+            let completed = JSON.parse(localStorage.getItem('ToursCompleted')) || [];
+            completed.push(location.pathname);
+            localStorage.setItem('ToursCompleted', JSON.stringify(_.uniq(completed)));
+        }
+
+        let tour = window.tour = new Shepherd.Tour({
+            defaults: {
+                classes: 'shepherd-element shepherd-open shepherd-theme-arrows step-class',
+                scrollTo: true,
+                scrollToHandler: topScrollHandler,
+                showCancelLink: true
+            }
+        });
+
+        tour.addStep('intro', {
+            title: 'Hello!',
+            text: 'This guided tour will walk you through the features on this page. Take this tour anytime by clicking the <i class="fa fa-question-circle-o"></i> Tour link. Shall we begin?',
+            showCancelLink: false,
+            buttons: [
+                {
+                    text: 'Not Now',
+                    action: tour.cancel,
+                    classes: 'shepherd-button-secondary'
+                },
+                {
+                    text: 'Continue',
+                    action: tour.next
+                }
+            ]
+        });
+
+        // if pageSteps exists, add them to tour
+        if (window.pageSteps && window.pageSteps.length) {
+            _.each(window.pageSteps, (step) => {
+                // if buttons are present
+                if (step.buttons) {
+                    _.each(step.buttons, (button) => {
+                        // if action is present
+                        if (button.action && _.isString(button.action))
+                            button['action'] = tour[button.action];
+                    });
+                }
+                tour.addStep(step);
+            })
+        }
+
+        tour.on('cancel', storeTourRecord);
+
+        tour.on('complete',storeTourRecord)
+    },
+    update() {
+        // debugger
+    },
+    unbind() {
+    }
+});
 
 Vue.directive('error-handler', {
     // This directive handles client-side and server-side errors.
@@ -135,201 +364,98 @@ Vue.directive('error-handler', {
     // The `value` property expects the actual field value to stay reactive.
     // The `client` property expects the handle that the validator plugin uses for validation.
     // The `server` property expects the handle that the server request rules use for validation.
+    // The `scope` property expects a string if provided, this is used to scope field validation.
     // If the `handle` property is present, client and server properties will be set to this.
     // OPTIONAL PROPERTIES
     // The `class` property allows you to set the error class to be set during validation.
     // The `messages` property allows you to customize the error message the user sees based on validators
     // i.e (`req` - required, `min` - minlength, `max` - maxlength, `email` - custom email validator)
 
-    // When server-side validation errors are returned to the `this.errors` object, this hand;e references the property
+    // When server-side validation errors are returned to the `this.errors` object, this handle references the property
     // for the field
-    deep: true,
-    bind: function () {
-        this.vm.$on('attemptSubmit', function (val) {
+    // deep: true,
+    inserted(el, binding, vnode) {
+        el.dataset.messages = JSON.stringify([]);
+
+        vnode.context.$watch('errors', (val) => {
+            let storedValue = el.dataset.storage !== undefined ? JSON.parse(el.dataset.storage) : binding.value;
             // The `attemptSubmit` variable delays validation until necessary, because this doesn't directly influence
             // the directive we want to watch it using the error-handler mixin
-            this.handleClass(this.storage);
-        }.bind(this));
-
-        this.vm.$on('errors', function (val) {
-            // The `attemptSubmit` variable delays validation until necessary, because this doesn't directly influence
-            // the directive we want to watch it using the error-handler mixin
-            this.handleClass(this.storage);
-            this.handleMessages(this.storage, val);
-        }.bind(this));
-
-        this.handleClass = function (value) {
-            // $nextTick is necessary for the component values to update first
-            if (this.vm) {
-                this.vm.$nextTick(function () {
-                    // debugger;
-                    let classTest = this.vm.checkForError(value.client) || this.vm.errors[value.server];
-                    if (classTest) {
-                        $(this.el).addClass(value.class || 'has-error');
-                    } else {
-                        $(this.el).removeClass(value.class || 'has-error');
-                    }
-                }.bind(this));
+            if (storedValue) {
+                vnode.context.handleValidationClass(el, storedValue);
+                vnode.context.handleValidationMessages(el, storedValue);
             }
-        };
+        }, { deep: true });
 
-        this.messages = [];
-        this.handleMessages = function (value, errors) {
-            // $nextTick is necessary for the component values to update first
-            if (this.vm && this.vm.attemptSubmit) {
-                this.vm.$nextTick(function () {
-                    //if (errors[value.server] || this.vm['$' + this.vm.validatorHandle][this.storage.client].invalid && this.vm.attemptSubmit) {
-                    // Lets first package errors to simply iterate
-                    let newMessages = [];
-                    if (errors[value.server])
-                        _.each(errors[value.server], function(error, index) {
-                            newMessages.push("<div class='help-block server-validation-error'>" + error + "</div>");
-                        });
 
-                    let genericMessage = this.vm.MESSAGES.DEFAULT;
-                    let validationObject = this.vm['$' + this.vm.validatorHandle][this.storage.client];
-                    if (_.isObject(validationObject)) {
-                        if (validationObject.required) {
-                            // Grab message from storage if it exists or use generic default
-                            // The manually set messages must be an object
-                            let reqMessage;
-                            if (this.storage.messages && this.storage.messages.req) {
-                                reqMessage = this.storage.messages.req;
-                            } else {
-                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
-                                reqMessage = _.isObject(genericMessage) ? genericMessage.req : genericMessage;
-                            }
-
-                            newMessages.push("<div class='help-block server-validation-error'>" + reqMessage + "</div>");
-                        }
-
-                        if (validationObject.minlength) {
-                            // Grab message from storage if it exists or use generic default
-                            let minMessage;
-                            if (this.storage.messages && this.storage.messages.min) {
-                                minMessage = this.storage.messages.min;
-                            } else {
-                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
-                                minMessage = _.isObject(genericMessage) ? genericMessage.min : genericMessage;
-                            }
-                            if (minMessage !== genericMessage)
-                                newMessages.push("<div class='help-block server-validation-error'>" + minMessage + "</div>");
-                        }
-
-                        if (validationObject.maxlength) {
-                            // Grab message from storage if it exists or use generic default
-                            let maxMessage;
-                            if (this.storage.messages && this.storage.messages.max) {
-                                maxMessage = this.storage.messages.max;
-                            } else {
-                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
-                                maxMessage = _.isObject(genericMessage) ? genericMessage.max : genericMessage;
-                            }
-                            if (maxMessage !== genericMessage)
-                                newMessages.push("<div class='help-block server-validation-error'>" + maxMessage + "</div>");
-                        }
-                        // custom email validator
-                        if (validationObject.email) {
-                            // Grab message from storage if it exists or use generic default
-                            let emailMessage;
-                            if (this.storage.messages && this.storage.messages.email) {
-                                emailMessage = this.storage.messages.email;
-                            } else {
-                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
-                                emailMessage = _.isObject(genericMessage) ? genericMessage.email : genericMessage;
-                            }
-                            if (emailMessage !== genericMessage)
-                                newMessages.push("<div class='help-block server-validation-error'>" + emailMessage + "</div>");
-                        }
-                    }
-                    //console.log(newMessages);
-
-                    this.messages = newMessages;
-
-                    // We want to keep track of listed errors and specify their location when displayed
-                    // Search for an '.errors-block' element as child to display messages in
-                    // If it does not exist we will place the error message after the input element
-
-                    let errorsBlock = this.el.getElementsByClassName('errors-block')[0] || false;
-                    if (errorsBlock) {
-                        $(errorsBlock).find('.server-validation-error').remove();
-                        if (errors[value.server] || this.storage.client && this.vm.checkForError(this.storage.client))
-                            $(errorsBlock).append(this.messages);
-                    } else {
-                        let inputGroup = $(this.el).hasClass('input-group') ? this.el : this.el.getElementsByClassName('input-group')[0];
-                        let inputEl = $(this.el).find('.form-control:not(.v-select *)');
-                        if (inputGroup) {
-                            $(this.el).parent().find('.server-validation-error').remove();
-                            if (errors[value.server] || this.storage.client && this.vm.checkForError(this.storage.client))
-                                $(inputGroup).after(this.messages);
-                        } else {
-                            $(this.el).find('.server-validation-error').remove();
-                            if (errors[value.server] || this.storage.client && this.vm.checkForError(this.storage.client))
-                                inputEl.after(this.messages);
-                        }
-                    }
-                    //}
-                }.bind(this));
-            }
-        }
     },
-    update: function (value) {
+    update(el, binding, vnode, oldVnode) {
         // If server value is identical to client, use 'handle' property for simplicity
-        if(value.handle) {
-            value.client = value.server = value.handle;
+        if(binding.value.handle) {
+            binding.value.client = binding.value.handle;
+            binding.value.server = binding.value.handle;
         }
 
         // Store the value within the directive to be used outside the update function
-        this.storage = value;
+        el.dataset.storage = JSON.stringify(binding.value);
 
         // Handle error class and messages on element
-        this.handleClass(value);
-        this.handleMessages(value, this.vm.errors);
+        // vnode.context.handleValidationClass(el, vnode.context, binding.value);
+        // vnode.context.handleValidationMessages(el, vnode.context, binding.value, vnode.context.errors);
     }
-});
-
-Vue.filter('moment', {
-    read: function (val, format, diff = false, noLocal = false) {
-
-        if (noLocal) {
-            return moment(val).format(format || 'LL'); // do not convert to local
-        }
-
-        // console.log('before: ', val);
-        var date = moment.utc(val).local().format(format || 'LL');
-
-        if (diff) {
-            date = moment.utc(val).local().fromNow();
-        }
-        // console.log('after: ', date);
-
-        return date;
-    },
-    write: function (val, oldVal) {
-        let format = 'YYYY-MM-DD HH:mm:ss';
-        // let format = val.length > 10 ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
-        return moment(val).local().utc().format(format);
-    }
-});
-Vue.filter('underscoreToSpace', function (value) {
-    return value.replace(/_/g, ' ');
 });
 
 Vue.mixin({
-    data() {
-        return {
-            // use as data property instead of computed for easy switching
-            isAdminRoute: true,
+    methods: {
+        // Some universal methods to replace vue 1 filters
+        limitBy(arr, number) {
+            return _.first(arr, number);
+        },
+        orderByProp(arr, prop, direction = 1) {
+            if (!_.isArray(arr) || !arr.length) return [];
+            let list = _.sortBy(arr, prop);
+            return direction === -1 ? _.reverse(list) : list
+        },
+        currency(number, symbol = '$') {
+            if (!isNaN(number)) {
+                return symbol + (Number(number).toFixed(2));
+            }
+            return number
+        },
+        pluralize: (value, unit, suffix = 's') => `${value} ${unit}${value !== 1 ? suffix : ''}`,
+        /*showSpinner(){
+               this.$refs.spinner.show();
+               },
+               hideSpinner(){
+               this.$refs.spinner.hide();
+               },*/
+    },
+    computed: {
+        firstUrlSegment() {
+            return document.location.pathname.split("/").slice(1, 2).toString();
+        },
+        isAdminRoute() {
+            return this.firstUrlSegment == 'admin';
+        },
+        isDashboardRoute() {
+            return this.firstUrlSegment == 'dashboard';
+        },
+    },
+    mounted() {
+        function isTouchDevice() {
+            return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
         }
+
+        // Disable tooltips on all components on mobile
+        if (isTouchDevice()) {
+            $("[rel='tooltip']").tooltip('destroy');
+        }
+
     }
 });
 
 let RootInstance = {
-    http: {
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    },
+    components: {},
     data: {
         userId: '',
         someObject: {},

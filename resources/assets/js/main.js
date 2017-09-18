@@ -159,7 +159,7 @@ window.$ = window.jQuery = require('jquery');
 (function($){
     $.fn.easyScroller = function(options) {
 
-        var settings = $.extend({
+        let settings = $.extend({
             backToTop: false,
             scrollDownSpeed: 800,
             scrollUpSpeed: 600,
@@ -167,7 +167,7 @@ window.$ = window.jQuery = require('jquery');
         }, options);
 
         $(this).click(function(event) {
-            var $this = $(this),
+            let $this = $(this),
                 sectionId = $this.attr('href');
 
             $('html, body').animate({
@@ -198,7 +198,7 @@ window.marked = require('marked');
 
 import { TimelineMax, TweenMax, Linear } from 'gsap';
 import ScrollMagic from 'scrollmagic';
-import 'imports?define=>false!scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap';
+// import 'imports?define=>false!scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap';
 window.ScrollMagic = ScrollMagic;
 require('scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators');
 

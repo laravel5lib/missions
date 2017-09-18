@@ -121,6 +121,14 @@ class AppServiceProvider extends ServiceProvider
 
             return false;
         });
+
+        Blade::directive('prod', function ($beta) {
+            return "<?php if (app()->environment('production')): ?>";
+        });
+
+        Blade::directive('endprod', function ($beta) {
+            return "<?php endif; ?>";
+        });
     }
 
     /**

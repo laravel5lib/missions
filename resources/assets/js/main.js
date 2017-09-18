@@ -245,10 +245,11 @@ Vue.component('tab', VueStrap.tab);
 Vue.component('tooltip', VueStrap.tooltip);
 Vue.component('vSelect', require('vue-select'));
 Vue.component('phone-input', {
-    template: '<div><label for="infoPhone" v-if="label" v-text="label"></label><input ref="input" type="text" id="infoPhone" class="form-control" :value="value" @input="updateValue($event.target.value)" @focus="selectAll" @blur="formatValue" :placeholder="placeholder"></div>',
+    template: '<div><label for="infoPhone" v-if="label" v-text="label"></label><input ref="input" type="text" id="infoPhone" :class="classes" :value="value" @input="updateValue($event.target.value)" @focus="selectAll" @blur="formatValue" :placeholder="placeholder"></div>',
     props: {
         value: { type: String, default: '' },
         label: { type: String, default: '' },
+        classes: { type: String, default: 'form-control'},
         placeholder: { type: String, default: '(123) 456-7890' },
 
     },

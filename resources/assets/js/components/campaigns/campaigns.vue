@@ -1,13 +1,13 @@
 <template>
 <div>
 	<div class="container" v-if="campaigns.length < 1">
-		<div class="col-sm-8 col-sm-offset-2 text-center">
-			<h3>Looking for 2018 trips?</h3>
-			<hr class="divider inv sm">
-			<p>Be the first on the list to know about 2018 trips.</p>
-			<hr class="divider inv">
-			<a href="http://eepurl.com/cZnArz" target="_blank" class="btn btn-primary">Notify Me!</a>
-		</div><!-- end col -->
+			<div class="col-sm-8 col-sm-offset-2 text-center">
+				<h3>Looking for 2018 trips?</h3>
+				<hr class="divider inv sm">
+				<p>Be the first on the list to know about 2018 trips.</p>
+				<hr class="divider inv">
+				<a href="http://eepurl.com/cZnArz" target="_blank" class="btn btn-primary">Notify Me!</a>
+			</div><!-- end col -->
 	</div><!-- end container -->
 
 	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;" v-if="campaigns.length > 0">

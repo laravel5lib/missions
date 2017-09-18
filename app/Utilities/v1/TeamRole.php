@@ -24,7 +24,8 @@ class TeamRole
         'BUSP' => 'Business Professional',
         'MEDI' => 'Media Professional',
         'MDPF' => 'Medical Professional',
-        'WATR' => 'Clean Water Team Member'
+        'WATR' => 'Clean Water Team Member',
+        'ATHL' => 'Athlete'
     ];
 
     protected static $medical = [

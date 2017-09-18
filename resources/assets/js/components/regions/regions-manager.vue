@@ -84,7 +84,7 @@
 												</div>
 											</div>
 											<p class="list-group-item-text small" v-if="team.groups.data.length">
-												<span v-for="group in team.groups.data">{{group.name}}<span v-if="!$last && team.groups.data.length > 1">, </span></span>
+												<span v-for="(group, index) in team.groups.data">{{group.name}}<span v-if="(index !== team.groups.data.length - 1) && team.groups.data.length > 1">, </span></span>
 											</p>
 										</div>
 									</div>
@@ -142,7 +142,7 @@
 					                                    <span v-if="region.callsign">
 					                                        <span class="label label-default" :style="'color: #FFF !important; background-color: ' + region.callsign">{{region.callsign|capitalize}}</span>
 					                                    </span>
-														<span class="small">{{ region.country.name|capitalize }}</span>
+														<span class="small" v-if="region.country">{{ region.country.name|capitalize }}</span>
 													</p>
 												</a>
 											</div>
@@ -223,7 +223,7 @@
 								<div class="row list-group-item-heading">
 									<div class="col-xs-6">
 										<a :href="'/admin/campaigns/' + campaignId + '/squads?squad=' + team.id" target="_blank">{{ team.callsign|capitalize }}</a>
-										<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;">{{team.type.data.name|capitalize}}</span>
+										<span class="badge text-uppercase" v-if="team.type" style="padding:3px 10px;font-size:10px;line-height:1.4;">{{team.type.data.name|capitalize}}</span>
 										<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 									</div>
 									<div class="col-xs-6 text-right">
@@ -234,7 +234,7 @@
 									</div>
 								</div>
 								<p class="list-group-item-text small" v-if="team.groups.data.length">
-									<span v-for="group in team.groups.data">{{group.name}}<span v-if="!$last && team.groups.data.length > 1">, </span></span>
+									<span v-for="(group, index) in team.groups.data">{{group.name}}<span v-if="(index !== team.groups.data.length - 1) && team.groups.data.length > 1">, </span></span>
 								</p>
 							</div>
 						</div>
@@ -259,7 +259,7 @@
 					<form id="RegionCreateForm" data-vv-scope="region-create">
 						<div class="form-group" :class="{'has-error': errors.has('name', 'region-create')}">
 							<label for="createRegionName" class="control-label">Region Name</label>
-							<input @keydown.enter.prevent="createRegion" type="text" class="form-control" id="createRegionName" placeholder="" name="name" v-model="selectedRegion.name" v-validate="'required'">
+							<input @keydown.enter.prevent="createRegion" class="form-control" id="createRegionName" placeholder="" name="name" v-model="selectedRegion.name" v-validate="'required'">
 						</div>
 						<div class="form-group">
 							<label for="createRegionCountry" class="control-label">Region Country</label>
@@ -269,17 +269,15 @@
 						</div>
 						<div class="form-group">
 							<label for="createRegionCallsign" class="control-label">Region CallSign</label>
-							<input type="text" class="form-control" id="createRegionCallsign" placeholder="" v-model="selectedRegion.callsign">
+							<input class="form-control" id="createRegionCallsign" placeholder="" v-model="selectedRegion.callsign">
 						</div>
 					</form>
 
 			</div>
 		</modal>
 		<modal title="Delete Region" small ok-text="Delete" :callback="deleteRegion" :value="showRegionDeleteModal" @closed="showRegionDeleteModal=false">
-			<div slot="modal-body" class="modal-body">
-				<p v-if="selectedRegion">
-					Are you sure you want to delete region: "{{selectedRegion.name}}" ?
-				</p>
+			<div slot="modal-body" class="modal-body" v-if="selectedRegion">
+				<p v-text="`Are you sure you want to delete region: ${selectedRegion.name }?`"></p>
 			</div>
 		</modal>
 		<modal title="Create a new Room" small ok-text="Create" :callback="newRoom" :value="showRoomModal" @closed="showRoomModal=false">
@@ -573,9 +571,6 @@
                 });
             },
             updateRegion() {
-                // already validated in previous function
-                this.selectedRegion.country_code = this.selectedRegion.country.code;
-                delete this.selectedRegion.country;
 
                 if (!this.selectedRegion.callsign)
                     delete this.selectedRegion.callsign;

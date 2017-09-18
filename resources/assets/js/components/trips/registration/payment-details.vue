@@ -114,99 +114,65 @@
 						</div>
 					</div><!-- end alert -->
 					<div class="well" v-if="upfrontTotal > 0">
-
-							<form novalidate role="form">
-								<div class="row">
-									<div class="col-sm-12 col-md-6">
-										<div class="form-group" :class="{ 'has-error': errors.has('cardholdername') }">
-											<label for="cardHolderName">Card Holder's Name</label>
-											<div class="input-group">
-												<span class="input-group-addon input-sm"><span class="fa fa-user"></span></span>
-												<input type="text" class="form-control input-sm" id="cardHolderName" placeholder="Name on card"
-													   v-model="cardHolderName" name="cardHolderName" v-validate="'required'" autofocus/>
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-12 col-md-6">
-										<div class="form-group" :class="{ 'has-error': errors.has('cardnumber') || validationErrors.cardNumber }">
-											<label for="cardNumber">Card Number</label>
-											<div class="input-group">
-												<span class="input-group-addon input-sm"><span class="fa fa-lock"></span></span>
-												<input type="text" class="form-control input-sm" id="cardNumber" placeholder="Valid Card Number"
-													   v-model="cardNumber" name="cardNumber" v-validate="'required|max:19'"
-													   @keyup="formatCard($event)" maxlength="19"/>
-											</div>
-											<span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
+						<form novalidate role="form" id="StripeForm">
+							<div class="row">
+								<div class="col-sm-12 col-md-6">
+									<div class="form-group" :class="{ 'has-error': errors.has('cardholdername') }">
+										<label for="cardHolderName">Card Holder's Name</label>
+										<div class="input-group">
+											<span class="input-group-addon input-sm"><span class="fa fa-user"></span></span>
+											<input type="text" class="form-control input-sm" id="cardHolderName" placeholder="Name on card"
+												   v-model="cardHolderName" name="cardholdername" v-validate="'required'" autofocus/>
 										</div>
 									</div>
 								</div>
-								<div class="row">
-									<div class="col-xs-7 col-md-7">
-										<label for="expiryMonth">EXPIRY DATE</label>
-										<div class="row">
-											<div class="col-xs-6 col-lg-6">
-												<div class="form-group" :class="{ 'has-error': errors.has('month') || validationErrors.cardMonth }">
-													<select v-model="cardMonth" class="form-control input-sm" id="expiryMonth" name="month" v-validate="'required'">
-														<option v-for="month in monthList" :value="month">{{month}}</option>
-													</select>
-												</div>
-											</div>
-											<div class="col-xs-6 col-lg-6">
-												<div class="form-group" :class="{ 'has-error': errors.has('year') || validationErrors.cardYear }">
-													<select v-model="cardYear" class="form-control input-sm" id="expiryYear" name="year" v-validate="'required'">
-														<option v-for="year in yearList" :value="year">{{year}}</option>
-													</select>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="col-xs-5 col-md-5 pull-right">
-										<div class="form-group" :class="{ 'has-error': errors.has('code') || validationErrors.cardCVC }">
-											<label for="cvCode">
-												CV CODE</label>
-											<input type="text" class="form-control input-sm" id="cvCode" maxlength="4" v-model="cardCVC"
-												   placeholder="CV" name="code" v-validate="'required|min:3|max:4'"/>
-										</div>
+								<div class="col-sm-12 col-md-6">
+									<div class="form-group" :class="{ 'has-error': errors.has('email') }">
+										<label for="infoEmailAddress">Billing Email Address</label>
+										<input type="text" class="form-control input-sm" v-model="cardEmail" name="email" id="infoEmailAddress" v-validate="'required|email'">
 									</div>
 								</div>
-								<div class="row">
-									<div class="col-sm-7">
-										<div class="form-group" :class="{ 'has-error': errors.has('email') }">
-											<label for="infoEmailAddress">Billing Email Address</label>
-											<input type="text" class="form-control input-sm" v-model="cardEmail" name="email" id="infoEmailAddress" v-validate="'email'">
-										</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="form-group">
+										<label for="">Card</label>
+										<div id="card-element" class="field"></div>
 									</div>
-									<div class="col-sm-5">
-										<div class="form-group" :class="{ 'has-error': errors.has('zip') }">
-											<label for="infoZip">Billing ZIP/Postal Code</label>
-											<input type="text" class="form-control input-sm" v-model="cardZip" name="zip" id="infoZip" placeholder="12345" v-validate="'required'">
-										</div>
-									</div>
-									<!--<div class="col-sm-12">-->
-										<!--<div class="checkbox">-->
-											<!--<label>-->
-												<!--<input type="checkbox" v-model="cardSave">Save payment details for next time.-->
-											<!--</label>-->
-										<!--</div>-->
-									<!--</div>-->
 								</div>
+							</div>
 
-								<p class="help-block text-success">Your card will be charged for the upfront fees
-									immediately after your trip registration process is complete to secure your spot on this trip.</p>
+							<p class="help-block text-success">Your card will be charged for the upfront fees
+								immediately after your trip registration process is complete to secure your spot on this trip.</p>
 
-								<div class="alert" :class="{ 'alert-warning': !$parent.detailsConfirmed, 'alert-success': $parent.detailsConfirmed }" v-if="$parent.paymentErrors.length > 0">
-									<label for="errorConfirm">
-										<input id="errorConfirm" type="checkbox" v-model="$parent.detailsConfirmed"> I have confirmed my payment details
-									</label>
-								</div>
-							</form>
-
+							<div class="alert" :class="{ 'alert-warning': !$parent.detailsConfirmed, 'alert-success': $parent.detailsConfirmed }" v-if="$parent.paymentErrors.length > 0">
+								<label for="errorConfirm">
+									<input id="errorConfirm" type="checkbox" v-model="$parent.detailsConfirmed"> I have confirmed my payment details
+								</label>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </template>
+<style>
+	#StripeForm .field {
+		display: block;
+		height: 34px;
+		padding: 8px 6px;
+		font-size: 14px;
+		color: #555555;
+		background-color: #fff;
+		background-image: none;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+		-webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+		transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+	}
+</style>
 <script type="text/javascript">
 	export default{
 		name: 'payment-details',
@@ -267,7 +233,9 @@
 				},
 				// deferred variable used for card validation
 				// needs to be on `this` scope to access in response callback
+				stripe: window.Stripe(this.$parent.stripeKey),
 				stripeDeferred: {},
+                cardElement: null,
 			}
 		},
         computed: {
@@ -448,52 +416,36 @@
                         this.attemptedCreateToken = true;
                         this.stripeDeferred.reject(false);
                     } else {
-//					Stripe.setPublishableKey(this.stripeKey);
-//					Stripe.card.createToken(this.cardParams, this.createTokenCallback);
                         this.$parent.$refs.validationSpinner.show();
+                        let extraDetails = {
+                            name: this.cardHolderName,
+                        };
+                        this.stripe
+	                        .createToken(this.cardElement, extraDetails)
+	                        .then(this.createTokenCallback);
 
-                        this.$http.post('donations/authorize', this.cardParams)
+
+                        /*this.$http.post('donations/authorize', this.cardParams)
                             .then(this.createTokenCallback,
                                 (error) =>  {
                                     this.$root.$emit('showError', error.data.message);
                                     this.$parent.$refs.validationSpinner.hide();
-                                });
+                                });*/
                     }
-                })
+                });
 
                 return this.stripeDeferred.promise();
             },
-            createTokenCallback(resp) {
+            createTokenCallback(result) {
                 //console.log(status);
-                console.log(resp);
-                this.validationErrors = {
-                    cardNumber: '',
-                    cardCVC: '',
-                    cardYear: '',
-                    cardMonth: ''
-                };
-                this.stripeError = resp.error;
-                if (this.stripeError) {
-                    if (this.stripeError.param === 'number') {
-                        this.validationErrors.cardNumber = 'error';
-                    }
-                    if (this.stripeError.param === 'exp_year') {
-                        this.validationErrors.cardYear = 'error';
-                    }
-                    if (this.stripeError.param === 'exp_month') {
-                        this.validationErrors.cardMonth = 'error';
-                    }
-                    if (this.stripeError.param === 'cvc') {
-                        this.validationErrors.cardCVC = 'error';
-                    }
-                    this.stripeDeferred.reject(false);
-                }
-                if (resp.status === 200) {
-                    this.card = this.cardParams;
-                    // send payment data to parent
+                console.log(result);
+                let errorElement = document.querySelector('.error');
+                errorElement.classList.remove('visible');
+
+                if (result.token) {
                     this.$parent.paymentInfo = {
-                        token: resp.data,
-                        card: this.cardParams,
+                        token: result.token.id,
+	                    card: result.token.card,
                         save: this.cardSave,
                         email: this.cardEmail,
                         address_zip: this.cardZip
@@ -502,18 +454,57 @@
                     this.$parent.fundraisingGoal = this.fundraisingGoal;
                     this.$parent.promocode = this.promoValid ? this.promo : null;
                     this.stripeDeferred.resolve(true);
+                } else if (result.error) {
+                    this.$root.$emit('showError', result.error.message);
+                    this.$parent.$refs.validationSpinner.hide();
+
+                    errorElement.textContent = result.error.message;
+                    errorElement.classList.add('visible');
+
+                }
+            },
+            setOutcome(result) {
+                if (result.error) {
+                    this.$root.$emit('showError', result.error.message);
                 }
             }
         },
         mounted() {
+		    // Stripe script
+            let elements = this.stripe.elements();
+            this.cardElement = elements.create('card', {
+                style: {
+                    /*base: {
+                        iconColor: '#666EE8',
+                        color: '#31325F',
+                        lineHeight: '40px',
+                        fontWeight: 300,
+                        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                        fontSize: '15px',
+
+                        '::placeholder': {
+                            color: '#CFD7E0',
+                        },
+                    },*/
+                }
+            });
+            this.cardElement.mount('#card-element');
+
+            this.cardElement.on('change', (event) => {
+                this.setOutcome(event);
+            });
+
 //			this.$emit('payment-complete', true);
             this.$emit('step-completion', true);
+
             if (this.devMode) {
 				this.cardNumber = '';
 				this.cardCVC = '';
 				this.cardYear = '2019';
-				return this.cardMonth = '1';
+				this.cardMonth = '1';
 			}
+
+
 		},
 		activated(){
 			$('html, body').animate({scrollTop : 200},300);

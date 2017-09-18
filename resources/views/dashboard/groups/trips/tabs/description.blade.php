@@ -3,7 +3,7 @@
         <h5>Description</h5>
     </div>
     <div class="panel-body">
-        {% $trip->description %}
+        {!! Markdown::convertToHtml($trip->description) !!}
     </div>
 </div>
 

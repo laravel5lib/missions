@@ -85,7 +85,7 @@
 										       v-model="currentAccommodation.name">
 									</div>
 									<div class="form-group col-sm-12"
-									     v-error-handler="{ value: currentAccommodation.short_desc, handle: 'shortdesc', scope: 'accommodation-manage' }">
+									     v-error-handler="{ value: currentAccommodation.short_desc, client: 'shortdesc', server: 'short_desc', scope: 'accommodation-manage' }">
 										<label for="AccoDescription" class="control-label">Description</label>
 										<textarea class="form-control"
 										          id="AccoDescription"
@@ -579,8 +579,10 @@
                     this.showAccommodationManageModal = false;
                     this.editMode = false;
                 }, (response) =>  {
+                    this.SERVER_ERRORS = response.response.data.errors;
+                    this.$root.$emit('showError', 'Please check the form.');
                     return response;
-                });
+                }).catch();
 	        },
 	        deleteAccommodation() {
                 return this.AccommodationsResource.delete({ region: this.currentRegion.id, accommodation: this.currentAccommodation.id }).then(() => {
@@ -593,7 +595,7 @@
 	        },
 	        handleAccommodationRoomTypes(accommodation){
                 let promises = [];
-                _.each(accommodation.room_types_settings, function (val, property) {
+                _.each(accommodation.room_types_settings,(val, property) => {
                     let promise;
                     if (property.indexOf('_method') === -1 && !_.contains(['total'], property)) {
                         if (accommodation.room_types_settings[property + '_method'] === 'PUT') {

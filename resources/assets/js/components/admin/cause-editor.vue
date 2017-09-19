@@ -81,7 +81,7 @@
         data() {
             return{
                 cause: {},
-                editMode: true,
+                editMode: false,
                 showSuccess: false,
                 showError: false,
                 message: ''
@@ -134,12 +134,8 @@
                 }
             }
         },
-        ready () {
-            if (this.edit) {
-                this.fetch();
-                this.editMode = false;
-            }
-
+        mounted() {
+            this.fetch();
             this.getCountries();
         }
     }

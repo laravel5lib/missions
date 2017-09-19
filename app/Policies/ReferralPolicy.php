@@ -15,11 +15,15 @@ class ReferralPolicy extends BasePolicy
      * @param  \App\Models\v1\Referral  $referral
      * @return mixed
      */
-    public function view(User $user, Referral $referral)
+    public function view(User $user, Referral $referral = null)
     {
         // has permission?
         if ($user->can('view_referrals')) {
             return true;
+        }
+
+        if (! $referral) {
+            return false;
         }
 
         // is manager, facilitator, or owner?
@@ -36,7 +40,7 @@ class ReferralPolicy extends BasePolicy
     {
         // admin routes require permission
         if (request()->is('admin/*')) {
-            return $user->can('create_referrals');
+            return $user->can('add_referrals');
         }
 
         return true;

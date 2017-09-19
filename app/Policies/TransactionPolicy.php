@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\v1\Fund;
 use App\Models\v1\User;
 use App\Models\v1\Transaction;
 
@@ -15,6 +16,10 @@ class TransactionPolicy extends BasePolicy
      */
     public function view(User $user)
     {
+        if ($user->can('view', request()->route('fund'))) {
+            return true;
+        }
+
         return $user->can('view_transactions');
     }
 

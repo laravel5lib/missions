@@ -163,10 +163,12 @@
                         Filters
                         <span class="caret"></span>
                     </button>
-                    <export-utility url="transactions/export"
-                                    :options="exportOptions"
-                                    :filters="exportFilters">
-                    </export-utility>
+                    <template v-if="app.user.can.create_reports">
+                        <export-utility url="transactions/export"
+                                        :options="exportOptions"
+                                        :filters="exportFilters">
+                        </export-utility>
+                    </template>
                 </form>
             </div>
         </div>
@@ -346,6 +348,7 @@
         },
         data(){
             return {
+                app: MissionsMe,
                 transactions: [],
                 orderByField: 'created_at',
                 direction: 0,

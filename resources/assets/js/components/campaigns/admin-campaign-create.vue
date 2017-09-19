@@ -211,7 +211,7 @@
 				countryCodeObj: null,
 				name: null,
 				country: null,
-				country_code: null,
+				description: null,
 				short_desc: null,
 				started_at: null,
 				ended_at: null,

@@ -2,8 +2,9 @@
 
 namespace App\Policies;
 
-use App\Models\v1\User;
 use App\Models\v1\Fund;
+use App\Models\v1\User;
+use App\Models\v1\Project;
 
 class FundPolicy extends BasePolicy
 {
@@ -21,6 +22,11 @@ class FundPolicy extends BasePolicy
 
         // is trip rep
         if ($fund->fundable_type == 'reservations' && $fund->fundable->trip->rep->id == $user->id) {
+            return true;
+        }
+
+        // is project manager
+        if ($fund->fundable_type == 'projects' && $user->can('view', Project::class)) {
             return true;
         }
 

@@ -14,8 +14,10 @@
                         <a onclick="window.history.back()" class="btn btn-primary-darker">
                             <span class="fa fa-chevron-left icon-left"></span>
                         </a>
+                        @can('update', $release)
                         <a href="{{ url('admin/records/medical-releases/' . $release->id . '/edit') }}" class="btn btn-primary">Edit
                         </a>
+                        @endcan
                     </div>
                 </div>
                 <div class="col-sm-4 text-center visible-xs">
@@ -23,8 +25,10 @@
                         <a onclick="window.history.back()" class="btn btn-primary-darker">
                             <span class="fa fa-chevron-left icon-left"></span>
                         </a>
+                        @can('update', $release)
                         <a href="{{ url('admin/records/medical-releases/' . $release->id . '/edit') }}" class="btn btn-primary">Edit
                         </a>
+                        @endcan
                     </div>
                     <hr class="divider inv sm">
                 </div>
@@ -34,6 +38,7 @@
     <hr class="divider inv">
     @include('_medical_release', $release)
 
+    @can('view', \App\Models\v1\Note::class)
     <div class="container">
         <div class="row">
             <div class="col-md-offset-2 col-md-8">
@@ -41,4 +46,5 @@
             </div>
         </div>
     </div>
+    @endcan
 @endsection

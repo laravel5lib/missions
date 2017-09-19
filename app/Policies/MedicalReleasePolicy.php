@@ -15,11 +15,15 @@ class MedicalReleasePolicy extends BasePolicy
      * @param  \App\Models\v1\MedicalRelease  $medicalRelease
      * @return mixed
      */
-    public function view(User $user, MedicalRelease $medicalRelease)
+    public function view(User $user, MedicalRelease $medicalRelease = null)
     {
         // has permission?
         if ($user->can('view_medical_releases')) {
             return true;
+        }
+
+        if (! $medicalRelease) {
+            return false;
         }
 
         // is manager, facilitator, or owner?
@@ -36,7 +40,7 @@ class MedicalReleasePolicy extends BasePolicy
     {
         // admin routes require permission
         if (request()->is('admin/*')) {
-            return $user->can('create_medical_releases');
+            return $user->can('add_medical_releases');
         }
 
         return true;

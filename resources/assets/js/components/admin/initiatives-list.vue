@@ -55,10 +55,12 @@
                         </ul>
                     </div>
                     <button class="btn btn-default btn-sm" type="button" @click="resetFilter">Reset Filters <i class="fa fa-times"></i></button>
-                    <export-utility url="initiatives/export"
-                                    :options="exportOptions"
-                                    :filters="exportFilters">
-                    </export-utility>
+                    <template v-if="app.user.can.create_reports">
+                        <export-utility url="initiatives/export"
+                                        :options="exportOptions"
+                                        :filters="exportFilters">
+                        </export-utility>
+                    </template>
                     <a class="btn btn-primary btn-sm" :href="'/admin/causes/' +  causeId  + '/initiatives/create'">New <i class="fa fa-plus"></i></a>
                 </form>
             </div>
@@ -146,6 +148,7 @@
         },
         data(){
             return{
+                app: MissionsMe,
                 initiatives: [],
                 orderByField: 'started_at',
                 direction: 1,

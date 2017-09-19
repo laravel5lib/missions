@@ -138,7 +138,7 @@ return [
                 'label' => 'Records',
                 'url' => 'admin/records',
                 'action' => 'view',
-                'policy' => ''
+                'policy' => 'App\Models\v1\Reservation'
             ],
             [
                 'icon' => 'line-chart',
@@ -173,35 +173,51 @@ return [
         'records' => [
             [
                 'label' => 'Passports',
-                'url' => 'passports'
+                'url' => 'passports',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Passport'
             ],
             [
                 'label' => 'Visas',
-                'url' => 'visas'
+                'url' => 'visas',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Visa'
             ],
             [
                 'label' => 'Medical Releases',
-                'url' => 'medical-releases'
+                'url' => 'medical-releases',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\MedicalRelease'
             ],
             [
                 'label' => 'Media Credentials',
-                'url' => 'media-credentials'
+                'url' => 'media-credentials',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Credential'
             ],
             [
                 'label' => 'Medical Credentials',
-                'url' => 'medical-credentials'
+                'url' => 'medical-credentials',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Credential'
             ],
             [
                 'label' => 'Referrals',
-                'url' => 'referrals'
+                'url' => 'referrals',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Referral'
             ],
             [
                 'label' => 'Testimonies',
-                'url' => 'essays'
+                'url' => 'essays',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Essay'
             ],
             [
                 'label' => 'Influencer Applications',
-                'url' => 'influencers'
+                'url' => 'influencers',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Essay'
             ]
         ],
         'reservation' => [

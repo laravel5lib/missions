@@ -32,7 +32,7 @@ class ProjectPolicy extends BasePolicy
      */
     public function create(User $user)
     {
-        return $user->can('create_projects');
+        return $user->can('add_projects');
     }
 
     /**

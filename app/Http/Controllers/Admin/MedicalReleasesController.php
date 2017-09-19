@@ -14,11 +14,11 @@ class MedicalReleasesController extends Controller
         return view('admin.records.medical-releases.create');
     }
 
-    public function show(MedicalRelease $release)
+    public function show(MedicalRelease $medicalRelease)
     {
-        $this->authorize('view', $release);
+        $this->authorize('view', $medicalRelease);
 
-        return view('admin.records.medical-releases.show', compact('release'));
+        return view('admin.records.medical-releases.show')->with(['release' => $medicalRelease]);
     }
 
     public function edit(MedicalRelease $release)

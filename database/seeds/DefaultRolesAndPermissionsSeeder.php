@@ -338,6 +338,8 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
         $projectsManager = Role::create(['name' => 'projects_manager']);
         $projectsManager->givePermissionTo([
             'access_backend',
+            'add_credit_card_transactions',
+            'add_check_transactions',
             'view_causes',
             'view_projects',
             'edit_projects',
@@ -349,7 +351,14 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
             'view_initatives',
             'add_initatives',
             'edit_initatives',
-            'delete_initatives'
+            'delete_initatives',
+            'view_users',
+            'edit_users',
+            'add_users',
+            'view_reports',
+            'add_reports',
+            'view_notes',
+            'add_notes'
         ]);
     }
 }

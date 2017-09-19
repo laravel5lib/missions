@@ -8,6 +8,7 @@
                     <h3 class="hidden-xs">User Passports</h3>
                     <h3 class="text-center visible-xs">User Passports</h3>
                 </div>
+                @can('create', \App\Models\v1\Passport::class)
                 <div class="col-sm-4 text-right hidden-xs">
                     <hr class="divider inv sm">
                     <a href="{{ url('admin/records/passports/create') }}" class="btn btn-primary"><i class="fa fa-plus icon-left"></i> Add Passport</a>
@@ -16,12 +17,17 @@
                     <a href="{{ url('admin/records/passports/create') }}" class="btn btn-primary"><i class="fa fa-plus icon-left"></i> Add Passport</a>
                     <hr class="divider inv sm">
                 </div>
+                @endcan
             </div>
         </div>
     </div>
 @stop
 
 @section('tab')
-    <passports-list></passports-list>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <passports-list></passports-list>
+        </div>
+    </div>
     <hr class="divider inv lg">
 @stop

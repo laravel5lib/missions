@@ -165,6 +165,8 @@
 //                if (this.includeManaging)
 //                    params.manager = this.userId;
 //                params.include = '';
+//              if (this.includeManaging)
+                    params.manager = this.userId;
                 $.extend(params, this.filters);
                 this.$http.get('credentials/media', {params: params}).then((response) => {
                     this.media_credentials = response.data.data;

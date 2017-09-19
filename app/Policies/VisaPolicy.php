@@ -15,11 +15,15 @@ class VisaPolicy extends BasePolicy
      * @param  \App\Models\v1\Visa  $visa
      * @return mixed
      */
-    public function view(User $user, Visa $visa)
+    public function view(User $user, Visa $visa = null)
     {
         // has permission?
         if ($user->can('view_visas')) {
             return true;
+        }
+
+        if (! $visa) {
+            return false;
         }
 
         // is manager, facilitator, or owner?
@@ -36,7 +40,7 @@ class VisaPolicy extends BasePolicy
     {
         // admin routes require permission
         if (request()->is('admin/*')) {
-            return $user->can('create_visas');
+            return $user->can('add_visas');
         }
 
         return true;

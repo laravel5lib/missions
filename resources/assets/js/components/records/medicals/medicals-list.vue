@@ -3,7 +3,7 @@
 		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="col-xs-12 text-right">
 			<form class="form-inline">
-				<div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
+				<div style="margin-right:5px;" class="checkbox" v-if="isFacilitator && ! firstUrlSegment == 'admin'">
 					<label>
 						<input type="checkbox" v-model="includeManaging"> Include my group's medical releases
 					</label>
@@ -12,7 +12,7 @@
 					<input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search">
 					<span class="input-group-addon"><i class="fa fa-search"></i></span>
 				</div>
-                <template v-if="canExport">
+                <template v-if="app.user.can.create_reports">
     				<export-utility url="medical/releases/export"
     				                :options="exportOptions"
     				                :filters="exportFilters">
@@ -34,8 +34,6 @@
 						</h5>
 					</a>
 					<div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:25px;top:12px;">
-						<!--<a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/medical-releases/' + medical_release.id + '/edit'"><i
-								class="fa fa-pencil"></i></a>-->
 						<a @click="selectedMedicalRelease = medical_release,deleteModal = true"><i
 								class="fa fa-times"></i></a>
 					</div>
@@ -104,6 +102,7 @@
         },
         data(){
             return {
+                app: MissionsMe,
                 medical_releases: [],
                 selectedMedicalRelease: null,
                 trips: [],

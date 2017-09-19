@@ -34,7 +34,7 @@ $factory->defineAs(App\Models\v1\Campaign::class, '1n1d2017', function (Faker\Ge
         'short_desc'       => '1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn’t just about numbers; it\'s about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.',
         'page_src'         => '_1n1d2017',
         'started_at'       => '2017-09-22 00:00:00',
-        'ended_at'         => '2017-09-30 22:59:59',
+        'ended_at'         => '2018-09-30 22:59:59',
         'published_at'     => '2016-01-01 00:00:00'
     ]);
 });

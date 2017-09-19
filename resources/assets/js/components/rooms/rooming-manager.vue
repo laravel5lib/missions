@@ -1181,7 +1181,6 @@
 	    activated(){
             this.currentPlan = this.$parent.currentPlan;
 	    },
-	    events: {},
         mounted(){
 	        // Get Plan from Parent
             this.currentPlan = this.$parent.currentPlan;

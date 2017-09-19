@@ -155,12 +155,6 @@
 
             }
         },
-        events:{
-            'vueCrop-api':function (api) {
-                // make api available on scope
-                window.vueCropApi = this.vueCropApi = api;
-            }
-        },
         methods: {
             isSmall(){
                 return (parseInt(this.coords.w / this.imageAspectRatio) < this.scaledWidth && parseInt(this.coords.h / this.imageAspectRatio) < this.scaledHeight);
@@ -251,6 +245,11 @@
             }
         },
         mounted(){
+            this.$root.$on('vueCrop-api', (api) => {
+                // make api available on scope
+                window.vueCropApi = this.vueCropApi = api;
+            })
+
             this.resource.get({id:this.uploadId}).then((response) => {
                 var upload = response.data.data;
                 this.name = upload.name;

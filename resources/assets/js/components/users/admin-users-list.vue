@@ -560,11 +560,11 @@
                 event.stopPropagation(); //Always stop propagation
             });
         },
-        events: {
+        /*events: {
             'importComplete': function (msg) {
                 console.log(msg);
                 this.searchUsers();
             }
-        },
+        },*/
     }
 </script>

@@ -43,7 +43,7 @@
 		</div>
 		<tabs v-if="transport">
 			<tab header="Passengers">
-				<transports-details-passengers ref="passengers" :transport="transport" :campaign-id="campaignId"></transports-details-passengers>
+				<transports-details-passengers ref="passengers" :transport="transport" :campaign-id="campaignId" @updatePassengersCount="(val) => passengersCount = val"></transports-details-passengers>
 			</tab>
 			<tab header="Details">
                 <div class="row">
@@ -180,11 +180,6 @@
         },
         mounted(){
 			this.getTransport();
-        },
-        events: {
-            'updatePassengersCount' (passengers) {
-                this.passengersCount = passengers;
-            }
         }
     }
 </script>

@@ -97,7 +97,6 @@
                 return this.id ? {view: 'details', id: this.id} : {view: 'list'};
             }
         },
-        events: {},
         methods: {
             fetch() {
                 this.$http.get('promotionals/' + this.id).then((response) => {

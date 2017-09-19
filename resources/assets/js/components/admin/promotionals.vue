@@ -45,11 +45,6 @@
                 id: null,
             }
         },
-        events: {
-            'load-view'(msg) {
-                this.toView(msg);
-            }
-        },
         methods: {
             toView(data){
                 if(data.view === 'details')

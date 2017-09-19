@@ -114,7 +114,6 @@
                 showDeleteModal: false
             }
         },
-        events: {},
         computed: {
             expires() {
                 if (this.promo.expires_at) return moment(this.promo.expires_at).format('lll');

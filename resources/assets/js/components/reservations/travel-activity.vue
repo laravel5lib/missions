@@ -91,11 +91,6 @@
                 this.handleLabels();
             },
 	    },
-	    events: {
-            'validate-itinerary'() {
-
-            }
-	    },
         methods: {
             update(){
 				this.$http.put('activities/' + this.activity.id, this.thisActivity).then((response) => {

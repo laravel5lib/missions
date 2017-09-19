@@ -1,28 +1,26 @@
 <template>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h5 class="panel-header">Assign Roles</h5>
-        </div>
-        <div class="panel-body">
-            <div class="panel-group" id="rolesAccordion" role="tablist" aria-multiselectable="true">
-                <div class="panel" v-for="(role, index) in availableRoles">
-                    <div class="panel-heading" role="tab" :id="'heading' + index">
-                        <h4 class="panel-title">
-                            <input type="checkbox" v-model="role.value" @change="handleRoleChange(role)">
-                            &nbsp;
-                            <a class="" role="button" data-toggle="collapse" data-parent="#rolesAccordion" :href="'#roleItem' + index" aria-expanded="true" aria-controls="collapseOne">
-                                {{ role.name|underscoreToSpace|capitalize }}
-                            </a>
-                        </h4>
-                    </div>
-                    <div :id="'roleItem' + index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                        <div class="panel-body">
-                            <h5>This Role has Permission to:</h5>
-                            <ul class="list-unstyled small" v-if="role.permissions.data.length > 0">
-                                <li v-for="permission in role.permissions.data">{{ permission.name|underscoreToSpace|capitalize }}</li>
-                            </ul>
-	                        <p class="small text-muted" v-else>No Permissions Given</p>
-                        </div>
+    <div>
+        <h5>Assign User Roles</h5>
+        <hr class="divider">
+
+        <div class="panel-group" id="rolesAccordion" role="tablist" aria-multiselectable="true">
+            <div class="panel" v-for="(role, index) in availableRoles">
+                <div class="panel-heading" role="tab" :id="'heading' + index">
+                    <h4 class="panel-title">
+                        <input type="checkbox" v-model="role.value" @change="handleRoleChange(role)">
+                        &nbsp;
+                        <a class="" role="button" data-toggle="collapse" data-parent="#rolesAccordion" :href="'#roleItem' + index" aria-expanded="true" aria-controls="collapseOne">
+                            {{ role.name|underscoreToSpace|capitalize }}
+                        </a>
+                    </h4>
+                </div>
+                <div :id="'roleItem' + index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        <h5>This Role has Permission to:</h5>
+                        <ul class="list-unstyled small" v-if="role.permissions.data.length > 0">
+                            <li v-for="permission in role.permissions.data">{{ permission.name|underscoreToSpace|capitalize }}</li>
+                        </ul>
+                        <p class="small text-muted" v-else>No Permissions Given</p>
                     </div>
                 </div>
             </div>

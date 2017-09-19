@@ -25,6 +25,8 @@ class MediaTrip extends BaseTrip
         $this->add_optional_costs($trip, $late);
 
         $this->add_trip_requirements($trip);
+
+        return $trip;
     }
 
     protected function add_trip_requirements($trip)

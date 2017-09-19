@@ -23,6 +23,6 @@ class RandomTrip extends FactoryStory
             'leader'        => 'LeaderTrip'
         ];
 
-        (new $type[array_rand($type)])->create($params);
+        return (new $type[array_rand($type)])->create($params);
     }
 }

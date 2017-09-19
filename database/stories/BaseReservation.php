@@ -35,7 +35,8 @@ class BaseReservation extends FactoryStory
             return $value->type == 'optional';
         })->random(1);
 
-        $costs = $incrementalCosts->merge($staticCosts)->push($optionalCosts);
+        $costs = $incrementalCosts->merge($staticCosts);
+        $costs = $costs->merge($optionalCosts);
 
         $res->syncCosts($costs);
     }

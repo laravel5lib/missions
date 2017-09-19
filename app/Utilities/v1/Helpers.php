@@ -244,7 +244,7 @@ function generate_fundraiser_slug($string)
 {
     $slug = str_slug($string);
 
-    $count = Fundraiser::where('url', $slug)->count();
+    $count = Fundraiser::where('url', 'LIKE', "$slug%")->count();
 
     return $count ? "{$slug}-{$count}" : $slug;
 }

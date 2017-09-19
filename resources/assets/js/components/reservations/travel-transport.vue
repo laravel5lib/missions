@@ -185,11 +185,11 @@
                 return this && this.transport.hasOwnProperty('id') && _.isString(this.transport.id);
 		    }
 	    },
-        events: {
+        /*events: {
             'validate-itinerary'() {
                 this.$validator.validateAll();
             }
-        },
+        },*/
         methods: {
             getAirline(reference){
                 return this.$http.get('utilities/airlines/' + reference).then((response) => {

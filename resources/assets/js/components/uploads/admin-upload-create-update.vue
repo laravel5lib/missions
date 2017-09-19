@@ -329,27 +329,6 @@
 				this.searchUploads();
 			}
 		},
-		events:{
-            'uploads-complete'(data){
-				switch(data.type){
-					case 'avatar':
-						this.selectedAvatar = data;
-						this.avatar_upload_id = data.id;
-						if (_.isFunction(jQuery.fn.collapse))
-							jQuery('#avatarCollapse').collapse('hide');
-						break;
-					case 'banner':
-						this.selectedBanner = data;
-						this.banner_upload_id = data.id;
-                        if (_.isFunction(jQuery.fn.collapse))
-                            jQuery('#bannerCollapse').collapse('hide');
-						break;
-					default:
-					    break;
-				}
-				this.reset();
-			}
-		},
         methods: {
             containedIn(arr, item) {
                 return _.contains(arr, item);
@@ -509,6 +488,7 @@
 				if(this.isChild) {
 					// send data to parent componant
 					this.$emit('uploads-complete', response.data.data);
+					this.uploadsComplete(response.data.data);
 
 				} else {
 					window.location.href = '/admin/uploads';
@@ -568,11 +548,14 @@
 			selectExisting(upload){
 				// Assumes this is a child component
 				this.$emit('uploads-complete', upload);
-			},
+                this.uploadsComplete(upload);
+
+            },
 			selectExistingPreview(){
 				// Assumes this is a child component
 				this.$emit('uploads-complete', this.previewUpload);
-			},
+                this.uploadsComplete(this.previewUpload);
+            },
 			preview(upload){
 			    this.previewModal = true;
 			    this.previewUpload = upload;
@@ -593,6 +576,25 @@
                     }, 1000);
                 }
 	        },
+            uploadsComplete(data){
+                switch(data.type){
+                    case 'avatar':
+                        this.selectedAvatar = data;
+                        this.avatar_upload_id = data.id;
+                        if (_.isFunction(jQuery.fn.collapse))
+                            jQuery('#avatarCollapse').collapse('hide');
+                        break;
+                    case 'banner':
+                        this.selectedBanner = data;
+                        this.banner_upload_id = data.id;
+                        if (_.isFunction(jQuery.fn.collapse))
+                            jQuery('#bannerCollapse').collapse('hide');
+                        break;
+                    default:
+                        break;
+                }
+                this.reset();
+            },
         },
 		mounted(){
             this.currentName = this.name;

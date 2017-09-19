@@ -155,13 +155,12 @@
                 });
             }
         },
-        events: {
-            'reconcileFund': function() {
-                this.reconcile();
-            }
-        },
         mounted() {
             this.fetch();
+
+            this.$root.$on('reconcileFund', () => {
+                this.reconcile();
+            });
 
             this.$http.get('accounting/classes').then((response) => {
                 this.accountingClasses = response.data.data;

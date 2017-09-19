@@ -149,11 +149,6 @@
                 return this && this.hub.hasOwnProperty('id') && _.isString(this.hub.id);
             }*/
         },
-        events: {
-            'validate-itinerary'() {
-
-            }
-        },
         watch: {
             selectedAirportObj(val, oldVal) {
                 if (val && val !== oldVal) {

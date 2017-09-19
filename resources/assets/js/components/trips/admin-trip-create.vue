@@ -76,11 +76,12 @@
 				window.location.href = window.location.href.split('/create')[0];
 			},
 			childValidationTrigger(){
-				var self = this;
+				let self = this;
 				// find child
-				var thisChild = _.find(this.$children, function (child) {
+				let thisChild = _.find(this.$children, function (child) {
 					return child.hasOwnProperty(self.currentStep.form);
 				});
+
 
 				// if form is invalid mark as invalid step, but continue anyway
 				this.currentStep.valid = !thisChild[this.currentStep.form].invalid;
@@ -111,13 +112,13 @@
 				}, this);
 			},
 			finish(){
-				// if details form is incomplete
+                let resource = this.$resource('trips');
+                // if details form is incomplete
 				if (!this.stepList[0].valid) {
 					// show error and discontinue
 					return false;
 				}
 
-				var resource = this.$resource('trips');
 				resource.post({}, this.wizardData).then((resp) => {
 					window.location.href = '/admin' + resp.data.data.links[0].uri;
 				}, (error) =>  {

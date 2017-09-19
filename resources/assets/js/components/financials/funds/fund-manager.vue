@@ -5,7 +5,7 @@
         </div>
         <div class="col-md-8" v-if="app.user.can.view_transactions">
             <div class="collapse" id="createTransaction">
-                <transaction-form :fund-id="id"></transaction-form>
+                <transaction-form :fund-id="id" @transactionCreated="transactionCreated"></transaction-form>
             </div>
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -45,8 +45,8 @@
             transactionForm,
             adminTransactionsList
         },
-        events: {
-            'transactionCreated': function() {
+        methods: {
+            transactionCreated() {
                 this.$emit('reconcileFund');
                 this.$emit('refreshTransactions');
             }

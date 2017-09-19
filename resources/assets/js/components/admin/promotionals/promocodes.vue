@@ -107,11 +107,6 @@
 //                this.fetch();
             }
         },
-        events: {
-            'promotionalStatusChanged': function (msg) {
-                this.fetch();
-            }
-        },
         methods: {
             debouncedSearch: _.debounce(function() { this.fetch() }, 250),
             fetch() {
@@ -154,6 +149,10 @@
         },
         mounted() {
             this.fetch();
+
+            this.$root.$on('promotionalStatusChanged', () => {
+                this.fetch();
+            });
         }
     }
 </script>

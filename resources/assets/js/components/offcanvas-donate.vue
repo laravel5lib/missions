@@ -363,15 +363,14 @@
 
             }
         },
-        events: {
-            'VueStripe::create-card-token': () =>  {
-                return this.createToken();
-            },
-            'VueStripe::reset-form': () =>  {
-                return this.resetCaching();
-            }
-        },
         mounted() {
+            this.$root.$on('VueStripe::create-card-token', () =>  {
+                return this.createToken();
+            });
+            this.$root.$on('VueStripe::reset-form', () =>  {
+                return this.resetCaching();
+            });
+
             this.$emit('payment-complete', true);
             if (this.devMode) {
                 this.cardNumber = '4242424242424242';

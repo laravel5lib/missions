@@ -142,29 +142,44 @@
             }
         },
         computed: {
-            todo() {
-                if (this.filterData.todoStatus && this.filterData.todoName) {
-                    return this.filterData.todoName + '|' + this.filterData.todoStatus;
-                } else {
-                    return this.filterData.todoName;
-                }
+            todo: {
+                get() {
+                    if (this.filterData) {
+                        if (this.filterData.todoStatus && this.filterData.todoName) {
+                            return this.filterData.todoName + '|' + this.filterData.todoStatus;
+                        } else {
+                            return this.filterData.todoName;
+                        }
+                    }
+                },
+	            set() {}
             },
-            requirement() {
-                if (this.filterData.requirementName && this.filterData.requirementStatus)
-                    return this.filterData.requirementName + '|' + this.filterData.requirementStatus;
+            requirement: {
+                get() {
+                    if (this.filterData) {
+                        if (this.filterData.requirementName && this.filterData.requirementStatus)
+                            return this.filterData.requirementName + '|' + this.filterData.requirementStatus;
 
-                return this.filterData.requirementName;
+                        return this.filterData.requirementName;
+                    }
+                },
+                set() {}
             },
-            due() {
-                if (this.filterData.dueName && this.filterData.dueStatus)
-                    return this.filterData.dueName + '|' + this.filterData.dueStatus;
+            due: {
+                get() {
+                    if (this.filterData) {
+                        if (this.filterData.dueName && this.filterData.dueStatus)
+                            return this.filterData.dueName + '|' + this.filterData.dueStatus;
 
-                return this.filterData.dueName;
+                        return this.filterData.dueName;
+                    }
+                },
+                set() {}
             }
         },
 	    watch:{
             requirement(){
-                if (this.filterData.requirementName) {
+                if (this.filterData && this.filterData.requirementName) {
                     if (this.filterData.requirementName && this.filterData.requirementStatus)
                         return this.filterData.requirementName + '|' + this.filterData.requirementStatus;
 
@@ -174,7 +189,7 @@
                 return ''
             },
             due(){
-                if (this.filterData.dueName) {
+                if (this.filterData && this.filterData.dueName) {
                     if (this.filterData.dueStatus)
                         return this.filterData.dueName + '|' + this.filterData.dueStatus;
 
@@ -202,7 +217,7 @@
                 // Instead of concerning the filters component about where it is
                 // It is may be best to behave based on the filter object passed in
                 // We can ho this be checking whether a property exists in it
-                return this.filterData.hasOwnProperty(property);
+                return this.filterData && this.filterData.hasOwnProperty(property);
             },
 	        syncFilters() {
                 // this.$root.$emit('reservations-filters:update:filter', this.filters);

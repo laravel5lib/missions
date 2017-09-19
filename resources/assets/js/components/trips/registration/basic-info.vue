@@ -498,7 +498,6 @@
 
 			this.getRoles(this.$parent.trip.team_roles);
 
-//			this.$emit('basic-info', true);
             this.$emit('step-completion', true);
 			if (this.isAdminRoute)
 				$('html, body').animate({scrollTop: 200}, 300);

@@ -1,6 +1,6 @@
 <template>
 	<div class="panel panel-default">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 
 		<div class="panel-heading">
 			<h3>Edit Campaign</h3>
@@ -44,7 +44,7 @@
                     		</v-select>
 						</div>
 					</div>
-					<div class="form-group" v-error-handler="{ value: description, handle: 'description' }">
+					<div class="form-group" v-error-handler="{ value: short_desc, handle: 'description' }">
 						<div class="col-xs-12">
 							<label for="description">Description</label>
 							<textarea id="description"

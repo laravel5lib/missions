@@ -406,7 +406,6 @@
             // watch filters obj
             'filters': {
                 handler(val, oldVal) {
-//                    console.log(val);
                     this.pagination.current_page = 1;
                     this.searchTransactions();
                 },
@@ -537,12 +536,11 @@
                 });
             }
         },
-        events: {
-            'refreshTransactions': function() {
-                this.searchTransactions();
-            }
-        },
         mounted() {
+            this.$root.$on('refreshTransactions', () => {
+                this.searchTransactions();
+            });
+
             // load view state
             if (localStorage[this.storageName]) {
                 this.filters.minDate = null;

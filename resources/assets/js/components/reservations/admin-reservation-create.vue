@@ -41,7 +41,7 @@
                     <spinner ref="validationSpinner" size="xl" :fixed="false" text="Validating"></spinner>
                     <spinner ref="reservationspinner" size="xl" :fixed="true" text="Creating Reservation"></spinner>
                     <keep-alive>
-                        <component :is="currentStep.view" transition="fade" transition-mode="out-in" :for-admin="true"></component>
+                        <component :is="currentStep.view" transition="fade" transition-mode="out-in" :for-admin="true" @step-completion="stepCompleted"></component>
                     </keep-alive>
                 </div>
             </div>
@@ -112,26 +112,26 @@
                 }, this);
             },
             nextStep(){
-                var thisChild;
+                let thisChild;
                 switch (this.currentStep.view) {
                     case 'step1':
 
                         // find child
                         this.$children.forEach(function (child) {
-                            if (child.hasOwnProperty('$BasicInfo'))
+                            if (child.hasOwnProperty('handle') && child.handle === 'BasicInfo')
                                 thisChild = child;
                         });
 
-                        // Touch fields for proper validation
-                        if ( _.isFunction(thisChild.$validate) )
-                            thisChild.$validate(true);
-
                         // if form is invalid do not continue
-                        if (thisChild.$BasicInfo.invalid) {
-                            thisChild.attemptedContinue = true;
-                            return false;
-                        }
-                        this.nextStepCallback();
+                        thisChild.$validator.validateAll().then(result => {
+                            if (!result) {
+                                thisChild.attemptedContinue = true;
+                                return false;
+                            }
+                            this.userInfo = thisChild.userInfo;
+                            this.nextStepCallback();
+                        });
+
                         break;
                     default:
                         this.nextStepCallback();
@@ -220,6 +220,11 @@
                     this.$refs.reservationspinner.hide();
                 });
             },
+            stepCompleted(val) {
+                this.currentStep.complete = val;
+                if (this.currentStep.view === 'step8')
+                    this.wizardComplete = val;
+            },
         },
         created(){
             // login component skipped for now
@@ -238,7 +243,7 @@
         },
         mounted(){
             //get trip costs
-            this.$http.get('trips/' + this.tripId, { params: {include: 'costs:status(active),costs.payments,deadlines,requirements' }}).then((response) => {
+            this.$http.get('trips/' + this.tripId, { params: { include: 'costs:status(active),costs.payments,deadlines,requirements' }}).then((response) => {
                 this.trip = response.data.data;
                 // deadlines, requirements, and companion_limit
                 this.deadlines =  response.data.data.deadlines.data;

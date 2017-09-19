@@ -339,12 +339,10 @@
         },
 		watch: {
 			'paymentComplete'(val, oldVal) {
-//				this.$emit('payment-complete', val)
                 this.$emit('step-completion', val);
             },
 			'$parent.detailsConfirmed'(val, oldVal) {
 			    if (val !== oldVal && this.$parent.paymentErrors.length > 0) {
-//                    this.$emit('payment-complete', val);
                     this.$emit('step-completion', val);
                 }
 			},
@@ -362,7 +360,6 @@
             'payment-complete'(val, oldVal) {
 			    if (this.$parent.paymentErrors.length > 0) {
                     this.$parent.detailsConfirmed = val;
-//                this.$emit('payment-complete', val)
                 }
 
             },

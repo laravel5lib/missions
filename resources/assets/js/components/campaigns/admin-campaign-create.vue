@@ -1,7 +1,7 @@
 <template>
 	<div class="panel panel-default">
 
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 
 		<div class="panel-heading">
 			<h3>Create Campaign</h3>
@@ -47,7 +47,7 @@
 								</v-select>
 							</div>
 						</div>
-						<div class="form-group" v-error-handler="{ value: description, handle: 'description' }">
+						<div class="form-group" v-error-handler="{ value: short_desc, handle: 'description' }">
 							<div class="col-xs-12">
 								<label for="description">Description</label>
 								<textarea id="description"
@@ -211,7 +211,6 @@
 				countryCodeObj: null,
 				name: null,
 				country: null,
-				description: null,
 				short_desc: null,
 				started_at: null,
 				ended_at: null,
@@ -227,8 +226,11 @@
             }
 		},
 		computed: {
-			country_code(){
-				return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+			country_code: {
+			    get() {
+                    return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+                },
+				set() {},
 			},
 		},
 		watch: {
@@ -271,23 +273,21 @@
                         this.showError = true;
                     }
                 });
-			}
-		},
-		events: {
-			uploadsComplete(data){
-				switch (data.type) {
-					case 'avatar':
-						this.selectedAvatar = data;
-						this.avatar_upload_id = data.id;
-						$('#avatarCollapse').collapse('hide');
-						break;
-					case 'banner':
-						this.selectedBanner = data;
-						this.banner_upload_id = data.id;
-						$('#bannerCollapse').collapse('hide');
-						break;
-				}
-			}
+			},
+            uploadsComplete(data) {
+		        switch (data.type) {
+		            case 'avatar':
+		                this.selectedAvatar = data;
+		                this.avatar_upload_id = data.id;
+		                $('#avatarCollapse').collapse('hide');
+		                break;
+		            case 'banner':
+		                this.selectedBanner = data;
+		                this.banner_upload_id = data.id;
+		                $('#bannerCollapse').collapse('hide');
+		                break;
+		        }
+		    }
 		},
 		mounted(){
 			this.getCountries();

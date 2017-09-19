@@ -424,13 +424,6 @@
 	                        .createToken(this.cardElement, extraDetails)
 	                        .then(this.createTokenCallback);
 
-
-                        /*this.$http.post('donations/authorize', this.cardParams)
-                            .then(this.createTokenCallback,
-                                (error) =>  {
-                                    this.$root.$emit('showError', error.data.message);
-                                    this.$parent.$refs.validationSpinner.hide();
-                                });*/
                     }
                 });
 
@@ -439,8 +432,6 @@
             createTokenCallback(result) {
                 //console.log(status);
                 console.log(result);
-                let errorElement = document.querySelector('.error');
-                errorElement.classList.remove('visible');
 
                 if (result.token) {
                     this.$parent.paymentInfo = {
@@ -457,10 +448,6 @@
                 } else if (result.error) {
                     this.$root.$emit('showError', result.error.message);
                     this.$parent.$refs.validationSpinner.hide();
-
-                    errorElement.textContent = result.error.message;
-                    errorElement.classList.add('visible');
-
                 }
             },
             setOutcome(result) {
@@ -494,7 +481,6 @@
                 this.setOutcome(event);
             });
 
-//			this.$emit('payment-complete', true);
             this.$emit('step-completion', true);
 
             if (this.devMode) {

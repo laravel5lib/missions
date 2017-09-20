@@ -6,6 +6,7 @@
     <script type="text/javascript" src="//platform-api.sharethis.com/js/sharethis.js#property=58ba1e02535b950011d40583&product=sticky-share-buttons"></script>
 @endsection
 @section('scripts')
+    <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
     @if( $fundraiser->sponsor_id === (auth()->check() ? auth()->id() : '') )
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.0/js/Jcrop.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.14.2/TweenMax.min.js"></script>
@@ -32,7 +33,7 @@
                 <hr class="divider inv md"> --}}
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h1 class="text-center text-success">${{ $fundraiser->raisedAsDollars() }} <span style="font-size: 18px;">Raised</span></h1>
+                        <h1 class="text-center text-success"><listen-text text="${{ $fundraiser->raisedAsDollars() }}" event="Fundraiser::raised"></listen-text> <span style="font-size: 18px;">Raised</span></h1>
                         @unless($fundraiser->isClosed())
                         <h4 class="text-center">${{ $fundraiser->goalAmountAsDollars() }} <span style="font-size: 14px;">Goal</span></h4>
                         <div class="col-xs-12 clearfix">

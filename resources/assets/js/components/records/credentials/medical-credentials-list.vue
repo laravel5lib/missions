@@ -165,9 +165,12 @@
             }
         },
         computed: {
-            isFacilitator() {
-                return this.trips.length > 0 ? true : false;
-            }
+            isFacilitator: {
+                get() {
+                    return this.trips.length > 0 ? true : false;
+                },
+                set() {}
+            },
         },
         watch: {
             'filters': {
@@ -230,7 +233,8 @@
 	        }
         },
         mounted(){
-            this.$http.get('users/' + this.userId).then((response) => {
+            let userId = this.userId || this.$root.user.id;
+            this.$http.get('users/' + userId).then((response) => {
                 let user = response.data.data;
                 let managing = [];
 

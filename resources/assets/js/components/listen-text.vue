@@ -1,5 +1,5 @@
 <template>
-    <span>{{text}}</span>
+    <span>{{displayedText}}</span>
 </template>
 <script type="text/javascript">
     export default{
@@ -17,9 +17,17 @@
         data(){
             return{}
         },
+        computed: {
+            displayedText: {
+                get() {
+                    return this.text;
+                },
+                set() {}
+            }
+        },
         mounted(){
             this.$root.$on(this.event, (val) =>  {
-                this.text = val;
+                this.displayedText = val;
             });
 
         }

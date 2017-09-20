@@ -30,10 +30,14 @@
     export default{
         name: 'fund-manager',
         props: {
-            'id': {
+            id: {
                 type: String,
                 required: true
-            }
+            },
+            stripeKey: {
+                type: String,
+                default: null
+            },
         },
         data(){
             return{

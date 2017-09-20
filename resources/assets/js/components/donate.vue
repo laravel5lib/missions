@@ -1,213 +1,214 @@
 <template>
-    <div>
-        <form class="" name="DonationForm" novalidate v-show="donationState === 'form'">
-            <spinner ref="validationSpinner" size="xl" :fixed="false" text="Validating"></spinner>
-            <template v-if="isState('form', 1)">
-                <div class="row">
-                    <div class="col-sm-12 text-center">
-                        <label>Your Donation will go to:</label>
-                        <h4 class="text-primary" style="margin-top:0px;" v-text="recipient"></h4>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12" :class="{ 'has-error': errors.has('amount', 'form-1')}">
-                        <label>Enter Donation Amount</label>
-                        <div class="input-group">
-                            <span class="input-group-addon">$</span>
-                            <input style="font-size:22px;color:#05ce7b;" type="text" class="form-control" v-model="amount" min="1" name="amount" data-vv-scope="form-1" v-validate="'required|min:1'">
-                            <span class="input-group-addon">USD</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12" :class="{ 'has-error': errors.has('donor', 'form-1')}">
-                        <label>Donor's Name</label>
-                        <input type="text" class="form-control" v-model="donor" name="donor" data-vv-scope="form-1" v-validate="'required|alpha_spaces|min:1'">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12" :class="{ 'has-error': errors.has('donor', 'form-1')}">
-                        <label>Company Name</label>
-                        <input type="text" class="form-control" v-model="company_name">
-                    </div>
-                </div>
-                <hr class="divider sm inv">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <label><input type="checkbox" v-model="anonymous"> Give Anonymously</label>
-                    </div>
-                </div>
-                <hr class="divider inv sm">
-                <div class="row" v-if="!child">
-                    <div class="col-sm-12 text-center">
-                        <div class="form-group" style="margin-bottom:0;">
-                            <div class="">
-                                <!--<a @click="goToState('form')" class="btn btn-default">Reset</a>-->
-                                <a @click="nextState()" class="btn btn-primary">Next <i style="margin-left:3px;font-size:.8em;vertical-align:middle;" class="fa fa-chevron-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </template>
-            <template v-if="isState('form', 2)">
-                <div class="alert alert-danger" role="alert" v-if="cardError" v-text="cardError"></div>
-                <!-- Credit Card -->
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div style="margin-bottom:0;" class="form-group" :class="{ 'has-error': errors.has('cardHolderName', 'form-2') }">
-                            <label for="cardHolderName">Name on Card</label>
-                            <div class="input-group">
-                                <span class="input-group-addon input input-sm"><span class="fa fa-user"></span></span>
-                                <input type="text" class="form-control input input-sm" id="cardHolderName" placeholder="Name on card"
-                                           v-model="cardHolderName" name="cardHolderName" data-vv-scope="form-2" v-validate="'required'" autofocus/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div style="margin-bottom:0;" class="form-group" :class="{ 'has-error': errors.has('cardNumber', 'form-2') || validationErrors.cardNumber }">
-                            <label for="cardNumber">Card Number</label>
-                            <div class="input-group">
-                                <span class="input-group-addon input input-sm"><span class="fa fa-credit-card"></span></span>
-                                <input type="text" class="form-control input input-sm" id="cardNumber" placeholder="Valid Card Number"
-                                       v-model="cardNumber" name="cardNumber" data-vv-scope="form-2" v-validate="'required|max:19'"
-                                       @keyup="formatCard($event)" maxlength="19"/>
-                            </div>
-                            <span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <label style="display:block;margin-left: 10px;margin-top:6px;" for="expiryMonth">Exp Date</label>
-                    <div class="col-xs-6 col-md-6">
-                        <div :class="{ 'has-error': errors.has('month', 'form-2') || validationErrors.cardMonth }">
-                            <select v-model="cardMonth" class="form-control input input-sm" id="expiryMonth" name="month" data-vv-scope="form-2" v-validate="'required'">
-                                <option v-for="month in monthList" :value="month">{{month}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-6 col-md-6">
-                        <div :class="{ 'has-error': errors.has('year', 'form-2') || validationErrors.cardYear }">
-                            <select v-model="cardYear" class="form-control input input-sm" id="expiryYear" name="year" data-vv-scope="form-2" v-validate="'required'">
-                                <option v-for="year in yearList" :value="year">{{year}}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-6 col-md-6">
-                        <div :class="{ 'has-error': errors.has('code', 'form-2') || validationErrors.cardCVC }">
-                            <label for="cvCode">
-                                CV CODE</label>
-                            <input type="text" class="form-control input input-sm" id="cvCode" maxlength="4" v-model="cardCVC"
-                                   placeholder="CV" name="code" data-vv-scope="form-2" v-validate="'required|min:3|max:4'"/>
-                            <span class="help-block" v-if= "errors.has('code', 'form-2') || validationErrors.cardCVC">{{stripeError ? stripeError.message : 'Invalid CVC number'}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div :class="{ 'has-error': errors.has('email', 'form-2') }">
-                            <label for="infoEmailAddress">Billing Email</label>
-                            <input type="text" class="form-control input input-sm" v-model="cardEmail" name="email=" id="infoEmailAddress" data-vv-scope="form-2" v-validate="cardPhone !== ''?'email':'required|email'">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div :class="{ 'has-error': errors.has('phone', 'form-2') }">
-                            <label for="infoPhone">Billing Phone</label>
-                            <phone-input v-model="cardPhone" classes="form-control input input-sm" name="phone" id="infoPhone" data-vv-scope="form-2" v-validate="cardEmail !== ''?'':'required'"></phone-input>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div :class="{ 'has-error': errors.has('zip', 'form-2') }">
-                            <label for="infoZip">ZIP</label>
-                            <input type="text" class="form-control input input-sm" v-model="cardZip" name="zip" id="infoZip" placeholder="12345" data-vv-scope="form-2" v-validate="'required'">
-                        </div>
-                    </div>
-                </div>
-                <hr class="divider inv">
-                <div class="col-sm-12 text-center" v-if="!child">
-                    <div class="form-group" style="margin-bottom:0;">
-                        <div class="">
-                            <!--<a @click="goToState('form')" class="btn btn-default">Reset</a>-->
-                            <a @click="createToken" class="btn btn-primary">Review Donation <i style="margin-left:3px;font-size:.8em;vertical-align:middle;" class="fa fa-chevron-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </template>
-        </form>
-        <div v-show="donationState === 'review'">
-            <spinner ref="donationSpinner" size="xl" :fixed="false" text="Processing Donation"></spinner>
-            <div class="row">
-                <div class="col-sm-12 text-center">
-                    <label>Donation Amount</label>
-                    <h3 class="text-success" style="margin-top:0px;">{{currency(amount)}}</h3>
-                    <label>Donation will go to</label>
-                    <p>{{recipient}}</p>
-                    <label>Who can see this?</label>
-                    <p style="margin-bottom:0;">{{anonymous ? 'This donation is anonymous.' : 'This donation is public.'}}</p>
-                </div>
-                <div class="col-sm-12">
-                    <hr class="divider inv">
-                    <div class="panel panel-default" style="border-color:#05ce7b;">
-                        <div class="panel-heading" style="background-color:#05ce7b;border-color:#05ce7b;">
-                            <h6 style="font-size:.6em;color:#3c763d;text-transform:uppercase;letter-spacing:1px;margin-top:0;margin-bottom:0;"><i class="fa fa-lock icon-left" style="font-size:1.3em;vertical-align:middle;"></i> Secure Information</h6>
-                        </div><!-- end panel-heading -->
-                        <div class="panel-body" style="padding:10px;background:#f7f7f7;border-radius:0 0 4px 4px;">
-                            <label>Card Holder Name</label>
-                            <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardHolderName}}</p>
-                            <label>Card Number</label>
-                            <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardNumber}}</p>
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <label>Card Exp</label>
-                                    <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardMonth}}/{{cardYear}}</p>
-                                </div>
-                                <div class="col-xs-8">
-                                    <label>Billing Email</label>
-                                    <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardEmail}}</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <label>Billing Zip</label>
-                                    <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardZip}}</p>
-                                </div>
-                            </div>
-                        </div><!-- end panel-body -->
-                    </div><!-- end panel -->
-                    <p style="color:#808080;font-size:9px;" class="list-group-item-text">
-                        <b>Disclaimer:</b>
-                        All Missions.Me donations and support are considered 501(c)3 tax-deductible donations (not payments for goods or services) and are 100% non-refundable and non-transferable.
-                    </p>
-                    <hr class="divider inv sm">
-                </div>
-            </div>
-            <div class="text-center" v-if="!child">
-                <a @click="submit" class="btn btn-primary">Donate</a>
-                <a @click="goToState('form')"><h6 class="text-uppercase" style="color:#808080;"><i class="fa fa-refresh icon-left"></i> Reset</h6></a>
-            </div>
-        </div>
-        <div class="" v-show="donationState === 'confirmation'">
-            <div class="text-center">
-                <img class="img-md" src="/images/donate/donation-check.png" alt="Donation Confirmed">
-                <h3 style="color:#808080;margin-bottom:0;">Donation Sent</h3>
-                <h5 style="color:#808080;margin-bottom:25px;">Thank you for your generosity!</h5>
-            </div>
-            <!--<div class="panel-footer" v-if="!child">
-                <a @click="done" class="btn btn-success">Close</a>
-            </div>-->
-        </div>
-    </div>
+	<div>
+		<form id="StripeForm" class="" name="DonationForm" novalidate v-show="donationState === 'form'">
+			<spinner ref="validationSpinner" size="xl" :fixed="false" text="Validating"></spinner>
+			<template v-if="isState('form', 1)">
+				<div class="row">
+					<div class="col-sm-12 text-center">
+						<label>Your Donation will go to:</label>
+						<h4 class="text-primary" style="margin-top:0px;" v-text="recipient"></h4>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12" :class="{ 'has-error': errors.has('amount', 'form-1')}">
+						<label>Enter Donation Amount</label>
+						<div class="input-group">
+							<span class="input-group-addon">$</span>
+							<input style="font-size:22px;color:#05ce7b;" type="text" class="form-control"
+							       v-model="amount" min="1" name="amount" data-vv-scope="form-1"
+							       v-validate="'required|min:1'">
+							<span class="input-group-addon">USD</span>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12" :class="{ 'has-error': errors.has('donor', 'form-1')}">
+						<label>Donor's Name</label>
+						<input type="text" class="form-control" v-model="donor" name="donor" data-vv-scope="form-1"
+						       v-validate="'required|alpha_spaces|min:1'">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12" :class="{ 'has-error': errors.has('donor', 'form-1')}">
+						<label>Company Name</label>
+						<input type="text" class="form-control" v-model="company_name">
+					</div>
+				</div>
+				<hr class="divider sm inv">
+				<div class="row">
+					<div class="col-sm-12">
+						<label><input type="checkbox" v-model="anonymous"> Give Anonymously</label>
+					</div>
+				</div>
+				<hr class="divider inv sm">
+				<div class="row" v-if="!child">
+					<div class="col-sm-12 text-center">
+						<div class="form-group" style="margin-bottom:0;">
+							<div class="">
+								<!--<a @click="goToState('form')" class="btn btn-default">Reset</a>-->
+								<a @click="nextState()" class="btn btn-primary">Next <i
+										style="margin-left:3px;font-size:.8em;vertical-align:middle;"
+										class="fa fa-chevron-right"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</template>
+			<template v-if="isState('form', 2)">
+				<div class="alert alert-danger" role="alert" v-if="cardError" v-text="cardError"></div>
+				<!-- Credit Card -->
+				<div class="row">
+					<div class="col-sm-12">
+						<div style="margin-bottom:0;" class="form-group"
+						     :class="{ 'has-error': errors.has('cardHolderName', 'form-2') }">
+							<label for="cardHolderName">Name on Card</label>
+							<div class="input-group">
+								<span class="input-group-addon input input-sm"><span class="fa fa-user"></span></span>
+								<input type="text" class="form-control input input-sm" id="cardHolderName"
+								       placeholder="Name on card"
+								       v-model="cardHolderName" name="cardHolderName" data-vv-scope="form-2"
+								       v-validate="'required'" autofocus/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<label for="">Card</label>
+						<div id="card-element" class="field"></div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-6">
+						<div :class="{ 'has-error': errors.has('email', 'form-2') }">
+							<label for="infoEmailAddress">Billing Email</label>
+							<input type="text" class="form-control input input-sm" v-model="cardEmail" name="email="
+							       id="infoEmailAddress" data-vv-scope="form-2"
+							       v-validate="cardPhone !== ''?'email':'required|email'">
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div :class="{ 'has-error': errors.has('phone', 'form-2') }">
+							<label for="infoPhone">Billing Phone</label>
+							<phone-input v-model="cardPhone" classes="form-control input input-sm" name="phone"
+							             id="infoPhone" data-vv-scope="form-2"
+							             v-validate="cardEmail !== ''?'':'required'"></phone-input>
+						</div>
+					</div>
+
+				</div>
+				<hr class="divider inv">
+				<div class="col-sm-12 text-center" v-if="!child">
+					<div class="form-group" style="margin-bottom:0;">
+						<div class="">
+							<!--<a @click="goToState('form')" class="btn btn-default">Reset</a>-->
+							<a @click="createToken" class="btn btn-primary">Review Donation <i
+									style="margin-left:3px;font-size:.8em;vertical-align:middle;"
+									class="fa fa-chevron-right"></i></a>
+						</div>
+					</div>
+				</div>
+			</template>
+		</form>
+		<div v-show="donationState === 'review'">
+			<spinner ref="donationSpinner" size="xl" :fixed="false" text="Processing Donation"></spinner>
+			<div class="row">
+				<div class="col-sm-12 text-center">
+					<label>Donation Amount</label>
+					<h3 class="text-success" style="margin-top:0px;">{{currency(amount)}}</h3>
+					<label>Donation will go to</label>
+					<p>{{recipient}}</p>
+					<label>Who can see this?</label>
+					<p style="margin-bottom:0;">{{anonymous ? 'This donation is anonymous.' : 'This donation is public.'}}</p>
+				</div>
+				<div class="col-sm-12">
+					<hr class="divider inv">
+					<div class="panel panel-default" style="border-color:#05ce7b;">
+						<div class="panel-heading" style="background-color:#05ce7b;border-color:#05ce7b;">
+							<h6 style="font-size:.6em;color:#3c763d;text-transform:uppercase;letter-spacing:1px;margin-top:0;margin-bottom:0;">
+								<i class="fa fa-lock icon-left" style="font-size:1.3em;vertical-align:middle;"></i>
+								Secure Information</h6>
+						</div><!-- end panel-heading -->
+						<div v-if="card" class="panel-body"
+						     style="padding:10px;background:#f7f7f7;border-radius:0 0 4px 4px;">
+							<label>Card Holder Name</label>
+							<p class="small" style="margin-top:0px;margin-bottom:0;">{{card.name}}</p>
+							<label>Card Number</label>
+							<p class="small" style="margin-top:0px;margin-bottom:0;">&middot;&middot;&middot;&middot;
+								&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; {{card.last4}}</p>
+							<div class="row">
+								<div class="col-xs-4">
+									<label>Card Exp</label>
+									<p class="small" style="margin-top:0px;margin-bottom:0;">
+										{{card.exp_month}}/{{card.exp_year}}</p>
+								</div>
+								<div class="col-xs-8">
+									<label>Billing Email</label>
+									<p class="small" style="margin-top:0px;margin-bottom:0;">{{cardEmail}}</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-4">
+									<label>Billing Zip</label>
+									<p class="small" style="margin-top:0px;margin-bottom:0;">{{card.address_zip}}</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<hr class="divider sm">
+									<label for="comment">Leave a Message</label>
+									<textarea name="comment" id="comment" rows="2" class="form-control" v-model="comment" style="resize: vertical" v-autosize></textarea>
+								</div>
+							</div>
+						</div><!-- end panel-body -->
+					</div><!-- end panel -->
+					<p style="color:#808080;font-size:9px;" class="list-group-item-text">
+						<b>Disclaimer:</b>
+						All Missions.Me donations and support are considered 501(c)3 tax-deductible donations (not payments for goods or services) and are 100% non-refundable and non-transferable.
+					</p>
+					<hr class="divider inv sm">
+				</div>
+			</div>
+			<div class="text-center" v-if="!child">
+				<a @click="submit" class="btn btn-primary">Donate</a>
+				<a @click="goToState('form')"><h6 class="text-uppercase" style="color:#808080;"><i
+						class="fa fa-refresh icon-left"></i> Reset</h6></a>
+			</div>
+		</div>
+		<div class="" v-show="donationState === 'confirmation'">
+			<div class="text-center">
+				<img class="img-md" src="/images/donate/donation-check.png" alt="Donation Confirmed">
+				<h3 style="color:#808080;margin-bottom:0;">Donation Sent</h3>
+				<h5 style="color:#808080;margin-bottom:25px;">Thank you for your generosity!</h5>
+			</div>
+
+		</div>
+	</div>
 </template>
+<style>
+	#StripeForm .field {
+		display: block;
+		height: 34px;
+		padding: 8px 6px;
+		font-size: 14px;
+		color: #555555;
+		background-color: #fff;
+		background-image: none;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+		-webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+		transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+	}
+</style>
 <script type="text/javascript">
+	import $ from 'jquery';
     import vSelect from 'vue-select';
-    export default{
+
+    export default {
         name: 'donate',
-        components:{ vSelect },
+        components: {vSelect},
         props: {
             type: {
                 type: String,
@@ -230,7 +231,7 @@
                 default: null
             },
             auth: {
-                type:String,
+                type: String,
                 default: '0'
             },
             /*attemptSubmit: {
@@ -241,14 +242,6 @@
                 type: Boolean,
                 default: false
             },
-            /*donationState: {
-                type: String,
-                default: 'form'
-            },*/
-            /*subState: {
-                type: Number,
-                default: 1
-            },*/
             title: {
                 type: String,
                 default: ''
@@ -259,8 +252,8 @@
             }
 
         },
-        data(){
-            return{
+        data() {
+            return {
                 donor: '',
                 donor_id: null,
                 company_name: '',
@@ -268,6 +261,7 @@
                 validateWith: 'email',
                 token: null,
                 anonymous: false,
+	            comment: null,
 
                 //card vars
                 card: null,
@@ -283,6 +277,8 @@
                 cardError: null,
 
                 // stripe vars
+                stripe: null,
+                cardElement: null,
                 stripeError: null,
                 monthList: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
                 placeholders: {
@@ -326,31 +322,8 @@
 //                console.log(val);
             },
         },
-        computed:{
-            yearList() {
-                let num, today, years, yyyy;
-                today = new Date;
-                yyyy = today.getFullYear();
-                years = (() =>  {
-                    var i, ref, ref1, results;
-                    results = [];
-                    for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
-                        results.push(num);
-                    }
-                    return results;
-                })();
-                return years;
-            },
-            cardParams() {
-                return {
-                    cardholder: this.cardHolderName,
-                    number: this.cardNumber,
-                    exp_month: this.cardMonth,
-                    exp_year: this.cardYear,
-                    cvc: this.cardCVC,
-                    zip: this.cardZip
-                };
-            }
+        computed: {
+
         },
         methods: {
             isState(major, minor) {
@@ -359,6 +332,7 @@
             toState(major, minor) {
                 this.donationState = major;
                 this.subState = minor
+                this.$emit('state-changed', this.donationState, this.subState);
             },
             resetCaching() {
                 console.log('resetting');
@@ -382,81 +356,43 @@
                 }
             },
             createToken() {
-                this.stripeDeferred = $.Deferred();
                 this.$validator.validateAll('form-2').then(result => {
                     if (!result) {
                         this.attemptSubmit = !0;
                         this.attemptedCreateToken = !0;
-                        this.stripeDeferred.reject(false);
                     } else {
-                        // reset errors
-                        this.cardError = null;
-                        this.validationErrors = {
-                            cardNumber: '',
-                            cardCVC: '',
-                            cardYear: '',
-                            cardMonth: '',
-                            cardZip: ''
-                        };
-
-                        // authorize card data
-                        console.log(this.cardParams);
                         this.$refs.validationSpinner.show();
-                        this.$http.post('donations/authorize', this.cardParams)
-                            .then(this.createTokenCallback,
-                                (error) => {
-                                    this.cardError = error.data.message;
-                                    this.$refs.validationSpinner.hide();
-
-
-                                    switch (error.data.message) {
-                                        case 'Your card number is incorrect.':
-                                            this.stripeError = error.data;
-                                            this.validationErrors.cardNumber = 'error';
-                                            break;
-                                    }
-
-                                    this.stripeDeferred.reject(error.data.code);
-                                });
+                        let extraDetails = {
+                            name: this.cardHolderName,
+                        };
+                        this.stripe
+                            .createToken(this.cardElement, extraDetails)
+                            .then(this.createTokenCallback);
                     }
-                    return this.stripeDeferred.promise();
                 });
             },
-            createTokenCallback(resp) {
-                console.log(resp);
-                 /*
-                if (this.stripeError) {
-                    if (this.stripeError.param === 'number') {
-                        this.validationErrors.cardNumber = 'error';
-                    }
-                    if (this.stripeError.param === 'exp_year') {
-                        this.validationErrors.cardYear = 'error';
-                    }
-                    if (this.stripeError.param === 'exp_month') {
-                        this.validationErrors.cardMonth = 'error';
-                    }
-                    if (this.stripeError.param === 'cvc') {
-                        this.validationErrors.cardCVC = 'error';
-                    }
-                    this.stripeDeferred.reject(false);
-                }*/
-                if (resp.status === 200) {
+            createTokenCallback(result) {
+                console.log(result);
+                if (result.token) {
+                    this.card = result.token.card;
+                    this.token = result.token.id;
+                    //this.stripeDeferred.resolve(result.token);
                     this.$refs.validationSpinner.hide();
-                    this.token = resp.data;
-                    this.stripeDeferred.resolve(resp.data);
-                }
-
-                if (!this.child) {
                     this.goToState('review');
                 }
             },
-            submit(){
+            setOutcome(result) {
+                if (result.error) {
+                    this.$root.$emit('showError', result.error.message);
+                }
+            },
+            submit() {
                 let data = {
                     amount: this.amount,
                     anonymous: this.anonymous,
                     currency: 'USD', // determined from card token
                     description: 'Donation to ' + this.title,
-	                comment: null,
+                    comment: this.comment,
                     fund_id: this.fundId,
                     token: this.token,
                     details: {
@@ -464,9 +400,9 @@
                     },
                     payment: {
                         type: 'card',
-                        brand: this.detectCardType(this.cardNumber),
-                        last_four: this.cardNumber.substr(-4),
-                        cardholder: this.cardHolderName,
+                        brand: this.card.brand,
+                        last_four: this.card.last4,
+                        cardholder: this.card.name,
                     }
                 };
                 this.$refs.donationSpinner.show();
@@ -479,46 +415,50 @@
                         company: this.company_name,
                         email: this.cardEmail,
                         phone: this.cardPhone,
-                        zip: this.cardZip,
-                        country_code: 'us' // needs UI
+                        zip: this.card.address_zip,
+                        country_code: this.card.country.toLowerCase()
                     }
                 }
                 this.$http.post('donations', data)
-                        .then((response) => {
-                            this.stripeDeferred.resolve(true);
-                            this.$refs.donationSpinner.hide();
-                            this.donationState = 'confirmation';
+                    .then((response) => {
+		                    // this.stripeDeferred.resolve(true);
+		                    this.$refs.donationSpinner.hide();
+		                    this.donationState = 'confirmation';
+		                    this.$root.$emit('DonateForm:complete', response.data.data.amount);
+
+		                    this.$http.get(`fundraisers?fund=${this.fundId}`).then((response) => {
+		                        let fundraiser = response.data.data[0];
+                                this.$root.$emit('Fundraiser::raised', fundraiser.raised_amount);
+                                this.$root.$emit('Fundraiser::percent', fundraiser.raised_percent);
+		                    });
+
+		                    this.$emit('state-changed', this.donationState, this.subState);
                         },
-                        (error) =>  {
+                        (error) => {
                             this.$refs.donationSpinner.hide();
                             this.cardError = error.data.message;
                             this.toState('form', 2);
                         });
             },
-            done(){
-                if (this.child) {
-                    this.$root.$emit('DonateForm:complete');
-                }/* else {
-                    window.location.href
-                }*/
-            },
-            goToState(state){
+            goToState(state) {
                 switch (state) {
                     case 'form':
                         this.donationState = state;
-
+                        this.$emit('state-changed', this.donationState, this.subState);
                         break;
                     case 'review':
                         this.attemptSubmit = true;
                         this.$validator.validateAll('form-2').then(result => {
                             if (result) this.donationState = state;
+                            this.$emit('state-changed', this.donationState, this.subState);
+
                         });
                         break;
                 }
             },
-            nextState(){
+            nextState() {
                 this.attemptSubmit = !0;
-                switch (this.donationState){
+                switch (this.donationState) {
                     case 'form':
                         switch (this.subState) {
                             case 1:
@@ -526,6 +466,24 @@
                                     if (result) {
                                         this.subState = 2;
                                         this.attemptSubmit = !1;
+                                        this.$emit('state-changed', this.donationState, this.subState);
+
+                                        // Stripe script
+                                        this.$nextTick(function () {
+                                            this.stripe = window.Stripe(this.$parent.stripeKey);
+                                            let elements = this.stripe.elements();
+                                            this.cardElement = elements.create('card', {
+                                                style: {}
+                                            });
+                                            this.cardElement.mount('#card-element');
+
+                                            this.cardElement.on('change', (event) => {
+                                                this.setOutcome(event);
+                                            });
+                                        });
+
+                                    } else {
+                                        this.$root.$emit('showError', 'Please check the form.');
                                     }
                                 });
                                 break;
@@ -536,8 +494,10 @@
                                         this.donationState = 'review';
                                         this.subState = 1;
                                         this.attemptSubmit = !1;
+                                        this.$emit('state-changed', this.donationState, this.subState);
+                                    } else {
+                                        this.$root.$emit('showError', 'Please check the form.');
                                     }
-
                                 });
                                 break
                         }
@@ -546,8 +506,8 @@
                         break;
                 }
             },
-            prevState(){
-                switch (this.donationState){
+            prevState() {
+                switch (this.donationState) {
                     case 'form':
                         switch (this.subState) {
                             case 1:
@@ -563,42 +523,15 @@
                         this.subState = 2;
                         break;
                 }
+                this.$emit('state-changed', this.donationState, this.subState);
             },
-            detectCardType(number) {
-                // http://stackoverflow.com/questions/72768/how-do-you-detect-credit-card-type-based-on-number
-                let re = {
-                    electron: /^(4026|417500|4405|4508|4844|4913|4917)\d+$/,
-                    maestro: /^(5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)\d+$/,
-                    dankort: /^(5019)\d+$/,
-                    interpayment: /^(636)\d+$/,
-                    unionpay: /^(62|88)\d+$/,
-                    visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
-                    mastercard: /^5[1-5][0-9]{14}$/,
-                    amex: /^3[47][0-9]{13}$/,
-                    diners: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
-                    discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/,
-                    jcb: /^(?:2131|1800|35\d{3})\d{11}$/
-                };
-
-                for(var key in re) {
-                    if(re[key].test(number)) {
-                        return key
-                    }
-                }
-            }
         },
         mounted() {
-            this.$root.$on('VueStripe::reset-form', () =>  {
+            this.$root.$on('VueStripe::reset-form', () => {
                 return this.resetCaching();
             });
 
             this.$emit('payment-complete', true);
-            if (this.devMode) {
-                this.cardNumber = '';
-                this.cardCVC = '';
-                this.cardYear = '2019';
-                this.cardMonth = '01';
-            }
 
             if (parseInt(this.auth)) {
                 this.$http.get('users/me').then((response) => {
@@ -612,29 +545,27 @@
             }
 
             //Listen to Event Bus
-            this.$root.$on('DonateForm:nextState', () =>  {
+            this.$root.$on('DonateForm:nextState', () => {
                 this.nextState();
             });
 
-            this.$root.$on('DonateForm:prevState', () =>  {
+            this.$root.$on('DonateForm:prevState', () => {
                 this.prevState();
             });
 
-            this.$root.$on('DonateForm:resetState', () =>  {
+            this.$root.$on('DonateForm:resetState', () => {
                 this.toState('form', 1);
             });
 
-            this.$root.$on('DonateForm:reviewDonation', function (identifier) {
+            this.$root.$on('DonateForm:reviewDonation', (identifier) => {
                 if (identifier !== this.identifier) {
                     return false;
                 }
 
-                $.when(this.createToken()).then((response) => {
-                    this.goToState('review');
-                });
+                this.createToken();
             });
 
-            this.$root.$on('DonateForm:donate', function (identifier) {
+            this.$root.$on('DonateForm:donate', (identifier) => {
                 if (identifier !== this.identifier) {
                     return false;
                 }

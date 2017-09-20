@@ -105,7 +105,12 @@
                         <ul style="padding: 10px 20px;" class="dropdown-menu" aria-labelledby="dropdownMenu1">
                             <li>
                                 <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="name" :disabled="maxCheck('name')"> Name
+                                    <input type="checkbox" v-model="activeFields" value="first_name" :disabled="maxCheck('first_name')"> First Name
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="last_name" :disabled="maxCheck('last_name')"> Last Name
                                 </label>
                             </li>
                             <li>
@@ -195,10 +200,15 @@
         <table class="table table-hover table-striped">
             <thead>
             <tr>
-                <th v-if="isActive('name')" :class="{'text-primary': orderByField === 'name'}">
-                    Name
-                    <i @click="setOrderByField('name')" v-if="orderByField !== 'name'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                <th v-if="isActive('first_name')" :class="{'text-primary': orderByField === 'first_name'}">
+                    First name
+                    <i @click="setOrderByField('first_name')" v-if="orderByField !== 'first_name'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'first_name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                </th>
+                <th v-if="isActive('last_name')" :class="{'text-primary': orderByField === 'last_name'}">
+                    Last name
+                    <i @click="setOrderByField('last_name')" v-if="orderByField !== 'last_name'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'last_name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
                 <th v-if="isActive('company')" :class="{'text-primary': orderByField === 'company'}">
                     Company
@@ -226,7 +236,8 @@
             </thead>
             <tbody>
             <tr v-for="donor in orderByProp(donors, orderByField, direction)">
-                <td v-if="isActive('name')" v-text="donor.name"></td>
+                <td v-if="isActive('first_name')" v-text="donor.first_name"></td>
+                <td v-if="isActive('last_name')" v-text="donor.last_name"></td>
                 <td v-if="isActive('company')" v-text="donor.company"></td>
                 <td v-if="isActive('email')" v-text="donor.email"></td>
                 <td v-if="isActive('phone')">{{donor.phone|phone}}</td>
@@ -443,7 +454,7 @@
             },
             resetFilter(){
                 $.extend(this, {
-                    orderByField: 'name',
+                    orderByField: 'first_name',
                     direction: 1,
                     per_page: 10,
                     perPageOptions: [5, 10, 25, 50, 100],
@@ -451,7 +462,7 @@
                         current_page: 1
                     },
                     search: '',
-                    activeFields: ['name', 'company', 'email', 'phone', 'zip', 'total_donated'],
+                    activeFields: ['first_name', 'company', 'email', 'phone', 'zip', 'total_donated'],
                     maxActiveFields: 8,
                     filters: {
                         tags: '',

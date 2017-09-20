@@ -8,7 +8,8 @@ $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker) {
 
     return [
         'id'               => $faker->unique()->uuid,
-        'name'             => $faker->firstName. ' '.$faker->lastName,
+        'first_name'       => $faker->firstName,
+        'last_name'        => $faker->lastName,
         'email'            => $faker->unique()->safeEmail,
         'alt_email'        => $faker->optional(0.5)->safeEmail,
         'password'         => $password,
@@ -56,7 +57,8 @@ $factory->defineAs(App\Models\v1\User::class, 'new', function (Faker\Generator $
 {
     return [
         'id'               => $faker->unique()->uuid,
-        'name'             => $faker->firstName. ' '.$faker->lastName,
+        'first_name'       => $faker->firstName,
+        'last_name'        => $faker->lastName,
         'email'            => $faker->unique()->safeEmail,
         'password'         => bcrypt('secret'),
         'gender'           => $faker->randomElement(['male', 'female']),

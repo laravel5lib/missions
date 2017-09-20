@@ -6,7 +6,8 @@
 $factory->define(App\Models\v1\Donor::class, function (Faker\Generator $faker) {
     return [
         'id'           => $faker->unique()->uuid,
-        'name'         => $faker->firstName . ' '. $faker->lastName,
+        'first_name'   => $faker->firstName,
+        'last_name'    => $faker->lastName,
         'email'        => $faker->safeEmail,
         'phone'        => stripPhone($faker->phoneNumber),
         'company'      => $faker->optional(0.5)->company,

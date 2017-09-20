@@ -9,7 +9,7 @@ class UserFilter extends Filter
      * @var array
      */
     public $sortable = [
-        'name', 'email', 'alt_email', 'zip',
+        'first_name', 'last_name', 'email', 'alt_email', 'zip',
         'country_code', 'state', 'city', 'created_at',
         'updated_at', 'birthday'
     ];
@@ -20,7 +20,7 @@ class UserFilter extends Filter
      * @var array
      */
     public $searchable = [
-        'name', 'email', 'alt_email', 'city', 'state',
+        'first_name', 'last_name', 'email', 'alt_email', 'city', 'state',
         'phone_one', 'phone_two', 'zip'
     ];
 

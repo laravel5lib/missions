@@ -77,8 +77,8 @@ class Fund extends Model
     {
         return $this->belongsToMany(Donor::class, 'transactions')
                     ->withPivot('created_at')
-                    ->groupBy('name')
-                    ->orderBy('name');
+                    ->groupBy('email')
+                    ->orderBy('first_name');
     }
 
     /**

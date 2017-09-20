@@ -13,7 +13,7 @@ class Donor extends Model
     use UuidForKey, Filterable, Taggable, SoftDeletes;
 
     protected $fillable = [
-        'name', 'email', 'phone', 'company', 'zip',
+        'first_name', 'last_name', 'email', 'phone', 'company', 'zip',
         'country_code', 'account_id', 'account_type',
         'customer_id', 'address', 'city', 'state',
         'created_at', 'updated_at'
@@ -87,5 +87,15 @@ class Donor extends Model
     public function funds()
     {
         return $this->belongsToMany(Fund::class, 'transactions')->withTrashed();
+    }
+
+    /**
+     * Get the donor's full name
+     *
+     * @return String
+     */
+    public function getNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
     }
 }

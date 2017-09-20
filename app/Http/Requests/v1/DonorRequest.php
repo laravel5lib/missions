@@ -25,7 +25,8 @@ class DonorRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name'         => 'required|string',
+            'first_name'   => 'required|string|max:100',
+            'last_name'    => 'required|string|max:100',
             'company'      => 'nullable|string',
             'email'        => 'nullable|email',
             'phone'        => 'nullable|string',

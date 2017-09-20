@@ -17,14 +17,14 @@ class DonorFilter extends Filter
      *
      * @var array
      */
-    public $sortable = ['name'];
+    public $sortable = ['first_name', 'last_name'];
 
     /**
      * Default searchable fields.
      *
      * @var array
      */
-    public $searchable = ['name'];
+    public $searchable = ['first_name', 'last_name'];
 
     /**
      * Filter by designated reservation.

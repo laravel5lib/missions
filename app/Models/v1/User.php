@@ -30,7 +30,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'alt_email',
+        'first_name', 'last_name', 'email', 'password', 'alt_email',
         'phone_one', 'phone_two', 'gender', 'status',
         'birthday', 'address', 'city', 'zip', 'country_code',
         'state', 'timezone', 'url', 'public', 'bio',
@@ -73,34 +73,56 @@ class User extends Authenticatable
     public $timestamps = true;
 
     /**
-     * Set the user's password
+     * Set the user's first name
      *
      * @param $value
      */
-    // public function setPasswordAttribute($value)
-    // {
-    //     $this->attributes['password'] = bcrypt($value);
-    // }
-
-    /**
-     * Set the user's name
-     *
-     * @param $value
-     */
-    public function setNameAttribute($value)
+    public function setFirstNameAttribute($value)
     {
-        $this->attributes['name'] = trim(strtolower($value));
+        $this->attributes['first_name'] = trim(strtolower($value));
     }
 
     /**
-     * Get the user's name
+     * Set the user's last name
+     *
+     * @param $value
+     */
+    public function setLastNameAttribute($value)
+    {
+        $this->attributes['last_name'] = trim(strtolower($value));
+    }
+
+    /**
+     * Get the user's first name
      *
      * @param $value
      * @return string
      */
-    public function getNameAttribute($value)
+    public function getFirstNameAttribute($value)
     {
         return ucwords($value);
+    }
+
+    /**
+     * Get the user's last name
+     *
+     * @param $value
+     * @return string
+     */
+    public function getLastNameAttribute($value)
+    {
+        return ucwords($value);
+    }
+
+    /**
+     * Get the user's full name
+     *
+     * @param $value
+     * @return string
+     */
+    public function getNameAttribute()
+    {
+        return ucwords($this->first_name.' '.$this->last_name);
     }
 
     /**

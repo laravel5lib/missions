@@ -20,14 +20,20 @@
 					<div id="toggleFields" class="form-toggle-menu dropdown" style="display: inline-block;">
 						<button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1"
 						        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-							Sort By
+							Fields
 							<span class="caret"></span>
 						</button>
 						<ul style="padding: 10px 20px;" class="dropdown-menu" aria-labelledby="dropdownMenu1">
 							<li>
 								<label style="margin-bottom: 0" class="small">
-									<input type="checkbox" v-model="activeFields" value="name"
-									       :disabled="maxCheck('name')"> Name
+									<input type="checkbox" v-model="activeFields" value="first_name"
+									       :disabled="maxCheck('first_name')"> First Name
+								</label>
+							</li>
+							<li>
+								<label style="margin-bottom: 0" class="small">
+									<input type="checkbox" v-model="activeFields" value="last_name"
+									       :disabled="maxCheck('last_name')"> Last Name
 								</label>
 							</li>
 							<li>
@@ -110,12 +116,6 @@
 							</li>
 							<li>
 								<label style="margin-bottom: 0" class="small">
-									<input type="checkbox" v-model="activeFields" value="isAdmin"
-									       :disabled="maxCheck('isAdmin')"> Admin
-								</label>
-							</li>
-							<li>
-								<label style="margin-bottom: 0" class="small">
 									<input type="checkbox" v-model="activeFields" value="timezone"
 									       :disabled="maxCheck('timezone')"> Timezone
 								</label>
@@ -180,24 +180,6 @@
 								</div>
 							</li>
 
-							<li style="padding: 3px 20px;">
-								<label class="control-label">Admin</label>
-								<div>
-									<label class="radio-inline">
-										<input type="radio" name="passports" id="passports1" v-model="filters.isAdmin"
-										       :value="null"> Any
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="passports" id="passports2" v-model="filters.isAdmin"
-										       value="yes"> Yes
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="passports" id="passports3" v-model="filters.isAdmin"
-										       value="no"> No
-									</label>
-								</div>
-							</li>
-
 							<li role="separator" class="divider"></li>
 							<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()">
 								Reset Filters
@@ -207,11 +189,6 @@
 						                :options="exportOptions"
 						                :filters="exportFilters">
 						</export-utility>
-						<!-- <import-utility title="Import Users List"
-										url="users/import"
-										:required-fields="importRequiredFields"
-										:optional-fields="importOptionalFields">
-						</import-utility> -->
 					</div>
 				</form>
 			</div>
@@ -220,11 +197,18 @@
 		<table class="table table-hover table-striped">
 			<thead>
 			<tr>
-				<th v-if="isActive('name')" :class="{'text-primary': orderByField === 'name'}">
-					Name
-					<i @click="setOrderByField('name')" v-if="orderByField !== 'name'"
+				<th v-if="isActive('first_name')" :class="{'text-primary': orderByField === 'first_name'}">
+					First Name
+					<i @click="setOrderByField('first_name')" v-if="orderByField !== 'first_name'"
 					   class="fa fa-sort pull-right"></i>
-					<i @click="direction=direction*-1" v-if="orderByField === 'name'" class="fa pull-right"
+					<i @click="direction=direction*-1" v-if="orderByField === 'first_name'" class="fa pull-right"
+					   :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+				</th>
+				<th v-if="isActive('last_name')" :class="{'text-primary': orderByField === 'last_name'}">
+					Last Name
+					<i @click="setOrderByField('last_name')" v-if="orderByField !== 'last_name'"
+					   class="fa fa-sort pull-right"></i>
+					<i @click="direction=direction*-1" v-if="orderByField === 'last_name'" class="fa pull-right"
 					   :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
 				</th>
 				<th v-if="isActive('email')" :class="{'text-primary': orderByField === 'email'}">
@@ -293,9 +277,6 @@
 				<th v-if="isActive('public')">
 					Public
 				</th>
-				<th v-if="isActive('isAdmin')">
-					Admin
-				</th>
 				<th v-if="isActive('timezone')">
 					Timezone
 				</th>
@@ -304,7 +285,8 @@
 			</thead>
 			<tbody>
 			<tr v-for="user in orderByProp(users, orderByField, direction)">
-				<td v-if="isActive('name')">{{user.name | capitalize}}</td>
+				<td v-if="isActive('first_name')">{{user.first_name | capitalize}}</td>
+				<td v-if="isActive('last_name')">{{user.last_name | capitalize}}</td>
 				<td v-if="isActive('email')" v-text="user.email"></td>
 				<td v-if="isActive('alt_email')" v-text="user.alt_email"></td>
 				<td v-if="isActive('gender')">{{user.gender | capitalize}}</td>
@@ -318,7 +300,6 @@
 				<td v-if="isActive('state')" v-text="user.state"></td>
 				<td v-if="isActive('country_name')" v-text="user.country_name"></td>
 				<td v-if="isActive('public')" v-text="user.public?'Yes':'No'"></td>
-				<td v-if="isActive('isAdmin')" v-text="user.isAdmin?'Yes':'No'"></td>
 				<td v-if="isActive('timezone')" v-text="user.timezone"></td>
 				<td>
 					<a :href="'/admin' + user.links[0].uri"><i class="fa fa-gear"></i></a>
@@ -362,7 +343,7 @@
                 perPageOptions: [5, 10, 25, 50, 100],
                 pagination: {current_page: 1},
                 search: '',
-                activeFields: ['name', 'email', 'birthday', 'status', 'public', 'isAdmin'],
+                activeFields: ['first_name', 'last_name', 'email', 'birthday', 'status', 'public'],
                 maxActiveFields: 6,
                 maxActiveFieldsOptions: [2, 3, 4, 5, 6, 7, 8, 9],
                 countriesArr: [],

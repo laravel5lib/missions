@@ -77,7 +77,8 @@ class BaseReservation extends FactoryStory
         $donor = factory(Donor::class)->create([
             'account_id' => $res->user_id,
             'account_type' => 'users',
-            'name' => $res->user->name
+            'first_name' => $res->user->first_name,
+            'last_name' => $res->user->last_name
         ]);
 
         $transaction = factory(Transaction::class)->create([

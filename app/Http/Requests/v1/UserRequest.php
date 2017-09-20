@@ -25,10 +25,11 @@ class UserRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name'             => 'required|max:100',
+            'first_name'       => 'required|string|max:100',
+            'last_name'        => 'required|string|max:100',
             'email'            => 'required|email|unique:users,email,NULL,id,deleted_at,NULL',
             'password'         => 'required|confirmed|min:8',
-            'alt_email'        => 'nullable|email|unique:users,alt_email',
+            'alt_email'        => 'nullable|email',
             'gender'           => 'in:Male,male,Female,female',
             'status'           => 'nullable|string',
             'birthday'         => 'nullable|date',
@@ -48,7 +49,7 @@ class UserRequest extends FormRequest
             $user_id = $this->route('user') ? $this->route('user') : auth()->user()->id;
 
             $rules['password'] = 'sometimes|required|confirmed|min:8';
-            $rules['alt_email'] = 'email|unique:users,alt_email,' . $user_id;
+            $rules['alt_email'] = 'nullable|email';
             $rules['email'] = 'sometimes|required|email|unique:users,email,' . $user_id . ',id,deleted_at,NULL';
             $rules['url'] = 'unique:slugs,url,'.$user_id.',slugable_id';
             $rules['country_code'] = 'sometimes|required|in:' . Country::codes();

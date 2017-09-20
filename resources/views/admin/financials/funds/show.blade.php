@@ -1,5 +1,7 @@
 @extends('admin.layouts.default')
-
+@section('scripts')
+    <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+@endsection
 @section('content')
     <div class="white-header-bg">
         <div class="container">
@@ -49,7 +51,7 @@
     <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <fund-manager id="{{ $fund->id }}">
+            <fund-manager id="{{ $fund->id }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}">
                 <notes type="funds"
                        id="{{ $fund->id }}"
                        user_id="{{ auth()->user()->id }}"

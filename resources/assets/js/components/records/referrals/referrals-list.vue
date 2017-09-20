@@ -145,8 +145,11 @@
             }
         },
         computed: {
-            isFacilitator() {
-                return this.trips.length > 0 ? true : false;
+            isFacilitator: {
+                get() {
+                    return this.trips.length > 0 ? true : false;
+                },
+                set() {}
             },
             canExport() {
                 return this.firstUrlSegment == 'admin';
@@ -192,7 +195,8 @@
             }
         },
         mounted(){
-            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then((response) => {
+            let userId = this.userId || this.$root.user.id;
+            this.$http.get('users/' + userId + '?include=facilitating,managing.trips').then((response) => {
                 let user = response.data.data;
                 let managing = [];
 

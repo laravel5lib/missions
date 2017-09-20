@@ -197,9 +197,9 @@ window._ = require('underscore');
 window.marked = require('marked');
 
 import { TimelineMax, TweenMax, Linear } from 'gsap';
-import ScrollMagic from 'scrollmagic';
+import sm from 'scrollmagic';
 // import 'imports?define=>false!scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap';
-window.ScrollMagic = ScrollMagic;
+window.ScrollMagic = sm;
 require('scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators');
 
 window.videojs = require('video.js');

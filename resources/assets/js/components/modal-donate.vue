@@ -2,7 +2,7 @@
     <div>
         <div class="panel panel-default collapse" id="collapseDonate">
             <div class="panel-body">
-                <donate ref="donator" :donation-state="donationState" :sub-state="subState" :attempt-submit="attemptSubmit" :title="title"
+                <donate ref="donator" :attempt-submit="attemptSubmit" :title="title" @state-changed="stateChanged"
                         :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" :fund-id="fundId" :recipient="recipient" identifier="modal"></donate>
                 <div class="text-center">
                     <button type="button" class="btn btn-default btn-sm" @click="prevState()" v-if="!isState('form', 1)"><i style="margin-right:3px;font-size:.8em;" class="fa fa-chevron-left"></i> Back</button>
@@ -68,7 +68,7 @@
             }
         },
         watch: {
-            'paymentComplete'(val, oldVal) {
+            paymentComplete(val, oldVal) {
                 this.$emit('payment-complete', val)
             },
         },
@@ -90,6 +90,10 @@
             },
             donate(identifier){
                 this.$root.$emit('DonateForm:donate', identifier);
+            },
+            stateChanged(donationState, subState) {
+                this.donationState = donationState;
+                this.subState = subState;
             },
             goToState(state){
                 switch (state) {

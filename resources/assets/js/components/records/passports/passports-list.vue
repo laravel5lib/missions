@@ -185,8 +185,11 @@
             }
         },
         computed: {
-            isFacilitator() {
-                return this.trips.length > 0 ? true : false;
+            isFacilitator: {
+                get() {
+                    return this.trips.length > 0 ? true : false;
+                },
+                set() {}
             },
             canExport() {
                 return this.firstUrlSegment == 'admin';

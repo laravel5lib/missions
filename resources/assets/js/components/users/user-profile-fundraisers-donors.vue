@@ -166,6 +166,10 @@
             if (this.display) {
                 this.searchDonors();
             }
+
+            this.$root.$on('DonateForm:complete', (val) => {
+                this.searchDonors();
+            });
         }
     }
 </script>

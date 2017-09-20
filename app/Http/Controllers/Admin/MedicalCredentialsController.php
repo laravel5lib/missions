@@ -16,7 +16,7 @@ class MedicalCredentialsController extends Controller
 
     public function show($id)
     {
-        $credential = Credential::medical()->findOrFail($id)
+        $credential = Credential::medical()->findOrFail($id);
 
         $this->authorize('view', $credential);
 

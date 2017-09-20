@@ -94,29 +94,13 @@
                         </div>
                     </div>
                     <div class="row" v-if="transaction.details.type == 'card'">
-                        <div class="col-xs-6">
+                        <div class="col-xs-12">
                             <label>Card Holder's Name</label>
-                            <input class="form-control" type="text" v-model="card.cardholder" />
+                            <input class="form-control input-sm" type="text" v-model="card.cardholder" />
                         </div>
-                        <div class="col-xs-6">
-                            <label>Card Number</label>
-                            <input class="form-control" type="text" v-model="card.number" :disabled="editingCreditCard" />
-                        </div>
-                        <div class="col-xs-4">
-                            <label>CVC Code</label>
-                            <input class="form-control" type="text" v-model="card.cvc" maxlength="4" :disabled="editingCreditCard" />
-                        </div>
-                        <div class="col-xs-4">
-                            <label>Exp. Month</label>
-                            <select class="form-control" v-model="card.exp_month" :disabled="editingCreditCard">
-                                <option v-for="month in monthList" :value="month">{{month}}</option>
-                            </select>
-                        </div>
-                        <div class="col-xs-4">
-                            <label>Exp. Year</label>
-                            <select class="form-control" v-model="card.exp_year" :disabled="editingCreditCard">
-                                <option v-for="year in yearList" :value="year">{{year}}</option>
-                            </select>
+                        <div class="col-xs-12" id="StripeForm">
+                            <label for="">Card</label>
+                            <div id="card-element" class="field"></div>
                         </div>
                     </div>
                 </div>
@@ -242,6 +226,22 @@
 
     </div>
 </template>
+<style>
+	#StripeForm .field {
+		display: block;
+		height: 34px;
+		padding: 8px 6px;
+		font-size: 14px;
+		color: #555555;
+		background-color: #fff;
+		background-image: none;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+		-webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+		transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+	}
+</style>
 <script type="text/javascript">
     import $ from 'jquery';
     import vSelect from "vue-select";
@@ -296,7 +296,11 @@
                 },
                 monthList: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
                 transfer_type: 'to',
-                spinnerText: 'Loading...'
+                spinnerText: 'Loading...',
+                stripe: null,
+                cardElement: null,
+                cardProcessing: false,
+
             }
         },
         computed: {
@@ -306,20 +310,6 @@
                 }
                 return false;
             },
-            yearList() {
-                var num, today, years, yyyy;
-                today = new Date;
-                yyyy = today.getFullYear();
-                years = (() =>  {
-                    var i, ref, ref1, results;
-                    results = [];
-                    for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
-                        results.push(num);
-                    }
-                    return results;
-                })();
-                return years;
-            }
         },
         methods: {
             newDonorMode() {
@@ -403,9 +393,12 @@
                 });
             },
             create() {
-                this.$refs.transactionspinner.show();
+                let data = this.prepareData();
 
-                var data = this.prepareData();
+                if (this.cardProcessing)
+                    return this.createWithCard(data);
+
+                this.$refs.transactionspinner.show();
 
                 this.$http.post('transactions', data).then((response) => {
                     this.$refs.transactionspinner.hide();
@@ -417,10 +410,13 @@
                     this.$root.$emit('showError', 'There are errors on the form.');
                 });
             },
+            createWithCard(data){
+                this.cardProcessing = data;
+                this.createToken();
+            },
             update() {
+                let data = this.prepareData();
                 this.$refs.transactionspinner.show();
-
-                var data = this.prepareData();
 
                 this.$http.put('transactions/' + this.id, data).then((response) => {
                     this.$refs.transactionspinner.hide();
@@ -432,7 +428,7 @@
                 });
             },
             prepareData() {
-                var data = {
+                let data = {
                     details: {}
                 };
 
@@ -467,16 +463,64 @@
                         data.details.comment = this.transaction.comment;
                     }
                     if (this.transaction.details.type == 'card') {
+                        this.cardProcessing = true;
                         data.card = this.card;
                         data.card.zip = this.selectedDonor.zip
                     }
                 }
 
                 return data;
-            }
+            },
+            createToken(data) {
+                this.$refs.transactionspinner.show();
+                this.stripe
+                    .createToken(this.cardElement, { name: this.card.cardholder })
+                    .then(this.createTokenCallback);
+            },
+            createTokenCallback(result) {
+                let data = this.cardProcessing;
+                console.log(result);
+                if (result.token) {
+                    data.card = result.token.card;
+                    data.token = result.token.id;
+                    data.card.zip = this.selectedDonor.zip;
+
+                    this.$http.post('transactions', data).then((response) => {
+                        this.$refs.transactionspinner.hide();
+                        this.$root.$emit('showSuccess', 'Transaction successfully created.');
+                        this.$emit('transactionCreated');
+                        this.reset();
+                    },(response) =>  {
+                        this.$refs.transactionspinner.hide();
+                        this.$root.$emit('showError', 'There are errors on the form.');
+                    });
+                }
+            },
+            setOutcome(result) {
+                if (result.error) {
+                    this.$root.$emit('showError', result.error.message);
+                }
+            },
         },
         mounted() {
-            if (this.editing) { this.fetch() };
+            if (this.editing) { this.fetch() }
+
+            // Stripe script
+//            this.$nextTick(function () {
+	            setTimeout(function () {
+	                debugger;
+	                this.stripe = window.Stripe(this.$parent.stripeKey);
+	                let elements = this.stripe.elements();
+	                this.cardElement = elements.create('card', {
+	                    style: {}
+	                });
+	                this.cardElement.mount('#card-element');
+
+	                this.cardElement.on('change', (event) => {
+	                    this.setOutcome(event);
+	                });
+	            }.bind(this), 3000)
+//            });
         }
     }
 </script>

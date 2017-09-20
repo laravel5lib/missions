@@ -99,8 +99,8 @@
 
         <div class="col-xs-12 text-center">
             <pagination :pagination="pagination" pagination-key="pagination" :callback="searchPassports"></pagination>
-
         </div>
+
         <modal :value="deleteModal" title="Remove Passport" :small="true">
             <div slot="modal-body" class="modal-body text-center">Delete this Passport?</div>
             <div slot="modal-footer" class="modal-footer">

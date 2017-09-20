@@ -464,8 +464,8 @@
                     }
                     if (this.transaction.details.type == 'card') {
                         this.cardProcessing = true;
-                        data.card = this.card;
-                        data.card.zip = this.selectedDonor.zip
+                        // data.card = this.card;
+                        // data.card.zip = this.selectedDonor.zip
                     }
                 }
 
@@ -508,7 +508,6 @@
             // Stripe script
 //            this.$nextTick(function () {
 	            setTimeout(function () {
-	                debugger;
 	                this.stripe = window.Stripe(this.$parent.stripeKey);
 	                let elements = this.stripe.elements();
 	                this.cardElement = elements.create('card', {

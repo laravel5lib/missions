@@ -138,7 +138,7 @@ class UtilitiesController extends Controller
 
         Mail::queue('emails.sponsor-request', ['data' => $data], function ($m) use ($data) {
             $m->to('mail@missions.me', 'Missions.Me')
-              ->cc('katie@missions.me', 'Katie Mazur')
+              ->cc('madeline@angelhouse.me', 'Madeline Osiwala')
               ->cc('gabe@missions.me', 'Gabe Bahlhorn')
               ->subject('New Project Request!');
         });

@@ -26,73 +26,56 @@
         <div class="col-xs-12" v-if="loaded && !visas.length">
             <div role="alert"><p class="text-center text-muted"><em>Add and manage your visas here!</em></p></div>
         </div>
-        <div class="col-sm-12" style="display:flex; flex-wrap: wrap;">
-        <div class="col-xs-12 col-sm-6 col-md-4" v-for="visa in visas" style="display:flex; flex-direction:column;">
-            <div class="panel panel-default">
-                <div style="min-height:220px;" class="panel-body">
-                    <a role="button" :href="'/'+ firstUrlSegment + '/records/visas/' + visa.id">
-                        <h5 class="text-primary text-capitalize" style="margin-top:0px;margin-bottom:5px;">
+
+        <div class="col-xs-12">
+            <div class="list-group">
+                <div class="list-group-item" v-for="visa in visas">
+                    <h5 class="list-group-item-heading">
+                        <a role="button" :href="'/'+ firstUrlSegment +'/records/visas/' + visa.id">
                             {{visa.given_names}} {{visa.surname}}
-                        </h5>
-                    </a>
-                    <div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:25px;top:12px;">
-                        <!--<a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/visas/' + visa.id + '/edit'"><i class="fa fa-pencil"></i></a>-->
-                        <a @click="selectedVisa = visa,deleteModal = true"><i class="fa fa-times"></i></a>
-                    </div>
-                    <hr class="divider">
+                        </a>
+                        <span v-if="app.user.can.delete_visas" style="position:absolute;right:25px;top:12px;">
+                            <a @click="selectedVisa = visa,deleteModal = true"><i class="fa fa-times"></i></a>
+                        </span>
+                    </h5>
+
                     <div class="row">
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <label>NUMBER</label>
-                                <p class="small">{{visa.number}}</p>
-                            </div>
-                            <div class="col-xs-6 text-right">
+                        <div class="col-sm-4">
+                            <label>NUMBER</label>
+                            <p class="small">{{visa.number}}</p>
+                        </div>
+                        <div class="col-sm-4">
+                            <label>COUNTRY</label>
+                            <p class="small">{{visa.country_name}}</p>
+                        </div>
+                        <div class="col-sm-4">
+                            <label>EXPIRES ON</label>
+                            <p class="small">
+                                {{visa.expires_at|moment('ll')}}
                                 <span class="label label-primary" v-if="visa.expired">
                                     <i class="fa fa-exclamation-triangle"></i> Expired
                                 </span>
-                            </div>
+                            </p>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <label>COUNTRY</label>
-                                <p class="small">{{visa.country_name}}</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <label>ISSUED ON</label>
-                                <p class="small">{{visa.issued_at|moment('ll')}}</p>
-                            </div><!-- end col -->
-                            <div class="col-sm-6">
-                                <label>EXPIRES ON</label>
-                                <p class="small">{{visa.expires_at|moment('ll')}}</p>
-                            </div><!-- end col -->
-                        </div><!-- end row -->
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <label>CREATED ON</label>
-                                <p class="small">{{visa.created_at|moment('lll')}}</p>
-                            </div><!-- end col -->
-                             <div class="col-sm-6">
-                                <label>UPDATED ON</label>
-                                <p class="small">{{visa.updated_at|moment('lll')}}</p>
-                            </div><!-- end col -->
-                        </div><!-- end row -->
-                    </div><!-- end panel-body -->
-                    <div class="panel-footer" style="padding: 0;" v-if="selector">
-                        <div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
-                            <a class="btn btn-danger" @click="setVisa(visa)">
-                                Select
+                    </div>
+
+                    <div class="row" v-if="selector">
+                        <div class="col-xs-12 text-right">
+                            <hr class="divider sm">
+                            <a class="btn btn-sm btn-primary" @click="setVisa(visa)">
+                                Use This Visa
                             </a>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
+
         <div class="col-xs-12 text-center">
             <pagination :pagination="pagination" pagination-key="pagination" :callback="searchVisas"></pagination>
-
         </div>
+
         <modal :value="deleteModal" title="Remove Visa" :small="true">
             <div slot="modal-body" class="modal-body">Delete this Visa?</div>
             <div slot="modal-footer" class="modal-footer">

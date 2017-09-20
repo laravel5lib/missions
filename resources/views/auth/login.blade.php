@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-xs-offset-0 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
-                    <div class="panel panel-default">
+                    <div class="panel panel-default panel-hero">
                         <div class="panel-heading">
                             <h6 class="text-uppercase text-center">Welcome To Missions.Me</h6>
                         </div>
@@ -63,7 +63,7 @@
                                 <div class="form-group">
                                     <div class="col-xs-10 col-xs-offset-1">
                                         <button type="submit" class="btn btn-primary btn-block">
-                                            Login
+                                            Log In
                                         </button>
                                         @if ($errors->has('email'))
                                             <a class="btn btn-link btn-block" href="{{ route('password.request') }}">

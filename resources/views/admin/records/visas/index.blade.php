@@ -24,6 +24,10 @@
 @stop
 
 @section('tab')
-    <visas-list></visas-list>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <visas-list></visas-list>
+        </div>
+    </div>
     <hr class="divider inv lg">
 @stop

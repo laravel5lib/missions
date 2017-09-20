@@ -61,7 +61,7 @@
       @else
         <li>
           <div class="btn-group hidden-xs" style="margin-right:20px;">
-            <a class="btn btn-link" href="{{ url('/login') }}">Login</a>
+            <a class="btn btn-link" href="{{ url('/login') }}">Log In</a>
             <a class="btn btn-primary" href="{{ url('/register') }}">Sign Up</a>
           </div>
         </li>

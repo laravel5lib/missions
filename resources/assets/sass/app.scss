@@ -158,6 +158,9 @@ p.large-line-height {
   background-color: $brand-sports !important;
   color: #fff !important;
 }
+.panel-hero {
+  border-top: 5px solid $brand-primary;
+}
 
 .list-group-item-default {
     color: $text-color;
@@ -974,7 +977,7 @@ img.adv-mark {
     background: $brand-primary url(../../images/login/login-bg-medium.jpg) no-repeat center fixed;
   }
   @media screen and (max-width: 767px) {
-    background: $brand-primary url(../../images/login/login-bg-small.jpg) no-repeat center scroll;
+    background: $brand-primary url(../../images/login/login-bg-small.jpg) no-repeat center fixed;
     padding: 80px 0 350px;
   }
 }

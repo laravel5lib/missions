@@ -4,7 +4,7 @@
 
         <div class="col-xs-12 text-right">
             <form class="form-inline">
-                <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
+                <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator && ! firstUrlSegment == 'admin'">
                     <label>
                         <input type="checkbox" v-model="includeManaging"> Include my group's visas
                     </label>
@@ -13,7 +13,7 @@
                     <input type="text" class="form-control" v-model="search" placeholder="Search" @keyup="debouncedSearch">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
-                <template v-if="canExport">
+                <template v-if="app.user.can.create_reports">
                     <export-utility url="visas/export"
                           :options="exportOptions"
                           :filters="exportFilters">
@@ -122,6 +122,7 @@
         },
         data(){
             return{
+                app: MissionsMe,
                 visas: [],
                 selectedVisa: null,
                 trips: [],
@@ -169,9 +170,6 @@
                     return this.trips.length > 0 ? true : false;
                 },
                 set() {}
-            },
-            canExport() {
-                return this.firstUrlSegment == 'admin';
             }
         },
         watch:{

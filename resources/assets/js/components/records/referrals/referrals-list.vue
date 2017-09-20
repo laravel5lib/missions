@@ -3,7 +3,7 @@
         <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="col-xs-12 text-right">
             <form class="form-inline">
-                <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
+                <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator && ! firstUrlSegment == 'admin'">
                     <label>
                         <input type="checkbox" v-model="includeManaging"> Include my group's referrals
                     </label>
@@ -12,7 +12,7 @@
                     <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
-                <template v-if="canExport">
+                <template v-if="app.user.can.create_reports">
                     <export-utility url="referrals/export"
                                     :options="exportOptions"
                                     :filters="exportFilters">
@@ -107,6 +107,7 @@
         },
         data(){
             return{
+                app: MissionsMe,
                 referrals: [],
                 selectedReferral: '',
                 trips: [],

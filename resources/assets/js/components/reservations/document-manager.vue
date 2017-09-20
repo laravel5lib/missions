@@ -7,10 +7,10 @@
                 <form novalidate>
                     <a class="btn btn-default-hollow btn-sm" @click="toggleChangeState()">
                         <span v-if="!changeState">
-                            <i class="fa fa-cog icon-left"></i> Manage
+                            <i class="fa fa-archive icon-left"></i> Use Existing
                         </span>
                         <span v-else>
-                            <i class="fa fa-times"></i> Cancel
+                            <i class="fa fa-times icon-left"></i> Cancel
                         </span>
                     </a>
                     <a class="btn btn-primary-hollow btn-sm" :href="'/' + firstUrlSegment + '/records/' + url + '/create'"><i class="fa fa-plus icon-left"></i> Create New</a>

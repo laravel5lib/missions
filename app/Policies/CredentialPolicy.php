@@ -15,11 +15,15 @@ class CredentialPolicy extends BasePolicy
      * @param  \App\Models\v1\Credential  $credential
      * @return mixed
      */
-    public function view(User $user, Credential $credential)
+    public function view(User $user, Credential $credential = null)
     {
         // has permission?
         if ($user->can('view_credentials')) {
             return true;
+        }
+
+        if (! $credential) {
+            return false;
         }
 
         // is manager, facilitator, or owner?
@@ -36,7 +40,7 @@ class CredentialPolicy extends BasePolicy
     {
         // admin routes require permission
         if (request()->is('admin/*')) {
-            return $user->can('create_credentials');
+            return $user->can('add_credentials');
         }
 
         return true;

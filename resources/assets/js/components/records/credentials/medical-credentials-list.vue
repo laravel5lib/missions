@@ -3,7 +3,7 @@
 		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="col-xs-12 text-right">
 			<form class="form-inline">
-				<div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
+				<div style="margin-right:5px;" class="checkbox" v-if="isFacilitator && ! firstUrlSegment == 'admin'">
 					<label>
 						<input type="checkbox" v-model="includeManaging"> Include my group's medical credentials
 					</label>

@@ -18,6 +18,8 @@ export default {
                 type: 'Please select a type.',
                 given_names: 'Please provide the given names.',
                 givennames: 'Please provide the given names.',
+                firstname: 'Please provide the first name.',
+                lastname: 'Please provide the last name.',
                 surname: 'Please provide the surname.',
                 number: 'Please provide a valid number.',
                 country: 'Please select a country.',

@@ -8,11 +8,19 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-6">
-                        <label>Name</label>
-                        <input type="text" class="form-control" v-model="donor.name" name="name" v-validate="'required'">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6" v-error-handler="{ value: donor.first_name, client: 'firstname' }">
+                                <label>First Name</label>
+                                <input type="text" class="form-control" v-model="donor.first_name" name="firstname" v-validate="'required'">
+                            </div>
+                            <div class="col-md-6" v-error-handler="{ value: donor.last_name, client: 'lastname' }">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control" v-model="donor.last_name" name="lastname" v-validate="'required'">
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label>Company</label>
                         <input type="text" class="form-control" v-model="donor.company">
                     </div>
@@ -23,7 +31,7 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-6" v-error-handler="{ value: donor.email, handle: 'email' }">
                         <label>Email</label>
                         <input type="text" class="form-control" v-model="donor.email" name="email" v-validate="'email'">
                     </div>
@@ -54,12 +62,12 @@
                         <input type="text" class="form-control" v-model="donor.zip"
                                name="zip" v-validate="'required'">
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6" v-error-handler="{ value: donor.country_code, client: 'country' }">
                         <label>Country</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="country" :debounce="250"
-                                  v-model="countryCodeObj" :options="countries" label="name"
+                                  v-model="countryCodeObj" :options="UTILITIES.countries" label="name"
                                   placeholder="Select a country"
-                                  name="country_code" v-validate="'required'"></v-select>
+                                  name="country" v-validate="'required'"></v-select>
                     </div>
                 </div>
             </div>
@@ -102,10 +110,13 @@
     </div>
 </template>
 <script type="text/javascript">
+    import utilities from '../../utilities.mixin';
+    import errorHandler from '../../error-handler.mixin';
     import vSelect from "vue-select";
     export default{
         name: 'donor-form',
         components: { vSelect },
+        mixins: [errorHandler, utilities],
         props: {
             'isUpdate': {
                 required: false,
@@ -119,7 +130,8 @@
         data() {
             return {
                 donor: {
-                    name: null,
+                    first_name: null,
+                    last_name: null,
                     company: null,
                     email: null,
                     phone: null,
@@ -132,7 +144,6 @@
                     account_id: null,
                     customer_id: null
                 },
-                countries: [],
                 users: [],
                 groups: [],
                 countryCodeObj: null,
@@ -155,7 +166,8 @@
         methods: {
             fetch() {
                 this.$http.get('donors/' + this.donorId).then((response) => {
-                    this.donor.name = response.data.data.name;
+                    this.donor.first_name = response.data.data.first_name;
+                    this.donor.last_name = response.data.data.last_name;
                     this.donor.company = response.data.data.company;
                     this.donor.email = response.data.data.email;
                     this.donor.phone = response.data.data.phone;
@@ -191,6 +203,9 @@
                             this.$refs.donorspinner.hide();
                             this.$root.$emit('showError', 'There are errors on the form');
                         });
+                    } else {
+                        this.$refs.donorspinner.hide();
+                        this.$root.$emit('showError', 'There are errors on the form');
                     }
                 })
             },
@@ -220,7 +235,8 @@
 			    }
             },
             reset() {
-                this.donor.name = null;
+                this.donor.first_name = null;
+                this.donor.last_name = null;
                 this.donor.company = null;
                 this.donor.email = null;
                 this.donor.phone = null;
@@ -232,13 +248,6 @@
                 this.donor.account_type = null;
                 this.donor.account_id = null;
                 this.donor.customer_id =  null;
-            },
-            getCountries() {
-                // this.$refs.spinner.show();
-                this.$http.get('utilities/countries').then((response) => {
-                    this.countries = response.data.countries;
-                    // this.$refs.spinner.hide();
-                });
             },
             getUsers(search) {
                 // this.$refs.spinner.show();

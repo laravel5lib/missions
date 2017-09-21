@@ -105,7 +105,7 @@ class DonationsController extends Controller
 
         // add metadata
         $request->merge(['metadata' => [
-            'donor_name' => $request->get('donor')['name'],
+            'donor_name' => $request->get('donor')['first_name'] . ' ' . $request->get('donor')['last_name'],
             'donor_email' => isset($request->get('donor')['email']) ? $request->get('donor')['email'] : null,
             'donor_phone' => isset($request->get('donor')['phone']) ? $request->get('donor')['phone'] : null,
             'fund' => $request->get('fund_id')

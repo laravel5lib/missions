@@ -1,4 +1,5 @@
 let mix = require('laravel-mix');
+let Path = require('path');
 
 /*
  |--------------------------------------------------------------------------
@@ -12,6 +13,23 @@ let mix = require('laravel-mix');
  */
 mix.options({
     processCssUrls: false
+});
+
+mix.webpackConfig({
+    resolve: {
+        modules:[
+            Path.resolve(__dirname), Path.resolve(__dirname, "node_modules")
+        ],
+        alias: {
+            "TweenLite": Path.resolve('node_modules', 'gsap/src/uncompressed/TweenLite.js'),
+            "TweenMax": Path.resolve('node_modules', 'gsap/src/uncompressed/TweenMax.js'),
+            "TimelineLite": Path.resolve('node_modules', 'gsap/src/uncompressed/TimelineLite.js'),
+            "TimelineMax": Path.resolve('node_modules', 'gsap/src/uncompressed/TimelineMax.js'),
+            "ScrollMagic": Path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/ScrollMagic.js'),
+            "animation.gsap": Path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap.js'),
+            "debug.addIndicators": Path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'),
+        },
+    },
 });
 
 mix.js('./resources/assets/js/main.js', 'public/js').version();

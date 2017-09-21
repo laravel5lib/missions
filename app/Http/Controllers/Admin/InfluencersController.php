@@ -19,21 +19,21 @@ class InfluencersController extends Controller
         return view('admin.records.influencers.create');
     }
 
-    public function show(Essay $essay)
+    public function show(Essay $influencer)
     {
-        $this->authorize('view', $essay);
+        $this->authorize('view', $influencer);
 
-        $this->seo()->setTitle($essay->author_name . ' - Influencer Application');
+        $this->seo()->setTitle($influencer->author_name . ' - Influencer Application');
 
-        return view('admin.records.influencers.show', compact('essay'));
+        return view('admin.records.influencers.show')->with('essay', $influencer);
     }
 
-    public function edit(Essay $essay)
+    public function edit(Essay $influencer)
     {
-        $this->authorize('update', $essay);
+        $this->authorize('update', $influencer);
 
         $this->seo()->setTitle('Edit Influencer Application');
 
-        return view('admin.records.influencers.edit')->with('id', $essay->id);
+        return view('admin.records.influencers.edit')->with('id', $influencer->id);
     }
 }

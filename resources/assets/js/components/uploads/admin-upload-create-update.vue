@@ -290,8 +290,9 @@
 				}
 			},
             isFileSet() {
+			    return true;
 			    // return  !_.isNull(this.file) && !!this.attemptSubmit;
-			    return  !_.isNull(this.file);
+			    //return  !_.isNull(this.file) ;
             }
 		},
 		watch:{

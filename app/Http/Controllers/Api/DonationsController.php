@@ -128,6 +128,7 @@ class DonationsController extends Controller
             'brand' => $charge['source']['brand'],
             'last_four' => $charge['source']['last4'],
             'cardholder' => $charge['source']['name'],
+            'comment' => $request->get('comment')
         ];
 
         // we can pass donor details to try and find a match

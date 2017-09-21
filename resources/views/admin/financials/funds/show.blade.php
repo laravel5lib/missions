@@ -51,7 +51,7 @@
     <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <fund-manager id="{{ $fund->id }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}">
+            <fund-manager id="{{ $fund->id }}" stripe-key="{{ env('STRIPE_KEY') }}">
                 <notes type="funds"
                        id="{{ $fund->id }}"
                        user_id="{{ auth()->user()->id }}"

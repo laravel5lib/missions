@@ -46,12 +46,12 @@ class MedicalCredentialsController extends Controller
         return view('admin.records.medical-credentials.show', compact('credential'));
     }
 
-    public function edit(Credential $credential)
+    public function edit(Credential $medicalCredential)
     {
-        $this->authorize('update', $credential);
+        $this->authorize('update', $medicalCredential);
 
         $this->seo()->setTitle('Edit Medical Credentials');
 
-        return view('admin.records.medical-credentials.edit')->with('id', $credential->id);
+        return view('admin.records.medical-credentials.edit')->with('id', $medicalCredential->id);
     }
 }

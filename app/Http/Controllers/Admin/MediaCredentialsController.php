@@ -46,12 +46,12 @@ class MediaCredentialsController extends Controller
         return view('admin.records.media-credentials.show', compact('credential'));
     }
 
-    public function edit(Credential $credential)
+    public function edit(Credential $mediaCredential)
     {
-        $this->authorize('update', $credential);
+        $this->authorize('update', $mediaCredential);
 
         $this->seo()->setTitle('Edit Media Credentials');
 
-        return view('admin.records.media-credentials.edit')->with('id', $credential->id);
+        return view('admin.records.media-credentials.edit')->with('id', $mediaCredential->id);
     }
 }

@@ -68,7 +68,6 @@ $api->version('v1', [
         $api->delete('users/{id}/roles/{name}', 'UserRolesController@destroy');
         $api->post('users/{id}/permissions', 'UserPermissionsController@store');
         $api->delete('users/{id}/permissions', 'UserPermissionsController@destroy');
-        $api->get('{recipient}/{id}/accolades/{name}', 'AccoladesController@index');
         $api->post('{recipient}/{id}/accolades', 'AccoladesController@store');
         $api->resource('groups', 'GroupsController');
         $api->get('groups/{id}/notes', 'GroupsController@notes');
@@ -280,6 +279,7 @@ $api->version('v1', [
     $api->get('groups', 'GroupsController@index');
     $api->get('groups/{group}', 'GroupsController@show');
     $api->get('stories', 'StoriesController@index');
+    $api->get('{recipient}/{id}/accolades/{name}', 'AccoladesController@index');
     $api->get('trips', 'TripsController@index');
     $api->get('trips/{trip}', 'TripsController@show');
     $api->resource('fundraisers', 'FundraisersController');

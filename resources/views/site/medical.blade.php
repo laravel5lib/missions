@@ -1,5 +1,7 @@
 @extends('site.layouts.default')
 
+@section('title', 'Medical Missions - Missions.Me')
+
 @section('content')
 <div class="content-page-header">
     <img class="img-responsive" src="images/medical/medical-header.jpg" alt="Medical">
@@ -48,7 +50,7 @@
 				<hr class="divider inv">
 				<hr class="divider xlg">
 				<div class="col-sm-4">
-					<ul>			
+					<ul>
 						<li>GENERAL PHYSICIANS</li>
 						<li>SURGEONS</li>
 						<li>REGISTERED NURSES</li>

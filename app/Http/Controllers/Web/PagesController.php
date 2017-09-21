@@ -60,8 +60,7 @@ class PagesController extends Controller
         $controllers = collect([
             'campaigns' => '\CampaignsController',
             'groups' => '\GroupsController',
-            'users' => '\UsersController',
-            'causes' => '\CausesController'
+            'users' => '\UsersController'
         ]);
 
         return app($namespace.$controllers->get($resource->slugable_type))

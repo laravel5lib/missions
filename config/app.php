@@ -193,7 +193,8 @@ return [
         FactoryStories\Providers\ServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Laracademy\Commands\MakeServiceProvider::class,
-        Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class
+        Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
+        Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class
     ],
 
     /*
@@ -248,6 +249,10 @@ return [
         'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
         'Promocodes' => App\Facades\Promocodes::class,
         'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
+        'SEOMeta'   => Artesaos\SEOTools\Facades\SEOMeta::class,
+        'OpenGraph' => Artesaos\SEOTools\Facades\OpenGraph::class,
+        'Twitter'   => Artesaos\SEOTools\Facades\TwitterCard::class,
+        'SEO' => Artesaos\SEOTools\Facades\SEOTools::class
     ],
 
 ];

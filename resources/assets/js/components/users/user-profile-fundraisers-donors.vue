@@ -2,14 +2,15 @@
     <div style="position:relative">
         <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div v-if="display && donors.length > 0">
-            <div class="btn-group btn-group-sm" role="group" aria-label="...">
-                <div class="btn-group btn-group-sm" role="group">
-                    <button type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donors'}" @click="toggleView('donors')">Donors</button>
-                </div>
-                <div class="btn-group btn-group-sm" role="group">
-                    <button type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donations'}" @click="toggleView('donations')">Donations</button>
-                </div>
-            </div>
+
+            <ul class="nav nav-tabs">
+                <li :class="{'active': activeView === 'donors'}">
+                    <a @click="toggleView('donors')">Donors</a>
+                </li>
+                <li :class="{'active': activeView === 'donations'}">
+                    <a @click="toggleView('donations')">Donations</a>
+                </li>
+            </ul>
 
             <hr class="divider inv sm">
             <template v-if="activeView==='donors'">
@@ -32,9 +33,9 @@
                     <div class="panel-heading" role="tab" :id="'heading-' + donation.id">
                         <h5>
                             <span class="text-success">{{ currency(donation.amount) }}</span> was donated<br>
-                            <small class="small">by 
-                                <a class="text-capitalize" 
-                                   :href="'/'+donation.donor.data.account_url" 
+                            <small class="small">by
+                                <a class="text-capitalize"
+                                   :href="'/'+donation.donor.data.account_url"
                                    v-if="!donation.anonymous && donation.donor.data.account_url">
                                     {{ donation.name }}
                                 </a>
@@ -99,7 +100,7 @@
         },
         watch: {
             'page'(val, oldVal) {
-                
+
                 if (this.activeView == 'donors') {
                     this.searchDonors();
                 } else {
@@ -144,7 +145,7 @@
             },
             searchDonations(){
                 this.$http.get('fundraisers/'+ this.id + '/donations', { params: {
-                    id: this.id, 
+                    id: this.id,
                     include: 'donor',
                     per_page: this.per_page,
                     page: this.page

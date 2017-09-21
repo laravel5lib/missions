@@ -3,7 +3,7 @@
     @if( $fundraiser->sponsor_id === (auth()->check() ? auth()->id() : '') )
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.0/css/Jcrop.min.css" type="text/css">
     @endif
-    <script type="text/javascript" src="//platform-api.sharethis.com/js/sharethis.js#property=58ba1e02535b950011d40583&product=sticky-share-buttons"></script>
+    <script type="text/javascript" src="//platform-api.sharethis.com/js/sharethis.js#property=58ba1e02535b950011d40583&product=inline-share-buttons"></script>
 @endsection
 @section('scripts')
     <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
@@ -29,8 +29,6 @@
             <h5 class="text-center text-capitalize">organized by <a href="{{ url($fundraiser->sponsor->slug->url) }}">{{ $fundraiser->sponsor->name }}</a></h5>
             <hr class="divider inv lg">
             <div class="col-xs-12 col-sm-6 col-sm-push-6 col-md-4 col-md-push-8">
-                {{-- <div class="sharethis-inline-share-buttons"></div>
-                <hr class="divider inv md"> --}}
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h1 class="text-center text-success"><listen-text text="${{ $fundraiser->raisedAsDollars() }}" event="Fundraiser::raised"></listen-text> <span style="font-size: 18px;">Raised</span></h1>
@@ -61,8 +59,11 @@
                     </div>
                 </div>
 
-                <modal-donate title="{{ $fundraiser->fund->name }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}" auth="{{ auth()->check() ? 1 : 0 }}"
+                <modal-donate title="{{ $fundraiser->fund->name }}" stripe-key="{{ env('STRIPE_KEY') }}" auth="{{ auth()->check() ? 1 : 0 }}"
                               type="{{ $type or '' }}" type-id="{{ $slug or '' }}" fund-id="{{ $fundraiser->fund->id }}" recipient="{{ $fundraiser->fund->name }}"></modal-donate>
+
+                <div class="sharethis-inline-share-buttons"></div>
+                <hr class="divider lg">
 
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                     <user-profile-fundraisers-donors id="{{ $fundraiser->id }}"></user-profile-fundraisers-donors>

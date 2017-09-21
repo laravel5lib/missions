@@ -6,9 +6,12 @@ use App\Http\Requests;
 use App\Models\v1\Fund;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Traits\SEOTools;
 
 class FundsController extends Controller
 {
+    use SEOTools;
+
     /**
      * Display a listing of the resource.
      *
@@ -22,6 +25,8 @@ class FundsController extends Controller
 
         $funds->setPath('/admin/funds');
 
+        $this->seo()->setTitle('Funds');
+
         return view('admin.financials.funds.index', compact('funds'));
     }
 
@@ -34,6 +39,8 @@ class FundsController extends Controller
     public function show(Fund $fund)
     {
         $this->authorize('view', $fund);
+
+        $this->seo()->setTitle($fund->name . ' Fund');
 
         return view('admin.financials.funds.show', compact('fund'));
     }

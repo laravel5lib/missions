@@ -11,7 +11,7 @@
             <div class="col-sm-6 col-sm-pull-6 col-sm-offset-0 col-md-4 col-md-offset-1">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <donate auth="{{ auth()->check() ? 1 : 0 }}" type="{{ $type or '' }}" type-id="{{ $slug or '' }}" recipient="{{$recipient or 'Missions.Me'}}" fund-id={{ $id }}></donate>
+                        <donate auth="{{ auth()->check() ? 1 : 0 }}" type="{{ $type or '' }}" type-id="{{ $slug or '' }}" recipient="{{$recipient or 'Missions.Me'}}" fund-id="{{ $id }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}"></donate>
                     </div>
                     <div class="panel-footer text-center">
                         <a href="https://stripe.com/" target="_blank"><span style="font-size:.6em;color:#bcbcbc;text-transform:uppercase;letter-spacing:1px;">Securely</span> <img style="width:90px; height:20px;opacity:.65;" src="../images/powered-by-stripe@2x.png" alt="Powered by Stripe"></a>
@@ -21,4 +21,8 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
 @endsection

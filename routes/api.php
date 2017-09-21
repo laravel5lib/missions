@@ -283,6 +283,7 @@ $api->version('v1', [
     $api->get('trips', 'TripsController@index');
     $api->get('trips/{trip}', 'TripsController@show');
     $api->resource('fundraisers', 'FundraisersController');
+    $api->resource('donations', 'DonationsController');
     $api->get('fundraisers/{id}/donors', 'FundraisersController@donors');
     $api->get('fundraisers/{id}/donations', 'FundraisersController@donations');
     $api->get('campaigns', 'CampaignsController@index');

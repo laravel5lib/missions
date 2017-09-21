@@ -22,16 +22,24 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-sm-12" :class="{ 'has-error': errors.has('donor', 'form-1')}">
+					<div class="col-sm-12" :class="{ 'has-error': errors.has('donorfirst', 'form-1') || errors.has('donorlast', 'form-1')}">
 						<label>Donor's Name</label>
-						<input type="text" class="form-control" v-model="donor" name="donor" data-vv-scope="form-1"
-						       v-validate="'required|alpha_spaces|min:1'">
+						<div class="row">
+							<div class="col-sm-6">
+								<input type="text" class="form-control" v-model="donor.first_name" name="donorfirst" data-vv-scope="form-1"
+								       v-validate="'required|alpha_spaces|min:1'" placeholder="First Name">
+							</div>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" v-model="donor.last_name" name="donorlast" data-vv-scope="form-1"
+								       v-validate="'required|alpha_spaces|min:1'" placeholder="Last Name">
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-sm-12" :class="{ 'has-error': errors.has('donor', 'form-1')}">
+					<div class="col-sm-12">
 						<label>Company Name</label>
-						<input type="text" class="form-control" v-model="company_name">
+						<input type="text" class="form-control" v-model="donor.company">
 					</div>
 				</div>
 				<hr class="divider sm inv">
@@ -158,7 +166,7 @@
 								<div class="col-sm-12">
 									<hr class="divider sm">
 									<label for="comment">Leave a Message</label>
-									<textarea name="comment" id="comment" rows="2" class="form-control" v-model="comment" style="resize: vertical" v-autosize></textarea>
+									<textarea name="comment" id="comment" rows="2" class="form-control" v-model="comment" style="resize: vertical"></textarea>
 								</div>
 							</div>
 						</div><!-- end panel-body -->
@@ -254,7 +262,11 @@
         },
         data() {
             return {
-                donor: '',
+                donor: {
+                    first_name: null,
+                    last_name: null,
+                    company: null,
+                },
                 donor_id: null,
                 company_name: '',
                 amount: 1,
@@ -372,7 +384,7 @@
                 });
             },
             createTokenCallback(result) {
-                console.log(result);
+                // console.log(result);
                 if (result.token) {
                     this.card = result.token.card;
                     this.token = result.token.id;
@@ -410,27 +422,28 @@
                 if (parseInt(this.auth) && this.donor_id) {
                     data.donor_id = this.donor_id;
                 } else {
-                    data.donor = {
-                        name: this.donor,
-                        company: this.company_name,
+                    data.donor = this.donor;
+                    _.extend(data.donor, {
                         email: this.cardEmail,
                         phone: this.cardPhone,
                         zip: this.card.address_zip,
                         country_code: this.card.country.toLowerCase()
-                    }
+                    })
                 }
                 this.$http.post('donations', data)
                     .then((response) => {
 		                    // this.stripeDeferred.resolve(true);
 		                    this.$refs.donationSpinner.hide();
 		                    this.donationState = 'confirmation';
-		                    this.$root.$emit('DonateForm:complete', response.data.data.amount);
+		                    this.$root.$emit('DonateForm:complete');
 
-		                    this.$http.get(`fundraisers?fund=${this.fundId}`).then((response) => {
-		                        let fundraiser = response.data.data[0];
-                                this.$root.$emit('Fundraiser::raised', fundraiser.raised_amount);
-                                this.$root.$emit('Fundraiser::percent', fundraiser.raised_percent);
-		                    });
+		                    if (this.child) {
+                                this.$http.get(`fundraisers?fund=${this.fundId}`).then((response) => {
+                                    let fundraiser = response.data.data[0];
+                                    this.$root.$emit('Fundraiser::raised', fundraiser.raised_amount);
+                                    this.$root.$emit('Fundraiser::percent', fundraiser.raised_percent);
+                                });
+                            }
 
 		                    this.$emit('state-changed', this.donationState, this.subState);
                         },
@@ -470,7 +483,7 @@
 
                                         // Stripe script
                                         this.$nextTick(function () {
-                                            this.stripe = window.Stripe(this.$parent.stripeKey);
+                                            this.stripe = window.Stripe(this.stripeKey);
                                             let elements = this.stripe.elements();
                                             this.cardElement = elements.create('card', {
                                                 style: {}
@@ -535,7 +548,8 @@
 
             if (parseInt(this.auth)) {
                 this.$http.get('users/me').then((response) => {
-                    this.donor = response.data.data.name;
+                    this.donor.first_name = response.data.data.first_name;
+                    this.donor.last_name = response.data.data.last_name;
                     this.donor_id = response.data.data.donor_id || null;
                     this.cardHolderName = response.data.data.name;
                     this.cardEmail = response.data.data.email;

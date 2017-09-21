@@ -1,5 +1,7 @@
 @extends('site.layouts.default')
 
+@section('title', 'Admissions - Missions.Me College')
+
 @section('scripts')
 <script>
     $('.scrollNav').easyScroller();
@@ -78,7 +80,7 @@
 						      </div>
 						    </div>
 						  </div>
-						  
+
 						  <div class="panel panel-default panel-primary">
 						    <div class="panel-heading">
 						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
@@ -203,7 +205,7 @@
 						    </div>
 						    <div id="collapseThirteen" class="panel-collapse collapse">
 						      <div class="panel-body">
-						        <p class="small">Every academic year, students are enrolled in two semesters. Students are enrolled as full time students completing two courses (six semester hours) every eight weeks during each semester. They are also enrolled in the ministerial practicum, which is college credit for serving within Missions.Me.</p> 
+						        <p class="small">Every academic year, students are enrolled in two semesters. Students are enrolled as full time students completing two courses (six semester hours) every eight weeks during each semester. They are also enrolled in the ministerial practicum, which is college credit for serving within Missions.Me.</p>
 
 								<p class="small">Students complete their education online with Southeastern University. Students are required to attend mandatory study hall times each day to allow the allotted time to complete class assignments. On site academic advising also occurs.</p>
 						      </div>
@@ -217,7 +219,7 @@
 						    </div>
 						    <div id="collapseFourteen" class="panel-collapse collapse">
 						      <div class="panel-body">
-						        <p class="small">With a full time class schedule and being a part of Missions.Me College, students have a pretty demanding schedule. However, we understand that some of our students may need a job while attending MMC. That is why our schedules end at 5pm during the week and 12pm on Fridays. Weekends will also be available for students.</p> 
+						        <p class="small">With a full time class schedule and being a part of Missions.Me College, students have a pretty demanding schedule. However, we understand that some of our students may need a job while attending MMC. That is why our schedules end at 5pm during the week and 12pm on Fridays. Weekends will also be available for students.</p>
 						      </div>
 						    </div>
 						</div><!-- end panel -->

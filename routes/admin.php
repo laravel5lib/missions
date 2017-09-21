@@ -1,5 +1,7 @@
 <?php
 
+use Artesaos\SEOTools\Facades\SEOMeta;
+
 /*
 |--------------------------------------------------------------------------
 | Admin Web Routes
@@ -7,6 +9,8 @@
 */
 
 Route::get('/', function () {
+    SEOMeta::setTitle('Admin Dashboard');
+
     return view('admin.index');
 })->middleware(['can:access_backend']);
 
@@ -50,6 +54,9 @@ Route::resource('transactions', 'TransactionsController');
 
 Route::prefix('records')->group(function () {
     Route::get('{tab?}', function ($tab = 'passports') {
+        $title = title_case(str_replace("-", " ", $tab));
+        SEOMeta::setTitle($title);
+
         return view('admin.records.'.$tab.'.index', compact('tab'));
     });
 
@@ -87,5 +94,6 @@ Route::prefix('records')->group(function () {
 });
 
 Route::get('reports', function () {
+    SEOMeta::setTitle('Reports');
     return view('admin.reports.index');
 })->middleware('can:view,App\Models\v1\Report');

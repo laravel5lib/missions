@@ -230,10 +230,10 @@
                 set() {}
             },
             isAdmin(){
-                return _.contains(_.pluck(this.$root.user.abilities.data, 'slug'), 'edit-groups');
+                return _.contains(_.pluck(this.$root.user.permissions.data, 'name'), 'edit_groups');
             },
         },
-        
+
         methods: {
             uploadsComplete(data){
                 switch(data.type){

@@ -1,5 +1,7 @@
 @extends('site.layouts.default')
 
+@section('title', 'Give to Missions.Me ')
+
 @section('content')
 <div class="content-page-header">
     <img class="img-responsive" src="images/support/support-header.jpg" alt="Support">

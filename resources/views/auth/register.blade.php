@@ -1,5 +1,7 @@
 @extends('site.layouts.default')
 
+@section('title', 'Sign Up for a Missions.Me Account')
+
 @section('content')
 <div class="login-bg">
     <div class="container">

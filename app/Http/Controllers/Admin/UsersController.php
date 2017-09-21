@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\v1\User;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Artesaos\SEOTools\Traits\SEOTools;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 
 class UsersController extends Controller
 {
+    use SEOTools;
 
     /**
      * UsersController constructor.
@@ -24,6 +26,8 @@ class UsersController extends Controller
     {
         $this->authorize('view', $this->user);
 
+        $this->seo()->setTitle('Users');
+
         return view('admin.users.index');
     }
 
@@ -33,6 +37,8 @@ class UsersController extends Controller
 
         $user = User::findOrFail($id);
 
+        $this->seo()->setTitle($user->name);
+
         return view('admin.users.show')->with('user', $user);
     }
 
@@ -40,12 +46,16 @@ class UsersController extends Controller
     {
         $this->authorize('update', $this->user);
 
+        $this->seo()->setTitle('Edit User');
+
         return view('admin.users.edit', compact('id'));
     }
 
     public function create()
     {
          $this->authorize('create', $this->user);
+
+         $this->seo()->setTitle('Create User');
 
          return view('admin.users.create');
     }

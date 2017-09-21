@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Traits\SEOTools;
 
 class DonationsController extends Controller
 {
+    use SEOTools;
+
     public function show($recipient = null)
     {
         // redirect if using an old donation route
@@ -24,6 +26,8 @@ class DonationsController extends Controller
         $type = $fund->type;
         $slug = $fund->slug;
         $id = $fund->id;
+
+        $this->seo()->setTitle('Donate to ' . $fund->name);
 
         return view('site.donate', compact('recipient', 'type', 'slug', 'id'));
     }

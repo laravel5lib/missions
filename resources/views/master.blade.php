@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
 
-    <title>
-      @hasSection('title')
-        @yield('title')
-      @else
-        Missions.Me | Custom Group Missions Trips
-      @endif
-    </title>
+    @hasSection('title')
+      <title>@yield('title')</title>
+    @else
+      {!! SEO::generate() !!}
+    @endif
+
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}" />
 
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">

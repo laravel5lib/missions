@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Traits\SEOTools;
 
 class CampaignsController extends Controller
 {
+    use SEOTools;
+
     public function index()
     {
+        $this->seo()->setTitle('Mission Trips');
+
         return view('site.campaigns.index');
     }
 
@@ -24,6 +28,8 @@ class CampaignsController extends Controller
             return $response;
         }
 
+        $this->seo()->setTitle($campaign->name);
+
         return view('site.campaigns.show', compact('campaign'));
     }
 
@@ -36,6 +42,8 @@ class CampaignsController extends Controller
 
             return $response;
         }
+
+         $this->seo()->setTitle($campaign->name . ' Trip Options');
 
         return view('site.campaigns.trips.index', compact('campaign'));
     }

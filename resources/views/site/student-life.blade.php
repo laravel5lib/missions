@@ -1,5 +1,7 @@
 @extends('site.layouts.default')
 
+@section('title', 'Student Life - Missions.Me College')
+
 @section('scripts')
 <script>
     $('.scrollNav').easyScroller();

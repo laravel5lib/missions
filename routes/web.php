@@ -1,5 +1,7 @@
 <?php
 
+use Artesaos\SEOTools\Facades\SEOMeta;
+
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes
@@ -8,10 +10,14 @@
 
 $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
     $this->get('/', function () {
+        SEOMeta::setTitle('Dashboard');
+
         return view('dashboard.index');
     });
 
     $this->get('settings', function () {
+        SEOMeta::setTitle('Settings');
+
         return view('dashboard.settings');
     });
 
@@ -19,6 +25,9 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
         if (! auth()->user()->managing()->count()) {
             abort(403);
         }
+
+        SEOMeta::setTitle('Reports');
+
         return view('dashboard.reports.index');
     });
 
@@ -30,6 +39,9 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
 
     // Records Routes...
     $this->get('records/{tab?}', function ($tab = 'passports') {
+        $title = title_case(str_replace("-"," ",$tab));
+        SEOMeta::setTitle($title);
+
         return view('dashboard.'.$tab.'.index', compact('tab'));
     });
     $this->resource('records/passports', 'Dashboard\PassportsController', [

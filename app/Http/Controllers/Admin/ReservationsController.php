@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\v1\Reservation;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Traits\SEOTools;
 
 class ReservationsController extends Controller
 {
+    use SEOTools;
 
     /**
      * @var Reservation
@@ -31,6 +33,8 @@ class ReservationsController extends Controller
     {
         $this->authorize('view', $this->reservation);
 
+        $this->seo()->setTitle('Reservations');
+
         return view('admin.reservations.index', compact('tab'));
     }
 
@@ -52,6 +56,9 @@ class ReservationsController extends Controller
 
         $locked = $reservation->trip->campaign->reservations_locked;
 
+        $title = $reservation->name . '\'s Reservation ' . title_case(str_replace("-", " ", $tab));
+        $this->seo()->setTitle($title);
+
         return view('admin.reservations.' . $tab, compact('reservation', 'rep', 'tab', 'locked'));
     }
 
@@ -65,6 +72,8 @@ class ReservationsController extends Controller
     {
         $this->authorize('edit', $this->reservation);
 
+        $this->seo()->setTitle('Edit Reservation');
+
         return view('admin.reservations.edit')->with('reservationId', $reservationId);
     }
 
@@ -73,6 +82,8 @@ class ReservationsController extends Controller
      */
     public function create()
     {
+        $this->seo()->setTitle('New Reservation');
+
         $this->authorize('create', $this->reservation);
     }
 }

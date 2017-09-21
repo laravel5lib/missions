@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Models\v1\Project;
-use App\Models\v1\ProjectCause;
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
+use App\Models\v1\Project;
+use Illuminate\Http\Request;
+use App\Models\v1\ProjectCause;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Traits\SEOTools;
 
 class ProjectsController extends Controller
 {
+    use SEOTools;
 
     /**
      * @var Project
@@ -45,6 +46,9 @@ class ProjectsController extends Controller
 
         $project = $this->project->findOrFail($id);
 
+        $title = $project->name . ' ' . title_case(str_replace("-", " ", $tab));
+        $this->seo()->setTitle($title);
+
         return view('admin.causes.projects.' . $tab, compact('project', 'tab'));
     }
 
@@ -59,6 +63,8 @@ class ProjectsController extends Controller
         $this->authorize('create', $this->project);
 
         $cause = $this->cause->findOrFail($cause_id);
+
+        $this->seo()->setTitle('Create Project');
 
         return view('admin.causes.projects.create', compact('cause'));
     }

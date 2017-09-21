@@ -4,9 +4,11 @@ namespace App\Http\Controllers\admin;
 
 use App\Models\v1\Campaign;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Traits\SEOTools;
 
 class CampaignsController extends Controller
 {
+    use SEOTools;
 
     /**
      * @var Campaign
@@ -31,6 +33,8 @@ class CampaignsController extends Controller
     {
         $this->authorize('view', $this->campaign);
 
+        $this->seo()->setTitle('Campaigns');
+
         return view('admin.campaigns.index');
     }
 
@@ -50,6 +54,9 @@ class CampaignsController extends Controller
             return view('admin.campaigns.tabs.'.$tab.'.details', compact('campaign', 'tab', 'tabId'));
         }
 
+        $title = title_case(str_replace("-", " ", $tab)) . ' - ' . $campaign->name;
+        $this->seo()->setTitle($title);
+
         return view('admin.campaigns.tabs.'.$tab, compact('campaign', 'tab'));
     }
 
@@ -63,6 +70,8 @@ class CampaignsController extends Controller
     {
         $this->authorize('update', $this->campaign);
 
+        $this->seo()->setTitle('Edit Campaign');
+
         return view('admin.campaigns.edit')->with('campaignId', $id);
     }
 
@@ -74,6 +83,8 @@ class CampaignsController extends Controller
     public function create()
     {
         $this->authorize('create', $this->campaign);
+
+        $this->seo()->setTitle('Create Campaign');
 
         return view('admin.campaigns.create');
     }

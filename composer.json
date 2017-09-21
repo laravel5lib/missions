@@ -31,7 +31,8 @@
         "jeffochoa/factory-stories": "^1.0",
         "laravel/tinker": "~1.0",
         "laravel/passport": "^3.0",
-        "laracasts/utilities": "^3.0"
+        "laracasts/utilities": "^3.0",
+        "artesaos/seotools": "^0.10.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

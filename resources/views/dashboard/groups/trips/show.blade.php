@@ -6,12 +6,12 @@
         <div class="row">
             <div class="col-sm-8">
                 <h3 class="hidden-xs text-capitalize">
-                    <img class="img-circle av-left img-sm" src="{{ image($trip->campaign->avatar->source . '?w=100') }}" alt="{{ $trip->campaign->name }}">
+                    <img class="img-circle av-left img-sm" src="{{ image($trip->campaign->getAvatar()->source . '?w=100') }}" alt="{{ $trip->campaign->name }}">
                     {{ $trip->campaign->name }} <small>&middot; Trip Details</small>
                 </h3>
                 <div class="visible-xs text-center">
                     <hr class="divider inv">
-                    <img class="img-circle av-left img-sm" src="{{ image($trip->campaign->avatar->source . '?w=100') }}" alt="{{ $trip->campaign->name }}">
+                    <img class="img-circle av-left img-sm" src="{{ image($trip->campaign->getAvatar()->source . '?w=100') }}" alt="{{ $trip->campaign->name }}">
                     <h4 class="text-capitalize">{{ $trip->campaign->name }}</h4>
                     <label>Trip Details</label>
                 </div>

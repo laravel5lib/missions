@@ -494,6 +494,9 @@
                         this.$refs.transactionspinner.hide();
                         this.$root.$emit('showError', 'There are errors on the form.');
                     });
+                } else if (result.error) {
+                    this.$root.$emit('showError', result.error.message);
+                    this.$refs.validationSpinner.hide();
                 }
             },
             setOutcome(result) {

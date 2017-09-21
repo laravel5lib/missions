@@ -391,6 +391,9 @@
                     //this.stripeDeferred.resolve(result.token);
                     this.$refs.validationSpinner.hide();
                     this.goToState('review');
+                } else if (result.error) {
+                    this.$root.$emit('showError', result.error.message);
+                    this.$refs.validationSpinner.hide();
                 }
             },
             setOutcome(result) {

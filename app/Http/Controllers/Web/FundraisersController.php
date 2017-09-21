@@ -51,7 +51,9 @@ class FundraisersController extends Controller
             abort(404);
         }
 
-        $this->seo()->setTitle($fundraiser->name);
+        $this->seo()->setTitle($fundraiser->name)
+            ->opengraph()
+            ->setType('article');
 
         return view('site.fundraisers.show', compact('fundraiser'));
     }

@@ -414,7 +414,7 @@ Vue.mixin({
         orderByProp(arr, prop, direction = 1) {
             if (!_.isArray(arr) || !arr.length) return [];
             let list = _.sortBy(arr, prop);
-            return direction === -1 ? _.reverse(list) : list
+            return direction === -1 ? list.reverse() : list
         },
         currency(number, symbol = '$') {
             if (!isNaN(number)) {

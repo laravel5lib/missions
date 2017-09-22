@@ -196,11 +196,10 @@ window.timezone = require('moment-timezone');
 window._ = require('underscore');
 window.marked = require('marked');
 
-import { TimelineMax, TweenMax, Linear } from 'gsap';
-import sm from 'scrollmagic';
-// import 'imports?define=>false!scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap';
-window.ScrollMagic = sm;
-require('scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators');
+import ScrollMagic from 'scrollmagic';
+window.ScrollMagic = ScrollMagic;
+import 'animation.gsap';
+import 'debug.addIndicators';
 
 window.videojs = require('video.js');
 require('videojs-youtube');
@@ -614,7 +613,7 @@ Vue.mixin({
         orderByProp(arr, prop, direction = 1) {
             if (!_.isArray(arr) || !arr.length) return [];
             let list = _.sortBy(arr, prop);
-            return direction === -1 ? _.reverse(list) : list
+            return direction === -1 ? list.reverse() : list
         },
         currency(number, symbol = '$') {
             if (!isNaN(number)) {

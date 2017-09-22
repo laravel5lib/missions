@@ -317,6 +317,7 @@
 	}
 </style>
 <script type="text/javascript">
+	import _ from 'underscore';
 	import vSelect from "vue-select";
 	import exportUtility from '../export-utility.vue';
 	import reservationsFilters from '../filters/reservations-filters.vue';

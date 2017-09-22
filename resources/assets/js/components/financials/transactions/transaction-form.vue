@@ -405,9 +405,10 @@
                     this.$root.$emit('showSuccess', 'Transaction successfully created.');
                     this.$emit('transactionCreated');
                     this.reset();
-                },(response) =>  {
+                },(error) =>  {
                     this.$refs.transactionspinner.hide();
-                    this.$root.$emit('showError', 'There are errors on the form.');
+                    this.$root.$emit('showError', error.response.data.message);
+//                    this.$root.$emit('showError', 'There are errors on the form.');
                 });
             },
             createWithCard(data){
@@ -494,6 +495,9 @@
                         this.$refs.transactionspinner.hide();
                         this.$root.$emit('showError', 'There are errors on the form.');
                     });
+                } else if (result.error) {
+                    this.$root.$emit('showError', result.error.message);
+                    this.$refs.validationSpinner.hide();
                 }
             },
             setOutcome(result) {

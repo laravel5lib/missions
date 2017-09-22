@@ -550,7 +550,7 @@
         },
         mounted(){
             if (this.isUpdate) {
-                this.$http.get('medical/releases/' + this.id, { params: { include: 'conditions,allergies,uploads,user'} }).then((response) => {
+                this.$http.get(`medical/releases/${this.id}`, { params: { include: 'conditions,allergies,uploads,user'} }).then((response) => {
                     this.user_id = response.data.data.id;
                     let medical_release = response.data.data;
                     medical_release.uploads = medical_release.uploads.data;

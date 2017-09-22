@@ -66,7 +66,7 @@
                     return donation.name.includes(this.search)
                 });
 	            arr = _.sortBy(arr, this.orderByField);
-                return this.direction === -1 ? _.reverse(arr) : arr;
+                return this.direction === -1 ? arr.reverse() : arr;
             }
 	    },
 		watch:{

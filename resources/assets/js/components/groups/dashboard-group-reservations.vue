@@ -249,7 +249,7 @@
                 // |orderBy orderByField direction
                 let arr =  _.sortBy(this.reservations, this.orderByField);
                 if (this.direction === -1) {
-                    _.reverse(arr)
+                    arr = arr.reverse();
                 }
                 arr.filter
             }

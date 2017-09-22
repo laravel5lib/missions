@@ -36,7 +36,7 @@ class DonorRequest extends FormRequest
             'zip'          => 'required|string',
             'country_code' => 'required|in:' . Country::codes(),
             'account_id'   => 'nullable|string|unique:donors',
-            'account_type' => 'in:users,groups',
+            'account_type' => 'nullable|string',
             'tags'         => 'array'
         ];
 

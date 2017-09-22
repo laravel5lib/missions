@@ -28,12 +28,12 @@ class MedicalReleasesController extends Controller
         return view('admin.records.medical-releases.show')->with(['release' => $medicalRelease]);
     }
 
-    public function edit(MedicalRelease $release)
+    public function edit(MedicalRelease $medicalRelease)
     {
-        $this->authorize('update', $release);
+        $this->authorize('update', $medicalRelease);
 
         $this->seo()->setTitle('Edit Medical Release');
 
-        return view('admin.records.medical-releases.edit')->with('id', $release->id);
+        return view('admin.records.medical-releases.edit')->with('id', $medicalRelease->id);
     }
 }

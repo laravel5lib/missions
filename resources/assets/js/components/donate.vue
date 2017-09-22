@@ -452,7 +452,8 @@
                         },
                         (error) => {
                             this.$refs.donationSpinner.hide();
-                            this.cardError = error.data.message;
+                            this.$root.$emit('showError', error.response.data.message);
+//                            this.cardError = error.data.message;
                             this.toState('form', 2);
                         });
             },

@@ -1,5 +1,5 @@
 <div class="content-page-header">
-    <img class="img-responsive" src="../images/advance/dr/dr-header.jpg" alt="The Best Dominican">
+    <img class="img-responsive" src="../images/advance/nica/nica-header.jpg" alt="Nicaragua Shines">
     <div class="c-page-header-text">
     </div><!-- end c-page-header-content -->
 </div><!-- end c-page-header -->
@@ -11,7 +11,7 @@
 				<img class="adv-mark" src="../images/advance/adv-mark.png" alt="Advance 2018">
 			</div><!-- end col -->
 			<div class="col-md-6 col-md-offset-0 col-sm-8 col-sm-offset-0">
-				<h1 style="color:#08384b;">The Best Dominican</h1>
+				<h1 style="color:#08384b;">Nicaragua Shines</h1>
 				<h3 style="color:#08384b;">July 21-29, 2018</h3>
 				<hr class="divider inv">
 				<h5 style="color:#08384b;">1Nation1Day was never the end, it was always the beginning.</h5>
@@ -21,7 +21,10 @@
 	</div>
 	</div>
 </div><!-- end india-vision -->
-<div class="dr-vision">
+
+@include('site.campaigns.partials._advance2018')
+
+<div class="nica-vision">
 	<div class="container">
 	<div class="content-section">
 		<div class="row">
@@ -32,4 +35,4 @@
 		</div><!-- end row -->
 	</div>
 	</div>
-</div><!-- end dr-vision -->
+</div><!-- end nica-vision -->

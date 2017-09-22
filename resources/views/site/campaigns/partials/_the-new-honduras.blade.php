@@ -21,6 +21,9 @@
 	</div>
 	</div>
 </div><!-- end gray-lighter-bg -->
+
+@include('site.campaigns.partials._advance2018')
+
 <div class="hondo-vision">
 	<div class="container">
 	<div class="content-section">

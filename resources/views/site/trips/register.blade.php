@@ -8,7 +8,7 @@
 		<h1 class="text-center">Let's Go!</h1>
 		<h4 class="text-center">Register to start changing the world!</h4>
 		<hr class="divider inv xlg">
-		<trip-registration-wizard trip-id="{{ $trip->id }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}"></trip-registration-wizard>
+		<trip-registration-wizard trip-id="{{ $trip->id }}" stripe-key="{{ env('STRIPE_KEY') }}"></trip-registration-wizard>
 		<hr class="divider inv xlg">
 	</div>
 </div>

@@ -260,9 +260,9 @@
                         token: this.paymentInfo.token,
                         payment: {
                             type: 'card',
-                            brand: this.detectCardType(this.paymentInfo.card.number) || 'visa',
-                            last_four: this.paymentInfo.card.number.substr(-4),
-                            cardholder: this.paymentInfo.card.cardholder,
+                            brand: this.paymentInfo.card.brand || 'visa',
+                            last_four: this.paymentInfo.card.last4,
+                            cardholder: this.paymentInfo.card.name,
                         }
 				    });
 				}

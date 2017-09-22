@@ -343,7 +343,7 @@
             },
             toState(major, minor) {
                 this.donationState = major;
-                this.subState = minor
+                this.subState = minor;
                 this.$emit('state-changed', this.donationState, this.subState);
             },
             resetCaching() {
@@ -455,6 +455,19 @@
                             this.$root.$emit('showError', error.response.data.message);
 //                            this.cardError = error.data.message;
                             this.toState('form', 2);
+                            // Stripe script
+                            this.$nextTick(function () {
+                                this.stripe = window.Stripe(this.stripeKey);
+                                let elements = this.stripe.elements();
+                                this.cardElement = elements.create('card', {
+                                    style: {}
+                                });
+                                this.cardElement.mount('#card-element');
+
+                                this.cardElement.on('change', (event) => {
+                                    this.setOutcome(event);
+                                });
+                            });
                         });
             },
             goToState(state) {

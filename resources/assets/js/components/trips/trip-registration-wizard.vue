@@ -287,12 +287,12 @@
 
 					window.location.href = '/dashboard/reservations/' + response.data.data.id;
 					this.$refs.reservationspinner.hide();
-				}, (response) =>  {
+				}, (error) =>  {
                     this.$refs.reservationspinner.hide();
-                    console.log(response);
-					this.$root.$emit('showError', response.data.message);
-                    this.fallbackStep(this.stepList[5]); // return to payment details step
-					this.paymentErrors.push(response.data.message);
+                    console.log(error.response);
+					this.$root.$emit('showError', error.response.data.message);
+                    this.fallbackStep(this.stepList[4]); // return to payment details step
+					this.paymentErrors.push(error.response.data.message);
 				});
 
 

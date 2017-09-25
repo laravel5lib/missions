@@ -1,6 +1,5 @@
 <template>
 	<div class="panel panel-default">
-
 		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 
 		<div class="panel-heading">
@@ -10,7 +9,6 @@
 		<form id="CreateCampaignForm" class="form-horizontal" novalidate>
 
 			<div class="panel-body">
-
 				<div class="row">
 					<div class="col-sm-4">
 						<h5>Campaign Details</h5>
@@ -51,12 +49,12 @@
 							<div class="col-xs-12">
 								<label for="description">Description</label>
 								<textarea id="description"
-										  rows="2"
+										  rows="5"
 										  v-model="short_desc"
 										  class="form-control"
 										  name="description"
 										  v-validate="'required|min:1|max:120'"
-										  maxlength="120"
+										  maxlength="225"
 										  minlength="1">
 								</textarea>
                         		<div v-if="short_desc" class="help-block">{{short_desc.length}}/255 characters remaining</div>
@@ -92,7 +90,6 @@
 					</div>
 				</div>
 				<hr class="divider">
-
 				<div class="row">
 					<div class="col-sm-4">
 						<h5>Campaign Dates</h5>
@@ -131,8 +128,7 @@
 						</div>
 					</div>
 				</div>
-				<hr class="divider">
-
+				<hr class="divider" v-if="published_at">
 				<div class="row" v-if="published_at">
 					<div class="col-sm-4">
 						<h5>Campaign Page</h5>
@@ -141,7 +137,7 @@
 					<div class="col-sm-8">
 						<div class="form-group" v-error-handler="{ value: page_url, client: 'url', server: 'page_url' }">
 							<div class="col-sm-12">
-								<label for="description">Page Url</label>
+								<label for="page_url">Page Url</label>
 								<div class="input-group">
 									<span class="input-group-addon">www.missions.me/campaigns/</span>
 									<input type="text"
@@ -155,7 +151,7 @@
 						</div>
 						<div class="form-group" v-error-handler="{ value: page_src, client: 'src', server: 'page_src' }">
 							<div class="col-sm-12">
-								<label for="description">Page Source</label>
+								<label for="page_src">Page Source</label>
 								<div class="input-group">
 									<input type="text"
 										   id="page_src"
@@ -169,35 +165,10 @@
 									<code>/resources/views/sites/campaigns/partials/</code>
 								</span>
 							</div>
-							<template v-if="published_at">
-								<div class="form-group" v-error-handler="{ value: page_url, client: 'url', server: 'page_url' }">
-									<div class="col-sm-12">
-										<label for="description">Page Url</label>
-										<div class="input-group">
-											<span class="input-group-addon">www.missions.me/campaigns/</span>
-											<input type="text" id="page_url" v-model="page_url" class="form-control"
-											       v-validate:url="{ required: false }"/>
-										</div>
-									</div>
-								</div>
-
-								<div class="form-group" v-error-handler="{ value: page_src, client: 'src', server: 'page_src' }">
-									<div class="col-sm-12">
-										<label for="description">Page Source</label>
-										<div class="input-group">
-											<input type="text" id="page_src" v-model="page_src" class="form-control"
-											       v-validate:src="{ required: false,  }"/>
-											<span class="input-group-addon">.blade.php</span>
-										</div>
-										<span class="help-block">The filename located at: <code>/resources/views/sites/campaigns/partials/</code>
-									</div>
-								</div>
-							</template>
 						</div>
 					</div>
 				</div>
-			</div>
-
+			</div><!-- end panel-body -->
 			<div class="panel-footer">
 				<div class="form-group">
 					<hr class="divider inv md">
@@ -210,13 +181,7 @@
 
 		</form>
 
-		<alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
-			<span class="icon-info-circled alert-icon-float-left"></span>
-			<strong>Oh No!</strong>
-			<p>There are errors on the form.</p>
-		</alert>
-
-	</div>
+	</div><!-- end panel-->
 </template>
 <script type="text/javascript">
 	import $ from 'jquery';

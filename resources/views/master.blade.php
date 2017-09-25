@@ -105,7 +105,6 @@
 
     @yield('tour')
     <script src="{{ mix('js/main.js') }}"></script>
-    <script src="{{ asset('/js/vendor.js') }}"></script>
     @yield('scripts')
 
     @prod

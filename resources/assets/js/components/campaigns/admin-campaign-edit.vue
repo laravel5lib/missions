@@ -86,8 +86,6 @@
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
 
 			<hr class="divider">
 
@@ -191,6 +189,7 @@
 			</div>
 		</div>
 		</form>
+		</validator>
 
 		<alert v-model="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
 			<span class="icon-ok-circled alert-icon-float-left"></span>

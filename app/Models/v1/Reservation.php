@@ -608,7 +608,7 @@ class Reservation extends Model
      *
      * @param array $todos [description]
      */
-    public function addTodos(array $todos)
+    public function addTodos($todos = [])
     {
         if (! $todos) {
             return;

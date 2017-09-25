@@ -169,6 +169,30 @@
 									<code>/resources/views/sites/campaigns/partials/</code>
 								</span>
 							</div>
+							<template v-if="published_at">
+								<div class="form-group" v-error-handler="{ value: page_url, client: 'url', server: 'page_url' }">
+									<div class="col-sm-12">
+										<label for="description">Page Url</label>
+										<div class="input-group">
+											<span class="input-group-addon">www.missions.me/campaigns/</span>
+											<input type="text" id="page_url" v-model="page_url" class="form-control"
+											       v-validate:url="{ required: false }"/>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group" v-error-handler="{ value: page_src, client: 'src', server: 'page_src' }">
+									<div class="col-sm-12">
+										<label for="description">Page Source</label>
+										<div class="input-group">
+											<input type="text" id="page_src" v-model="page_src" class="form-control"
+											       v-validate:src="{ required: false,  }"/>
+											<span class="input-group-addon">.blade.php</span>
+										</div>
+										<span class="help-block">The filename located at: <code>/resources/views/sites/campaigns/partials/</code>
+									</div>
+								</div>
+							</template>
 						</div>
 					</div>
 				</div>

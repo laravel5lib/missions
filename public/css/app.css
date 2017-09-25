@@ -22223,6 +22223,33 @@ body:not(.modal-open) {
   opacity: 0;
 }
 
+.hover-container {
+  position: relative; }
+  .hover-container .hover-image {
+    display: block;
+    width: 100%;
+    height: auto; }
+  .hover-container .hover-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0.8;
+    transition: .5s ease;
+    background: #f6323e; }
+    .hover-container .hover-overlay .hover-text {
+      color: #000;
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%); }
+  .hover-container:hover .hover-overlay {
+    opacity: 0; }
+
 .prof-cover-photo {
   height: 400px;
   overflow: hidden;
@@ -22883,6 +22910,40 @@ img.onenation-logo {
   background-size: cover;
   padding: 200px 0 200px;
 }
+
+img.adv-mark {
+  width: 400px;
+  height: 400px;
+  margin-top: -200px; }
+  @media screen and (max-width: 991px) {
+    img.adv-mark {
+      width: 300px;
+      height: 300px;
+      margin-top: -100px; } }
+  @media screen and (max-width: 767px) {
+    img.adv-mark {
+      width: 200px;
+      height: 200px;
+      margin-top: -100px;
+      margin-left: 10px; } }
+
+.hondo-vision {
+  color: #fff;
+  background: #fff url(../../images/advance/hondo/stadium-drone.jpg) no-repeat center fixed;
+  background-size: cover;
+  padding: 60px 0 60px; }
+
+.dr-vision {
+  color: #fff;
+  background: #fff url(../../images/advance/dr/team.jpg) no-repeat center fixed;
+  background-size: cover;
+  padding: 60px 0 60px; }
+
+.nica-vision {
+  color: #fff;
+  background: #fff url(../../images/advance/nica/teen-boy-baseball.jpg) no-repeat center fixed;
+  background-size: cover;
+  padding: 60px 0 60px; }
 
 .row-no-margin {
   margin-left: 0;

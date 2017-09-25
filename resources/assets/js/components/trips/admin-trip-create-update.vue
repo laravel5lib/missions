@@ -12,9 +12,6 @@
                     <div class="col-sm-12">
                         <label class="control-label">Group</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="group" v-model="groupObj" :options="groups" :on-search="getGroups" label="name" name="group" v-validate="'required'"></v-select>
-                        <!--<select hidden v-model="group_id" name="group" v-validate="'required'">
-                            <option :value="group.id" v-for="group in groups">{{ group.name }}</option>
-                        </select>-->
                     </div>
                 </div>
 				<div class="row">

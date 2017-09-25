@@ -12,7 +12,7 @@ class LogUserInTest extends BrowserKitTestCase
     public function see_login_page()
     {
          $this->visit('/')
-              ->click('Login')
+              ->click('Log In')
               ->seePageIs('/login');
     }
 

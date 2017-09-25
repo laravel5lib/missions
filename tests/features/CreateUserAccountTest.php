@@ -20,7 +20,8 @@ class CreateUserAccountTest extends BrowserKitTestCase
     public function registers_user()
     {
         $newUser = [
-            'name' => 'John Doe',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
             'email' => 'john@email.com',
             'gender' => 'male',
             'birthday' => '1987-07-28',

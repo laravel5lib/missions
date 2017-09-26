@@ -426,7 +426,7 @@
 
                 while ( startYear <= currentYear ) {
                         years.push(startYear++);
-                } 
+                }
 
                 return years;
             },
@@ -434,7 +434,7 @@
                 let day = 1, days = [];
                 while ( day <= 31 ) {
                         days.push(day++);
-                } 
+                }
 
                 return days;
             },

@@ -29,7 +29,9 @@ mix.webpackConfig({
     },
 });
 
-mix.js('resources/assets/js/app.js', 'public/js');
+mix.js('resources/assets/js/app.js', 'public/js')
+   .extract(['vue', 'jquery', 'scrollmagic', 'moment', 'aos', 'axios', 'video.js', 'tether-shepherd', 'vue-strap']);
+
 mix.sass('resources/assets/sass/app.scss', 'public/css');
 
 mix.copy('resources/assets/js/vendors/slim.jquery.min.js', 'public/js/slim.js');

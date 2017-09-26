@@ -26,11 +26,11 @@ mix.webpackConfig({
             "animation.gsap": Path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap.js'),
             "debug.addIndicators": Path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'),
         },
-    },
+    }
 });
 
 mix.js('resources/assets/js/app.js', 'public/js')
-   .extract(['vue', 'jquery', 'scrollmagic', 'moment', 'aos', 'axios', 'video.js', 'tether-shepherd', 'vue-strap']);
+   .extract(['vue', 'jquery', 'scrollmagic', 'moment', 'aos', 'axios', 'video.js', 'tether-shepherd']);
 
 mix.sass('resources/assets/sass/app.scss', 'public/css');
 

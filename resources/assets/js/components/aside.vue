@@ -15,7 +15,7 @@
 </template>
 
 <script>
-    import {getScrollBarWidth} from 'vue-strap/src/utils/utils';
+    import { getScrollBarWidth } from 'vue-strap/src/utils/utils';
     import $ from 'jquery';
 
     export default {

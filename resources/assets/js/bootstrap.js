@@ -117,7 +117,6 @@ window.Shepherd = require('tether-shepherd');
  */
 
 window.Vue = require('vue');
-// window.VueStrap = require('vue-strap');
 
 Vue.use(require('vue-cookie'));
 Vue.use(require('vee-validate'));

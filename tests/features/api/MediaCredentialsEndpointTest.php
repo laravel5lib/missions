@@ -1,7 +1,8 @@
 <?php
 
-class MediaCredentialsEndpointTest extends TestCase
+class MediaCredentialsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
 
     /**
      * @test
@@ -19,7 +20,7 @@ class MediaCredentialsEndpointTest extends TestCase
                         'content', 'expired_at', 'created_at', 'updated_at', 'deleted_at'
                     ]
                 ]
-            ])
+             ])
              ->seeJson(['type' => 'media']);
     }
 

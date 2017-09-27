@@ -1,7 +1,7 @@
 <template>
     <div style="position: relative;">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
+        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
@@ -12,44 +12,44 @@
                 <h6 style="font-size: .7em;letter-spacing: 2px;text-transform: uppercase;text-align: center;color: #808080;background: #242424;padding-top: 4px;padding-bottom: 4px;">By Designation</h6>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="groupFilter" :debounce="250" :on-search="getGroups"
-                              :value.sync="groupObj" :options="groupsOptions" label="name"
+                              v-model="groupObj" :options="groupsOptions" label="name"
                               placeholder="Filter by Group"></v-select>
                 </div>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="reservationFilter" :debounce="250" :on-search="getReservations"
-                              :value.sync="reservationObj" :options="reservationsOptions" label="given_names"
+                              v-model="reservationObj" :options="reservationsOptions" label="given_names"
                               placeholder="Filter by Reservation"></v-select>
                 </div>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
-                              :value.sync="campaignObj" :options="campaignsOptions" label="name"
+                              v-model="campaignObj" :options="campaignsOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="causesFilter" :debounce="250" :on-search="getCauses"
-                              :value.sync="causeObj" :options="causesOptions" label="name"
+                              v-model="causeObj" :options="causesOptions" label="name"
                               placeholder="Filter by Cause"></v-select>
                 </div>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="tripsFilter" :debounce="250" :on-search="getTrips"
-                              :value.sync="tripObj" :options="tripsOptions" label="name"
+                              v-model="tripObj" :options="tripsOptions" label="name"
                               placeholder="Filter by Trip"></v-select>
                 </div>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="projectsFilter" :debounce="250" :on-search="getProjects"
-                              :value.sync="projectObj" :options="projectsOptions" label="name"
+                              v-model="projectObj" :options="projectsOptions" label="name"
                               placeholder="Filter by Project"></v-select>
                 </div>
 
                 <h6 style="font-size: .7em;letter-spacing: 2px;text-transform: uppercase;text-align: center;color: #808080;background: #242424;padding-top: 4px;padding-bottom: 4px;">By Account Holder</h6>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="groupFilter" :debounce="250" :on-search="getGroups"
-                              :value.sync="groupAccountObj" :options="groupsOptions" label="name"
+                              v-model="groupAccountObj" :options="groupsOptions" label="name"
                               placeholder="Filter Groups"></v-select>
                 </div>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="userFilter" :debounce="250" :on-search="getUsers"
-                              :value.sync="userObj" :options="usersOptions" label="name"
+                              v-model="userObj" :options="usersOptions" label="name"
                               placeholder="Filter Users"></v-select>
                 </div>
 
@@ -57,7 +57,7 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-12">
-                            <date-picker addon="Start" :input-sm="true" :model.sync="filters.starts|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+                            <date-picker addon="Start" input-sm v-model="filters.starts" :view-format="['MM-DD-YYYY HH:mm:ss']" v-if="filters"></date-picker>
                             <!--<div class="input-group input-group-sm">
                                 <span class="input-group-addon">Start</span>
                                 &lt;!&ndash;<input type="datetime-local" class="form-control" v-model="filters.starts"/>&ndash;&gt;
@@ -66,7 +66,7 @@
                             <br>
                         </div>
                         <div class="col-xs-12">
-                            <date-picker addon="End" :input-sm="true" :model.sync="filters.ends|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+                            <date-picker addon="End" input-sm v-model="filters.ends" :view-format="['MM-DD-YYYY HH:mm:ss']" v-if="filters"></date-picker>
                             <!--<div class="input-group input-group-sm">
                                 <span class="input-group-addon">End</span>
                                 &lt;!&ndash;<input type="datetime-local" class="form-control" v-model="filters.ends"/>&ndash;&gt;
@@ -80,7 +80,7 @@
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
                 <hr class="divider inv">
             </form>
-        </aside>
+        </mm-aside>
 
         <div class="row">
             <div class="col-sm-12">
@@ -105,7 +105,12 @@
                         <ul style="padding: 10px 20px;" class="dropdown-menu" aria-labelledby="dropdownMenu1">
                             <li>
                                 <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="name" :disabled="maxCheck('name')"> Name
+                                    <input type="checkbox" v-model="activeFields" value="first_name" :disabled="maxCheck('first_name')"> First Name
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="last_name" :disabled="maxCheck('last_name')"> Last Name
                                 </label>
                             </li>
                             <li>
@@ -195,10 +200,15 @@
         <table class="table table-hover table-striped">
             <thead>
             <tr>
-                <th v-if="isActive('name')" :class="{'text-primary': orderByField === 'name'}">
-                    Name
-                    <i @click="setOrderByField('name')" v-if="orderByField !== 'name'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                <th v-if="isActive('first_name')" :class="{'text-primary': orderByField === 'first_name'}">
+                    First name
+                    <i @click="setOrderByField('first_name')" v-if="orderByField !== 'first_name'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'first_name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                </th>
+                <th v-if="isActive('last_name')" :class="{'text-primary': orderByField === 'last_name'}">
+                    Last name
+                    <i @click="setOrderByField('last_name')" v-if="orderByField !== 'last_name'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'last_name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
                 <th v-if="isActive('company')" :class="{'text-primary': orderByField === 'company'}">
                     Company
@@ -225,21 +235,22 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="donor in donors|filterBy search|orderBy orderByField direction">
-                <td v-if="isActive('name')" v-text="donor.name"></td>
+            <tr v-for="donor in orderByProp(donors, orderByField, direction)">
+                <td v-if="isActive('first_name')" v-text="donor.first_name"></td>
+                <td v-if="isActive('last_name')" v-text="donor.last_name"></td>
                 <td v-if="isActive('company')" v-text="donor.company"></td>
                 <td v-if="isActive('email')" v-text="donor.email"></td>
-                <td v-if="isActive('phone')" v-text="donor.phone|phone"></td>
+                <td v-if="isActive('phone')">{{donor.phone|phone}}</td>
                 <td v-if="isActive('zip')" v-text="donor.zip"></td>
-                <td v-if="isActive('total_donated')" v-text="donor.total_donated|currency"></td>
-                <td><a href="/admin/donors/{{ donor.id }}"><i class="fa fa-cog"></i></a></td>
+                <td v-if="isActive('total_donated')" v-text="currency(donor.total_donated)"></td>
+                <td><a :href="`/admin/donors/${ donor.id }`"><i class="fa fa-cog"></i></a></td>
             </tr>
             </tbody>
             <tfoot>
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination" class="small" :callback="searchDonors"></pagination>
+                        <pagination :pagination="pagination" pagination-key="pagination" class="small" :callback="searchDonors"></pagination>
                     </div>
                 </td>
             </tr>
@@ -283,6 +294,7 @@
                 search: '',
                 activeFields: ['name', 'company', 'email', 'phone', 'zip', 'total_donated'],
                 maxActiveFields: 8,
+                maxActiveFieldsOptions: [3, 4, 5, 6, 7, 8],
 
                 // filter vars
                 groupsOptions: [],
@@ -335,54 +347,54 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: function (val) {
+                handler(val, oldVal) {
                     console.log(val);
                     this.pagination.current_page = 1;
                     this.searchDonors();
                 },
                 deep: true
             },
-            'campaignObj': function (val) {
+            'campaignObj'(val, oldVal) {
                 this.filters.campaign = val ? val.id : '';
                 this.searchDonors();
             },
-            'causeObj': function (val) {
+            'causeObj'(val, oldVal) {
                 this.filters.cause = val ? val.id : '';
                 this.searchDonors();
             },
-            'tripObj': function (val) {
+            'tripObj'(val, oldVal) {
                 this.filters.trip = val ? val.id : '';
                 this.searchDonors();
             },
-            'projectObj': function (val) {
+            'projectObj'(val, oldVal) {
                 this.filters.project = val ? val.id : '';
                 this.searchDonors();
             },
-            'userObj': function (val) {
+            'userObj'(val, oldVal) {
                 this.filters.userAccount = val ? val.id : '';
                 this.searchDonors();
             },
-            'groupObj': function (val) {
+            'groupObj'(val, oldVal) {
                 this.filters.group = val ? val.id : '';
                 this.searchDonors();
             },
-            'groupAccountObj': function (val) {
+            'groupAccountObj'(val, oldVal) {
                 this.filters.groupAccount = val ? val.id : '';
                 this.searchDonors();
             },
-            'reservationObj': function (val) {
+            'reservationObj'(val, oldVal) {
                 this.filters.reservation = val ? val.id : '';
                 this.searchDonors();
             },
-            'direction': function (val) {
+            'direction'(val, oldVal) {
                 this.searchDonors();
             },
-            'tagsString': function (val) {
+            'tagsString'(val, oldVal) {
                 let tags = val.split(/[\s,]+/);
                 this.filters.tags = tags[0] !== '' ? tags : '';
                 this.searchDonors();
             },
-            'activeFields': function (val, oldVal) {
+            'activeFields'(val, oldVal) {
                 // if the orderBy field is removed from view
                 if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
                     // default to first visible field
@@ -390,12 +402,12 @@
                 }
                 this.updateConfig();
             },
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.page = 1;
                 this.pagination.current_page = 1;
                 this.searchDonors();
             },
-            'per_page': function (val, oldVal) {
+            'per_page'(val, oldVal) {
                 this.searchDonors();
             },
 
@@ -442,7 +454,7 @@
             },
             resetFilter(){
                 $.extend(this, {
-                    orderByField: 'name',
+                    orderByField: 'first_name',
                     direction: 1,
                     per_page: 10,
                     perPageOptions: [5, 10, 25, 50, 100],
@@ -450,7 +462,7 @@
                         current_page: 1
                     },
                     search: '',
-                    activeFields: ['name', 'company', 'email', 'phone', 'zip', 'total_donated'],
+                    activeFields: ['first_name', 'company', 'email', 'phone', 'zip', 'total_donated'],
                     maxActiveFields: 8,
                     filters: {
                         tags: '',
@@ -485,37 +497,37 @@
             },
             getGroups(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('groups', { params: { search: search} }).then(function (response) {
-                    this.groupsOptions = response.body.data;
+                this.$http.get('groups', { params: { search: search} }).then((response) => {
+                    this.groupsOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getReservations(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('reservations', { params: { search: search} }).then(function (response) {
-                    this.reservationsOptions = response.body.data;
+                this.$http.get('reservations', { params: { search: search} }).then((response) => {
+                    this.reservationsOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getCampaigns(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('campaigns', { params: { search: search} }).then(function (response) {
-                    this.campaignsOptions = response.body.data;
+                this.$http.get('campaigns', { params: { search: search} }).then((response) => {
+                    this.campaignsOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getCauses(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('causes', { params: { search: search} }).then(function (response) {
-                    this.causesOptions = response.body.data;
+                this.$http.get('causes', { params: { search: search} }).then((response) => {
+                    this.causesOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getTrips(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('trips', { params: { search: search, include: 'group'} }).then(function (response) {
-                    this.tripsOptions = response.body.data;
-                    _.each(this.tripsOptions, function (trip) {
+                this.$http.get('trips', { params: { search: search, include: 'group'} }).then((response) => {
+                    this.tripsOptions = response.data.data;
+                    _.each(this.tripsOptions, (trip) => {
                         trip.name = trip.type + ' | ' + trip.country_name + ' | ' + trip.group.data.name;
                     });
                     loading ? loading(false) : void 0;
@@ -523,9 +535,9 @@
             },
             getProjects(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('projects', { params: { search: search} }).then(function (response) {
-                    this.projectsOptions = response.body.data;
-                    _.each(this.projectsOptions, function (project) {
+                this.$http.get('projects', { params: { search: search} }).then((response) => {
+                    this.projectsOptions = response.data.data;
+                    _.each(this.projectsOptions, (project) => {
                         project.name = project.plaque.prefix + ' ' + project.plaque.message;
                     });
                     loading ? loading(false) : void 0;
@@ -533,25 +545,25 @@
             },
             getUsers(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('users', { params: { search: search} }).then(function (response) {
-                    this.usersOptions = response.body.data;
+                this.$http.get('users', { params: { search: search} }).then((response) => {
+                    this.usersOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
             searchDonors(){
                 let params = this.getListSettings();
                 // this.$refs.spinner.show();
-                this.$http.get('donors', { params: params }).then(function (response) {
+                this.$http.get('donors', { params: params }).then((response) => {
                     let self = this;
-                    this.donors = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                    this.donors = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
-                }).then(function () {
+                }).then(() => {
                     this.updateConfig();
                 });
             }
         },
-        ready() {
+        mounted() {
             // load view state
             if (localStorage[this.storageName]) {
                 let config = JSON.parse(localStorage[this.storageName]);

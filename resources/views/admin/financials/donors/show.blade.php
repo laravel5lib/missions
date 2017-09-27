@@ -11,9 +11,11 @@
                     <hr class="divider inv sm">
                     <div class="btn-group">
                         <a href="{{ url('admin/donors') }}" class="btn btn-primary-darker"><span class="fa fa-chevron-left icon-left"></span></a>
+                        @can('update', $donor)
                         <a href="{{ url('admin/donors/'. $donor->id .'/edit') }}" class="btn btn-primary">
                             Edit
                         </a>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -89,6 +91,8 @@
                 </div>
             </div>
         </div>
+
+        @can('view', \App\Models\v1\Transaction::class)
         <div class="row">
             <div class="col-md-offset-2 col-md-8">
                 <div class="panel panel-default">
@@ -103,15 +107,19 @@
                 </div>
             </div>
         </div>
+        @endcan
+
+        @can('view', \App\Models\v1\Note::class)
         <div class="row">
             <div class="col-md-offset-2 col-md-8">
                 <notes type="donors"
                        id="{{ $donor->id }}"
                        user_id="{{ auth()->user()->id }}"
-                       :per_page="3"
-                       :can-modify="{{ auth()->user()->can('modify-notes') }}">
+                       :per_page="3">
                 </notes>
             </div>
         </div>
+        @endcan
+
     </div>
 @stop

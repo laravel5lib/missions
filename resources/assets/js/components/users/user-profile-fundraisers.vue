@@ -1,8 +1,8 @@
 <template>
 	<div style="position:relative;">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="text-muted text-center" v-if="fundraisers.length < 1">
-			<template v-if="isUser()">
+			<template v-if="isUser">
 				<em><h4>Start Fundraising</h4>
 					<p>Join a trip or sponsor a project to start fundraising.</p></em>
 				<p class="text-center"><a class="btn btn-primary" href="/campaigns">Go On A Trip</a> <a class="btn btn-default" href="/sponsor-a-project">Sponsor A Project</a></p>
@@ -28,7 +28,7 @@
 						<div class="col-xs-6 col-sm-12 col-md-6">
 							<label>Expires</label>
 							<p class="small">
-								{{ fundraiser.ended_at | moment 'll' }}
+								{{ fundraiser.ended_at | moment('ll') }}
 							</p>
 						</div>
 					</div><!-- end row -->
@@ -70,7 +70,7 @@
 					</div>
 					<div class="panel-body text-center">
 							<label>Closed</label>
-							<p class="small">{{ fundraiser.ended_at | moment 'll' }}</p>
+							<p class="small">{{ fundraiser.ended_at | moment('ll') }}</p>
 							<label><span class="text-success">${{ fundraiser.raised_amount }}</span>
 								<small>Raised / {{ fundraiser.donors_count }} Donors</small>
 							</label>
@@ -94,36 +94,32 @@
 				pathName: window.location.pathname
 			}
 		},
-		methods: {
-            isUser(){
+		computed: {
+            isUser() {
                 return this.$root.user && this.id === this.$root.user.id;
             },
-            isVisible(fundraiser) {
-				if(! fundraiser.public && this.$root.user.id == fundraiser.sponsor_id) {
-					return true;
-				} else if(fundraiser.public) {
-					return true;
-				} else {
-					return false;
-				}
-			}
 		},
-		ready(){
+		methods: {
+            isVisible(fundraiser) {
+				return !fundraiser.public && this.$root.user.id === fundraiser.sponsor_id ? true : !!fundraiser.public;
+            }
+		},
+		mounted(){
 			this.$http.get('fundraisers?active=true', { params: {
 				sponsorId: this.id,
 				sponsorType: 'user',
 				per_page: 100
-			}}).then(function (response) {
-				this.fundraisers = response.body.data;
-			});
+			}}).then((response) => {
+				this.fundraisers = response.data.data;
+			}).catch(this.$root.handleApiError);
 
 			this.$http.get('fundraisers?archived=true', { params: {
 				sponsorId: this.id,
 				sponsorType: 'user',
 				per_page: 100
-			}}).then(function (response) {
-				this.oldFundraisers = response.body.data;
-			})
+			}}).then((response) => {
+				this.oldFundraisers = response.data.data;
+			}).catch(this.$root.handleApiError)
 		}
 
 	}

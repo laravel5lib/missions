@@ -11,6 +11,11 @@ use App\Models\v1\Fundraiser;
 use App\Models\v1\Reservation;
 use App\Models\v1\ProjectCause;
 
+function make_date_string($year, $month, $day)
+{
+    return Carbon::createFromDate($year, $month, $day)->toDateString();
+}
+
 function country($code)
 {
     return implode('', array_keys(App\Utilities\v1\Country::get($code)));
@@ -61,7 +66,8 @@ function download_file($source)
     return url('api/download/'.$source);
 }
 
-function play_file($source) {
+function play_file($source)
+{
     return url('api/play/'.$source);
 }
 
@@ -116,7 +122,7 @@ function generateFundraiserName($data)
 
 function generateFundraiserNameFromReservation($reservation)
 {
-   return 'Send ' . $reservation->name . ' to ' . country($reservation->trip->country_code);
+    return 'Send ' . $reservation->name . ' to ' . country($reservation->trip->country_code);
 }
 
 function generateFundraiserNameFromTrip($trip)
@@ -147,7 +153,7 @@ function generateQbClassName($data)
     }
 
     if ($data instanceof Trip) {
-       return $data->campaign->name . ' - Team';
+        return $data->campaign->name . ' - Team';
     }
 
     if ($data instanceof Campaign) {
@@ -179,18 +185,19 @@ function getAccountingItem($instance)
  * @param $url
  * @return mixed
  */
-function remove_http($url) {
+function remove_http($url)
+{
 
     // check for protocol and remove
-    $disallowed = array('http://', 'https://');
-    foreach($disallowed as $d) {
-        if(strpos($url, $d) === 0) {
+    $disallowed = ['http://', 'https://'];
+    foreach ($disallowed as $d) {
+        if (strpos($url, $d) === 0) {
             $url = str_replace($d, '//', $url);
         }
     }
 
     // add relative protocol if missing
-    if(strpos($url, '//') === false) {
+    if (strpos($url, '//') === false) {
         $url = '//'.$url;
     }
 
@@ -199,7 +206,7 @@ function remove_http($url) {
 
 /**
  * Generate a unique slug
- * 
+ *
  * @param  String $string
  * @return String
  */
@@ -207,14 +214,14 @@ function generate_slug($string)
 {
     $slug = str_slug($string);
 
-    $count = Slug::whereRaw("url RLIKE '^{$slug}(-[0-9]+)?$'")->count();
+    $count = Slug::where('url', $slug)->count();
 
     return $count ? "{$slug}-{$count}" : $slug;
 }
 
 /**
  * Generate a unique fund slug
- * 
+ *
  * @param  String $string
  * @return String
  */
@@ -222,14 +229,14 @@ function generate_fund_slug($string)
 {
     $slug = str_slug($string);
 
-    $count = Fund::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
+    $count = Fund::where('slug', $slug)->count();
 
     return $count ? "{$slug}-{$count}" : $slug;
 }
 
 /**
  * Generate a unique fundraiser slug
- * 
+ *
  * @param  String $string
  * @return String
  */
@@ -237,7 +244,7 @@ function generate_fundraiser_slug($string)
 {
     $slug = str_slug($string);
 
-    $count = Fundraiser::whereRaw("url RLIKE '^{$slug}(-[0-9]+)?$'")->count();
+    $count = Fundraiser::where('url', 'LIKE', "$slug%")->count();
 
     return $count ? "{$slug}-{$count}" : $slug;
 }
@@ -249,7 +256,8 @@ function generate_fundraiser_slug($string)
  * @param int $inches
  * @return int
  */
-function convert_to_cm($feet, $inches = 0) {
+function convert_to_cm($feet, $inches = 0)
+{
     $inches = ($feet * 12) + $inches;
     return (int) round($inches / 0.393701);
 }
@@ -260,7 +268,8 @@ function convert_to_cm($feet, $inches = 0) {
  * @param int $cm
  * @return array
  */
-function convert_to_inches($cm) {
+function convert_to_inches($cm)
+{
     $inches = round($cm * 0.393701);
     $result = [
         'ft' => intval($inches / 12),
@@ -272,7 +281,7 @@ function convert_to_inches($cm) {
 
 /**
  * Converts a weight value given in pounds
- * 
+ *
  * @param  integer $pounds
  * @return integer
  */
@@ -283,8 +292,8 @@ function convert_to_kg($pounds)
 
 /**
  * Converts a weight value given in kilograms
- * 
- * @param  integer $kg 
+ *
+ * @param  integer $kg
  * @return integer
  */
 function convert_to_pounds($kg)
@@ -309,9 +318,11 @@ function addLeadingZeros($value, $digits = 4)
 
 function getFirstName($givenNames)
 {
-    $array = explode(' ',trim($givenNames));
+    $array = explode(' ', trim($givenNames));
 
-    if (empty($array)) return null;
+    if (empty($array)) {
+        return null;
+    }
 
     return $array[0];
 }

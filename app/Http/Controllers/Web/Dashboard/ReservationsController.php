@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\Web\Dashboard;
 
-use Dingo\Api\Exception\InternalHttpException;
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Traits\SEOTools;
+use Dingo\Api\Exception\InternalHttpException;
 
 class ReservationsController extends Controller
 {
+    use SEOTools;
+
     public function index()
     {
+        $this->seo()->setTitle('Reservations');
+
         return view('dashboard.reservations.index');
     }
 
@@ -30,6 +34,9 @@ class ReservationsController extends Controller
 
         $locked = $reservation->trip->campaign->reservations_locked;
 
+        $title = $reservation->name.'\'s Reservation ' . title_case(str_replace("-"," ",$tab));
+        $this->seo()->setTitle($title);
+
         return view('dashboard.reservations.' . $tab, compact('reservation', 'rep', 'tab', 'locked'));
     }
 
@@ -45,6 +52,8 @@ class ReservationsController extends Controller
             case 'deadlines':
                 return 'trip.campaign,deadlines,requirements,costs.payments';
                 break;
+            case 'squad':
+                return 'trip.group,squads.team.squads.reservations';
             default:
                 return 'trip.campaign';
                 break;

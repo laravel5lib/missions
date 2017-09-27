@@ -2,20 +2,21 @@
 
 namespace App\Services\Importers;
 
-class PassportListImportHandler extends ImportHandler {
+class PassportListImportHandler extends ImportHandler
+{
 
     /**
      * The model class to use
-     * 
+     *
      * @var string
      */
     public $model = 'App\Models\v1\Passport';
 
     /**
-     * The database columns and document 
+     * The database columns and document
      * columns to find matches on.
      * ['db_col' => 'doc_col']
-     * 
+     *
      * @var array
      */
     public $duplicates = ['number' => 'number'];
@@ -37,5 +38,4 @@ class PassportListImportHandler extends ImportHandler {
             'updated_at' => $passport->updated_at
         ];
     }
-
 }

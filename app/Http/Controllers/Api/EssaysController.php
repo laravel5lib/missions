@@ -136,10 +136,10 @@ class EssaysController extends Controller
 
     /**
      * Import essays.
-     * 
-     * @param  ImportRequest   $request 
-     * @param  EssayListImport $import  
-     * @return response                   
+     *
+     * @param  ImportRequest   $request
+     * @param  EssayListImport $import
+     * @return response
      */
     public function import(ImportRequest $request, EssayListImport $import)
     {
@@ -147,5 +147,4 @@ class EssaysController extends Controller
 
         return $this->response()->created(null, $response);
     }
-
 }

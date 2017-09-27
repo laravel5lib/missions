@@ -1,6 +1,6 @@
 <template>
     <div style="position:relative;">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="row">
             <div class="col-sm-12">
                 <form class="form-inline" novalidate>
@@ -13,7 +13,7 @@
                         </div>
                     </div>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+                        <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search for anything">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
                     <div id="toggleFields" class="form-toggle-menu dropdown" style="display: inline-block;">
@@ -62,7 +62,7 @@
                                 </li>
                                 <li>
                                     <label class="small" style="margin-bottom: 0px;">
-                                        <input type="checkbox" v-model="reservations_count" value="trips" :disabled="maxCheck('reservations_count')"> Active Reservations
+                                        <input type="checkbox" v-model="activeFields" value="trips" :disabled="maxCheck('reservations_count')"> Active Reservations
                                     </label>
                                 </li>
                             </template>
@@ -79,7 +79,7 @@
                     </div>
                     <div class="dropdown" style="display: inline-block;">
                         <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            Sort By
+                            Filter
                             <span class="caret"></span>
                         </button>
                         <ul style="padding: 10px 20px;" class="dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -131,7 +131,7 @@
                             </li>
                         </ul>
                     </div>
-                    <button class="btn btn-default btn-sm" type="button" @click="resetFilter()">Reset Filters</button>
+                    <button class="btn btn-default btn-sm" type="button" @click="resetFilter">Reset Filters</button>
                     <export-utility url="groups/export"
                                     :options="exportOptions"
                                     :filters="exportFilters">
@@ -196,8 +196,8 @@
             <tbody>
             <tr v-for="group in groups">
                 <td v-if="isActive('name')">{{group.name}}</td>
-                <td v-if="isActive('type')">{{group.type|capitalize}}</td>
-                <td v-if="isActive('location')">{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>
+                <td v-if="isActive('type')">{{ group.type|capitalize }}</td>
+                <td v-if="isActive('location')">{{ group.state|capitalize }}, {{ group.country_name|capitalize }}</td>
                 <template v-if="pending">
                     <td v-if="isActive('phone_one')">{{group.phone_one}}</td>
                     <td v-if="isActive('email')">{{group.email}}</td>
@@ -208,7 +208,7 @@
                     <td v-if="isActive('reservations_count')">{{ group.reservations_count }}</td>
                 </template>
                 <td>
-                    <a data-toggle="tooltip" data-placement="top" title="Manage" href="/admin/groups/{{ group.id }}"><i class="fa fa-gear"></i></a>
+                    <a data-toggle="tooltip" data-placement="top" title="Manage" :href="`/admin/groups/${ group.id }`"><i class="fa fa-gear"></i></a>
                 </td>
             </tr>
             </tbody>
@@ -216,7 +216,7 @@
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination" :callback="searchGroups"></pagination>
+                        <pagination :pagination="pagination" pagination-key="pagination" :callback="searchGroups"></pagination>
                     </div>
                 </td>
             </tr>
@@ -225,6 +225,7 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import exportUtility from '../export-utility.vue';
     import importUtility from '../import-utility.vue';
     export default{
@@ -287,13 +288,13 @@
             }
         },
         watch: {
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.searchGroups();
             },
             // watch filters obj
             'filters': {
-                handler: function (val) {
+                handler(val, oldVal) {
                     // console.log(val);
                     this.exportFilters = val;
                     this.pagination.current_page = 1;
@@ -301,20 +302,20 @@
                 },
                 deep: true
             },
-            'activeFields': function (val, oldVal) {
+            'activeFields'(val, oldVal) {
                 // if the orderBy field is removed from view
                 if (!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
                     // default to first visible field
                     this.orderByField = val[0];
                 }
                 // this.updateConfig();
-            },'orderByField': function (val, oldVal) {
+            },'orderByField'(val, oldVal) {
                 this.searchGroups();
             },
-            'direction': function (val) {
+            'direction'(val, oldVal) {
                 this.searchGroups();
             },
-            'per_page': function (val, oldVal) {
+            'per_page'(val, oldVal) {
                 this.searchGroups();
             }
         },
@@ -336,6 +337,7 @@
                 this.status = '';
                 this.type = '';
             },
+            debouncedSearch: _.debounce(function() { this.searchgroups() }, 250),
             searchGroups(){
                 this.$http.get('groups', { params: {
                     include: 'trips:status(active),notes',
@@ -346,15 +348,15 @@
                     per_page: this.per_page,
                     page: this.pagination.current_page,
                     pending: this.pending ? true : null
-                }}).then(function (response) {
-                    this.pagination = response.body.meta.pagination;
-                    this.groups = response.body.data;
-                }, function (error) {
+                }}).then((response) => {
+                    this.pagination = response.data.meta.pagination;
+                    this.groups = response.data.data;
+                }, (error) =>  {
                     this.$root.$emit('showError', 'Something went wrong!')
                 })
             }
         },
-        ready(){
+        mounted(){
             this.searchGroups();
             $('[data-toggle="tooltip"]').tooltip();
 

@@ -35,8 +35,7 @@ class CreateTripsTables extends Migration
             $table->softDeletes();
         });
 
-        Schema::table('trips', function($table)
-        {
+        Schema::table('trips', function ($table) {
             $table->foreign('group_id')
                 ->references('id')->on('groups')
                 ->onDelete('cascade');
@@ -56,8 +55,7 @@ class CreateTripsTables extends Migration
             $table->timestamps();
         });
 
-        Schema::table('facilitators', function($table)
-        {
+        Schema::table('facilitators', function ($table) {
             $table->foreign('trip_id')
                 ->references('id')->on('trips')
                 ->onDelete('cascade');
@@ -78,25 +76,23 @@ class CreateTripsTables extends Migration
             $table->timestamps();
         });
 
-        Schema::table('trip_interests', function($table)
-        {
+        Schema::table('trip_interests', function ($table) {
             $table->foreign('trip_id')
                 ->references('id')->on('trips')
                 ->onDelete('cascade');
         });
 
-        Schema::create('prospects', function(Blueprint $table) {
+        Schema::create('prospects', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
         });
 
-        Schema::create('trip_prospect', function(Blueprint $table) {
+        Schema::create('trip_prospect', function (Blueprint $table) {
             $table->uuid('trip_id');
             $table->uuid('prospect_id');
         });
 
-        Schema::table('trip_prospect', function($table)
-        {
+        Schema::table('trip_prospect', function ($table) {
             $table->foreign('trip_id')
                   ->references('id')->on('trips')
                   ->onDelete('cascade');
@@ -106,18 +102,17 @@ class CreateTripsTables extends Migration
                   ->onDelete('cascade');
         });
 
-        Schema::create('assignments', function(Blueprint $table) {
+        Schema::create('assignments', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
         });
 
-        Schema::create('trip_assignment', function(Blueprint $table) {
+        Schema::create('trip_assignment', function (Blueprint $table) {
             $table->uuid('trip_id');
             $table->uuid('assignment_id');
         });
 
-        Schema::table('trip_assignment', function($table)
-        {
+        Schema::table('trip_assignment', function ($table) {
             $table->foreign('trip_id')
                   ->references('id')->on('trips')
                   ->onDelete('cascade');
@@ -126,7 +121,6 @@ class CreateTripsTables extends Migration
                   ->references('id')->on('assignments')
                   ->onDelete('cascade');
         });
-
     }
 
     /**

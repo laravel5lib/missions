@@ -5,7 +5,7 @@
 			<div class="form-group" v-if="propertyExists('groups')">
 				<label>Travel Group</label>
 				<v-select @keydown.enter.prevent="" multiple class="form-control" id="groupFilter"  :debounce="250" :on-search="getGroups"
-				          :value.sync="groupsArr" :options="groupsOptions" label="name"
+				          v-model="groupsArr" :options="groupsOptions" label="name"
 				          placeholder="Filter Groups"></v-select>
 			</div>
 
@@ -97,7 +97,7 @@
         },
 	    watch: {
             'filters': {
-                handler: function (val) {
+                handler(val, oldVal) {
 //                    if (this.starter)
 //                        return;
 //                    // console.log(val);
@@ -119,17 +119,17 @@
             },
             getGroups(search, loading){
                 loading ? loading(true) : void 0;
-                let promise = this.$http.get('groups', { params: {search: search} }).then(function (response) {
-                    this.groupsOptions = response.body.data;
+                let promise = this.$http.get('groups', { params: {search: search} }).then((response) => {
+                    this.groupsOptions = response.data.data;
                     if (loading) {
                         loading(false);
                     } else {
                         return promise;
                     }
-                }, this.$root.handleApiError);
+                }).catch(this.$root.handleApiError);
             },
         },
-        ready(){
+        mounted(){
             if (this.propertyExists('groups'))
 			this.getGroups();
         }

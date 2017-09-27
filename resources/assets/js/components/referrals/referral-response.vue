@@ -1,21 +1,21 @@
 <template>
     <section>
-        <spinner v-ref:spinner size="xl" :fixed="false" text="Loading..."></spinner>
-        <validator name="validation" :classes="{ invalid: 'has-error' }">
-        <div class="form-group" v-for="item in referral.response" :class="{ 'has-error' : $validation.item.invalid}">
-            <label for="item_{{ $index }}">{{ item.q }}</label>
+        <spinner ref="spinner" size="xl" :fixed="false" text="Loading..."></spinner>
+
+        <div class="form-group" v-for="(item, index) in referral.response" :class="{ 'has-error' : errors.has('item')}">
+            <label :for="'item_' + index">{{ item.q }}</label>
 
             <span v-if="item.type == 'radio'">
                 <p>
-                    <input type="radio" value="yes" v-model="item.a"> Yes
-                    <input type="radio" value="no" v-model="item.a"> No
+                    <input type="radio" name="item" value="yes" v-model="item.a"> Yes
+                    <input type="radio" name="item" value="no" v-model="item.a"> No
                 </p>
             </span>
             <span v-else>
-                <textarea id="item_{{ $index }}" class="form-control" v-model="item.a" rows="5" initial="off" v-validate:item="{required: true}"></textarea>
+                <textarea :id="'item_' + index" class="form-control" v-model="item.a" rows="5"  name="item" v-validate="'required'"></textarea>
             </span>
         </div>
-        </validator>
+
         <div class="form-group text-center">
             <button class="btn btn-default" @click="reset">Clear</button>
             <button class="btn btn-primary" @click="save">Submit</button>
@@ -38,10 +38,10 @@
         },
         methods: {
             fetch() {
-                this.$http.get('referrals/' + this.id).then(function (response) {
-                    this.referral = response.body.data;
-                },function () {
-                    this.$dispatch('showError', 'Unable to retrieve the referral request!')
+                this.$http.get('referrals/' + this.id).then((response) => {
+                    this.referral = response.data.data;
+                },() =>  {
+                    this.$root.$emit('showError', 'Unable to retrieve the referral request!')
                 });
             },
             reset() {
@@ -51,22 +51,22 @@
             save() {
                 // validate manually
                 let self = this;
-                this.$validate(true, function () {
-                    if (self.$validation.invalid) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
                         console.log('validation errors');
-                        self.$dispatch('showError', 'Could not submit. Please check the form.');
+                        self.$root.$emit('showError', 'Could not submit. Please check the form.');
                     } else {
                         self.referral.responded_at = moment().format('YYYY-MM-DD HH:MM:SS');
-                        self.$http.put('referrals/' + self.id, self.referral).then(function (response) {
-                            self.$dispatch('showSuccess', 'Thank you for submitting your response.');
-                        },function () {
-                            self.$dispatch('showError', 'Unable to retrieve the referral request!');
+                        self.$http.put('referrals/' + self.id, self.referral).then((response) => {
+                            self.$root.$emit('showSuccess', 'Thank you for submitting your response.');
+                        },() =>  {
+                            self.$root.$emit('showError', 'Unable to retrieve the referral request!');
                         });
                     }
                 });
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

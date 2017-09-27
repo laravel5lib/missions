@@ -1,16 +1,13 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="CreateUpdateVisa" @touched="onTouched">
+<template >
+    <div>
         <form id="CreateUpdateVisa" class="form-horizontal" novalidate>
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-            
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
+
             <template v-if="forAdmin">
                 <div class="col-sm-12">
-                    <div class="form-group" :class="{ 'has-error': checkForError('manager') }">
+                    <div class="form-group" :class="{ 'has-error': errors.has('manager') }">
                         <label for="infoManager">Record Manager</label>
-                        <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
-                            <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
-                        </select>
+                        <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name" name="manager" v-validate="'required'"></v-select>
                     </div>
                 </div>
             </template>
@@ -19,8 +16,8 @@
                 <div class="col-sm-6">
                     <div v-error-handler="{ value: given_names, client: 'givennames', server: 'given_names' }">
                         <label for="given_names" class="control-label">Given Names</label>
-                        <input type="text" class="form-control" name="given_names" id="given_names" v-model="given_names"
-                               placeholder="Given Names" v-validate:givennames="{ required: true, minlength:1, maxlength:100 }"
+                        <input type="text" class="form-control" id="given_names" v-model="given_names"
+                               placeholder="Given Names" name="givennames" v-validate="'required|alpha_spaces|min:1|max:100'"
                                maxlength="150" minlength="1" required>
                     </div>
                 </div>
@@ -28,7 +25,7 @@
                     <div v-error-handler="{ value: surname, handle: 'surname' }">
                         <label for="surname" class="control-label">Surname</label>
                         <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
-                               placeholder="Surname" v-validate:surname="{ required: true, minlength:1, maxlength:100 }"
+                               placeholder="Surname" v-validate="'required|alpha|min:1|max:100'"
                                maxlength="100" minlength="1" required>
                     </div>
                 </div>
@@ -37,43 +34,35 @@
                 <div class="col-sm-12">
                     <label for="number" class="control-label">Visa Number</label>
                     <input type="text" class="form-control" name="number" id="number" v-model="number"
-                           placeholder="Visa Number" v-validate:number="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Visa Number" v-validate="'required|min:1|max:100'"
                            maxlength="100" minlength="9" required>
                 </div>
             </div>
 
-            <div class="row" :class="{ 'has-error': (checkForError('issued') || checkForError('expires')) }">
+            <div class="row" :class="{ 'has-error': (errors.has('issued') || errors.has('expires')) }">
                 <div class="col-sm-12">
                     <label for="issued_at" class="control-label">Dates</label>
                     <div class="row">
-                        <div class="col-lg-6">
-                            <date-picker addon="Issued" v-error-handler="{ value: issued_at, client:'issued', server: 'issued_at' }" :model.sync="issued_at|moment 'YYYY-MM-DD'"></date-picker>
-                            <input type="datetime" class="form-control hidden" v-model="issued_at" id="issued_at" :max="today"
-                                   v-validate:issued="{ required: true }" required>
+                        <div class="col-lg-6" v-error-handler="{ value: issued_at, client:'issued', server: 'issued_at' }">
+                            <date-picker addon="Issued" v-model="issued_at" :view-format="['YYYY-MM-DD']" type="date" name="issued" v-validate="'required'"></date-picker>
                             <br>
                         </div>
-                        <div class="col-lg-6">
-                            <date-picker addon="Expires" v-error-handler="{ value: expires_at, client:'expires', server: 'expires_at' }" :model.sync="expires_at|moment 'YYYY-MM-DD'"></date-picker>
-                            <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
-                                   v-validate:expires="{ required: true }" required>
+                        <div class="col-lg-6" v-error-handler="{ value: expires_at, client:'expires', server: 'expires_at' }">
+                            <date-picker addon="Expires" v-model="expires_at" :view-format="['YYYY-MM-DD', false, true]" type="date" name="expires" v-validate="'required'"></date-picker>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                 <div class="col-sm-12">
                     <label for="country" class="control-label">Country</label>
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="countryObj" :value.sync="countryObj" :options="countries" label="name"></v-select>
-                    <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }">
-                        <option :value="country.code" v-for="country in countries">{{country.name}}</option>
-                    </select>
-
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="countryObj" v-model="countryObj" :options="UTILITIES.countries" label="name" name="country" v-validate="'required'"></v-select>
                 </div>
             </div>
 
-            <accordion :one-at-atime="true">
-                <panel header="Upload Photocopy" :is-open.sync="true">
+            <accordion one-at-atime>
+                <panel header="Upload Photocopy" is-open>
                     <div class="media" v-if="selectedAvatar">
                         <div class="media-left">
                             <a href="#">
@@ -85,44 +74,54 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <upload-create-update v-if="userObj || !isUpdate" type="passport" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :is-update="isUpdate && !!upload_id" :upload-id="upload_id" :name="'passport-'+given_names+'-'+surname"></upload-create-update>
+                        <upload-create-update v-if="userObj || !isUpdate" type="passport" lock-type :ui-selector="2" ui-locked is-child :tags="['User']" :is-update="isUpdate && !!upload_id" :upload-id="upload_id" :name="'passport-'+given_names+'-'+surname"  @uploads-complete="uploadsComplete"></upload-create-update>
                     </div><!-- end panel-body -->
                 </panel>
             </accordion>
 
             <div class="form-group">
                 <div class="col-sm-12 text-center">
-                    <a v-if="!isUpdate" :href="'/'+ this.firstUrlSegment +'/records/visas'" class="btn btn-default">Cancel</a>
-                    <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
-                    <a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
-                    <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
+                    <template v-if="!isUpdate">
+                        <a :href="'/'+ this.firstUrlSegment +'/records/visas'" class="btn btn-default">Cancel</a>
+                        <a @click="submit" class="btn btn-primary">Create</a>
+                    </template>
+                    <template v-else>
+                        <a @click="back" class="btn btn-default">Cancel</a>
+                        <a @click="update" class="btn btn-primary">Update</a>
+                    </template>
+
+
                 </div>
             </div>
         </form>
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+        <alert v-model="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Good job!</strong>
             <p>Profile updated</p>
         </alert>
-        <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
+        <alert v-model="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
             <span class="icon-info-circled alert-icon-float-left"></span>
             <strong>Oh No!</strong>
             <p>There are errors on the form.</p>
         </alert>
-        <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+        <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
+    </div>
 
-    </validator>
+
+
 </template>
 <script type="text/javascript">
+    import $ from 'jquery';
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
     import errorHandler from'../../error-handler.mixin';
+    import utilities from'../../utilities.mixin';
     export default{
         name: 'visa-create-update',
         components: {vSelect, 'upload-create-update': uploadCreateUpdate},
-        mixins: [errorHandler],
+        mixins: [utilities, errorHandler],
         props: {
             isUpdate: {
                 type:Boolean,
@@ -139,21 +138,17 @@
         },
         data(){
             return{
-                // mixin settings
-                validatorHandle: 'CreateUpdateVisa',
-
                 given_names: '',
                 surname: '',
                 number: '',
                 issued_at: null,
                 expires_at: null,
-                country_code: null,
+                showSaveAlert: false,
                 upload_id: null,
                 usersArr: [],
                 userObj: null,
 
                 // logic vars
-                countries: [],
                 countryObj: null,
                 showSuccess: false,
                 showError: false,
@@ -165,8 +160,11 @@
             }
         },
         computed: {
-            country_code(){
-                return _.isObject(this.countryObj) ? this.countryObj.code : null;
+            country_code:{
+                get() {
+                    return _.isObject(this.countryObj) ? this.countryObj.code : null;
+                },
+                set() {}
             },
             user_id(){
                 return  _.isObject(this.userObj) ? this.userObj.id : this.$root.user.id;
@@ -175,16 +173,13 @@
         methods: {
             getUsers(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('users', { params: { search: search} }).then(function (response) {
-                    this.usersArr = response.body.data;
+                this.$http.get('users', { params: { search: search} }).then((response) => {
+                    this.usersArr = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
-            onTouched(){
-                this.hasChanged = true;
-            },
             back(force){
-                if (this.hasChanged && !force ) {
+                if (this.isFormDirty && !force ) {
                     this.showSaveAlert = true;
                     return false;
                 }
@@ -193,10 +188,14 @@
             forceBack(){
                 return this.back(true);
             },
-            submit(){
-                this.resetErrors();
-                if (this.$CreateUpdateVisa.valid) {
-                    this.visasResource.save(null, {
+            submit() {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.showError = true;
+                        return;
+                    }
+
+                    this.visasResource.post({}, {
                         given_names: this.given_names,
                         surname: this.surname,
                         number: this.number,
@@ -205,26 +204,24 @@
                         country_code: this.country_code,
                         upload_id: this.upload_id,
                         user_id: this.user_id,
-                    }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Visa created.');
-                        setTimeout(function () {
+                    }).then((resp) => {
+                        this.$root.$emit('showSuccess', 'Visa created.');
+                        setTimeout(() => {
                             window.location.href = '/' + this.firstUrlSegment + '/records/visas/' + resp.data.data.id;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) => {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to create visa.');
+                        this.$root.$emit('showError', 'Unable to create visa.');
                     });
-                } else {
-                    this.showError = true;
-                }
+                });
             },
             update(){
-                if ( _.isFunction(this.$validate) )
-                    this.$validate(true);
-                
-                this.resetErrors();
-                if (this.$CreateUpdateVisa.valid) {
-                    this.visasResource.update({id:this.id}, {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        return;
+                    }
+
+                    this.visasResource.put({id:this.id}, {
                         given_names: this.given_names,
                         surname: this.surname,
                         number: this.number,
@@ -233,22 +230,19 @@
                         country_code: this.country_code,
                         upload_id: this.upload_id,
                         user_id: this.user_id,
-                    }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Changes saved.');
+                    }).then((resp) => {
+                        this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
-                        setTimeout(function () {
+                        setTimeout(() =>  {
                             window.location.href = '/' + that.firstUrlSegment + '/records/visas/' + that.id;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to save changes.');
+                        this.$root.$emit('showError', 'Unable to save changes.');
                     });
-                }
+                });
             },
-
-        },
-        events:{
-            'uploads-complete'(data){
+            uploadsComplete(data){
                 switch(data.type){
                     case 'other':
                         //save for preview
@@ -257,22 +251,23 @@
                         this.upload_id = data.id;
                         break;
                 }
-            }
+            },
+
         },
-        ready(){
-            this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.body.countries;
+        mounted(){
+            this.getCountries().then(() => {
+                if (this.isUpdate) {
+                    this.visasResource.get({ id: this.id }).then((response) => {
+                        let visa = response.data.data;
+                        $.extend(this, visa);
+                        this.countryObj = _.findWhere(this.UTILITIES.countries, {code: visa.country_code});
+                        this.userObj = visa.user.data;
+                        this.usersArr.push(this.userObj);
+                    });
+                }
             });
 
-            if (this.isUpdate) {
-                this.visasResource.get({ id: this.id }).then(function (response) {
-                    let visa = response.body.data;
-                    $.extend(this, visa);
-                    this.countryObj = _.findWhere(this.countries, {code: visa.country_code});
-                    this.userObj = visa.user.data;
-                    this.usersArr.push(this.userObj);
-                });
-            }
+
         }
 
     }

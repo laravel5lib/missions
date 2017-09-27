@@ -1,25 +1,25 @@
 <template>
 	<div>
-		<aside :show.sync="showActivityFilters" placement="left" header="Activity Filters" :width="375">
+		<mm-aside :show="showActivityFilters" @open="showActivityFilters=true" @close="showActivityFilters=false" placement="left" header="Activity Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 				<div class="form-group">
 					<label>Activity Type</label>
 					<select class="form-control" v-model="activityFilters.type">
 						<option value="">Any Type</option>
-						<option :value="type.id" v-for="type in UTILITIES.activityTypes" v-text="type.name|capitalize"></option>
+						<option :value="type.id" v-for="type in UTILITIES.activityTypes">{{type.name|capitalize}}</option>
 					</select>
 				</div>
 			</form>
-		</aside>
+		</mm-aside>
 		<form class="form-inline">
 			<div class="input-group input-group-sm">
 				<input type="text" class="form-control" v-model="activityFilters.search" debounce="300" placeholder="Search">
 				<span class="input-group-addon"><i class="fa fa-search"></i></span>
 			</div>
 			<button class="btn btn-default btn-sm" @click="showActivityFilters = true;">Filters</button>
-			<date-picker :has-error="" :model.sync="activityFilters.starts|moment 'YYYY-MM-DD' false true" type="date" placeholder="Start DateTime" input-sm></date-picker>
-			<date-picker :has-error="" :model.sync="activityFilters.ends|moment 'YYYY-MM-DD' false true" type="date" placeholder="End DateTime" input-sm></date-picker>
+			<date-picker :has-error="" v-model="activityFilters.starts" :view-format="['YYYY-MM-DD', false, true]" type="date" placeholder="Start DateTime" input-sm></date-picker>
+			<date-picker :has-error="" v-model="activityFilters.ends" :view-format="['YYYY-MM-DD', false, true]" type="date" placeholder="End DateTime" input-sm></date-picker>
 
 			<button type="button" class="btn btn-primary btn-sm" @click="newActivity();">Add Activity</button>
 		</form>
@@ -35,9 +35,9 @@
 						<article class="timeline-entry" v-for="activity in activities">
 
 							<div class="timeline-entry-inner">
-								<time class="timeline-time" datetime="{{ activity.occurred_at }}">
-									<span>{{ activity.occurred_at | moment 'h:mm A zz' }}</span>
-									<span>{{ activity.occurred_at | moment 'ddd, ll' }}</span>
+								<time class="timeline-time" :datetime=" activity.occurred_at ">
+									<span>{{ activity.occurred_at | moment('h:mm A zz') }}</span>
+									<span>{{ activity.occurred_at | moment('ddd, ll') }}</span>
 								</time>
 
 								<div class="timeline-icon bg-success" v-if="activity.type.name == 'departure'">
@@ -54,10 +54,10 @@
 
 								<div class="timeline-label">
 									<h2>
-										<a href="#">{{ activity.name | capitalize }}</a>
-										<span class="label label-default" v-text="activity.type.name|capitalize"></span>
+										<a href="#">{{ activity.name|capitalize }}</a>
+										<span class="label label-default">{{activity.type.name|capitalize}}</span>
 										<br />
-										<small><i class="fa fa-clock-o"></i> {{ activity.occurred_at|moment 'dddd, MMMM D, YYYY zz' }}</small>
+										<small><i class="fa fa-clock-o"></i> {{ activity.occurred_at|moment('dddd, MMMM D, YYYY zz') }}</small>
 									</h2>
 
 									<p>{{ activity.description }}</p>
@@ -96,7 +96,7 @@
 											<div class="list-group">
 												<div class="list-group-item" v-for="hub in activity.hubs.data">
 													<h5 class="list-group-item-heading">
-														{{hub.name | capitalize}} <span v-if="hub.call_sign">({{hub.call_sign}})</span>
+														{{ hub.name|capitalize }} <span v-if="hub.call_sign">({{hub.call_sign}})</span>
 
 														<a @click="confirmDeleteHub(hub)" class="btn btn-xs btn-default-hollow pull-right">
 															<i class="fa fa-trash"></i> Delete
@@ -109,7 +109,7 @@
 													<p class="list-group-item-text">
 														{{hub.address}}
 														{{hub.city}} {{hub.state}} {{hub.zip}}
-														{{hub.country_code | uppercase}}
+														{{hub.country_code.toUpperCase()}}
 													</p>
 												</div>
 											</div>
@@ -139,7 +139,7 @@
 				</div>
 			</div>
 				<div class="col-xs-12 text-center">
-					<pagination :pagination.sync="activitiesPagination" :callback="getActivities"></pagination>
+					<pagination :pagination="activitiesPagination" pagination-key="activitiesPagination" :callback="getActivities"></pagination>
 				</div>
 		</template>
 		<!-- Activities List Empty State -->
@@ -148,31 +148,31 @@
 			<p class="text-center text-muted"><em>No activities</em></p>
 		</template>
 
-		<modal :title="editMode?'Edit Activity':'Create Activity'" :ok-text="editMode?'Update':'Create'" :callback="saveActivity" :show.sync="activityModal">
+		<modal :title="editMode?'Edit Activity':'Create Activity'" :ok-text="editMode?'Update':'Create'" :callback="saveActivity" :value="activityModal" @closed="activityModal=false">
 			<div slot="modal-body" class="modal-body" v-if="selectedActivity">
 				<div class="form-group">
 					<label>Activity Type</label>
 					<select class="form-control" v-model="selectedActivity.activity_type_id">
 						<option value="">Any Type</option>
-						<option :value="type.id" v-for="type in UTILITIES.activityTypes" v-text="type.name|capitalize"></option>
+						<option :value="type.id" v-for="type in UTILITIES.activityTypes">{{type.name|capitalize}}</option>
 					</select>
 				</div>
-				<travel-activity v-ref:activity :activity="selectedActivity" :activity-types="UTILITIES.activityTypes" :activity-type="selectedActivity.activity_type_id" transport-domestic></travel-activity>
+				<travel-activity ref="activity" :activity="selectedActivity" :activity-types="UTILITIES.activityTypes" :activity-type="selectedActivity.activity_type_id" transport-domestic></travel-activity>
 			</div>
 		</modal>
-		<modal :title="editMode?'Edit Hub':'Create Hub'" :ok-text="editMode?'Update':'Create'" :callback="saveHub" :show.sync="hubModal">
+		<modal :title="editMode?'Edit Hub':'Create Hub'" :ok-text="editMode?'Update':'Create'" :callback="saveHub" :value="hubModal" @closed="hubModal=false">
 			<div slot="modal-body" class="modal-body" v-if="selectedHub">
-				<travel-hub v-ref:hub :hub.sync="selectedHub" :activity-types="activityTypes"></travel-hub>
+				<travel-hub ref="hub" :hub="selectedHub" :activity-types="activityTypes"></travel-hub>
 			</div>
 		</modal>
-		<modal title="Delete Hub" small ok-text="Delete" :callback="deleteHub" :show.sync="showHubDeleteModal">
+		<modal title="Delete Hub" small ok-text="Delete" :callback="deleteHub" :value="showHubDeleteModal" @closed="showHubDeleteModal=false">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="selectedHub">
 					Are you sure you want to delete {{selectedHub.name}} ?
 				</p>
 			</div>
 		</modal>
-		<modal title="Delete Activity" small ok-text="Delete" :callback="deleteActivity" :show.sync="showActivityDeleteModal">
+		<modal title="Delete Activity" small ok-text="Delete" :callback="deleteActivity" :value="showActivityDeleteModal" @closed="showActivityDeleteModal=false">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="selectedActivity">
 					Are you sure you want to delete {{selectedActivity.name}} ?
@@ -214,8 +214,6 @@
                 hubModal: false,
                 editMode: false,
 
-	            ActivityResource: this.$resource('activities{/activity}'),
-	            HubResource: this.$resource('hubs{/hub}')
             }
         },
 	    watch: {
@@ -261,9 +259,9 @@
                     include: 'hubs'
                 }, this.activityFilters);
 
-                return this.ActivityResource.get(params).then(function (response) {
-                    this.activitiesPagination = response.body.meta.pagination;
-                    return this.activities = response.body.data;
+                return this.$http.get(`activities`, {params: params}).then((response) => {
+                    this.activitiesPagination = response.data.meta.pagination;
+                    return this.activities = response.data.data;
                 }, this.handleApiError);
             },
             newActivity() {
@@ -300,22 +298,22 @@
                 let promise;
 
                 // trigger validation styles
-                this.$broadcast('validate-itinerary');
+                this.$emit('validate-itinerary');
 
 	            if (data.id) {
-	                promise = this.HubResource.update({ hub: data.id}, data).then(function (response) {
+	                promise = this.$http.put({ hub: data.id}, data).then((response) => {
                         this.editMode = false;
                         this.getActivities();
                     }, this.handleApiError);
 	            } else {
                     data.campaign_id = null;
-                    promise = this.HubResource.save(data).then(function (response) {
+                    promise = this.HubResource.post(data).then((response) => {
                         this.getActivities();
 
                     }, this.handleApiError);
 	            }
 
-	            promise.then(function () {
+	            promise.then(() => {
 		            this.hubModal = false;
                 });
 	        },
@@ -328,40 +326,40 @@
                 let promise;
 
                 // trigger validation styles
-                this.$broadcast('validate-itinerary');
+                this.$emit('validate-itinerary');
 
                 if (data.id) {
-                    promise = this.ActivityResource.update({ activity: data.id}, data).then(function (response) {
+                    promise = this.$http.put(`activities/${data.id}`, data).then((response) => {
                         this.editMode = false;
                         this.getActivities();
                     }, this.handleApiError);
                 } else {
                     data.campaign_id = null;
-                    promise = this.ActivityResource.save(data).then(function (response) {
+                    promise = this.$http.post(`activities`, data).then((response) => {
                         this.getActivities();
 
                     }, this.handleApiError);
                 }
 
-                promise.then(function () {
+                promise.then(() => {
                     this.activityModal = false;
                 });
 
             },
 	        deleteHub(){
-                this.HubResource.delete({ activity: this.selectedHub.id }).then(function () {
+                this.HubResource.delete({ activity: this.selectedHub.id }).then(() => {
                     this.getActivities();
                     this.showHubDeleteModal = false;
                 }, this.handleApiError);
 	        },
 	        deleteActivity(){
-	            this.ActivityResource.delete({ activity: this.selectedActivity.id }).then(function () {
+	            this.$http.delete(`activities/${this.selectedActivity.id}`).then(() => {
 	                this.getActivities();
                     this.showActivityDeleteModal = false;
                 }, this.handleApiError);
 	        },
         },
-        ready(){
+        mounted(){
             this.getActivityTypes();
 			this.getActivities();
         }

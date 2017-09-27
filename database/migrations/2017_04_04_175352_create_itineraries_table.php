@@ -28,7 +28,8 @@ class CreateItinerariesTable extends Migration
             $table->string('description')->nullable();
             $table->string('participant_id');
             $table->string('participant_type');
-            $table->timestamp('occurred_at');
+//            $table->timestamp('occurred_at');
+            $table->dateTime('occurred_at');
             $table->timestamps();
             $table->softDeletes();
         });

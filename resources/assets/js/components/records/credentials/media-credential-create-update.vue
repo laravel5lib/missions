@@ -1,7 +1,7 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template>
 	<div style="position:relative;">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
-		<validator name="CreateUpdateMediaCredential" @touched="onTouched">
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
+
 			<form id="CreateUpdateMediaCredential" class="form-horizontal">
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -16,23 +16,20 @@
 							<div class="col-sm-6" v-error-handler="{ value: applicant_name, handle: 'name' }">
 								<label for="name" class="control-label">Credential Holder's Name</label>
 								<input type="text" class="form-control" name="name" id="name" v-model="applicant_name"
-										       placeholder="Name" v-validate:name="{ required: true, minlength:1 }"
+										       placeholder="Name" v-validate="'required|min:1'"
 								       minlength="1" required>
 							</div>
                             <div class="col-sm-6" v-if="forAdmin">
-                                <div class="form-group" :class="{ 'has-error': checkForError('manager') }">
+                                <div class="form-group" :class="{ 'has-error': errors.has('manager') }">
                                     <label for="infoManager">Record Manager</label>
-                                    <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                                    <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
-                                        <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
-                                    </select>
+                                    <v-select @keydown.enter.prevent="" class="form-control" name="manager" id="infoManager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name" v-validate="'required'"></v-select>
                                 </div>
                             </div>
 						</div>
 					</div>
 				</div>
 
-				<div v-for="(indexQA, QA) in content" v-show="checkConditions(QA)">
+				<div v-for="(QA, indexQA) in content" v-show="checkConditions(QA)">
 
 					<!-- start has type designation -->
 					<template v-if="QA.type">
@@ -45,10 +42,10 @@
 								</div>
 								<div class="panel-body">
 									<label class="radio-inline" v-for="choice in QA.options">
-										<input type="radio" :value="choice.value" v-model="QA.a" :field="'radio' + indexQA" v-validate="['required']"> {{ choice.name }}
+										<input type="radio" :value="choice.value" v-model="QA.a" :name="'radio' + indexQA" v-validate="'required'"> {{ choice.name }}
                                     </label>
 								</div>
-								<div class="panel-footer" v-show="checkForError('radio' + indexQA)">
+								<div class="panel-footer" v-show= "errors.has('radio' + indexQA)">
 									<div class="errors-block"></div>
 								</div>
 							</div>
@@ -59,33 +56,33 @@
 						<template v-if="QA.type === 'checkbox'">
 							<template v-if="QA.id === 'role'">
 								<!-- start roles checklist -->
-								<div class="panel panel-default" v-error-handler="{ value: QA.options, handle: 'roles', class: 'panel-danger has-error', messages: { min: 'Please select at least one role.'} }">
+								<div class="panel panel-default" v-error-handler="{ value: QA.options, handle: 'roles', class: 'panel-danger has-error', messages: { req: 'Please select at least one role.'} }">
 									<div class="panel-heading">
 										<h5 v-text="QA.q"></h5>
 									</div>
 									<div class="panel-body">
 										<div class="row">
 											<div class="checkbox col-sm-6 col-xs-12">
-												<template v-for="choice in QA.options">
-													<template v-if="$index % 2 == 0">
+												<template v-for="(choice, choiceIndex) in QA.options">
+													<template v-if="choiceIndex % 2 == 0">
 														<label>
-															<input type="checkbox" v-model="choice.value" :checked.sync="choice.value" v-validate:roles="$index === 0 ? { minlength: 1} : void 0">
+															<input type="checkbox" v-model="choice.value" :checked="choice.value" name="roles" v-validate="choiceIndex === 0 ? 'required' : ''">
 															{{ choice.name }}
 														</label>
 														<div v-if="choice.value">
-															<div class="row" v-error-handler="{ value: choice.proficiency, client: 'proficiencyEven' + $index, messages: { req: 'Please select at proficiency level.'} }">
+															<div class="row" v-error-handler="{ value: choice.proficiency, client: 'proficiencyEven' + choiceIndex, messages: { req: 'Please select a proficiency level.'} }">
 																<div class="col-md-2">
 																	<span class="help-block">Proficiency: </span>
 																</div>
 																<div class="col-md-10">
 																	<label class="radio-inline">
-																		<input type="radio" :field="'proficiencyEven' + $index" v-validate="{ required: { rule: !!choice.value} }" value="beginner" v-model="choice.proficiency"> Beginner
+																		<input type="radio" :name="'proficiencyEven' + choiceIndex" v-validate="!!choice.value ? 'required' : ''" value="beginner" v-model="choice.proficiency"> Beginner
 																	</label>
 																	<label class="radio-inline">
-																		<input type="radio" :field="'proficiencyEven' + $index" v-validate value="intermediate" v-model="choice.proficiency"> Intermediate
+																		<input type="radio" :name="'proficiencyEven' + choiceIndex" value="intermediate" v-model="choice.proficiency"> Intermediate
 																	</label>
 																	<label class="radio-inline">
-																		<input type="radio" :field="'proficiencyEven' + $index" v-validate value="expert" v-model="choice.proficiency"> Expert
+																		<input type="radio" :name="'proficiencyEven' + choiceIndex" value="expert" v-model="choice.proficiency"> Expert
 																	</label>
 																	<div class="errors-block"></div>
 																</div>
@@ -97,26 +94,26 @@
 												</template>
 											</div>
 											<div class="checkbox col-sm-6 col-xs-12">
-												<template v-for="choice in QA.options">
-													<template v-if="$index % 2 != 0">
+												<template v-for="(choice, choiceIndex) in QA.options">
+													<template v-if="choiceIndex % 2 != 0">
 														<label>
-															<input type="checkbox" v-model="choice.value" :checked.sync="choice.value" :value="true" v-validate:roles>
+															<input type="checkbox" v-model="choice.value" :checked="choice.value" :value="true" v-validate="choiceIndex === 0 ? 'required' : ''" name="roles">
 															{{ choice.name }}
 														</label>
 														<div v-if="choice.value">
-															<div class="row" v-error-handler="{ value: choice.proficiency, client: 'proficiencyOdd' + $index, messages: { req: 'Please select at proficiency level.'} }">
+															<div class="row" v-error-handler="{ value: choice.proficiency, client: 'proficiencyOdd' + choiceIndex, messages: { req: 'Please select at proficiency level.'} }">
 																<div class="col-md-2">
 																	<span class="help-block">Proficiency:</span>
 																</div>
 																<div class="col-md-10">
 																	<label class="radio-inline">
-																		<input type="radio" :field="'proficiencyOdd' + $index" v-validate="{ required: { rule: !!choice.value} }" value="beginner" v-model="choice.proficiency"> Beginner
+																		<input type="radio" :name="'proficiencyOdd' + choiceIndex" v-validate="choice.value ? 'required' : ''" value="beginner" v-model="choice.proficiency"> Beginner
 																	</label>
 																	<label class="radio-inline">
-																		<input type="radio" :field="'proficiencyOdd' + $index" v-validate value="intermediate" v-model="choice.proficiency"> Intermediate
+																		<input type="radio" :name="'proficiencyOdd' + choiceIndex" value="intermediate" v-model="choice.proficiency"> Intermediate
 																	</label>
 																	<label class="radio-inline">
-																		<input type="radio" :field="'proficiencyOdd' + $index" v-validate value="expert" v-model="choice.proficiency"> Expert
+																		<input type="radio" :name="'proficiencyOdd' + choiceIndex" value="expert" v-model="choice.proficiency"> Expert
 																	</label>
 																	<div class="errors-block"></div>
 																</div>
@@ -129,7 +126,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="panel-footer" v-show="checkForError('roles')">
+									<div class="panel-footer" v-show= "errors.has('roles')">
 										<div class="errors-block"></div>
 									</div>
 								</div>
@@ -145,15 +142,15 @@
 									<div class="panel-body">
 										<div class="row">
 											<div class="checkbox col-sm-6 col-xs-12">
-												<template v-for="choice in QA.options">
-													<template v-if="$index % 2 == 0">
+												<template v-for="(choice, choiceIndex) in QA.options">
+													<template v-if="choiceIndex % 2 == 0">
 														<label>
-															<input type="checkbox" :checked.sync="choice.value" :value="true" v-model="choice.value"> {{ choice.name }}
+															<input type="checkbox" :checked="choice.value" :value="true" v-model="choice.value"> {{ choice.name }}
 														</label>
-														<div v-if="choice.value" v-error-handler="{ value: choice.brand, client: ('brandEven' + $index), messages: { req: 'Please enter a brand or model name.'} }">
+														<div v-if="choice.value" v-error-handler="{ value: choice.brand, client: ('brandEven' + choiceIndex), messages: { req: 'Please enter a brand or model name.'} }">
 															<div class="input-group">
 																<span class="input-group-addon input-sm">Brand/Model</span>
-																<input class="form-control input-sm" type="text" v-model="choice.brand" :field="'brandEven' + $index" v-validate="['required']">
+																<input class="form-control input-sm" type="text" v-model="choice.brand" :name="'brandEven' + choiceIndex" v-validate="'required'">
 															</div>
 															<hr class="divider md">
 														</div>
@@ -162,15 +159,15 @@
 												</template>
 											</div>
 											<div class="checkbox col-sm-6 col-xs-12">
-												<template v-for="choice in QA.options">
-													<template v-if="$index % 2 != 0">
+												<template v-for="(choice, choiceIndex) in QA.options">
+													<template v-if="choiceIndex % 2 != 0">
 														<label>
-															<input type="checkbox" :checked.sync="choice.value" :value="true" v-model="choice.value"> {{ choice.name }}
+															<input type="checkbox" :checked="choice.value" :value="true" v-model="choice.value"> {{ choice.name }}
 														</label>
-														<div v-if="choice.value" v-error-handler="{ value: choice.brand, client: ('brandOdd' + $index), messages: { req: 'Please enter a brand or model name.'} }">
+														<div v-if="choice.value" v-error-handler="{ value: choice.brand, client: ('brandOdd' + choiceIndex), messages: { req: 'Please enter a brand or model name.'} }">
 															<div class="input-group">
 																<span class="input-group-addon input-sm">Brand/Model</span>
-																<input class="form-control input-sm" type="text" v-model="choice.brand" :field="'brandOdd' + $index" v-validate="['required']">
+																<input class="form-control input-sm" type="text" v-model="choice.brand" :name="'brandOdd' + choiceIndex" v-validate="'required'">
 															</div>
 															<hr class="divider md">
 														</div>
@@ -195,9 +192,9 @@
 								</div>
 								<div class="panel-body">
 									<span class="help-block">Please Explain:</span>
-									<textarea class="form-control" v-model="QA.a" :field="'textarea' + indexQA" v-validate="{}"></textarea>
+									<textarea class="form-control" v-model="QA.a" :name="'textarea' + indexQA" v-validate="''"></textarea>
 								</div>
-								<div class="panel-footer" v-show="checkForError('textarea' + indexQA)">
+								<div class="panel-footer" v-show= "errors.has('textarea' + indexQA)">
 									<div class="errors-block"></div>
 								</div>
 							</div>
@@ -215,7 +212,7 @@
 									<span class="help-block">Provide link:</span>
 									<input type="url" class="form-control" v-model="QA.a" :placeholder="QA.placeholder"></input>
 								</div>
-								<!--<div class="panel-footer" v-show="checkForError('url' + indexQA)">
+								<!--<div class="panel-footer" v-show= "errors.has('url' + indexQA)">
 									<div class="errors-block"></div>
 								</div>-->
 							</div>
@@ -229,12 +226,12 @@
 									<h5 v-text="QA.q"></h5>
 								</div>
 								<div class="panel-body">
-									<select class="form-control" v-model="QA.a" :field="'select' + indexQA" v-validate="{}">
+									<select class="form-control" v-model="QA.a" :name="'select' + indexQA" v-validate="''">
 										<option value="">-- Select Role --</option>
 										<option v-for="option in QA.options" :value="option.value">{{option.name}}</option>
 									</select>
 								</div>
-								<div class="panel-footer" v-show="checkForError('select' + indexQA)">
+								<div class="panel-footer" v-show= "errors.has('select' + indexQA)">
 									<div class="errors-block"></div>
 								</div>
 							</div>
@@ -256,7 +253,7 @@
                                                         <a class="badge" @click="confirmUploadNoteRemoval(upload)"><i class="fa fa-close"></i></a>
 												</li>
 											</ul>
-											<upload-create-update v-show="uploads.length < 1" type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :name="'credentials-professor-note-'+ today + '-' + uploadCounter"></upload-create-update>
+											<upload-create-update v-show="uploads.length < 1" type="file" lock-type :ui-selector="2" ui-locked is-child :tags="['User']" button-text="Attach" :allow-name="false" :name="'credentials-professor-note-'+ today + '-' + uploadCounter"  @uploads-complete="uploadsComplete"></upload-create-update>
 										</div>
 									</div>
 								</div>
@@ -271,10 +268,10 @@
 									<h5 v-text="QA.q"></h5>
 								</div>
 								<div class="panel-body">
-									<date-picker :model.sync="QA.a|moment 'YYYY-MM-DD'" type="date" ></date-picker>
-									<input type="datetime" class="form-control hidden" v-model="QA.a | moment 'LLLL'" id="started_at" required :field="'date' + indexQA" v-validate="{}">
+									<date-picker v-model="QA.a" :view-format="['YYYY-MM-DD']" type="date" v-validate="'required'" :data-vv-name="'date' + indexQA" data-vv-value-path="value"></date-picker>
+									<!--<input type="datetime" class="form-control hidden" v-model="QA.a | moment('LLLL')" id="started_at" required :name="'date' + indexQA" v-validate="''">-->
 								</div>
-								<div class="panel-footer" v-show="checkForError('date' + indexQA)">
+								<div class="panel-footer" v-show= "errors.has('date' + indexQA)">
 									<div class="errors-block"></div>
 								</div>
 							</div>
@@ -300,7 +297,7 @@
 					<div class="panel-body">
 						<div class="checkbox" v-error-handler="{ value: disclaimer, handle: 'disclaimer' }">
 							<label>
-								<input type="checkbox" :checked.sync="disclaimer" v-model="disclaimer" v-validate:disclaimer="['required']">
+								<input type="checkbox" :checked="disclaimer" v-model="disclaimer" name="disclaimer" v-validate="'required'">
 								I agree that, Missions.Me is not responsible for any lost, stolen or broken equipment brought my your missions trip.
 							</label>
 						</div>
@@ -309,26 +306,31 @@
 
 				<div class="form-group text-center">
 					<div class="col-xs-12">
-						<a v-if="!isUpdate" href="/dashboard/records/media-credentials" class="btn btn-default">Cancel</a>
-						<a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
-						<a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
-						<a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
+						<template v-if="!isUpdate">
+							<a href="/dashboard/records/media-credentials" class="btn btn-default">Cancel</a>
+							<a @click="submit" class="btn btn-primary">Create</a>
+						</template>
+						<template v-else>
+							<a @click="back" class="btn btn-default">Cancel</a>
+							<a @click="update" class="btn btn-primary">Update</a>
+
+						</template>
 					</div>
 				</div>
 			</form>
 
-			<modal class="text-center" :show.sync="deleteModal" title="Delete Credential" small="true">
+			<!--<modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Credential" :small="true">
 				<div slot="modal-body" class="modal-body text-center" v-if="selectedItem">Delete {{ selectedItem.name }}?</div>
 				<div slot="modal-footer" class="modal-footer">
 					<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
 					<button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Delete</button>
 				</div>
-			</modal>
-			<modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+			</modal>-->
+			<modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
 				<div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
 			</modal>
 
-		</validator>
+
 	</div>
 
 </template>
@@ -357,9 +359,6 @@
         },
         data(){
             return {
-                // mixin settings
-                validatorHandle: 'CreateUpdateMediaCredential',
-
                 applicant_name: '',
                 usersArr: [],
                 userObj: null,
@@ -403,7 +402,7 @@
                 uploads: [],
                 upload_ids: [],
                 uploadCounter: 1,
-                attemptUploadDoc: false,
+                showSaveAlert: false,
 
                 // logic vars
                 selectedAvatar: null,
@@ -424,7 +423,7 @@
                 // check proficiencies
                 let roles = _.findWhere(this.content, { id: 'role'});
                 let selectedRoles = _.findWhere(roles.options, { value: true});
-                _.each(selectedRoles, function (role) {
+                _.each(selectedRoles, (role) => {
                     if (role.proficiency === null || role.proficiency === '') {
                         self.$root.$emit('showError', 'Please select a proficiency level for ' + role.name);
                         pass = false;
@@ -435,7 +434,7 @@
                 // check brands/models
                 let equipment = _.findWhere(this.content, { id: 'equipment'});
                 let selectedEquipment = _.findWhere(equipment.options, { value: true});
-                _.each(selectedEquipment, function (item) {
+                _.each(selectedEquipment, (item) => {
                     if (item.brand === null || item.brand === '') {
                         self.$root.$emit('showError', 'Please type a brand/model name for your ' + item.name);
                         pass = false;
@@ -448,7 +447,7 @@
         },
         watch:{
             content: {
-                handler: function (val, oldVal) {
+                handler(val, oldVal) {
                     let roleObj = _.findWhere(val, {id: 'role'}); // seems unnecessary but we should not assume the order of the data
                     if (_.isObject(this.selectedRoleObj) && this.selectedRoleObj.value !== roleObj.a) {
                         roleObj.a = this.selectedRoleObj.value;
@@ -460,21 +459,18 @@
             disclaimer(val){
                 let contentIndex = _.findIndex(this.content, {id: 'disclaimer'});
                 this.content[contentIndex].a = val;
-            }
+            },
         },
         methods: {
             getUsers(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('users', { params: { search: search} }).then(function (response) {
-                    this.usersArr = response.body.data;
+                this.$http.get('users', { params: { search: search} }).then((response) => {
+                    this.usersArr = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
-            onTouched(){
-                this.hasChanged = true;
-            },
             back(force){
-                if (this.hasChanged && !force ) {
+                if (this.isFormDirty && !force ) {
                     this.showSaveAlert = true;
                     return false;
                 }
@@ -484,53 +480,53 @@
                 return this.back(true);
             },
             submit(){
-                this.resetErrors();
-                if (this.$CreateUpdateMediaCredential.valid) {
-                    this.resource.save(null, {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.showError = true;
+                        return;
+                    }
+                    this.resource.post({}, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,
                         holder_type: 'users',
                         content: this.content,
                         expired_at: moment(this.expired_at).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
 //                        uploads: _.uniq(this.upload_ids),
-                    }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Media Credential created.');
+                    }).then((resp) => {
+                        this.$root.$emit('showSuccess', 'Media Credential created.');
                         let that = this;
-                        setTimeout(function () {
-                            window.location.href = '/'+ that.firstUrlSegment +'/records/media-credentials/' + resp.body.data.id;
+                        setTimeout(() =>  {
+                            window.location.href = '/'+ that.firstUrlSegment +'/records/media-credentials/' + resp.data.data.id;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to create media credential.');
+                        this.$root.$emit('showError', 'Unable to create media credential.');
                     });
-                } else {
-                    this.showError = true;
-                }
+                });
             },
             update(){
-                if ( _.isFunction(this.$validate) )
-                    this.$validate(true);
-
-                this.resetErrors();
-                if (this.$CreateUpdateMediaCredential.valid) {
-                    this.resource.update({id:this.id, include: 'uploads'}, {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        return;
+                    }
+                    this.resource.put({id:this.id, include: 'uploads'}, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,
                         holder_type: 'users',
                         content: this.content,
                         expired_at: moment(this.expired_at).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
 //                        uploads: _.uniq(this.upload_ids),
-                    }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Changes saved.');
+                    }).then((resp) => {
+                        this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
-                        setTimeout(function () {
+                        setTimeout(() =>  {
                             window.location.href = '/'+ that.firstUrlSegment +'/records/media-credentials/' + that.id;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to save changes.');
+                        this.$root.$emit('showError', 'Unable to save changes.');
                     });
-                }
+                });
             },
             checkConditions(question){
                 // skip files and role question
@@ -547,25 +543,25 @@
             },
             syncCheckboxes() {
                 let self = this;
-                this.$nextTick(function () {
+                this.$nextTick(() =>  {
                     _.each($('input[type=checkbox]'), function (checkbox) {
 //	                    if (checkbox.hasAttribute('checked'))
                         checkbox.checked = checkbox.hasAttribute('checked');
                     });
-                    self.$validate('certifications', true);
-                    self.$validate('participations', true);
+//                    self.$validate('certifications', true);
+//                    self.$validate('participations', true);
 //					debugger;
 //                  let certifications = _.findWhere(this.content, { id: 'files'})
                 });
             }
         },
-        ready(){
+        mounted(){
             // set user data
             // this.userId = this.holder_id = this.$root.user.id;
             // this.holder_type = 'users';
             if (this.isUpdate) {
-                this.resource.get({ id: this.id, include: 'holder'}).then(function (response) {
-                    let credential = response.body.data;
+                this.resource.get({ id: this.id, include: 'holder'}).then((response) => {
+                    let credential = response.data.data;
                     this.applicant_name = credential.applicant_name;
                     this.holder_id = credential.holder_id;
                     this.holder_type = credential.holder_type;
@@ -575,7 +571,7 @@
                     this.usersArr.push(this.userObj);
 
                     this.disclaimer = _.findWhere(this.content, { id: 'disclaimer'}).a;
-                    this.syncCheckboxes();
+                    //thisCheckboxes();
                 });
             }
         }

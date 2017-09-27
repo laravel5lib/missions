@@ -62,8 +62,10 @@
                 </div><!-- end panel -->
             </div><!-- end col -->
         </div><!-- end row -->
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
-		<component :is="currentView" :user-id="userId" :campaign-id="campaignId" :group-id="groupId" transition="fade" transition-mode="out-in" keep-alive></component>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
+		<keep-alive>
+			<component :is="currentView" :user-id="userId" :campaign-id="campaignId" :group-id="groupId" transition="fade" transition-mode="out-in" @plan-selected="planSelected" @plan-selection="planSelection"></component>
+		</keep-alive>
 	</div>
 </template>
 <style></style>
@@ -100,29 +102,29 @@
             manager: manager,
             notes: notes
         },
-        events: {
-            'rooming-wizard:plan-selected'(plan) {
+        methods: {
+            planSelected(plan) {
 				this.currentPlan = plan;
 				this.currentView = 'manager';
 				this.$root.$emit('plan-scope', plan);
             },
-            'rooming-wizard:plan-selection'() {
+            planSelection() {
 				this.currentPlan = null;
 				this.currentView = 'plans';
             },
         },
-	    ready() {
+	    mounted() {
             let self = this;
-            this.$root.$on('campaign-scope', function (val) {
+            this.$root.$on('campaign-scope', (val) =>  {
                 this.campaignId = val ? val.id : '';
                 this.$root.$emit('update-title', val ? val.name : '');
-            }.bind(this));
+            });
 
             $('#collapseHints')
-                .on('show.bs.collapse', function () {
+                .on('show.bs.collapse', () =>  {
                     self.toggleHintsCollapse = true;
                 })
-                .on('hide.bs.collapse', function () {
+                .on('hide.bs.collapse', () =>  {
                     self.toggleHintsCollapse = false;
                 });
         }

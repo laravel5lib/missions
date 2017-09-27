@@ -15,18 +15,18 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <label>Transfer to Group:</label>
-                            <select class="form-control" v-model="selectedGroupId">
+                            <select class="form-control" v-model="selectedGroupId" data-vv-scope="transfer" name="transgroup" v-validate="'required'">
                                 <option v-for="group in groups" v-bind:value="group.id">
-                                        {{ group.name | capitalize }}
+                                        {{ group.name|capitalize }}
                                 </option>
                             </select>
                             <span class="help-block">Only group's with active trips participating in the same campaign are available.</span>
                             
                             <div v-if="selectedGroupId">
                                 <label>Register for Trip Type:</label>
-                                <select class="form-control" v-model="selectedTrip">
+                                <select class="form-control" v-model="selectedTrip" data-vv-scope="transfer" name="transtrip" v-validate="'required'">
                                     <option v-for="trip in trips" v-bind:value="trip">
-                                        {{ trip.type | capitalize }}
+                                        {{ trip.type|capitalize }}
                                     </option>
                                 </select>
                                 <span class="help-block">Available trips may have changed. Please select a new trip.</span>
@@ -34,7 +34,7 @@
                             
                             <div v-if="selectedTrip">
                                 <label>Assign Role:</label>
-                                <select class="form-control" v-model="selectedRole">
+                                <select class="form-control" v-model="selectedRole" data-vv-scope="transfer" name="transrole" v-validate="'required'">
                                     <option v-for="role in roles" v-bind:value="role.value">
                                         {{ role.name }}
                                     </option>
@@ -50,7 +50,7 @@
                     <div class="row">
                         <div class="col-xs-6"><a class="btn btn-md btn-block btn-default" @click="cancel()">Cancel</a></div>
                         <div class="col-xs-6">
-                            <a @click="transfer()" class="btn btn-md btn-block btn-primary" v-html="button" :disabled="! selectedRole"></a>
+                            <a @click="transfer" class="btn btn-md btn-block btn-primary" v-html="button" :disabled="! selectedRole"></a>
                         </div>
                     </div>
                 </div>
@@ -84,65 +84,70 @@
             }
         },
         watch: {
-            'selectedGroupId': function() {
+            'selectedGroupId'() {
                 this.selectedTrip = null;
                 this.selectedRole = null;
                 this.getTrips();
             },
-            'selectedTrip': function(val) {
+            'selectedTrip'(val) {
                 if (! val) return;
 
-                this.$http.get('utilities/team-roles').then(function (response) {
-                    _.each(response.body.roles, function (name, key) {
+                this.$http.get('utilities/team-roles').then((response) => {
+                    _.each(response.data.roles, function (name, key) {
                         if (_.contains(val.team_roles, key))
                             this.roles.push({ value: key, name: name});
-                    }.bind(this));
+                    });
                 });
             }
         },
         methods: {
             getGroups() {
                 this.$http.get('campaigns/'+this.campaignId+'?include=groups')
-                .then(function (response) {
+                .then((response) => {
                     this.groups = response.data.data.groups.data;
-                }, function (error) {
-                    this.$dispatch('showError', 'Unable to find groups');
+                }, (error) =>  {
+                    this.$root.$emit('showError', 'Unable to find groups');
                 });
             },
             getTrips() {
                 this.$http.get('trips?status=active&campaign='+this.campaignId+'&groups[]='+this.selectedGroupId)
-                .then(function (response) {
+                .then((response) => {
                     this.trips = response.data.data;
-                }, function (error) {
-                    this.$dispatch('showError', 'Unable to find trips');
+                }, (error) =>  {
+                    this.$root.$emit('showError', 'Unable to find trips');
                 });
             },
             transfer() {
-                this.button = '<i class="fa fa-circle-o-notch fa-spin"></i> Transferring...'
-                this.$http.post('reservations/' + this.id + '/transfer', {
-                    trip_id: this.selectedTrip.id, desired_role: this.selectedRole
-                })
-                .then(function (response) {
-                    this.selectedGroupId = null;
-                    this.selectedTrip = null;
-                    this.selectedRole = null;
-                    this.button = 'Transfer';
-                    $('#transferModal').modal('hide');
-                    this.$dispatch('showSuccess', 'Reservation transferred and registrant notified');
-                    setTimeout(location.reload.bind(location), 300);
-                }, function (error) {
-                    this.button = 'Transfer';
-                    this.$dispatch('showError', 'Unable to transfer');
+                this.$validator.validateAll('transfer').then(result => {
+                    if (result) {
+                        this.button = '<i class="fa fa-circle-o-notch fa-spin"></i> Transferring...'
+                        this.$http.post('reservations/' + this.id + '/transfer', {
+                            trip_id: this.selectedTrip.id, desired_role: this.selectedRole
+                        })
+                            .then((response) => {
+                                this.selectedGroupId = null;
+                                this.selectedTrip = null;
+                                this.selectedRole = null;
+                                this.button = 'Transfer';
+                                $('#transferModal').modal('hide');
+                                this.$root.$emit('showSuccess', 'Reservation transferred and registrant notified');
+                                setTimeout(location.reload.bind(location), 300);
+                            }, (error) =>  {
+                                this.button = 'Transfer';
+                                this.$root.$emit('showError', 'Unable to transfer');
+                            });
+                    }
                 });
             },
             cancel() {
                 this.selectedGroupId = null;
                 this.selectedTrip = null;
                 this.selectedRole = null;
+                this.$emit('clear');
                 $('#transferModal').modal('hide');
             }
         },
-        ready() {
+        mounted() {
             this.getGroups();
         }
     }

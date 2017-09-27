@@ -7,12 +7,12 @@
 
 <div class="container" v-tour-guide="">
     <div class="row">
-        <div class="col-sm-4 tour-step-navigation">
+        <div class="col-sm-3 tour-step-navigation">
             @include('dashboard.records.layouts.menu', [
             'links' => config('navigation.dashboard.records')
             ])
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-9">
             @yield('tab')
         </div>
     </div>

@@ -8,8 +8,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-xs-6"><a class="btn btn-sm btn-block btn-default" data-dismiss="modal">{{ cancel }}</a></div>
-                        <div class="col-xs-6"><a @click="destroy()" class="btn btn-sm btn-block btn-primary">{{ action }}</a></div>
+                        <div class="col-xs-6"><a class="btn btn-sm btn-block btn-link" data-dismiss="modal">{{ cancel }}</a></div>
+                        <div class="col-xs-6"><a @click="destroy" class="btn btn-sm btn-block btn-primary">{{ action }}</a></div>
                     </div>
                 </div>
 
@@ -54,14 +54,14 @@
         },
         methods: {
             destroy(){
-                this.$http.delete(this.resource + 's/' + this.id).then(function (response) {
+                this.$http.delete(this.resource + 's/' + this.id).then((response) => {
                     if (this.redirect) {
                         window.location.href = this.redirect;
                     } else {
                         window.location.href = '/admin/' + this.resource + 's/' + this.id;
                     }
-                }, function (error) {
-                    this.$dispatch('showError', 'Unable to ' + this.action);
+                }, (error) =>  {
+                    this.$root.$emit('showError', 'Unable to ' + this.action);
                 })
             }
         }

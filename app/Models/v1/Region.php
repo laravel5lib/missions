@@ -24,8 +24,9 @@ class Region extends Model
 
     public function setCallsignAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['callsign'] = trim(strtolower($value));
+        }
     }
 
     public function getNameAttribute($value)
@@ -35,8 +36,9 @@ class Region extends Model
 
     public function getCallsignAttribute($value)
     {
-        if ($value)
+        if ($value) {
             return ucwords($value);
+        }
     }
 
     public function campaign()

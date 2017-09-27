@@ -1,7 +1,9 @@
 <?php
 
-class PlansEndpointTest extends TestCase
+class PlansEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /** @test */
     public function gets_all_plans()
     {

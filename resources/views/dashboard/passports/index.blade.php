@@ -22,6 +22,12 @@
 @stop
 
 @section('tab')
-    <passports-list user-id="{{ auth()->user()->id }}"></passports-list>
-    <hr class="divider inv lg">
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <passports-list user-id="{{ auth()->user()->id }}"></passports-list>
+    </div>
+</div>
+<hr class="divider inv lg">
+
 @stop

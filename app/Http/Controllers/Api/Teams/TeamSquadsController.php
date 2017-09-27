@@ -20,7 +20,7 @@ class TeamSquadsController extends Controller
 
     /**
      * Get all squads in a team.
-     * 
+     *
      * @param  Request $request
      * @param  String  $teamId
      * @return Response
@@ -39,7 +39,7 @@ class TeamSquadsController extends Controller
 
     /**
      * Get specific team squad
-     * 
+     *
      * @param  String $teamId
      * @param  String $squadId
      * @return Response
@@ -57,7 +57,7 @@ class TeamSquadsController extends Controller
 
     /**
      * Create a new squad in the team.
-     * 
+     *
      * @param  TeamSquadRequest $request
      * @param  String           $teamId
      * @return Response

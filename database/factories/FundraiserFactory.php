@@ -3,8 +3,7 @@
 /**
  * Generic Fundraiser (user sponosor default)
  */
-$factory->define(App\Models\v1\Fundraiser::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Fundraiser::class, function (Faker\Generator $faker) {
     return [
         'id'               => $faker->unique()->uuid,
         'fund_id'          => $faker->uuid,
@@ -24,8 +23,7 @@ $factory->define(App\Models\v1\Fundraiser::class, function (Faker\Generator $fak
 /**
  * Group Fundraiser
  */
-$factory->defineAs(App\Models\v1\Fundraiser::class, 'group', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Fundraiser::class, 'group', function (Faker\Generator $faker) use ($factory) {
     $fundraiser = $factory->raw(App\Models\v1\Fundraiser::class);
 
     return array_merge($fundraiser, [
@@ -37,8 +35,7 @@ $factory->defineAs(App\Models\v1\Fundraiser::class, 'group', function (Faker\Gen
 /**
  * Private Fundraiser
  */
-$factory->defineAs(App\Models\v1\Fundraiser::class, 'private', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Fundraiser::class, 'private', function (Faker\Generator $faker) use ($factory) {
     $fundraiser = $factory->raw(App\Models\v1\Fundraiser::class);
 
     return array_merge($fundraiser, [

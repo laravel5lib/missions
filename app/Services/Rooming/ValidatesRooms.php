@@ -20,8 +20,7 @@ class ValidatesRooms
      */
     public function validate()
     {
-        $this->getRooms()->each(function($room) 
-        {
+        $this->getRooms()->each(function ($room) {
             $type = $this->model->availableRoomTypes()->where('id', $room->room_type_id)->first();
 
             $this->assertAllowsRoomType($type);
@@ -40,7 +39,7 @@ class ValidatesRooms
     {
         $count = $this->model->roomsCount()->byType($type->id);
 
-        if ( $count >= $type->pivot->available_rooms ) {
+        if ($count >= $type->pivot->available_rooms) {
             throw new \Exception("The maximum number of $type->name rooms allowed has been reached.");
         }
     }

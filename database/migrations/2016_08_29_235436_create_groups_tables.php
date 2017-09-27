@@ -44,8 +44,7 @@ class CreateGroupsTables extends Migration
             $table->timestamps();
         });
 
-        Schema::table('managers', function($table)
-        {
+        Schema::table('managers', function ($table) {
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade');

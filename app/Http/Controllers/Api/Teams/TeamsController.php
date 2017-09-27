@@ -59,7 +59,6 @@ class TeamsController extends Controller
         ]);
 
         if ($request->has('associations')) {
-            
             $team->addTeamables($request->get('associations'));
         }
 

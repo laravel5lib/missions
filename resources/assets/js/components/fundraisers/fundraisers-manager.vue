@@ -1,7 +1,7 @@
 <template>
     <div style="position:relative">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-        <template v-if="isUser()">
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
+        <template v-if="isUser">
             <!--<div class="panel panel-default">-->
                 <!--<div class="panel-body">-->
                     <form>
@@ -36,15 +36,15 @@
                         <hr class="divider inv">
                         <textarea v-show="!newMarkedContentToggle" class="form-control" id="newStoryContent" v-model="description" minlength="1" rows="20"></textarea>
                         <div class="collapse" :class="{ 'in': newMarkedContentToggle }">
-                            <div v-html="description | marked"></div>
+                            <div v-html="marked(description)"></div>
                         </div>
                     </form>
                 <!--</div>-->
             <!--</div>-->
 
-            <modal v-if="fundraiser" title="Fundraiser Settings" :show.sync="settingsModal" effect="zoom" width="400" :callback="saveSettings">
+            <modal v-if="fundraiser" title="Fundraiser Settings" :value="settingsModal" @closed="settingsModal=false" effect="zoom" width="400" :callback="saveSettings">
                 <div slot="modal-body" class="modal-body">
-                    <validator name="FundraiserSettings">
+
                         <form id="FundraiserSettingsForm">
                             <div class="form-group">
                                 <label for="name">Fundraiser Name</label>
@@ -58,7 +58,7 @@
                                     <i class="fa fa-check" v-if="checkingUrl === false && validUrl === true"></i>
                                     <i class="fa fa-times" v-if="checkingUrl === false && validUrl === false"></i>
                                 </span>
-                                    <input type="text" class="form-control" id="url" v-model="fundraiser.url" debounce="500" @change="validateUrl">
+                                    <input type="text" class="form-control" id="url" v-model="fundraiser.url" @change="debouncedValidateUrl">
                                 </div>
                             </div>
 
@@ -74,17 +74,17 @@
                                 </label>
                             </div>
                         </form>
-                    </validator>
+
                 </div>
             </modal>
 
-            <alert :show.sync="showDescriptionSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+            <alert v-model="showDescriptionSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                 <span class="icon-ok-circled alert-icon-float-left"></span>
                 <strong>Good job!</strong>
                 <p>Description updated</p>
             </alert>
 
-            <alert :show.sync="showSettingsSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+            <alert v-model="showSettingsSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                 <span class="icon-ok-circled alert-icon-float-left"></span>
                 <strong>Good job!</strong>
                 <p>Settings updated</p>
@@ -95,16 +95,19 @@
         </template>
 
         <template v-else>
-            <div v-html="fundraiser.description | marked"></div>
+            <div v-html="marked(fundraiser.description)"></div>
         </template>
 
 
     </div>
 </template>
 <script type="text/javascript">
-    var marked = require('marked');
+    import _ from 'underscore'
+    import markdownExampleModal from '../markdown-example-modal.vue';
+    let marked = require('marked');
     export default{
         name: 'fundraisers-manager',
+        components: {'markdown-example-modal': markdownExampleModal},
         props: ['id', 'sponsorId', 'editable'],
         data(){
             return {
@@ -123,8 +126,15 @@
                 validUrl: true,
             }
         },
+        computed: {
+            isUser(){
+                if (this.editable === 1) return true;
+
+                return this.$root.user && this.sponsorId === this.$root.user.id;
+            },
+        },
         watch: {
-            'fundraiser': function (val, oldVal) {
+            'fundraiser'(val, oldVal) {
                 this.description = val.hasOwnProperty('description') ? val.description : '';
                 // watch url value for checking
                 if (val.hasOwnProperty('url') && oldVal.hasOwnProperty('url') && val.url !== oldVal.url) {
@@ -137,15 +147,9 @@
 				}
             }
         },
-        filters: {
-            marked: marked,
-        },
         methods: {
-            isUser(){
-                if (this.editable === 1) return true;
-                
-                return this.$root.user && this.sponsorId === this.$root.user.id;
-            },
+            marked: marked,
+
             reset(){
                 this.description = this.fundraiser.description;
             },
@@ -156,11 +160,14 @@
 			toggleDisplayDonors(val) {
 				this.$root.$emit('Fundraiser:DisplayDonors', val);
 			},
+            debouncedValidateUrl: _.debounce(function () {
+                this.validateUrl()
+            }, 500),
             validateUrl(){
                 this.checkingUrl = true;
-                this.$http.get('fundraisers', { params: { url: this.fundraiser.url } }).then(function (response) {
-                    if (response.body.data.length) {
-                        this.validUrl = response.body.data[0].id === this.fundraiser.id;
+                this.$http.get('fundraisers', { params: { url: this.fundraiser.url } }).then((response) => {
+                    if (response.data.data.length) {
+                        this.validUrl = response.data.data[0].id === this.fundraiser.id;
                     } else {
                         this.validUrl = true;
                     }
@@ -170,7 +177,7 @@
                         this.validUrl = true;
                     }
                     this.checkingUrl = false;
-                }, function (error) {
+                }, (error) =>  {
                     console.log(error);
                 });
             },
@@ -182,33 +189,30 @@
             },
             doUpdate(type){
                 // this.$refs.spinner.show();
-                this.resource.update({id: this.id}, {
+                this.resource.put({id: this.id}, {
                     name: this.fundraiser.name,
                     url: this.fundraiser.url,
                     description: this.fundraiser.description,
                     public: this.fundraiser.public,
                     show_donors: this.fundraiser.show_donors
-                }).then(function (response) {
-                    this.fundraiser = response.body.data;
+                }).then((response) => {
+                    this.fundraiser = response.data.data;
                     this.newMarkedContentToggle = true;
                     if (type === 'description') {
                         this.showDescriptionSuccess = true;
                     } else {
                         this.showSettingsSuccess = true;
-                        this.$dispatch('fundraiserSettingsChanged', response.body.data);
+                        this.$emit('fundraiserSettingsChanged', response.data.data);
                         // page refresh might be necessary for updated url
                     }
                     // this.$refs.spinner.hide();
-                }, function (error) {
-                    // this.$refs.spinner.hide();
-                    //TODO add error alert
-                });
+                }, this.$root.handleApiError);
             }
         },
-        ready(){
+        mounted(){
             // this.$refs.spinner.show();
-            this.resource.get({id: this.id}).then(function (response) {
-                this.fundraiser = response.body.data;
+            this.resource.get({id: this.id}).then((response) => {
+                this.fundraiser = response.data.data;
 				this.$root.$emit('Fundraiser:DisplayDonors', this.fundraiser.show_donors);
                 // this.$refs.spinner.hide();
             });

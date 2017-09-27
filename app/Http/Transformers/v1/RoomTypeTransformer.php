@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Transformers\v1;
+
 use App\Models\v1\RoomType;
 use League\Fractal\TransformerAbstract;
 

@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="panel-body">
-            <spinner v-ref:spinner size="md" text="Loading..."></spinner>
+            <spinner ref="spinner" size="md" text="Loading..."></spinner>
             <div class="row">
                 <div class="col-sm-6">
                     <label>Type</label>
@@ -33,10 +33,10 @@
                 <div class="col-sm-6">
                     <label>Start Date</label>
                     <input type="text" class="form-control" v-model="initiative.started_at" v-if="editMode">
-                    <p v-else>{{ initiative.started_at | moment 'll' }}</p>
+                    <p v-else>{{ initiative.started_at | moment('ll') }}</p>
                     <label>End Date</label>
                     <input type="text" class="form-control" v-model="initiative.ended_at" v-if="editMode">
-                    <p v-else>{{ initiative.ended_at | moment 'll' }}</p>
+                    <p v-else>{{ initiative.ended_at | moment('ll') }}</p>
                 </div>
             </div>
 
@@ -91,39 +91,39 @@
         methods: {
             getCause() {
                 // this.$refs.spinner.show();
-                this.$http.get('causes/' + this.causeId).then(function (response) {
-                    this.cause  = response.body.data;
+                this.$http.get('causes/' + this.causeId).then((response) => {
+                    this.cause  = response.data.data;
                     this.countries = this.cause.countries;
                     // this.$refs.spinner.hide();
                 });
             },
             fetch () {
                 // this.$refs.spinner.show();
-                this.$http.get('initiatives/' + this.id, { params: {include: 'cause'} }).then(function (response) {
-                    this.cause = response.body.data.cause.data;
-                    this.countries = response.body.data.cause.data.countries;
-                    this.initiative = _.omit(response.body.data, 'cause');
+                this.$http.get('initiatives/' + this.id, { params: {include: 'cause'} }).then((response) => {
+                    this.cause = response.data.data.cause.data;
+                    this.countries = response.data.data.cause.data.countries;
+                    this.initiative = _.omit(response.data.data, 'cause');
                     // this.$refs.spinner.hide();
                 });
             },
             save() {
                 this.initiative.country_code = this.initiative.country.code;
-                this.$http.put('initiatives/' + this.id, this.initiative).then(function (response) {
-                    this.initiative = response.body.data;
+                this.$http.put('initiatives/' + this.id, this.initiative).then((response) => {
+                    this.initiative = response.data.data;
                     this.editMode = false;
-                    this.$dispatch('showSuccess', 'Your changes were saved successfully.');
-                },function () {
-                    this.$dispatch('showError', 'Your changes could not be saved.');
+                    this.$root.$emit('showSuccess', 'Your changes were saved successfully.');
+                },() =>  {
+                    this.$root.$emit('showError', 'Your changes could not be saved.');
                 });
             },
             create() {
                 this.initiative.country_code = this.initiative.country.code;
                 this.initiative.project_cause_id = this.causeId;
-                this.$http.post('initiatives', this.initiative).then(function (response) {
+                this.$http.post('initiatives', this.initiative).then((response) => {
                     this.initiative = {};
-                    window.location = '/admin/initiatives/' + response.body.data.id;
-                },function () {
-                    this.$dispatch('showError', 'The initiative could not be created.');
+                    window.location = '/admin/initiatives/' + response.data.data.id;
+                },() =>  {
+                    this.$root.$emit('showError', 'The initiative could not be created.');
                 });
             },
             cancel() {

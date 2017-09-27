@@ -5,7 +5,8 @@ namespace App\Http\Transformers\v1;
 use App\Models\v1\TeamType;
 use League\Fractal\TransformerAbstract;
 
-class TeamTypeTransformer extends TransformerAbstract {
+class TeamTypeTransformer extends TransformerAbstract
+{
 
     /**
      * Transform the object into a basic array

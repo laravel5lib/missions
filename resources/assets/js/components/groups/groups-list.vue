@@ -1,14 +1,14 @@
 <template>
 <div>
-    <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+    <spinner ref="spinner" size="sm" text="Loading"></spinner>
     <div class="row">
         <div class="col-sm-6 col-sm-offset-3 col-xs-12 col-xs-offset-0">
             <hr class="divider inv">
             <h6 class="text-center text-uppercase">Choose Your Group</h6>
             <form v-if="selectUi">
                 <div class="form-group">
-                    <select class="form-control" v-model="currentGroup" @change="rememberSelection()">
-                        <option :value="">Select Group</option>
+                    <select class="form-control" v-model="currentGroup" @change="rememberSelection">
+                        <option value="">Select Group</option>
                         <option v-for="group in groups" :value="group.id">{{group.name}}</option>
                     </select>
                 </div>
@@ -22,15 +22,15 @@
                 <h5 class="text-uppercase">{{ group.type }} Group</h5>
             </div>
             <div class="panel-body text-center">
-                <img :src="group.avatar||group.banner" class="img-circle img-md">
+                <img :src="getGroupImgSrc(group)" class="img-circle img-md">
                 <h4>{{ group.name }}</h4>
                 <p class="small">{{ group.country }}</p>
                 <hr class="divider inv sm">
-                <a href="/dashboard/groups/{{ group.id }}" class="btn btn-sm btn-primary">
+                <a :href="'/dashboard/groups/' + group.id " class="btn btn-sm btn-primary">
                     <i class="fa fa-pencil"></i> Manage
                 </a><br>
                 <label v-if="group.public">
-                    <a href="/{{ group.url }}">View Group</a>
+                    <a :href="'/' + group.url">View Group</a>
                 </label>
             </div>
         </div>
@@ -39,6 +39,8 @@
 </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
+
     export default{
         name: 'groups-list',
         props: {
@@ -66,6 +68,9 @@
             }
         },
         methods: {
+            getGroupImgSrc(group) {
+                return group.avatar||group.banner;
+            },
             country(code){
                 return code;
             },
@@ -80,14 +85,12 @@
                 this.$http.get('users/' + this.$root.user.id, { params: {
                     include: 'managing',
                     user: new Array(this.$root.user.id)
-                }}).then(function (response) {
-                    this.groups = response.body.data.managing.data;
-                })
+                }}).then((response) => {
+                    this.groups = response.data.data.managing.data;
+                }).catch(this.$root.handleApiError)
             },
         },
-        ready(){
-
-
+        mounted(){
             this.getGroups();
         }
     }

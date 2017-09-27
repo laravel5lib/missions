@@ -3,8 +3,7 @@
 /**
  * Generic Credit Card Donation Transaction
  */
-$factory->define(App\Models\v1\Transaction::class, function(Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Transaction::class, function (Faker\Generator $faker) {
     return [
         'fund_id' => $faker->uuid,
         'donor_id' => $faker->uuid,
@@ -16,7 +15,7 @@ $factory->define(App\Models\v1\Transaction::class, function(Faker\Generator $fak
             'last_four' => substr($faker->creditCardNumber, -4),
             'cardholder' => $faker->name,
             'brand' => $faker->creditCardType,
-            'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2),
+            'comment' => $faker->text($maxNbChars = 120, $indexSize = 2),
             'charge_id' => 'ch_' . str_random(30)
         ],
         'created_at' => $faker->dateTimeThisMonth,
@@ -27,8 +26,7 @@ $factory->define(App\Models\v1\Transaction::class, function(Faker\Generator $fak
 /**
  * Anonymous Credit Card Donation Transaction
  */
-$factory->defineAs(App\Models\v1\Transaction::class, 'check', function(Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Transaction::class, 'check', function (Faker\Generator $faker) use ($factory) {
     $transaction = $factory->raw(App\Models\v1\Transaction::class);
 
     return array_merge($transaction, [
@@ -39,15 +37,14 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'check', function(Faker\Gen
 /**
  * Check Donation Transaction
  */
-$factory->defineAs(App\Models\v1\Transaction::class, 'check', function(Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Transaction::class, 'check', function (Faker\Generator $faker) use ($factory) {
     $transaction = $factory->raw(App\Models\v1\Transaction::class);
 
     return array_merge($transaction, [
         'details' => [
             'type' => 'check',
             'number' => $faker->randomDigitNotNull,
-            'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2)
+            'comment' => $faker->text($maxNbChars = 120, $indexSize = 2)
         ]
     ]);
 });
@@ -55,14 +52,13 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'check', function(Faker\Gen
 /**
  * Cash Donation Transaction
  */
-$factory->defineAs(App\Models\v1\Transaction::class, 'cash', function(Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Transaction::class, 'cash', function (Faker\Generator $faker) use ($factory) {
     $transaction = $factory->raw(App\Models\v1\Transaction::class);
 
     return array_merge($transaction, [
         'details' => [
             'type' => 'cash',
-            'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2)
+            'comment' => $faker->text($maxNbChars = 120, $indexSize = 2)
         ]
     ]);
 });
@@ -70,8 +66,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'cash', function(Faker\Gene
 /**
  * Transfer From Transaction
  */
-$factory->defineAs(App\Models\v1\Transaction::class, 'transfer_from', function(Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Transaction::class, 'transfer_from', function (Faker\Generator $faker) use ($factory) {
     $transaction = $factory->raw(App\Models\v1\Transaction::class);
 
     return array_merge($transaction, [
@@ -86,8 +81,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'transfer_from', function(F
 /**
  * Transfer to Transaction
  */
-$factory->defineAs(App\Models\v1\Transaction::class, 'transfer_to', function(Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Transaction::class, 'transfer_to', function (Faker\Generator $faker) use ($factory) {
     $transaction = $factory->raw(App\Models\v1\Transaction::class);
 
     return array_merge($transaction, [
@@ -102,8 +96,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'transfer_to', function(Fak
 /**
  * Credit Transaction
  */
-$factory->defineAs(App\Models\v1\Transaction::class, 'credit', function(Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Transaction::class, 'credit', function (Faker\Generator $faker) use ($factory) {
     $transaction = $factory->raw(App\Models\v1\Transaction::class);
 
     return array_merge($transaction, [
@@ -111,7 +104,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'credit', function(Faker\Ge
         'donor_id' => null,
         'type' => 'credit',
         'details' => [
-            'reason' => $faker->realText($maxNbChars = 120, $indexSize = 2)
+            'reason' => $faker->text($maxNbChars = 120, $indexSize = 2)
         ]
     ]);
 });
@@ -119,8 +112,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'credit', function(Faker\Ge
 /**
  * Refund Transaction
  */
-$factory->defineAs(App\Models\v1\Transaction::class, 'refund', function(Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Transaction::class, 'refund', function (Faker\Generator $faker) use ($factory) {
     $transaction = $factory->raw(App\Models\v1\Transaction::class);
 
     return array_merge($transaction, [
@@ -134,8 +126,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'refund', function(Faker\Ge
             //         'fund_id' => $transaction['fund_id']
             //     ])->id;
             // },
-            'reason' => $faker->realText($maxNbChars = 120, $indexSize = 2)
+            'reason' => $faker->text($maxNbChars = 120, $indexSize = 2)
         ]
     ]);
 });
-

@@ -1,5 +1,7 @@
 @extends('site.layouts.default')
 
+@section('title', 'Corporate Sponsors - Missions.Me')
+
 @section('content')
 <div class="content-page-header">
     <img class="img-responsive" src="images/corp-sponsors/corp-sponsors-header.jpg" alt="Corporate Sponsors">
@@ -25,7 +27,7 @@
                       <img class="img-responsive" src="images/corp-sponsors/stripe-logo.png" alt="">
                     </a>
                     <div class="panel-body">
-                      <h5 class="text-center"><a href="http://stripe.com" target="_blank">Stripe</a></h5> 
+                      <h5 class="text-center"><a href="http://stripe.com" target="_blank">Stripe</a></h5>
                     </div>
                   </div>
                 </div><!-- end col -->
@@ -77,7 +79,7 @@
                       <img class="img-responsive" src="images/corp-sponsors/astarsandstripescorp-logo.png" alt="">
                     </a>
                     <div class="panel-body">
-                      <h5 class="text-center"><a href="https://www.bestcustomflags.com/" target="_blank">Stars & Stripes Flags</a></h5> 
+                      <h5 class="text-center"><a href="https://www.bestcustomflags.com/" target="_blank">Stars & Stripes Flags</a></h5>
                     </div>
                   </div>
                 </div><!-- end col -->

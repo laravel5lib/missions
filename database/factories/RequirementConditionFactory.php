@@ -2,8 +2,7 @@
 
 use App\Utilities\v1\TeamRole;
 
-$factory->define(App\Models\v1\RequirementCondition::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\RequirementCondition::class, function (Faker\Generator $faker) {
     return [
         'id'              => $faker->unique()->uuid,
         'requirement_id'  => $faker->uuid,

@@ -41,7 +41,7 @@ class RoomingPlanTransformer extends TransformerAbstract
 
     private function getAvailableRooms(RoomingPlan $plan)
     {
-        $available = $plan->availableRoomTypes->keyBy('name')->map(function($type) {
+        $available = $plan->availableRoomTypes->keyBy('name')->map(function ($type) {
             return $type->pivot->available_rooms;
         });
 
@@ -56,7 +56,6 @@ class RoomingPlanTransformer extends TransformerAbstract
             $this->validateParams($params);
 
             $rooms = $plan->rooms()->filter(['notInUse' => $params->get('notInUse')])->get();
-
         } else {
             $rooms = $plan->rooms;
         }
@@ -82,5 +81,4 @@ class RoomingPlanTransformer extends TransformerAbstract
             ));
         }
     }
-
 }

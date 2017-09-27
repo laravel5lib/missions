@@ -3,8 +3,10 @@
 use App\Models\v1\Region;
 use App\Models\v1\Campaign;
 
-class RegionsEndpointTest extends TestCase
+class RegionsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /** @test */
     public function gets_all_regions()
     {
@@ -31,7 +33,7 @@ class RegionsEndpointTest extends TestCase
                         'deleted_at'
                     ]
                 ]
-            ]);
+             ]);
     }
 
     /** @test */
@@ -65,7 +67,7 @@ class RegionsEndpointTest extends TestCase
     {
         $campaign = factory(Campaign::class)->create();
         $region = factory(Region::class)->create([
-            'campaign_id' => $campaign->id, 
+            'campaign_id' => $campaign->id,
             'name' => 'New Region',
             'callsign' => 'Red'
         ]);

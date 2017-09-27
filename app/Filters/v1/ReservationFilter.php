@@ -42,7 +42,9 @@ class ReservationFilter extends Filter
 
     public function ignore($ids)
     {
-        if($ids == []) return $this;
+        if ($ids == []) {
+            return $this;
+        }
 
         return $this->whereNotIn('id', $ids);
     }
@@ -55,7 +57,9 @@ class ReservationFilter extends Filter
      */
     public function user($ids)
     {
-        if($ids == []) return $this;
+        if ($ids == []) {
+            return $this;
+        }
 
         return $this->whereIn('user_id', $ids);
     }
@@ -68,7 +72,9 @@ class ReservationFilter extends Filter
      */
     public function shirtSize($shirtSizes)
     {
-        if($shirtSizes == []) return $this;
+        if ($shirtSizes == []) {
+            return $this;
+        }
 
         return $this->whereIn('shirt_size', $shirtSizes);
     }
@@ -81,7 +87,9 @@ class ReservationFilter extends Filter
      */
     public function gender($gender)
     {
-        if( !$gender) return $this;
+        if (!$gender) {
+            return $this;
+        }
 
         return $this->where('gender', $gender);
     }
@@ -94,7 +102,9 @@ class ReservationFilter extends Filter
      */
     public function status($status)
     {
-        if( !$status) return $this;
+        if (!$status) {
+            return $this;
+        }
 
         return $this->where('status', $status);
     }
@@ -107,9 +117,11 @@ class ReservationFilter extends Filter
      */
     public function rep($id)
     {
-        if(! $id) return $this;
+        if (! $id) {
+            return $this;
+        }
 
-        return $this->whereHas('trip.rep', function($rep) use($id) {
+        return $this->whereHas('trip.rep', function ($rep) use ($id) {
             return $rep->where('id', $id);
         })->orWhere('rep_id', $id);
     }
@@ -122,20 +134,24 @@ class ReservationFilter extends Filter
      */
     public function trip($ids)
     {
-        if($ids == []) return $this;
+        if ($ids == []) {
+            return $this;
+        }
 
         return $this->whereIn('trip_id', $ids);
     }
 
     /**
      * By role.
-     * 
+     *
      * @param  string $code
      * @return mixed
      */
     public function role($code)
     {
-        if(! $code) return $this;
+        if (! $code) {
+            return $this;
+        }
 
         return $this->where('desired_role', $code);
     }
@@ -148,7 +164,9 @@ class ReservationFilter extends Filter
      */
     public function age($ages)
     {
-        if($ages == []) return $this;
+        if ($ages == []) {
+            return $this;
+        }
 
         // $start needs to be the greater number to produce a year earlier than end
         $start = Carbon::now()->subYears($ages[1]);
@@ -178,7 +196,9 @@ class ReservationFilter extends Filter
      */
     public function hasCompanions($hasCompanions)
     {
-        if(!$hasCompanions) return $this;
+        if (!$hasCompanions) {
+            return $this;
+        }
 
         return $hasCompanions == 'yes' ?
             $this->has('companions') :
@@ -217,20 +237,20 @@ class ReservationFilter extends Filter
 
     /**
      * By applied cost name
-     * 
+     *
      * @param  string $name
      * @return mixed
      */
     public function cost($name)
     {
-        return $this->whereHas('costs', function($costs) use($name) {
+        return $this->whereHas('costs', function ($costs) use ($name) {
             return $costs->where('name', $name);
         });
     }
 
     /**
      * By requirement and/or it's status.
-     * 
+     *
      * @param  String $requirement
      * @return mixed
      */
@@ -238,14 +258,12 @@ class ReservationFilter extends Filter
     {
         $param = preg_split('/\|+/', urldecode($requirement));
 
-        return $this->whereHas('requirements', function($requirements) use($param) 
-        {
+        return $this->whereHas('requirements', function ($requirements) use ($param) {
             if (isset($param[1])) {
                 $requirements->where('status', $param[1]);
             }
 
-            return $requirements->whereHas('requirement', function($req) use($param)
-            {
+            return $requirements->whereHas('requirement', function ($req) use ($param) {
                 return $req->where('name', $param[0]);
             });
         });
@@ -253,7 +271,7 @@ class ReservationFilter extends Filter
 
     /**
      * By Todo and it's completion status.
-     * 
+     *
      * @param  String $todo
      * @return mixed
      */
@@ -261,8 +279,7 @@ class ReservationFilter extends Filter
     {
         $param = preg_split('/\|+/', urldecode($todo));
 
-        return $this->whereHas('todos', function($todos) use($param)
-        {
+        return $this->whereHas('todos', function ($todos) use ($param) {
             if (isset($param[1]) && $param[1] == 'complete') {
                 $todos->whereNotNull('completed_at');
             }
@@ -278,22 +295,21 @@ class ReservationFilter extends Filter
 
     /**
      * By payment due and optionally by it's status.
-     * 
-     * @param  string $due 
-     * @return mixed      
+     *
+     * @param  string $due
+     * @return mixed
      */
     public function due($due)
     {
         $param = preg_split('/\|+/', urldecode($due));
 
-        return $this->whereHas('dues', function($payments) use($param) {
+        return $this->whereHas('dues', function ($payments) use ($param) {
 
-            $payments->whereHas('payment.cost', function($costs) use($param)
-            {
+            $payments->whereHas('payment.cost', function ($costs) use ($param) {
                 return $costs->where('name', $param[0]);
             });
 
-            if(isset($param[1])) {
+            if (isset($param[1])) {
                 switch ($param[1]) {
                     case 'overdue':
                         return $payments->overdue();
@@ -317,18 +333,17 @@ class ReservationFilter extends Filter
             }
 
             return $payments;
-
         });
     }
 
     /**
      * By arrival designation type
-     * 
+     *
      * @param  String $type
      * @return Builder
      */
     public function designation($type)
-    {   
+    {
         if ($type === 'none') {
             return $this->has('designation', '<', 1);
         }
@@ -340,7 +355,7 @@ class ReservationFilter extends Filter
 
     /**
      * By minimum amount raised.
-     * 
+     *
      * @param  string/integer $amount
      * @return Builder
      */
@@ -355,7 +370,7 @@ class ReservationFilter extends Filter
 
     /**
      * By maximum amount raised.
-     * 
+     *
      * @param  string/integer $amount
      * @return Builder
      */
@@ -400,21 +415,21 @@ class ReservationFilter extends Filter
 
     /**
      * Has no room for the given accomodation or plan.
-     * 
+     *
      * @param  String $roomable Accommodation or Plan
      * @return Builder
      */
     public function hasRoom($roomable)
-    {   
+    {
         // grab the parameters seperated by "|" pipe
         $param = preg_split('/\|+/', $roomable);
 
         // check for existence of value after "|" pipe
         if (isset($param[1])) {
             // query reservations that have rooms
-            return $this->wherehas('rooms', function($room) use ($param) {
+            return $this->wherehas('rooms', function ($room) use ($param) {
                 // query a room in plan or accomodation
-                return $room->whereHas($param[0], function($query) use($param) {
+                return $room->whereHas($param[0], function ($query) use ($param) {
                     return $query->where('id', $param[1]);
                 });
             });
@@ -426,7 +441,7 @@ class ReservationFilter extends Filter
 
     /**
      * Has no room for the given accomodation or plan.
-     * 
+     *
      * @param  String $roomable Accommodation or Plan
      * @return Builder
      */
@@ -438,9 +453,9 @@ class ReservationFilter extends Filter
         // check for existence of value after "|" pipe
         if (isset($param[1])) {
             // query reservations that have rooms
-            return $this->whereDoesntHave('rooms', function($room) use ($param) {
+            return $this->whereDoesntHave('rooms', function ($room) use ($param) {
                 // query a room in plan or accomodation
-                return $room->whereHas($param[0], function($query) use($param) {
+                return $room->whereHas($param[0], function ($query) use ($param) {
                     return $query->where('id', '=', $param[1]);
                 });
             });
@@ -462,8 +477,9 @@ class ReservationFilter extends Filter
 
     public function notInTransport($transportId)
     {
-        if ($transportId === 'true')
+        if ($transportId === 'true') {
             return $this->doesntHave('transports');
+        }
 
         return $this->whereDoesntHave('transports', function ($transport) use ($transportId) {
             return $transport->where('transports.id', $transportId);
@@ -472,8 +488,9 @@ class ReservationFilter extends Filter
 
     public function inTransport($transportId)
     {
-        if ($transportId === 'true')
+        if ($transportId === 'true') {
             return $this->has('transports');
+        }
 
         return $this->whereHas('transports', function ($transport) use ($transportId) {
             return $transport->where('transports.id', $transportId);
@@ -517,7 +534,7 @@ class ReservationFilter extends Filter
         })->when(($searchTerms->count() < 2), function ($query) use ($searchTerms, $first) {
             return $query->where('given_names', 'LIKE', "%$first%")
                 ->orWhere('surname', 'LIKE', "%$first%");
-        });
+        })->current();
     }
 
     public function givenNames($value)
@@ -538,7 +555,8 @@ class ReservationFilter extends Filter
     public function phone($value)
     {
         return $this->where('phone_one', 'LIKE', "%$value%")
-            ->orWhere('phone_two', 'LIKE', "%$value%");;
+            ->orWhere('phone_two', 'LIKE', "%$value%");
+        ;
     }
 
     public function phoneOne($value)
@@ -556,5 +574,19 @@ class ReservationFilter extends Filter
         $code = TeamRole::get_code($value);
 
         return $this->where('desired_role', $code);
+    }
+
+    public function checkedIn()
+    {
+        $this->whereHas('todos', function ($query) {
+            $query->where('task', 'hq check in')->whereNotNull('completed_at');
+        });
+    }
+
+    public function checkedOut()
+    {
+        $this->whereDoesntHave('todos', function ($query) {
+            $query->where('task', 'hq check in')->whereNotNull('completed_at');
+        });
     }
 }

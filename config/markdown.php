@@ -1,30 +1,25 @@
 <?php
 
+/*
+ * This file is part of Laravel Markdown.
+ *
+ * (c) Graham Campbell <graham@alt-three.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 return [
 
     /*
     |--------------------------------------------------------------------------
-    | Enable Markdown Tags
-    |--------------------------------------------------------------------------
-    |
-    | This option specifies if you want to extend the blade template with
-    | markdown specific "curly" braces '{%' and '%}'.  This is a short-cut
-    | to having to call the facade inside blade "curly" braces.
-    |
-    | Default: true
-    |
-    */
-
-    'tags' => true,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Enable Views Extensions
+    | Enable View Integration
     |--------------------------------------------------------------------------
     |
     | This option specifies if the view integration is enabled so you can write
-    | markdown views and have them rendered as html. The following view
-    | extensions will be supported: ".md", ".md.php", and ".md.blade.php".
+    | markdown views and have them rendered as html. The following extensions
+    | are currently supported: ".md", ".md.php", and ".md.blade.php". You may
+    | disable this integration if it is conflicting with another package.
     |
     | Default: true
     |
@@ -34,39 +29,115 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Include CommonMark Configuration
+    | CommonMark Extensions
     |--------------------------------------------------------------------------
     |
-    | This option specifies the configuration options for the CommonMark
-    | converter. The following configuration will affect how CommonMark will
-    | parse your markdown.
+    | This option specifies what extensions will be automatically enabled.
+    | Simply provide your extension class names here.
     |
-    | For more info on the possible configuration options:
-    | http://commonmark.thephpleague.com/configuration/
-    |
-    | Default: none
+    | Default: []
     |
     */
 
-    'configurations' => [
-        //
+    'extensions' => [],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Renderer Configuration
+    |--------------------------------------------------------------------------
+    |
+    | This option specifies an array of options for rendering HTML.
+    |
+    | Default: [
+    |              'block_separator' => "\n",
+    |              'inner_separator' => "\n",
+    |              'soft_break'      => "\n",
+    |          ]
+    |
+    */
+
+    'renderer' => [
+        'block_separator' => "\n",
+        'inner_separator' => "\n",
+        'soft_break'      => "\n",
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Include CommonMark Extensions
+    | Enable Em Tag Parsing
     |--------------------------------------------------------------------------
     |
-    | This option specifies the extensions to add to the CommonMark converter.
-    | After extension is loaded you will be able to use those extension in the
-    | markdown views or blade markdown tags
+    | This option specifies if `<em>` parsing is enabled.
     |
-    | Default: none
+    | Default: true
     |
     */
 
-    'extensions' => [
-        //
-    ],
+    'enable_em' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Enable Strong Tag Parsing
+    |--------------------------------------------------------------------------
+    |
+    | This option specifies if `<strong>` parsing is enabled.
+    |
+    | Default: true
+    |
+    */
+
+    'enable_strong' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Enable Asterisk Parsing
+    |--------------------------------------------------------------------------
+    |
+    | This option specifies if `*` should be parsed for emphasis.
+    |
+    | Default: true
+    |
+    */
+
+    'use_asterisk' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Enable Underscore Parsing
+    |--------------------------------------------------------------------------
+    |
+    | This option specifies if `_` should be parsed for emphasis.
+    |
+    | Default: true
+    |
+    */
+
+    'use_underscore' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | HTML Input
+    |--------------------------------------------------------------------------
+    |
+    | This option specifies how to handle untrusted HTML input.
+    |
+    | Default: 'strip'
+    |
+    */
+
+    'html_input' => 'strip',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Allow Unsafe Links
+    |--------------------------------------------------------------------------
+    |
+    | This option specifies whether to allow risky image URLs and links.
+    |
+    | Default: true
+    |
+    */
+
+    'allow_unsafe_links' => true,
 
 ];

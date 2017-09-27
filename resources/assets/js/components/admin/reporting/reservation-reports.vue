@@ -10,6 +10,7 @@
         <li><a @click="create('travel')"><i class="fa fa-file-excel-o"></i> Travel Documents &amp; Itinerary</a></li>
         <li><a @click="create('rooming')"><i class="fa fa-file-excel-o"></i> Rooming</a></li>
         <li><a @click="create('itinerary')"><i class="fa fa-file-excel-o"></i> Itinerary</a></li>
+        <li><a @click="create('medical')"><i class="fa fa-file-excel-o"></i> Medical Info</a></li>
       </ul>
     </div>
 </template>
@@ -23,11 +24,11 @@ export default {
             $.extend(params, this.filters);
             $.extend(params, {search: this.search});
             console.log(report);
-            this.$http.post('reports/reservations/' + report, params).then(function (response) {
-                this.$dispatch('showSuccess', response.body.message);
+            this.$http.post('reports/reservations/' + report, params).then((response) => {
+                this.$root.$emit('showSuccess', response.data.message);
                 this.report = '';
-            }, function (error) {
-                this.$dispatch('showError', 'Unable to create the report.');
+            }, (error) =>  {
+                this.$root.$emit('showError', 'Unable to create the report.');
             })
         }
     }

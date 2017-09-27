@@ -20,7 +20,7 @@ class RoomOccupantsController extends Controller
 
     /**
      * Get all occupants in the room.
-     * 
+     *
      * @param  string  $roomId
      * @param  Request $request
      * @return Response
@@ -34,7 +34,7 @@ class RoomOccupantsController extends Controller
 
     /**
      * Get specific occupant in room.
-     * 
+     *
      * @param  string $roomId
      * @param  string $reservationId
      * @return Response
@@ -48,7 +48,7 @@ class RoomOccupantsController extends Controller
 
     /**
      * Add a new occupant to the room.
-     * 
+     *
      * @param  string  $roomId
      * @param  Request $request
      * @return Response
@@ -70,7 +70,7 @@ class RoomOccupantsController extends Controller
 
     /**
      * Update the occupant in the room.
-     * 
+     *
      * @param  string  $roomId
      * @param  string  $reservationId
      * @param  Request $request
@@ -79,12 +79,10 @@ class RoomOccupantsController extends Controller
     public function update($roomId, $reservationId, OccupantRequest $request)
     {
         if ($request->has('room_leader')) {
-
             $isLeader = $request->get('room_leader');
 
-            $isLeader ? $this->occupant->promote($roomId, $reservationId) 
+            $isLeader ? $this->occupant->promote($roomId, $reservationId)
                 : $this->occupant->demote($roomId, $reservationId);
-
         }
 
         $occupant = $this->occupant->getById($roomId, $reservationId);
@@ -94,13 +92,13 @@ class RoomOccupantsController extends Controller
 
     /**
      * Remove the occupant from the room.
-     * 
+     *
      * @param  string $roomId
      * @param  string $reservationId
      * @return Response
      */
     public function destroy($roomId, $reservationId = null)
-    {   
+    {
         $reservations = $reservationId ?: $request->get('reservations');
 
         $this->occupant->delete($roomId, $reservations);

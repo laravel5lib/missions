@@ -1,11 +1,11 @@
 <template>
 	<div>
-		<aside :show.sync="showPassengersFilters" placement="left" header="Passengers Filters" :width="375">
-			<reservations-filters v-ref:filters :filters.sync="passengersFilters" :reset-callback="resetPassengerFilters" :pagination="passengersPagination" :callback="getPassengers" :campaign-id="campaignId" storage="" transports></reservations-filters>
-		</aside>
-		<aside :show.sync="showReservationsFilters" placement="left" header="Reservations Filters" :width="375">
-			<reservations-filters v-ref:filters :filters.sync="reservationFilters" :reset-callback="resetReservationFilters" :pagination="reservationsPagination" :callback="searchReservations" :campaign-id="campaignId" storage="" teams></reservations-filters>
-		</aside>
+		<mm-aside :show="showPassengersFilters" @open="showPassengersFilters=true" @close="showPassengersFilters=false" placement="left" header="Passengers Filters" :width="375">
+			<reservations-filters ref="filters" v-model="passengersFilters" :reset-callback="resetPassengerFilters" :pagination="passengersPagination" pagination-key="passengersPagination" :callback="getPassengers" :campaign-id="campaignId" storage="" transports></reservations-filters>
+		</mm-aside>
+		<mm-aside :show="showReservationsFilters" @open="showReservationsFilters=true" @close="showReservationsFilters=false" placement="left" header="Reservations Filters" :width="375">
+			<reservations-filters ref="filters" v-model="reservationFilters" :reset-callback="resetReservationFilters" :pagination="reservationsPagination" pagination-key="reservationsPagination" :callback="searchReservations" :campaign-id="campaignId" storage="" teams></reservations-filters>
+		</mm-aside>
 
 		<div class="row">
 			<!-- Passengers List -->
@@ -22,7 +22,7 @@
 						<a class="btn btn-default btn-sm btn-block" @click="showPassengersFilters = true;">Filters</a>
 					</div>
 					<div class="col-xs-12">
-						<filters-indicator :filters.sync="passengersFilters"></filters-indicator>
+						<filters-indicator :filters="passengersFilters"></filters-indicator>
 						<hr class="divider">
 					</div>
 				</form>
@@ -30,7 +30,7 @@
 					<p class="lead text-center text-muted" v-if="passengers.length < 1">
 						There are no passengers in this transport. <br /> Add passengers from the reservations list to get started.
 					</p>
-					<div class="panel panel-default" v-for="passenger in passengers">
+					<div class="panel panel-default" v-for="(passenger, index) in passengers">
 						<div class="panel-heading" role="tab" id="headingOne">
 							<h4 class="panel-title">
 								<div class="row">
@@ -44,7 +44,7 @@
 											<div class="media-body" style="vertical-align:middle;">
 												<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 													<i :class="getGenderStatusIcon(passenger.reservation.data)"></i>
-													<a :href="'/admin/reservations/' + passenger.reservation.data.id" target="_blank">{{ passenger.reservation.data.surname | capitalize }}, {{ passenger.reservation.data.given_names | capitalize }}</a></h6>
+													<a :href="'/admin/reservations/' + passenger.reservation.data.id" target="_blank">{{ passenger.reservation.data.surname|capitalize }}, {{ passenger.reservation.data.given_names|capitalize }}</a></h6>
 												<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ passenger.reservation.data.desired_role.name }} <span class="text-muted">&middot; {{ passenger.reservation.data.trip.data.group.data.name}}</span></p>
 											</div><!-- end media-body -->
 										</div><!-- end media -->
@@ -53,21 +53,21 @@
 										<a class="btn btn-xs btn-primary-hollow" @click="removePassenger(passenger)">
 											<span class="fa fa-minus"></span>
 										</a>
-										<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#PassengerAccordion" :href="'#squadLeaderItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+										<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#PassengerAccordion" :href="'#squadLeaderItem' + index" aria-expanded="true" aria-controls="collapseOne">
 											<i class="fa fa-angle-down"></i>
 										</a>
 									</div>
 								</div>
 							</h4>
 						</div>
-						<div :id="'squadLeaderItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+						<div :id="'squadLeaderItem' + index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 							<div class="panel-body">
 								<div class="row">
 									<div class="col-sm-6">
 										<label>Gender</label>
-										<p class="small">{{passenger.reservation.data.gender | capitalize}}</p>
+										<p class="small">{{ passenger.reservation.data.gender|capitalize }}</p>
 										<label>Marital Status</label>
-										<p class="small">{{passenger.reservation.data.status | capitalize}}</p>
+										<p class="small">{{ passenger.reservation.data.status|capitalize }}</p>
 									</div><!-- end col -->
 									<div class="col-sm-6">
 										<label>Age</label>
@@ -82,15 +82,15 @@
 										<ul class="list-unstyled" v-if="passenger.reservation.data.companions.data.length">
 											<li v-for="companion in passenger.reservation.data.companions.data">
 												<i :class="getGenderStatusIcon(companion)"></i>
-												{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
-												<span class="text-muted">({{ companion.relationship | capitalize }})</span>
+												{{ companion.surname|capitalize }}, {{ companion.given_names|capitalize }}
+												<span class="text-muted">({{ companion.relationship|capitalize }})</span>
 											</li>
 										</ul>
 										<p class="small" v-else>None</p>
 									</div>
 									<div class="col-sm-6">
 										<label>Trip Type</label>
-										<p class="small">{{passenger.reservation.data.trip.data.type | capitalize}}</p>
+										<p class="small">{{ passenger.reservation.data.trip.data.type|capitalize }}</p>
 									</div>
 									<div class="col-sm-6">
 										<label>Designation</label>
@@ -106,7 +106,7 @@
 					</div>
 				</div>
 				<div class="col-sm-12 text-center">
-					<pagination :pagination.sync="passengersPagination" :callback="getPassengers"></pagination>
+					<pagination :pagination="passengersPagination" pagination-key="passengersPagination" :callback="getPassengers"></pagination>
 				</div>
 
 			</div>
@@ -124,7 +124,7 @@
 						<a class="btn btn-default btn-sm" @click="showReservationsFilters = true;">Filters</a>
 					</div>
 					<div class="col-xs-12">
-						<filters-indicator :filters.sync="reservationFilters"></filters-indicator>
+						<filters-indicator :filters="reservationFilters"></filters-indicator>
 						<hr class="divider">
 					</div>
 
@@ -133,7 +133,7 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<div class="panel-group" id="reservationsAccordion" role="tablist" aria-multiselectable="true">
-							<div class="panel panel-default" v-for="reservation in reservations">
+							<div class="panel panel-default" v-for="(reservation, index) in reservations">
 								<div class="panel-heading" role="tab" id="headingOne">
 									<h4 class="panel-title">
 										<div class="row">
@@ -148,7 +148,7 @@
 														<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 															<i :class="getGenderStatusIcon(reservation)"></i>
 															<a :href="'/admin/reservations/' + reservation.id" target="_blank">
-																{{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}</a></h6>
+																{{ reservation.surname|capitalize }}, {{ reservation.given_names|capitalize }}</a></h6>
 														<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ reservation.desired_role.name }} <span class="text-muted">&middot; {{ reservation.trip.data.group.data.name }}</span></p>
 													</div><!-- end media-body -->
 												</div><!-- end media -->
@@ -157,7 +157,7 @@
 												<a class="btn btn-xs btn-primary-hollow" @click="addPassenger(reservation)">
 													<span class="fa fa-plus"></span>
 												</a>
-												<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+												<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + index" aria-expanded="true" aria-controls="collapseOne">
 													<i class="fa fa-angle-down"></i>
 												</a>
 											</div>
@@ -165,14 +165,14 @@
 
 									</h4>
 								</div>
-								<div :id="'reservationItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+								<div :id="'reservationItem' + index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 									<div class="panel-body">
 										<div class="row">
 											<div class="col-sm-6">
 												<label>Gender</label>
-												<p class="small">{{reservation.gender | capitalize}}</p>
+												<p class="small">{{ reservation.gender|capitalize }}</p>
 												<label>Marital Status</label>
-												<p class="small">{{reservation.status | capitalize}}</p>
+												<p class="small">{{ reservation.status|capitalize }}</p>
 											</div><!-- end col -->
 											<div class="col-sm-6">
 												<label>Age</label>
@@ -185,18 +185,18 @@
 												<ul class="list-unstyled" v-if="reservation.companions.data.length">
 													<li v-for="companion in reservation.companions.data">
 														<i :class="getGenderStatusIcon(companion)"></i>
-														{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} <span class="text-muted">({{ companion.relationship | capitalize }})</span>
+														{{ companion.surname|capitalize }}, {{ companion.given_names|capitalize }} <span class="text-muted">({{ companion.relationship|capitalize }})</span>
 													</li>
 												</ul>
 												<p class="small" v-else>None</p>
 											</div>
 											<div class="col-sm-6">
 												<label>Trip Type</label>
-												<p class="small">{{reservation.trip.data.type | capitalize}}</p>
+												<p class="small">{{ reservation.trip.data.type|capitalize }}</p>
 											</div>
 											<div class="col-sm-6">
 												<label>Designation</label>
-												<p class="small">{{reservation.arrival_designation | capitalize}}</p>
+												<p class="small">{{ reservation.arrival_designation|capitalize }}</p>
 											</div>
 										</div><!-- end row -->
 									</div>
@@ -207,7 +207,7 @@
 							</div>
 						</div>
 						<div class="col-sm-12 text-center">
-							<pagination :pagination.sync="reservationsPagination" :callback="searchReservations"></pagination>
+							<pagination :pagination="reservationsPagination" pagination-key="reservationsPagination" :callback="searchReservations"></pagination>
 						</div>
 					</div>
 				</div>
@@ -326,23 +326,23 @@
                     page: this.passengersPagination.current_page,
                 }, this.passengersFilters);
 
-                this.PassengersResource.get(params).then(function (response) {
-                    this.passengers = response.body.data;
-                    this.passengersPagination = response.body.meta.pagination;
-                    this.$dispatch('updatePassengersCount', this.passengersPagination.total);
-                }, this.$root.handleApiError);
+                this.PassengersResource.get(params).then((response) => {
+                    this.passengers = response.data.data;
+                    this.passengersPagination = response.data.meta.pagination;
+                    this.$emit('updatePassengersCount', this.passengersPagination.total);
+                }).catch(this.$root.handleApiError);
             },
 	        addPassenger(reservation) {
-                return this.PassengersResource.save({
+                return this.PassengersResource.post({
                     transport_id: this.transport.id,
                     reservation_id: reservation.id,
-                }).then(function (response) {
+                }).then((response) => {
                     this.getPassengers();
                     this.searchReservations();
-                }, this.$root.handleApiError);
+                }).catch(this.$root.handleApiError);
 	        },
 	        removePassenger(passenger) {
-                this.PassengersResource.delete({ passenger: passenger.id }).then(function (response) {
+                this.PassengersResource.delete({ passenger: passenger.id }).then((response) => {
                     this.getPassengers();
                     this.searchReservations();
                 });
@@ -375,9 +375,9 @@
                         this.lastReservationRequest.abort();
                     }
                     this.lastReservationRequest = xhr;
-                } }).then(function (response) {
-                    this.reservations = response.body.data;
-                    this.reservationsPagination = response.body.meta.pagination;
+                } }).then((response) => {
+                    this.reservations = response.data.data;
+                    this.reservationsPagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 }, this.$root.handleApiSoftError);
             },
@@ -395,19 +395,19 @@
 	            // Available Space
 
 	            let promises = [];
-	            _.each(notPresentIds, function (id) {
+	            _.each(notPresentIds, (id) => {
 		            promises.push(this.addPassenger({ id: id }));
-                }.bind(this));
+                });
 
-	            Promise.all(promises).then(function (values) {
+	            Promise.all(promises).then((values) => {
 		            this.$root.$emit('showSuccess', 'Companions Added');
-                }.then(function(error) {
+                },(error) => {
                     this.$root.$emit('showError', error.message);
-				}).bind(this));
+				});
 
             }
         },
-        ready(){
+        mounted(){
 			this.getPassengers();
 			this.searchReservations();
         }

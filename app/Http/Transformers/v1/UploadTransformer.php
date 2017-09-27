@@ -5,7 +5,8 @@ namespace App\Http\Transformers\v1;
 use App\Models\v1\Upload;
 use League\Fractal\TransformerAbstract;
 
-class UploadTransformer extends TransformerAbstract {
+class UploadTransformer extends TransformerAbstract
+{
 
     /**
      * Turn this item object into a generic array
@@ -34,5 +35,4 @@ class UploadTransformer extends TransformerAbstract {
             ],
         ];
     }
-
 }

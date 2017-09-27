@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Transformers\v1;
+
 use League\Fractal\TransformerAbstract;
-use Silber\Bouncer\Database\Role;
+use Spatie\Permission\Models\Role;
 
 class RoleTransformer extends TransformerAbstract
 {
@@ -12,7 +13,7 @@ class RoleTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'abilities'
+        'permissions'
     ];
 
     public function transform(Role $role)
@@ -23,10 +24,10 @@ class RoleTransformer extends TransformerAbstract
         ];
     }
 
-    public function includeAbilities(Role $role)
+    public function includePermissions(Role $role)
     {
-        $abilities = $role->abilities;
+        $permissions = $role->permissions;
 
-        return $this->collection($abilities, new AbilityTransformer);
+        return $this->collection($permissions, new PermissionTransformer);
     }
 }

@@ -34,7 +34,7 @@ class CredentialFilter extends Filter
      */
     public function user($id)
     {
-        if ( ! key_exists('manager', $this->input)) {
+        if (! key_exists('manager', $this->input)) {
             return $this->where('holder_id', $id)
                         ->where('holder_type', 'users');
         }
@@ -44,8 +44,8 @@ class CredentialFilter extends Filter
 
     /**
      * By reservation id
-     * 
-     * @param  String $id 
+     *
+     * @param  String $id
      * @return Builder
      */
     public function reservation($id)
@@ -56,7 +56,7 @@ class CredentialFilter extends Filter
 
     /**
      * By type
-     * 
+     *
      * @param  String $type
      * @return Builder
      */
@@ -67,14 +67,15 @@ class CredentialFilter extends Filter
 
     /**
      * By status
-     * 
+     *
      * @param  String $status
      * @return Response
      */
     public function status($status)
     {
-        if ( ! in_array($status, ['expired', 'active']) )
+        if (! in_array($status, ['expired', 'active'])) {
             return $this;
+        }
 
         return $this->{$status}();
     }

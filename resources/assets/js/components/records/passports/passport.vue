@@ -10,7 +10,7 @@
         <p class="small">
             <b>NUMBER:</b> {{passport.number}}
             <br>
-            <b>EXPIRES ON:</b> {{passport.expires_at|moment 'll'}}
+            <b>EXPIRES ON:</b> {{passport.expires_at|moment('ll')}}
         </p>
     </div>
 </template>

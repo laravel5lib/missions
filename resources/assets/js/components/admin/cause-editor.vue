@@ -26,14 +26,14 @@
         </div>
         <div class="panel-body">
             <label>Name</label>
-            <input class="form-control" v-model="cause.name" v-if="editMode" />
+            <input class="form-control" name="name" v-model="cause.name" v-if="editMode" />
             <p v-else>{{ cause.name }}</p>
             <label>Countries</label>
             <v-select @keydown.enter.prevent=""  class="form-control"
-                      multiple
+                      multiple name="countries"
                       id="country"
-                      :value.sync="cause.countries"
-                      :options="countries"
+                      :value="cause.countries"
+                      :options="UTILITIES.countries"
                       label="name"
                       v-if="editMode">
             </v-select>
@@ -47,7 +47,7 @@
             <p v-else>{{ cause.short_desc }}</p>
         </div>
 
-        <alert :show.sync="showSuccess"
+        <alert v-model="showSuccess"
                placement="top-right"
                :duration="3000"
                type="success"
@@ -58,7 +58,7 @@
             <p>{{ message }}</p>
         </alert>
 
-        <alert :show.sync="showError"
+        <alert v-model="showError"
                placement="top-right"
                :duration="6000"
                type="danger"
@@ -72,19 +72,16 @@
     </div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
+    import utilities from '../utilities.mixin'
     import vSelect from 'vue-select';
     export default {
         name: 'cause-editor',
-        components: {
-            'alert': VueStrap.alert,
-            'v-select': vSelect
-        },
+        mixins: [utilities],
+        components: {vSelect},
         data() {
             return{
                 cause: {},
-                countries: [],
-                editMode: true,
+                editMode: false,
                 showSuccess: false,
                 showError: false,
                 message: ''
@@ -104,26 +101,26 @@
         },
         methods: {
             fetch () {
-                this.$http.get('causes/' + this.id).then(function (response) {
-                    this.cause = response.body.data;
+                this.$http.get('causes/' + this.id).then((response) => {
+                    this.cause = response.data.data;
                 });
             },
             save() {
-                this.$http.put('causes/' + this.id, this.cause).then(function (response) {
-                    this.cause = response.body.data;
+                this.$http.put('causes/' + this.id, this.cause).then((response) => {
+                    this.cause = response.data.data;
                     this.editMode = false;
                     this.message = 'Your changes were saved successfully.';
                     this.showSuccess = true;
-                },function () {
+                },() =>  {
                     this.message = 'Your changes could not be saved.';
                     this.showError = true;
                 });
             },
             create() {
-                this.$http.post('causes', this.cause).then(function (response) {
+                this.$http.post('causes', this.cause).then((response) => {
                     this.cause = {};
                     window.location.reload();
-                },function () {
+                },() =>  {
                     this.message = 'The cause could not be created.';
                     this.showError = true;
                 });
@@ -137,15 +134,9 @@
                 }
             }
         },
-        ready () {
-            if (this.edit) {
-                this.fetch();
-                this.editMode = false;
-            }
-
-            this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.body.countries;
-			});
+        mounted() {
+            this.fetch();
+            this.getCountries();
         }
     }
 </script>

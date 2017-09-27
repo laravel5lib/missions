@@ -1,6 +1,6 @@
 <template>
     <div class="row" style="position:relative">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="col-xs-12 text-right">
             <form class="form-inline">
                 <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
@@ -9,7 +9,7 @@
                     </label>
                 </div>
                 <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
+                    <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
                 <!-- <export-utility v-if="canExport" url="influencers/export"
@@ -51,11 +51,11 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label>CREATED ON</label>
-                            <p class="small">{{influencer.created_at|moment 'lll'}}</p>
+                            <p class="small">{{influencer.created_at|moment('lll')}}</p>
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{influencer.updated_at|moment 'lll'}}</p>
+                            <p class="small">{{influencer.updated_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
                     <div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:20px;top:5px;">
@@ -73,9 +73,9 @@
             </div>
         </div>
         <div class="col-xs-12 text-center">
-            <pagination :pagination.sync="pagination" :callback="searchInfluencers"></pagination>
+            <pagination :pagination="pagination" pagination-key="pagination" :callback="searchInfluencers"></pagination>
         </div>
-        <modal :show.sync="deleteModal" title="Remove Influencer" small="true">
+        <modal :value="deleteModal" title="Remove Influencer" :small="true">
             <div slot="modal-body" class="modal-body text-center">Delete this Influencer?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -85,6 +85,7 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import exportUtility from '../../export-utility.vue';
     import importUtility from '../../import-utility.vue';
     let API = {
@@ -145,16 +146,19 @@
             }
         },
         computed: {
-            isFacilitator() {
-                return this.trips.length > 0 ? true : false;
-            }
+            isFacilitator: {
+                get() {
+                    return this.trips.length > 0 ? true : false;
+                },
+                set() {}
+            },
         },
         watch:{
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
-                this.searchInfluencers();
+//                this.searchInfluencers();
             },
-            'includeManaging': function (val, oldVal) {
+            'includeManaging'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.searchInfluencers();
             }
@@ -167,34 +171,38 @@
                 // return this.$root.hasAbility('') ||  this.$root.hasAbility('') ||  this.$root.hasAbility('');
             },
             setInfluencer(influencer) {
-                this.$dispatch('set-document', influencer);
+                this.$emit('set-document', influencer);
             },
             removeInfluencer(influencer){
                 if(influencer) {
-                    this.$http.delete('influencers/' + influencer.id).then(function (response) {
-                        this.influencers = _.reject(this.influencers, function (item) {
+                    this.$http.delete('influencers/' + influencer.id).then((response) => {
+                        this.influencers = _.reject(this.influencers, (item) => {
                             return item.id === influencer.id;
                         });
                         this.selectedInfluencer = '';
                     });
                 }
             },
+            debouncedSearch: _.debounce(function() {
+                this.searchInfluencers()
+            }, 250),
             searchInfluencers(){
                 let params = {user: this.userId, subject: 'Influencer', sort: 'author_name', search: this.search, per_page: this.per_page, page: this.pagination.current_page};
                 if (this.includeManaging)
                     params.manager = this.userId;
                 this.exportFilters = params;
-                this.$http.get('essays', { params: params }).then(function (response) {
-                    this.influencers = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('essays', { params: params }).then((response) => {
+                    this.influencers = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     this.loaded = true;
                     // this.$refs.spinner.hide();
                 });
             }
         },
-        ready(){
-            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
-                let user = response.body.data;
+        mounted(){
+            let userId = this.userId || this.$root.user.id;
+            this.$http.get('users/' + userId + '?include=facilitating,managing.trips').then((response) => {
+                let user = response.data.data;
                 let managing = [];
 
                 if (user.facilitating.data.length) {
@@ -204,7 +212,7 @@
                 }
 
                 if (user.managing.data.length) {
-                    _.each(user.managing.data, function (group) {
+                    _.each(user.managing.data, (group) => {
                         managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                     });
                     this.trips = _.union(this.trips, managing);

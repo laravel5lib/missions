@@ -1,55 +1,55 @@
 <template>
 	<div style="position: relative;">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
-		<aside :show.sync="showRegionsFilters" placement="left" header="Region Filters" :width="375">
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
+		<mm-aside :show="showRegionsFilters" @open="showRegionsFilters=true" @close="showRegionsFilters=false" placement="left" header="Region Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 
 				<div class="form-group" v-if="isAdminRoute">
 					<label>Country</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" :debounce="250" :on-search="getCountries"
-					          :value.sync="regionsFilters.country" :options="UTILITIES.countries" label="name"
+					          v-model="regionsFilters.country" :options="UTILITIES.countries" label="name"
 					          placeholder="Filter Countries"></v-select>
 				</div>
 
 				<hr class="divider inv sm">
 				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetRegionFilter"><i class="fa fa-times"></i> Reset Region Filters</button>
 			</form>
-		</aside>
-		<aside :show.sync="showPlansFilters" placement="left" header="Plans Filters" :width="375">
+		</mm-aside>
+		<mm-aside :show="showPlansFilters" @open="showPlansFilters=true" @close="showPlansFilters=false" placement="left" header="Plans Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 				<div class="form-group">
 					<label>Travel Group</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
-					          :value.sync="plansFilters.group" :options="groupsOptions" label="name"
+					          v-model="plansFilters.group" :options="groupsOptions" label="name"
 					          placeholder="Filter by Group"></v-select>
 				</div>
 
 				<hr class="divider inv sm">
 				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetPlansFilter()"><i class="fa fa-times"></i> Reset Filters</button>
 			</form>
-		</aside>
-		<aside :show.sync="showRoomsFilters" placement="left" header="Rooms Filters" :width="375">
+		</mm-aside>
+		<mm-aside :show="showRoomsFilters" @open="showRoomsFilters=true" @close="showRoomsFilters=false" placement="left" header="Rooms Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 				<div class="form-group">
 					<label>Rooming Plans</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="plansFilter" multiple :debounce="250" :on-search="getRoomingPlansFilter"
-					          :value.sync="roomsFilters.plans" :options="plansOptions" label="name"
+					          v-model="roomsFilters.plans" :options="plansOptions" label="name"
 					          placeholder="Filter by Plans"></v-select>
 				</div>
 				<div class="form-group">
 					<label>Room Type</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="typeFilter" :debounce="250" :on-search="getRoomTypes"
-					          :value.sync="roomsFilters.type" :options="roomTypes" label="name"
+					          v-model="roomsFilters.type" :options="roomTypes" label="name"
 					          placeholder="Filter by Type"></v-select>
 				</div>
 
 				<hr class="divider inv sm">
 				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetRoomsFilter()"><i class="fa fa-times"></i> Reset Filters</button>
 			</form>
-		</aside>
+		</mm-aside>
 		<div class="row">
 			<div class="col-sm-7">
                 <h4>Accommodations</h4>
@@ -58,7 +58,7 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h5>
-								{{ currentAccommodation.name | capitalize }} <span> &middot; Rooms</span>
+								{{ currentAccommodation.name|capitalize }} <span> &middot; Rooms</span>
                                 <span v-if="currentAccommodation.room_types.total === currentAccommodation.rooms_count.total" class="badge text-uppercase pull-right" style="padding:3px 10px;font-size:10px;line-height:1.4;">Full</span>
 							</h5>
 						</div>
@@ -66,7 +66,7 @@
 							<form class="form-inline row">
 								<div class="form-group col-xs-8">
 									<div class="input-group input-group-sm col-xs-12">
-										<input type="text" class="form-control" v-model="roomsSearch" debounce="300" placeholder="Search rooms">
+										<input type="text" class="form-control" v-model="roomsSearch" @keyup="debouncedRoomsSearch" placeholder="Search rooms">
 										<span class="input-group-addon"><i class="fa fa-search"></i></span>
 									</div>
 									<hr class="divider sm inv">
@@ -94,7 +94,7 @@
 									</div>
 								</div>
 								<div class="text-center">
-									<pagination :pagination.sync="currentAccommodationRoomsPagination"
+									<pagination :pagination="currentAccommodationRoomsPagination" pagination-key="currentAccommodationRoomsPagination"
 									            :callback="getCurrentAccommodationRooms"
 									            size="small">
 									</pagination>
@@ -118,7 +118,7 @@
 					<div class="panel panel-default">
 						<div class="panel-heading text-center"><h5>Choose a Region</h5></div>
                         <ul class="list-group">
-                          <li class="list-group-item" v-for="region in regions | orderBy 'name'">
+                          <li class="list-group-item" v-for="region in orderByProp(regions, 'name')">
                             <span class="badge" style="background-color: white; border: 1px solid black; color: black">
                                 {{region.teams_count}} Squads
                             </span>
@@ -127,9 +127,9 @@
                             </span>
                             <h5>{{region.name}}</h5>
                             <span v-if="region.callsign">
-                                <span class="label label-default" :style="'color: #FFF !important; background-color: ' + region.callsign" v-text="region.callsign|capitalize"></span>
+                                <span class="label label-default" :style="'color: #FFF !important; background-color: ' + region.callsign">{{region.callsign|capitalize}}</span>
                             </span>
-                            <span class="small">{{ region.country.name | capitalize }}</span>
+                            <span class="small">{{ region.country.name|capitalize }}</span>
                             <button class="btn btn-xs btn-primary pull-right" type="button" @click="selectRegion(region)">
                                 Select
                             </button>
@@ -137,7 +137,7 @@
                         </ul>
 					</div>
 					<div class="text-center">
-						<pagination :pagination.sync="regionsPagination"
+						<pagination :pagination="regionsPagination" pagination-key="regionsPagination"
 									:callback="getRegions"
 									size="small">
 						</pagination>
@@ -152,7 +152,7 @@
 					</div>
 					<template v-if="accommodations.length">
 						<accordion :one-at-atime="true">
-							<panel :type="currentAccommodation && currentAccommodation.id === accommodation.id ? 'danger' : ''" v-for="accommodation in accommodations">
+							<panel :type="currentAccommodation && currentAccommodation.id === accommodation.id ? 'danger' : ''" v-for="accommodation in accommodations" :key="accommodation.id">
 								<div slot="header" class="row">
 									<div class="col-xs-6">
                                         <strong>{{accommodation.name}}</strong>
@@ -189,14 +189,14 @@
 									<div class="col-sm-6">
 										<label>Rooms</label>
 										<div class="small">
-											<span v-for="(key, val) in accommodation.rooms_count">
-				                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key | capitalize}}: <strong>{{val}}</strong></p>
+											<span v-for="(val, key, index) in accommodation.rooms_count">
+				                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="index != 0"> &middot; </span>{{ key|capitalize }}: <strong>{{val}}</strong></p>
 				                        </span>
 										</div>
 										<label>Rooms Allowed</label>
 										<div class="small">
-										<span v-for="(key, val) in accommodation.room_types">
-				                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key | capitalize}}: <strong>{{val}}</strong></p>
+										<span v-for="(val, key, index) in accommodation.room_types">
+				                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="index != 0"> &middot; </span>{{ key|capitalize }}: <strong>{{val}}</strong></p>
 				                        </span>
 										</div>
 									</div><!-- end col -->
@@ -204,7 +204,7 @@
 							</panel>
 						</accordion>
 						<div class="text-center">
-							<pagination :pagination.sync="accommodationsPagination"
+							<pagination :pagination="accommodationsPagination" pagination-key="accommodationsPagination"
 							            :callback="getAccommodations"
 							            size="small">
 							</pagination>
@@ -227,7 +227,7 @@
 					<form class="form-inline row">
 						<div class="form-group col-xs-8">
 							<div class="input-group input-group-sm col-xs-12">
-								<input type="text" class="form-control" v-model="plansSearch" debounce="300" placeholder="Search">
+								<input type="text" class="form-control" v-model="plansSearch" @keyup="debouncedPlansSearch" placeholder="Search">
 								<span class="input-group-addon"><i class="fa fa-search"></i></span>
 							</div>
 							<hr class="divider sm inv">
@@ -243,7 +243,7 @@
 						<div class="col-sm-12">
 							<template v-if="plans.length">
 								<div class="panel-group" id="plansAccordion" role="tablist" aria-multiselectable="true">
-									<div class="panel panel-default" v-for="plan in plans">
+									<div class="panel panel-default" v-for="(plan, index) in plans">
 										<div class="panel-heading">
 											<div class="panel-title" slot="header">
 												<div class="row">
@@ -258,26 +258,26 @@
 														<button :disabled="!currentAccommodation" class="btn btn-xs btn-primary-hollow" type="button" @click="addPlanToAccommodation(plan, currentAccommodation)">
 															<i class="fa fa-plus"></i>
 														</button>
-														<a :class="{ 'disabled': plan.rooms.data.length === 0 }" class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#plansAccordion" :href="'#planItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+														<a :class="{ 'disabled': plan.rooms.data.length === 0 }" class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#plansAccordion" :href="'#planItem' + index" aria-expanded="true" aria-controls="collapseOne">
 															<i class="fa fa-angle-down"></i>
 														</a>
 													</div>
 													<div class="col-xs-12">
 														<label>Groups</label><br />
-														<span v-for="group in plan.groups.data">
-								                            <p class="small" style="line-height:1;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{group.name | capitalize}}</p>
+														<span v-for="(group, groupIndex) in plan.groups.data">
+								                            <p class="small" style="line-height:1;margin-bottom:2px;display:inline-block;"><span v-if="groupIndex != 0"> &middot; </span>{{ group.name|capitalize }}</p>
 								                        </span>
 													</div>
 													<!--<div class="col-xs-12">-->
 														<!--<label>Rooms</label><br />-->
 														<!--<span v-for="(key, val) in plan.rooms_count">-->
-								                            <!--<p class="small" style="line-height:1;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key | capitalize}}: <strong>{{val}}</strong> <span v-if="plan.rooms_count_remaining[key] && plan.rooms_count_remaining[key] !== val">({{plan.rooms_count_remaining[key]}} left)</span></p>-->
+								                            <!--<p class="small" style="line-height:1;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{ key|capitalize }}: <strong>{{val}}</strong> <span v-if="plan.rooms_count_remaining[key] && plan.rooms_count_remaining[key] !== val">({{plan.rooms_count_remaining[key]}} left)</span></p>-->
 								                        <!--</span>-->
 													<!--</div>-->
 												</div>
 											</div>
 										</div>
-										<div :id="'planItem' + $index" class="panel-collapse collapse">
+										<div :id="'planItem' + index" class="panel-collapse collapse">
 
 											<div class="list-group">
 												<div class="list-group-item"  v-for="room in plan.rooms.data" >
@@ -301,7 +301,7 @@
 								</div>
 
 								<div class="text-center">
-									<pagination :pagination.sync="plansPagination" :callback="getRoomingPlans"
+									<pagination :pagination="plansPagination" pagination-key="plansPagination" :callback="getRoomingPlans"
 									            size="small">
 									</pagination>
 								</div>
@@ -422,11 +422,9 @@
             },
             plansSearch(val) {
                 this.plansPagination.current_page = 1;
-                this.getRoomingPlans();
             },
             roomsSearch(val) {
                 this.currentAccommodationRoomsPagination.current_page = 1;
-                this.getCurrentAccommodationRooms();
             },
         },
         methods: {
@@ -450,38 +448,38 @@
                 this.selectRegionView = false;
 	        },
             addPlanToAccommodation(plan, accommodation) {
-                this.RoomingAccommodationsResource.save({ accommodation: accommodation.id, path: 'plans' }, { plan_ids: [plan.id] })
-		            .then(function (response) {
+                this.RoomingAccommodationsResource.post({ accommodation: accommodation.id, path: 'plans' }, { plan_ids: [plan.id] })
+		            .then((response) => {
                         this.AccommodationsResource
                             .get({ region: this.currentRegion.id, accommodation: this.currentAccommodation.id})
-                            .then(function (response) {
-								accommodation = response.body.data;
+                            .then((response) => {
+								accommodation = response.data.data;
                                 this.getCurrentAccommodationRooms();
                                 this.getRoomingPlans();
                                 this.$root.$emit('showSuccess', plan.name + ' successfully added to accommodation.');
                             }, this.$root.handleApiErro);
 
-                    }, this.$root.handleApiError);
+                    }).catch(this.$root.handleApiError);
             },
             addRoomToAccommodation(room, accommodation) {
-                this.RoomingAccommodationsResource.save({ accommodation: accommodation.id, path: 'rooms' }, { room_ids: [room.id] })
-                    .then(function (response) {
+                this.RoomingAccommodationsResource.post({ accommodation: accommodation.id, path: 'rooms' }, { room_ids: [room.id] })
+                    .then((response) => {
                         accommodation.rooms_count[room.type]++;
                         accommodation.rooms_count.total++;
                         this.getCurrentAccommodationRooms();
                         this.getRoomingPlans();
                         this.$root.$emit('showSuccess', (room.label ? (room.label + ' - ' + room.type) : room.type) + ' successfully added to accommodation.');
-                    }, this.$root.handleApiError)
+                    }).catch(this.$root.handleApiError)
             },
             removeRoomFromAccommodation(room, accommodation) {
                 this.RoomingAccommodationsResource.delete({ accommodation: accommodation.id, path: 'rooms', pathId: room.id })
-                    .then(function (response) {
+                    .then((response) => {
                         accommodation.rooms_count[room.type]--;
                         accommodation.rooms_count.total--;
                         this.getCurrentAccommodationRooms();
                         this.getRoomingPlans();
                         this.$root.$emit('showSuccess', (room.label ? (room.label + ' - ' + room.type) : room.type) + ' successfully removed from accommodation.');
-                    }, this.$root.handleApiError)
+                    }).catch(this.$root.handleApiError)
             },
             getAccommodations(){
                 let params = {
@@ -489,10 +487,10 @@
 					page: this.accommodationsPagination.current_page,
                 };
 
-                return this.AccommodationsResource.get(params).then(function (response) {
-                    this.accommodationsPagination = response.body.meta.pagination;
-					return this.accommodations = response.body.data;
-                }, this.$root.handleApiError);
+                return this.AccommodationsResource.get(params).then((response) => {
+                    this.accommodationsPagination = response.data.meta.pagination;
+					return this.accommodations = response.data.data;
+                }).catch(this.$root.handleApiError);
             },
             getRegions(){
                 let params = {
@@ -505,11 +503,12 @@
 
                 //params.country = this.regionsFilters.country;
 
-                return this.RegionsResource.get(params).then(function (response) {
-                    this.regionsPagination = response.body.meta.pagination;
-                    return this.regions = response.body.data;
-                }, this.$root.handleApiError);
+                return this.RegionsResource.get(params).then((response) => {
+                    this.regionsPagination = response.data.meta.pagination;
+                    return this.regions = response.data.data;
+                }).catch(this.$root.handleApiError);
             },
+            debouncedPlansSearch: _.debounce(function () { this.getRoomingPlans() }, 250),
             getRoomingPlans(){
                 let regionId = this.currentRegion ? this.currentRegion.id : '';
                 let params = {
@@ -524,13 +523,13 @@
 	                page: this.plansPagination.current_page
                 });
 
-                return this.PlansResource.get(params).then(function (response) {
-                    _.each(response.body.data, function (plan) {
+                return this.PlansResource.get(params).then((response) => {
+                    _.each(response.data.data, (plan) => {
                         plan.rooms_count_remaining = _.countBy(plan.rooms.data, 'type');
                     });
-                    this.plansPagination = response.body.meta.pagination;
-                    return this.plans = response.body.data;
-                }, this.$root.handleApiError)
+                    this.plansPagination = response.data.meta.pagination;
+                    return this.plans = response.data.data;
+                }).catch(this.$root.handleApiError)
             },
             getRoomingPlansFilter(){
                 let params = {
@@ -543,10 +542,10 @@
                     per_page: this.per_page,
                 });
 
-                return this.PlansResource.get(params).then(function (response) {
-                    this.pagination = response.body.meta.pagination;
-                    this.plans = response.body.data;
-                }, this.$root.handleApiError)
+                return this.PlansResource.get(params).then((response) => {
+                    this.pagination = response.data.meta.pagination;
+                    this.plans = response.data.data;
+                }).catch(this.$root.handleApiError)
             },
 	        getRoomLeader(room) {
                 return _.findWhere(room.occupants.data, { room_leader: true });
@@ -554,28 +553,29 @@
             getGroups(search, loading){
                 let promise;
                 loading ? loading(true) : void 0;
-                promise = this.$http.get('groups', { params: {search: search} }).then(function (response) {
-                    this.groupsOptions = response.body.data;
+                promise = this.$http.get('groups', { params: {search: search} }).then((response) => {
+                    this.groupsOptions = response.data.data;
                     if (loading) {
                         loading(false);
                     } else {
                         return promise;
                     }
-                }, this.$root.handleApiError);
+                }).catch(this.$root.handleApiError);
             },
-	        getAccommodationRooms(accommodation) {
+            getAccommodationRooms(accommodation) {
                 let params = {
                     accommodations: [accommodation.id],
 	                page: accommodation.roomsPagination.current_page,
                 };
 
-                return this.$http.get('rooming/rooms', { params: params }).then(function (response) {
+                return this.$http.get('rooming/rooms', { params: params }).then((response) => {
                     return {
-                        rooms: response.body.data,
-                        pagination: response.body.meta.pagination
+                        rooms: response.data.data,
+                        pagination: response.data.meta.pagination
                     }
-                }, this.$root.handleApiError);
+                }).catch(this.$root.handleApiError);
 	        },
+            debouncedRoomsSearch: _.debounce(function () { this.getCurrentAccommodationRooms() }, 250),
             getCurrentAccommodationRooms() {
                 let params = {
                     accommodations: [this.currentAccommodation.id],
@@ -589,27 +589,27 @@
 	                type: this.roomsFilters.type ? this.roomsFilters.type.id : undefined,
                 });
 
-                return this.$http.get('rooming/rooms', { params: params }).then(function (response) {
-                    this.currentAccommodationRooms = response.body.data;
-                    this.currentAccommodationRoomsPagination = response.body.meta.pagination;
-                }, this.$root.handleApiError);
+                return this.$http.get('rooming/rooms', { params: params }).then((response) => {
+                    this.currentAccommodationRooms = response.data.data;
+                    this.currentAccommodationRoomsPagination = response.data.meta.pagination;
+                }).catch(this.$root.handleApiError);
 	        },
             getRoomTypes(){
                 return this.$http.get('rooming/types')
-                    .then(function (response) {
-                            return this.roomTypes = response.body.data;
-                        }, this.$root.handleApiError);
+                    .then((response) => {
+                            return this.roomTypes = response.data.data;
+                        }).catch(this.$root.handleApiError);
             },
         },
-        ready() {
+        mounted() {
             let promises = [];
             promises.push(this.getGroups());
             promises.push(this.getRoomTypes());
             promises.push(this.getRegions());
-            promises.push(this.getRoomingPlans().then(function (plans) {
+            promises.push(this.getRoomingPlans().then((plans) => {
 				this.plansOptions = plans;
             }));
-            Promise.all(promises).then(function (values) {
+            Promise.all(promises).then((values) => {
 
             });
         }

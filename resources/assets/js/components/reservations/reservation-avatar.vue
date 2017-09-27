@@ -1,6 +1,6 @@
 <template>
     <div>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="media col-md-12 tour-step-avatar">
             <div class="media-left">
                 <a href="#">
@@ -16,12 +16,12 @@
         <div>
             <div class="collapse" id="avatarCollapse">
                 <div class="well">
-                    <upload-create-update type="avatar" :name="'reservation-' + id" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['User']"></upload-create-update>
+                    <upload-create-update type="avatar" :name="'reservation-' + id" lock-type ui-locked :ui-selector="2" is-child :tags="['User']"  @uploads-complete="uploadsComplete"></upload-create-update>
                 </div>
             </div>
             <hr class="divider inv sm"/>
         </div>
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+        <alert v-model="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Good job!</strong>
             <p>Reservation Avatar Updated!</p>
@@ -43,19 +43,22 @@
                 resource: this.$resource('reservations{/id}')
             }
         },
-        events:{
-            'uploads-complete'(data){
+        computed: {
+            name() {
+                return this.reservation ? this.reservation.given_names + ' ' + this.reservation.surname : '';
+            }
+        },
+        methods: {
+            uploadsComplete(data){
                 switch(data.type){
                     case 'avatar':
                         this.avatar = data;
                         this.avatar_upload_id = data.id;
-                        jQuery('#avatarCollapse').collapse('hide');
+                        $('#avatarCollapse').collapse('hide');
                         break;
                 }
                 this.submit();
-            }
-        },
-        methods: {
+            },
             submit(){
                 // this.$refs.spinner.show();
                 this.reservation.avatar_upload_id = this.avatar_upload_id;
@@ -66,18 +69,18 @@
                 if(_.isObject(this.reservation.desired_role))
                     this.reservation.desired_role = this.reservation.desired_role.code;
 
-                this.resource.update({id: this.id}, this.reservation).then(function(response) {
-                    this.reservation = response.body.data;
+                this.resource.put({id: this.id}, this.reservation).then((response) => {
+                    this.reservation = response.data.data;
                     this.avatar = this.reservation.avatar;
                     this.showSuccess = true;
                     // this.$refs.spinner.hide();
                 });
             },
         },
-        ready(){
+        mounted(){
             // this.$refs.spinner.show();
-            this.resource.get({id: this.id}).then(function(response) {
-                this.reservation = response.body.data;
+            this.resource.get({id: this.id}).then((response) => {
+                this.reservation = response.data.data;
                 this.avatar = this.reservation.avatar
                 // this.$refs.spinner.hide();
             });

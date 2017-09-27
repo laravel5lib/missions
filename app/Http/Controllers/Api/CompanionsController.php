@@ -25,7 +25,7 @@ class CompanionsController extends Controller
 
     /**
      * Get all companions
-     * 
+     *
      * @param  String $reservation_id
      * @return response
      */
@@ -38,7 +38,7 @@ class CompanionsController extends Controller
 
     /**
      * Add a companion
-     * 
+     *
      * @param  String $reservation_id
      * @return response
      */
@@ -53,7 +53,7 @@ class CompanionsController extends Controller
 
     /**
      * Remove a companion from the group
-     * 
+     *
      * @param  String $reservation_id
      * @param  String $companion_reservation_id
      * @return response
@@ -72,18 +72,13 @@ class CompanionsController extends Controller
         $reservation = $this->reservation->withTrashed()->with('companions')->find($reservation_id);
         $companion   = $this->reservation->withTrashed()->with('companions')->find($companion_id);
 
-        if ($reservation->companions->count() && $companion->companions->count())
-        {
+        if ($reservation->companions->count() && $companion->companions->count()) {
             $this->leaveGroup($reservation); // leave it's current group
             $this->joinGroup($reservation, $companion, $relationship); // join it's companion's group
-
-        } elseif ( ! $reservation->companions->count() && ! $companion->companions->count())
-        {
+        } elseif (! $reservation->companions->count() && ! $companion->companions->count()) {
             $this->createGroup($reservation, $companion, $relationship); // create a new group
-
-        } else
-        {
-            $reservation->companions->count() ? 
+        } else {
+            $reservation->companions->count() ?
                 $this->joinGroup($companion, $reservation, $relationship) : // add companion to reservation's group
                 $this->joinGroup($reservation, $companion, $relationship); // add reservation to companion's group
         }
@@ -91,7 +86,7 @@ class CompanionsController extends Controller
 
     /**
      * Join a companion group.
-     * 
+     *
      * @param  Collection $new_member
      * @param  Collection $existing_member
      * @param  String     $relationship
@@ -103,7 +98,7 @@ class CompanionsController extends Controller
 
         $companions = $this->companion->where('group_key', $group_key)->get();
 
-        $companions->each(function($companion) use($new_member, $existing_member, $relationship) {
+        $companions->each(function ($companion) use ($new_member, $existing_member, $relationship) {
             $this->companion->create([
                 'reservation_id' => $companion->companion_id,
                 'companion_id'   => $new_member->id,
@@ -121,7 +116,7 @@ class CompanionsController extends Controller
 
     /**
      * Create a new companion group.
-     * 
+     *
      * @param  Collection $reservation
      * @param  Collection $companion
      * @param  String $relationship
@@ -132,15 +127,15 @@ class CompanionsController extends Controller
         $group_key = Uuid::uuid4();
 
         $this->companion->create([
-            'reservation_id' => $reservation->id, 
-            'companion_id' => $companion->id, 
+            'reservation_id' => $reservation->id,
+            'companion_id' => $companion->id,
             'group_key' => $group_key,
             'relationship' => $relationship
         ]);
 
         $this->companion->create([
-            'reservation_id' => $companion->id, 
-            'companion_id' => $reservation->id, 
+            'reservation_id' => $companion->id,
+            'companion_id' => $reservation->id,
             'group_key' => $group_key,
             'relationship' => $relationship
         ]);
@@ -148,7 +143,7 @@ class CompanionsController extends Controller
 
     /**
      * Leave a companion group.
-     * 
+     *
      * @param  Collection $existing_member
      * @return void
      */
@@ -158,13 +153,13 @@ class CompanionsController extends Controller
 
         $companions = $this->companion
                            ->where('group_key', $group_key)
-                           ->whereNested(function ($query) use($existing_member) {
+                           ->whereNested(function ($query) use ($existing_member) {
                                 $query->where('reservation_id', '=', $existing_member->id)
                                       ->orWhere('companion_id', '=', $existing_member->id);
-                            })
+                           })
                            ->get();
 
-        $companions->each(function($companion) {
+        $companions->each(function ($companion) {
             $this->companion->destroy($companion->id);
         });
     }

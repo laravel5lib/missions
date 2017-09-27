@@ -1,6 +1,6 @@
 <template>
     <div>
-        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
 
@@ -27,9 +27,9 @@
                 </div>
 
                 <hr class="divider inv sm">
-                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
-        </aside>
+        </mm-aside>
 
         <div class="row">
             <div class="col-sm-12">
@@ -65,7 +65,7 @@
         </div>
         <hr>
         <div style="position:relative">
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -97,16 +97,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="trip in trips|filterBy search|orderBy orderByField direction">
+                <tr v-for="trip in orderByProp(trips, orderByField, direction)">
                     <td>{{trip.group.data.name}}</td>
-                    <td>{{trip.type|capitalize}}</td>
-                    <td>{{trip.campaign.data.name|capitalize}}</td>
+                    <td>{{ trip.type|capitalize }}</td>
+                    <td>{{ trip.campaign.data.name|capitalize }}</td>
                     <td>{{trip.status}}</td>
-                    <td>{{trip.started_at|moment 'll' false true}} - <br>{{trip.ended_at|moment 'll' false true}}</td>
+                    <td>{{trip.started_at|moment('ll', false, true)}} - <br>{{trip.ended_at|moment('ll', false, true)}}</td>
                     <td>{{trip.reservations}}</td>
                     <td>
-                        <a href="/admin{{trip.links[0].uri}}"><i class="fa fa-eye"></i></a>
-                        <a href="/admin{{campaignId + trip.links[0].uri}}/edit"><i class="fa fa-pencil"></i></a>
+                        <a :href="`/admin${trip.links[0].uri}`"><i class="fa fa-eye"></i></a>
+                        <a :href="'/admin' + campaignId + trip.links[0].uri + '/edit'"><i class="fa fa-pencil"></i></a>
                     </td>
                 </tr>
                 </tbody>
@@ -114,7 +114,7 @@
                 <tr>
                     <td colspan="7">
                         <div class="col-sm-12 text-center">
-                            <pagination :pagination.sync="pagination" :callback="searchTrips"></pagination>
+                            <pagination :pagination="pagination" pagination-key="pagination" :callback="searchTrips"></pagination>
                         </div>
                     </td>
                 </tr>
@@ -127,7 +127,7 @@
     import exportUtility from '../export-utility.vue';
     import importUtility from '../import-utility.vue';
     export default{
-        name: 'admin-trips',
+        name: 'admin-trips-list',
         components: {exportUtility, importUtility},
         data(){
             return{
@@ -170,29 +170,28 @@
                 importRequiredFields: [
                   'type', 'country_code', 'started_at', 'ended_at'
                 ],
-                importOptionalFields: [
-                ]
+                importOptionalFields: []
             }
         },
         watch: {
             // watch filters obj
             'filters': {
-                handler: function (val) {
+                handler(val, oldVal) {
                     // console.log(val);
                     this.pagination.current_page = 1;
                     this.searchTrips();
                 },
                 deep: true
             },
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.page = 1;
                 this.pagination.current_page = 1;
                 this.searchTrips();
             },
-            'page': function (val, oldVal) {
+            'page'(val, oldVal) {
                 this.searchTrips();
             },
-            'per_page': function (val, oldVal) {
+            'per_page'(val, oldVal) {
                 this.searchTrips();
             }
         },
@@ -219,13 +218,13 @@
                 };
                 $.extend(params, this.filters);
                 this.exportFilters = params;
-                this.$http.get('trips', { params: params }).then(function (response) {
-                    this.pagination = response.body.meta.pagination;
-                    this.trips = response.body.data;
+                this.$http.get('trips', { params: params }).then((response) => {
+                    this.pagination = response.data.meta.pagination;
+                    this.trips = response.data.data;
                 })
             }
         },
-        ready(){
+        mounted(){
             this.searchTrips();
         }
     }

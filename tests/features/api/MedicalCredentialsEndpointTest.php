@@ -1,7 +1,8 @@
 <?php
 
-class MedicalCredentialsEndpointTest extends TestCase
+class MedicalCredentialsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
 
     /**
      * @test
@@ -19,7 +20,7 @@ class MedicalCredentialsEndpointTest extends TestCase
                         'content', 'expired_at', 'created_at', 'updated_at', 'deleted_at'
                     ]
                 ]
-            ]);
+             ]);
     }
 
     /** @test */

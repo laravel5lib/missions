@@ -3,8 +3,7 @@
 /**
  * Generic Campaign
  */
-$factory->define(App\CampaignTransport::class, function (Faker\Generator $faker)
-{
+$factory->define(App\CampaignTransport::class, function (Faker\Generator $faker) {
     return [
         'type' => $faker->randomElement(['flight', 'train', 'bus', 'vehicle']),
         'name' => $faker->sentence(2),
@@ -16,6 +15,7 @@ $factory->define(App\CampaignTransport::class, function (Faker\Generator $faker)
         'capacity' => 100,
         'departure_hub_id' => $faker->uuid,
         'arrival_hub_id' => $faker->uuid,
-        'campaign_id' => $faker->uuid
+        'campaign_id' => $faker->uuid,
+        'designation' => 'outbound'
     ];
 });

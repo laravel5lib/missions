@@ -1,11 +1,11 @@
 <template>
     <div>
-        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
-                              :value.sync="groupObj" :options="groupsOptions" label="name"
+                              v-model="groupObj" :options="groupsOptions" label="name"
                               placeholder="Filter Group"></v-select>
                 </div>
                 <div class="form-group">
@@ -19,22 +19,23 @@
                 <div class="form-group">
                     <select id="type" class="form-control input-sm" v-model="filters.trip_type" >
                         <option value="">Any Trip Type</option>
-                        <option value="full">Full</option>
+                        <option value="ministry">Ministry</option>
                         <option value="media">Media</option>
                         <option value="medical">Medical</option>
-                        <option value="short">Short</option>
+                        <option value="leader">Leader</option>
+                        <option value="family">Family</option>
                     </select>
                 </div>
-                <div class="form-group" v-if="!tripId">
+                <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
-                              :value.sync="campaignObj" :options="campaignOptions" label="name"
+                              v-model="campaignObj" :options="campaignOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>
 
                 <hr class="divider inv sm">
-                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
-        </aside>
+        </mm-aside>
 
         <div class="row">
             <div class="col-sm-12">
@@ -112,10 +113,12 @@
                         Filters
                         <i class="fa fa-filter"></i>
                     </button>
-                    <export-utility url="interests/export"
-                                    :options="exportOptions"
-                                    :filters="exportFilters">
-                    </export-utility>
+                    <template v-if="app.user.can.create_reports">
+                        <export-utility url="interests/export"
+                                        :options="exportOptions"
+                                        :filters="exportFilters">
+                        </export-utility>
+                    </template>
                 </form>
             </div>
         </div>
@@ -141,7 +144,7 @@
         </div>
         <hr class="divider sm">
         <div>
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -189,8 +192,8 @@
                 </tr>
                 </thead>
                 <tbody v-if="interests.length > 0">
-                <tr v-for="interest in interests|filterBy search|orderBy orderByField direction">
-                    <td v-if="isActive('name')">{{interest.name|capitalize}}</td>
+                <tr v-for="interest in orderByProp(interests, orderByField, direction)">
+                    <td v-if="isActive('name')">{{ interest.name|capitalize }}</td>
                     <td v-if="isActive('email')">{{interest.email}}</td>
                     <td v-if="isActive('phone')">{{interest.phone}}</td>
                     <td v-if="isActive('status')">
@@ -204,9 +207,9 @@
                     <td v-if="isActive('campaign')">{{interest.trip.data.campaign.data.name}}</td>
                     <td v-if="isActive('type')">{{interest.trip.data.type}}</td>
                     <td v-if="isActive('group')">{{interest.trip.data.group.data.name}}</td>
-                    <td v-if="isActive('created_at')">{{interest.created_at | moment 'lll'}}</td>
+                    <td v-if="isActive('created_at')">{{interest.created_at | moment('lll')}}</td>
                     <td>
-                        <a href="/admin/interests/{{ interest.id }}"><i class="fa fa-cog"></i></a>
+                        <a :href="`/admin/interests/${ interest.id }`"><i class="fa fa-cog"></i></a>
                     </td>
                 </tr>
                 </tbody>
@@ -221,7 +224,7 @@
                 <tr>
                     <td colspan="8">
                         <div class="col-sm-12 text-center">
-                            <pagination :pagination.sync="pagination"
+                            <pagination :pagination="pagination" pagination-key="pagination"
                                         :callback="searchInterests"
                                         size="small">
                             </pagination>
@@ -241,6 +244,7 @@
         components: {vSelect, exportUtility},
         data(){
             return{
+                app: MissionsMe,
                 interests: [],
                 orderByField: 'name',
                 direction: 1,
@@ -283,34 +287,34 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: function (val) {
+                handler(val, oldVal) {
                     // console.log(val);
                     this.pagination.current_page = 1;
                     this.searchInterests();
                 },
                 deep: true
             },
-            'groupObj': function (val) {
+            'groupObj'(val, oldVal) {
                 this.filters.group = val ? val.id : '';
             },
-            'tripObj': function (val) {
+            'tripObj'(val, oldVal) {
                 this.filters.trip = val ? val.id : '';
             },
-            'campaignObj': function (val) {
+            'campaignObj'(val, oldVal) {
                 this.filters.campaign = val ? val.id : '';
             },
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.page = 1;
                 this.searchInterests();
             },
-            'direction': function (val) {
+            'direction'(val, oldVal) {
                 this.searchInterests();
             },
-            'page': function (val, oldVal) {
+            'page'(val, oldVal) {
                 this.searchInterests();
             },
-            'per_page': function (val, oldVal) {
+            'per_page'(val, oldVal) {
                 this.searchInterests();
             }
         },
@@ -332,22 +336,22 @@
             },
             getGroups(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('groups', { params: { search: search} }).then(function (response) {
-                    this.groupsOptions = response.body.data;
+                this.$http.get('groups', { params: { search: search} }).then((response) => {
+                    this.groupsOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getCampaigns(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('campaigns', { params: { search: search} }).then(function (response) {
-                    this.campaignOptions = response.body.data;
+                this.$http.get('campaigns', { params: { search: search} }).then((response) => {
+                    this.campaignOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getTrips(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('trips', { params: { search: search} }).then(function (response) {
-                    this.tripOptions = response.body.data;
+                this.$http.get('trips', { params: { search: search} }).then((response) => {
+                    this.tripOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
@@ -362,14 +366,14 @@
                 $.extend(params, this.filters);
 
                 // this.$refs.spinner.show();
-                this.$http.get('interests', { params: params }).then(function (response) {
-                    this.pagination = response.body.meta.pagination;
-                    this.interests = response.body.data;
+                this.$http.get('interests', { params: params }).then((response) => {
+                    this.pagination = response.data.meta.pagination;
+                    this.interests = response.data.data;
                     // this.$refs.spinner.hide();
                 })
             }
         },
-        ready(){
+        mounted(){
             // populate
             // this.$refs.spinner.show();
             this.getGroups();

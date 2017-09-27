@@ -84,5 +84,4 @@ class TransferTransaction extends TransactionHandler
     {
         app(TransferRequest::class)->validate();
     }
-
 }

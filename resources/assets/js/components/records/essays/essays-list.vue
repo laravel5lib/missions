@@ -1,6 +1,6 @@
 <template>
     <div class="row" style="position:relative">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="col-xs-12 text-right">
             <form class="form-inline">
                 <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
@@ -9,7 +9,7 @@
                     </label>
                 </div>
                 <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
+                    <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
                 <template v-if="canExport()">
@@ -48,11 +48,11 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label>CREATED ON</label>
-                            <p class="small">{{essay.created_at|moment 'lll'}}</p>
+                            <p class="small">{{essay.created_at|moment('lll')}}</p>
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{essay.updated_at|moment 'lll'}}</p>
+                            <p class="small">{{essay.updated_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
                     <div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:20px;top:5px;">
@@ -70,9 +70,9 @@
             </div>
         </div>
         <div class="col-xs-12 text-center">
-            <pagination :pagination.sync="pagination" :callback="searchEssays"></pagination>
+            <pagination :pagination="pagination" pagination-key="pagination" :callback="searchEssays"></pagination>
         </div>
-        <modal :show.sync="deleteModal" title="Remove Essay" small="true">
+        <modal :value="deleteModal" title="Remove Essay" :small="true">
             <div slot="modal-body" class="modal-body text-center">Delete this Essay?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -82,6 +82,7 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import exportUtility from '../../export-utility.vue';
     import importUtility from '../../import-utility.vue';
     export default{
@@ -129,16 +130,19 @@
             }
         },
         computed: {
-            isFacilitator() {
-                return this.trips.length > 0 ? true : false;
-            }
+            isFacilitator: {
+                get() {
+                    return this.trips.length > 0 ? true : false;
+                },
+                set() {}
+            },
         },
         watch:{
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
-                this.searchEssays();
+//                this.searchEssays();
             },
-            'includeManaging': function (val, oldVal) {
+            'includeManaging'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.searchEssays();
             }
@@ -148,34 +152,38 @@
                 return this.firstUrlSegment == 'admin';
             },
             setEssay(essay) {
-                this.$dispatch('set-document', essay);
+                this.$emit('set-document', essay);
             },
             removeEssay(essay){
                 if(essay) {
-                    this.$http.delete('essays/' + essay.id).then(function (response) {
-                        this.essays = _.reject(this.essays, function (item) {
+                    this.$http.delete('essays/' + essay.id).then((response) => {
+                        this.essays = _.reject(this.essays, (item) => {
                             return item.id === essay.id;
                         });
                         this.selectedEssay = '';
                     });
                 }
             },
+            debouncedSearch: _.debounce(function() {
+                this.searchEssays()
+            }, 250),
             searchEssays(){
                 let params = {user: this.userId, subject: 'Testimony', sort: 'author_name', search: this.search, per_page: this.per_page, page: this.pagination.current_page};
                 if (this.includeManaging)
                     params.manager = this.userId;
                 this.exportFilters = params;
-                this.$http.get('essays', { params: params }).then(function (response) {
-                    this.essays = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('essays', { params: params }).then((response) => {
+                    this.essays = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     this.loaded = true;
                     // this.$refs.spinner.hide();
                 });
             }
         },
-        ready(){
-            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
-                let user = response.body.data;
+        mounted(){
+            let userId = this.userId || this.$root.user.id;
+            this.$http.get('users/' + userId + '?include=facilitating,managing.trips').then((response) => {
+                let user = response.data.data;
                 let managing = [];
 
                 if (user.facilitating.data.length) {
@@ -185,7 +193,7 @@
                 }
 
                 if (user.managing.data.length) {
-                    _.each(user.managing.data, function (group) {
+                    _.each(user.managing.data, (group) => {
                         managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                     });
                     this.trips = _.union(this.trips, managing);

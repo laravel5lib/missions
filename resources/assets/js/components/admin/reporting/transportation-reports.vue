@@ -18,11 +18,11 @@ export default {
             $.extend(params, this.filters);
             $.extend(params, {search: this.search});
             console.log(report);
-            this.$http.post('reports/transports/' + report, params).then(function (response) {
-                this.$dispatch('showSuccess', response.body.message);
+            this.$http.post('reports/transports/' + report, params).then((response) => {
+                this.$root.$emit('showSuccess', response.data.message);
                 this.report = '';
-            }, function (error) {
-                this.$dispatch('showError', 'Unable to create the report.');
+            }, (error) =>  {
+                this.$root.$emit('showError', 'Unable to create the report.');
             })
         }
     }

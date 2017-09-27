@@ -2,24 +2,32 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
+use App\Models\v1\Credential;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Traits\SEOTools;
 
 class MediaCredentialsController extends Controller
 {
+    use SEOTools;
+
     public function create()
     {
+        $this->authorize('create', Credential::class);
+
+        $this->seo()->setTitle('Add Media Credentials');
+
         return view('admin.records.media-credentials.create');
     }
-    
+
     public function show($id)
     {
+        $credential = Credential::media()->findOrFail($id);
+
+        $this->authorize('view', $credential);
+
         // maybe there is a better way to filter conditional content
-        $credential = $this->api->get('credentials/media/' . $id);
         $new_content = [];
-        foreach ($credential['content'] as $index => $content) {
+        foreach ($credential->content as $index => $content) {
             if (isset($content['conditions'])) {
                 if (isset($content['conditions']['role'])) {
                     if ($credential['content'][0]['a'] === $content['conditions']['role']) {
@@ -33,11 +41,17 @@ class MediaCredentialsController extends Controller
 
         $credential['content'] = $new_content;
 
+        $this->seo()->setTitle($credential->applicant_name . ' - Media Credentials');
+
         return view('admin.records.media-credentials.show', compact('credential'));
     }
 
-    public function edit($id)
+    public function edit(Credential $mediaCredential)
     {
-        return view('admin.records.media-credentials.edit', compact('id'));
+        $this->authorize('update', $mediaCredential);
+
+        $this->seo()->setTitle('Edit Media Credentials');
+
+        return view('admin.records.media-credentials.edit')->with('id', $mediaCredential->id);
     }
 }

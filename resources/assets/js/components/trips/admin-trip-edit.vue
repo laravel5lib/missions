@@ -8,36 +8,26 @@
 					</a>
 			</ul>
 		</div>
-		<div class="col-sm-8 col-md-9 {{currentStep.view}}">
-			<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
+		<div class="col-sm-8 col-md-9" :class="currentStep.view">
+			<keep-alive><component :is="currentStep.view" transition="fade" transition-mode="out-in"></component></keep-alive>
 
-			</component>
 			<div class="alert alert-danger alert-dismissible" role="alert" v-if="!stepList[0].valid && !!$children[0].attemptedContinue">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<strong>Uh Oh!</strong> The Details form still contains errors. Please correct them before updating.
 			</div>
 			<hr>
 			<div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
-				<a class="btn btn-link" @click="back()">Cancel</a>
-				<a class="btn btn-default" v-if="currentStep.view !== 'step1'" @click="backStep()">Back</a>
-				<a class="btn btn-primary" v-if="!wizardComplete" @click="nextStep()">Continue</a>
-				<a class="btn btn-success" v-if="wizardComplete" @click="finish()">Save</a>
-				<a class="btn btn-primary" v-if="wizardComplete" @click="back()">Finish</a>
+				<a class="btn btn-link" @click="back">Cancel</a>
+				<a class="btn btn-default" v-if="currentStep.view !== 'step1'" @click="backStep">Back</a>
+				<a class="btn btn-primary" v-if="!wizardComplete" @click="nextStep">Continue</a>
+				<template v-if="wizardComplete">
+					<a class="btn btn-success" @click="finish">Save</a>
+					<a class="btn btn-primary" @click="back">Finish</a>
+				</template>
 			</div>
 		</div>
 	</div>
 </template>
-<style>
-	.fade-transition {
-		transition: opacity .3s ease;
-	}
-
-	.fade-enter, .fade-leave {
-		opacity: 0;
-	}
-
-	.step1 {}
-</style>
 <script type="text/javascript">
 	import details from './edit/details.vue';
 	import settings from './edit/settings.vue';
@@ -125,9 +115,9 @@
 				}
 
 				var resource = this.$resource('trips{/id}');
-				resource.update({ id: this.tripId}, this.wizardData).then(function (resp) {
+				resource.put({ id: this.tripId}, this.wizardData).then((resp) => {
 
-				}, function (error) {
+				}, (error) =>  {
 					console.log(error);
 				});
 			},
@@ -138,14 +128,14 @@
 		created(){
 			this.currentStep = this.stepList[0];
 
-			this.$http.get('trips/' + this.tripId, { params: { include: 'campaign,costs.payments,requirements,notes,deadlines'} }).then(function (response) {
-				var trip = response.body.data;
+			this.$http.get('trips/' + this.tripId, { params: { include: 'campaign,costs.payments,requirements,notes,deadlines'} }).then((response) => {
+				var trip = response.data.data;
 				$.extend(trip, {
 					type: this.type,
 					group_id: this.group_id
 				});
 				// trim costs
-				_.each(trip.costs.data, function (cost) {
+				_.each(trip.costs.data, (cost) => {
 					cost.payments = cost.payments.data;
 				});
 				trip.costs = trip.costs.data;
@@ -164,7 +154,7 @@
 				this.wizardData.campaign_id =  this.trip.campaign_id;
 				this.wizardData.country_code = this.trip.country_code;
 
-				this.$broadcast('trip', this.trip);
+				this.$emit('trip', this.trip);
 			});
 		},
 		events: {
@@ -186,3 +176,4 @@
 		}
 	}
 </script> 
+<style></style>

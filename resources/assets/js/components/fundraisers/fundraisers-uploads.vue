@@ -1,7 +1,7 @@
 <template>
     <div>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-        <template v-if="isUser()">
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
+        <template v-if="isUser">
             <div class="row">
                 <div class="col-xs-12">
                     <div class="panel panel-default panel-body">
@@ -41,7 +41,7 @@
                                 </div>
                             </div>
 
-                            <modal title="View Upload" :show.sync="showView">
+                            <modal title="View Upload" :value="showView" @closed="showView=false">
                                 <div slot="modal-body" class="modal-body" v-if="selectedUpload && selectedUpload.hasOwnProperty('type')">
                                     <template v-if="selectedUpload.type === 'video'">
                                         <video id="preview" class="video-js vjs-default-skin vjs-big-play-centered" width="620">
@@ -60,15 +60,15 @@
                                 </div>
                             </modal>
 
-                            <modal title="Delete Upload" small :show.sync="showDelete" ok-text="Delete" cancel-text="Keep" :callback="doDelete">
+                            <modal title="Delete Upload" small :value="showDelete" @closed="showDelete=false" ok-text="Delete" cancel-text="Keep" :callback="doDelete">
                                 <div slot="modal-body" class="modal-body">Delete this upload?</div>
                             </modal>
                         </div>
                         <div class="tab-pane fade" id="tab2">
-                            <upload-create-update type="other" :name="randName" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Fundraiser']" :width="1920" :height="1080"></upload-create-update>
+                            <upload-create-update type="other" :name="randName" lock-type ui-locked :ui-selector="2" is-child :tags="['Fundraiser']" :width="1920" :height="1080"  @uploads-complete="uploadsComplete"></upload-create-update>
                         </div>
                         <div class="tab-pane fade" id="tab3">
-                            <upload-create-update type="video" :name="randName" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Fundraiser']"></upload-create-update>
+                            <upload-create-update type="video" :name="randName" lock-type ui-locked :ui-selector="2" is-child :tags="['Fundraiser']"  @uploads-complete="uploadsComplete"></upload-create-update>
                         </div>
                     </div>
 
@@ -80,11 +80,11 @@
             <!-- Indicators -->
             <ol class="carousel-indicators">
                 <!--<li data-target="#uploads-carousel" data-slide-to="0" class="active"></li>-->
-                <li data-target="#uploads-carousel" class="{{ $index == 0 ? 'active' : '' }}" :data-slide-to="$index" v-for="upload in fundraiser.uploads.data"></li>
+                <li data-target="#uploads-carousel" v-for="(upload, index) in fundraiser.uploads.data" :data-slide-to="index" :class="{'active' : index == 0}"></li>
             </ol>
             <!-- Wrapper for slides -->
             <div class="carousel-inner" role="listbox">
-                <div class="item {{ $index == 0 ? 'active' : '' }}" v-for="upload in fundraiser.uploads.data">
+                <div class="item" :class="{'active' : index == 0}" v-for="(upload, index) in fundraiser.uploads.data">
                     <template v-if="upload.type === 'video'">
                         <video :id="upload.id" class="video-js vjs-default-skin vjs-big-play-centered" width="620">
                             <p class="vjs-no-js">
@@ -156,8 +156,18 @@
                 selectedUploadPlayer: null
             }
         },
-        events:{
-            'uploads-complete'(data){
+        computed:{
+            randName(){
+                return (this.fundraiser.url || this.id) + '_' + moment().unix().toString();
+            },
+            isUser(){
+                if (this.editable === 1) return true;
+
+                return this.sponsorId && this.$root.user && this.sponsorId === this.$root.user.id;
+            },
+        },
+        methods:{
+            uploadsComplete(data){
                 switch(data.type){
                     case 'video':
                     case 'other':
@@ -169,28 +179,18 @@
                         break;
                 }
                 this.submit();
-            }
-        },
-        computed:{
-            randName(){
-                return (this.fundraiser.url || this.id) + '_' + moment().unix().toString();
-            },
-        },
-        methods:{
-            isUser(){
-                if (this.editable === 1) return true;
-
-                return this.sponsorId && this.$root.user && this.sponsorId === this.$root.user.id;
             },
             viewUpload(upload){
+                let vjsOptions;
+
                 this.selectedUpload = upload;
                 this.showView = true;
 
                 if (this.selectedUpload.type === 'video') {
                     // load preview player
-                    this.$nextTick(function () {
+                    this.$nextTick(() =>  {
                         if (this.selectedUploadPlayer === null) {
-                            var vjsOptions = {
+                            vjsOptions = {
                                 controls: true,
                                 autoplay: false,
                                 preload: 'metadata',
@@ -210,11 +210,10 @@
                                     break;
                             }
 
-                            this.selectedUploadPlayer = videojs('preview', vjsOptions, function () {
+                            this.selectedUploadPlayer = videojs('preview', vjsOptions, () =>  {
                                 // Player (this) is initialized and ready.
                             });
                         } else {
-                            debugger;
                             switch (this.selectedUpload.meta.format) {
                                 case 'youtube':
                                     //vjsOptions.techOrder = ['youtube'];
@@ -240,37 +239,37 @@
                 this.showDelete = true;
             },
             doDelete(){
-                this.$http.delete('uploads/' + this.selectedUpload.id).then(function (response) {
+                this.$http.delete('uploads/' + this.selectedUpload.id).then((response) => {
                     console.log(response);
-                    this.fundraiser.uploads.data = _.reject(this.fundraiser.uploads.data, function (upload) {
+                    this.fundraiser.uploads.data = _.reject(this.fundraiser.uploads.data, (upload) => {
                         return upload.id === this.selectedUpload.id;
-                    }.bind(this));
+                    });
                     this.showDelete = false;
                     this.selectedUpload = null;
 
-                });
+                }).catch(this.$root.handleApiError);
             },
             submit(){
                 console.log(this);
                 // this.$refs.spinner.show();
-                this.$http.put('fundraisers/' + this.id + '?include=uploads', {upload_ids: this.fundraiser.upload_ids}).then(function (response) {
-                    this.fundraiser = response.body.data;
+                this.$http.put('fundraisers/' + this.id + '?include=uploads', {upload_ids: this.fundraiser.upload_ids}).then((response) => {
+                    this.fundraiser = response.data.data;
                     this.initVideoPlayers();
                     // this.$refs.spinner.hide();
-                });
+                }).catch(this.$root.handleApiError);
             },
             initVideoPlayers(){
                 // Handling Videos
                 // We must use $nexTick to allow the DOM to fully load first
                 // else videojs won't find the element
-                this.$nextTick(function () {
+                this.$nextTick(() =>  {
                     // We need to filter the `upload.type: 'video'` objs
-                    var videos = _.filter(this.fundraiser.uploads.data, function (upload) {
+                    let videos = _.filter(this.fundraiser.uploads.data, (upload) => {
                         return upload.type === 'video';
                     });
 
                     // Initiate videojs players for each video
-                    _.each(videos, function (video) {
+                    _.each(videos, (video) => {
                         var vjsId = video.id;
                         var vjsOptions = {
                             controls: true,
@@ -297,16 +296,13 @@
                 });
             }
         },
-        ready(){
+        mounted(){
             // this.$refs.spinner.show();
-            this.$http.get('fundraisers/' + this.id, { params: { include: 'uploads'} }).then(function (response) {
-                this.fundraiser = response.body.data;
+            this.$http.get('fundraisers/' + this.id, { params: { include: 'uploads'} }).then((response) => {
+                this.fundraiser = response.data.data;
                 this.initVideoPlayers();
                 // this.$refs.spinner.hide();
-            }, function (error) {
-                // this.$refs.spinner.hide();
-                //TODO add error alert
-            });
+            }).catch(this.$root.handleApiError);
         }
     }
 </script>

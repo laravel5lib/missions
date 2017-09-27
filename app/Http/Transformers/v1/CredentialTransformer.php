@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Transformers\v1;
+
 use App\Models\v1\User;
 use App\Models\v1\Credential;
 use League\Fractal\TransformerAbstract;
@@ -61,7 +62,7 @@ class CredentialTransformer extends TransformerAbstract
 
     /**
      * Include the credential holder
-     * 
+     *
      * @param  Credential $credential
      * @return \League\Fractal\Resource\Item
      */
@@ -69,7 +70,7 @@ class CredentialTransformer extends TransformerAbstract
     {
         $holder = $credential->holder;
 
-        if ($holder instanceOf User) {
+        if ($holder instanceof User) {
             return $this->item($holder, new UserTransformer);
         }
     }

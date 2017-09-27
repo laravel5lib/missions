@@ -1,5 +1,5 @@
 <template>
-    {{text}}
+    <span>{{displayedText}}</span>
 </template>
 <script type="text/javascript">
     export default{
@@ -17,10 +17,18 @@
         data(){
             return{}
         },
-        ready(){
-            this.$root.$on(this.event, function (val) {
-                this.text = val;
-            }.bind(this));
+        computed: {
+            displayedText: {
+                get() {
+                    return this.text;
+                },
+                set() {}
+            }
+        },
+        mounted(){
+            this.$root.$on(this.event, (val) =>  {
+                this.displayedText = val;
+            });
 
         }
     }

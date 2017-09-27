@@ -44,7 +44,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-               <cause-editor id="{{ $cause->id }}" :edit="true"></cause-editor>
+               <cause-editor id="{{ $cause->id }}"></cause-editor>
             </div>
             <div class="col-md-6">
                 <div class="circle-tile ">

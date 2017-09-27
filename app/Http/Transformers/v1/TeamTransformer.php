@@ -7,7 +7,8 @@ use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use League\Fractal\TransformerAbstract;
 
-class TeamTransformer extends TransformerAbstract {
+class TeamTransformer extends TransformerAbstract
+{
 
     /**
      * List of resources available to include
@@ -33,7 +34,7 @@ class TeamTransformer extends TransformerAbstract {
             'locked'       => (boolean) $team->locked,
             'groups_count' => $team->groups_count,
             'squads_count' => $team->squads_count,
-            'members_count'=> $team->squads->lists('members')->collapse()->count(),
+            'members_count'=> $team->squads->pluck('members')->collapse()->count(),
             'created_at'   => $team->created_at->toDateTimeString(),
             'updated_at'   => $team->updated_at->toDateTimeString(),
             'deleted_at'   => $team->deleted_at ? $team->deleted_at->toDateTimeString() : null,
@@ -48,7 +49,7 @@ class TeamTransformer extends TransformerAbstract {
 
     /**
      * Include team squads.
-     * 
+     *
      * @param  Team   $team
      * @return Collection
      */
@@ -61,7 +62,7 @@ class TeamTransformer extends TransformerAbstract {
 
     /**
      * Include groups assocated with the team.
-     * 
+     *
      * @param  Team   $team
      * @return Collection
      */
@@ -74,7 +75,7 @@ class TeamTransformer extends TransformerAbstract {
 
     /**
      * Include campaigns associated with the team
-     * 
+     *
      * @param  Team   $team
      * @return Collection
      */

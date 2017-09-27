@@ -43,7 +43,7 @@ class PassengersByTransport extends Job implements ShouldQueue
                 'passengers.campaignTransport.departureHub',
                 'passengers.campaignTransport.arrivalHub',
                 'passengers.reservation.requirements' => function ($query) {
-                    $query->where('document_type', 'passports');
+                    $query->whereStrict('document_type', 'passports');
                 }
             ])
             ->get()
@@ -63,6 +63,7 @@ class PassengersByTransport extends Job implements ShouldQueue
             $reservation = [
                 'Given Names' => $passenger->reservation->given_names,
                 'Surname' => $passenger->reservation->surname,
+                'Email' => $passenger->reservation->email,
                 'DOB' => $passenger->reservation->birthday->format('Y-m-d'),
                 'Designation' => $passenger->reservation->designation ?
                     implode('', array_flatten($passenger->reservation->designation->content)) : 'none',
@@ -88,14 +89,13 @@ class PassengersByTransport extends Job implements ShouldQueue
             ];
 
             return ($reservation + $passport + $transport);
-
         })->all();
     }
 
     private function passport($reservation)
     {
         $requirement = $reservation->requirements
-            ->where('document_type', 'passports')
+            ->whereStrict('document_type', 'passports')
             ->first();
 
         $requirement->load('document');

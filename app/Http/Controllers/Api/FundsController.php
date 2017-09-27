@@ -75,8 +75,9 @@ class FundsController extends Controller
             'item_id' => $request->get('item_id')
         ]);
 
-        if ($request->has('tags'))
+        if ($request->has('tags')) {
             $fund->tag($request->get('tags'));
+        }
 
         return $this->response->item($fund, new FundTransformer);
     }
@@ -101,8 +102,9 @@ class FundsController extends Controller
             'item_id' => $request->get('item_id', $fund->item_id)
         ]);
 
-        if ($request->has('tags'))
+        if ($request->has('tags')) {
             $fund->retag($request->get('tags'));
+        }
 
         return $this->response->item($fund, new FundTransformer);
     }

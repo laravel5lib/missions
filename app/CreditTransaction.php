@@ -50,5 +50,4 @@ class CreditTransaction extends TransactionHandler
     {
         app(CreditRequest::class)->validate();
     }
-
 }

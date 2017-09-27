@@ -40,8 +40,11 @@ class ItineraryReport extends Job implements ShouldQueue
         $reservations = $reservation
             ->filter(array_filter($this->request))
             ->with(
-                'trip.group', 'trip.campaign', 'designation',
-                'transports.departureHub', 'transports.arrivalHub'
+                'trip.group',
+                'trip.campaign',
+                'designation',
+                'transports.departureHub',
+                'transports.arrivalHub'
             )
             ->get();
 
@@ -60,13 +63,16 @@ class ItineraryReport extends Job implements ShouldQueue
      */
     private function columnize($reservations)
     {
-        return $reservations->map(function($reservation) {
+        return $reservations->map(function ($reservation) {
             $data = [
                 'Last Name' => $reservation->surname,
                 'First Name' => getFirstName($reservation->given_names),
+                'Email' => $reservation->email,
                 'Type' => $reservation->trip->type,
                 'Role' => teamRole($reservation->desired_role),
-                'Group' => $reservation->trip->group->name
+                'Group' => $reservation->trip->group->name,
+                'Designation' => $reservation->designation ?
+                    implode('', array_flatten($reservation->designation->content)) : 'none',
             ];
 
             $data = collect($data)
@@ -75,7 +81,6 @@ class ItineraryReport extends Job implements ShouldQueue
 
             return $data;
         })->all();
-
     }
 
     private function tripDetails($reservation)
@@ -107,8 +112,7 @@ class ItineraryReport extends Job implements ShouldQueue
             ->pluck('regions')
             ->flatten()
             ->pluck('name')
-            ->all()
-        );
+            ->all());
     }
 
     private function getInCountryAccommodations($reservation)

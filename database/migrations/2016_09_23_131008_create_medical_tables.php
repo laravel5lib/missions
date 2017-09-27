@@ -23,15 +23,13 @@ class CreateMedicalTables extends Migration
             $table->timestamps();
         });
 
-        Schema::table('medical_releases', function($table)
-        {
+        Schema::table('medical_releases', function ($table) {
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade');
         });
 
-        Schema::create('medical_conditions', function($table)
-        {
+        Schema::create('medical_conditions', function ($table) {
             $table->uuid('id')->primary();
             $table->uuid('medical_release_id')->index();
             $table->string('name');
@@ -40,15 +38,13 @@ class CreateMedicalTables extends Migration
             $table->timestamps();
         });
 
-        Schema::table('medical_conditions', function($table)
-        {
+        Schema::table('medical_conditions', function ($table) {
             $table->foreign('medical_release_id')
                 ->references('id')->on('medical_releases')
                 ->onDelete('cascade');
         });
 
-        Schema::create('medical_allergies', function($table)
-        {
+        Schema::create('medical_allergies', function ($table) {
             $table->uuid('id')->primary();
             $table->uuid('medical_release_id')->index();
             $table->string('name');
@@ -57,8 +53,7 @@ class CreateMedicalTables extends Migration
             $table->timestamps();
         });
 
-        Schema::table('medical_allergies', function($table)
-        {
+        Schema::table('medical_allergies', function ($table) {
             $table->foreign('medical_release_id')
                 ->references('id')->on('medical_releases')
                 ->onDelete('cascade');

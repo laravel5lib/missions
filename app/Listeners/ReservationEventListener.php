@@ -8,7 +8,8 @@ use App\Jobs\ApplyPromoCode;
 use App\Jobs\Reservations\SetupFunding;
 use App\Jobs\Reservations\ProcessReservation;
 
-class ReservationEventListener {
+class ReservationEventListener
+{
 
     /**
      * Register for the Trip.
@@ -22,28 +23,37 @@ class ReservationEventListener {
         $this->process($event);
 
         $params = $event->request->only(
-            'donor', 'payment', 'token', 'amount', 'donor_id',
-            'currency', 'description', 'details'
+            'donor',
+            'payment',
+            'token',
+            'amount',
+            'donor_id',
+            'currency',
+            'description',
+            'details'
         ) + ['fund_id' => $fund->id, 'fund_name' => $fund->name];
 
-        if ($event->request->get('amount') && $event->request->get('amount') > 0)
+        if ($event->request->get('amount') && $event->request->get('amount') > 0) {
             dispatch(new MakeDeposit($params));
+        }
 
         $this->promos($event);
     }
 
     /**
      * Manage Promotionals
-     * 
+     *
      * @param  $event
      */
     public function promos($event)
     {
-        if ($event->request->get('promocode'))
+        if ($event->request->get('promocode')) {
             dispatch(new ApplyPromoCode($event->reservation, $event->request->get('promocode')));
+        }
 
-        if ($promos = $event->reservation->canBeRewarded())
+        if ($promos = $event->reservation->canBeRewarded()) {
             dispatch(new AddReferral($event->reservation, $promos));
+        }
     }
 
     /**
@@ -123,5 +133,4 @@ class ReservationEventListener {
             'App\Listeners\ReservationEventListener@register'
         );
     }
-
 }

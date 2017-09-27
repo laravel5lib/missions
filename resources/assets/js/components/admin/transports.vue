@@ -2,10 +2,10 @@
     <div>
         <div class="row">
             <div class="col-sm-12">
-                <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-                <aside :show.sync="showFilters" placement="left" header="Transport Filters" :width="375">
-                    <transports-filters :filters.sync="filters" :reset-callback="resetFilters" :pagination="pagination" :callback="fetch"></transports-filters>
-                </aside>
+                <spinner ref="spinner" size="sm" text="Loading"></spinner>
+                <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Transport Filters" :width="375">
+                    <transports-filters :filters="filters" :reset-callback="resetFilters" :pagination="pagination" pagination-key="pagination" :callback="fetch"></transports-filters>
+                </mm-aside>
 
                 <div class="row">
                     <div class="col-xs-12">
@@ -18,14 +18,14 @@
                     <form class="form-inline">
                         <div class="form-group col-lg-6 col-sm-12 col-md-4">
                             <div class="input-group input-group-sm col-xs-12">
-                                <input type="text" class="form-control" v-model="options.params.search" debounce="300" placeholder="Search">
+                                <input type="text" class="form-control" v-model="options.params.search" @keyup="debouncedSearch" placeholder="Search">
                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
                             </div>
                         </div>
                         <div class="form-group col-lg-6 col-sm-12 col-md-8 text-right">
                             <button type="button" class="btn btn-sm btn-default" @click="showFilters = !showFilters">Filters</button>
                             <button type="button" class="btn btn-sm btn-default" @click="expandAll">Expand All</button>
-                            <transport-reports :filters="filters" :search="search"></transport-reports>
+                            <transport-reports :filters="filters" :search="options.params.search"></transport-reports>
                             <button type="button" class="btn btn-primary btn-sm" @click="openTransportModal()">Create a Transport</button>
                         </div>
                         <div class="col-xs-12">
@@ -49,7 +49,7 @@
                                         <div class="media">
                                             <div class="media-left">
                                                 <h4 class="media-heading text-capitalize">
-                                                    {{ transport.depart_at | moment 'MMM D' false true }}
+                                                    {{ transport.depart_at | moment('MMM D', false, true) }}
                                                 </h4>
                                             </div>
                                             <div class="media-body" style="vertical-align:middle;">
@@ -62,16 +62,16 @@
                                                             </a>
                                                             <br />
                                                             <small><i class="fa" :class="{ 'fa-bus': transport.type === 'bus', 'fa-plane': transport.type === 'flight', 'fa-car': transport.type === 'vehicle', 'fa-train': transport.type === 'train'}"></i>
-                                                                {{ transport.type | capitalize }}
-                                                                <span class="label label-info" v-text="transport.domestic ? 'Domestic' : 'International'"></span> <span class="label label-primary" v-text="transport.designation | capitalize"></span>
+                                                                {{ transport.type|capitalize }}
+                                                                <span class="label label-info" v-text="transport.domestic ? 'Domestic' : 'International'"></span> <span class="label label-primary">{{transport.designation|capitalize}}</span>
                                                             </small>
                                                         </h5>
                                                     </div>
                                                     <div class="col-sm-6">
-                                                        <strong>{{ transport.depart_at | moment 'hh:mm a' false true }}</strong>
+                                                        <strong>{{ transport.depart_at | moment('hh:mm a', false, true) }}</strong>
                                                         {{ transport.departureHub.data.call_sign }}
                                                         <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
-                                                        <strong>{{ transport.arrive_at | moment 'hh:mm a' false true }}</strong>
+                                                        <strong>{{ transport.arrive_at | moment('hh:mm a', false, true) }}</strong>
                                                         {{ transport.arrivalHub.data.call_sign }}
                                                     </div>
                                                 </div>
@@ -80,10 +80,8 @@
                                     </div>
                                     <div class="col-xs-3 text-right action-buttons">
                                         <a :href="'transports/' + transport.id" class="btn btn-xs btn-primary">View</a>
-                                        <dropdown type="default">
-                                            <button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-                                                <span class="fa fa-ellipsis-h"></span>
-                                            </button>
+                                        <dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+                                            <span slot="button" class="fa fa-ellipsis-h"></span>
                                             <ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
                                                 <li><a @click="openTransportModal(transport)"><i class="fa fa-cog"></i> Edit</a></li>
                                                 <li><a @click="openTransportDeleteModal(transport)"><i class="fa fa-trash"></i> Delete</a></li>
@@ -112,15 +110,15 @@
                     </div>
                 </div>
                 <div class="col-sm-12 text-center">
-                    <pagination :pagination.sync="pagination" :callback="fetch"></pagination>
+                    <pagination :pagination="pagination" pagination-key="pagination" :callback="fetch"></pagination>
                 </div>
             </div>
         </div>
 
-        <modal :title="transportsModalEdit? 'Edit Transport' : 'Create Transport'" :ok-text="transportsModalEdit? 'Update' : 'Create'" :callback="handleTransport" :show.sync="showTransportsModal">
+        <modal :title="transportsModalEdit? 'Edit Transport' : 'Create Transport'" :ok-text="transportsModalEdit? 'Update' : 'Create'" :callback="handleTransport" :value="showTransportsModal" @closed="showTransportsModal=false">
             <div slot="modal-body" class="modal-body" v-if="selectedTransport">
-                <validator name="TransportsModal">
-                    <form id="TransportsModalForm">
+
+                    <form id="TransportsModalForm" data-vv-scope="transport-modal">
                         <div class="form-group">
                             <div class="checkbox">
                             	<label>
@@ -129,33 +127,27 @@
                             	</label>
                             </div>
                         </div>
-                        <div class="form-group" v-error-handler="{ value: selectedTransport.type, client: 'type' }">
+                        <div class="form-group" v-error-handler="{ value: selectedTransport.type, client: 'type', scope: 'transport-modal' }">
                             <label for="transportType" class="control-label">Type</label>
                             <select class="form-control" id="transportType"
-                                    v-validate:type="['required']" v-model="selectedTransport.type">
+                                    name="type" v-model="selectedTransport.type" v-validate="'required'">
                                 <option value="">-- Select--</option>
-                                <option :value="option" v-for="option in travelTypeOptions">{{option | capitalize}}</option>
+                                <option :value="option" v-for="option in travelTypeOptions">{{ option|capitalize }}</option>
                             </select>
                         </div>
 
-                        <div class="form-group" v-error-handler="{ value: selectedTransport.designation, client: 'designation' }">
+                        <div class="form-group" v-error-handler="{ value: selectedTransport.designation, client: 'designation', scope: 'transport-modal' }">
                             <label for="transportType" class="control-label">Designation</label>
                             <input type="text" class="form-control" v-model="selectedTransport.designation" placeholder="i.e. outbound, return, etc.">
                             <span>A passenger can only be added one transport with the given designation.</span>
                         </div>
 
                         <template v-if="selectedTransport.type === 'flight'">
-                            <div class="form-group" v-error-handler="{ value: selectedTransport.name, client: 'airline' }">
+                            <div class="form-group" v-error-handler="{ value: selectedTransport.name, client: 'airline', scope: 'transport-modal' }">
                                 <label v-if="!manualAirlineData" for="travel_methodA">Airline</label>
                                 <v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
-                                          :value.sync="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
-                                          placeholder="Select Airline"></v-select>
-                                <select  v-if="manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate:airline="['required']"
-                                        v-model="selectedTransport.name">
-                                    <option :value="airline.name" v-for="airline in UTILITIES.airlines">
-                                        {{airline.extended_name | capitalize}}
-                                    </option>
-                                </select>
+                                          v-model="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
+                                          placeholder="Select Airline" name="airline" v-validate="'required'"></v-select>
 	                            <label><input type="checkbox" v-model="manualAirlineData"> This is a chartered flight</label>
                                 <template v-if="manualAirlineData">
                                     <div class="form-group">
@@ -171,7 +163,7 @@
 
                             <div class="form-group">
                                 <label for="">Flight No.</label>
-                                <input type="number" class="form-control" v-model="selectedTransport.vessel_no">
+                                <input type="text" class="form-control" v-model="selectedTransport.vessel_no">
                             </div>
                         </template>
 
@@ -188,7 +180,7 @@
 
                             <div class="form-group">
                                 <label for="">Schedule/Route No.</label>
-                                <input type="number" class="form-control" v-model="selectedTransport.vessel_no">
+                                <input type="text" class="form-control" v-model="selectedTransport.vessel_no">
                             </div>
                         </template>
 
@@ -196,8 +188,8 @@
                             <div class="form-group">
                                 <label for="travel_methodB">Company</label>
                                     <select class="form-control" name="travel_methodB" id="train"
-                                            v-validate:train="['required']" v-model="selectedTransport.name">
-                                        <option :value="option" v-for="option in trainOptions">{{option | capitalize}}</option>
+                                            v-model="selectedTransport.name" v-validate="'required'">
+                                        <option :value="option" v-for="option in trainOptions">{{ option|capitalize }}</option>
                                     </select>
                             </div>
 
@@ -208,7 +200,7 @@
 
                             <div class="form-group">
                                 <label for="">Train No.</label>
-                                <input type="number" class="form-control" v-model="selectedTransport.vessel_no">
+                                <input type="text" class="form-control" v-model="selectedTransport.vessel_no">
                             </div>
                         </template>
 
@@ -216,8 +208,8 @@
                             <div class="form-group">
                                 <label for="travel_methodB">Company</label>
                                     <select class="form-control" name="travel_methodB" id="train"
-                                            v-validate:train="['required']" v-model="selectedTransport.name">
-                                        <option :value="option" v-for="option in vehicleOptions">{{option | capitalize}}
+                                            v-model="selectedTransport.name" v-validate="'required'">
+                                        <option :value="option" v-for="option in vehicleOptions">{{ option|capitalize }}
                                         </option>
                                     </select>
                             </div>
@@ -238,28 +230,28 @@
                         <travel-hub :hub="selectedTransport.departure" :activity-types="UTILITIES.activityTypes"
                                     :activity-type="departureType.id" edit-mode transports
                                     :transport-type="selectedTransport.type"></travel-hub>
-                        <div class="form-group" v-error-handler="{ value: selectedTransport.depart_at, client: 'depart_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
+                        <div class="form-group" v-error-handler="{ value: selectedTransport.depart_at, client: 'depart_at', scope: 'transport-modal', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
                             <label for="">Departing at Date & Time</label>
-                            <date-picker :model.sync="selectedTransport.depart_at | moment 'YYYY-MM-DD HH:mm:ss' false true"></date-picker>
-                            <input type="text" class="form-control hidden" v-model="selectedTransport.depart_at | moment 'YYYY-MM-DD HH:mm:ss' false true"
-                                   id="depart_at" v-validate:occurred="['required', 'datetime']">
+                            <date-picker v-model="selectedTransport.depart_at" :view-format="['YYYY-MM-DD HH:mm:ss', false, true]" name="depart_at" v-validate="'required'"></date-picker>
+                            <!--<input type="text" class="form-control hidden" v-model="selectedTransport.depart_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"
+                                   id="depart_at" name="occurred" v-validate="['required', 'datetime']">-->
                         </div>
                         <h4>Arrival</h4>
                         <travel-hub :hub="selectedTransport.arrival" :activity-types="UTILITIES.activityTypes"
                                     :activity-type="arrivalType.id" edit-mode transports
                                     :transport-type="selectedTransport.type"></travel-hub>
-                        <div class="form-group" v-error-handler="{ value: selectedTransport.arrive_at, client: 'arrive_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
+                        <div class="form-group" v-error-handler="{ value: selectedTransport.arrive_at, client: 'arrive_at', scope: 'transport-modal', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
                             <label for="">Arriving at Date & Time</label>
-                            <date-picker :model.sync="selectedTransport.arrive_at | moment 'YYYY-MM-DD HH:mm:ss' false true"></date-picker>
-                            <input type="text" class="form-control hidden" v-model="selectedTransport.arrive_at | moment 'YYYY-MM-DD HH:mm:ss' false true"
-                                   id="arrive_at" v-validate:occurred="['required', 'datetime']">
+                            <date-picker v-model="selectedTransport.arrive_at" :view-format="['YYYY-MM-DD HH:mm:ss', false, true]" name="arrive_at" v-validate="'required'"></date-picker>
+                            <!--<input type="text" class="form-control hidden" v-model="selectedTransport.arrive_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"
+                                   id="arrive_at" name="occurred" v-validate="['required', 'datetime']">-->
                         </div>
                     </form>
-                </validator>
+
             </div>
         </modal>
 
-        <modal title="Delete Transport" small ok-text="Delete" :callback="deleteTransport" :show.sync="showTransportDeleteModal">
+        <modal title="Delete Transport" small ok-text="Delete" :callback="deleteTransport" :value="showTransportDeleteModal" @closed="showTransportDeleteModal=false">
             <div slot="modal-body" class="modal-body">
                 <p v-if="selectedTransport">
                     Are you sure you want to delete the transport: "{{selectedTransport.name}} {{selectedTransport.vessel_no}}" ?
@@ -349,7 +341,7 @@
                 this.fetch();
             },
             'options.params.search'(val){
-                this.fetch();
+//                this.fetch();
             },
             selectedAirlineObj(val, oldVal){
                 if (val && val !== oldVal) {
@@ -360,9 +352,9 @@
             selectedTransport: {
                 handler(val, oldVal) {
                     if (val && val.name) {
-                        this.$nextTick(function () {
-                            if (_.isFunction(this.$validate))
-                                this.$validate(true);
+                        this.$nextTick(() =>  {
+
+
                         });
                     }
 
@@ -426,7 +418,7 @@
                 };
             },
             changeList(tab) {
-                if (tab == 'domestic') {
+                if (tab === 'domestic') {
                     this.options.params.isDomestic = 'yes';
                     this.fetch();
                 } else {
@@ -446,15 +438,16 @@
                     include: 'departureHub,arrivalHub'
                 };
             },
+            debouncedSearch: _.debounce(function() { this.fetch(); }, 300),
             fetch() {
                 let params = _.extend({}, this.options.params);
                 params = _.extend(params, this.filters);
                 params.page = _.isObject(this.pagination) ? this.pagination.current_page : 1;
-                this.TransportsResource.get(params).then(function (response) {
-                    this.transports = response.body.data;
-                    this.pagination = response.body.meta.pagination;
-                }, function (error) {
-                    this.$dispatch('showError', 'Unable to get data from server.');
+                this.TransportsResource.get(params).then((response) => {
+                    this.transports = response.data.data;
+                    this.pagination = response.data.meta.pagination;
+                }, (error) =>  {
+                    this.$root.$emit('showError', 'Unable to get data from server.');
                 });
             },
             openTransportModal(transport) {
@@ -491,7 +484,7 @@
 
                     this.selectedTransport = thisTransport;
 
-                    this.getAirlines(transport.name).then(function (obj) {
+                    this.getAirlines(transport.name).then((obj) => {
                         let airline = _.findWhere(this.UTILITIES.airlines, { name: transport.name });
                         if (airline) {
                             this.selectedAirlineObj = airline;
@@ -499,10 +492,6 @@
                     });
 
                     this.showTransportsModal = true;
-                    this.$nextTick(function () {
-                        if (_.isFunction(this.$validate))
-                            this.$validate(true);
-                    });
                 } else {
                     this.selectedTransport = thisTransport;
                     this.showTransportsModal = true;
@@ -513,36 +502,37 @@
                 this.showTransportDeleteModal = true;
             },
             handleTransport() {
-                this.resetErrors();
-                if (this.$TransportsModal.valid && _.isObject(this.selectedTransport)) {
-                    let promise;
-                    if (this.transportsModalEdit) {
-                        promise = this.TransportsResource
-                            .update({ transport: this.selectedTransport.id}, this.selectedTransport)
-                            .then(function (response) {
-                                this.$root.$emit('showSuccess', (this.selectedTransport.domestic ? 'Domestic' : 'International') + ' transport updated successfully');
-                            });
-                    } else {
-                        promise = this.TransportsResource
-                            .save(this.selectedTransport)
-                            .then(function (response) {
-                                this.$root.$emit('showSuccess', (this.selectedTransport.domestic ? 'Domestic' : 'International') + ' transport created successfully');
-                            });
-                    }
+                this.$validator.validateAll('transport-modal').then(result => {
+                    if (result && _.isObject(this.selectedTransport)) {
+                        let promise;
+                        if (this.transportsModalEdit) {
+                            promise = this.TransportsResource
+                                .put({ transport: this.selectedTransport.id}, this.selectedTransport)
+                                .then((response) => {
+                                    this.$root.$emit('showSuccess', (this.selectedTransport.domestic ? 'Domestic' : 'International') + ' transport updated successfully');
+                                });
+                        } else {
+                            promise = this.TransportsResource
+                                .post(this.selectedTransport)
+                                .then((response) => {
+                                    this.$root.$emit('showSuccess', (this.selectedTransport.domestic ? 'Domestic' : 'International') + ' transport created successfully');
+                                });
+                        }
 
-                    promise.then(function () {
-                        this.fetch();
-                        this.showTransportsModal = false;
-                        this.transportsModalEdit = false;
-                        this.selectedTransport = null;
-                    }, this.$root.handleApiError)
-                } else {
-                    console.log(this.$TransportsModal);
-                    this.$root.$emit('showError', 'Please check the form.');
-                }
+                        promise.then(() => {
+                            this.fetch();
+                            this.showTransportsModal = false;
+                            this.transportsModalEdit = false;
+                            this.selectedTransport = null;
+                        }).catch(this.$root.handleApiError)
+                    } else {
+                        this.$root.$emit('showError', 'Please check the form.');
+                    }
+                })
+
             },
             deleteTransport(){
-                this.TransportsResource.delete({ transport: this.selectedTransport.id}).then(function (response) {
+                this.TransportsResource.delete({ transport: this.selectedTransport.id}).then((response) => {
                     this.$root.$emit('showSuccess', 'Transport deleted');
                     this.fetch();
                     this.showTransportDeleteModal = false;
@@ -554,7 +544,7 @@
                     $('.transport-item').collapse('show');
             },
         },
-        ready() {
+        mounted() {
             this.getActivityTypes();
             this.fetch();
             this.getAirlines();

@@ -6,11 +6,16 @@ use App\Http\Requests;
 use App\Models\v1\Slug;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Traits\SEOTools;
 
 class GroupsController extends Controller
 {
+    use SEOTools;
+
     public function index()
     {
+        $this->seo()->setTitle('Custom Group Mission Trips');
+
         return view('site.groups.index');
     }
 
@@ -22,7 +27,11 @@ class GroupsController extends Controller
 
         $authId = auth()->user() ? auth()->user()->id : null;
 
-        if ( !$group->public && ! $group->managers->pluck('id')->contains($authId) ) abort(403);
+        if (!$group->public && ! $group->managers->pluck('id')->contains($authId)) {
+            abort(403);
+        }
+
+        $this->seo()->setTitle($group->name);
 
         return view('site.groups.profile', compact('group'));
     }
@@ -35,6 +44,8 @@ class GroupsController extends Controller
                ->first();
 
         $group = $this->api->get('/groups/'.$id);
+
+        $this->seo()->setTitle('Sign up with ' . $group->name);
 
         return view('site.groups.signup', compact('group'));
     }

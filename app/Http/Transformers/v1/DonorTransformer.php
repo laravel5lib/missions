@@ -36,6 +36,8 @@ class DonorTransformer extends TransformerAbstract
         $array = [
             'id'            => $donor->id,
             'name'          => $donor->name,
+            'first_name'    => $donor->first_name,
+            'last_name'     => $donor->last_name,
             'company'       => $donor->company,
             'email'         => $donor->email,
             'phone'         => $donor->phone,

@@ -3,8 +3,10 @@
 use App\Models\v1\Note;
 use App\Models\v1\User;
 
-class NotesEndpointTest extends TestCase
+class NotesEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /**
      * @test
      */
@@ -89,7 +91,7 @@ class NotesEndpointTest extends TestCase
                  ]
              ])->seeJson([
                  'status_code' => 422
-            ]);
+             ]);
     }
 
     /**
@@ -105,5 +107,4 @@ class NotesEndpointTest extends TestCase
                 array_except($note, ['id', 'noteable_type', 'noteable_id', 'user_id'])
             );
     }
-
 }

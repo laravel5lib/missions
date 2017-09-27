@@ -51,7 +51,7 @@ class RoomsController extends Controller
                      ->update([
                         'room_type_id' => $request->get('room_type_id'),
                         'label'        => $request->get('label')
-                    ], $id);
+                     ], $id);
 
         return $this->response->item($room, new RoomTransformer);
     }

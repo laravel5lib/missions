@@ -17,14 +17,14 @@ class DonorFilter extends Filter
      *
      * @var array
      */
-    public $sortable = ['name'];
+    public $sortable = ['first_name', 'last_name'];
 
     /**
      * Default searchable fields.
      *
      * @var array
      */
-    public $searchable = ['name'];
+    public $searchable = ['first_name', 'last_name'];
 
     /**
      * Filter by designated reservation.
@@ -101,7 +101,7 @@ class DonorFilter extends Filter
      */
     protected function byDesignation($type, $id)
     {
-        return $this->whereHas('funds', function($donation) use($id, $type) {
+        return $this->whereHas('funds', function ($donation) use ($id, $type) {
             $donation->where('fundable_type', $type)
                 ->where('fundable_id', $id);
         });
@@ -150,22 +150,21 @@ class DonorFilter extends Filter
      */
     public function starts($started_at)
     {
-        return $this->whereHas('donations', function($donation) use($started_at) {
+        return $this->whereHas('donations', function ($donation) use ($started_at) {
             $donation->whereDate('created_at', '>=', $started_at);
         });
     }
 
     /**
      * Filter by end date.
-     * 
+     *
      * @param $ended_at
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function ends($ended_at)
     {
-        return $this->whereHas('donations', function($donation) use($ended_at) {
+        return $this->whereHas('donations', function ($donation) use ($ended_at) {
             $donation->whereDate('created_at', '<=', $ended_at);
         });
     }
-
 }

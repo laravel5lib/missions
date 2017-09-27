@@ -1,6 +1,6 @@
 <template>
 	<div class="row">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="col-xs-12 text-right">
 			<form class="form-inline">
 				<div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
@@ -9,7 +9,7 @@
 					</label>
 				</div>
 				<div class="input-group input-group-sm">
-					<input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
+					<input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search">
 					<span class="input-group-addon"><i class="fa fa-search"></i></span>
 				</div>
 			</form>
@@ -39,11 +39,11 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label>CREATED ON</label>
-                            <p class="small">{{media_credential.created_at|moment 'lll'}}</p>
+                            <p class="small">{{media_credential.created_at|moment('lll')}}</p>
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{media_credential.updated_at|moment 'lll'}}</p>
+                            <p class="small">{{media_credential.updated_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
 				</div><!-- end panel-body -->
@@ -57,10 +57,10 @@
 			</div>
 		</div>
 		<div class="col-xs-12 text-center">
-			<pagination :pagination.sync="pagination" :callback="searchMedias"></pagination>
+			<pagination :pagination="pagination" pagination-key="pagination" :callback="searchMedias"></pagination>
 
 		</div>
-		<modal :show.sync="deleteModal" title="Remove Media Credential" small="true">
+		<modal :value="deleteModal" title="Remove Media Credential" :small="true">
 			<div slot="modal-body" class="modal-body">Delete this Media Credential?</div>
 			<div slot="modal-footer" class="modal-footer">
 				<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -72,6 +72,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import exportUtility from '../../export-utility.vue';
     import importUtility from '../../import-utility.vue';
     export default {
@@ -124,23 +125,26 @@
             }
         },
         computed: {
-            isFacilitator() {
-                return this.trips.length > 0 ? true : false;
-            }
+            isFacilitator: {
+                get() {
+                    return this.trips.length > 0 ? true : false;
+                },
+                set() {}
+            },
         },
         watch: {
             'filters': {
-                handler: function (val) {
+                handler(val, oldVal) {
                     this.pagination.current_page = 1;
                     this.searchMedias();
                 },
                 deep: true
             },
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
-                this.searchMedias();
+                //this.searchMedias();
             },
-            'includeManaging': function (val, oldVal) {
+            'includeManaging'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.searchMedias();
             }
@@ -148,8 +152,11 @@
         },
         methods: {
             setMedia(media) {
-                this.$dispatch('set-document', media);
+                this.$emit('set-document', media);
             },
+            debouncedSearch: _.debounce(function() {
+                this.searchMedias()
+            }, 250),
             searchMedias(){
                 let params = {
                     user: this.userId,
@@ -161,16 +168,18 @@
 //                if (this.includeManaging)
 //                    params.manager = this.userId;
 //                params.include = '';
+//              if (this.includeManaging)
+                    params.manager = this.userId;
                 $.extend(params, this.filters);
-                this.$http.get('credentials/media', {params: params}).then(function (response) {
-                    this.media_credentials = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('credentials/media', {params: params}).then((response) => {
+                    this.media_credentials = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     this.loaded = true;
                 });
             },
             removeMediaCredential(media_credential){
                 if (media_credential) {
-                    this.$http.delete('credentials/media/' + media_credential.id).then(function (response) {
+                    this.$http.delete('credentials/media/' + media_credential.id).then((response) => {
                         this.media_credentials.$remove(media_credential);
                         this.paginatedMedia_credentials.$remove(media_credential);
                         this.pagination.total_pages = Math.ceil(this.media_credentials.length / this.per_page);
@@ -181,19 +190,20 @@
                 return _.findWhere(media_credential.content, { id: 'role'}).a.name;
 	        }
         },
-        ready(){
-            this.$http.get('users/' + this.userId).then(function (response) {
-                let user = response.body.data;
+        mounted(){
+            let userId = this.userId || this.$root.user.id;
+            this.$http.get('users/' + userId).then((response) => {
+                let user = response.data.data;
                 let managing = [];
 
-                if (user.facilitating.data.length) {
+                if (user.facilitating && user.facilitating.data.length) {
                     this.isFacilitator = true;
                     let facilitating = _.pluck(user.facilitating.data, 'id');
                     this.trips = _.union(this.trips, facilitating);
                 }
 
-                if (user.managing.data.length) {
-                    _.each(user.managing.data, function (group) {
+                if (user.managing && user.managing.data.length) {
+                    _.each(user.managing.data, (group) => {
                         managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                     });
                     this.trips = _.union(this.trips, managing);

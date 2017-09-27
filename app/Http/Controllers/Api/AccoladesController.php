@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\v1\AccoladeRequest;
-use App\Http\Requests\v1\FilteredAccoladeRequest;
 use App\Http\Transformers\v1\AccoladeTransformer;
 use App\Models\v1\Accolade;
 use Illuminate\Http\Request;

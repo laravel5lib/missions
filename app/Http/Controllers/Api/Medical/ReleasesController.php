@@ -65,8 +65,9 @@ class ReleasesController extends Controller
      */
     public function store(ReleaseRequest $request)
     {
-        if ( ! empty($request->get('conditions')))
+        if (! empty($request->get('conditions'))) {
             $request->merge(['is_risk' => true]);
+        }
 
         $release = $this->release->create($request->all());
 
@@ -90,8 +91,9 @@ class ReleasesController extends Controller
      */
     public function update(ReleaseRequest $request, $id)
     {
-        if ( ! empty($request->get('conditions')))
+        if (! empty($request->get('conditions'))) {
             $request->merge(['is_risk' => true]);
+        }
 
         $release = $this->release->findOrFail($id);
 
@@ -140,7 +142,7 @@ class ReleasesController extends Controller
 
     /**
      * Import a list of MedicalReleases.
-     * 
+     *
      * @param  MedicalReleaseListImport $import
      * @return response
      */

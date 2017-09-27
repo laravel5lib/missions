@@ -34,9 +34,9 @@
         },
         methods: {
             restore(){
-                this.$http.put('reservations/' + this.id + '/restore').then(function (response) {
+                this.$http.put('reservations/' + this.id + '/restore').then((response) => {
                     window.location.href = '/admin/reservations/' + this.id;
-                }, function (error) {
+                }, (error) =>  {
                     this.dispatch('showError', 'Unable to restore');
                 })
             }

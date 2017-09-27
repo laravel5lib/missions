@@ -32,7 +32,7 @@ class StoryFilter extends Filter
      */
     public function group($id)
     {
-        return $this->whereHas('groups', function($group) use($id) {
+        return $this->whereHas('groups', function ($group) use ($id) {
             $group->where('id', $id);
         });
     }
@@ -45,7 +45,7 @@ class StoryFilter extends Filter
      */
     public function user($id)
     {
-        return $this->whereHas('users', function($user) use($id) {
+        return $this->whereHas('users', function ($user) use ($id) {
             $user->where('id', $id);
         });
     }
@@ -58,7 +58,7 @@ class StoryFilter extends Filter
      */
     public function fundraiser($id)
     {
-        return $this->whereHas('fundraisers', function($fundraiser) use($id) {
+        return $this->whereHas('fundraisers', function ($fundraiser) use ($id) {
             $fundraiser->where('id', $id);
         });
     }

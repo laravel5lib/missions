@@ -3,13 +3,13 @@
 /**
  * Generic User
  */
-$factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\User::class, function (Faker\Generator $faker) {
     $password = bcrypt('secret');
 
     return [
         'id'               => $faker->unique()->uuid,
-        'name'             => $faker->firstName. ' '.$faker->lastName,
+        'first_name'       => $faker->firstName,
+        'last_name'        => $faker->lastName,
         'email'            => $faker->unique()->safeEmail,
         'alt_email'        => $faker->optional(0.5)->safeEmail,
         'password'         => $password,
@@ -28,10 +28,10 @@ $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
         'bio'              => $faker->optional(0.5)->realText(120),
         'public'           => $faker->boolean(50),
         'remember_token'   => str_random(10),
-        'avatar_upload_id' => function() {
+        'avatar_upload_id' => function () {
             return factory(App\Models\v1\Upload::class, 'avatar')->create()->id;
         },
-        'banner_upload_id' => function() {
+        'banner_upload_id' => function () {
             return factory(App\Models\v1\Upload::class, 'banner')->create()->id;
         },
         'created_at' => \Carbon\Carbon::now(),
@@ -42,11 +42,31 @@ $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
 /**
  * Admin User
  */
-$factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator $faker) use ($factory) {
     $user = $factory->raw(App\Models\v1\User::class);
 
     return array_merge($user, [
         'email'    => 'admin@admin.com'
     ]);
+});
+
+/**
+ * New User
+ */
+$factory->defineAs(App\Models\v1\User::class, 'new', function (Faker\Generator $faker)
+{
+    return [
+        'id'               => $faker->unique()->uuid,
+        'first_name'       => $faker->firstName,
+        'last_name'        => $faker->lastName,
+        'email'            => $faker->unique()->safeEmail,
+        'password'         => bcrypt('secret'),
+        'gender'           => $faker->randomElement(['male', 'female']),
+        'status'           => $faker->randomElement(['single', 'married']),
+        'birthday'         => $faker->dateTimeBetween('-60 years', '-12 years'),
+        'country_code'     => $faker->randomElement(explode(',', App\Utilities\v1\Country::codes())),
+        'timezone'         => 'America/Detroit',
+        'created_at'       => \Carbon\Carbon::now(),
+        'updated_at'       => \Carbon\Carbon::now()
+    ];
 });

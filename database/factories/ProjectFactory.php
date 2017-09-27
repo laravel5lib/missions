@@ -3,8 +3,7 @@
 /**
  * Generic User Sponsored Project
  */
-$factory->define(App\Models\v1\Project::class, function(Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Project::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->sentence(3),
         'project_initiative_id' => $faker->uuid,
@@ -18,8 +17,7 @@ $factory->define(App\Models\v1\Project::class, function(Faker\Generator $faker)
 /**
  * Group Sponsored Project
  */
-$factory->defineAs(App\Models\v1\Project::class, 'group', function(Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Project::class, 'group', function (Faker\Generator $faker) use ($factory) {
     $project = $factory->raw(App\Models\v1\Project::class);
     
     return array_merge($project, [
@@ -27,4 +25,3 @@ $factory->defineAs(App\Models\v1\Project::class, 'group', function(Faker\Generat
         'sponsor_type' => 'groups'
     ]);
 });
-

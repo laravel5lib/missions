@@ -13,32 +13,32 @@
                     <div class="col-sm-4">
                         <label>1st Choice</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
-                                  :value.sync="choiceOneObj" :options="airportsOptions" label="name"
+                                  v-model="choiceOneObj" :options="airportsOptions" label="name"
                                   placeholder="Search Airports" v-if="editMode"></v-select>
                         <input type="text" v-model="choice_one"
                                class="form-control hidden" maxlength="3"
                                minlength="3" style="text-transform: uppercase" v-if="editMode">
-                        <p v-else>({{ choice_one | uppercase }}) <span v-if="choiceOneObj">{{ choiceOneObj.name | uppercase }}</span></p>
+                        <p v-else>({{ choice_one.toUpperCase() }}) <span v-if="choiceOneObj">{{ choiceOneObj.name.toUpperCase() }}</span></p>
                     </div>
                     <div class="col-sm-4">
                         <label>2nd Choice</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
-                                  :value.sync="choiceTwoObj" :options="airportsOptions" label="name"
+                                  v-model="choiceTwoObj" :options="airportsOptions" label="name"
                                   placeholder="Search Airports" v-if="editMode"></v-select>
                         <input type="text" v-model="choice_two"
                                class="form-control hidden" maxlength="3"
                                minlength="3" style="text-transform: uppercase" v-if="editMode">
-                        <p v-else>({{ choice_two | uppercase }}) <span v-if="choiceTwoObj">{{ choiceTwoObj.name | uppercase }}</span></p>
+                        <p v-else>({{ choice_two.toUpperCase() }}) <span v-if="choiceTwoObj">{{ choiceTwoObj.name.toUpperCase() }}</span></p>
                     </div>
                     <div class="col-sm-4">
                         <label>3rd Choice</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
-                                  :value.sync="choiceThreeObj" :options="airportsOptions" label="name"
+                                  v-model="choiceThreeObj" :options="airportsOptions" label="name"
                                   placeholder="Search Airports" v-if="editMode"></v-select>
                         <input type="text" v-model="choice_three"
                                class="form-control hidden" maxlength="3"
                                minlength="3" style="text-transform: uppercase" v-if="editMode">
-                        <p v-else>({{ choice_three | uppercase }}) <span v-if="choiceThreeObj">{{ choiceThreeObj.name | uppercase }}</span></p>
+                        <p v-else>({{ choice_three.toUpperCase() }}) <span v-if="choiceThreeObj">{{ choiceThreeObj.name.toUpperCase() }}</span></p>
                     </div>
                 </div>
                 <div class="row" v-if="editMode">
@@ -114,8 +114,8 @@
         methods: {
             getAirports(search, loading){
                 loading ? loading(true) : void 0;
-                return this.$http.get('utilities/airports', { params: {search: search, sort: 'name'} }).then(function (response) {
-                    this.airportsOptions = response.body.data;
+                return this.$http.get('utilities/airports', { params: {search: search, sort: 'name'} }).then((response) => {
+                    this.airportsOptions = response.data.data;
                     if (loading) {
                         loading(false);
                     } else {
@@ -124,13 +124,13 @@
                 });
             },
             getAirport(reference){
-                return this.$http.get('utilities/airports/' + reference).then(function (response) {
-                    return response.body.data;
+                return this.$http.get('utilities/airports/' + reference).then((response) => {
+                    return response.data.data;
                 });
             },
             save() {
                 if(this.document) {
-                    this.$http.delete('questionnaires/' + this.document.id).then(function (response) {
+                    this.$http.delete('questionnaires/' + this.document.id).then((response) => {
                         console.log('old removed');
                     });
                 }
@@ -138,14 +138,14 @@
                     content: [this.choice_one, this.choice_two, this.choice_three],
                     reservation_id: this.reservationId,
                     type: 'airport_preference'
-                }).then(function (response) {
-                    this.preference = response.body.data;
+                }).then((response) => {
+                    this.preference = response.data.data;
                     this.editMode = false;
-                    this.setPreference(response.body.data);
+                    this.setPreference(response.data.data);
                 });
             },
             setPreference(preference) {
-              this.$dispatch('set-document', preference);
+              this.$emit('set-document', preference);
             },
             cancel() {
                 this.editMode = false;
@@ -153,13 +153,13 @@
                     this.choice_one = this.document.content[0];
                     this.choice_two = this.document.content[1];
                     this.choice_three = this.document.content[2];
-                    this.getAirport(this.choice_one).then(function (response) {
+                    this.getAirport(this.choice_one).then((response) => {
                         this.choiceOneObj = response;
                     });
-                    this.getAirport(this.choice_two).then(function (response) {
+                    this.getAirport(this.choice_two).then((response) => {
                         this.choiceTwoObj = response;
                     });
-                    this.getAirport(this.choice_three).then(function (response) {
+                    this.getAirport(this.choice_three).then((response) => {
                         this.choiceThreeObj = response;
                     });
                 } else {
@@ -169,19 +169,19 @@
                 }
             }
         },
-        ready() {
+        mounted() {
             if(this.document) {
                 this.editMode = false;
                 this.choice_one = this.document.content[0];
                 this.choice_two = this.document.content[1];
                 this.choice_three = this.document.content[2];
-                this.getAirport(this.choice_one).then(function (response) {
+                this.getAirport(this.choice_one).then((response) => {
                     this.choiceOneObj = response;
                 });
-                this.getAirport(this.choice_two).then(function (response) {
+                this.getAirport(this.choice_two).then((response) => {
                     this.choiceTwoObj = response;
                 });
-                this.getAirport(this.choice_three).then(function (response) {
+                this.getAirport(this.choice_three).then((response) => {
                     this.choiceThreeObj = response;
                 });
             }

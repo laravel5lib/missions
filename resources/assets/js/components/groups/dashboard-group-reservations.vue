@@ -1,7 +1,7 @@
 <template>
     <div>
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
-		<aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
+		<mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 				<div class="form-group">
@@ -10,7 +10,7 @@
 				</div>
 				<div class="form-group">
 					<v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
-							  :value.sync="usersArr" :options="usersOptions" label="name"
+							  v-model="usersArr" :options="usersOptions" label="name"
 							  placeholder="Filter Users"></v-select>
 				</div>
 				<div class="form-group">
@@ -30,7 +30,7 @@
 				</div>
 
 				<div class="form-group">
-					<v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
+					<v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" v-model="shirtSizeArr" multiple
 							  :options="shirtSizeOptions" label="name" placeholder="Shirt Sizes"></v-select>
 				</div>
 
@@ -84,7 +84,7 @@
 				<hr class="divider inv sm">
 				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
 			</form>
-		</aside>
+		</mm-aside>
 
 		<div class="row">
             <div class="col-sm-12">
@@ -98,7 +98,7 @@
                         </div>
                     </div>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+                        <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search for anything">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
 					<button class="btn btn-default btn-sm " type="button" @click="showFilters=!showFilters">
@@ -151,7 +151,7 @@
         <hr class="divider sm">
         <div class="row">
 			<div class="col-xs-12 col-sm-4 col-md-3">
-				<div class="panel panel-default" v-for="reservation in reservations|filterBy search|orderBy orderByField direction">
+				<div class="panel panel-default" v-for="reservation in reservationsOrderedFiltered">
 					<div class="panel-heading text-center">
 						<h5>{{ reservation.given_names }} {{ reservation.surname }}</h5>
 					</div>
@@ -159,13 +159,13 @@
 						<img :src="reservation.avatar" class="img-circle img-md">
 						<hr class="divider inv sm">
 						<label style="margin-bottom:2px;">Registered On</label>
-						<h5 style="margin-top:5px;" class="text-center">{{ reservation.created_at | moment 'll' }}</h5>
+						<h5 style="margin-top:5px;" class="text-center">{{ reservation.created_at | moment('ll') }}</h5>
 						<!--<div class="btn-group btn-group-justified">
-							<a class="btn btn-sm btn-primary" href="/dashboard/groups{{reservation.links[0].uri}}"><i class="fa fa-pencil"></i> Manage</a>
+							<a class="btn btn-sm btn-primary" :href="`/dashboard/groups${reservation.links[0].uri}`"><i class="fa fa-pencil"></i> Manage</a>
 						</div>-->
 					</div>
 					<div class="panel-footer text-center">
-						<h5 class="text-capitalize"><span class="text-success">{{ reservation.percent_raised | number '2' }}%</span> <small>Raised</small></h5>
+						<h5 class="text-capitalize"><span class="text-success">{{ reservation.percent_raised.toFixed(2) }}%</span> <small>Raised</small></h5>
 					</div>
 				</div><!-- end panel -->
 			</div><!-- end col -->
@@ -185,8 +185,10 @@
 	}
 </style>
 <script type="text/javascript">
+	import _ from 'underscore';
+	import $ from 'jquery';
 	import vSelect from "vue-select";
-	export default{
+	export default {
         name: 'dashboard-group-reservations',
 		components: {vSelect},
 		props:{
@@ -243,42 +245,50 @@
             }
         },
 		computed: {
+            reservationsOrderedFiltered() {
+                // |orderBy orderByField direction
+                let arr =  _.sortBy(this.reservations, this.orderByField);
+                if (this.direction === -1) {
+                    arr = arr.reverse();
+                }
+                arr.filter
+            }
 		},
         watch: {
 			// watch filters obj
 			'filters': {
-				handler: function (val) {
+				handler(val, oldVal) {
 					// console.log(val);
 					this.searchReservations();
 				},
 				deep: true
 			},
-        	'campaignObj': function (val) {
+        	'campaignObj'(val, oldVal) {
 				this.filters.campaign = val ? val.id : '';
 			},
-			'shirtSizeArr': function (val) {
+			'shirtSizeArr'(val, oldVal) {
 				this.filters.shirtSize = _.pluck(val, 'id')||'';
 			},
-			'groupsArr': function (val) {
+			'groupsArr'(val, oldVal) {
 				this.filters.groups = _.pluck(val, 'id')||'';
 				this.searchReservations();
 			},
-			'usersArr': function (val) {
+			'usersArr'(val, oldVal) {
 				this.filters.user = _.pluck(val, 'id')||'';
 				this.searchReservations();
 			},
-			'tagsString': function (val) {
+			'tagsString'(val, oldVal) {
 				let tags = val.split(/[\s,]+/);
 				this.filters.tags = tags[0] !== '' ? tags : '';
 				this.searchReservations();
 			},
-			'ageMin': function (val) {
+			'ageMin'(val, oldVal) {
 				this.searchReservations();
 			},
-			'ageMax': function (val) {
+			'ageMax'(val, oldVal) {
 				this.searchReservations();
 			},
-        	'activeFields': function (val, oldVal) {
+        	'activeFields'(val, oldVal) {
         		// if the orderBy field is removed from view
         		if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
         			// default to first visible field
@@ -286,24 +296,27 @@
 				}
 				this.updateConfig();
 			},
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
 				this.updateConfig();
 				this.page = 1;
-                this.searchReservations();
+
             },
-            'page': function (val, oldVal) {
+            'page'(val, oldVal) {
 				this.updateConfig();
 				this.searchReservations();
             },
-            'per_page': function (val, oldVal) {
+            'per_page'(val, oldVal) {
 				this.updateConfig();
 				this.searchReservations();
             },
-			'groups':function () {
+			'groups':() =>  {
 				this.searchReservations();
 			}
         },
         methods: {
+            debouncedSearch: _.debounce(function () {
+                this.searchReservations();
+            }, 250),
 			consoleCallback (val) {
 				console.dir(JSON.stringify(val))
 			},
@@ -368,14 +381,14 @@
             },
             totalAmountRaised(reservation){
                 let total = 0;
-                _.each(reservation.fundraisers.data, function (fundraiser) {
+                _.each(reservation.fundraisers.data, (fundraiser) => {
                     total += fundraiser.raised_amount;
                 });
                 return total;
             },
             totalPercentRaised(reservation){
                 let totalDue = 0;
-                _.each(reservation.costs.data, function (cost) {
+                _.each(reservation.costs.data, (cost) => {
                     totalDue += cost.amount;
                 });
                 return this.totalAmountRaised(reservation) / totalDue * 100;
@@ -398,43 +411,43 @@
 					age: [ this.ageMin, this.ageMax]
 				});
 				// this.$refs.spinner.show();
-				this.$http.get('reservations', { params: params }).then(function (response) {
+				this.$http.get('reservations', { params: params }).then((response) => {
                     let self = this;
-                    _.each(response.body.data, function (reservation) {
+                    _.each(response.data.data, (reservation) => {
                         reservation.amount_raised = this.totalAmountRaised(reservation);
                         reservation.percent_raised = this.totalPercentRaised(reservation);
                     }, this);
-                    this.reservations = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                    this.reservations = response.data.data;
+                    this.pagination = response.data.meta.pagination;
 					// this.$refs.spinner.hide();
-				}, function (error) {
+				}, (error) =>  {
 					// this.$refs.spinner.hide();
 					//TODO add error alert
 				});
             },
 			getGroups(search, loading){
 				loading ? loading(true) : void 0;
-            	this.$http.get('groups', { params: { search: search} }).then(function (response) {
-					this.groupsOptions = response.body.data;
+            	this.$http.get('groups', { params: { search: search} }).then((response) => {
+					this.groupsOptions = response.data.data;
 					loading ? loading(false) : void 0;
 				})
 			},
 			getCampaigns(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('campaigns', { params: { search: search} }).then(function (response) {
-					this.campaignOptions = response.body.data;
+				this.$http.get('campaigns', { params: { search: search} }).then((response) => {
+					this.campaignOptions = response.data.data;
 					loading ? loading(false) : void 0;
 				})
 			},
 			getUsers(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('users', { params: { search: search} }).then(function (response) {
-					this.usersOptions = response.body.data;
+				this.$http.get('users', { params: { search: search} }).then((response) => {
+					this.usersOptions = response.data.data;
 					loading ? loading(false) : void 0;
 				})
 			},
         },
-        ready(){
+        mounted(){
             // load view state
 			if (localStorage.AdminReservationsListConfig) {
 				let config = JSON.parse(localStorage.AdminReservationsListConfig);

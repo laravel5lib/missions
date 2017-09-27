@@ -1,9 +1,9 @@
 <template>
 	<div class="row" style="position:relative;">
 
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
 
-		<aside :show.sync="showRegionsFilters" placement="left" header="Region Filters" :width="375">
+		<mm-aside :show="showRegionsFilters" @open="showRegionsFilters=true" @close="showRegionsFilters=false" placement="left" header="Region Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 				<div class="form-group" v-if="isAdminRoute">
@@ -12,7 +12,7 @@
                               class="form-control"
                               :debounce="250"
                               :on-search="getCountries"
-					          :value.sync="regionsFilters.country"
+					          :value="regionsFilters.country"
                               :options="UTILITIES.countries"
                               label="name"
 					          placeholder="Filter Countries">
@@ -25,7 +25,7 @@
                     <i class="fa fa-times"></i> Reset Region Filters
                 </button>
 			</form>
-		</aside>
+		</mm-aside>
 
 		<div class="col-sm-8">
             <div class="row">
@@ -66,164 +66,163 @@
 
 				<div class="collapse" id="AccommodationModal">
 					<div class="panel panel-default" v-if="showAccommodationManageModal">
-							<validator name="AccommodationForm">
-								<form id="AccommodationForm"
-								      name="AccommodationForm"
-								      @submit.prevent="manageAccommodation">
-									<div class="panel-heading">
-										<h5 v-text="editMode?'Update an Accommodation':'Create an Accommodation'"></h5>
+
+						<form id="AccommodationForm" name="AccommodationForm"
+						      @submit.prevent="manageAccommodation" data-vv-scope="accommodation-manage">
+							<div class="panel-heading">
+								<h5 v-text="editMode?'Update an Accommodation':'Create an Accommodation'"></h5>
+							</div>
+							<div class="panel-body" v-if="currentAccommodation">
+								<div class="row">
+									<div class="form-group col-sm-12"
+									     v-error-handler="{ value: currentAccommodation.name, handle: 'name', scope: 'accommodation-manage' }">
+										<label for="AccoName" class="control-label">Name</label>
+										<input @keydown.enter.prevent="manageAccommodation"
+										       type="text"
+										       class="form-control"
+										       id="AccoName" placeholder=""
+										       name="name" v-validate="'required'"
+										       v-model="currentAccommodation.name">
 									</div>
-									<div class="panel-body" v-if="currentAccommodation">
-										<div class="row">
-											<div class="form-group col-sm-12"
-											     v-error-handler="{ value: currentAccommodation.name, handle: 'name' }">
-												<label for="AccoName" class="control-label">Name</label>
-												<input @keydown.enter.prevent="manageAccommodation"
-												       type="text"
-												       class="form-control"
-												       id="AccoName" placeholder=""
-												       v-validate:name="['required']"
-												       v-model="currentAccommodation.name">
-											</div>
-											<div class="form-group col-sm-12"
-											     v-error-handler="{ value: currentAccommodation.short_desc, handle: 'shortdesc' }">
-												<label for="AccoDescription" class="control-label">Description</label>
-												<textarea class="form-control"
-												          id="AccoDescription"
-												          v-validate:shortdesc=""
-												          v-model="currentAccommodation.short_desc">
-                                            </textarea>
-											</div>
-											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.address_one, handle: 'addressone' }">
-												<label for="AccoAddressOne" class="control-label">Address 1</label>
-												<input type="text"
-												       class="form-control"
-												       id="AccoAddressOne"
-												       placeholder=""
-												       v-validate:addressone=""
-												       v-model="currentAccommodation.address_one">
-											</div>
-											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.address_two, handle: 'addresstwo' }">
-												<label for="AccoAddressTwo" class="control-label">Address 2</label>
-												<input type="text"
-												       class="form-control"
-												       id="AccoAddressTwo"
-												       placeholder=""
-												       v-validate:addresstwo=""
-												       v-model="currentAccommodation.address_two">
-											</div>
-											<div class="form-group col-sm-4"
-											     v-error-handler="{ value: currentAccommodation.state, handle: 'city' }">
-												<label for="AccoCity" class="control-label">City</label>
-												<input type="text"
-												       class="form-control"
-												       id="AccoCity"
-												       placeholder=""
-												       v-validate:city=""
-												       v-model="currentAccommodation.city">
-											</div>
-											<div class="form-group col-sm-4"
-											     v-error-handler="{ value: currentAccommodation.state, handle: 'state' }">
-												<label for="AccoState" class="control-label">State</label>
-												<input type="text"
-												       class="form-control"
-												       id="AccoState"
-												       placeholder=""
-												       v-validate:state=""
-												       v-model="currentAccommodation.state">
-											</div>
-											<div class="form-group col-sm-4"
-											     v-error-handler="{ value: currentAccommodation.zip, handle: 'zip' }">
-												<label for="AccoZip" class="control-label">Zip</label>
-												<input type="text"
-												       class="form-control"
-												       id="AccoZip"
-												       placeholder=""
-												       v-validate:zip=""
-												       v-model="currentAccommodation.zip">
-											</div>
-											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.phone, handle: 'phone' }">
-												<label for="AccoPhone" class="control-label">Phone</label>
-												<input type="text"
-												       class="form-control"
-												       id="AccoPhone"
-												       placeholder=""
-												       v-validate:phone=""
-												       v-model="currentAccommodation.phone">
-											</div>
-											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.email, handle: 'email' }">
-												<label for="AccoEmail" class="control-label">Email</label>
-												<input type="email"
-												       class="form-control"
-												       id="AccoEmail"
-												       placeholder=""
-												       v-validate:email="['email']"
-												       v-model="currentAccommodation.email">
-											</div>
-											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.fax, handle: 'fax' }">
-												<label for="AccoFax" class="control-label">Fax</label>
-												<input type="text"
-												       class="form-control"
-												       id="AccoFax"
-												       placeholder=""
-												       v-validate:fax=""
-												       v-model="currentAccommodation.fax">
-											</div>
-											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.url, handle: 'url' }">
-												<label for="AccoURL" class="control-label">URL</label>
-												<input type="url"
-												       class="form-control"
-												       id="AccoURL"
-												       placeholder=""
-												       v-validate:url=""
-												       v-model="currentAccommodation.url">
-											</div>
-										</div>
-										<div class="checkbox">
-											<label>
-												<input type="checkbox" v-model="currentAccommodationDifferentCountry" >
-												Is this Accommodation in another country?
-											</label>
-										</div>
-										<div class="form-group" v-if="currentAccommodationDifferentCountry">
-											<label for="createPlanCallsign" class="control-label">
-												Region Country
-											</label>
-											<v-select @keydown.enter.prevent=""
-											          class="form-control"
-											          :debounce="250"
-											          :on-search="getCountries"
-											          :value.sync="currentAccommodation.country"
-											          :options="UTILITIES.countries"
-											          label="name"
-											          placeholder="Select a Country">
-											</v-select>
-										</div>
+									<div class="form-group col-sm-12"
+									     v-error-handler="{ value: currentAccommodation.short_desc, client: 'shortdesc', server: 'short_desc', scope: 'accommodation-manage' }">
+										<label for="AccoDescription" class="control-label">Description</label>
+										<textarea class="form-control"
+										          id="AccoDescription"
+										          name="shortdesc" v-validate="''"
+										          v-model="currentAccommodation.short_desc">
+                                    </textarea>
 									</div>
-									<template v-if="currentAccommodation.room_types_settings">
-										<div class="panel-heading">
-											<h5>Rooms Allowed</h5>
-										</div>
-										<div class="panel-body">
-											<div class="form-group col-sm-6" v-for="type in roomTypes">
-												<label :for="'settingsType-' + type.id" class="" v-text="type.name"></label>
-												<input type="number"
-												       number
-												       class="form-control"
-												       :id="'settingsType-' + type.id"
-												       v-model="currentAccommodation.room_types_settings[type.id]"
-												       min="0">
-											</div>
-										</div>
-									</template>
-								</form>
-							</validator>
+									<div class="form-group col-sm-6"
+									     v-error-handler="{ value: currentAccommodation.address_one, handle: 'addressone', scope: 'accommodation-manage' }">
+										<label for="AccoAddressOne" class="control-label">Address 1</label>
+										<input type="text"
+										       class="form-control"
+										       id="AccoAddressOne"
+										       placeholder=""
+										       name="addressone" v-validate="''"
+										       v-model="currentAccommodation.address_one">
+									</div>
+									<div class="form-group col-sm-6"
+									     v-error-handler="{ value: currentAccommodation.address_two, handle: 'addresstwo', scope: 'accommodation-manage' }">
+										<label for="AccoAddressTwo" class="control-label">Address 2</label>
+										<input type="text"
+										       class="form-control"
+										       id="AccoAddressTwo"
+										       placeholder=""
+										       name="addresstwo" v-validate="''"
+										       v-model="currentAccommodation.address_two">
+									</div>
+									<div class="form-group col-sm-4"
+									     v-error-handler="{ value: currentAccommodation.state, handle: 'city', scope: 'accommodation-manage' }">
+										<label for="AccoCity" class="control-label">City</label>
+										<input type="text"
+										       class="form-control"
+										       id="AccoCity"
+										       placeholder=""
+										       name="city" v-validate="''"
+										       v-model="currentAccommodation.city">
+									</div>
+									<div class="form-group col-sm-4"
+									     v-error-handler="{ value: currentAccommodation.state, handle: 'state', scope: 'accommodation-manage' }">
+										<label for="AccoState" class="control-label">State</label>
+										<input type="text"
+										       class="form-control"
+										       id="AccoState"
+										       placeholder=""
+										       name="state" v-validate="''"
+										       v-model="currentAccommodation.state">
+									</div>
+									<div class="form-group col-sm-4"
+									     v-error-handler="{ value: currentAccommodation.zip, handle: 'zip', scope: 'accommodation-manage' }">
+										<label for="AccoZip" class="control-label">Zip</label>
+										<input type="text"
+										       class="form-control"
+										       id="AccoZip"
+										       placeholder=""
+										       name="zip" v-validate="''"
+										       v-model="currentAccommodation.zip">
+									</div>
+									<div class="form-group col-sm-6"
+									     v-error-handler="{ value: currentAccommodation.phone, handle: 'phone', scope: 'accommodation-manage' }">
+										<label for="AccoPhone" class="control-label">Phone</label>
+										<input type="text"
+										       class="form-control"
+										       id="AccoPhone"
+										       placeholder=""
+										       name="phone" v-validate="''"
+										       v-model="currentAccommodation.phone">
+									</div>
+									<div class="form-group col-sm-6"
+									     v-error-handler="{ value: currentAccommodation.email, handle: 'email', scope: 'accommodation-manage' }">
+										<label for="AccoEmail" class="control-label">Email</label>
+										<input type="email"
+										       class="form-control"
+										       id="AccoEmail"
+										       placeholder=""
+										       name="email" v-validate="'email'"
+										       v-model="currentAccommodation.email">
+									</div>
+									<div class="form-group col-sm-6"
+									     v-error-handler="{ value: currentAccommodation.fax, handle: 'fax', scope: 'accommodation-manage' }">
+										<label for="AccoFax" class="control-label">Fax</label>
+										<input type="text"
+										       class="form-control"
+										       id="AccoFax"
+										       placeholder=""
+										       name="fax" v-validate="''"
+										       v-model="currentAccommodation.fax">
+									</div>
+									<div class="form-group col-sm-6"
+									     v-error-handler="{ value: currentAccommodation.url, handle: 'url', scope: 'accommodation-manage' }">
+										<label for="AccoURL" class="control-label">URL</label>
+										<input type="url"
+										       class="form-control"
+										       id="AccoURL"
+										       placeholder=""
+										       name="url" v-validate="''"
+										       v-model="currentAccommodation.url">
+									</div>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" v-model="currentAccommodationDifferentCountry" >
+										Is this Accommodation in another country?
+									</label>
+								</div>
+								<div class="form-group" v-if="currentAccommodationDifferentCountry">
+									<label for="createPlanCallsign" class="control-label">
+										Region Country
+									</label>
+									<v-select @keydown.enter.prevent=""
+									          class="form-control"
+									          :debounce="250"
+									          :on-search="getCountries"
+									          v-model="currentAccommodation.country"
+									          :options="UTILITIES.countries"
+									          label="name"
+									          placeholder="Select a Country">
+									</v-select>
+								</div>
+							</div>
+							<template v-if="currentAccommodation.room_types_settings">
+								<div class="panel-heading">
+									<h5>Rooms Allowed</h5>
+								</div>
+								<div class="panel-body">
+									<div class="form-group col-sm-6" v-for="type in roomTypes">
+										<label :for="'settingsType-' + type.id" class="" v-text="type.name"></label>
+										<input type="number"
+										       number
+										       class="form-control"
+										       :id="'settingsType-' + type.id"
+										       v-model="currentAccommodation.room_types_settings[type.id]"
+										       min="0">
+									</div>
+								</div>
+							</template>
+						</form>
+
 					    <div class="panel-footer text-center">
 						    <button type="button"
                                     class="btn btn-default btn-sm"
@@ -243,7 +242,7 @@
 					<div class="col-xs-12">
 						<template v-if="accommodations.length">
 							<accordion :one-at-atime="true" type="info">
-								<panel type="primary" v-for="accommodation in accommodations">
+								<panel type="primary" v-for="accommodation in accommodations" :key="accommodation.id">
 									<div slot="header" class="row">
 										<div class="col-xs-8">
 											<h5>{{ accommodation.name }}</h5>
@@ -298,16 +297,16 @@
 											<label>Rooms</label>
 											<div class="small">
 												<ul class="list-unstyled">
-													<li v-for="(key, value) in accommodation.rooms_count">
-														{{key|capitalize}}: {{value}}
+													<li v-for="(value, key) in accommodation.rooms_count">
+														{{ key|capitalize }}: {{value}}
 													</li>
 												</ul>
 											</div>
 											<label>Rooms Allowed</label>
 											<div class="small">
 												<ul class="list-unstyled">
-													<li v-for="(key, value) in accommodation.room_types">
-														{{key|capitalize}}: {{value}}
+													<li v-for="(value, key) in accommodation.room_types">
+														{{ key|capitalize }}: {{value}}
 													</li>
 												</ul>
 											</div>
@@ -318,7 +317,7 @@
 								</panel>
 							</accordion>
 							<div class="col-xs-12 text-center">
-								<pagination :pagination.sync="accommodationsPagination" :callback="getAccommodations"></pagination>
+								<pagination :pagination="accommodationsPagination" pagination-key="accommodationsPagination" :callback="getAccommodations"></pagination>
 							</div>
 						</template>
 						<template v-else>
@@ -384,22 +383,22 @@
                                :class="{ 'active': currentRegion && currentRegion.id === region.id}"
                                v-for="region in regions">
 								<h4 class="list-group-item-heading">
-									{{ region.name | capitalize }}
+									{{ region.name|capitalize }}
 									<span class="badge pull-right" v-text="region.accommodations.data.length"></span>
 								</h4>
                                 <p>
                                     <span v-if="region.callsign">
                                         <span class="label label-default"
-                                              :style="'color: #FFF !important; background-color: ' + region.callsign"
-                                              v-text="region.callsign|capitalize">
+                                              :style="'color: #FFF !important; background-color: ' + region.callsign">
+	                                        {{region.callsign|capitalize}}
                                         </span>
                                     </span>
-                                    <span class="small">{{ region.country.name | capitalize }}</span>
+                                    <span class="small">{{ region.country.name|capitalize }}</span>
                                 </p>
 							</a>
 						</div>
 						<div class="col-xs-12 text-center">
-							<pagination :pagination.sync="regionsPagination" :callback="getRegions"></pagination>
+							<pagination :pagination="regionsPagination" pagination-key="regionsPagination" :callback="getRegions"></pagination>
 						</div>
 					</template>
 					<template v-else>
@@ -414,7 +413,8 @@
                small
                ok-text="Delete"
                :callback="deleteAccommodation"
-               :show.sync="showAccommodationDeleteModal">
+               @closed="showAccommodationDeleteModal=false"
+               :value="showAccommodationDeleteModal">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="currentAccommodation">
 					Are you sure you want to delete accommodation: "{{currentAccommodation.name}}" ?
@@ -469,7 +469,7 @@
         },
         watch: {
             showAccommodationManageModal(val) {
-                this.$nextTick(function () {
+                this.$nextTick(() =>  {
                     if ($.fn.collapse)
                         $('#AccommodationModal').collapse(val ? 'show' : 'hide');
                 });
@@ -519,7 +519,7 @@
 	        loadAccommodationRoomTypes(accommodation) {
                 accommodation.room_types_settings = accommodation.room_types_settings || {};
                 // We need to loop through each room type to create an object to reference the plan types present
-                _.each(this.roomTypes, function (type) {
+                _.each(this.roomTypes, (type) => {
                     // the settings will be traced by the type ids
                     // then we will attempt to find the assignment in the current plan's settings (expecting a number) or set to 0
                     let assignment = accommodation.room_types && accommodation.room_types.hasOwnProperty(type.name) ? accommodation.room_types[type.name] : 0;
@@ -534,14 +534,14 @@
                 this.showAccommodationDeleteModal = true;
             },
 	        manageAccommodation() {
-                this.resetErrors();
-                if (this.$AccommodationForm.valid) {
-                    return this.editMode ? this.updateAccommodation() : this.saveAccommodation();
-                } else {
-                    this.$root.$emit('showError', 'Please check the form.');
-                    return false;
-                }
-
+                this.$validator.validateAll('accommodation-manage').then(result => {
+                    if (result) {
+                        return this.editMode ? this.updateAccommodation() : this.saveAccommodation();
+                    } else {
+                        this.$root.$emit('showError', 'Please check the form.');
+                        return false;
+                    }
+                });
 	        },
             saveAccommodation() {
                 let data = _.extend({}, this.currentAccommodation);
@@ -553,13 +553,13 @@
                 if (data.room_types_settings)
                     delete data.room_types_settings;
 
-                return this.AccommodationsResource.save({ region: this.currentRegion.id }, data).then(function (response) {
-	                let newAccommodation = response.body.data;
+                return this.AccommodationsResource.post({ region: this.currentRegion.id }, data).then((response) => {
+	                let newAccommodation = response.data.data;
                     this.handleAccommodationRoomTypes(_.extend(this.currentAccommodation, newAccommodation));
                     this.currentRegion.accommodations.data.push(newAccommodation);
                     this.accommodations.push(newAccommodation);
                     this.showAccommodationManageModal = false;
-                }, function (response) {
+                }, (response) =>  {
                     return response;
                 });
 	        },
@@ -573,32 +573,34 @@
                 if (data.room_types_settings)
                     delete data.room_types_settings;
 
-                return this.AccommodationsResource.update({ region: this.currentRegion.id, accommodation: this.currentAccommodation.id }, data).then(function (response) {
-                    this.handleAccommodationRoomTypes(_.extend(this.currentAccommodation, response.body.data));
+                return this.AccommodationsResource.put({ region: this.currentRegion.id, accommodation: this.currentAccommodation.id }, data).then((response) => {
+                    this.handleAccommodationRoomTypes(_.extend(this.currentAccommodation, response.data.data));
                     this.currentAccommodation = null;
                     this.showAccommodationManageModal = false;
                     this.editMode = false;
-                }, function (response) {
+                }, (response) =>  {
+                    this.SERVER_ERRORS = response.response.data.errors;
+                    this.$root.$emit('showError', 'Please check the form.');
                     return response;
-                });
+                }).catch();
 	        },
 	        deleteAccommodation() {
-                return this.AccommodationsResource.delete({ region: this.currentRegion.id, accommodation: this.currentAccommodation.id }).then(function () {
+                return this.AccommodationsResource.delete({ region: this.currentRegion.id, accommodation: this.currentAccommodation.id }).then(() => {
                     this.currentAccommodation = null;
                     this.showAccommodationDeleteModal = false;
                     return this.getAccommodations();
-                }, function (response) {
+                }, (response) =>  {
                     return response;
                 });
 	        },
 	        handleAccommodationRoomTypes(accommodation){
                 let promises = [];
-                _.each(accommodation.room_types_settings, function (val, property) {
+                _.each(accommodation.room_types_settings,(val, property) => {
                     let promise;
                     if (property.indexOf('_method') === -1 && !_.contains(['total'], property)) {
                         if (accommodation.room_types_settings[property + '_method'] === 'PUT') {
                             if (val > 0) {
-                                promise = this.AccommodationTypesResource.update({
+                                promise = this.AccommodationTypesResource.put({
                                     accommodation: accommodation.id, type: property
                                 }, { available_rooms: val });
                             } else {
@@ -610,42 +612,42 @@
                         } else {
                             // only create setting if val > 0
                             if (val > 0)
-                                promise = this.AccommodationTypesResource.save({ accommodation: accommodation.id}, {
+                                promise = this.AccommodationTypesResource.post({ accommodation: accommodation.id}, {
                                     room_type_id: property,
                                     available_rooms: val
                                 });
                         }
                         if (promise) {
                             // we only need to catch errors here
-                            promise.catch(function (response) {});
+                            promise.catch((response) =>  {});
                             promises.push(promise);
                         }
                     }
 
-                }.bind(this));
+                });
 
-                Promise.all(promises).then(function () {
+                Promise.all(promises).then(() => {
                     this.$root.$emit('showSuccess', accommodation.name + ' settings updated successfully.');
                     this.getAccommodations();
-                    this.$nextTick(function () {
+                    this.$nextTick(() =>  {
                         this.currentAccommodation = null;
                     });
 
-                }.bind(this));
+                });
 	        },
             getAccommodations(){
                 let params = {
                     region: this.currentRegion.id,
                 };
 
-                return this.AccommodationsResource.get(params).then(function (response) {
-                    this.accommodationsPagination = response.body.meta.pagination;
-                    let accommodations = _.each(response.body.data, function (acc) {
+                return this.AccommodationsResource.get(params).then((response) => {
+                    this.accommodationsPagination = response.data.meta.pagination;
+                    let accommodations = _.each(response.data.data, (acc) => {
 	                    acc = _.extend(acc, this.loadAccommodationRoomTypes(acc));
-                    }.bind(this));
+                    });
 					return this.accommodations = accommodations;
-                }, function (response) {
-                    return response.body.message;
+                }, (response) =>  {
+                    return response.data.message;
                 });
             },
             getRegions(){
@@ -657,29 +659,29 @@
                     country: _.isObject(this.regionsFilters.country) ? this.regionsFilters.country.code : undefined
                 };
 
-                return this.RegionsResource.get(params).then(function (response) {
-                    this.regionsPagination = response.body.meta.pagination;
-                    return this.regions = response.body.data;
-                }, function (response) {
-                    return response.body.message;
+                return this.RegionsResource.get(params).then((response) => {
+                    this.regionsPagination = response.data.meta.pagination;
+                    return this.regions = response.data.data;
+                }, (response) =>  {
+                    return response.data.message;
                 });
             },
             getRoomTypes(){
                 return this.$http.get('rooming/types', { params: { campaign: this.campaignId, per_page: 100 } })
-                    .then(function (response) {
-                            return this.roomTypes = response.body.data;
+                    .then((response) => {
+                            return this.roomTypes = response.data.data;
                         },
-                        function (response) {
-                            return response.body.data;
+                        (response) =>  {
+                            return response.data.data;
                         });
             },
         },
-        ready(){
+        mounted(){
 			let promises = [];
             promises.push(this.getCountries());
             promises.push(this.getRegions());
             promises.push(this.getRoomTypes());
-			Promise.all(promises).then(function (values) {});
+			Promise.all(promises).then((values) => {});
         }
     }
 </script>

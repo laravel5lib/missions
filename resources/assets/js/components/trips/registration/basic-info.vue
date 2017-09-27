@@ -1,16 +1,13 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template ref="BasicInfo">
 	<div class="row">
 		<div class="col-sm-12">
-			<validator name="BasicInfo" @valid="onValid">
+
 				<form novalidate name="BasicInfoForm" id="BasicInfoForm">
 					<template v-if="forAdmin">
 						<div class="col-sm-12">
-							<div class="form-group" :class="{ 'has-error': checkForError('manager') }">
+							<div class="form-group" :class="{ 'has-error': errors.has('manager') }">
 								<label for="infoManager">Reservation Manager</label>
-								<v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-								<select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
-									<option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
-								</select>
+								<v-select @keydown.enter.prevent="" class="form-control" name="manager" id="infoManager" v-validate="'required'" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
 							</div>
 						</div>
 					</template>
@@ -26,19 +23,19 @@
 					<!--</template>-->
 
 					<div class="col-md-6">
-						<div class="form-group" :class="{ 'has-error': checkForError('role') }">
+						<div class="form-group" v-error-handler="{value: desired_role, handle: 'role'}">
 							<label for="desiredRole">Desired Team Role</label>
-								<select class="form-control input-sm" id="desiredRole" v-model="desired_role" v-validate:role="{ required: true }">
-									<option v-for="role in roles" :value="{value: role.value, name: role.name}">{{role.name}}</option>
+								<select class="form-control input-sm" id="desiredRole" v-model="desired_role" name="role" v-validate="'required'">
+									<option v-for="role in UTILITIES.roles" :value="{value: role.value, name: role.name}">{{role.name}}</option>
 								</select>
 						</div><!-- end form-group -->
 						<label>Given Names</label>
 						<div class="row">
 							<div class="col-sm-12">
-								<div class="form-group" :class="{ 'has-error': checkForError('firstName') }">
+								<div class="form-group" v-error-handler="{value: firstName, handle: 'firstName'}">
 									<!--<label for="infoFirstName">First</label>-->
 									<input type="text" class="form-control input-sm" v-model="firstName"
-										   v-validate:firstName="{ required: true }" :classes="{ invalid: 'has-error' }" placeholder="First & Middle Names"
+										   name="firstName" placeholder="First & Middle Names" v-validate="'required'"
 										   id="infoFirstName">
 								</div>
 							</div>
@@ -46,29 +43,28 @@
 						<label>Surname</label>
 						<div class="row">
 							<div class="col-sm-12">
-								<div class="form-group" :class="{ 'has-error': checkForError('lastName') }">
+								<div class="form-group" v-error-handler="{value: lastName, handle: 'lastName'}">
 									<!--<label for="infoLastName">Last</label>-->
 									<input type="text" class="form-control input-sm" v-model="lastName"
-										   v-validate:lastName="{ required: true }" :classes="{ invalid: 'has-error' }" placeholder="Last Name"
+										   name="lastName" placeholder="Last Name" v-validate="'required'"
 										   id="infoLastName">
 								</div>
 							</div>
 						</div>
 
-						<div class="form-group" :class="{ 'has-error': (checkForError('email')) || ($BasicInfo.email.email && $BasicInfo.email.dirty) }">
+						<div class="form-group" v-error-handler="{ value: email, handle: 'email'}">
 							<label for="infoEmailAddress">Email Address</label>
 							<input type="text" class="form-control input-sm" v-model="email" id="infoEmailAddress"
-								   :classes="{ invalid: 'has-error' }" v-validate:email="['required', 'email']">
-							<span class="help-block" v-show="$BasicInfo.email.email && $BasicInfo.email.dirty">Invalid email address</span>
+								   name="email" v-validate="'required|email'">
 						</div>
 
 						<label>Date of Birth</label>
 						<div class="row">
 							<div class="col-sm-4">
-								<div class="form-group" :class="{ 'has-error': checkForError('dobMonth') }">
+								<div class="form-group" :class="{ 'has-error': errors.has('dobMonth') }">
 									<!--<label for="infoDobMonth">Month</label>-->
 									<select class="form-control input-sm" v-model="dobMonth"
-											v-validate:dobMonth="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoDobMonth">
+											name="dobMonth" id="infoDobMonth" v-validate="'required'">
 										<option value="">Month</option>
 										<option value="01">January</option>
 										<option value="02">February</option>
@@ -86,10 +82,10 @@
 								</div>
 							</div>
 							<div class="col-sm-4">
-								<div class="form-group" :class="{ 'has-error': checkForError('dobDay') }">
+								<div class="form-group" :class="{ 'has-error': errors.has('dobDay') }">
 									<!--<label for="infoDobDay">Day</label>-->
 									<select class="form-control input-sm" v-model="dobDay"
-											v-validate:dobDay="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoDobDay">
+											name="dobDay" id="infoDobDay" v-validate="'required'">
 										<option value="">Day</option>
 										<option value="01">01</option>
 										<option value="02">02</option>
@@ -126,13 +122,13 @@
 								</div>
 							</div>
 							<div class="col-sm-4">
-								<div class="form-group" :class="{ 'has-error': checkForError('dobYear') }">
+								<div class="form-group" :class="{ 'has-error': errors.has('dobYear') }">
 									<!--<label for="infoDobYear">Year</label>-->
 									<select class="form-control input-sm" v-model="dobYearCalc"
-											v-validate:dobYear="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoDobYear">
+											name="dobYear" id="infoDobYear" v-validate="'required'">
 										<option value="">Year</option>
-										<option v-for="n in 100 | orderBy true -1" :value="n">
-											{{ currentYear - 100 + n }}
+										<option v-for="year in selectableYears" :value="year">
+											{{ year }}
 										</option>
 									</select>
 								</div>
@@ -140,27 +136,26 @@
 						</div>
 
 						<div class="row">
-							<div class="col-sm-6">
+							<div class="col-sm-6" v-error-handler="{value: gender, handle: 'gender', messages: { req: 'Select a gender' }}">
 								<label>Gender</label>
-								<div :class="{ 'has-error': checkForError('gender') }">
+								<div :class="{ 'has-error': errors.has('gender') }">
 									<label>
-										<input type="radio" v-model="gender" v-validate:gender="{ required: { rule: true} }"
+										<input type="radio" v-model="gender" name="gender" v-validate="'required'"
 											   value="male"> Male
 									</label>
 								</div>
-								<div :class="{ 'has-error': checkForError('gender') }">
+								<div :class="{ 'has-error': errors.has('gender') }">
 									<label>
-										<input type="radio" v-model="gender" v-validate:gender="{ required: { rule: true} }" value="female"> Female
+										<input type="radio" v-model="gender" name="gender" value="female"> Female
 									</label>
 								</div>
-								<span class="help-block" v-show="checkForError('gender')">Select a gender</span>
-
 							</div>
+
 							<div class="col-sm-6">
-								<div class="form-group" :class="{ 'has-error': checkForError('relationshipStatus') }">
+								<div class="form-group" :class="{ 'has-error': errors.has('relationshipStatus') }">
 									<label for="infoRelStatus">Relationship Status</label>
 									<select class="form-control input-sm" v-model="relationshipStatus"
-											v-validate:relationshipStatus="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoRelStatus">
+											name="relationshipStatus" id="infoRelStatus" v-validate="'required'">
 										<option value="single">Single</option>
 										<option value="engaged">Engaged</option>
 										<option value="married">Married</option>
@@ -179,17 +174,17 @@
 										<label for="infoHeightA">Height</label>
 									</div>
 									<div class="col-sm-6">
-										<div class="form-group" :class="{ 'has-error': checkForError('heightA') }">
+										<div class="form-group" :class="{ 'has-error': errors.has('heightA') }">
 											<div class="input-group input-group-sm">
-												<input type="number" class="form-control" id="infoHeightA" v-model="heightA" number min="0" max="10" v-validate:heightA="{ required: true }" :classes="{ invalid: 'has-error' }">
+												<input type="number" class="form-control" id="infoHeightA" v-model="heightA" number min="0" max="10" name="heightA" v-validate="'required'">
 												<div class="input-group-addon" v-text="heightUnitA"></div>
 											</div>
 										</div>
 									</div>
 									<div class="col-sm-6">
-										<div class="form-group" :class="{ 'has-error': checkForError('heightB') }">
+										<div class="form-group" :class="{ 'has-error': errors.has('heightB') }">
 											<div class="input-group input-group-sm">
-												<input type="number" class="form-control"  v-model="heightB" number min="0" max="11" v-validate:heightB="{ required: true }" :classes="{ invalid: 'has-error' }">
+												<input type="number" class="form-control"  v-model="heightB" number min="0" max="11" name="heightB" v-validate="'required'">
 												<div class="input-group-addon" v-text="heightUnitB"></div>
 											</div>
 										</div>
@@ -200,18 +195,18 @@
 
 						<div class="row">
 							<div class="col-sm-6">
-								<div class="form-group" :class="{ 'has-error': checkForError('weight') }">
+								<div class="form-group" :class="{ 'has-error': errors.has('weight') }">
 									<label for="infoWeight">Weight</label>
 									<div class="input-group input-group-sm">
-										<input type="number" class="form-control" id="infoWeight" v-model="weight" number min="0" v-validate:weight="{ required: true }" :classes="{ invalid: 'has-error' }">
+										<input type="number" class="form-control" id="infoWeight" v-model="weight" number min="0" name="weight" v-validate="'required'">
 										<div class="input-group-addon" v-text="weightUnit"></div>
 									</div>
 								</div>
 							</div>
 							<div class="col-sm-6">
-								<div class="form-group" :class="{ 'has-error': checkForError('size') }">
+								<div class="form-group" :class="{ 'has-error': errors.has('size') }">
 									<label for="infoShirtSize">Shirt Sizes</label>
-									<select class="form-control input-sm" v-model="size" v-validate:size="{ required: true }" :classes="{ invalid: 'has-error' }"
+									<select class="form-control input-sm" v-model="size" name="size" v-validate="'required'"
 											id="infoShirtSize">
 										<option value="XS">XS (Extra Small)</option>
 										<option value="S">S (Small)</option>
@@ -226,70 +221,72 @@
 						</div>
 					</div>
 					<div class="col-md-6">
-						<div class="form-group" :class="{ 'has-error': checkForError('address') }">
+						<div class="form-group" :class="{ 'has-error': errors.has('address') }">
 							<label for="infoAddress">Address</label>
 							<input type="text" class="form-control input-sm" v-model="address"
-								   v-validate:address="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoAddress"
+								   name="address" id="infoAddress" v-validate="'required'"
 								   placeholder="Street Address">
 						</div>
 
 						<div class="row">
 							<div class="col-sm-12">
-								<div class="form-group" :class="{ 'has-error': checkForError('city') }">
+								<div class="form-group" :class="{ 'has-error': errors.has('city') }">
 									<label for="infoCity">City</label>
 									<input type="text" class="form-control input-sm" v-model="city"
-										   v-validate:city="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoCity" placeholder="">
+										   name="city" id="infoCity" placeholder v-validate="'required'">
 								</div>
 							</div>
 							<div class="col-sm-12">
-								<div class="form-group" :class="{ 'has-error': checkForError('state') }">
+								<div class="form-group" :class="{ 'has-error': errors.has('state') }">
 									<label for="infoState">State/Prov.</label>
 									<input type="text" class="form-control input-sm" v-model="state"
-										   v-validate:state="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoState" placeholder="">
+										   name="state" id="infoState" placeholder v-validate="'required'">
 								</div>
 							</div>
 						</div>
 
 						<div class="row">
 							<div class="col-sm-6">
-								<div class="form-group" :class="{ 'has-error': checkForError('zip') }">
+								<div class="form-group" :class="{ 'has-error': errors.has('zip') }">
 									<label for="infoZip">Zip/Postal Code</label>
 									<input type="text" class="form-control input-sm" v-model="zipCode"
-										   v-validate:zip="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoZip" placeholder="12345">
+										   name="zip" id="infoZip" placeholder="12345" v-validate="'required'">
 								</div>
 							</div>
 							<div class="col-sm-12">
-								<div class="form-group" :class="{ 'has-error': checkForError('country') }">
+								<div class="form-group" :class="{ 'has-error': errors.has('country') }">
 									<label for="infoCountry">Country</label>
-									<v-select @keydown.enter.prevent="" class="form-control" id="infoCountry" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
-									<select hidden name="country" id="infoCountry" class="hidden" v-model="country" v-validate:country="{ required: true }">
-										<option :value="country.code" v-for="country in countries">{{country.name}}</option>
-									</select>
+									<v-select @keydown.enter.prevent="" name="country" v-validate="'required'" class="form-control" id="infoCountry" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
 								</div>
 							</div>
 						</div>
 
-						<div class="form-group" :class="{ 'has-error': checkForError('phone') }">
+						<div class="form-group" :class="{ 'has-error': errors.has('phone') }">
 							<label for="infoPhone">Home Phone</label>
-							<input type="text" class="form-control input-sm" v-model="phone | phone"
-								   v-validate:phone="{ required: true, minlength:10 }" :classes="{ invalid: 'has-error' }" id="infoPhone" placeholder="123-456-7890">
+							<phone-input v-validate="'required|min:10'" id="infoPhone" name="phone" v-model="phone"></phone-input>
+							<!--<input type="text" class="form-control input-sm" v-model="phone | phone"-->
+								   <!--name="phone="'required|min:10'" id="infoPhone" placeholder" v-validate="123-456-7890">-->
 						</div>
 
-						<div class="form-group" :class="{ 'has-error': checkForError('mobile') }">
+						<div class="form-group" :class="{ 'has-error': errors.has('mobile') }">
 							<label for="infoMobile">Cell Phone</label>
-							<input type="text" class="form-control input-sm" v-model="mobile | phone"
-								   v-validate:mobile="{ required: true, minlength:10 }" :classes="{ invalid: 'has-error'}" id="infoMobile" placeholder="123-456-7890">
+							<phone-input v-validate="'required|min:10'" id="infoMobile" name="mobile" v-model="mobile"></phone-input>
+							<!--<input type="text" class="form-control input-sm" v-model="mobile | phone"-->
+								   <!--name="mobile="'required|min:10'" :classes="{ invalid: 'has-error'}" id="infoMobile" placeholder" v-validate="123-456-7890">-->
 						</div>
 					</div>
 				</form>
-			</validator>
+
 		</div>
 	</div>
 </template>
 <script type="text/javascript">
 	import vSelect from "vue-select";
+	import utilities from '../../utilities.mixin';
+	import errorHandler from '../../error-handler.mixin';
 	export default{
 		name: 'basic-info',
+		mixins: [utilities, errorHandler],
 		props: {
 			forAdmin: {
 				type: Boolean,
@@ -299,16 +296,15 @@
 		components: {vSelect},
 		data(){
 			return {
+			    handle: 'BasicInfo',
 				title: 'Basic Traveler Information',
 				currentYear: new Date().getFullYear(),
 				dobYearCalc: '',
 				attemptedContinue: false,
-				roles: [],
-				countries: [],
 				usersArr: [],
 				countryCodeObj: null,
 				userObj: null,
-				user_id: null,
+//				user_id: null,
 				onBehalf: false,
 
 				// basic info data
@@ -324,39 +320,49 @@
 				email: null,
 				dobDay: '',
 				dobMonth: '',
-				dobYear: null,
+//				dobYear: null,
 				gender: null,
 				relationshipStatus: 'single',
 				size: null,
-				height: null,
+//				height: null,
 				heightA: null,
 				heightB: null,
 				weight: null,
 				avatar_upload_id: null,
-				userInfo: {}
+//				userInfo: {}
 			}
 		},
 		computed: {
+		    selectableYears() {
+		        let i = 100;
+		        let arr = [];
+		        for(i;i >= 0;i--) {
+					arr.push(this.currentYear - i);
+		        }
+		        return arr;
+		    },
 			heightUnitA() {
-				if (this.country == 'us')
+				if (this.country === 'us')
 					return 'ft';
 
 				return 'm';
 			},
 			heightUnitB() {
-				if (this.country == 'us')
+				if (this.country === 'us')
 					return 'in';
 
 				return 'cm';
 			},
 			weightUnit() {
-				if (this.country == 'us')
+				if (this.country === 'us')
 					return 'lbs';
 
 				return 'kg';
 			},
-			country(){
-				return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+			country: {
+		        get() {
+                    return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+                }, set() {}
 			},
 			user_id(){
 				if (this.$parent.hasOwnProperty('userData') && _.isObject(this.userObj)) {
@@ -365,9 +371,11 @@
                 }
 				return  _.isObject(this.userObj) ? this.userObj.id : null;
 			},
-			dobYear(){
-				return (this.currentYear - 100 + parseInt(this.dobYearCalc));
-			},
+			dobYear: {
+                get() {
+                    return this.dobYearCalc;
+                }, set() {}
+            },
 			height(){
 				return this.heightA + ' ft. ' + this.heightB + ' in.';
 			},
@@ -406,12 +414,7 @@
 		watch: {
 		    // fail safe for poor loading
 		    '$parent.trip'(val){
-                this.$http.get('utilities/team-roles').then(function (response) {
-                    _.each(response.body.roles, function (name, key) {
-                        if (_.contains(val.team_roles, key))
-                            this.roles.push({ value: key, name: name});
-                    }.bind(this));
-                });
+		        this.getRoles(val.team_roles);
 		    },
 			'userObj'(val){
 		        if (this.forAdmin) {
@@ -421,20 +424,19 @@
                         this.toggleUserData()
                     }
                 }
-			}
+			},
+            /*isFormDirty(){
+			    this.$validator.validateAll().then(result => {
+			        if (result)
+                        this.$parent.userInfo = this.userInfo;
+                });
+            }*/
 		},
 		methods: {
-			onValid(){
-				this.$parent.userInfo = this.userInfo;
-			},
-			checkForError(field){
-				// if user clicked continue button while the field is invalid trigger error styles
-				return this.$BasicInfo[field.toLowerCase()].invalid && this.attemptedContinue
-			},
 			getUsers(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('users', { params: { search: search} }).then(function (response) {
-					this.usersArr = response.body.data;
+				this.$http.get('users', { params: { search: search} }).then((response) => {
+					this.usersArr = response.data.data;
 					loading ? loading(false) : void 0;
 				})
 			},
@@ -455,7 +457,7 @@
                     this.address = null;
                     this.state = null;
                     this.zipCode = null;
-                    this.countryCodeObj = _.findWhere(this.countries, {code: "us"});
+                    this.countryCodeObj = _.findWhere(this.UTILITIES.countries, {code: "us"});
                     this.avatar_upload_id = null;
                 } else {
 				    this.setLocalUserData();
@@ -483,31 +485,22 @@
                 this.state = user.state;
                 this.zipCode = user.zip;
                 this.size = user.shirt_size;
-                this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
+                this.countryCodeObj = _.findWhere(this.UTILITIES.countries, {code: user.country_code});
                 this.avatar_upload_id = user.avatar_upload_id;
 			}
 		},
-		activate(done){
+		activated(){
 			if (this.forAdmin) {
 				this.onBehalf = true;
 			}
 
-			this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.body.countries;
-				this.toggleUserData();
-			});
+			this.getCountries();
 
-			this.$http.get('utilities/team-roles').then(function (response) {
-				_.each(response.body.roles, function (name, key) {
-				    if (_.contains(this.$parent.trip.team_roles, key))
-						this.roles.push({ value: key, name: name});
-				}.bind(this));
-			});
+			this.getRoles(this.$parent.trip.team_roles);
 
-			this.$dispatch('basic-info', true);
-			if (location.pathname.indexOf('admin') === -1)
+            this.$emit('step-completion', true);
+			if (this.isAdminRoute)
 				$('html, body').animate({scrollTop: 200}, 300);
-			done();
 		}
 	}
 </script>

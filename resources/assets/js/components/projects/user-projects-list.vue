@@ -1,19 +1,19 @@
 <template>
     <div>
-        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
 
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="causeFilter" :debounce="250" :on-search="getCauses"
-                              :value.sync="causeObj" :options="causeOptions" label="name"
+                              v-model="causeObj" :options="causeOptions" label="name"
                               placeholder="Filter by Cause"></v-select>
                 </div>
 
                 <hr class="divider inv sm">
-                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
-        </aside>
+        </mm-aside>
 
         <div class="row">
 
@@ -36,7 +36,7 @@
                 <hr class="divider sm inv">
             </div>
             <div class="col-xs-12" style="position:relative">
-                <!--<spinner v-ref:spinner size="sm" text="Loading"></spinner>-->
+                <!--<spinner ref="spinner" size="sm" text="Loading"></spinner>-->
                 <template v-if="projects.length > 0">
                 <div class="col-xs-12 col-sm-6 col-md-4" v-for="project in projects">
                     <div class="panel panel-default">
@@ -58,14 +58,14 @@
                                 <p class="text-capitalize small" style="margin-top:2px;">{{ project.initiative.data.country.name }}</p>
                             </div><!-- end col -->
                             <label style="margin-bottom:2px;">Raised</label>
-                            <p class="text-capitalize text-success" style="margin-top:2px;">{{ project.amount_raised|currency}}</p>
+                            <p class="text-capitalize text-success" style="margin-top:2px;">{{ currency(project.amount_raised) }}</p>
                             <hr class="divider inv sm">
-                            <a class="btn btn-sm btn-primary" href="/dashboard/projects/{{ project.id }}">View Project</a>
+                            <a class="btn btn-sm btn-primary" :href="'/dashboard/projects/' + project.id ">View Project</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-12 text-center">
-                    <pagination :pagination.sync="pagination" :callback="getProjects"></pagination>
+                    <pagination :pagination="pagination" pagination-key="pagination" :callback="getProjects"></pagination>
                 </div>
             </template>
             </div>
@@ -77,6 +77,7 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import vSelect from "vue-select";
     export default{
         name: 'user-projects-list',
@@ -105,29 +106,36 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: function (val) {
+                handler(val, oldVal) {
                     // console.log(val);
                     this.pagination.current_page = 1;
                     this.getProjects();
                 },
                 deep: true
             },
-            'groupsArr': function (val) {
+            'groupsArr'(val, oldVal) {
                 this.filters.groups = _.pluck(val, 'id')||'';
             },
-            'causeObj': function (val) {
+            'causeObj'(val, oldVal) {
                 this.filters.cause = val ? val.id : '';
             },
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.getProjects();
             },
-            'includeManaging': function (val, oldVal) {
+            'includeManaging'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.getProjects();
             }
         },
         methods: {
+            resetFilter() {
+                this.filters = {
+                    groups: '',
+                    cause: '',
+                    type: ''
+                }
+            },
             country(code){
                 return code;
             },
@@ -155,31 +163,31 @@
                 $.extend(params, this.filters);
 
                 // this.$refs.spinner.show();
-                this.$http.get('projects', { params: params }).then(function (response) {
-                    this.projects = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('projects', { params: params }).then((response) => {
+                    this.projects = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 });
             },
             getGroups(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('groups', { params: { search: search} }).then(function (response) {
-                    this.groupOptions = response.body.data;
+                this.$http.get('groups', { params: { search: search} }).then((response) => {
+                    this.groupOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getCauses(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('causes', { params: { search: search} }).then(function (response) {
-                    this.causeOptions = response.body.data;
+                this.$http.get('causes', { params: { search: search} }).then((response) => {
+                    this.causeOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
 
         },
-        ready(){
-            this.$http.get('users/' + this.userId + '?include=facilitating,managing.projects').then(function (response) {
-                let user = response.body.data;
+        mounted(){
+            this.$http.get('users/' + this.userId + '?include=facilitating,managing.projects').then((response) => {
+                let user = response.data.data;
                 let managing = [];
 
                 if (user.facilitating.data.length) {
@@ -189,7 +197,7 @@
                 }
 
                 if (user.managing.data.length) {
-                    _.each(user.managing.data, function (group) {
+                    _.each(user.managing.data, (group) => {
                         managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                     });
                     this.trips = _.union(this.trips, managing);

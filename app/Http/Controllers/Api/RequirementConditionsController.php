@@ -44,7 +44,7 @@ class RequirementConditionsController extends Controller
     }
 
     public function update($requirementId, $id, RequirementConditionRequest $request)
-    {   
+    {
         $condition = $this->condition
                           ->where('requirement_id', $requirementId)
                           ->findOrFail($id);
@@ -65,7 +65,7 @@ class RequirementConditionsController extends Controller
 
     /**
      * Remove a condition
-     * 
+     *
      * @param  String $id
      * @return Response
      */

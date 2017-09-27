@@ -1,5 +1,7 @@
 @extends('site.layouts.default')
 
+@section('title', 'Serving the Local Church - Missions.Me')
+
 @section('content')
 <div class="content-page-header">
     <img class="img-responsive" src="images/speakers/speaker-header.jpg" alt="Speakers">

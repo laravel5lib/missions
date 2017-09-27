@@ -1,50 +1,50 @@
 <template>
 	<div class="row" style="position:relative;">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
-		<aside :show.sync="showRegionsFilters" placement="left" header="Region Filters" :width="375">
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
+		<mm-aside :show="showRegionsFilters" @open="showRegionsFilters=true" @close="showRegionsFilters=false" placement="left" header="Region Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 
 				<div class="form-group" v-if="isAdminRoute">
 					<label>Country</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" :debounce="250" :on-search="getCountries"
-					          :value.sync="regionsFilters.country" :options="UTILITIES.countries" label="name"
+					          v-model="regionsFilters.country" :options="UTILITIES.countries" label="name"
 					          placeholder="Filter Countries"></v-select>
 				</div>
 
 				<hr class="divider inv sm">
 				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetRegionFilter"><i class="fa fa-times"></i> Reset Region Filters</button>
 			</form>
-		</aside>
-		<aside :show.sync="showSquadsFilters" placement="left" header="Squad Filters" :width="375">
+		</mm-aside>
+		<mm-aside :show="showSquadsFilters" @open="showSquadsFilters=true" @close="showSquadsFilters=false" placement="left" header="Squad Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 
 				<div class="form-group">
 					<label for="" class="control-label">Type</label>
 					<select class="form-control" v-model="squadsFilters.type">
-						<option :value="">-- Select --</option>
-						<option :value="type.name" v-for="type in squadTypes">{{type.name | capitalize}}</option>
+						<option value="">-- Select --</option>
+						<option :value="type.name" v-for="type in squadTypes">{{ type.name|capitalize }}</option>
 					</select>
 				</div>
 
 				<div class="form-group">
 					<label>Travel Group</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
-					          :value.sync="squadsFilters.group" :options="groupsOptions" label="name"
+					          v-model="squadsFilters.group" :options="groupsOptions" label="name"
 					          placeholder="Filter by Group"></v-select>
 				</div>
 				<div class="form-group">
 					<label>Region</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" :debounce="250"
-					          :value.sync="squadsFilters.region" :options="regions" label="name"
+					          v-model="squadsFilters.region" :options="regions" label="name"
 					          placeholder="Filter by Region"></v-select>
 				</div>
 
 				<hr class="divider inv sm">
 				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetSquadFilter"><i class="fa fa-times"></i> Reset Squad Filters</button>
 			</form>
-		</aside>
+		</mm-aside>
 
 		<div class="col-sm-8">
 
@@ -54,7 +54,7 @@
 					<div class="panel-heading">
 						<div class="row">
 							<div class="col-sm-6">
-								<h5>{{currentRegion.name | capitalize}} <span v-if="currentRegion.callsign">({{currentRegion.callsign}})</span><span class="small">&middot; Details</span></h5>
+								<h5>{{ currentRegion.name|capitalize }} <span v-if="currentRegion.callsign">({{currentRegion.callsign}})</span><span class="small">&middot; Details</span></h5>
 							</div>
 							<div class="col-sm-6 text-right">
 								<h5>{{currentRegion.country.name}}</h5>
@@ -72,8 +72,8 @@
 										<div class="list-group-item" v-for="team in currentRegion.teams.data">
 											<div class="row list-group-item-heading">
 												<div class="col-xs-6">
-													<a :href="'/admin/campaigns/' + campaignId + '/squads?squad=' + team.id" target="_blank">{{ team.callsign | capitalize }}</a>
-													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name | capitalize"></span>
+													<a :href="'/admin/campaigns/' + campaignId + '/squads?squad=' + team.id" target="_blank">{{ team.callsign|capitalize }}</a>
+													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;">{{team.type.data.name|capitalize}}</span>
 													<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 												</div>
 												<div class="col-xs-6 text-right">
@@ -84,7 +84,7 @@
 												</div>
 											</div>
 											<p class="list-group-item-text small" v-if="team.groups.data.length">
-												<span v-for="group in team.groups.data">{{group.name}}<span v-if="!$last && team.groups.data.length > 1">, </span></span>
+												<span v-for="(group, index) in team.groups.data">{{group.name}}<span v-if="(index !== team.groups.data.length - 1) && team.groups.data.length > 1">, </span></span>
 											</p>
 										</div>
 									</div>
@@ -111,7 +111,7 @@
 					<form class="form-inline row">
 						<div class="form-group col-xs-8">
 							<div class="input-group input-group-sm col-xs-12">
-								<input type="text" class="form-control" v-model="regionsSearch" debounce="300" placeholder="Search">
+								<input type="text" class="form-control" v-model="regionsSearch" @keyup="debouncedRegionsSearch" placeholder="Search">
 								<span class="input-group-addon"><i class="fa fa-search"></i></span>
 							</div>
 						</div><!-- end col -->
@@ -131,18 +131,18 @@
 
 					<template v-if="regions.length">
 						<div class="panel-group" id="regionsAccordion" role="tablist" aria-multiselectable="true">
-							<div class="panel panel-default" v-for="region in regions | orderBy 'name'">
+							<div class="panel panel-default" v-for="(region, regionIndex) in regionsOrdered">
 								<div class="panel-heading" role="tab" id="headingOne">
 									<h5 class="panel-title">
 										<div class="row">
 											<div class="col-xs-9">
 												<a role="button" @click="makeCurrentRegion(region)">
-													<h4>{{ region.name | capitalize }}</h4>
+													<h4>{{ region.name|capitalize }}</h4>
 													<p>
 					                                    <span v-if="region.callsign">
-					                                        <span class="label label-default" :style="'color: #FFF !important; background-color: ' + region.callsign" v-text="region.callsign|capitalize"></span>
+					                                        <span class="label label-default" :style="'color: #FFF !important; background-color: ' + region.callsign">{{region.callsign|capitalize}}</span>
 					                                    </span>
-														<span class="small">{{ region.country.name | capitalize }}</span>
+														<span class="small" v-if="region.country">{{ region.country.name|capitalize }}</span>
 													</p>
 												</a>
 											</div>
@@ -150,24 +150,22 @@
 												<span class="badge badge-danger" style="background-color: #F6323E;">
 													{{region.teams && region.teams.data.length ? region.teams.data.length : 0}}
 												</span>
-												<dropdown type="default">
-													<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-														<span class="fa fa-ellipsis-h"></span>
-													</button>
+												<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+													<span slot="button" class="fa fa-ellipsis-h"></span>
 													<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 														<li><a @click="openRegionEditModal(region)"><i class="fa fa-pencil"></i> Edit</a></li>
 														<li role="separator" class="divider"></li>
 														<li><a @click="openRegionDeleteModal(region)"><i class="fa fa-trash"></i> Delete</a></li>
 													</ul>
 												</dropdown>
-												<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#regionAccordion" :href="'#regionItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+												<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#regionAccordion" :href="'#regionItem' + regionIndex" aria-expanded="true" aria-controls="collapseOne">
 													<i class="fa fa-angle-down"></i>
 												</a>
 											</div>
 										</div>
 									</h5>
 								</div>
-								<div :id="'regionItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+								<div :id="'regionItem' + regionIndex" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 									<div class="panel-body">
 										<label>Travel Groups In this Region</label>
 									</div>
@@ -175,7 +173,7 @@
 										<template v-for="team in region.teams.data">
 											<template v-if="team.groups">
 												<li class="list-group-item" v-for="group in team.groups.data">
-													{{ group.name | capitalize }}
+													{{ group.name|capitalize }}
 												</li>
 											</template>
 										</template>
@@ -186,7 +184,7 @@
 								</div>
 							</div>
 							<div class="col-xs-12 text-center">
-								<pagination :pagination.sync="regionsPagination" :callback="getRegions"></pagination>
+								<pagination :pagination="regionsPagination" pagination-key="regionsPagination" :callback="getRegions"></pagination>
 							</div>
 						</div>
 					</template>
@@ -204,7 +202,7 @@
 			<form class="form-inline row" @submit.prevent>
 				<div class="form-group col-xs-8">
 					<div class="input-group input-group-sm">
-						<input type="text" class="form-control" v-model="squadsSearch" debounce="300" placeholder="Search">
+						<input type="text" class="form-control" v-model="squadsSearch" @keyup="debouncedSquadsSearch" placeholder="Search">
 						<span class="input-group-addon"><i class="fa fa-search"></i></span>
 					</div>
 				</div>
@@ -224,8 +222,8 @@
 							<div class="list-group-item" v-for="team in squads">
 								<div class="row list-group-item-heading">
 									<div class="col-xs-6">
-										<a :href="'/admin/campaigns/' + campaignId + '/squads?squad=' + team.id" target="_blank">{{ team.callsign | capitalize }}</a>
-										<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name | capitalize"></span>
+										<a :href="'/admin/campaigns/' + campaignId + '/squads?squad=' + team.id" target="_blank">{{ team.callsign|capitalize }}</a>
+										<span class="badge text-uppercase" v-if="team.type" style="padding:3px 10px;font-size:10px;line-height:1.4;">{{team.type.data.name|capitalize}}</span>
 										<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 									</div>
 									<div class="col-xs-6 text-right">
@@ -236,12 +234,12 @@
 									</div>
 								</div>
 								<p class="list-group-item-text small" v-if="team.groups.data.length">
-									<span v-for="group in team.groups.data">{{group.name}}<span v-if="!$last && team.groups.data.length > 1">, </span></span>
+									<span v-for="(group, index) in team.groups.data">{{group.name}}<span v-if="(index !== team.groups.data.length - 1) && team.groups.data.length > 1">, </span></span>
 								</p>
 							</div>
 						</div>
 						<div class="col-xs-12 text-center">
-							<pagination :pagination.sync="squadsPagination" :callback="getSquads"></pagination>
+							<pagination :pagination="squadsPagination" pagination-key="squadsPagination" :callback="getSquads"></pagination>
 						</div>
 					</template>
 					<template v-else>
@@ -255,58 +253,56 @@
 		</div>
 
 		<!-- Modals -->
-		<modal :title="editRegionModal?'Edit Region' : 'Create a Region'" small :ok-text="editRegionModal?'Update' : 'Create'" :callback="createRegion" :show.sync="showRegionModal">
+		<modal :title="editRegionModal?'Edit Region' : 'Create a Region'" small :ok-text="editRegionModal?'Update' : 'Create'" :callback="createRegion" :value="showRegionModal" @closed="showRegionModal=false">
 			<div slot="modal-body" class="modal-body" v-if="selectedRegion">
-				<validator name="RegionCreate">
-					<form id="RegionCreateForm">
-						<div class="form-group" :class="{'has-error': $RegionCreate.name.invalid}">
-							<label for="createPlanCallsign" class="control-label">Region Name</label>
-							<input @keydown.enter.prevent="createRegion" type="text" class="form-control" id="createRegionName" placeholder="" v-validate:name="['required']" v-model="selectedRegion.name">
+
+					<form id="RegionCreateForm" data-vv-scope="region-create">
+						<div class="form-group" :class="{'has-error': errors.has('name', 'region-create')}">
+							<label for="createRegionName" class="control-label">Region Name</label>
+							<input @keydown.enter.prevent="createRegion" class="form-control" id="createRegionName" placeholder="" name="name" v-model="selectedRegion.name" v-validate="'required'">
 						</div>
 						<div class="form-group">
-							<label for="createPlanCallsign" class="control-label">Region Country</label>
-							<v-select @keydown.enter.prevent=""  class="form-control" :debounce="250" :on-search="getCountries"
-							          :value.sync="selectedRegion.country" :options="UTILITIES.countries" label="name"
+							<label for="createRegionCountry" class="control-label">Region Country</label>
+							<v-select @keydown.enter.prevent="" class="form-control" :debounce="250" :on-search="getCountries"
+							          v-model="selectedRegion.country" :options="UTILITIES.countries" label="name"
 							          placeholder="Select a Country"></v-select>
 						</div>
 						<div class="form-group">
-							<label for="createPlanCallsign" class="control-label">Region CallSign</label>
-							<input  type="text" class="form-control" id="createRegionName" placeholder="" v-model="selectedRegion.callsign">
+							<label for="createRegionCallsign" class="control-label">Region CallSign</label>
+							<input class="form-control" id="createRegionCallsign" placeholder="" v-model="selectedRegion.callsign">
 						</div>
 					</form>
-				</validator>
+
 			</div>
 		</modal>
-		<modal title="Delete Region" small ok-text="Delete" :callback="deleteRegion" :show.sync="showRegionDeleteModal">
-			<div slot="modal-body" class="modal-body">
-				<p v-if="selectedRegion">
-					Are you sure you want to delete region: "{{selectedRegion.name}}" ?
-				</p>
+		<modal title="Delete Region" small ok-text="Delete" :callback="deleteRegion" :value="showRegionDeleteModal" @closed="showRegionDeleteModal=false">
+			<div slot="modal-body" class="modal-body" v-if="selectedRegion">
+				<p v-text="`Are you sure you want to delete region: ${selectedRegion.name }?`"></p>
 			</div>
 		</modal>
-		<modal title="Create a new Room" small ok-text="Create" :callback="newRoom" :show.sync="showRoomModal">
-			<div slot="modal-body" class="modal-body">
-				<validator name="RoomCreate">
-					<form id="RoomCreateForm">
-						<div class="form-group" :class="{'has-error': $RoomCreate.roomtype.invalid}">
+		<modal title="Create a new Room" small ok-text="Create" :callback="newRoom" :value="showRoomModal" @closed="showRoomModal=false">
+			<div slot="modal-body" class="modal-body" v-if="selectedRoom">
+
+					<form id="RoomCreateForm" data-vv-scope="room-create">
+						<div class="form-group" :class="{'has-error': errors.has('roomtype', 'room-create')}">
 							<label for="" class="control-label">Type</label>
-							<select class="form-control" v-model="selectedRoom.type" v-validate:roomtype="['required']" @change="selectedRoom.room_type_id = selectedRoom.type.id">
-								<option :value="type" v-for="type in roomTypes">{{type.name | capitalize}}</option>
+							<select class="form-control" v-model="selectedRoom.type" name="roomtype=" @change="selectedRoom.room_type_id = selectedRoom.type.id" v-validate="'required'">
+								<option :value="type" v-for="type in roomTypes">{{ type.name|capitalize }}</option>
 							</select>
 							<hr class="divider sm">
 							<div v-if="selectedRoom.type" class="">
-								<template  v-for="(key, value) in selectedRoom.type.rules">
-									<label v-text="key | underscoreToSpace | capitalize"></label>
-									<p class="small" v-text="value | capitalize"></p>
+								<template  v-for="(value, key) in selectedRoom.type.rules">
+									<!--<label v-text="key ? (key[0].toUpperCase() + key.slice(1)) | underscoreToSpace : ''"></label>-->
+									<p class="small">{{value|capitalize}}</p>
 								</template>
 							</div>
 						</div>
-						<div class="form-group">
+						<div class="form-group" :class="{'has-error': errors.has('roomname', 'room-create')}">
 							<label for="roomname" class="control-label">Room Name (Optional)</label>
 							<input @keydown.enter.prevent="" type="text" class="form-control" id="roomname" v-model="selectedRoom.label">
 						</div>
 					</form>
-				</validator>
+
 			</div>
 		</modal>
 	</div>
@@ -394,21 +390,19 @@
         watch: {
             regionsSearch(val) {
                 this.regionsPagination.current_page = 1;
-                this.getRegions();
             },
             squadsSearch(val) {
                 this.squadsPagination.current_page = 1;
-                this.getSquads();
             },
             regionsFilters: {
-                handler: function (val) {
+                handler(val, oldVal) {
                     this.regionsPagination.current_page = 1;
                     this.getRegions();
                 },
                 deep: true
             },
             squadsFilters: {
-                handler: function (val) {
+                handler(val, oldVal) {
                     this.squadsPagination.current_page = 1;
                     this.getSquads();
                 },
@@ -419,9 +413,17 @@
             }
         },
         computed: {
-
+			regionsOrdered() {
+			    return _.sortBy(this.regions, 'name')
+			}
         },
         methods: {
+            debouncedRegionsSearch: _.debounce(function() {
+                this.getRegions();
+            }, 250),
+            debouncedSquadsSearch: _.debounce(function() {
+                this.getSquads();
+            }, 250),
             regionFactory() {
                 return {
 					name: '',
@@ -450,12 +452,12 @@
 	                country: this.regionsFilters.country,
                 };
 
-                return this.RegionsResource.get(params).then(function (response) {
-                    this.regionsPagination = response.body.meta.pagination;
-                    return this.regions = response.body.data;
-                }, function (response) {
+                return this.RegionsResource.get(params).then((response) => {
+                    this.regionsPagination = response.data.meta.pagination;
+                    return this.regions = response.data.data;
+                }, (response) =>  {
                     console.log(response);
-                    return response.body.data;
+                    return response.data.data;
                 });
             },
 	        makeCurrentRegion(region) {
@@ -463,24 +465,24 @@
 	        },
             addToRegion(squad, region) {
                 region = region || this.currentRegion;
-	            this.$http.post('regions/' + region.id + '/teams', { ids: [squad.id] }).then(function (response) {
+	            this.$http.post('regions/' + region.id + '/teams', { ids: [squad.id] }).then((response) => {
 	                region.teams.data.push(squad);
 					this.getSquads();
                 });
             },
             removeFromRegion(squad, region) {
                 region = region || this.currentRegion;
-                this.$http.delete('regions/' + region.id + '/teams/' + squad.id).then(function (response) {
-                    region.teams.data = _.reject(region.teams.data, function (obj) {
+                this.$http.delete('regions/' + region.id + '/teams/' + squad.id).then((response) => {
+                    region.teams.data = _.reject(region.teams.data, (obj) => {
 	                    return obj.id === squad.id;
                     });
                     this.getSquads();
                 });
             },
             getTeamTypes() {
-                return this.$http.get('teams/types', { params: { campaign: this.campaignId } }).then(function (response) {
-                    return this.squadTypes = response.body.data;
-                }, function (error) {
+                return this.$http.get('teams/types', { params: { campaign: this.campaignId } }).then((response) => {
+                    return this.squadTypes = response.data.data;
+                }, (error) =>  {
                     console.log(error);
                     return error;
                 });
@@ -501,23 +503,23 @@
                     params.unassigned = 'region';
                 }
 
-                return this.$http.get('teams', { params: params}).then(function (response) {
-                        this.squadsPagination = response.body.meta.pagination;
-                        return this.squads = response.body.data;
+                return this.$http.get('teams', { params: params}).then((response) => {
+                        this.squadsPagination = response.data.meta.pagination;
+                        return this.squads = response.data.data;
                     },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
-                        return response.body.data;
+                        return response.data.data;
                     });
 	        },
             getGroups(search, loading){
                 loading ? loading(true) : void 0;
-                return this.$http.get('groups', { params: {search: search} }).then(function (response) {
-                    this.groupsOptions = response.body.data;
+                return this.$http.get('groups', { params: {search: search} }).then((response) => {
+                    this.groupsOptions = response.data.data;
                     if (loading) {
                         loading(false);
                     } else {
-                        return response.body.data;
+                        return response.data.data;
                     }
                 });
             },
@@ -537,31 +539,38 @@
                 this.selectedRegion = region;
             },
             createRegion() {
-                if (this.editRegionModal)
-                    return this.updateRegion();
+                this.$validator.validateAll('region-create').then(result => {
+                    if (!result) {
+                        return;
+                    }
+                    if (this.editRegionModal) {
+                        return this.updateRegion();
+                    }
 
-                this.selectedRegion.country_code = this.selectedRegion.country.code;
-                delete this.selectedRegion.country;
+	                this.selectedRegion.country_code = this.selectedRegion.country.code;
+	                delete this.selectedRegion.country;
 
-                if (!this.selectedRegion.callsign)
-                    delete this.selectedRegion.callsign;
+	                if (!this.selectedRegion.callsign)
+	                    delete this.selectedRegion.callsign;
 
 
-                return this.RegionsResource.save({ campaign: this.campaignId, include: 'teams.groups', }, this.selectedRegion).then(function (response) {
-                    let region = response.body.data;
-                    this.regions.push(region);
-                    this.showRegionModal = false;
-                    this.$root.$emit('showSuccess', 'Region: ' + region.name + ', created successfully.');
-                    return this.currentRegion = region;
-                }, function (response) {
-                    console.log(response);
-                    this.$root.$emit('showError', response.body.message);
-                    return response.body.data;
+                    return this.RegionsResource.post({
+                        campaign: this.campaignId,
+                        include: 'teams.groups',
+                    }, this.selectedRegion).then((response) => {
+                        let region = response.data.data;
+                        this.regions.push(region);
+                        this.showRegionModal = false;
+                        this.$root.$emit('showSuccess', 'Region: ' + region.name + ', created successfully.');
+                        return this.currentRegion = region;
+                    }, (response) => {
+                        console.log(response);
+                        this.$root.$emit('showError', response.data.message);
+                        return response.data.data;
+                    });
                 });
             },
             updateRegion() {
-                this.selectedRegion.country_code = this.selectedRegion.country.code;
-                delete this.selectedRegion.country;
 
                 if (!this.selectedRegion.callsign)
                     delete this.selectedRegion.callsign;
@@ -572,30 +581,35 @@
                     callsign: this.selectedRegion.callsign,
                 };
 
-                this.RegionsResource.update({ campaign: this.campaignId, region: this.selectedRegion.id, include: 'teams.groups, teams.type', }, data).then(function (response) {
-                    let region = response.body.data;
+                this.RegionsResource.put({
+                    campaign: this.campaignId,
+                    region: this.selectedRegion.id,
+                    include: 'teams.groups, teams.type',
+                }, data).then((response) => {
+                    let region = response.data.data;
                     this.showRegionModal = false;
                     this.editRegionModal = false;
+                    this.selectedRegion = null;
                     this.$root.$emit('showSuccess', 'Region: ' + region.name + ', created successfully.');
-                    return region;
-                }, function (response) {
+	                return region;
+                }, (response) => {
                     console.log(response);
-                    this.$root.$emit('showError', response.body.message);
-                    return response.body.data;
+                    this.$root.$emit('showError', response.data.message);
+                    return response.data.data;
                 });
             },
             deleteRegion() {
                 let region = _.extend({}, this.selectedRegion);
-                this.RegionsResource.delete({ campaign: this.campaignId, region: this.selectedRegion.id}).then(function (response) {
+                this.RegionsResource.delete({ campaign: this.campaignId, region: this.selectedRegion.id}).then((response) => {
                     this.showRegionDeleteModal = false;
                     this.$root.$emit('showInfo', region.name + ' Deleted!');
-                    this.regions = _.reject(this.regions, function (obj) {
+                    this.regions = _.reject(this.regions, (obj) => {
                         return region.id === obj.id;
                     });
                     this.currentRegion = this.region.length ? this.region[0] : null;
-                }, function (response) {
-                    this.$root.$emit('showError', response.body.message);
-                }).then(function () {
+                }, (response) =>  {
+                    this.$root.$emit('showError', response.data.message);
+                }).then(() => {
                     this.selectedRegion = null;
                 });
 
@@ -615,35 +629,34 @@
                 };
             },
             newRoom() {
-                return this.$http.post('rooming/plans/' + this.currentPlan.id + '/rooms' , this.selectedRoom, { params: { include: 'type'}}).then(function (response) {
-                    let room = response.body.data;
-                    this.showRoomModal = false;
-                    //this.currentPlan.rooms.push(room);
-                    this.currentRegions.push(room);
-                    //_.some()
-                    return this.currentRegion = room;
-                }, function (response) {
-                    console.log(response);
-                    return response.body.data;
+                this.$validator.validateAll('room-create').then(result => {
+                    if (!result) {
+                        return;
+                    }
+                    return this.$http.post('rooming/plans/' + this.currentPlan.id + '/rooms', this.selectedRoom, {params: {include: 'type'}}).then((response) => {
+                        let room = response.data.data;
+                        this.showRoomModal = false;
+                        //this.currentPlan.rooms.push(room);
+                        this.currentRegions.push(room);
+                        //_.some()
+                        return this.currentRegion = room;
+                    }, (response) => {
+                        console.log(response);
+                        return response.data.data;
+                    });
                 });
             },
         },
-        ready(){
+        mounted(){
             let promises = [];
-            if (this.isAdminRoute) {
-
-            } else {
-
-            }
-
             promises.push(this.getCountries());
             promises.push(this.getTeamTypes());
             promises.push(this.getRegions());
             promises.push(this.getSquads());
             promises.push(this.getGroups());
-            Promise.all(promises).then(function (values) {
+            Promise.all(promises).then((values) => {
                 this.startUp = false;
-            }.bind(this));
+            });
         }
     }
 </script>

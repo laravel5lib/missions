@@ -53,7 +53,9 @@ class TodoTransformer extends TransformerAbstract
     {
         $user = $todo->user;
 
-        if (! $user) return null;
+        if (! $user) {
+            return null;
+        }
 
         return $this->item($user, new UserTransformer);
     }

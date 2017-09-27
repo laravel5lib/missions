@@ -12,7 +12,7 @@
 						</div>
 					</div>
 					<div class="input-group input-group-sm">
-						<input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+						<input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search for anything">
 						<span class="input-group-addon"><i class="fa fa-search"></i></span>
 					</div>
 					<export-utility url="campaigns/export"
@@ -29,7 +29,7 @@
 		</div>
 		<hr class="divider sm">
 		<div style="position:relative;">
-			<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+			<spinner ref="spinner" size="sm" text="Loading"></spinner>
 			<table class="table table-striped">
 				<thead>
 				<tr>
@@ -44,20 +44,20 @@
 				<tbody>
 				<tr v-for="campaign in campaigns">
 					<td>{{ campaign.country }}</td>
-					<td>{{ campaign.started_at|moment 'MM DD, YYYY'}} - {{ campaign.ended_at|moment 'MM DD, YYYY' }}</td>
+					<td>{{ campaign.started_at|moment('MM DD, YYYY')}} - {{ campaign.ended_at|moment('MM DD, YYYY') }}</td>
 					<td>{{ campaign.name }}</td>
 					<td>{{ campaign.groups.data.length }} <i class="fa fa-group"></i></td>
 					<td>
 						<i class="fa" :class="{ 'fa-calendar':campaign.status === 'Scheduled', 'fa-check':campaign.pencil === 'Draft', 'fa-check':campaign.status === 'Published' }"></i> {{ campaign.status }}
 					</td>
-					<td class="text-center"><a href="/admin/campaigns/{{ campaign.id }}"><i class="fa fa-gear"></i></a>
+					<td class="text-center"><a :href="'/admin/campaigns/' + campaign.id"><i class="fa fa-gear"></i></a>
 					</td>
 				</tr>
 				</tbody>
 				<tfoot>
 				<tr>
 					<td colspan="10" class="text-center">
-						<pagination :pagination.sync="pagination" :callback="searchCampaigns"></pagination>
+						<pagination :pagination="pagination" pagination-key="pagination" :callback="searchCampaigns"></pagination>
 					</td>
 				</tr>
 				</tfoot>
@@ -66,6 +66,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+	import _ from 'underscore';
     import vSelect from "vue-select";
     import exportUtility from '../export-utility.vue';
   	import importUtility from '../import-utility.vue';
@@ -119,16 +120,19 @@
         }
     },
 		watch: {
-			'per_page': function (val, oldVal) {
+			'per_page'(val, oldVal) {
 				this.searchCampaigns();
 			},
-			'search': function (val, oldVal) {
+			'search'(val, oldVal) {
 				this.pagination.current_page = 1;
-				this.searchCampaigns();
+
 			},
 
 		},
         methods: {
+            debouncedSearch: _.debounce(function () {
+                this.searchCampaigns();
+            }, 250),
 			searchCampaigns(){
 				let params = {
 				    include: 'groups',
@@ -150,13 +154,13 @@
 				$.extend(params, this.filters);
         this.exportFilters = params;
 
-				this.$http.get('campaigns', { params: params }).then(function (response) {
-					this.campaigns = response.body.data;
-					this.pagination = response.body.meta.pagination;
+				this.$http.get('campaigns', { params: params }).then((response) => {
+					this.campaigns = response.data.data;
+					this.pagination = response.data.meta.pagination;
 				})
 			}
         },
-        ready(){
+        mounted(){
             this.searchCampaigns();
         }
     }

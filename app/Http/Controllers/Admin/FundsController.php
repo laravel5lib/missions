@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
+use App\Models\v1\Fund;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Traits\SEOTools;
 
 class FundsController extends Controller
 {
+    use SEOTools;
+
     /**
      * Display a listing of the resource.
      *
@@ -16,9 +19,13 @@ class FundsController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('view', Fund::class);
+
         $funds = $this->api->get('funds?page=' . $request->get('page', 1));
 
         $funds->setPath('/admin/funds');
+
+        $this->seo()->setTitle('Funds');
 
         return view('admin.financials.funds.index', compact('funds'));
     }
@@ -26,12 +33,14 @@ class FundsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param Fund $fund
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Fund $fund)
     {
-        $fund = $this->api->get('funds/' . $id);
+        $this->authorize('view', $fund);
+
+        $this->seo()->setTitle($fund->name . ' Fund');
 
         return view('admin.financials.funds.show', compact('fund'));
     }

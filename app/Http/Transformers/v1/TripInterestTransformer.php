@@ -56,5 +56,4 @@ class TripInterestTransformer extends TransformerAbstract
 
         return $this->item($trip, new TripTransformer);
     }
-
 }

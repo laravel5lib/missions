@@ -2,20 +2,21 @@
 
 namespace App\Services\Importers;
 
-class ReferralListImportHandler extends ImportHandler {
+class ReferralListImportHandler extends ImportHandler
+{
 
     /**
      * The model class to use
-     * 
+     *
      * @var string
      */
     public $model = 'App\Models\v1\Referral';
 
     /**
-     * The database columns and document 
+     * The database columns and document
      * columns to find matches on.
      * ['db_col' => 'doc_col']
-     * 
+     *
      * @var array
      */
     public $duplicates = ['name' => 'name', 'referral_email' => 'referral_email'];
@@ -36,5 +37,4 @@ class ReferralListImportHandler extends ImportHandler {
             'updated_at' => $referral->updated_at
         ];
     }
-
 }

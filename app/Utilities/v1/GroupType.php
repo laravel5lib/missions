@@ -2,7 +2,8 @@
 
 namespace App\Utilities\v1;
 
-class GroupType {
+class GroupType
+{
 
     /**
      * Available group types
@@ -22,5 +23,4 @@ class GroupType {
     {
         return static::$types;
     }
-
 }

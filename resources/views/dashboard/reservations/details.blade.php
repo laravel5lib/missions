@@ -10,13 +10,13 @@
 @endsection
 
 @section('tab')
-    @if($reservation->trip->campaign->publish_rooms || $reservation->trip->campaign->publish_squads || $reservation->trip->campaign->publish_regions)
+    @if( $reservation->assignmentsArePublished() )
     <div class="panel panel-default">
         <div class="panel-heading">
             <h5>Trip Assignments</h5>
         </div>
         <div class="panel-body">
-            @if($reservation->trip->campaign->publish_squads)
+            @if( $reservation->squadsArePublished() )
             <div class="col-md-6">
                 <label>Squad(s)</label>
                 <p>
@@ -29,7 +29,7 @@
                 <hr class="divider">
             </div>
             @endif
-            @if($reservation->trip->campaign->publish_regions)
+            @if( $reservation->regionsArePublished() )
             <div class="col-md-6">
                 <label>Region(s)</label>
                 <p>
@@ -46,7 +46,7 @@
                 <hr class="divider">
             </div>
             @endif
-            @if($reservation->trip->campaign->publish_rooms)
+            @if( $reservation->roomsArePublished() )
             <div class="col-md-6">
                 <label>Accommodations</label>
                 <p>
@@ -62,6 +62,15 @@
             @endif
         </div>
     </div>
+    @endif
+
+    @if( $reservation->transportsArePublished() )
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h5>Travel</h5>
+            </div>
+            @include('partials.reservations.transportation', ['reservation' => $reservation])
+        </div>
     @endif
 
     <div class="panel panel-default">

@@ -23,9 +23,8 @@ class AirportFilter extends ModelFilter
      * Fields that can be searched.
      *
      * @var array
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    // public $searchable = ['name', 'iata'];
-
     public function search($search)
     {
         return $this->where(function ($q) use ($search) {

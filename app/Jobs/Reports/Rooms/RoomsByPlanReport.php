@@ -51,16 +51,14 @@ class RoomsByPlanReport extends Job implements ShouldQueue
     {
         $occupantCols = [];
 
-        foreach(range(1, $rooms->max('occupants_count')) as $number)
-        {
+        foreach (range(1, $rooms->max('occupants_count')) as $number) {
             $occupantCols['Occupant '.$number . ' Given Names'] = null;
             $occupantCols['Occupant '.$number . ' Surname'] = null;
         }
 
         return $rooms->map(function ($room) use ($occupantCols) {
 
-            foreach($room->occupants as $key => $occupant)
-            {
+            foreach ($room->occupants as $key => $occupant) {
                 $number = ($key+1);
                 $occupantCols['Occupant '. $number .' Surname'] = $occupant->surname;
                 $occupantCols['Occupant '. $number .' Given Names'] = $occupant->given_names;
@@ -81,7 +79,6 @@ class RoomsByPlanReport extends Job implements ShouldQueue
             ];
 
             return $occupantCols + $columns;
-
         })->all();
     }
 }

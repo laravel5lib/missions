@@ -4,19 +4,20 @@ namespace App\Services\Importers;
 
 use App\Models\v1\Upload;
 
-class UserListImportHandler extends ImportHandler {
+class UserListImportHandler extends ImportHandler
+{
 
     /**
      * The model class to use
-     * 
+     *
      * @var string
      */
     public $model = 'App\Models\v1\User';
 
     /**
-     * The database columns and document 
+     * The database columns and document
      * columns to find matches on.
-     * 
+     *
      * @var array
      */
     public $duplicates = ['email' => 'email'];
@@ -24,7 +25,7 @@ class UserListImportHandler extends ImportHandler {
 
     public function match_columns_to_properties($user)
     {
-        $user = $user->transform(function($item) {
+        $user = $user->transform(function ($item) {
             return trim($item);
         });
 
@@ -59,7 +60,9 @@ class UserListImportHandler extends ImportHandler {
 
     private function attach_avatar($user)
     {
-        if (! $user->logo_source) return null;
+        if (! $user->logo_source) {
+            return null;
+        }
 
         $upload = Upload::firstOrNew(['source' => trim($user->avatar_source)]);
 
@@ -73,20 +76,24 @@ class UserListImportHandler extends ImportHandler {
 
     private function attach_banner($user)
     {
-        if (! $user->banner_source) return null;
+        if (! $user->banner_source) {
+            return null;
+        }
 
         $upload = Upload::firstOrNew(['source' => trim($user->banner_source)]);
 
-        if ($upload->id) return $upload->id;
+        if ($upload->id) {
+            return $upload->id;
+        }
 
         return null;
     }
 
     private function get_links($user)
     {
-        $links = $user->filter(function($value, $key) {
+        $links = $user->filter(function ($value, $key) {
             return ends_with($key, '_url') && $value;
-        })->map(function($value, $key) {
+        })->map(function ($value, $key) {
             return [
                 'name' => chop($key, '_url'),
                 'url' => remove_http($value)
@@ -95,5 +102,4 @@ class UserListImportHandler extends ImportHandler {
 
         return $links;
     }
-
 }

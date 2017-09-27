@@ -86,7 +86,7 @@ class DonationsController extends Controller
     {
         // has a credit card token already been created and provided?
         // if not, tokenize the card details.
-        if( ! $request->has('token')) {
+        if (! $request->has('token')) {
             $token = $this->payment->createCardToken($request->get('card'));
         } else {
             $token = $request->get('token');
@@ -105,7 +105,7 @@ class DonationsController extends Controller
 
         // add metadata
         $request->merge(['metadata' => [
-            'donor_name' => $request->get('donor')['name'],
+            'donor_name' => $request->get('donor')['first_name'] . ' ' . $request->get('donor')['last_name'],
             'donor_email' => isset($request->get('donor')['email']) ? $request->get('donor')['email'] : null,
             'donor_phone' => isset($request->get('donor')['phone']) ? $request->get('donor')['phone'] : null,
             'fund' => $request->get('fund_id')
@@ -128,11 +128,12 @@ class DonationsController extends Controller
             'brand' => $charge['source']['brand'],
             'last_four' => $charge['source']['last4'],
             'cardholder' => $charge['source']['name'],
+            'comment' => $request->get('comment')
         ];
 
         // we can pass donor details to try and find a match
         // or to create a new donor if a match isn't found.
-        if($request->has('donor')) {
+        if ($request->has('donor')) {
             $donor = $this->donor->firstOrCreate($request->get('donor'));
         // Alternatively, we can use an existing donor by id.
         } else {

@@ -27,8 +27,7 @@ class CreateUploadsTables extends Migration
             $table->uuid('uploadable_type')->index();
         });
 
-        Schema::table('uploadables', function($table)
-        {
+        Schema::table('uploadables', function ($table) {
             $table->foreign('upload_id')
                 ->references('id')->on('uploads')
                 ->onDelete('cascade');

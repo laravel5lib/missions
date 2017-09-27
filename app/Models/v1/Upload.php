@@ -53,7 +53,7 @@ class Upload extends Model
 
     /**
      * Get a Random Banner
-     * 
+     *
      * @param  Builder $query
      * @return Builder
      */
@@ -63,6 +63,4 @@ class Upload extends Model
                      ->withAllTags($tags)
                      ->inRandomOrder();
     }
-
 }
-

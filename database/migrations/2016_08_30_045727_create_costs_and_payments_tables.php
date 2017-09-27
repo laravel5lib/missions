@@ -33,14 +33,13 @@ class CreateCostsAndPaymentsTables extends Migration
             $table->boolean('upfront')->default(false);
         });
 
-        Schema::table('payments', function($table)
-        {
+        Schema::table('payments', function ($table) {
             $table->foreign('cost_id')
                 ->references('id')->on('costs')
                 ->onDelete('cascade');
         });
 
-        Schema::create('dues', function(Blueprint $table) {
+        Schema::create('dues', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('payment_id')->index();
             $table->uuid('payable_id')->index();
@@ -51,8 +50,7 @@ class CreateCostsAndPaymentsTables extends Migration
             $table->timestamps();
         });
 
-        Schema::table('dues', function($table)
-        {
+        Schema::table('dues', function ($table) {
             $table->foreign('payment_id')
                 ->references('id')->on('payments')
                 ->onDelete('cascade');

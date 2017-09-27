@@ -6,9 +6,6 @@
             <div class="row">
                 <div class="col-sm-8">
                     <h3 class="text-capitalize">
-                        <a href="#">
-                            <img class="img-circle av-left img-sm" src="{{ image($interest->trip->campaign->avatar->source . '?w=100') }}" alt="{{ $interest->trip->campaign->name }}">
-                        </a>
                         {{ $interest->trip->campaign->name }} <small>&middot; Trip Interest</small>
                     </h3>
                 </div>
@@ -28,24 +25,30 @@
                 <trip-interest-editor id="{{ $interest->id }}"></trip-interest-editor>
             </div>
         </div>
+
+        @can('view', \App\Models\v1\Todo::class)
         <div class="row">
             <div class="col-md-offset-2 col-md-8">
                 <todos type="trip_interests"
                        id="{{ $interest->id }}"
                        user_id="{{ auth()->user()->id }}"
-                       :can-modify="{{ auth()->user()->can('modify-todos') }}">
+                       :can-modify="{{ auth()->user()->can('modify-todos')?1:0 }}">
                 </todos>
             </div>
         </div>
+        @endcan
+
+        @can('view', \App\Models\v1\Note::class)
         <div class="row">
             <div class="col-md-offset-2 col-md-8">
                 <notes type="trip_interests"
                        id="{{ $interest->id }}"
                        user_id="{{ auth()->user()->id }}"
                        :per_page="3"
-                       :can-modify="{{ auth()->user()->can('modify-notes') }}">
+                       :can-modify="{{ auth()->user()->can('modify-notes')?1:0 }}">
                 </notes>
             </div>
         </div>
+        @endcan
     </div>
 @endsection

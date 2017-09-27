@@ -9,7 +9,7 @@
 /*
  * Variables...
  */
- 
+
 $active-icon-color: #6CC94D;
 /*$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 $fa-font-path: "~font-awesome/fonts/";*/
@@ -35,6 +35,18 @@ $fa-font-path: "~font-awesome/fonts/";*/
     line-height: 1.8;
   }
 }
+
+/**
+ * Vue Transitions
+ */
+.fade-transition {
+  transition: opacity .3s ease;
+}
+
+.fade-enter, .fade-leave {
+  opacity: 0;
+}
+
 
 /**
  * Elements
@@ -141,6 +153,13 @@ p.large-line-height {
 .panel-leader {
   background-color: $brand-leader !important;
   color: #fff !important;
+}
+.panel-sports {
+  background-color: $brand-sports !important;
+  color: #fff !important;
+}
+.panel-hero {
+  border-top: 5px solid $brand-primary;
 }
 
 .list-group-item-default {
@@ -273,7 +292,7 @@ body:not(.modal-open) {
     @media screen and (max-width: 767px) {
       left: 5%;
       right: 5%;
-      bottom: 5%; 
+      bottom: 5%;
       padding-bottom: 0px;
     }
   }
@@ -527,7 +546,7 @@ body:not(.modal-open) {
 .navbar-toggle {
   display: inline;
 }
-@media screen and (min-width: 767px) { 
+@media screen and (min-width: 767px) {
     .navbar-toggle {
       display: inline;
       padding: 10px 10px;
@@ -535,7 +554,7 @@ body:not(.modal-open) {
       margin: 10.5px 15px 15.5px 0px;
     }
 }
-@media screen and (max-width: 767px) { 
+@media screen and (max-width: 767px) {
     .navbar-toggle {
       display: inline;
       padding: 9px 10px;
@@ -877,6 +896,49 @@ img.onenation-logo {
   background-size: cover;
   padding: 200px 0 200px;
 }
+img.adv-mark {
+  width:400px;
+  height:400px;
+  margin-top: -200px;
+  @media screen and (max-width: 991px) {
+    width:300px;
+  height:300px;
+  margin-top: -100px;
+  }
+  @media screen and (max-width: 767px) {
+    width:200px;
+    height:200px;
+    margin-top: -100px;
+    margin-left: 10px;
+  }
+}
+.hondo-vision {
+  color:#fff;
+  background: #fff url(../../images/advance/hondo/stadium-drone.jpg) no-repeat center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  padding: 60px 0 60px;
+}
+.dr-vision {
+  color:#fff;
+  background: #fff url(../../images/advance/dr/team.jpg) no-repeat center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  padding: 60px 0 60px;
+}
+.nica-vision {
+  color:#fff;
+  background: #fff url(../../images/advance/nica/teen-boy-baseball.jpg) no-repeat center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  padding: 60px 0 60px;
+}
 .row-no-margin {
     margin-left: 0;
     margin-right: 0;
@@ -915,7 +977,7 @@ img.onenation-logo {
     background: $brand-primary url(../../images/login/login-bg-medium.jpg) no-repeat center fixed;
   }
   @media screen and (max-width: 767px) {
-    background: $brand-primary url(../../images/login/login-bg-small.jpg) no-repeat center scroll;
+    background: $brand-primary url(../../images/login/login-bg-small.jpg) no-repeat center fixed;
     padding: 80px 0 350px;
   }
 }
@@ -1107,8 +1169,8 @@ h1.home-college-header {
   overflow: hidden;
 }
 
-.video-inner iframe,  
-.video-inner object,  
+.video-inner iframe,
+.video-inner object,
 .video-inner embed {
   position: absolute;
   top: 0;
@@ -1419,13 +1481,13 @@ a.btn-college-nav {
       }
     }
   }
-  &:hover .equals-icon { 
+  &:hover .equals-icon {
     -o-transform: translateX(0px);
     -ms-transform: translateX(0px);
     -moz-transform: translateX(0px);
     -webkit-transform: translateX(0px);
   }
-  &:hover .view { 
+  &:hover .view {
     -o-transform: translateX(250px);
     -ms-transform: translateX(250px);
     -moz-transform: translateX(250px);

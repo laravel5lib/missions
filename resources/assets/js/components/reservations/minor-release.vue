@@ -40,6 +40,6 @@
             return {}
         },
         methods: {},
-        ready() {}
+        mounted() {}
     }
 </script>

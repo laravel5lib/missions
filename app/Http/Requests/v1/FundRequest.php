@@ -34,10 +34,9 @@ class FundRequest extends FormRequest
             'slug'           => 'unique:funds,slug'
         ];
 
-        if ($this->isMethod('put'))
-        {
+        if ($this->isMethod('put')) {
             $rules = [
-                'name'          => 'sometimes|required|string|unique:funds,name,' . $this->route('funds'),
+                'name'          => 'sometimes|required|string|unique:funds,name,' . $this->route('fund'),
                 'balance'       => 'integer',
                 'slug'          => 'sometimes|required|unique:funds,slug',
                 'class'         => 'sometimes|required|string',
@@ -45,7 +44,7 @@ class FundRequest extends FormRequest
                 'fundable_id'   => 'sometimes|required|string',
                 'fundable_type' => 'sometimes|required|string|in:reservations,trips,groups,campaigns,causes,projects',
                 'tags'          => 'array',
-                'slug'          => 'unique:funds,slug,' . $this->route('funds')
+                'slug'          => 'unique:funds,slug,' . $this->route('fund')
             ];
         }
 

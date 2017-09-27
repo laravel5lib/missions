@@ -4,19 +4,20 @@ namespace App\Services\Importers;
 
 use App\Models\v1\User;
 
-class MedicalReleaseListImportHandler extends ImportHandler {
+class MedicalReleaseListImportHandler extends ImportHandler
+{
 
     /**
      * The model class to use
-     * 
+     *
      * @var string
      */
     public $model = 'App\Models\v1\MedicalRelease';
 
     /**
-     * The database columns and document 
+     * The database columns and document
      * columns to find matches on.
-     * 
+     *
      * @var array
      */
     public $duplicates = ['name' => 'name'];
@@ -46,15 +47,14 @@ class MedicalReleaseListImportHandler extends ImportHandler {
 
         return $details->put('conditions', $conditions)
                        ->put('allergies', $allergies);
-
     }
 
     private function map_items($items)
     {
-        return collect(explode(',', $items))->reject(function($item) {
+        return collect(explode(',', $items))->reject(function ($item) {
             $item = collect($item);
             return $item->contains(null) || $item->contains('');
-        })->map(function($item) {
+        })->map(function ($item) {
             return [
                 'name' => trim(explode('(', $item)[0]),
                 'diagnosed' => str_contains($item, 'Diagnosed') ? true : false,
@@ -62,5 +62,4 @@ class MedicalReleaseListImportHandler extends ImportHandler {
             ];
         })->all();
     }
-
 }

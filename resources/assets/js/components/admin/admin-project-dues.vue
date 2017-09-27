@@ -1,6 +1,6 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
     <div>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <!--<button class="btn btn-primary btn-xs" @click="add"><span
 					   class="fa fa-plus"></span> Add Existing
 			   </button>-->
@@ -24,12 +24,12 @@
             <template v-for="due in project.dues.data">
                 <tr>
                     <td class="text-center">
-                        <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{due.status|capitalize}}</small>
+                        <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{ due.status|capitalize }}</small>
                     </td>
                     <td>{{ due.cost }}</td>
-                    <td>{{ due.balance | currency }}</td>
+                    <td>{{ currency(due.balance) }}</td>
                     <td>{{ due.grace_period }}</td>
-                    <td>{{ due.due_at | moment 'll' }}</td>
+                    <td>{{ due.due_at | moment('ll') }}</td>
                     <td>
                         <a class="btn btn-default btn-xs" @click="edit(due)"><i class="fa fa-pencil"></i></a>
                         <a class="btn btn-danger btn-xs" @click="remove(due)"><i class="fa fa-times"></i></a>
@@ -39,34 +39,31 @@
             </tbody>
         </table>
 
-        <modal title="Add Dues" :show.sync="showAddModal" effect="fade" width="800" :callback="addDues">
+        <modal title="Add Dues" :value="showAddModal" @closed="showAddModal=false" effect="fade" width="800" :callback="addDues">
             <div slot="modal-body" class="modal-body">
-                <validator name="AddDue">
+
                     <form class="for" novalidate>
-                        <div class="form-group" :class="{ 'has-error': checkForError('dues') }">
+                        <div class="form-group" :class="{ 'has-error': errors.has('dues') }">
                             <label class="control-label">Available Dues</label>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedDues" :options="availableDues"
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" name="dues" v-validate="'required'" multiple v-model="selectedDues" :options="availableDues"
                                       label="name"></v-select>
-                            <select hidden="" v-model="user_id" v-validate:dues="{ required: true }" multiple>
-                                <option :value="due.id" v-for="due in dues">{{due.name}}</option>
-                            </select>
                         </div>
                     </form>
-                </validator>
+
             </div>
         </modal>
 
-        <modal title="Edit Due" :show.sync="showEditModal" effect="fade" width="800" :callback="updateDue">
+        <modal title="Edit Due" :value="showEditModal" @closed="showEditModal=false" effect="fade" width="800" :callback="updateDue">
             <div slot="modal-body" class="modal-body">
-                <validator name="EditDue">
-                    <form class="form" novalidate>
+
+                    <form class="form" novalidate data-vv-scope="EditDue">
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="form-group" :class="{'has-error': checkForEditDueError('grace') }">
+                                <div class="form-group" :class="{'has-error': errors.has('grace') }">
                                     <label for="grace_period">Grace Period</label>
-                                    <div class="input-group input-group-sm" :class="{'has-error': checkForEditDueError('grace') }">
+                                    <div class="input-group input-group-sm" :class="{'has-error': errors.has('grace') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="editedDue.grace_period"
-                                               v-validate:grace="{required: { rule: true }}">
+                                               name="grace" v-validate="'required'">
                                         <span class="input-group-addon">Days</span>
                                     </div>
                                 </div>
@@ -77,7 +74,7 @@
                             </div>
                         </div>
                     </form>
-                </validator>
+
             </div>
         </modal>
     </div>
@@ -108,7 +105,6 @@
                     grace_period: 0,
                     enforced: false,
                 },
-                resource: this.$resource('projects/' + this.id, { include: 'dues,costs.payments,initiative' }),
                 showAddModal: false,
                 showNewModal: false,
                 showEditModal: false,
@@ -124,18 +120,6 @@
                 let stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
                 console.log(moment(a).isBetween(start, stop));
                 return moment(a).isBetween(start, stop);
-            },
-            checkForError(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$AddDue[field].invalid && this.attemptSubmit;
-            },
-            checkForEditDueError(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$EditDue[field].invalid && this.attemptSubmit;
-            },
-            checkForNewDueError(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$NewDue[field].invalid && this.attemptSubmit;
             },
             resetDue(){
                 this.newDue = {
@@ -169,13 +153,13 @@
                 console.log(this.editedDue.due_at);
                 // prep current dues
                 let dues = [];
-                _.each(this.project.dues.data, function (due) {
+                _.each(this.project.dues.data, (due) => {
                     if (due.cost_id === this.editedDue.cost_id) {
                         dues.push({ id: this.editedDue.cost_id, grace_period: this.editedDue.grace_period, due_at: this.editedDue.due_at });
                     } else {
                         dues.push({id: due.cost_id, grace_period: due.grace_period});
                     }
-                }.bind(this));
+                });
 
                 let project = this.preppedProject;
                 project.dues = dues;
@@ -185,7 +169,7 @@
             remove(due){
                 let project = this.preppedProject;
                 project.dues = [];
-                _.each(this.project.dues.data, function (cs) {
+                _.each(this.project.dues.data, (cs) => {
                     if (cs.due_id !== due.due_id) {
                         project.dues.push({ id: cs.due_id/*, locked: cs.locked*/})
                     }
@@ -197,13 +181,13 @@
             addDues(){
                 // prep current dues
                 let currentDueIds = [];
-                _.each(this.project.dues.data, function (due) {
+                _.each(this.project.dues.data, (due) => {
                     currentDueIds.push({ id: due.id || due.due_id, locked: due.locked })
                 });
 
                 // prep added dues
                 let selectedDueIds = [];
-                _.each(this.selectedDues, function (due) {
+                _.each(this.selectedDues, (due) => {
                     selectedDueIds.push({ id: due.id })
                 });
 
@@ -223,7 +207,7 @@
 
                 // get only ids of current dues so we don't change anything
                 initiative.dues = [];
-                _.each(this.project.initiative.data.dues.data, function (dl) {
+                _.each(this.project.initiative.data.dues.data, (dl) => {
                     initiative.dues.push({id: dl.id});
                 });
                 initiative.dues.push(this.newDeadline);
@@ -232,8 +216,8 @@
                 delete initiative.rep_id;
 
                 // this.$refs.spinner.show();
-                this.$http.put('initiatives/' + initiative.id, initiative).then(function (response) {
-                    let thisTrip = response.body.data;
+                this.$http.put('initiatives/' + initiative.id, initiative).then((response) => {
+                    let thisTrip = response.data.data;
                     this.selecteddues = new Array(this.newDeadline);
                     // this.$refs.spinner.hide();
                     return this.adddues();
@@ -247,8 +231,8 @@
             },
             doUpdate(project){
                 // this.$refs.spinner.show();
-                return this.resource.update(project).then(function (response) {
-                    this.setProjectData(response.body.data);
+                return this.$http.put(`projects/${this.id}`, project, { params: { include: 'dues,costs.payments,initiative' } }).then((response) => {
+                    this.setProjectData(response.data.data);
                     this.selectedDues = [];
                     // this.$refs.spinner.hide();
                 });
@@ -265,25 +249,27 @@
                 };
 
                 // get available costs intersect with current
-                this.availableCosts = _.filter(project.initiative.data.costs.data, function (cost) {
-                    return !_.findWhere(project.costs.data, {cost_id: cost.id, type: 'incremental' || 'optional'})
-                });
+	            if (project.initiative.data.costs) {
+                    this.availableCosts = _.filter(project.initiative.data.costs.data, (cost) => {
+                        return !_.findWhere(project.costs.data, {cost_id: cost.id, type: 'incremental' || 'optional'})
+                    });
+                }
 
                 // Extend dues data
 
             }
         },
-        ready(){
-            // this.$refs.spinner.show();
-            this.resource.get().then(function (response) {
-                this.setProjectData(response.body.data)
-                // this.$refs.spinner.hide();
+        mounted(){
+            this.$http.get(`projects/${this.id}`, { params: {
+                include: 'dues,costs.payments,initiative.costs.payments'
+            } }).then((response) => {
+                this.setProjectData(response.data.data)
             });
 
             //Listen to Event Bus
             this.$root.$on('AdminProject:CostsUpdated', function (data) {
                 this.setProjectData(data)
-            }.bind(this));
+            });
 
         }
     }

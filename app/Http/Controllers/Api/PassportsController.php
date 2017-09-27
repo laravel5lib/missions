@@ -119,7 +119,7 @@ class PassportsController extends Controller
 
     /**
      * Import a list of passports.
-     * 
+     *
      * @param  PassportListImport $import
      * @return response
      */

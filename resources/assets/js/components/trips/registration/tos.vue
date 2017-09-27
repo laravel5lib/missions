@@ -49,12 +49,12 @@
 		},
 		watch:{
 			'tosAgree'(val, oldVal) {
-				this.$dispatch('tos-agree', val)
+//				this.$emit('tos-agree', val)
+				this.$emit('step-completion', val)
 			}
 		},
-		activate(done){
+		activated(){
 			$('html, body').animate({scrollTop : 200},300);
-			done();
 		}
 
 	}

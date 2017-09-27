@@ -73,7 +73,7 @@ class Requirement extends Model
 
     /**
      * Get the requirement's conditions
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function conditions()

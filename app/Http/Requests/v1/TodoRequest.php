@@ -28,7 +28,7 @@ class TodoRequest extends FormRequest
             'todoable_type' => 'required|string|in:reservations,trip_interests,projects',
             'todoable_id' => 'required|string',
             'complete' => 'boolean',
-            'completed_at' => 'date',
+            'completed_at' => 'nullable|date',
             'user_id' => 'required_if:complete,true|string|exists:users,id'
         ];
 

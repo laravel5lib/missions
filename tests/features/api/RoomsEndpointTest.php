@@ -1,7 +1,9 @@
 <?php
 
-class RoomsEndpointTest extends TestCase
+class RoomsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /** @test */
     public function fetches_all_rooms()
     {
@@ -19,7 +21,7 @@ class RoomsEndpointTest extends TestCase
                         'deleted_at'
                     ]
                 ]
-            ]);
+             ]);
     }
 
     /** @test */

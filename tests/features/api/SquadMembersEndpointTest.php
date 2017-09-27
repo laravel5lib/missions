@@ -1,7 +1,9 @@
 <?php
 
-class SquadMembersEndpointTest extends TestCase
+class SquadMembersEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /** @test */
     public function fetches_all_squad_members()
     {
@@ -30,7 +32,7 @@ class SquadMembersEndpointTest extends TestCase
                         'updated_at'
                     ]
                 ]
-            ]);
+             ]);
     }
 
     /** @test */
@@ -58,10 +60,10 @@ class SquadMembersEndpointTest extends TestCase
         $this->post('api/squads/' . $squad->id . '/members', ['id' => $reservation->id])
              ->assertResponseOk()
              ->seeInDatabase('team_members', [
-                'team_squad_id' => $squad->id, 
+                'team_squad_id' => $squad->id,
                 'reservation_id' => $reservation->id,
                 'leader' => false
-            ])
+             ])
              ->seeJson(['id' => $reservation->id]);
     }
 
@@ -77,10 +79,10 @@ class SquadMembersEndpointTest extends TestCase
         $this->put('api/squads/' . $squad->id . '/members/' . $reservation->id, ['leader' => true])
              ->assertResponseOk()
              ->seeInDatabase('team_members', [
-                'team_squad_id' => $squad->id, 
+                'team_squad_id' => $squad->id,
                 'reservation_id' => $reservation->id,
                 'leader' => true
-            ])
+             ])
              ->seeJson(['id' => $reservation->id, 'leader' => true]);
     }
 
@@ -96,9 +98,9 @@ class SquadMembersEndpointTest extends TestCase
         $this->delete('api/squads/' . $squad->id . '/members/' . $reservation->id)
              ->assertResponseStatus(204)
              ->dontSeeInDatabase('team_members', [
-                'team_squad_id' => $squad->id, 
+                'team_squad_id' => $squad->id,
                 'reservation_id' => $reservation->id,
                 'leader' => true
-            ]);
+             ]);
     }
 }

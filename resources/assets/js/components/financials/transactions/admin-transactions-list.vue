@@ -1,6 +1,6 @@
 <template>
     <div>
-        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
@@ -17,7 +17,7 @@
                 <div class="form-group" v-if="!donor">
                     <label>Donor</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="donorFilter" :debounce="250" :on-search="getDonors"
-                              :value.sync="donorObj" :options="donorsOptions" label="name"
+                              v-model="donorObj" :options="donorsOptions" label="name"
                               placeholder="Filter by Donor"></v-select>
                 </div>
 
@@ -33,12 +33,12 @@
 
                 <div class="form-group">
                     <label>From Date</label>
-                    <date-picker :model.sync="filters.minDate|moment"></date-picker>
+                    <date-picker v-model="filters.minDate" type="date"></date-picker>
                 </div>
 
                 <div class="form-group">
                     <label>To Date</label>
-                    <date-picker :model.sync="filters.maxDate|moment"></date-picker>
+                    <date-picker v-model="filters.maxDate" type="date"></date-picker>
                 </div>
 
                 <div class="form-group">
@@ -63,10 +63,10 @@
                 </div>
 
                 <hr class="divider inv sm">
-                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter"><i class="fa fa-times"></i> Reset Filters</button>
                 <hr class="divider inv">
             </form>
-        </aside>
+        </mm-aside>
 
         <div class="row">
             <div class="col-sm-12">
@@ -80,7 +80,7 @@
                         </div>
                     </div>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+                        <input type="text" class="form-control" v-model="search" @keyup="debouncedSearchTransactions" placeholder="Search for anything">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
                     <div id="toggleFields" class="form-toggle-menu dropdown" style="display: inline-block;">
@@ -163,10 +163,12 @@
                         Filters
                         <span class="caret"></span>
                     </button>
-                    <export-utility url="transactions/export"
-                                    :options="exportOptions"
-                                    :filters="exportFilters">
-                    </export-utility>
+                    <template v-if="app.user.can.create_reports">
+                        <export-utility url="transactions/export"
+                                        :options="exportOptions"
+                                        :filters="exportFilters">
+                        </export-utility>
+                    </template>
                 </form>
             </div>
         </div>
@@ -204,7 +206,7 @@
         </div>
         <hr class="divider sm">
         <div style="position: relative">
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <table class="table table-hover table-striped">
                 <thead>
                 <tr>
@@ -277,13 +279,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="transaction in transactions|filterBy search|orderBy orderByField direction">
+                <tr v-for="transaction in orderByProp(transactions, orderByField, direction)">
                     <td v-if="isActive('type')">
-                        <span class="label label-default" v-text="transaction.type|capitalize"></span>
+                        <span class="label label-default">{{transaction.type|capitalize}}</span>
                     </td>
                     <td v-if="isActive('description')" v-text="transaction.description"></td>
                     <td v-if="isActive('amount')">
-                        <span v-text="transaction.amount|currency" :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}"></span>
+                        <span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{currency(transaction.amount)}}</span>
                     </td>
                     <td v-if="isActive('donor')" v-text="transaction.donor.data.name"></td>
                     <td v-if="isActive('class')" v-text="transaction.fund.data.class"></td>
@@ -294,15 +296,15 @@
                     <td v-if="isActive('donor_phone')" v-text="transaction.donor.data.phone"></td>
                     <td v-if="isActive('donor_email')" v-text="transaction.donor.data.email"></td>
                     <td v-if="isActive('fund_name')" v-text="transaction.fund.data.name"></td>
-                    <td v-if="isActive('created_at')" v-text="transaction.created_at|moment 'lll'"></td>
-                    <td><a href="/admin/transactions/{{ transaction.id }}"><i class="fa fa-cog"></i></a></td>
+                    <td v-if="isActive('created_at')">{{transaction.created_at|moment('lll')}}</td>
+                    <td><a :href="`/admin/transactions/${ transaction.id }`"><i class="fa fa-cog"></i></a></td>
                 </tr>
                 </tbody>
                 <tfoot>
                 <tr>
                     <td colspan="7">
                         <div class="col-sm-12 text-center">
-                            <pagination :pagination.sync="pagination" size="small" :callback="searchTransactions"></pagination>
+                            <pagination :pagination="pagination" pagination-key="pagination" size="small" :callback="searchTransactions"></pagination>
                         </div>
                     </td>
                 </tr>
@@ -323,6 +325,8 @@
 	}
 </style>
 <script type="text/javascript">
+    import _ from 'underscore';
+    import $ from 'jquery';
     import vSelect from "vue-select";
     import exportUtility from '../../export-utility.vue';
     export default{
@@ -344,6 +348,7 @@
         },
         data(){
             return {
+                app: MissionsMe,
                 transactions: [],
                 orderByField: 'created_at',
                 direction: 0,
@@ -369,7 +374,7 @@
                     type: null,
                     maxDate: null,
                     minDate: null,
-                    payment: null
+                    payment: ''
                 },
                 showFilters: false,
                 exportOptions: {
@@ -400,26 +405,25 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: function (val) {
-//                    console.log(val);
+                handler(val, oldVal) {
                     this.pagination.current_page = 1;
                     this.searchTransactions();
                 },
                 deep: true
             },
-            'donorObj': function (val) {
+            'donorObj'(val, oldVal) {
                 this.filters.donor = val ? val.id : '';
                 this.searchTransactions();
             },
-            'direction': function (val) {
+            'direction'(val, oldVal) {
                 this.searchTransactions();
             },
-            'tagsString': function (val) {
+            'tagsString'(val, oldVal) {
                 let tags = val.split(/[\s,]+/);
                 this.filters.tags = tags[0] !== '' ? tags : '';
                 this.searchTransactions();
             },
-            'activeFields': function (val, oldVal) {
+            'activeFields'(val, oldVal) {
                 // if the orderBy field is removed from view
                 if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
                     // default to first visible field
@@ -427,15 +431,15 @@
                 }
                 this.updateConfig();
             },
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.page = 1;
+//                this.searchTransactions();
+            },
+            'page'(val, oldVal) {
                 this.searchTransactions();
             },
-            'page': function (val, oldVal) {
-                this.searchTransactions();
-            },
-            'per_page': function (val, oldVal) {
+            'per_page'(val, oldVal) {
                 this.searchTransactions();
             },
 
@@ -511,32 +515,32 @@
             },
             getDonors(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('donors', { params: { search: search} }).then(function (response) {
-                    this.donorsOptions = response.body.data;
+                this.$http.get('donors', { params: { search: search} }).then((response) => {
+                    this.donorsOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
+            debouncedSearchTransactions: _.debounce(function() { this.searchTransactions(); }, 250),
             searchTransactions(){
                 let params = this.getListSettings();
                 // this.$refs.spinner.show();
-                this.$http.get('transactions', { params: params }).then(function (response) {
-                    this.transactions = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('transactions', { params: params }).then((response) => {
+                    this.transactions = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
-                }, function (error) {
+                }, (error) =>  {
                     // this.$refs.spinner.hide();
                     // TODO add error alert
-                }).then(function () {
+                }).then(() => {
                     this.updateConfig();
                 });
             }
         },
-        events: {
-            'refreshTransactions': function() {
+        mounted() {
+            this.$root.$on('refreshTransactions', () => {
                 this.searchTransactions();
-            }
-        },
-        ready() {
+            });
+
             // load view state
             if (localStorage[this.storageName]) {
                 this.filters.minDate = null;
@@ -545,7 +549,7 @@
                 let config = JSON.parse(localStorage[this.storageName]);
                 this.activeFields = config.activeFields;
                 this.maxActiveFields = config.maxActiveFields;
-                this.filters = config.filters;
+                this.filters = _.extend(this.filters, config.filters);
             }
 
             // populate

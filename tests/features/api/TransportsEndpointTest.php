@@ -1,7 +1,9 @@
 <?php
 
-class TransportsEndpointTest extends TestCase
+class TransportsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /** @test */
     public function gets_all_transports()
     {
@@ -29,7 +31,7 @@ class TransportsEndpointTest extends TestCase
                     'deleted_at'
                 ]
             ]
-        ]);
+            ]);
     }
 
     /** @test */
@@ -55,6 +57,7 @@ class TransportsEndpointTest extends TestCase
             'call_sign' => 'aa',
             'vessel_no' => '300',
             'domestic' => false,
+            'designation' => 'outbound',
             'depart_at' => '2017-07-22 10:30:01',
             'arrive_at' => '2017-07-22 22:45:05'
         ];
@@ -67,6 +70,7 @@ class TransportsEndpointTest extends TestCase
             'call_sign' => 'AA',
             'vessel_no' => 'AA0300',
             'domestic' => false,
+            'designation' => 'outbound',
             'depart_at' => '2017-07-22 10:30:00',
             'arrive_at' => '2017-07-22 22:45:00'
         ]);

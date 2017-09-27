@@ -3,20 +3,19 @@
 /**
  * Generic Campaign
  */
-$factory->define(App\Models\v1\Campaign::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Campaign::class, function (Faker\Generator $faker) {
     return [
         'id'               => $faker->unique()->uuid,
         'name'             => $faker->catchPhrase,
         'country_code'     => strtolower($faker->countryCode),
-        'short_desc'       => $faker->realText(120),
+        'short_desc'       => $faker->text(120),
         'page_src'         => '_generic',
         'started_at'       => \Carbon\Carbon::now()->addYear(),
-        'ended_at'         => function(array $campaign) {
+        'ended_at'         => function (array $campaign) {
             return \Carbon\Carbon::parse($campaign['started_at'])->addDays(6);
         },
         'published_at'     => function(array $campaign) {
-            return $campaign['started_at'];
+            return \Carbon\Carbon::parse($campaign['started_at'])->subYear();
         },
         'created_at' => \Carbon\Carbon::now(),
         'updated_at' => \Carbon\Carbon::now()
@@ -26,8 +25,7 @@ $factory->define(App\Models\v1\Campaign::class, function (Faker\Generator $faker
 /**
  * 1Nation1Day 2017
  */
-$factory->defineAs(App\Models\v1\Campaign::class, '1n1d2017', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Campaign::class, '1n1d2017', function (Faker\Generator $faker) use ($factory) {
     $campaign = $factory->raw(App\Models\v1\Campaign::class);
 
     return array_merge($campaign, [
@@ -35,8 +33,8 @@ $factory->defineAs(App\Models\v1\Campaign::class, '1n1d2017', function (Faker\Ge
         'country_code'     => 'ni',
         'short_desc'       => '1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn’t just about numbers; it\'s about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.',
         'page_src'         => '_1n1d2017',
-        'started_at'       => '2017-07-22 00:00:00',
-        'ended_at'         => '2017-07-30 22:59:59',
+        'started_at'       => '2017-09-22 00:00:00',
+        'ended_at'         => '2018-09-30 22:59:59',
         'published_at'     => '2016-01-01 00:00:00'
     ]);
 });
@@ -44,8 +42,7 @@ $factory->defineAs(App\Models\v1\Campaign::class, '1n1d2017', function (Faker\Ge
 /**
  * Orphans to Angles 2017
  */
-$factory->defineAs(App\Models\v1\Campaign::class, 'india', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Campaign::class, 'india', function (Faker\Generator $faker) use ($factory) {
     $campaign = $factory->raw(App\Models\v1\Campaign::class);
 
     return array_merge($campaign, [

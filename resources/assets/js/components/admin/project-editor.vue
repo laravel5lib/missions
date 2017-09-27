@@ -1,6 +1,6 @@
 <template>
     <div class="panel panel-default">
-        <spinner v-ref:loader size="xl" :fixed="false" text="Loading..."></spinner>
+        <spinner ref="loader" size="xl" :fixed="false" text="Loading..."></spinner>
         <div class="panel-heading">
             <h5>
                 Details
@@ -57,7 +57,7 @@
                         <label>Sponsor Name</label>
                         <v-select @keydown.enter.prevent=""  class="form-control"
                                   id="sponsor"
-                                  :value.sync="selectedSponsor"
+                                  :value="selectedSponsor"
                                   :options="sponsors"
                                   :on-search="getSponsors"
                                   label="name"
@@ -100,7 +100,7 @@
                     <hr class="divider">
                     <div class="col-md-6">
                         <label>Started At</label>
-                        <p>{{ project.created_at | moment 'll' }}</p>
+                        <p>{{ project.created_at | moment('ll') }}</p>
                     </div>
                     <div class="col-md-6">
                         <label>Funded At</label>
@@ -111,7 +111,7 @@
                     <hr class="divider">
                     <div class="col-md-6">
                         <label>Last Updated</label>
-                        <p>{{ project.updated_at | moment 'll' true }}</p>
+                        <p>{{ project.updated_at | moment('ll', true) }}</p>
                     </div>
                 </div>
             </div>
@@ -205,31 +205,31 @@
         },
         methods: {
             getInitiatives() {
-                this.$http.get('causes/' + this.cause.id + '/initiatives', { params: {
+                this.$http.get(`causes/${this.cause.id}/initiatives`, { params: {
                     country: this.initiative.country.code
-                }}).then(function (response) {
-                    this.availableInitiatives = response.body.data;
+                }}).then((response) => {
+                    this.availableInitiatives = response.data.data;
                 });
             },
             getSponsors(search, loading) {
                 loading(true);
-                this.$http.get(this.project.sponsor_type, { params: {search: search} }).then(function (response) {
-                    this.sponsors = response.body.data;
+                this.$http.get(this.project.sponsor_type, { params: {search: search} }).then((response) => {
+                    this.sponsors = response.data.data;
                     loading(false);
                 });
             },
             getCause() {
                 this.$refs.loader.show();
-                this.$http.get('causes/' + this.causeId).then(function (response) {
-                    this.cause  = response.body.data;
+                this.$http.get(`causes/${this.causeId}`).then((response) => {
+                    this.cause  = response.data.data;
                     this.initiative.country = _.first(this.cause.countries);
                     this.$refs.loader.hide();
                 });
             },
             fetch() {
                 this.$refs.loader.show();
-                this.$http.get('projects/' + this.id, { params: {include: 'initiative.cause,sponsor'} }).then(function (response) {
-                    var arr = response.body.data;
+                this.$http.get('projects/' + this.id, { params: {include: 'initiative.cause,sponsor'} }).then((response) => {
+                    var arr = response.data.data;
                     this.cause = _.omit(arr.initiative.data.cause.data, 'initiatives');
                     this.initiative = arr.initiative.data;
                     this.sponsor = arr.sponsor.data;
@@ -239,23 +239,23 @@
             },
             save() {
                 this.$refs.loader.show();
-                this.$http.put('projects/' + this.id, this.project).then(function (response) {
+                this.$http.put('projects/' + this.id, this.project).then((response) => {
                     this.editMode = false;
                     this.$refs.loader.hide();
-                    this.$dispatch('showSuccess', 'Your changes were saved successfully.');
+                    this.$root.$emit('showSuccess', 'Your changes were saved successfully.');
                 },function() {
                     this.$refs.loader.hide();
-                    this.$dispatch('showError', 'There are problems with the form.');
+                    this.$root.$emit('showError', 'There are problems with the form.');
                 });
             },
             create() {
                 this.$refs.loader.show();
-                this.$http.post('projects', this.project).then(function (response) {
+                this.$http.post('projects', this.project).then((response) => {
                     this.$refs.loader.hide();
-                    window.location = '/admin/projects/' + response.body.data.id;
+                    window.location = '/admin/projects/' + response.data.data.id;
                 },function() {
                     this.$refs.loader.hide();
-                    this.$dispatch('showError', 'There are problems with the form.');
+                    this.$root.$emit('showError', 'There are problems with the form.');
                 });
             },
             cancel() {
@@ -263,11 +263,11 @@
                     this.editMode = false;
                     this.fetch();
                 } else {
-                     window.location = '/admin/causes/' + this.causeId + '/current-projects';
+                     window.location = `/admin/causes/${this.causeId}/current-projects`;
                 }
             }
         },
-        ready() {
+        mounted() {
             if( ! this.newOnly) {
                 this.fetch();
             }

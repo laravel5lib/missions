@@ -25,15 +25,15 @@ class SquadMemberRequest extends FormRequest
     {
         $rules = [
             'members' => 'array',
-            'members.*.id' => 'required_with:members|string|exists:reservations,id|unique:team_members,reservation_id,NULL,reservation_id,team_squad_id,' . $this->route('squads'),
+            'members.*.id' => 'required_with:members|string|exists:reservations,id|unique:team_members,reservation_id,NULL,reservation_id,team_squad_id,' . $this->route('squad'),
             'members.*.leader' => 'boolean',
-            'id' => 'required_without:members|string|exists:reservations,id|unique:team_members,reservation_id,NULL,reservation_id,team_squad_id,' . $this->route('squads'),
+            'id' => 'required_without:members|string|exists:reservations,id|unique:team_members,reservation_id,NULL,reservation_id,team_squad_id,' . $this->route('squad'),
             'leader' => 'boolean'
         ];
 
         if ($this->isMethod('put')) {
             $rules = [
-                'id' => 'sometimes|required_without:members|string|exists:reservations,id|unique:team_members,reservation_id,NULL,reservation_id,team_squad_id,' . $this->route('squads'),
+                'id' => 'sometimes|required_without:members|string|exists:reservations,id|unique:team_members,reservation_id,NULL,reservation_id,team_squad_id,' . $this->route('squad'),
                 'leader' => 'boolean',
                 'team_squad_id' => 'string|exists:team_squads,id'
             ];

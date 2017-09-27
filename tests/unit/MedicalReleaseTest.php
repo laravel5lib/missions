@@ -3,7 +3,7 @@
 use App\Models\v1\User;
 use App\Models\v1\MedicalRelease;
 
-class MedicalReleaseTest extends TestCase
+class MedicalReleaseTest extends BrowserKitTestCase
 {
     /** @test */
     public function syncs_conditions()

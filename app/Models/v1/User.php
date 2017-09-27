@@ -3,17 +3,19 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use App\Models\v1\Project;
 use EloquentFilter\Filterable;
-use Illuminate\Auth\Passwords\CanResetPassword;
+use Laravel\Passport\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Session;
-use Silber\Bouncer\Database\HasRolesAndAbilities;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable
 {
-    use SoftDeletes, Filterable, UuidForKey, HasRolesAndAbilities, CanResetPassword;
+    use HasApiTokens, Notifiable, SoftDeletes, Filterable, UuidForKey, CanResetPassword, HasRoles;
 
     /**
      * The table associated with the model.
@@ -28,7 +30,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'alt_email',
+        'first_name', 'last_name', 'email', 'password', 'alt_email',
         'phone_one', 'phone_two', 'gender', 'status',
         'birthday', 'address', 'city', 'zip', 'country_code',
         'state', 'timezone', 'url', 'public', 'bio',
@@ -69,55 +71,58 @@ class User extends Authenticatable implements JWTSubject
      * @var bool
      */
     public $timestamps = true;
-    
 
     /**
-     * Get the identifier that will be stored in the subject claim of the JWT
-     *
-     * @return mixed
-     */
-    public function getJWTIdentifier(){
-        return $this->getKey();
-    }
-
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT
-     *
-     * @return array
-     */
-    public function getJWTCustomClaims(){
-        return [];
-    }
-
-    /**
-     * Set the user's password
+     * Set the user's first name
      *
      * @param $value
      */
-    // public function setPasswordAttribute($value)
-    // {
-    //     $this->attributes['password'] = bcrypt($value);
-    // }
-
-    /**
-     * Set the user's name
-     *
-     * @param $value
-     */
-    public function setNameAttribute($value)
+    public function setFirstNameAttribute($value)
     {
-        $this->attributes['name'] = trim(strtolower($value));
+        $this->attributes['first_name'] = trim(strtolower($value));
     }
 
     /**
-     * Get the user's name
+     * Set the user's last name
+     *
+     * @param $value
+     */
+    public function setLastNameAttribute($value)
+    {
+        $this->attributes['last_name'] = trim(strtolower($value));
+    }
+
+    /**
+     * Get the user's first name
      *
      * @param $value
      * @return string
      */
-    public function getNameAttribute($value)
+    public function getFirstNameAttribute($value)
     {
         return ucwords($value);
+    }
+
+    /**
+     * Get the user's last name
+     *
+     * @param $value
+     * @return string
+     */
+    public function getLastNameAttribute($value)
+    {
+        return ucwords($value);
+    }
+
+    /**
+     * Get the user's full name
+     *
+     * @param $value
+     * @return string
+     */
+    public function getNameAttribute()
+    {
+        return ucwords($this->first_name.' '.$this->last_name);
     }
 
     /**
@@ -137,8 +142,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setAltEmailAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['alt_email'] = trim(strtolower($value));
+        }
     }
 
     /**
@@ -148,8 +154,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setPhoneOneAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['phone_one'] = trim(stripPhone($value));
+        }
     }
 
     /**
@@ -159,8 +166,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setPhoneTwoAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['phone_two'] = trim(stripPhone($value));
+        }
     }
 
     /**
@@ -192,8 +200,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setGenderAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['gender'] = trim(strtolower($value));
+        }
     }
 
     /**
@@ -214,8 +223,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setStatusAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['status'] = trim(strtolower($value));
+        }
     }
 
     /**
@@ -236,8 +246,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setStreetAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['street'] = trim(strtolower($value));
+        }
     }
 
     /**
@@ -258,8 +269,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setCityAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['city'] = trim(strtolower($value));
+        }
     }
 
     /**
@@ -280,8 +292,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setZipAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['zip'] = trim(strtoupper($value));
+        }
     }
 
     /**
@@ -291,8 +304,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setStateAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['state'] = trim(strtolower($value));
+        }
     }
 
     /**
@@ -315,8 +329,9 @@ class User extends Authenticatable implements JWTSubject
     {
 //        $afterSlash = trim(substr($value, strrpos($value, '/') + 1));
 //        $beforePeriod = substr($afterSlash, 0, strpos($afterSlash, '.'));
-        if ($value)
+        if ($value) {
             $this->attributes['url'] = trim(strtolower($value));
+        }
     }
 
     /**
@@ -326,8 +341,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setBioAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['bio'] = trim($value);
+        }
     }
 
     /**
@@ -470,12 +486,12 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Helper method to retrieve the user's avatar
-     * 
+     *
      * @return mixed
      */
     public function getAvatar()
     {
-        if( ! $this->avatar) {
+        if (! $this->avatar) {
             return new Upload([
                 'id' => \Ramsey\Uuid\Uuid::uuid4(),
                 'name' => 'placeholder',
@@ -502,12 +518,12 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Helper method to retrieve the user's banner
-     * 
+     *
      * @return mixed
      */
     public function getBanner()
     {
-        if( ! $this->banner) {
+        if (! $this->banner) {
             return new Upload([
                 'id' => \Ramsey\Uuid\Uuid::uuid4(),
                 'name' => 'default',
@@ -586,7 +602,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Get the user's profile slug.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      */
     public function slug()
@@ -596,7 +612,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Get the user's reports.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function reports()
@@ -606,7 +622,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Get a user that is a rep
-     * 
+     *
      * @param  Builder $query
      * @return Builder
      */
@@ -618,7 +634,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Get trips the user is representing
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function tripsRepresenting()
@@ -628,7 +644,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Get reservations the user is representing
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function reservationsRepresenting()
@@ -643,16 +659,17 @@ class User extends Authenticatable implements JWTSubject
      */
     public function syncLinks($links)
     {
-        if ( ! $links) return;
+        if (! $links) {
+            return;
+        }
 
-        $links = collect($links)->reject(function($link) {
+        $links = collect($links)->reject(function ($link) {
             return strlen($link['url']) < 1;
         })->all();
 
         $names = $this->links()->pluck('id', 'name');
 
-        foreach($links as $link)
-        {
+        foreach ($links as $link) {
             array_forget($names, $link['name']);
 
             $link['url'] = remove_http($link['url']);
@@ -660,7 +677,9 @@ class User extends Authenticatable implements JWTSubject
             $this->links()->updateOrCreate(['name' => $link['name']], $link);
         }
 
-        if( ! $names->isEmpty()) Link::destroy(array_values($names->toArray()));
+        if (! $names->isEmpty()) {
+            Link::destroy(array_values($names->toArray()));
+        }
     }
 
     public function getCountriesVisited()
@@ -693,7 +712,7 @@ class User extends Authenticatable implements JWTSubject
              ->get()
              ->pluck('requirements')
              ->flatten()
-             ->reject(function($item) {
+             ->reject(function ($item) {
                  return $item->status == 'complete';
              })
              ->sortBy('due_at');
@@ -722,8 +741,7 @@ class User extends Authenticatable implements JWTSubject
             $query->has('membership')->with('membership.team.region.campaign', 'trip');
         }])->first()->reservations;
 
-        $data = collect($reservations)->map(function ($item, $key)
-        {
+        $data = collect($reservations)->map(function ($item, $key) {
             return $array = [
                 'label'          => $item->trip->started_at->format('Y') .
                                     ' ' . $item->membership->team->region->name .
@@ -766,5 +784,34 @@ class User extends Authenticatable implements JWTSubject
     public function isImpersonating()
     {
         return Session::has('impersonate');
+    }
+
+    /**
+     * Determine if the user is the project sponsor.
+     *
+     * @param  Project $project
+     * @return boolean
+     */
+    public function isSponsor(Project $project)
+    {
+        if ($project->sponsor_type === 'group') {
+            $group_ids = $this->managing()->get('id')->toArray();
+
+            return in_array($project->sponsor_id, $group_ids);
+        }
+
+        return $this->id === $project->sponsor_id;
+    }
+
+    public function doesManage($resource)
+    {
+        $class = get_class($resource);
+
+        $resourceIds = (new $class)
+            ->filter(['manager' => $this->id])
+            ->pluck('id')
+            ->toArray();
+
+        return in_array($resource->id, $resourceIds);
     }
 }

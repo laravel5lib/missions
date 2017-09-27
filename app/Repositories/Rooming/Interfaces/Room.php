@@ -2,7 +2,8 @@
 
 namespace App\Repositories\Rooming\Interfaces;
 
-interface Room {
+interface Room
+{
     public function filter(array $data);
     public function getById($id);
     public function create(array $data);

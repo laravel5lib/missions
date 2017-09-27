@@ -22,15 +22,14 @@ class CreateStoriesTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create('published_stories', function(Blueprint $table) {
+        Schema::create('published_stories', function (Blueprint $table) {
             $table->uuid('story_id');
             $table->uuid('publication_id');
             $table->string('publication_type');
             $table->timestamp('published_at');
         });
 
-        Schema::table('published_stories', function($table)
-        {
+        Schema::table('published_stories', function ($table) {
             $table->foreign('story_id')
                 ->references('id')->on('stories')
                 ->onDelete('cascade');

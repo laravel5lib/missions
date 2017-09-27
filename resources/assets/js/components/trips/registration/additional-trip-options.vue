@@ -4,13 +4,13 @@
             <h4>Rooming and Additional Trip Options</h4>
             <hr class="divider" />
             <hr class="divider inv sm" />
-			<validator name="AdditionalOptions" @valid="onValid">
+
 				<form novalidate name="AdditionalOptionsForm">
-					<div class="" v-for="option in optionalCosts | orderBy 'name'">
-						<label style="display:block" for="option{{$index}}">
-							<input type="radio" id="option{{$index}}" v-model="selectedOptions" :value="option" v-validate:additional="$index === 0 ? ['required'] : ''">
+					<div class="" v-for="(option, index) in optionalCosts">
+						<label style="display:block" :for="'option' + index">
+							<input type="radio" :id="'option' + index" v-model="selectedOptions" :value="option" name="additional" v-validate="index === 0 ? 'required' : ''">
 							{{option.name}}
-							<span class="pull-right">{{option.amount | currency}}</span>
+							<span class="pull-right">{{currency(option.amount)}}</span>
 						</label>
 						<span class="help-block">{{option.description}}</span>
 						<hr class="divider lg">
@@ -19,50 +19,46 @@
 						No additional options available
 					</h5>
 				</form>
-			</validator>
+
         </div>
     </div>
 </template>
 <script type="text/javascript">
+	import _ from 'underscore';
+	import errorHandler from '../../error-handler.mixin'
+
 	export default{
 		name: 'additional-trip-options',
+		mixins: [errorHandler],
 		data(){
 			return {
 				title: 'Additional Trip Options',
-				atoComplete: true,
-				optionalCosts: [],
+//				optionalCosts: [],
 				selectedOptions: null
 			}
 		},
 		computed:{
 			optionalCosts(){
-			    let arr = this.$parent.tripCosts.optional;
+			    let arr = this.$parent.tripCosts.optional || [];
 			    if (!arr.length) {
-                    this.$dispatch('ato-complete', true);
-			    }
-				return arr;
+                    this.$emit('step-completion', true);
+                }
+				return _.sortBy(arr, 'name');
 			}
 		},
 		watch:{
-			'atoComplete'(val, oldVal) {
-				this.$dispatch('ato-complete', val)
-			},
-			'selectedOptions'(val, oldVal) {
+
+			selectedOptions(val, oldVal) {
 				this.$parent.selectedOptions = val;
-			}
-		},
-		methods: {
-            onValid(){
-                this.$dispatch('ato-complete', true);
+			},
+            isFormDirty() {
+                this.$emit('step-completion', true);
             },
-
-        },
-		ready(){
-
 		},
-		activate(done){
+		methods: {},
+		mounted(){},
+		activated(){
 			$('html, body').animate({scrollTop : 200},300);
-			done();
 		}
 	}
 </script>

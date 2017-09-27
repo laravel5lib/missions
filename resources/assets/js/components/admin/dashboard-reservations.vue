@@ -1,6 +1,6 @@
 <template>
 	<div class="panel panel-default">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="panel-heading">
 			<h5>Newest Reservations</h5>
 		</div>
@@ -21,7 +21,7 @@
 			</tbody>
 		</table>
 		<div class="panel-footer text-center" style="padding:10px;">
-			<a class="small" style="color:#bcbcbc;" href="{{ url('/admin/reservations/current') }}">View All Reservations</a>
+			<a class="small" style="color:#bcbcbc;" :href=" url('/admin/reservations/current') ">View All Reservations</a>
 		</div>
 	</div>
 </template>
@@ -40,12 +40,12 @@
 					per_page: 5,
 					sort: 'created_at+DESC',
 					page: 1
-				}}).then(function (response) {
-					this.reservations = response.body.data;
+				}}).then((response) => {
+					this.reservations = response.data.data;
 				})
 			}
 		},
-        ready(){
+        mounted(){
             this.getReservations();
         }
     }

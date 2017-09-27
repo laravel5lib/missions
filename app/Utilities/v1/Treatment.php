@@ -2,7 +2,8 @@
 
 namespace App\Utilities\v1;
 
-class Treatment {
+class Treatment
+{
 
     protected static $certifications = [
         'C01' => 'register patients and record chief concern, medical and family histories',
@@ -28,8 +29,8 @@ class Treatment {
 
     /**
      * Return certifications
-     * 
-     * @return array 
+     *
+     * @return array
      */
     public static function certifications()
     {
@@ -38,8 +39,8 @@ class Treatment {
 
     /**
      * Return responsibilities
-     * 
-     * @return array 
+     *
+     * @return array
      */
     public static function responsibilities()
     {
@@ -56,17 +57,16 @@ class Treatment {
 
     /**
      * Return a single treatment by code
-     * 
-     * @param  sting $code 
-     * @return array       
+     *
+     * @param  sting $code
+     * @return array
      */
     public static function get($code)
     {
-        $result = array_where(static::all(), function($key, $value) use($code) {
+        $result = array_where(static::all(), function ($value, $key) use ($code) {
             return $key === strtoupper($code);
         });
 
         return $result;
     }
-    
 }

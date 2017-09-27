@@ -1,7 +1,7 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="CreateUpdateMedicalRelease" @touched="onTouched">
+<template>
+    <div>
         <form id="CreateUpdateMedicalRelease" class="form-horizontal" novalidate>
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
@@ -11,15 +11,12 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    
+
                     <template v-if="forAdmin">
                         <div class="col-sm-12">
-                            <div class="form-group" :class="{ 'has-error': checkForError('manager') }">
+                            <div class="form-group" :class="{ 'has-error': errors.has('manager') }">
                                 <label for="infoManager">Record Manager</label>
-                                <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                                <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
-                                    <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
-                                </select>
+                                <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" name="manager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name" v-validate="'required'"></v-select>
                             </div>
                         </div>
                     </template>
@@ -28,7 +25,7 @@
                             <div v-error-handler="{ value: name, handle: 'name', messages: { req: 'Please enter the release holder\'s name.'} }">
                                 <label for="name" class="control-label">Name</label>
                                 <input type="text" class="form-control" name="name" id="name" v-model="name"
-                                       placeholder="Name" v-validate:name="{ required: true, minlength:1 }"
+                                       placeholder="Name" v-validate="'required|min:1'"
                                        minlength="1" required>
 
                             </div>
@@ -38,16 +35,16 @@
                         <div class="col-sm-6">
                             <div v-error-handler="{ value: ins_provider, client: 'provider', server: 'ins_provider', messages: { req: 'Please enter the insurance provider\'s name.'} }">
                                 <label for="ins_provider" class="control-label">Insurance Provider</label>
-                                <input type="text" class="form-control" name="ins_provider" id="ins_provider" v-model="ins_provider"
-                                       placeholder="Insurance Provider" v-validate:provider="{ required: true, minlength:1, maxlength:100 }"
+                                <input type="text" class="form-control" name="provider" id="ins_provider" v-model="ins_provider"
+                                       placeholder="Insurance Provider" v-validate="noInsurance?'':'required|min:1|max:100'"
                                        maxlength="100" minlength="1" required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div v-error-handler="{ value: ins_policy_no, client: 'policy', server: 'ins_policy_no', messages: { req: 'Please enter the policy number.'} }">
                                 <label for="ins_policy_no" class="control-label">Insurance Policy Number</label>
-                                <input type="text" class="form-control" name="ins_policy_no" id="ins_policy_no" v-model="ins_policy_no"
-                                       placeholder="Insurance Policy Number" v-validate:policy="{ required: true, minlength:1 }"
+                                <input type="text" class="form-control" name="policy" id="ins_policy_no" v-model="ins_policy_no"
+                                       placeholder="Insurance Policy Number" v-validate="noInsurance?'':'required|min:1'"
                                        maxlength="100" minlength="1" required>
                             </div>
                         </div>
@@ -57,7 +54,7 @@
                             <hr class="divider inv">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" v-model="noInsurance"> I do not have medical insurance 
+                                    <input type="checkbox" v-model="noInsurance"> I do not have medical insurance
                                 </label>
                                 <span class="help-block">
                                     Medical Insurance is not required for travel, but highly recommend.
@@ -81,7 +78,7 @@
                             </div>
                         </div>
                         <div class="list-group">
-                            <div class="list-group-item" v-for="condition in conditionsList|orderBy 'name'">
+                            <div class="list-group-item" v-for="condition in conditionsListOrdered">
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" v-model="condition.selected"> {{condition.name}}
@@ -135,14 +132,14 @@
                             </div>
                             <div class="collapse" id="newCondition">
                                 <div class="list-group-item">
-                                    <validator name="NewCondition">
-                                        <form name="NewCondition">
-                                            <label>Name</label>
-                                            <input type="text" class="form-control" v-model="newCondition.name" required>
-                                            <hr class="divider inv sm">
-                                            <button class="btn btn-sm btn-success" type="button" @click="addCondition(newCondition)">Add Condition</button>
-                                        </form>
-                                    </validator>
+
+                                    <form name="NewCondition">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" v-model="newCondition.name" required>
+                                        <hr class="divider inv sm">
+                                        <button class="btn btn-sm btn-success" type="button" @click="addCondition(newCondition)">Add Condition</button>
+                                    </form>
+
                                 </div>
                             </div>
                         </div>
@@ -161,7 +158,7 @@
                             </div>
                         </div>
                         <div class="list-group">
-                            <div class="list-group-item" v-for="allergy in allergiesList|orderBy 'name'">
+                            <div class="list-group-item" v-for="allergy in allergiesListOrdered">
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" v-model="allergy.selected"> {{allergy.name}}
@@ -215,14 +212,14 @@
                             </div>
                             <div class="collapse" id="newAllergy">
                                 <div class="list-group-item">
-                                    <validator name="newAllergy">
-                                        <form name="newAllergy">
-                                            <label>Name</label>
-                                            <input type="text" class="form-control" v-model="newAllergy.name">
-                                            <hr class="divider inv sm">
-                                            <button class="btn btn-sm btn-success" type="button" @click="addAllergy(newAllergy)">Add Allergy</button>
-                                        </form>
-                                    </validator>
+
+                                    <form name="newAllergy">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" v-model="newAllergy.name">
+                                        <hr class="divider inv sm">
+                                        <button class="btn btn-sm btn-success" type="button" @click="addAllergy(newAllergy)">Add Allergy</button>
+                                    </form>
+
                                 </div>
                             </div>
                         </div>
@@ -253,7 +250,7 @@
                                     <a class="badge" @click="confirmUploadRemoval(upload)"><i class="fa fa-close"></i></a>
                                 </li>
                             </ul>
-                            <upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="true" :name="'medical-release-'+ today + '-' + uploadCounter"></upload-create-update>
+                            <upload-create-update type="file" lock-type :ui-selector="2" ui-locked is-child :tags="['User']" button-text="Attach" allow-name :name="'medical-release-'+ today + '-' + uploadCounter"  @uploads-complete="uploadsComplete"></upload-create-update>
                         </div>
                     </div>
                 </div>
@@ -268,23 +265,15 @@
                             <div class="col-sm-6">
                                 <div v-error-handler="{ value: emergency_contact.name, handle: 'emergencyname' }">
                                     <label>Name</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           v-model="emergency_contact.name" 
-                                           v-validate:emergencyname="{ required: true, minlength:1 }"
-                                           minlength="1" 
-                                           required>
+                                    <input type="text" class="form-control" v-model="emergency_contact.name"
+                                           name="emergencyname" v-validate="'required|min:1'" minlength="1" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div v-error-handler="{ value: emergency_contact.email, handle: 'emergencyemail', messages: { email: 'Please enter a valid email address.'} }">
                                     <label>Email</label>
-                                    <input type="email" 
-                                           class="form-control" 
-                                           v-model="emergency_contact.email" 
-                                           v-validate:emergencyemail="{ required: true, minlength:1, email:true }"
-                                           minlength="1" 
-                                           required>
+                                    <input type="email" class="form-control" v-model="emergency_contact.email"
+                                           name="emergencyemail" v-validate="'required|email'" minlength="1" required>
                                 </div>
                             </div>
                         </div>
@@ -292,23 +281,14 @@
                             <div class="col-sm-6">
                                 <div v-error-handler="{ value: emergency_contact.phone, handle: 'emergencyphone' }">
                                     <label>Phone</label>
-                                    <input type="tel" 
-                                           class="form-control" 
-                                           v-model="emergency_contact.phone|phone" 
-                                           v-validate:emergencyphone="{ required: true, minlength:1 }"
-                                           minlength="1" 
-                                           required>
-
+                                    <phone-input v-model="emergency_contact.phone" name="emergencyphone" v-validate="'required'"></phone-input>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div v-error-handler="{ value: emergency_contact.relationship, handle: 'emergencyrelationship' }">
                                     <label>Relationship</label>
-                                    <select type="tel" 
-                                            class="form-control" 
-                                            v-model="emergency_contact.relationship" 
-                                            v-validate:emergencyrelationship="{ required: true }"
-                                            required>
+                                    <select class="form-control" v-model="emergency_contact.relationship"
+                                            name="emergencyrelationship" v-validate="'required'" required>
                                         <option value="friend">Friend</option>
                                         <option value="spouse">Spouse</option>
                                         <option value="family">Family</option>
@@ -332,20 +312,21 @@
             </div>
         </form>
 
-        <modal class="text-center" :show.sync="deleteModal" title="Delete Cost" small="true">
+        <!--<modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" :small="true">
             <div slot="modal-body" class="modal-body text-center" v-if="selectedItem">Delete {{ selectedItem.name }}?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Delete</button>
             </div>
-        </modal>
-        <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+        </modal>-->
+        <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
-
-    </validator>
+    </div>
 </template>
 <script type="text/javascript">
+    import $ from 'jquery';
+    import _ from 'underscore';
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
     import errorHandler from'../../error-handler.mixin';
@@ -369,8 +350,6 @@
         },
         data(){
             return{
-                // mixin settings
-                validatorHandle: 'CreateUpdateMedicalRelease',
                 noInsurance: false,
                 usersArr: [],
                 userObj: null,
@@ -413,6 +392,8 @@
                 showSuccess: false,
                 showError: false,
                 selectedAvatar: null,
+                deleteModal: false,
+                showSaveAlert: false,
                 today: moment().format('YYYY-MM-DD'),
                 yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
                 tomorrow:moment().add(1, 'days').format('YYYY-MM-DD'),
@@ -420,11 +401,20 @@
             }
         },
         computed: {
+            conditionsListOrdered() {
+                return _.sortBy(this.conditionsList, 'name')
+            },
+            allergiesListOrdered() {
+                return _.sortBy(this.allergiesList, 'name')
+            },
             country_code(){
                 return _.isObject(this.countryObj) ? this.countryObj.code : null;
             },
-            user_id(){
-                return  _.isObject(this.userObj) ? this.userObj.id : this.$root.user.id;
+            user_id: {
+                get() {
+                    return _.isObject(this.userObj) ? this.userObj.id : this.$root.user.id;
+                },
+                set() {}
             },
             hasConditionsOrAllergies(){
                 return _.contains(_.pluck(this.conditionsList, 'selected'), true) || _.contains(_.pluck(this.allergiesList, 'diagnosed'), true) || _.contains(_.pluck(this.allergiesList, 'medication'), true) || _.contains(_.pluck(this.additionalConditionsList, 'selected'), true) || _.contains(_.pluck(this.additionalAllergiesList, 'medication'), true) || _.contains(_.pluck(this.additionalAllergiesList, 'diagnosed'), true)
@@ -433,16 +423,13 @@
         methods: {
             getUsers(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('users', { params: { search: search} }).then(function (response) {
-                    this.usersArr = response.body.data;
+                this.$http.get('users', { params: { search: search} }).then((response) => {
+                    this.usersArr = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
-            onTouched(){
-                this.hasChanged = true;
-            },
             back(force){
-                if (this.hasChanged && !force ) {
+                if (this.isFormDirty && !force ) {
                     this.showSaveAlert = true;
                     return false;
                 }
@@ -468,7 +455,7 @@
                             diagnosed: false,
                             selected: true
                         };
-                        jQuery('#newCondition').collapse();
+                        $('#newCondition').collapse();
                         break;
                     case 'allergy':
                         this.newAllergy = {
@@ -477,7 +464,7 @@
                             diagnosed: false,
                             selected: true
                         };
-                        jQuery('#newAllergy').collapse();
+                        $('#newAllergy').collapse();
                         break;
                 }
             },
@@ -486,10 +473,14 @@
                 this.allergies = _.where(_.union(this.allergiesList, this.additionalAllergiesList), { selected: true });
             },
             submit(){
-                this.resetErrors();
-                if (this.$CreateUpdateMedicalRelease.valid) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.showError = true;
+                        return;
+                    }
+
                     this.prepArrays();
-                    this.resource.save(null, {
+                    this.resource.post({}, {
                         name: this.name,
                         ins_provider: this.ins_provider,
                         ins_policy_no: this.ins_policy_no,
@@ -499,28 +490,26 @@
                         is_risk: this.is_risk,
                         user_id: this.user_id,
                         upload_ids: _.uniq(this.upload_ids),
-                    }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Medical Release created.');
+                    }).then((resp) => {
+                        this.$root.$emit('showSuccess', 'Medical Release created.');
                         let that = this;
-                        setTimeout(function () {
+                        setTimeout(() =>  {
                             window.location.href = '/' + that.firstUrlSegment + '/records/medical-releases/' + resp.data.data.id;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to create medical release.');
+                        this.$root.$emit('showError', 'Unable to create medical release.');
                     });
-                } else {
-                    this.showError = true;
-                }
+                });
             },
             update(){
-                if ( _.isFunction(this.$validate) )
-                    this.$validate(true);
-                
-                this.resetErrors();
-                if (this.$CreateUpdateMedicalRelease.valid) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        return;
+                    }
+
                     this.prepArrays();
-                    this.resource.update({id:this.id, include: 'uploads'}, {
+                    this.resource.put({id:this.id, include: 'uploads'}, {
                         name: this.name,
                         ins_provider: this.ins_provider,
                         ins_policy_no: this.ins_policy_no,
@@ -530,26 +519,23 @@
                         is_risk: this.is_risk,
                         user_id: this.user_id,
                         upload_ids: _.uniq(this.upload_ids),
-                    }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Changes saved.');
+                    }).then((resp) => {
+                        this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
-                        setTimeout(function () {
+                        setTimeout(() =>  {
                             window.location.href = '/' + that.firstUrlSegment + '/records/medical-releases/' + that.id;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to save changes.');
+                        this.$root.$emit('showError', 'Unable to save changes.');
                     });
-                }
+                });
             },
             confirmUploadRemoval(upload){
                 this.uploads.$remove(upload);
                 this.upload_ids.$remove(upload.id);
             },
-
-        },
-        events:{
-            'uploads-complete'(data){
+            uploadsComplete(data){
                 switch(data.type){
                     case 'file':
                         this.uploads.push(data);
@@ -559,13 +545,14 @@
                         this.uploadCounter++;
                         break;
                 }
-            }
+            },
+
         },
-        ready(){
+        mounted(){
             if (this.isUpdate) {
-                this.$http.get('medical/releases/' + this.id, { params: { include: 'conditions,allergies,uploads,user'} }).then(function (response) {
-                    this.user_id = response.body.data.id;
-                    let medical_release = response.body.data;
+                this.$http.get(`medical/releases/${this.id}`, { params: { include: 'conditions,allergies,uploads,user'} }).then((response) => {
+                    this.user_id = response.data.data.id;
+                    let medical_release = response.data.data;
                     medical_release.uploads = medical_release.uploads.data;
                     this.upload_ids = _.pluck(medical_release.uploads, 'id');
                     this.uploadCounter = medical_release.uploads.length + 1;
@@ -573,10 +560,10 @@
                     this.usersArr.push(this.userObj);
                     $.extend(this, medical_release);
 
-                    this.$http.get('medical/conditions').then(function (response) {
+                    this.$http.get('medical/conditions').then((response) => {
                         // prepare conditions for UI
                         let med_conditions = medical_release.conditions.data;
-                        _.each(response.body.data, function (condition) {
+                        _.each(response.data.data, (condition) => {
                             let obj = { name: condition, medication: false, diagnosed: false, selected: false };
                             let match = _.find(med_conditions, function (c, i) {
                                 med_conditions[i].selected = true;
@@ -589,13 +576,13 @@
                                 _.extend(obj, match, { selected: true });
                             }
                             this.conditionsList.push(obj);
-                        }.bind(this));
+                        });
                         this.additionalConditionsList = med_conditions;
                     });
-                    this.$http.get('medical/allergies').then(function (response) {
+                    this.$http.get('medical/allergies').then((response) => {
                     // prepare conditions for UI
                     let med_allergies = medical_release.allergies.data;
-                    _.each(response.body.data, function (allergy) {
+                    _.each(response.data.data, (allergy) => {
                         let obj = { name: allergy, medication: false, diagnosed: false, selected: false };
                         let match = _.find(med_allergies, function (a, i) {
                             med_allergies[i].selected = true;
@@ -608,20 +595,20 @@
                             _.extend(obj, match, { selected: true });
                         }
                         this.allergiesList.push(obj);
-                    }.bind(this));
+                    });
                     this.additionalAllergiesList = med_allergies;
                 });
                 });
             } else {
-                this.$http.get('medical/conditions').then(function (response) {
-                    _.each(response.body.data, function (condition) {
+                this.$http.get('medical/conditions').then((response) => {
+                    _.each(response.data.data, (condition) => {
                         this.conditionsList.push({ name: condition, medication: false, diagnosed: false, selected: false });
-                    }.bind(this));
+                    });
                 });
-                this.$http.get('medical/allergies').then(function (response) {
-                    _.each(response.body.data, function (allergy) {
+                this.$http.get('medical/allergies').then((response) => {
+                    _.each(response.data.data, (allergy) => {
                         this.allergiesList.push({ name: allergy, medication: false, diagnosed: false, selected: false });
-                    }.bind(this));
+                    });
                 });
             }
         }

@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Transformers\v1;
+
 use App\Models\v1\Itinerary;
 use League\Fractal\TransformerAbstract;
 
 class ItineraryTransformer extends TransformerAbstract
-{   
+{
+
 
     /**
      * List of resources available to include

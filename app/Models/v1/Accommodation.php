@@ -71,5 +71,4 @@ class Accommodation extends Model
     {
         return ucwords($value);
     }
-
 }

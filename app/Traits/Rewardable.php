@@ -18,8 +18,8 @@ trait Rewardable
     public function createCode(
         $promotionalId,
         $amount = 1
-    )
-    {
+    ) {
+    
         $records = [];
 
         // loop though each promocodes required
@@ -52,10 +52,8 @@ trait Rewardable
 
         // check if exists not expired code
         if (!is_null($promocode)) {
-
             // check if a rewardable resource exists and if the code applies to the given rewardable
             if (!is_null($promocode->rewardable) && $promocode->rewardable->id !== $this->attributes['id']) {
-
                 // callback function with false value
                 if (is_callable($callback)) {
                     $callback(false);

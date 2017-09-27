@@ -1,5 +1,7 @@
 @extends('admin.layouts.default')
-
+@section('scripts')
+    <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+@endsection
 @section('content')
     <div class="white-header-bg">
         <div class="container">
@@ -11,7 +13,14 @@
                     <hr class="divider inv sm">
                     <div class="btn-group">
                         <a href="{{ url('admin/funds') }}" class="btn btn-primary-darker"><i class="fa fa-chevron-left"></i></a>
-                        <a type="button" class="btn btn-primary" data-toggle="collapse" data-target="#createTransaction"><i class="fa fa-plus icon-left"></i> Transaction</a>
+                        @can('create', \App\Models\v1\Transaction::class)
+                            <a type="button"
+                               class="btn btn-primary"
+                               data-toggle="collapse"
+                               data-target="#createTransaction">
+                                <i class="fa fa-plus icon-left"></i> Transaction
+                           </a>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -26,9 +35,15 @@
                 <hr class="divider inv sm">
             </div>
             <div class="col-sm-4 text-center">
-                <hr class="divider inv sm hidden-xs">
-                <button data-toggle="modal" data-target="#restoreConfirmationModal" class="btn btn-sm btn-white-hollow"><i class="fa fa-undo"></i> Restore</button>
-                <hr class="divider inv sm">
+                @can('update', \App\Models\v1\Fund::class)
+                    <hr class="divider inv sm hidden-xs">
+                    <button data-toggle="modal"
+                            data-target="#restoreConfirmationModal"
+                            class="btn btn-sm btn-white-hollow">
+                        <i class="fa fa-undo"></i> Restore
+                    </button>
+                    <hr class="divider inv sm">
+                @endcan
             </div>
         </div><!-- end container -->
     </div><!-- end dark-bg-primary -->
@@ -36,12 +51,11 @@
     <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <fund-manager id="{{ $fund->id }}">
+            <fund-manager id="{{ $fund->id }}" stripe-key="{{ env('STRIPE_KEY') }}">
                 <notes type="funds"
                        id="{{ $fund->id }}"
                        user_id="{{ auth()->user()->id }}"
-                       :per_page="3"
-                       :can-modify="{{ auth()->user()->can('modify-notes') }}">
+                       :per_page="3">
                 </notes>
             </fund-manager>
             <restore-fund id="{{ $fund->id }}"></restore-fund>

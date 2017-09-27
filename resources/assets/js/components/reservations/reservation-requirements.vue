@@ -6,7 +6,7 @@
             </div>
             <div class="col-xs-6 tour-step-search">
                 <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for requirements">
+                    <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search for requirements">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
             </div>
@@ -24,7 +24,7 @@
                                     </a> {{ requirement.name }}
                                     <span class="label" :class="statusLabel(requirement.status)">
                                         <i class="fa" :class="statusIcon(requirement.status)"></i>
-                                        <span class="hidden-xs"> {{ requirement.status | capitalize }}</span>
+                                        <span class="hidden-xs"> {{ requirement.status|capitalize }}</span>
                                     </span>
                                 </h5>
                             </div>
@@ -33,7 +33,7 @@
                                     <span v-show="isLocked">
                                         <i class="fa fa-lock"></i> Locked &middot;
                                     </span>
-                                    Due {{ requirement.due_at | moment 'lll' }}
+                                    Due {{ requirement.due_at | moment('lll') }}
                                 </label>
                             </div>
                         </div>
@@ -50,35 +50,36 @@
                                           :requirement-id="requirement.id"
                                           :requirement="requirement"
                                           :user-id="userId"
+                                          @set-status="handleStatus"
                                           :locked="isLocked">
                         </document-manager>
                     </div>
                     <div class="panel-footer">
-                        <label>Last Updated: {{ requirement.updated_at | moment 'lll' }}</label>
+                        <label>Last Updated: {{ requirement.updated_at | moment('lll') }}</label>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
           <div class="col-xs-12 text-center">
-              <pagination :pagination.sync="pagination"
+              <pagination :pagination="pagination" pagination-key="pagination"
                           :callback="fetch"
                           size="small">
               </pagination>
           </div>
         </div>
 
-        <modal :title="'Edit ' + editedRequirement.name" :show.sync="showEditModal" effect="fade" width="800" :callback="update">
+        <modal :title="'Edit ' + editedRequirement.name" :value="showEditModal" @closed="showEditModal=false" effect="fade" width="800" :callback="update">
             <div slot="modal-body" class="modal-body">
-                <validator name="EditRequirement">
-                    <form class="form" novalidate>
+
+                    <form class="form" novalidate data-vv-scope="requirement-update">
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="form-group" :class="{'has-error': checkForEditRequirementError('grace') }">
+                                <div class="form-group" :class="{'has-error': errors.has('grace', 'requirement-update') }">
                                     <label for="grace_period">Grace Period</label>
-                                    <div class="input-group input-group-sm" :class="{'has-error': checkForEditRequirementError('grace') }">
+                                    <div class="input-group input-group-sm" :class="{'has-error': errors.has('grace', 'requirement-update') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="editedRequirement.grace_period"
-                                               v-validate:grace="{required: { rule: true }}">
+                                               name="grace" v-validate="'required'">
                                         <span class="input-group-addon">Days</span>
                                     </div>
                                 </div>
@@ -94,15 +95,17 @@
                             </div>
                         </div>
                     </form>
-                </validator>
+
             </div>
         </modal>
 
     </section>
 </template>
 <script>
+    import _ from 'underscore';
     import documentManager from './document-manager.vue';
     export default{
+        name: 'reservation-requirements',
         components: {
             documentManager,
         },
@@ -111,17 +114,17 @@
                 type: String,
                 required: true
             },
-            'age': {
-                type: Number,
-                default: 100
-            },
             'userId': {
                 type: String,
                 required: true
             },
-            'locked': {
+            'age': {
                 type: Number,
-                default: 0
+                default: 100
+            },
+            'locked': {
+                type: Boolean,
+                default: false
             }
         },
         computed: {
@@ -133,22 +136,21 @@
 
                 return false;
             },
-            'isLocked': function() {
+            isLocked() {
                 if (this.isAdminRoute)
                     return false;
 
-                return this.locked == 1 ? true: false;
+                return this.locked;
             }
         },
         watch: {
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.page = 1;
+            },
+            'page'(val, oldVal) {
                 this.fetch();
             },
-            'page': function (val, oldVal) {
-                this.fetch();
-            },
-            'per_page': function (val, oldVal) {
+            'per_page'(val, oldVal) {
                 this.fetch();
             }
         },
@@ -167,21 +169,17 @@
             }
         },
         methods: {
-            checkForEditRequirementError(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$EditRequirement[field].invalid && this.attemptSubmit;
-            },
+            debouncedSearch: _.debounce(function () {
+                this.fetch();
+            }, 250),
             statusLabel(status) {
                 switch(status) {
                     case 'complete':
                         return 'label-success';
-                        break;
                     case 'reviewing':
                         return 'label-default';
-                        break;
                     case 'attention':
                         return 'label-info';
-                        break;
                     default:
                         return 'label-danger';
                 }
@@ -190,19 +188,16 @@
                 switch(status) {
                     case 'complete':
                         return 'fa-check';
-                        break;
                     case 'reviewing':
                         return 'fa-user';
-                        break;
                     case 'attention':
                         return 'fa-exclamation-triangle';
-                        break;
                     default:
                         return 'fa-exclamation';
                 }
             },
             fetch() {
-                var params = {
+                let params = {
                     search: this.search,
                     per_page: this.per_page,
                     page: this.pagination.current_page,
@@ -210,9 +205,9 @@
                     //sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc'),
                 };
 
-                this.$http.get('reservations/' + this.id + '/requirements', { params: params }).then(function (response) {
-                    this.requirements = response.body.data
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('reservations/' + this.id + '/requirements', { params: params }).then((response) => {
+                    this.requirements = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                 });
             },
             edit(requirement) {
@@ -223,23 +218,21 @@
                 this.$http.put('reservations/' + this.id + '/requirements/' + this.editedRequirement.id, {
                     status: this.editedRequirement.status,
                     grace_period: this.editedRequirement.grace_period
-                }).then(function (response) {
-                    this.$emit('set-status', response.body.data);
-                    this.$dispatch('showSuccess', 'Requirement updated.');
+                }).then((response) => {
+                    this.handleStatus(response.data.data);
+                    this.$root.$emit('showSuccess', 'Requirement updated.');
                     this.showEditModal = false;
                 });
-            }
-        },
-        events: {
-            'set-status': function(requirement) {
-                var index = this.requirements.indexOf(_.findWhere(this.requirements, {id: requirement.id}));
+            },
+            handleStatus(requirement) {
+                let index = this.requirements.indexOf(_.findWhere(this.requirements, {id: requirement.id}));
                 if (index !== -1) {
-                  this.requirements[index].status = requirement.status;
-                  this.requirements[index].updated_at = requirement.updated_at;
+                    this.requirements[index].status = requirement.status;
+                    this.requirements[index].updated_at = requirement.updated_at;
                 }
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

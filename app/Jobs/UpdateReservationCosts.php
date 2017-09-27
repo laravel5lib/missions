@@ -31,7 +31,7 @@ class UpdateReservationCosts extends Job implements ShouldQueue
      */
     public function handle()
     {
-        $this->cost->costAssignable->reservations->each(function($reservation) {
+        $this->cost->costAssignable->reservations->each(function ($reservation) {
             $reservation->updateCosts();
         });
     }

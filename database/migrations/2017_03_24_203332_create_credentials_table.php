@@ -19,7 +19,7 @@ class CreateCredentialsTable extends Migration
             $table->string('type');
             $table->string('applicant_name');
             $table->json('content')->nullable();
-            $table->timestamp('expired_at');
+            $table->timestamp('expired_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

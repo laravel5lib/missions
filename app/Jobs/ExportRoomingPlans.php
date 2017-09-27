@@ -25,8 +25,7 @@ class ExportRoomingPlans extends Exporter
             'occupants' => $plan->occupantsCount()->total()
         ];
 
-        foreach($plan->roomsCount()->all() as $key => $value)
-        {
+        foreach ($plan->roomsCount()->all() as $key => $value) {
             $columns[$key] = $value;
         }
 
@@ -38,8 +37,7 @@ class ExportRoomingPlans extends Exporter
 
     public function getFields()
     {
-        if ( $this->includeRoomCount() )
-        {
+        if ($this->includeRoomCount()) {
             $roomTypes = $this->getRoomTypesInPlans();
 
             return $this->addRoomTypesToFields($roomTypes);
@@ -62,8 +60,8 @@ class ExportRoomingPlans extends Exporter
     {
         $fields = collect($this->request->get('fields'));
 
-        return $fields->reject(function($field) use($roomTypes) { 
+        return $fields->reject(function ($field) use ($roomTypes) {
                     return $field == 'room_count';
-                })->merge($roomTypes)->all();
+        })->merge($roomTypes)->all();
     }
 }

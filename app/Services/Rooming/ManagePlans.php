@@ -18,7 +18,7 @@ class ManagePlans
 
     /**
      * Add plan to the given repository.
-     * 
+     *
      * @param  array|string $rooms
      * @return boolean
      */
@@ -31,7 +31,7 @@ class ManagePlans
 
     /**
      * Remove plan from the given repository.
-     * 
+     *
      * @param  array|string $rooms
      * @return boolean
      */
@@ -44,7 +44,7 @@ class ManagePlans
 
     /**
      * Get the repository to use.
-     * 
+     *
      * @return Repo
      */
     private function getRoomIds($plans)
@@ -53,5 +53,4 @@ class ManagePlans
 
         return $room->filter(['plans' => $plans])->getAll()->pluck('id')->all();
     }
-
 }

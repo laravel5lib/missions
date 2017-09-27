@@ -64,6 +64,7 @@ class TodosController extends Controller
      */
     public function store(TodoRequest $request)
     {
+
         $todo = $this->todo->create($request->all());
 
         return $this->response->item($todo, new TodoTransformer);

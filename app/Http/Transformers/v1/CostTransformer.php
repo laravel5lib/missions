@@ -33,8 +33,7 @@ class CostTransformer extends TransformerAbstract
             'type'             => $cost->type,
         ];
 
-        if ($cost->pivot)
-        {
+        if ($cost->pivot) {
             $array = [
                 'cost_id'          => $cost->id,
                 'name'             => $cost->name,

@@ -4,7 +4,8 @@ namespace App\Services;
 
 use Cartalyst\Stripe\Stripe;
 
-class PaymentGateway {
+class PaymentGateway
+{
 
     /**
      * @var Stripe
@@ -57,7 +58,6 @@ class PaymentGateway {
 
         // was an array of card details provided?
         if (is_array($params)) {
-
             $card = [
                 'card' => [
                     'name'      => $params['cardholder'],
@@ -92,7 +92,8 @@ class PaymentGateway {
         return $customer;
     }
 
-    public function findCustomer($customer_id) {
+    public function findCustomer($customer_id)
+    {
         return $this->stripe->customers()->find($customer_id);
     }
 
@@ -177,5 +178,4 @@ class PaymentGateway {
 
         return $refund['id'];
     }
-
 }

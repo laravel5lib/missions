@@ -2,7 +2,8 @@
 
 namespace App\Utilities\v1;
 
-class Requirement {
+class Requirement
+{
 
     protected static $requirements = [
         'medical_release' => 'Medical Release',
@@ -19,8 +20,8 @@ class Requirement {
 
     /**
      * Return all requirements
-     * 
-     * @return array 
+     *
+     * @return array
      */
     public static function all()
     {
@@ -29,17 +30,16 @@ class Requirement {
 
     /**
      * Return a single requirement by code
-     * 
+     *
      * @param  string $code
-     * @return array       
+     * @return array
      */
     public static function get($code)
     {
-        $result = array_where(static::$requirements, function($key, $value) use($code) {
+        $result = array_where(static::$requirements, function ($value, $key) use ($code) {
             return $key === strtolower($code);
         });
 
         return $result;
     }
-    
 }

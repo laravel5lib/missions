@@ -3,11 +3,11 @@
 /**
  * Donor Factory
  */
-$factory->define(App\Models\v1\Donor::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Donor::class, function (Faker\Generator $faker) {
     return [
         'id'           => $faker->unique()->uuid,
-        'name'         => $faker->firstName . ' '. $faker->lastName,
+        'first_name'   => $faker->firstName,
+        'last_name'    => $faker->lastName,
         'email'        => $faker->safeEmail,
         'phone'        => stripPhone($faker->phoneNumber),
         'company'      => $faker->optional(0.5)->company,
@@ -24,8 +24,7 @@ $factory->define(App\Models\v1\Donor::class, function (Faker\Generator $faker)
 /**
  * Donor with user account
  */
-$factory->defineAs(App\Models\v1\Donor::class, 'user', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Donor::class, 'user', function (Faker\Generator $faker) use ($factory) {
     $donor = $factory->raw(App\Models\v1\Donor::class);
 
     return array_merge($donor, [
@@ -39,8 +38,7 @@ $factory->defineAs(App\Models\v1\Donor::class, 'user', function (Faker\Generator
 /**
  * Donor with group account
  */
-$factory->defineAs(App\Models\v1\Donor::class, 'group', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Donor::class, 'group', function (Faker\Generator $faker) use ($factory) {
     $donor = $factory->raw(App\Models\v1\Donor::class);
 
     return array_merge($donor, [

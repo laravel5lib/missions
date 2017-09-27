@@ -1,7 +1,7 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
     <div>
-        <aside :show.sync="showRight" placement="right" header="Donate" :width="275">
-            <validator name="Donation">
+        <mm-aside :show="showRight" @open="showRight=true" @close="showRight=false" placement="right" header="Donate" :width="275">
+
             <form class="form-horizontal" name="DonationForm" novalidate v-show="donationState === 'form'">
                 <div class="row">
                     <div class="col-sm-12 text-center">
@@ -11,31 +11,31 @@
                 </div>
                 <hr class="divider inv sm">
                 <div class="row">
-                    <div class="col-sm-12" :class="{ 'has-error': checkForError('amount')}">
+                    <div class="col-sm-12" :class="{ 'has-error': errors.has('amount')}">
                         <label>Amount</label>
                         <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            <input type="number" class="form-control" v-model="amount" min="1" v-validate:amount="{required: true, min: 1}">
+                            <input type="number" class="form-control" v-model="amount" min="1" name="amount" v-validate="'required|min:1'">
                         </div>
                     </div>
                 </div>
                 <hr class="divider inv sm">
                 <div class="row">
-                    <div class="col-sm-12" :class="{ 'has-error': checkForError('donor')}">
+                    <div class="col-sm-12" :class="{ 'has-error': errors.has('donor')}">
                             <label>Donor Or Company Name</label>
-                            <input type="text" class="form-control" v-model="donor" v-validate:donor="{required: true}">
+                            <input type="text" class="form-control" v-model="donor" name="donor" v-validate="'required'">
                     </div>
                 </div>
                 <hr class="divider inv sm">
                 <!-- Credit Card -->
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="form-groups" :class="{ 'has-error': checkForError('cardholdername') }">
+                            <div class="form-groups" :class="{ 'has-error': errors.has('cardholdername') }">
                                 <label for="cardHolderName">Card Holder's Name</label>
                                 <div class="input-group">
                                     <span class="input-group-addon input"><span class="fa fa-user"></span></span>
                                     <input type="text" class="form-control input" id="cardHolderName" placeholder="Name on card"
-                                           v-model="cardHolderName" v-validate:cardHolderName="{ required: true }" autofocus/>
+                                           v-model="cardHolderName" name="cardHolderName" v-validate="'required'" autofocus/>
                                 </div>
                             </div>
                         </div>
@@ -43,12 +43,12 @@
                     <hr class="divider inv sm">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="form-groups" :class="{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }">
+                            <div class="form-groups" :class="{ 'has-error': errors.has('cardnumber') || validationErrors.cardNumber }">
                                 <label for="cardNumber">Card Number</label>
                                 <div class="input-group">
                                     <span class="input-group-addon input"><span class="fa fa-lock"></span></span>
                                     <input type="text" class="form-control input" id="cardNumber" placeholder="Valid Card Number"
-                                           v-model="cardNumber" v-validate:cardNumber="{ required: true, maxlength: 19 }"
+                                           v-model="cardNumber" name="cardNumber" v-validate="'required|max:19'"
                                            @keyup="formatCard($event)" maxlength="19"/>
                                 </div>
                                 <span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
@@ -59,16 +59,16 @@
                     <div class="row">
                         <label style="display:block;margin-left: 10px;" for="expiryMonth">EXPIRY DATE</label>
                         <div class="col-xs-6 col-md-6">
-                            <div :class="{ 'has-error': checkForError('month') || validationErrors.cardMonth }">
-                                <select v-model="cardMonth" class="form-control input" id="expiryMonth" v-validate:month="{ required: true }">
-                                    <option v-for="month in monthList" value="{{month}}">{{month}}</option>
+                            <div :class="{ 'has-error': errors.has('month') || validationErrors.cardMonth }">
+                                <select v-model="cardMonth" class="form-control input" id="expiryMonth" name="month" v-validate="'required'">
+                                    <option v-for="month in monthList" :value="month">{{month}}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-xs-6 col-md-6">
-                            <div :class="{ 'has-error': checkForError('year') || validationErrors.cardYear }">
-                                <select v-model="cardYear" class="form-control input" id="expiryYear" v-validate:year="{ required: true }">
-                                    <option v-for="year in yearList" value="{{year}}">{{year}}</option>
+                            <div :class="{ 'has-error': errors.has('year') || validationErrors.cardYear }">
+                                <select v-model="cardYear" class="form-control input" id="expiryYear" name="year" v-validate="'required'">
+                                    <option v-for="year in yearList" :value="year">{{year}}</option>
                                 </select>
                             </div>
                         </div>
@@ -76,35 +76,36 @@
                     <hr class="divider inv sm">
                     <div class="row">
                         <div class="col-xs-6 col-md-6">
-                            <div :class="{ 'has-error': checkForError('code') || validationErrors.cardCVC }">
+                            <div :class="{ 'has-error': errors.has('code') || validationErrors.cardCVC }">
                                 <label for="cvCode">
                                     CV CODE</label>
                                 <input type="text" class="form-control input" id="cvCode" maxlength="3" v-model="cardCVC"
-                                       placeholder="CV" v-validate:code="{ required: true, minlength: 3, maxlength: 3 }"/>
+                                       placeholder="CV" name="code" v-validate="'required|min:3|max:4'"/>
                             </div>
                         </div>
                     </div>
                     <hr class="divider inv sm">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div :class="{ 'has-error': checkForError('email') }">
+                            <div :class="{ 'has-error': errors.has('email') }">
                                 <label for="infoEmailAddress">Billing Email</label>
-                                <input type="text" class="form-control input" v-model="cardEmail" v-validate:email="['oneOrOther']" id="infoEmailAddress">
+                                <input type="text" class="form-control input" v-model="cardEmail" name="email="['oneOrOther']" id" v-validate="infoEmailAddress">
                             </div>
                         </div>
                     </div>
                     <hr class="divider inv sm">
                     <div class="row">
                         <div class="col-sm-6">
-                            <div :class="{ 'has-error': checkForError('phone') }">
+                            <div :class="{ 'has-error': errors.has('phone') }">
                                 <label for="infoPhone">Billing Phone</label>
-                                <input type="tel" class="form-control input" v-model="cardPhone | phone" v-validate:phone="['oneOrOther']" id="infoPhone">
+                                <phone-input v-model="cardPhone" id="infoPhone" name="phone" v-validate="'required|oneOrOther'"></phone-input>
+                                <!--<input type="tel" class="form-control input" v-model="cardPhone | phone" name="phone="['oneOrOther']" id" v-validate="infoPhone">-->
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div :class="{ 'has-error': checkForError('zip') }">
+                            <div :class="{ 'has-error': errors.has('zip') }">
                                 <label for="infoZip">ZIP</label>
-                                <input type="text" class="form-control input" v-model="cardZip" v-validate:zip="{ required: true }" id="infoZip" placeholder="12345">
+                                <input type="text" class="form-control input" v-model="cardZip" name="zip="'required'" id="infoZip" placeholder" v-validate="12345">
                             </div>
                         </div>
                     </div>
@@ -151,15 +152,15 @@
                     </dl>
                     <hr>
                     <p class="list-group-item-text">Recipient: {{recipient}}</p>
-                    <p class="list-group-item-text">Amount to be charged immediately: {{amount|currency}}</p>
+                    <p class="list-group-item-text">Amount to be charged immediately: {{currency(amount)}}</p>
                 </div>
                 <div class="panel-footer">
                     <a @click="goToState('form')" class="btn btn-default">Reset</a>
                     <a @click="createToken" class="btn btn-primary">Donate</a>
                 </div>
             </div>
-        </validator>
-        </aside>
+
+        </mm-aside>
     </div>
 </template>
 <script>
@@ -243,7 +244,7 @@
         },
         watch: {
             'paymentComplete'(val, oldVal) {
-                this.$dispatch('payment-complete', val)
+                this.$emit('payment-complete', val)
             }
         },
         computed:{
@@ -251,7 +252,7 @@
                 var num, today, years, yyyy;
                 today = new Date;
                 yyyy = today.getFullYear();
-                years = (function () {
+                years = (() =>  {
                     var i, ref, ref1, results;
                     results = [];
                     for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
@@ -273,10 +274,6 @@
             }
         },
         methods: {
-            checkForError(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$Donation[field].invalid && this.attemptSubmit;
-            },
             resetCaching() {
                 console.log('resetting');
                 this.cardMonth = '';
@@ -366,16 +363,15 @@
 
             }
         },
-        events: {
-            'VueStripe::create-card-token': function () {
+        mounted() {
+            this.$root.$on('VueStripe::create-card-token', () =>  {
                 return this.createToken();
-            },
-            'VueStripe::reset-form': function () {
+            });
+            this.$root.$on('VueStripe::reset-form', () =>  {
                 return this.resetCaching();
-            }
-        },
-        ready: function () {
-            this.$dispatch('payment-complete', true);
+            });
+
+            this.$emit('payment-complete', true);
             if (this.devMode) {
                 this.cardNumber = '4242424242424242';
                 this.cardCVC = '123';
@@ -384,12 +380,12 @@
             }
 
             if (parseInt(this.auth)) {
-                this.$http.get('users/me').then(function (response) {
-                    this.donor = response.body.data.name
-                    this.cardHolderName = response.body.data.name
-                    this.cardEmail = response.body.data.email
-                    this.cardPhone = response.body.data.phone_one
-                    this.cardZip = response.body.data.zip
+                this.$http.get('users/me').then((response) => {
+                    this.donor = response.data.data.name
+                    this.cardHolderName = response.data.data.name
+                    this.cardEmail = response.data.data.email
+                    this.cardPhone = response.data.data.phone_one
+                    this.cardZip = response.data.data.zip
                 });
             }
         },

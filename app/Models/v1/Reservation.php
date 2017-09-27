@@ -2,6 +2,7 @@
 
 namespace App\Models\v1;
 
+use App\Models\Presenters\ReservationPresenter;
 use Carbon\Carbon;
 use App\UuidForKey;
 use App\Traits\Rewardable;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey, Taggable, Rewardable;
+    use SoftDeletes, Filterable, UuidForKey, Taggable, Rewardable, ReservationPresenter;
 
     /**
      * The table associated with the model.
@@ -73,8 +74,9 @@ class Reservation extends Model
      */
     public function setGenderAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['gender'] = trim(strtolower($value));
+        }
     }
 
     /**
@@ -106,8 +108,9 @@ class Reservation extends Model
      */
     public function setStatusAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['status'] = trim(strtolower($value));
+        }
     }
 
     /**
@@ -346,8 +349,7 @@ class Reservation extends Model
      */
     public function getAgeAttribute()
     {
-        if ( ! is_null($this->birthday))
-        {
+        if (! is_null($this->birthday)) {
             return $this->birthday->diffInYears();
         }
     }
@@ -394,8 +396,9 @@ class Reservation extends Model
      */
     public function getPercentRaised()
     {
-        if( $this->getTotalRaised() === 0 or $this->getTotalCost() === 0 )
+        if ($this->getTotalRaised() === 0 or $this->getTotalCost() === 0) {
             return 0;
+        }
 
         return (int) round(($this->getTotalRaised()/$this->getTotalCost()) * 100);
     }
@@ -414,7 +417,7 @@ class Reservation extends Model
 
     public function totalOwedInDollars()
     {
-        return number_format($this->getTotalOwed()/100, 2 , '.', '');
+        return number_format($this->getTotalOwed()/100, 2, '.', '');
     }
 
     /**
@@ -426,14 +429,14 @@ class Reservation extends Model
         $active = $this->trip
                        ->activeCosts()
                        ->get()
-                       ->transform(function($cost) {
+                       ->transform(function ($cost) {
                             // set a "locked" attribute for
-                            // merge with reseration costs
+                            // merge with reservation costs
                             return $cost->setAttribute('locked', 0);
                        });
 
         // we find the 'incremental' cost with the latest activation date
-        $maxDate = $active->where('type', 'incremental')->max('active_at');
+        $maxDate = $active->whereStrict('type', 'incremental')->max('active_at');
 
         // we remove optional costs so they don't
         // get added to the reservation
@@ -450,12 +453,12 @@ class Reservation extends Model
         // 2) merge new trip costs with existing reservation costs
         // 3) remove duplicates
         $costs = $this->costs
-                    ->transform(function($cost) {
+                    ->transform(function ($cost) {
                         // set a "locked" attribute to make sure any previously
                         // locked costs remain locked after update
                         return $cost->setAttribute('locked', $cost->pivot->locked);
                     })
-                    ->reject(function($cost) {
+                    ->reject(function ($cost) {
                         return in_array(
                             $cost->id,
                             $this->payments()
@@ -468,12 +471,12 @@ class Reservation extends Model
                     ->unique();
 
         // find the 'incremental' cost that has the earliest activation date
-        $minDate = $costs->where('type', 'incremental')->min('active_at');
+        $minDate = $costs->whereStrict('type', 'incremental')->min('active_at');
 
         // to make sure only one incremental cost is being applied,
         // we choose the 'incremental' cost that
         // has the earliest activation date
-        $costs = $costs->reject(function ($value) use($minDate) {
+        $costs = $costs->reject(function ($value) use ($minDate) {
             return $value->type == 'incremental' && $value->active_at > $minDate;
         });
 
@@ -488,13 +491,16 @@ class Reservation extends Model
      */
     public function syncCosts($costs)
     {
-        if ( ! $costs) return;
+        if (! $costs) {
+            return;
+        }
 
-        if ( ! $costs instanceof Collection)
+        if (! $costs instanceof Collection) {
             $costs = collect($costs);
+        }
 
         // build the data array
-        $data = $costs->keyBy('id')->map(function($item) {
+        $data = $costs->keyBy('id')->map(function ($item) {
             return [
                 'locked' => isset($item['locked']) and $item['locked'] ? true : false,
             ];
@@ -503,10 +509,11 @@ class Reservation extends Model
         $this->costs()->sync($data);
 
         // update the related fudraiser goal amount
-        if ($this->fundraisers->count())
+        if ($this->fundraisers->count()) {
             $this->fundraisers()->first()->update([
                 'goal_amount' => $this->getTotalCost()/100
             ]);
+        }
 
         // go update the payments due
         dispatch(new SyncPaymentsDue($this));
@@ -529,12 +536,15 @@ class Reservation extends Model
      */
     public function syncRequirements($requirements)
     {
-        if ( ! $requirements) return;
+        if (! $requirements) {
+            return;
+        }
 
-        if ( ! $requirements instanceof Collection)
+        if (! $requirements instanceof Collection) {
             $requirements = collect($requirements);
+        }
 
-        $requirements->map(function($item, $key) {
+        $requirements->map(function ($item, $key) {
             return [
                 'requirement_id' => $item->id,
                 'document_type' => $item->document_type,
@@ -542,14 +552,13 @@ class Reservation extends Model
                 'status' => $item->status ? $item->status : 'incomplete',
                 'completed_at' => $item->completed_at ? $item->completed_at : null
             ];
-        })->each(function($requirement) {
+        })->each(function ($requirement) {
 
             // if conditions apply
             if (RequirementCondition::where('requirement_id', $requirement['requirement_id'])->count()) {
-
                     $matches = collect([]);
 
-                    RequirementCondition::where('requirement_id', $requirement['requirement_id'])->get()->each(function($condition) use($matches) {
+                    RequirementCondition::where('requirement_id', $requirement['requirement_id'])->get()->each(function ($condition) use ($matches) {
                         if ($condition->type === 'role') {
                             $matches->push(in_array($this->desired_role, $condition->applies_to));
                         } elseif ($condition->type === 'age') {
@@ -560,10 +569,9 @@ class Reservation extends Model
                     });
 
                     // if all conditions match
-                    if ( ! in_array(false, $matches->all())) {
-                        $this->requirements()->create($requirement);
-                    }
-
+                if (! in_array(false, $matches->all())) {
+                    $this->requirements()->create($requirement);
+                }
             } else {
                 // if not conditions apply
                 $this->requirements()->create($requirement);
@@ -578,12 +586,15 @@ class Reservation extends Model
      */
     public function syncDeadlines($deadlines)
     {
-        if ( ! $deadlines) return;
+        if (! $deadlines) {
+            return;
+        }
 
-        if ( ! $deadlines instanceof Collection)
+        if (! $deadlines instanceof Collection) {
             $deadlines = collect($deadlines);
+        }
 
-        $data = $deadlines->keyBy('id')->map(function($item, $key) {
+        $data = $deadlines->keyBy('id')->map(function ($item, $key) {
             return [
                 'grace_period' => $item['grace_period']
             ];
@@ -597,11 +608,13 @@ class Reservation extends Model
      *
      * @param array $todos [description]
      */
-    public function addTodos(array $todos)
+    public function addTodos($todos = [])
     {
-        if ( ! $todos) return;
+        if (! $todos) {
+            return;
+        }
 
-        $data = collect($todos)->map(function($item, $key) {
+        $data = collect($todos)->map(function ($item, $key) {
             return new Todo(['task' => $item]);
         });
 
@@ -615,7 +628,11 @@ class Reservation extends Model
      */
     public function removeTodos(array $todos)
     {
-        if ( ! $todos) return;
+        if (! $todos) {
+            return;
+        }
+
+        $todos = array_map('strtolower', $todos);
 
         $this->todos()
              ->whereIn('task', $todos)
@@ -632,16 +649,16 @@ class Reservation extends Model
     {
         $tasks = $this->todos()->pluck('task')->toArray();
 
-        $todos = collect($tripTodos)->transform(function($todo) {
+        $todos = collect($tripTodos)->transform(function ($todo) {
             return ucfirst(trim(strtolower($todo)));
         })->toArray();
 
-        $oldTodos = collect($tasks)->reject(function ($task) use($todos) {
+        $oldTodos = collect($tasks)->reject(function ($task) use ($todos) {
             return in_array($task, $todos);
         })->all();
         $this->removeTodos($oldTodos);
 
-        $newTodos = collect($todos)->reject(function ($todo) use($tasks) {
+        $newTodos = collect($todos)->reject(function ($todo) use ($tasks) {
             return in_array($todo, $tasks);
         })->all();
         $this->addTodos($newTodos);
@@ -649,7 +666,7 @@ class Reservation extends Model
 
     public function scopeCurrent($query)
     {
-        return $query->whereHas('trip', function($trip) {
+        return $query->whereHas('trip', function ($trip) {
             return $trip->current();
         });
     }
@@ -661,7 +678,7 @@ class Reservation extends Model
 
     public function scopePast($query)
     {
-        return $query->whereHas('trip', function($trip) {
+        return $query->whereHas('trip', function ($trip) {
             return $trip->past();
         });
     }
@@ -673,7 +690,7 @@ class Reservation extends Model
      */
     public function getAvatar()
     {
-        if( ! $this->avatar) {
+        if (! $this->avatar) {
             return new Upload([
                 'id' => \Ramsey\Uuid\Uuid::uuid4(),
                 'name' => 'placeholder',
@@ -704,8 +721,9 @@ class Reservation extends Model
      */
     public function archiveFund()
     {
-        if ($this->fund)
+        if ($this->fund) {
             $this->fund->archive();
+        }
 
         return $this;
     }
@@ -739,7 +757,7 @@ class Reservation extends Model
      */
     public function transferToTrip($trip_id, $desired_role)
     {
-        DB::transaction(function () use($trip_id, $desired_role) {
+        DB::transaction(function () use ($trip_id, $desired_role) {
             // remove the current resources
             $this->costs()->detach();
             $this->requirements()->delete();
@@ -759,7 +777,7 @@ class Reservation extends Model
     }
 
     /**
-     * Find rewardable promotionals the
+     * Find rewardable promotions the
      * reservation can be enrolled in
      *
      * @return mixed
@@ -773,27 +791,27 @@ class Reservation extends Model
              ->active()
              ->hasAffiliates('reservations')
              ->pluck('id')
-             ->each(function ($id) use($promos) {
+             ->each(function ($id) use ($promos) {
                 $promos->push($id);
-            });
+             });
 
         $this->trip
              ->promotionals()
              ->active()
              ->hasAffiliates('reservations')
              ->pluck('id')
-             ->each(function ($id) use($promos) {
+             ->each(function ($id) use ($promos) {
                 $promos->push($id);
-            });
+             });
 
         $this->trip->group
              ->promotionals()
              ->active()
              ->hasAffiliates('reservations')
              ->pluck('id')
-             ->each(function ($id) use($promos) {
+             ->each(function ($id) use ($promos) {
                 $promos->push($id);
-            });
+             });
 
         return $promos->count() ? $promos : false;
     }

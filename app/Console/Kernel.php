@@ -28,7 +28,9 @@ class Kernel extends ConsoleKernel
         Commands\Utilities\UpdateRoomingPlansToMultiGroups::class,
         Commands\Utilities\ExportReservationProfilePics::class,
         \Bugsnag\BugsnagLaravel\Commands\DeployCommand::class,
-        Commands\RunScenario::class
+        Commands\RunScenario::class,
+        Commands\AssignRoleToUser::class,
+        Commands\RemoveRoleFromUser::class
     ];
 
     /**

@@ -1,8 +1,5 @@
 /vendor
 /node_modules
-/public/build
-/public/css
-/public/js
 /storage
 Homestead.yaml
 Homestead.json
@@ -14,10 +11,3 @@ readme.md
 .idea/
 
 *.csv
-public/css/app.css
-
-public/css/app.css.map
-
-public/js/main.js
-
-public/js/main.js.map

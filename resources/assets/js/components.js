@@ -5,6 +5,7 @@
 /**
  * Frontend Forms
  */
+
 Vue.component('contact-form', require('./components/contact-form.vue'));
 Vue.component('speaker-form', require('./components/speaker-form.vue'));
 Vue.component('sponsor-project-form', require('./components/sponsor-project-form.vue'));

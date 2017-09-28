@@ -3676,20 +3676,20 @@ fieldset[disabled] a.btn {
 
 .btn-default:focus, .btn-default.focus {
   color: #333;
-  background-color: #e6e6e6;
+  background-color: #e6e5e5;
   border-color: #8c8c8c;
 }
 
 .btn-default:hover {
   color: #333;
-  background-color: #e6e6e6;
+  background-color: #e6e5e5;
   border-color: #adadad;
 }
 
 .btn-default:active, .btn-default.active,
 .open > .btn-default.dropdown-toggle {
   color: #333;
-  background-color: #e6e6e6;
+  background-color: #e6e5e5;
   border-color: #adadad;
 }
 
@@ -5185,7 +5185,7 @@ tbody.collapse.in {
 }
 
 .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
-  color: #5e5e5e;
+  color: #5e5d5d;
   background-color: transparent;
 }
 
@@ -9986,20 +9986,20 @@ fieldset[disabled] a.btn {
 
 .btn-default:focus, .btn-default.focus {
   color: #fff !important;
-  background-color: #676767;
+  background-color: #676666;
   border-color: #404040;
 }
 
 .btn-default:hover {
   color: #fff !important;
-  background-color: #676767;
+  background-color: #676666;
   border-color: #616161;
 }
 
 .btn-default:active, .btn-default.active,
 .open > .btn-default.dropdown-toggle {
   color: #fff !important;
-  background-color: #676767;
+  background-color: #676666;
   border-color: #616161;
 }
 
@@ -10395,8 +10395,8 @@ fieldset[disabled] .btn-white-hollow.focus {
 }
 
 .btn-white-hollow:hover, .btn-white-hollow:focus, .btn-white-hollow.focus {
-  color: #e6e6e6 !important;
-  border-color: #e6e6e6 !important;
+  color: #e6e5e5 !important;
+  border-color: #e6e5e5 !important;
   text-decoration: none;
 }
 
@@ -10453,8 +10453,8 @@ fieldset[disabled] .btn-default-hollow.focus {
 }
 
 .btn-default-hollow:hover, .btn-default-hollow:focus, .btn-default-hollow.focus {
-  color: #3e3e3e !important;
-  border-color: #9a9a9a !important;
+  color: #3e3d3d !important;
+  border-color: #9a9999 !important;
   text-decoration: none;
 }
 
@@ -12019,7 +12019,7 @@ tbody.collapse.in {
 }
 
 .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
-  color: #676767;
+  color: #676666;
   background-color: transparent;
 }
 
@@ -12441,7 +12441,7 @@ a.label:hover, a.label:focus {
 }
 
 .label-default[href]:hover, .label-default[href]:focus {
-  background-color: #676767;
+  background-color: #676666;
 }
 
 .label-primary {
@@ -12578,7 +12578,7 @@ a.badge:hover, a.badge:focus {
 }
 
 .jumbotron > hr {
-  border-top-color: gainsboro;
+  border-top-color: #dcdbdb;
 }
 
 .container .jumbotron,
@@ -12687,11 +12687,11 @@ a.thumbnail.active {
 }
 
 .alert-success hr {
-  border-top-color: #e6e6e6;
+  border-top-color: #e6e5e5;
 }
 
 .alert-success .alert-link {
-  color: #e6e6e6;
+  color: #e6e5e5;
 }
 
 .alert-info {
@@ -12705,7 +12705,7 @@ a.thumbnail.active {
 }
 
 .alert-info .alert-link {
-  color: #e6e6e6;
+  color: #e6e5e5;
 }
 
 .alert-warning {
@@ -12729,11 +12729,11 @@ a.thumbnail.active {
 }
 
 .alert-danger hr {
-  border-top-color: #e6e6e6;
+  border-top-color: #e6e5e5;
 }
 
 .alert-danger .alert-link {
-  color: #e6e6e6;
+  color: #e6e5e5;
 }
 
 @-webkit-keyframes progress-bar-stripes {
@@ -17985,7 +17985,7 @@ button.close {
 .navmenu-default .navmenu-brand:hover, .navmenu-default .navmenu-brand:focus,
 .navbar-default .navbar-offcanvas .navmenu-brand:hover,
 .navbar-default .navbar-offcanvas .navmenu-brand:focus {
-  color: #5e5e5e;
+  color: #5e5d5d;
   background-color: transparent;
 }
 

@@ -15,10 +15,10 @@
 			<div class="col-sm-8 col-sm-offset-2">
                 <h3 class="text-primary">Greetings Legacy Partners,</h3>
 
-                <p>Trusting that all of you are having a great start to your summer. It’s official, we are now less than 60 days away from 1Nation1Day and we can hardly contain our excitement and expectation for this historic event. In this months update we wanted to give you a message and update from Managua.</p>
+                <p>As the summer comes to a close we wanted to take a moment and thank each and every one of you for your tremendous support this summer while sharing some of the exciting things happening this fall and next summer.</p>
 
-                <p>Please know that with all of our excitement and faith into what’s ahead for Missions.Me we are equally excited and full of faith for each and every one of you. You are on our minds and in our prayers every day.</p>
-                
+                <p>As always, if you need anything please feel free to reach out to us directly.</p>
+
                 <hr class="divider inv">
                 <p>Blessings!</p>
                 <h5 class="text-primary"><em>Gabe</em></h5>
@@ -36,7 +36,7 @@
 				<hr class="divider inv">
 				<div class="video-outer">
 					<div class="video-inner">
-						<iframe src="https://player.vimeo.com/video/220020772?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+						<iframe src="https://player.vimeo.com/video/234718889?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 					</div>
 				</div>
 			</div><!-- end col -->

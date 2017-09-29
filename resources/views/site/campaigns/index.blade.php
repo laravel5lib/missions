@@ -3,14 +3,13 @@
 @section('content')
     @component('carousel', ['id' => 'carousel-example-generic', 'class' => 'campaign-carousel' ])
         <div class="item active">
-            <img src="/images/1n1d17/1n1d17-campaign-banner.jpg" alt="#1N1D17">
+            <img src="../images/advance/adv-2018-header.jpg" alt="Advance 2018">
             <div class="carousel-caption">
-                <h6 class="text-uppercase">Nicaragua</h6>
-                <h3>1Nation1Day 2017</h3>
-                <p>July 29, 2017 marked the day that the hand of God touched the nation of Nicaragua in epic proportions.</p>
-                <a href="http://1nation1day.com" class="btn btn-primary btn-sm">Learn About 1N1D17</a>
-            </div>
-        </div>
+                <h6 class="text-uppercase">Advance 2018</h6>
+                <h3>3 Nations 1 Generation</h3>
+                <p>On July 21-29, 2018 we will take the next step in discipling nations by returning to all 3 1Nation1Day nations.</p>
+            </div><!-- end carousel -->
+        </div><!-- end item -->
     @endcomponent
 
     <hr class="divider inv xlg">
@@ -75,7 +74,7 @@
 
     @component('section', ['class' => 'gray-lighter-bg'])
         <div class="row">
-            <div class="col-xs-10 col-xs-offset-1">
+            <div class="col-xs-12 col-xs-offset-0">
                 <div class="row">
                     <div class="col-xs-12">
                         <h6 class="text-uppercase text-center">A Trip For Everyone</h6>
@@ -85,7 +84,7 @@
                     </div><!-- end col -->
                 </div><!-- end row -->
                 <div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-                    <div class="col-sm-4 col-xs-12" style="display:flex">
+                    <div class="col-sm-3 col-xs-12" style="display:flex">
                         <div class="panel">
                             <div style="position: absolute;left: 25px;top: 15px;z-index: 999;">
                                 <a class="btn btn-primary-hollow btn-sm launch-modal pull-right" data-toggle="modal" data-target="#video-modal-one"><i class="fa fa-play"></i></a>
@@ -99,7 +98,7 @@
                             </div>
                         </div>
                     </div><!-- end col -->
-                    <div class="col-sm-4 col-xs-12" style="display:flex">
+                    <div class="col-sm-3 col-xs-12" style="display:flex">
                         <div class="panel">
                             <div style="position: absolute;left: 25px;top: 15px;z-index: 999;">
                                 <a class="btn btn-primary-hollow btn-sm launch-modal pull-right" data-toggle="modal" data-target="#video-modal-two"><i class="fa fa-play"></i></a>
@@ -113,7 +112,7 @@
                             </div>
                         </div>
                     </div><!-- end col -->
-                    <div class="col-sm-4 col-xs-12" style="display:flex">
+                    <div class="col-sm-3 col-xs-12" style="display:flex">
                         <div class="panel">
                             <div style="position: absolute;left: 25px;top: 15px;z-index: 999;">
                                 <a class="btn btn-primary-hollow btn-sm launch-modal pull-right" data-toggle="modal" data-target="#video-modal-three"><i class="fa fa-play"></i></a>
@@ -125,9 +124,7 @@
                             </div>
                         </div>
                     </div><!-- end col -->
-                </div><!-- end row -->
-                <div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-                    <div class="col-sm-4 col-xs-12" style="display:flex">
+                    <div class="col-sm-3 col-xs-12" style="display:flex">
                         <div class="panel">
                             <div style="position: absolute;left: 25px;top: 15px;z-index: 999;">
                                 <a class="btn btn-primary-hollow btn-sm launch-modal pull-right" data-toggle="modal" data-target="#video-modal-four"><i class="fa fa-play"></i></a>
@@ -141,7 +138,9 @@
                             </div><!-- end panel-body -->
                         </div><!-- end panel -->
                     </div><!-- end col -->
-                    <div class="col-sm-4 col-xs-12" style="display:flex">
+                </div><!-- end row -->
+                <div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+                    <div class="col-sm-3 col-xs-12 col-sm-offset-1" style="display:flex">
                         <div class="panel">
                             <div style="position: absolute;left: 25px;top: 15px;z-index: 999;">
                                 <a class="btn btn-primary-hollow btn-sm launch-modal pull-right" data-toggle="modal" data-target="#video-modal-five"><i class="fa fa-play"></i></a>
@@ -156,7 +155,7 @@
                             </div>
                         </div>
                     </div><!-- end col -->
-                    <div class="col-sm-4 col-xs-12" style="display:flex">
+                    <div class="col-sm-3 col-xs-12" style="display:flex">
                         <div class="panel">
                             <div style="position: absolute;left: 25px;top: 15px;z-index: 999;">
                                 <a class="btn btn-primary-hollow btn-sm launch-modal pull-right" data-toggle="modal" data-target="#video-modal-six"><i class="fa fa-play"></i></a>
@@ -168,6 +167,18 @@
                                     interview, edit, export, and be creative! Experience a whole new world
                                     through the lens of a camera while capturing the most exciting moments of
                                     the trip.</p>
+                            </div>
+                        </div>
+                    </div><!-- end col -->
+                    <div class="col-sm-3 col-xs-12" style="display:flex">
+                        <div class="panel">
+                            <div style="position: absolute;left: 25px;top: 15px;z-index: 999;">
+                                <a class="btn btn-primary-hollow btn-sm launch-modal pull-right" data-toggle="modal" data-target="#video-modal-seven"><i class="fa fa-play"></i></a>
+                            </div>
+                            <img class="img-responsive" src="images/why-mm/sports-missionary.jpg" alt="">
+                            <div class="panel-body">
+                                <h5>Athlete</h5>
+                                <p class="small">An athlete missionary is ready to reach people with the life-changing message of Jesus through sports outreach.  Each day play an organized game of soccer or baseball with a local team then spend some time ministering to your opponents during a time of sharing and prayer.</p>
                             </div>
                         </div>
                     </div><!-- end col -->
@@ -308,6 +319,13 @@
     @component('video-modal', [
         'id' => 'video-modal-six',
         'url' => 'https://player.vimeo.com/video/185716158?title=0&byline=0&portrait=0'
+    ])
+    @endcomponent
+
+    <!-- ATHLETE MODAL -->
+    @component('video-modal', [
+        'id' => 'video-modal-seven',
+        'url' => 'https://player.vimeo.com/video/235653915?title=0&byline=0&portrait=0'
     ])
     @endcomponent
 

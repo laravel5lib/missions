@@ -23286,6 +23286,73 @@ h1.home-college-header {
   }
 }
 
+/* Home Campaign Layout Import */
+.home-campaign-header {
+  color: #fff;
+  background: #3e3e3e url(../../images/advance/adv-web-bg-lg.jpg) no-repeat center fixed;
+  background-size: cover;
+  padding: 100px 0 100px;
+  /* Large devices (large desktops, 1200px and up) */
+  /* Medium devices (desktops, 992px and up) */
+  /* Small devices (tablets, 768px and up) */
+}
+
+.home-campaign-header h6 {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.home-campaign-header .video-inner {
+  border-radius: 6px;
+  -o-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+}
+
+@media screen and (max-width: 1200px) {
+  .home-campaign-header {
+    background: #3e3e3e url(../../images/advance/adv-web-bg-md.jpg) no-repeat center fixed;
+    background-size: cover;
+    padding: 100px 0 100px;
+  }
+  .home-campaign-header h2 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .home-campaign-header .video-outer {
+    margin-top: 10%;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .home-campaign-header {
+    background: #3e3e3e url(../../images/advance/adv-web-bg-sm.jpg) no-repeat center fixed;
+    background-size: cover;
+    padding: 100px 0 100px;
+  }
+  .home-campaign-header h2 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  .home-campaign-header .video-outer {
+    margin-top: 20px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .home-campaign-header {
+    background: #3e3e3e url(../../images/advance/adv-web-bg-xs.jpg) no-repeat center fixed;
+    background-size: cover;
+    padding: 30px 0 30px;
+  }
+  .home-campaign-header h2 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  .home-campaign-header .video-outer {
+    margin-top: 20px;
+  }
+}
+
 .max-panel-height {
   max-height: 390px;
   overflow: scroll;

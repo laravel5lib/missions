@@ -1,0 +1,66 @@
+.home-campaign-header {
+  color:#fff;
+  background: $gray-darker url(../../images/advance/adv-web-bg-lg.jpg) no-repeat center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  padding: 100px 0 100px;
+  h6 {
+    color:rgba(255, 255, 255, 0.8);
+  }
+  .video-inner {
+    border-radius: 6px;
+    -o-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+  }
+  /* Large devices (large desktops, 1200px and up) */
+  @media screen and (max-width:1200px) {
+      h2 {
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      .video-outer {
+        margin-top:10%;
+      }
+      background: $gray-darker url(../../images/advance/adv-web-bg-md.jpg) no-repeat center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+      padding: 100px 0 100px;
+  }
+  /* Medium devices (desktops, 992px and up) */
+  @media screen and (max-width:992px) {
+      h2 {
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+      .video-outer {
+        margin-top:20px;
+      }
+      background: $gray-darker url(../../images/advance/adv-web-bg-sm.jpg) no-repeat center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+      padding: 100px 0 100px;
+  }
+  /* Small devices (tablets, 768px and up) */
+  @media screen and (max-width:768px) {
+      h2 {
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+      .video-outer {
+        margin-top:20px;
+      }
+      background: $gray-darker url(../../images/advance/adv-web-bg-xs.jpg) no-repeat center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+      padding: 30px 0 30px;
+  }
+}

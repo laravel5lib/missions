@@ -22,7 +22,30 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 </script>
 @endsection
 @section('content')
-<div class="vid-bg">
+<div class="home-campaign-header">
+  <div class="container">
+      <div class="col-xs-12 col-sm-10 col-md-6 col-xs-offset-0 col-sm-offset-1 col-md-offset-0">
+          <h6 class="text-uppercase">2018 Campaign</h6>
+          <h2 style="display:inline-block;border-bottom:6px solid #f6323e;line-height:0.6em;">Advance</h2>
+          <h4>3 Nations 1 Generation</h4>
+          <p>1Nation1Day is the moment that creates the movement. It's a movement of young people following their dreams; teachers mentoring their students; the Body of Christ united across borders and denominations; pastors equiped; the church mobilized to lead; women empowered to stand for justice; millions encountering God!</p>
+          <a href="{{ url('campaigns') }}" class="btn btn-primary hidden-xs">Go On A Trip</a>
+          <div class="row visible-xs">
+            <div class="col-xs-8">
+              <a href="{{ url('campaigns') }}" class="btn btn-primary btn-block">Go On A Trip</a>
+            </div><!-- end col -->
+          </div><!-- end row -->
+      </div><!-- end col -->
+      <div class="col-xs-12 col-sm-10 col-md-6 col-xs-offset-0 col-sm-offset-1 col-md-offset-0">
+        <div class="video-outer">
+          <div class="video-inner">
+            <iframe src="https://player.vimeo.com/video/234077014" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+          </div><!-- end vid-inner -->
+        </div><!-- end vid-outer -->
+      </div><!-- end col -->
+  </div><!-- end container -->
+</div><!-- end home-campign-header -->
+<!-- <div class="vid-bg">
   <video muted autoplay loop poster="video/video-placeholder.jpg" class="vid-bg-video">
     <source src="video/mm-homepage-bg.webm" type="video/webm">
     <source src="video/mm-homepage-bg.mp4" type="video/mp4">
@@ -43,12 +66,11 @@ $('.video-modal').on('hide.bs.modal', function(e) {
               <a href="{{ url('fundraisers') }}" class="btn btn-white-hollow btn-block" data-aos="fade-up" data-aos-delay="300">Support A Cause</a>
             </div>
           </div>
-        </div><!-- end vid-bg-caption -->
-      </div><!-- end col -->
-    </div><!-- end row -->
-  </div><!-- end container -->
-</div><!-- end vid-bg -->
-
+        </div>
+      </div>
+    </div>
+  </div>
+</div>-->
 <div class="gray-lighter-bg">
     <div class="content-section" style="padding:0;">
       <div class="row" style="margin-left:0;margin-right:0;">

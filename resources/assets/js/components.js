@@ -146,6 +146,11 @@ Vue.component('admin-user-edit', require('./components/users/admin-user-edit.vue
 Vue.component('admin-user-delete', require('./components/users/admin-user-delete.vue'));
 
 /**
+ * Representative Components
+ */
+Vue.component('representative-list', require('./components/admin/RepresentativeList.vue'));
+
+/**
  * Records Components
  */
 Vue.component('records-list', require('./components/records/records-list.vue'));

@@ -47,6 +47,11 @@ Route::get('initiatives/{id}', 'ProjectInitiativesController@show');
 Route::get('projects/{id}/{tab?}', 'ProjectsController@show');
 
 Route::resource('users', 'UsersController');
+
+Route::get('representatives', function() {
+    return view('admin.representatives.index');
+})->middleware('can:view,App\Models\v1\Representative');
+
 Route::resource('uploads', 'UploadsController');
 Route::resource('donors', 'DonorsController');
 Route::resource('funds', 'FundsController');

@@ -28,6 +28,7 @@ $api->version('v1', [
 
     $api->get('campaigns/{campaign}', 'CampaignsController@show');
     $api->get('trips/{trip}', 'TripsController@show');
+    $api->resource('representatives', 'RepresentativeController');
 
 
     $api->group(['middleware' => ['api.auth']], function($api) {

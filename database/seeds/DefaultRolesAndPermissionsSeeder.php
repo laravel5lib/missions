@@ -158,6 +158,10 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'add_requirements']);
         Permission::create(['name' => 'edit_requirements']);
         Permission::create(['name' => 'delete_requirements']);
+        Permission::create(['name' => 'view_representatives']);
+        Permission::create(['name' => 'add_representatives']);
+        Permission::create(['name' => 'edit_representatives']);
+        Permission::create(['name' => 'delete_representatives']);
 
         $intern = Role::create(['name' => 'intern']);
         $intern->givePermissionTo([
@@ -200,7 +204,9 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
             'view_costs',
             'view_requirements',
             'view_fundraisers',
-            'edit_fundraisers'
+            'edit_fundraisers',
+            'view_representatives',
+            'edit_representatives'
         ]);
 
         $staff = Role::create(['name' => 'staff']);
@@ -238,7 +244,9 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
             'add_fundraisers',
             'delete_fundraisers',
             'view_donors',
-            'view_funds'
+            'view_funds',
+            'add_representatives',
+            'delete_representatives'
         ]));
 
         $admin = Role::create(['name' => 'admin']);

@@ -120,6 +120,13 @@ return [
                 'policy' => 'App\Models\v1\User'
             ],
             [
+                'icon' => 'user-circle-o',
+                'label' => 'Trip&nbsp;Reps',
+                'url' => 'admin/representatives',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Representative'
+            ],
+            [
                 'icon' => 'usd',
                 'label' => 'Transactions',
                 'url' => 'admin/transactions',

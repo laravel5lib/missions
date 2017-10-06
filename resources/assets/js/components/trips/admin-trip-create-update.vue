@@ -329,7 +329,7 @@
 			},
 			getReps(search, loading){
 				loading(true);
-				this.$http.get('users', { params: {search: search} }).then((response) => {
+				this.$http.get('representatives', { params: {search: search} }).then((response) => {
 					this.reps = response.data.data;
 					loading(false);
 				});

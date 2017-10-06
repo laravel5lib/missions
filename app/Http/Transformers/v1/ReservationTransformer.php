@@ -7,6 +7,7 @@ use App\Models\v1\User;
 use League\Fractal\ParamBag;
 use App\Models\v1\Reservation;
 use App\Utilities\v1\ShirtSize;
+use App\Models\v1\Representative;
 use League\Fractal\TransformerAbstract;
 
 class ReservationTransformer extends TransformerAbstract
@@ -157,14 +158,14 @@ class ReservationTransformer extends TransformerAbstract
         $rep = $reservation->rep ? $reservation->rep : $reservation->trip->rep;
 
         if (! $rep) {
-            $rep = new User([
+            $rep = new Representative([
             'name' => 'none',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
             ]);
         }
 
-        return $this->item($rep, new UserTransformer);
+        return $this->item($rep, new RepresentativeTransformer);
     }
 
     /**

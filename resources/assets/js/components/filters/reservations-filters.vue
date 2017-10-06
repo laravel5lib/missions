@@ -568,7 +568,7 @@
                 }).catch(this.$root.handleApiError);
             },
             getReps(){
-                return this.$http.get('users', { params: {
+                return this.$http.get('representatives', { params: {
                     'rep': true,
                     'per_page': 100
                 }}).then((response) => {

@@ -13,7 +13,7 @@ use Illuminate\View\View;
 use App\Models\v1\Requirement;
 use App\Models\v1\Transaction;
 use App\Models\v1\TripInterest;
-use App\Models\v1\Represenative;
+use App\Models\v1\Representative;
 
 class JavascriptComposer
 {
@@ -54,9 +54,9 @@ class JavascriptComposer
             'add_cash_transactions' => $user->hasanyrole('super_admin|admin') || $user->can('add_cash_transactions'),
             'add_transfer_transactions' => $user->hasanyrole('super_admin|admin') || $user->can('add_transfer_transactions'),
             'create_donors' => $user->can('create', Donor::class),
-            'create_representatives' => $user->can('create', Represenative::class),
-            'update_representatives' => $user->can('update', Represenative::class),
-            'delete_representatives' => $user->can('delete', Represenative::class)
+            'create_representatives' => $user->can('create', Representative::class),
+            'update_representatives' => $user->can('update', Representative::class),
+            'delete_representatives' => $user->can('delete', Representative::class)
         ];
 
         \JavaScript::put([

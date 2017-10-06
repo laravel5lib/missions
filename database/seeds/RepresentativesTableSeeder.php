@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Models\v1\Represenative;
+use App\Models\v1\Representative;
 
-class RepresenativesTableSeeder extends Seeder
+class RepresentativesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,6 +12,6 @@ class RepresenativesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(Represenative::class, 10)->create();
+        factory(Representative::class, 10)->create();
     }
 }

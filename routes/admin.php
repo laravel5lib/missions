@@ -21,6 +21,7 @@ Route::prefix('campaigns')->group(function () {
     Route::get('/', 'CampaignsController@index');
     Route::get('create', 'CampaignsController@create');
     Route::get('{id}/edit', 'CampaignsController@edit');
+    Route::get('{id}/trips/create', 'TripsController@create');
     Route::get('{id}/{tab?}', 'CampaignsController@show');
     Route::get('{id}/{tab?}/{tabId}', 'CampaignsController@show');
 });

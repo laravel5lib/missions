@@ -14,7 +14,7 @@ class CreateTripRepsTable extends Migration
     public function up()
     {
         Schema::create('representatives', function (Blueprint $table) {
-            $table->increments('id');
+            $table->uuid('id')->primary();
             $table->string('name')->unique();
             $table->string('email')->nullable();
             $table->string('phone', 20)->nullable();

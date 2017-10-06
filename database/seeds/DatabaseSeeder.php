@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AccountingTablesSeeder::class);
         $this->call(UploadSeeder::class);
         $this->call(UserTableSeeder::class);
+        $this->call(RepresentativesTableSeeder::class);
         $this->call(TripTableSeeder::class);
         $this->call(ProjectTablesSeeder::class);
         $this->call(FundsTableSeeder::class);

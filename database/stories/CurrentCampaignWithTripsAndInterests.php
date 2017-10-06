@@ -8,6 +8,7 @@ use App\Models\v1\Region;
 use App\Models\v1\Campaign;
 use App\Models\v1\TripInterest;
 use FactoryStories\FactoryStory;
+use App\Models\v1\Representative;
 
 class CurrentCampaignWithTripsAndInterests extends FactoryStory
 {
@@ -45,16 +46,14 @@ class CurrentCampaignWithTripsAndInterests extends FactoryStory
 
             $randomNumber = mt_rand(1,3);
 
-            $randomIntern = User::whereHas('roles', function($role) {
-                return $role->where('name', 'intern');
-            })->get()->random() ?: (new InternWithEverything)->create();
+            $randomRep = Representative::all()->random() ?: factory(Representative::class)->create();
 
             foreach (range(1, $randomNumber) as $number) {
 
                 (new RandomTrip)->create([
                     'group_id' => $group->id,
                     'campaign_id' => $campaign->id,
-                    'rep_id' => $randomIntern->id
+                    'rep_id' => $randomRep->id
                 ]);
             }
 

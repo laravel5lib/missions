@@ -14,11 +14,12 @@ class RepresentativeTest extends TestCase
 
         $this->get('/api/representatives')
             ->assertStatus(200)
-            ->assertJson([
+            ->assertJsonStructure([
                 'data' => [
-                    ['id' => 1],
-                    ['id' => 2]
-                ],
+                    ['id', 'name', 'email', 'phone', 'ext', 'created_at', 'updated_at'],
+                ]
+            ])
+            ->assertJson([
                 'meta' => [
                     'pagination' => [
                         'total' => 2

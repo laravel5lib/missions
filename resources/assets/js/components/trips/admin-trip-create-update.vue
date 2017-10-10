@@ -373,7 +373,7 @@
 
 			// get team roles list
 			let teamRolesPromise = this.$http.get('utilities/team-roles').then((response) => {
-			    _.each(response.data.roles, function (name, key) {
+			    _.each(response.data.roles, (name, key) => {
 					this.teamRolesList.push({ value: key, name: name});
 				});
 			});

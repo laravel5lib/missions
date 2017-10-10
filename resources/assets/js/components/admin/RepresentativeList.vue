@@ -61,8 +61,8 @@
             <h4 class="modal-title">{{ ui.modal.title }}</h4>
           </div>
           <div class="modal-body clearfix">
-            <form id="createRepForm" novalidate>
-                <div class="form-group" v-error-handler="{ value: representative.name, handle: 'name' }">
+            <form id="createRepForm" novalidate data-vv-scope="create-rep">
+                <div class="form-group" v-error-handler="{ value: representative.name, handle: 'name', scope: 'create-rep' }">
                     <div class="col-xs-12">
                         <label for="name">Name</label>
                         <input type="text"
@@ -78,22 +78,23 @@
                                required>
                     </div>
                 </div>
-                <div class="form-group" v-error-handler="{ value: representative.email, handle: 'email' }">
+                <div class="form-group" v-error-handler="{ value: representative.email, handle: 'email', scope: 'create-rep' }">
                      <div class="col-xs-12">
                         <label for="email" class="control-label" placeholder="john@missions.me">Email</label>
-                        <input type="email" class="form-control" name="email" id="email" v-model="representative.email">
+                        <input type="email" class="form-control" name="email" id="email" v-validate="'required|email'" v-model="representative.email">
                     </div>
                 </div>
-                <div class="form-group" v-error-handler="{ value: representative.phone, handle: 'phone' }">
-                     <div class="col-xs-8">
+                <div class="form-group">
+                     <div class="col-xs-8" v-error-handler="{ value: representative.phone, handle: 'phone', scope: 'create-rep' }">
                         <label for="phone">Phone</label>
-                        <phone-input v-model="representative.phone" name="phone" id="phone"></phone-input>
+                        <phone-input v-model="representative.phone" v-validate="'required'" data-vv-value-path="value" data-vv-scope="create-rep" name="phone" id="phone"></phone-input>
                     </div>
-                    <div class="col-xs-4">
+                    <div class="col-xs-4" >
                         <label for="ext" class="control-label">Extension</label>
-                        <input type="text" class="form-control" name="ext" id="ext" v-model="representative.ext" placeholder="1011">
+                        <input type="text" class="form-control" v-validate="'numeric|max:4'" name="ext" id="ext" v-model="representative.ext" placeholder="1011">
                     </div>
                 </div>
+                <uploader type="avatar" :name="representative.name + '_avatar' || 'rep_avatar'" lock-type ui-locked :ui-selector="2" is-child :tags="['User']" ></uploader>
             </form>
           </div>
           <div class="modal-footer">
@@ -127,85 +128,97 @@
 </template>
 
 <script>
-export default {
+    import errorHandler from '../error-handler.mixin';
+    import uploader from '../uploads/admin-upload-create-update.vue';
 
-  data () {
-    return {
-        app: MissionsMe,
-        ui: {
-            modal: {
-                title: 'Add New Trip Rep',
-                edit: false
+    export default {
+        mixins: [errorHandler],
+        components: {'uploader': uploader},
+        data () {
+            return {
+                app: MissionsMe,
+                ui: {
+                    modal: {
+                        title: 'Add New Trip Rep',
+                        edit: false
+                    }
+                },
+                representatives: [],
+                representative: {
+                    name: '',
+                    email: '',
+                    phone: '',
+                    ext: ''
+                },
+                currentIndex: null,
+                pagination: {current_page: 1}
+            };
+          },
+        methods: {
+        getRepresentatives() {
+            this.$http.get('representatives').then((response) => {
+                this.representatives = response.data.data;
+                this.pagination = response.data.meta.pagination;
+            });
+        },
+        load(representative, index) {
+            this.ui.modal.title = "Update Trip Rep";
+            this.ui.modal.edit = true;
+
+            this.representative = representative;
+            this.currentIndex = index;
+        },
+        add() {
+            this.$validator.validateAll('create-rep').then(result => {
+                if (result) {
+                    this.$http.post('representatives', this.representative).then((response) => {
+                        this.representatives.push(response.data.data);
+                        this.cancel();
+                        this.$root.$emit('showSuccess', 'New Trip Rep added.');
+                    }).catch(this.$root.handleApiError);
+                }
+            });
+
+        },
+        remove() {
+            this.$http.delete('representatives/' + this.representative.id).then((response) => {
+                this.representatives.splice(this.currentIndex, 1);
+                $('#deleteRep').modal('hide');
+                this.$root.$emit('showSuccess', 'Trip Rep deleted.');
+                this.cancel();
+            }).catch(this.$root.handleApiError);
+        },
+        update() {
+            this.$validator.validateAll('create-rep').then(result => {
+                if (result) {
+                    this.$http.put('representatives/' + this.representative.id, this.representative).then((response) => {
+                        this.cancel();
+                        this.$root.$emit('showSuccess', 'Trip Rep updated.');
+                    }).catch(this.$root.handleApiError);
+
+                    this.cancel();
+                }
+            });
+
+        },
+        cancel() {
+            $('#repForm').modal('hide');
+
+            this.ui.modal.title = "Add New Representative";
+            this.ui.modal.edit = false;
+
+            this.currentIndex = null;
+
+            this.representative = {
+                name: '',
+                email: '',
+                phone: '',
+                ext: ''
             }
-        },
-        representatives: [],
-        representative: {
-            name: '',
-            email: '',
-            phone: '',
-            ext: ''
-        },
-        currentIndex: null,
-        pagination: {current_page: 1}
-    };
-  },
-
-  methods: {
-    getRepresentatives() {
-        this.$http.get('representatives').then((response) => {
-            this.representatives = response.data.data;
-            this.pagination = response.data.meta.pagination;
-        });
-    },
-    load(representative, index) {
-        this.ui.modal.title = "Update Trip Rep";
-        this.ui.modal.edit = true;
-
-        this.representative = representative;
-        this.currentIndex = index;
-    },
-    add() {
-        this.$http.post('representatives', this.representative).then((response) => {
-            this.representatives.push(response.data.data);
-            this.cancel();
-            this.$root.$emit('showSuccess', 'New Trip Rep added.');
-        });
-    },
-    remove() {
-        this.$http.delete('representatives/' + this.representative.id).then((response) => {
-            this.representatives.splice(this.currentIndex, 1);
-            $('#deleteRep').modal('hide');
-            this.$root.$emit('showSuccess', 'Trip Rep deleted.');
-            this.cancel();
-        });
-    },
-    update() {
-        this.$http.put('representatives/' + this.representative.id, this.representative).then((response) => {
-            this.cancel();
-            this.$root.$emit('showSuccess', 'Trip Rep updated.');
-        });
-
-        this.cancel();
-    },
-    cancel() {
-        $('#repForm').modal('hide');
-
-        this.ui.modal.title = "Add New Representative";
-        this.ui.modal.edit = false;
-
-        this.currentIndex = null;
-
-        this.representative = {
-            name: '',
-            email: '',
-            phone: '',
-            ext: ''
         }
-    }
-  },
-
-  mounted() {
-    this.getRepresentatives();
-  }
-};
+        },
+        mounted() {
+            this.getRepresentatives();
+        }
+    };
 </script>

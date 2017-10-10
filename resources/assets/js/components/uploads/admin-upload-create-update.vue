@@ -135,6 +135,10 @@
 				type: String,
 				default: null
 			},
+			initialImage: {
+				type: String,
+				default: null
+			},
 			type: {
 				type: String,
 				default: null
@@ -333,6 +337,11 @@
 
                 if ( this.isUpdate )
                     slim.load(this.src);
+                else {
+                    if (this.initialImage )
+                        slim.load(this.initialImage);
+                }
+
                 this.slimAPI = slim;
             },
             slimService (formdata, progress, success, failure, slim) {
@@ -584,7 +593,7 @@
                 if (_.contains(['avatar', 'other', 'passport'], this.type) || (this.type === 'banner' && this.uiSelector !== 1)) {
                     //setTimeout(() =>  {
 
-                        self.slimAPI = new Slim.parse(self.$el);
+                        //self.slimAPI = new Slim.parse(self.$el);
                         if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
                             //self.adjustSelectByType();
                         } else {

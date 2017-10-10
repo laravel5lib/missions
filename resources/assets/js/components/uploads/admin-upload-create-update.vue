@@ -41,41 +41,33 @@
 			</div>
 		</div>
 
-			<form id="CreateUploadForm" class="form" novalidate @submit.prevent="isUpdate ? update() : submit()">
-				<div class="form-group" v-error-handler="{ value: currentName, handle: 'name' }" v-show="!uiLocked || allowName">
-					<label for="name" class="control-label">Name</label>
-						<input type="text" class="form-control" name="name" id="name" v-model="currentName"
-							   placeholder="Name" v-validate="'required|max:100'"
-							   maxlength="100" minlength="1" required>
-				</div>
-				<div class="form-group" v-error-handler="{ value: tags, handle: 'tags' }" v-show="!uiLocked" >
-					<label for="tags" class="control-label">Tags</label>
-						<v-select @keydown.enter.prevent=""  id="tags" name="tags" v-validate="'required'" class="form-control" multiple v-model="tags" :options="tagOptions"></v-select>
+		<form id="CreateUploadForm" class="form" novalidate @submit.prevent="isUpdate ? update() : submit()">
+			<div class="form-group" v-error-handler="{ value: currentName, handle: 'name' }" v-show="!uiLocked || allowName">
+				<label for="name" class="control-label">Name</label>
+					<input type="text" class="form-control" name="name" id="name" v-model="currentName"
+						   placeholder="Name" v-validate="'required|max:100'"
+						   maxlength="100" minlength="1" required>
+			</div>
+			<div class="form-group" v-error-handler="{ value: tags, handle: 'tags' }" v-show="!uiLocked" >
+				<label for="tags" class="control-label">Tags</label>
+					<v-select @keydown.enter.prevent=""  id="tags" name="tags" v-validate="'required'" class="form-control" multiple v-model="tags" :options="tagOptions"></v-select>
 
-				</div>
-				<div class="form-group" v-error-handler="{ value: type, handle: 'type' }" v-show="!uiLocked" >
-					<label for="type" class="control-label">Type</label>
-					<select class="form-control" id="type" v-model="type" name="type" v-validate="'required'" :disabled="lockType">
-						<option value="">-- select type --</option>
-						<option value="avatar">Image (Avatar) - 1280 x 1280</option>
-						<option value="banner">Image (Banner) - 1300 x 500</option>
-						<option value="other">Image (other) - no set dimensions</option>
-						<option value="passport">Image (Passport/Visa) - no set dimensions</option>
-						<option value="video">Video</option>
-						<option value="file">File</option>
-					</select>
-				</div>
+			</div>
+			<div class="form-group" v-error-handler="{ value: type, handle: 'type' }" v-show="!uiLocked" >
+				<label for="type" class="control-label">Type</label>
+				<select class="form-control" id="type" v-model="type" name="type" v-validate="'required'" :disabled="lockType">
+					<option value="">-- select type --</option>
+					<option value="avatar">Image (Avatar) - 1280 x 1280</option>
+					<option value="banner">Image (Banner) - 1300 x 500</option>
+					<option value="other">Image (other) - no set dimensions</option>
+					<option value="passport">Image (Passport/Visa) - no set dimensions</option>
+					<option value="video">Video</option>
+					<option value="file">File</option>
+				</select>
+			</div>
 
-				<div class="row" v-if="isUpdate">
-					<div class="col-xs-4" v-if="containedIn(['avatar', 'banner', 'other', 'passport'], type)">
-						<div class="slim" data-instant-edit="true" data-did-confirm="slimConfirmed" v-if="src">
-							<img :src="src" class="">
-							<input type="file" id="file" :accept="allowedTypes" :value="fileA" @change="handleImage" class="">
-						</div>
-					</div>
-				</div>
-
-				<div class="row" v-if="type && containedIn(['video'], type)">
+			<template v-if="type">
+				<div class="row" v-if="containedIn(['video'], type)">
 					<div class="col-xs-12">
 						<div class="input-group">
 							<span class="input-group-addon"><i class="fa fa-play-circle"></i></span>
@@ -85,40 +77,30 @@
 					</div>
 				</div>
 
-				<div class="form-group" v-if="type && containedIn(['file'], type)" :class="{ 'has-error': !isFileSet}">
+				<div class="form-group" v-else-if="containedIn(['file'], type)" :class="{ 'has-error': !isFileSet}">
 					<label for="file" class="control-label">File</label>
-						<input type="file" id="file" :accept="allowedTypes" :value="fileA" @change="handleImage" class="form-control">
-						<span class="help-block"><i class="fa fa-file-pdf-o"></i> PDF format only</span>
-						<!--<h5>Coords: {{coords|json}}</h5>-->
+					<input type="file" id="file" :accept="allowedTypes" :value="fileA" @change="handleImage" class="form-control">
+					<span class="help-block"><i class="fa fa-file-pdf-o"></i> PDF format only</span>
 				</div>
 
-
-				<div class="row2" v-if="type && type !== 'file' && file && isSmall()">
-					<div class="alert alert-warning" role="alert">
-						The recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>
-						The current size is <b>{{(coords.w / imageAspectRatio).toFixed(0)}}x{{(coords.h / imageAspectRatio).toFixed(0)}}</b>.
-					</div>
-				</div>
-
-				<div class="form-group" v-if="!isUpdate && type && !containedIn(['video', 'file'], type)" :class="{ 'has-error': !isFileSet}">
-					<label for="file" class="control-label">File</label>
-					<div class="slim" data-instant-edit="true" data-did-confirm="slimConfirmed">
-						<input type="file" id="file" :accept="allowedTypes" :value="fileA" @change="handleImage" class="">
-					</div>
+				<div class="form-group" v-else :class="{ 'has-error': !isFileSet}">
+					<slim-cropper v-if="loadedCropper" :options="slimOptions"/>
 					<span class="help-block"><i class="fa fa-image"></i> Image formats only</span>
-					<!--<h5>Coords: {{coords|json}}</h5>-->
 				</div>
+			</template>
 
+			<template v-if="!hideSubmit">
 				<br>
 
-				<div class="form-group" v-if="!hideSubmit">
+				<div class="form-group">
 					<a v-if="!isChild" href="/admin/uploads" class="btn btn-default">Cancel</a>
 					<button type="submit" class="btn btn-primary">{{buttonText}}</button>
 				</div>
-			</form>
+			</template>
 
+		</form>
 
-			<modal title="Preview" :value="previewModal" @closed="previewModal=false" effect="zoom" width="400" ok-text="Select" :callback="selectExistingPreview">
+		<modal title="Preview" :value="previewModal" @closed="previewModal=false" effect="zoom" width="400" ok-text="Select" :callback="selectExistingPreview">
 			<div slot="modal-body" class="modal-body" v-if="previewUpload">
 				<h5 class="text-center">{{previewUpload.name}}</h5>
 				<img :src="previewUpload.source + '?w=720&fit=max&q=65'" :alt="previewUpload.name" class="img-responsive">
@@ -128,14 +110,14 @@
 	</div>
 </template>
 <script type="text/javascript">
-    import Slim from '../../../../../public/js/slim.commonjs';
+    import Slim from '../../vendors/slim.vue';
     import jQuery from 'jquery';
     import _ from 'underscore';
     import vSelect from 'vue-select'
     import errorHandler from'../error-handler.mixin';
     export default{
         name: 'upload-create-update',
-		components: {vSelect},
+		components: { 'slim-cropper': Slim, vSelect},
         mixins: [errorHandler],
 	    // TODO: component needs to be redesigned to accept an object of properties matching the current properties.
 	    // TODO: This will eliminate the anti-pattern of changing props inside the component.
@@ -230,6 +212,16 @@
                 file: null,
                 x_axis: null,
                 y_axis: null,
+
+                loadedCropper: false,
+                slimOptions: {
+                    ratio: `${this.width}:${this.height}`,
+                    statusFileType: 'image/bmp, image/jpg, image/jpeg, image/png, image/gif',
+	                instantEdit: true,
+                    service: this.slimService,
+                    didInit: this.slimInit,
+                    didRemove: this.slimRemove
+                },
 
 				// logic variables
 				previewModal: false,
@@ -331,6 +323,32 @@
 			}
 		},
         methods: {
+            // Slim Methods
+            slimInit (data, slim) {
+                // slim instance reference
+                console.log(slim)
+
+                // current slim data object and slim reference
+                console.log(data)
+
+                if ( this.isUpdate )
+                    slim.load(this.src);
+                this.slimAPI = slim;
+            },
+            slimService (formdata, progress, success, failure, slim) {
+                // slim instance reference
+                console.log(slim)
+
+                // form data to post to server
+                console.log(formdata)
+
+                // call these methods to handle upload state
+                console.log(progress, success, failure)
+            },
+            slimRemove (data, slim) {
+
+            },
+
             containedIn(arr, item) {
                 return _.contains(arr, item);
             },
@@ -561,20 +579,19 @@
 			    this.previewModal = true;
 			    this.previewUpload = upload;
 			},
-	        slimConfirmed(data){
-			    debugger;
-	        },
 	        loadCropper() {
                 let self = this;
                 if (_.contains(['avatar', 'other', 'passport'], this.type) || (this.type === 'banner' && this.uiSelector !== 1)) {
-                    setTimeout(() =>  {
+                    //setTimeout(() =>  {
+
                         self.slimAPI = new Slim.parse(self.$el);
                         if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
-                            self.adjustSelectByType();
+                            //self.adjustSelectByType();
                         } else {
-                            self.slimAPI[0].ratio = 'free';
+                            this.slimOptions.ratio = 'free';
                         }
-                    }, 1000);
+                    this.loadedCropper = true;
+                    //}, 1000);
                 }
 	        },
             uploadsComplete(data){
@@ -641,8 +658,8 @@
 				this.typeObj = _.findWhere(this.typePaths, {type: this.type});
 				if (this.typeObj) {
 					this.path = this.typeObj.path;
-					if (this.file)
-						this.adjustSelectByType();
+					//if (this.file)
+						//this.adjustSelectByType();
 				}
 			}
 
@@ -654,19 +671,6 @@
                 } else {
                     self.submit();
                 }
-            });
-
-            let slimEvents = [
-                'didInit',                  // Initialized
-                'didLoad',                  // Image Loaded
-                'didTransform',             // Image Transformed
-                'didCancel',                // Image Editor Cancelled
-                'didConfirm',               // Image Editor Confirmed
-                'didSave',                  // Image Saved
-                'didRemove',                // Image Removed
-                'didUpload',                // Image Uploaded
-                'didReceiveServerError',    // Error Received from Server During Upload
-            ];
-        }
+            });}
     }
 </script> 

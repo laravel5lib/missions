@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\v1\Representative;
 use Artesaos\SEOTools\Facades\SEOMeta;
 
 /*
@@ -49,9 +50,14 @@ Route::get('projects/{id}/{tab?}', 'ProjectsController@show');
 
 Route::resource('users', 'UsersController');
 
-Route::get('representatives', function() {
+// Representatives
+Route::get('representatives', function () {
     return view('admin.representatives.index');
 })->middleware('can:view,App\Models\v1\Representative');
+
+Route::get('representatives/{representative}', function (Representative $representative) {
+    return view('admin.representatives.edit', compact('representative'));
+})->middleware('can:update,App\Models\v1\Representative');
 
 Route::resource('uploads', 'UploadsController');
 Route::resource('donors', 'DonorsController');

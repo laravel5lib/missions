@@ -94,6 +94,11 @@ window.ScrollMagic = ScrollMagic;
 import 'animation.gsap';
 import 'debug.addIndicators';
 
+/**
+ * SweetAlert makes popup messages easy and pretty.
+ */
+import swal from 'sweetalert';
+
 
 /**
  * AOS allows you to animate elements as you scroll down, and up. If you scroll back to

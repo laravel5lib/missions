@@ -49,16 +49,16 @@ class TripRequest extends FormRequest
         }
 
         $optional = [
-            'rep_id'          => 'exists:users,id',
-            'spots'           => 'numeric',
-            'todos'           => 'array',
-            'prospects'       => 'array',
-            'team_roles'      => 'array',
-            'description'     => 'string',
-            'published_at'    => 'date',
-            'companion_limit' => 'numeric',
-            'facilitators'    => 'array',
-            'tags'            => 'array'
+            'rep_id'          => 'nullable|exists:representatives,id',
+            'spots'           => 'nullable|numeric',
+            'todos'           => 'nullable|array',
+            'prospects'       => 'nullable|array',
+            'team_roles'      => 'nullable|array',
+            'description'     => 'nullable|string',
+            'published_at'    => 'nullable|date',
+            'companion_limit' => 'nullable|numeric',
+            'facilitators'    => 'nullable|array',
+            'tags'            => 'nullable|array'
         ];
 
         $rules = $required + $optional;

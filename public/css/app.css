@@ -9916,6 +9916,90 @@ select[multiple].input-lg,
   }
 }
 
+.swal-button {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 12px 36px;
+  font-size: 15px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+}
+
+.swal-button--confirm {
+  color: #fff !important;
+  background-color: #f6323e;
+  border-color: #f6323e;
+}
+
+.swal-button--confirm:focus, .swal-button--confirm.focus {
+  color: #fff !important;
+  background-color: #eb0a18;
+  border-color: #a10711;
+}
+
+.swal-button--confirm:hover {
+  color: #fff !important;
+  background-color: #eb0a18;
+  border-color: #e10a17;
+}
+
+.swal-button--confirm:active, .swal-button--confirm.active,
+.open > .swal-button--confirm.dropdown-toggle {
+  color: #fff !important;
+  background-color: #eb0a18;
+  border-color: #e10a17;
+}
+
+.swal-button--confirm:active:hover, .swal-button--confirm:active:focus, .swal-button--confirm:active.focus, .swal-button--confirm.active:hover, .swal-button--confirm.active:focus, .swal-button--confirm.active.focus,
+.open > .swal-button--confirm.dropdown-toggle:hover,
+.open > .swal-button--confirm.dropdown-toggle:focus,
+.open > .swal-button--confirm.dropdown-toggle.focus {
+  color: #fff !important;
+  background-color: #c80915;
+  border-color: #a10711;
+}
+
+.swal-button--confirm:active, .swal-button--confirm.active,
+.open > .swal-button--confirm.dropdown-toggle {
+  background-image: none;
+}
+
+.swal-button--confirm.disabled:hover, .swal-button--confirm.disabled:focus, .swal-button--confirm.disabled.focus, .swal-button--confirm[disabled]:hover, .swal-button--confirm[disabled]:focus, .swal-button--confirm[disabled].focus,
+fieldset[disabled] .swal-button--confirm:hover,
+fieldset[disabled] .swal-button--confirm:focus,
+fieldset[disabled] .swal-button--confirm.focus {
+  background-color: #f6323e;
+  border-color: #f6323e;
+}
+
+.swal-button--confirm .badge {
+  color: #f6323e;
+  background-color: #fff !important;
+}
+
+.swal-button--cancel {
+  color: #3e3e3e;
+  font-weight: 700;
+  border-radius: 4px;
+}
+
 .btn {
   display: inline-block;
   margin-bottom: 0;

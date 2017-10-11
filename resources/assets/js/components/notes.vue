@@ -4,10 +4,11 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-6">
-                    <h5>Notes</h5>
+                    <h3>Notes</h3>
                 </div>
                 <div class="col-xs-6 text-right" v-if="app.user.can.create_notes">
-                    <button class="btn btn-primary btn-xs" @click="prepareNew">
+                    <hr class="divider inv sm"
+                    <button class="btn btn-primary" @click="prepareNew">
                         <span v-if="! newMode">New <i class="fa fa-plus"></i></span>
                         <span v-if="newMode">List <i class="fa fa-list-ul"></i></span>
                     </button>

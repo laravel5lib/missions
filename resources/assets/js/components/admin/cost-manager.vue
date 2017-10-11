@@ -1,102 +1,73 @@
 <template>
     <section>
-        <spinner ref="spinner" size="md" text="Loading"></spinner>
-        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
-            <hr class="divider inv sm">
-            <form class="col-sm-12">
-                <div class="form-group">
-                    <select class="form-control input-sm" v-model="filters.type" style="width:100%;">
-                        <option value="">Any Type</option>
-                        <option value="incremental">Incremental</option>
-                        <option value="optional">Optional</option>
-                        <option value="static">Static</option>
-                    </select>
-                </div>
-
-                <hr class="divider inv sm">
-                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter"><i class="fa fa-times"></i> Reset Filters It!</button>
-            </form>
-        </mm-aside>
-        <form class="panel-body form-inline text-right" novalidate>
-            <div class="input-group input-group-sm">
-                <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search for anything">
-                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+        <spinner ref="spinner" size="xl" :fixed="true" text="Loading..."></spinner>
+        <form class="panel-body form-inline" novalidate>
+            <div class="form-group">
+                <select class="form-control input-sm" v-model="filters.type" style="width:100%;">
+                    <option value="">Filter by any type...</option>
+                    <option value="incremental">Incremental</option>
+                    <option value="optional">Optional</option>
+                    <option value="static">Static</option>
+                </select>
             </div>
-            <button class="btn btn-default btn-sm" type="button" @click="showFilters=true">Filters</button>
-            <a class="btn btn-primary btn-sm"
+            <div class="form-group">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search for anything" style="min-width: 200px">
+                </div>
+            </div>
+            <a class="btn btn-primary btn-sm pull-right"
                @click="showAddModal=true"
                v-if="app.user.can.create_costs">
-               New <i class="fa fa-plus"></i>
+               Add New Cost
            </a>
         </form>
         <hr class="divider sm">
         <template v-for="(cost, index) in costs">
             <div class="panel-body" :class="{ 'panel-warning': costsErrors[index] != false, 'panel-success': costsErrors[index] === false }">
                 <div class="row">
-                    <div class="col-sm-6">
-                        <h4>{{ cost.name|capitalize }}</h4>
+                    <div class="col-sm-2 col-xs-12">
+                        <h5 class="text-primary">{{ currency(cost.amount) }}</h5>
                     </div>
-                    <div class="col-sm-6 text-right hidden-xs">
+                    <div class="col-sm-6 col-xs-6">
+                        <h5>{{ cost.name|capitalize }}</h5>
+                    </div>
+                    <div class="col-sm-4 col-xs-6 text-right">
                         <div style="padding: 0;">
-                            <div role="group" aria-label="...">
-                                <a class="btn btn-xs btn-default-hollow small"
-                                   @click="addPayment(cost)"
+                            <div class="btn-group btn-group-sm">
+                              <button type="button" class="btn btn-sm btn-link dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-ellipsis-h"></i>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a @click="addPayment(cost)"
                                    v-if="app.user.can.create_costs || app.user.can.update_costs">
-                                   <i class="fa fa-plus"></i> New Payment
-                                </a>
-                                <a class="btn btn-xs btn-default-hollow small"
-                                   @click="editCost(cost)"
+                                   Add New Payment
+                                </a></li>
+                                <li class="divider"></li>
+                                <li><a @click="editCost(cost)"
                                    v-if="app.user.can.update_costs">
-                                   <i class="fa fa-pencil"></i> Edit
-                                </a>
-                                <a class="btn btn-xs btn-default-hollow small"
-                                   @click="confirmRemove(cost)"
+                                   Edit
+                                </a></li>
+                                <li><a @click="confirmRemove(cost)"
                                    v-if="app.user.can.delete_costs">
-                                   <i class="fa fa-trash"></i> Delete
-                                </a>
+                                   Delete
+                                </a></li>
+                              </ul>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 text-center visible-xs">
-                        <div style="padding: 0;">
-                            <div role="group" aria-label="...">
-                                <a class="btn btn-xs btn-default-hollow small"
-                                   @click="addPayment(cost)"
-                                   v-if="app.user.can.create_costs || app.user.can.update_costs">
-                                   <i class="fa fa-plus"></i> New Payment
-                                </a>
-                                <a class="btn btn-xs btn-default-hollow small"
-                                   @click="editCost(cost)"
-                                   v-if="app.user.can.update_costs">
-                                   <i class="fa fa-pencil"></i> Edit
-                                </a>
-                                <a class="btn btn-xs btn-default-hollow small"
-                                   @click="confirmRemove(cost)"
-                                   v-if="app.user.can.delete_costs">
-                                   <i class="fa fa-trash"></i> Delete
-                               </a>
-                            </div>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <p><span class="label label-default">{{ cost.type|capitalize }}</span></p>
+                    </div>
+                    <div class="col-sm-10">
+                        <p class="small"><i class="fa fa-calendar-o"></i> Effective Date: <em class="text-primary">{{ cost.active_at|moment('lll') }}</em></p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
                         <p class="small">{{ cost.description }}</p>
-                    </div>
-                </div>
-                <hr class="divider">
-                <div class="row">
-                    <div class="col-sm-4 text-center">
-                        <label>Cost Type</label>
-                        <p>{{ cost.type|capitalize }}</p>
-                    </div>
-                    <div class="col-sm-4 text-center">
-                        <label>Active Date</label>
-                        <p>{{ cost.active_at|moment('lll') }}</p>
-                    </div>
-                    <div class="col-sm-4 text-center">
-                        <label>Cost</label>
-                        <p>{{ currency(cost.amount) }}</p>
                     </div>
                 </div>
                 <hr class="divider">
@@ -108,24 +79,24 @@
             </div>
             <hr class="divider">
         </template>
+        <template v-if="costs.length < 1">
+            <div class="panel-body">
+                <p class="lead text-muted text-center">No costs have been assigned yet.</p>
+            </div>
+        </template>
 
-        <modal title="New Cost" :value="showAddModal" @closed="showAddModal=false" effect="fade" width="800">
+        <modal title="Add New Cost" :value="showAddModal" @closed="showAddModal=false" effect="fade" width="800">
             <div slot="modal-body" class="modal-body">
                 <template v-if="!selectedCost">
 
                         <form class="form" novalidate data-vv-scope="cost-create">
                             <div class="row">
-                                <div class="col-sm-12">
+                                <div class="col-sm-10 col-sm-offset-1">
                                     <div class="form-group" :class="{'has-error': errors.has('costName', 'cost-create')}">
                                         <label for="cost_name">Name</label>
                                         <input type="text" class="form-control" id="cost_name"
                                                v-model="newCost.name" name="costName" v-validate="'required'"
                                                placeholder="Name" autofocus>
-                                    </div>
-                                    <div class="form-group" :class="{'has-error': errors.has('costDescription', 'cost-create')}">
-                                        <label for="cost_description">Description</label>
-                                        <textarea class="form-control" id="cost_description"
-                                                  v-model="newCost.description" name="costDescription" v-validate="'required|min:1'"></textarea>
                                     </div>
                                     <div class="form-group" :class="{'has-error': errors.has('costType', 'cost-create')}">
                                         <label for="cost_type">Type</label>
@@ -136,27 +107,24 @@
                                             <option value="optional">Optional</option>
                                         </select>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group" :class="{'has-error': errors.has('costActive', 'cost-create')}">
-                                                <label for="newCost_active_at">Active</label>
-                                                <br>
-                                                <date-picker input-sm v-model="newCost.active_at" :view-format="['YYYY-MM-DD HH:mm:ss']" name="costActive" v-validate="'required'"></date-picker>
-                                                <!--<input type="datetime" id="newCost_active_at" class="form-control hidden"
-                                                       v-model="newCost.active_at" name="costActive" v-validate="'required'">-->
-                                            </div>
-
+                                    <div class="form-group" :class="{'has-error': errors.has('costAmount', 'cost-create')}">
+                                        <label for="newCost_amount">Amount</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-usd"></i></span>
+                                            <input type="number" number id="newCost_amount" class="form-control"
+                                                   v-model="newCost.amount" name="costAmount" v-validate="'required'">
                                         </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group" :class="{'has-error': errors.has('costAmount', 'cost-create')}">
-                                                <label for="newCost_amount">Amount</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon"><i class="fa fa-usd"></i></span>
-                                                    <input type="number" number id="newCost_amount" class="form-control"
-                                                           v-model="newCost.amount" name="costAmount" v-validate="'required'">
-                                                </div>
-                                            </div>
-                                        </div>
+                                    </div>
+                                    <div class="form-group" :class="{'has-error': errors.has('costActive', 'cost-create')}">
+                                        <label for="newCost_active_at">Effective Date</label>
+                                        <br>
+                                        <date-picker v-model="newCost.active_at" :view-format="['YYYY-MM-DD HH:mm:ss']" name="costActive" v-validate="'required'"></date-picker>
+                                        <span class="help-block">This is when the cost goes into effect and will be applied. You should stagger this date for sets of incremental costs.</span>
+                                    </div>
+                                    <div class="form-group" :class="{'has-error': errors.has('costDescription', 'cost-create')}">
+                                        <label for="cost_description">Short Description</label>
+                                        <textarea class="form-control" id="cost_description"
+                                                  v-model="newCost.description" name="costDescription" v-validate="'required|min:1'"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -165,8 +133,8 @@
                 </template>
             </div>
             <div slot="modal-footer" class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" @click='showAddModal = false, resetCost()'>Cancel</button>
-                <button type="button" class="btn btn-primary btn-sm" @click='addCost(newCost)'>Add</button>
+                <button type="button" class="btn btn-link" @click='showAddModal = false, resetCost()'>Cancel</button>
+                <button type="button" class="btn btn-primary" @click='addCost(newCost)'>Add</button>
             </div>
 
         </modal>
@@ -176,17 +144,12 @@
 
                         <form class="form" novalidate data-vv-scope="cost-edit">
                             <div class="row">
-                                <div class="col-sm-12">
+                                <div class="col-sm-10 col-sm-offset-1">
                                     <div class="form-group" :class="{'has-error': errors.has('costName', 'cost-edit')}">
                                         <label for="cost_name">Name</label>
                                         <input type="text" class="form-control" id="cost_name"
                                                v-model="selectedCost.name" name="costName" v-validate="'required'"
                                                placeholder="Name" autofocus>
-                                    </div>
-                                    <div class="form-group" :class="{'has-error': errors.has('costDescription', 'cost-edit')}">
-                                        <label for="cost_description">Description</label>
-                                        <textarea class="form-control" id="cost_description"
-                                                  v-model="selectedCost.description" name="costDescription" v-validate="'required|min:1'"></textarea>
                                     </div>
                                     <div class="form-group" :class="{'has-error': errors.has('costType', 'cost-edit')}">
                                         <label for="cost_type">Type</label>
@@ -197,25 +160,24 @@
                                             <option value="optional">Optional</option>
                                         </select>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group" :class="{'has-error': errors.has('costActive', 'cost-edit')}">
-                                                <label for="selectedCost_active_at">Active</label>
-                                                <br>
-                                                <date-picker input-sm v-model="selectedCost.active_at" :view-format="['YYYY-MM-DD HH:mm:ss']" data-vv-value-path="model" name="costActive" v-validate="'required'"></date-picker>
-                                            </div>
-
+                                    <div class="form-group" :class="{'has-error': errors.has('costActive', 'cost-edit')}">
+                                        <label for="selectedCost_active_at">Effective Date</label>
+                                        <br>
+                                        <date-picker v-model="selectedCost.active_at" :view-format="['YYYY-MM-DD HH:mm:ss']" data-vv-value-path="model" name="costActive" v-validate="'required'"></date-picker>
+                                        <span class="help-block">This is when the cost goes into effect and will be applied. You should stagger this date for sets of incremental costs.</span>
+                                    </div>
+                                    <div class="form-group" :class="{'has-error': errors.has('costAmount', 'cost-edit')}">
+                                        <label for="selectedCost_amount">Amount</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-usd"></i></span>
+                                            <input type="number" number id="selectedCost_amount" class="form-control"
+                                                   v-model="selectedCost.amount" name="costAmount" v-validate="'required'">
                                         </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group" :class="{'has-error': errors.has('costAmount', 'cost-edit')}">
-                                                <label for="selectedCost_amount">Amount</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon"><i class="fa fa-usd"></i></span>
-                                                    <input type="number" number id="selectedCost_amount" class="form-control"
-                                                           v-model="selectedCost.amount" name="costAmount" v-validate="'required'">
-                                                </div>
-                                            </div>
-                                        </div>
+                                    </div>
+                                    <div class="form-group" :class="{'has-error': errors.has('costDescription', 'cost-edit')}">
+                                        <label for="cost_description">Description</label>
+                                        <textarea class="form-control" id="cost_description"
+                                                  v-model="selectedCost.description" name="costDescription" v-validate="'required|min:1'"></textarea>
                                     </div>
                                 </div>
                             </div>

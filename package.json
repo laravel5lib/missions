@@ -55,5 +55,8 @@
       "./resources/assets/js/test/helpers/setup.js",
       "./resources/assets/js/test/helpers/storageMocks.js"
     ]
+  },
+  "dependencies": {
+    "sweetalert": "^2.0.6"
   }
 }

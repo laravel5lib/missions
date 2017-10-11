@@ -113,7 +113,10 @@
         this.$validator.validateAll('update-rep').then(result => {
           if (result) {
             this.$http.put('representatives/' + this.representative.id, this.representative).then((response) => {
-                this.$root.$emit('showSuccess', 'Trip Rep updated.');
+                swal("Good job!", "The trip rep was updated.", "success", {
+                        button: true,
+                        timer: 3000
+                    });
             }).catch(this.$root.handleApiError);
           } else {
               this.$root.$emit('showError', 'Please check the form.');

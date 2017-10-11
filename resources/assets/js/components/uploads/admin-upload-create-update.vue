@@ -57,8 +57,8 @@
 				<label for="type" class="control-label">Type</label>
 				<select class="form-control" id="type" v-model="type" name="type" v-validate="'required'" :disabled="lockType">
 					<option value="">-- select type --</option>
-					<option value="avatar">Image (Avatar) - 1280 x 1280</option>
-					<option value="banner">Image (Banner) - 1300 x 500</option>
+					<option value="avatar">Image (Avatar) - 1:1</option>
+					<option value="banner">Image (Banner) - 16:9</option>
 					<option value="other">Image (other) - no set dimensions</option>
 					<option value="passport">Image (Passport/Visa) - no set dimensions</option>
 					<option value="video">Video</option>
@@ -223,11 +223,12 @@
 
                 loadedCropper: false,
                 slimOptions: {
-                    ratio: `${this.width}:${this.height}`,
+                    ratio: `free`,
                     statusFileType: 'image/bmp, image/jpg, image/jpeg, image/png, image/gif',
                     instantEdit: false,
                     service: this.slimService,
                     didInit: this.slimInit,
+	                didLoad: this.slimLoad,
                     didRemove: this.slimRemove
                 },
 
@@ -257,11 +258,11 @@
                 fileA: null,
                 resultImage: null,
                 typePaths: [
-                    {type: 'avatar', path: 'images/avatars', width: 1280, height: 1280},
-                    {type: 'banner', path: 'images/banners', width: 1300, height: 500},
+                    {type: 'avatar', path: 'images/avatars', ratio: '1:1'},
+                    {type: 'banner', path: 'images/banners', ratio: '16:9'},
                     {type: 'video'},
-                    {type: 'other', path: 'images/other', width: this.width, height: this.height},
-                    {type: 'passport', path: 'images/other', width: 300, height: 400},
+                    {type: 'other', path: 'images/other', ratio: 'free'},
+                    {type: 'passport', path: 'images/other', width: 300, height: 400, ratio: 'free'},
                     {type: 'file', path: 'resources/documents'},
                 ],
                 typeObj: null,
@@ -383,6 +384,20 @@
                 }).catch(result => {
                     failure();
                 })
+            },
+            slimLoad (file, image, meta) {
+                switch(this.type) {
+                    case 'avatar':
+                        this.slimAPI.setRatio('1:1');
+                        break;
+                    case 'banner':
+                        this.slimAPI.setRatio('16:9');
+                        break;
+                    case 'other':
+                        this.slimAPI.setRatio('free');
+                        break;
+                }
+				return true;
             },
             slimRemove (data, slim) {
 
@@ -577,15 +592,6 @@
                 };
                 reader.readAsDataURL(e.target.files[0]);
             },
-            test(event, selection, coordinates) {
-                this.coords = coordinates;
-                if(coordinates) {
-                    this.x_axis = coordinates.x;
-                    this.y_axis = coordinates.y;
-                    this.currentWidth = coordinates.w;
-                    this.currentHeight = coordinates.h;
-                }
-            },
             searchUploads(){
                 let params = {
                     include: '',
@@ -621,7 +627,15 @@
                 let self = this;
                 if (_.contains(['avatar', 'banner', 'other', 'passport'], this.type) && this.uiSelector === 2) {
                     if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
-                        //self.adjustSelectByType();
+                        switch(this.type) {
+	                        case 'avatar':
+	                            this.slimOptions.ratio = '1:1';
+	                            break;
+	                        case 'banner':
+	                            this.slimOptions.ratio = '16:9';
+	                            break;
+
+                        }
                     } else {
                         this.slimOptions.ratio = 'free';
                     }

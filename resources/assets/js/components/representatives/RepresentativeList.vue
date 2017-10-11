@@ -46,7 +46,7 @@
                         {{ representative.name }}
                     </td>
                     <td class="col-md-3">{{ representative.email }}</td>
-                    <td class="col-md-2">{{ representative.phone }}</td>
+                    <td class="col-md-2">{{ representative.phone | phone }}</td>
                     <td class="col-md-1">{{ representative.ext }}</td>
                     <td class="col-md-2 text-right">
                         <span class="tools">
@@ -134,7 +134,7 @@
                                      id="phone">
                         </phone-input>
                     </div>
-                    <div class="col-xs-4" >
+                    <div class="col-xs-4" v-error-handler="{ value: representative.ext, handle: 'ext', scope: 'create-rep' }">
                         <label for="ext" class="control-label">Extension</label>
                         <input type="text"
                                class="form-control"
@@ -218,6 +218,8 @@
                         this.cancel();
                         this.$root.$emit('showSuccess', 'New Trip Rep added.');
                     }).catch(this.$root.handleApiError);
+                } else {
+                    this.$root.$emit('showError', 'Please check the form.');
                 }
             });
 

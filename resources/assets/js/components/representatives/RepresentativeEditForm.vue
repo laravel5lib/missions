@@ -6,7 +6,7 @@
           <h5>Update Photo</h5>
       </div>
       <div class="panel-body">
-        <uploader type="avatar" :name="representative.name + '_avatar' || 'rep_avatar'" lock-type ui-locked :ui-selector="2" is-child :tags="['User']" ></uploader>
+        <uploader type="avatar" hide-submit :initial-image="representative.avatar_url" :name="representative.name + '_avatar' || 'rep_avatar'" lock-type ui-locked :ui-selector="2" is-child :tags="['User']" @uploads-complete="uploadComplete"></uploader>
       </div>
     </div>
 
@@ -113,12 +113,21 @@
         this.$validator.validateAll('update-rep').then(result => {
           if (result) {
             this.$http.put('representatives/' + this.representative.id, this.representative).then((response) => {
-                this.cancel();
                 this.$root.$emit('showSuccess', 'Trip Rep updated.');
             }).catch(this.$root.handleApiError);
+          } else {
+              this.$root.$emit('showError', 'Please check the form.');
           }
         });
       },
+        uploadComplete(upload) {
+          this.$http.post(`representatives/${this.representative.id}/avatar`, {
+              name: upload.name,
+              path: upload.source
+          }).then((response) => {
+              this.$root.$emit('showSuccess', 'Trip Rep\'s Avatar updated.');
+          }).catch(this.$root.handleApiError);
+        }
     },
 
     mounted() {

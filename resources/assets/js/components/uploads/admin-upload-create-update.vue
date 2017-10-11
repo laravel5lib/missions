@@ -225,7 +225,7 @@
                 slimOptions: {
                     ratio: `${this.width}:${this.height}`,
                     statusFileType: 'image/bmp, image/jpg, image/jpeg, image/png, image/gif',
-                    instantEdit: true,
+                    instantEdit: false,
                     service: this.slimService,
                     didInit: this.slimInit,
                     didRemove: this.slimRemove
@@ -351,7 +351,7 @@
                     });
                 else {
                     if (this.initialImage )
-                        slim.load(this.initialImage + '.jpg', function (error, data) {
+                        slim.load(this.initialImage, function (error, data) {
 	                        // initial image loaded
                             console.log(error, data);
                         });

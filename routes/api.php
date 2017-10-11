@@ -28,6 +28,8 @@ $api->version('v1', [
 
     $api->get('campaigns/{campaign}', 'CampaignsController@show');
     $api->get('trips/{trip}', 'TripsController@show');
+
+    $api->put('representatives/{id}/avatar', 'RepresentativeAvatarController@update');
     $api->resource('representatives', 'RepresentativeController');
 
 

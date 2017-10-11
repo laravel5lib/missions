@@ -6,7 +6,9 @@
           <h5>Update Photo</h5>
       </div>
       <div class="panel-body">
+        <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
         <uploader type="avatar" hide-submit :initial-image="representative.avatar_url" :name="representative.name + '_avatar' || 'rep_avatar'" lock-type ui-locked :ui-selector="2" is-child :tags="['User']" @uploads-complete="uploadComplete"></uploader>
+        </div>
       </div>
     </div>
 
@@ -124,7 +126,7 @@
         });
       },
         uploadComplete(upload) {
-          this.$http.post(`representatives/${this.representative.id}/avatar`, {
+          this.$http.put(`representatives/${this.representative.id}/avatar`, {
               name: upload.name,
               path: upload.source
           }).then((response) => {

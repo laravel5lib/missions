@@ -34,9 +34,6 @@ mix.js('resources/assets/js/app.js', 'public/js')
 
 mix.sass('resources/assets/sass/app.scss', 'public/css');
 
-mix.copy('resources/assets/js/vendors/slim.jquery.min.js', 'public/js/slim.js');
-mix.copy('resources/assets/js/vendors/slim.commonjs.js', 'public/js/slim.commonjs.js');
-mix.copy('resources/assets/js/vendors/slim.min.css', 'public/css/slim.css');
 mix.copyDirectory('node_modules/font-awesome/fonts', 'public/fonts');
 mix.version();
 

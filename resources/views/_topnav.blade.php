@@ -1,4 +1,4 @@
-<div class="navbar navbar-default navbar-fixed-top">
+<div class="navbar navbar-default">
   <div class="container">
 
     <a href="{{ url('/') }}" class="navbar-brand visible-xs">
@@ -22,7 +22,7 @@
             {{ auth()->user()->name }} <i class="fa fa-angle-down"></i>
           </a>
         </li>
-        <ul class="dropdown-menu" aria-labelledby="userMenu">
+        <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="userMenu">
           <li>
             <a href="{{ url(auth()->user()->slug->url) }}" id="top-profile-link">
               <i class="fa fa-user"></i> Profile

@@ -422,7 +422,7 @@ body:not(.modal-open) {
   margin: 0 auto -200px;
   /* Pad bottom by footer height */
   padding: 0 0 200px;
-  padding-top: 65px;
+  // padding-top: 65px;
 }
 #dash-page-wrap {
   min-height: 100%;
@@ -432,7 +432,7 @@ body:not(.modal-open) {
   margin: 0 auto -200px;
   /* Pad bottom by footer height */
   padding: 0 0 200px 55px;
-  padding-top: 65px;
+  // padding-top: 65px;
   @media screen and (max-width: 991px) {
     padding-left: 0px;
   }
@@ -445,7 +445,7 @@ body:not(.modal-open) {
   margin: 0 auto 20px;
   /* Pad bottom by footer height */
   padding: 0 0 20px 55px;
-  padding-top: 65px;
+  // padding-top: 65px;
   @media screen and (max-width: 991px) {
     padding-left: 0px;
   }

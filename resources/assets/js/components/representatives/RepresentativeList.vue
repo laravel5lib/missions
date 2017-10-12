@@ -215,6 +215,7 @@
                 if (result) {
                     this.$http.post('representatives', this.representative).then((response) => {
                         this.representatives.push(response.data.data);
+                        this.pagination.total = this.pagination.total + 1;
                         this.cancel();
                         this.$root.$emit('showSuccess', 'New Trip Rep added.');
                     }).catch(this.$root.handleApiError);
@@ -227,6 +228,7 @@
         remove() {
             this.$http.delete('representatives/' + this.representative.id).then((response) => {
                 this.representatives.splice(this.currentIndex, 1);
+                this.pagination.total = this.pagination.total - 1;
                 $('#deleteRep').modal('hide');
                 this.$root.$emit('showSuccess', 'Trip Rep deleted.');
                 this.cancel();

@@ -18,6 +18,7 @@ class RepresentativeController extends Controller
     public function index()
     {
         $representatives = Representative::filter(request()->all())
+            ->orderBy('name', 'asc')
             ->paginate(request()->get('per_page', 10));
 
         return $this->response->paginator($representatives, new RepresentativeTransformer);

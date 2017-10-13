@@ -47,4 +47,11 @@ class TripInterest extends Model
     {
         return $this->morphMany(Todo::class, 'todoable');
     }
+
+    public function scopeCurrent($query)
+    {
+        return $query->whereHas('trip', function ($trip) {
+            return $trip->current();
+        });
+    }
 }

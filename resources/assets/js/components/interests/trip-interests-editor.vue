@@ -80,7 +80,10 @@
                 <div class="col-sm-6">
                     <label>Communication Preferences</label>
                     <h5>
-                        <span class="label label-default" style="margin-right:5px" v-for="preference in interest.communication_preferences">
+                        <span v-if=" ! interest.communication_preferences.length">
+                            None specified
+                        </span>
+                        <span class="label label-default" style="margin-right:5px" v-for="preference in interest.communication_preferences" v-else>
                             {{ preference|capitalize }}
                         </span>
                     </h5>

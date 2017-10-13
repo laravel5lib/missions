@@ -22,7 +22,7 @@ class TripInterestFilter extends Filter
      *
      * @var array
      */
-    public $searchable = ['name', 'email', 'phone', 'communication_preferences'];
+    public $searchable = ['name', 'email'];
 
     /**
      * Find by trip id.

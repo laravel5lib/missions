@@ -140,6 +140,7 @@
                             button: true,
                             timer: 3000
                         });
+                        this.attemptSubmit = false;
                         this.interest = {
                             trip_id: null,
                             name: null,
@@ -149,7 +150,6 @@
                             status: 'undecided'
                         };
                         this.campaign_id = '';
-                        this.attemptSubmit = false;
                         console.log(response);
                     }).catch((error) => {
                         this.errors = error.data.errors;

@@ -3,10 +3,10 @@
         <form id="UserSettingsForm" class="" novalidate style="position:relative;">
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="row">
-                <div class="col-sm-offset-2 col-sm-8">
+                <div class="col-sm-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h5>Account</h5>
+                            <h3>Account</h3>
                         </div>
                         <div class="panel-body">
                             <div class="row form-group">
@@ -207,10 +207,10 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-offset-2 col-sm-8 tour-step-contact">
+                <div class="col-sm-12 tour-step-contact">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h5>Contact Info</h5>
+                            <h3>Contact Info</h3>
                         </div>
                         <div class="panel-body">
                             <div class="row form-group">
@@ -278,10 +278,10 @@
                 </div><!-- end col -->
             </div>
             <div class="row">
-                <div class="col-sm-offset-2 col-sm-8 tour-step-social">
+                <div class="col-sm-12 tour-step-social">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h5>Social Media</h5>
+                            <h3>Social Media</h3>
                         </div>
                             <div class="panel-body">
                                 <div class="row form-group">

@@ -8,35 +8,24 @@
 @endsection
 
 @section('content')
-<div class="white-header-bg">
-    <div class="container">
-        <div class="row hidden-xs">
-            <div class="col-sm-8">
-                <h3>Settings</h3>
-            </div>
-            <div class="col-sm-4 text-right">
-                <hr class="divider inv sm">
-                {{-- <action-trigger text="Save Settings" event="save-settings"></action-trigger> --}}
-                <a id="settings-profile-link" class="btn btn-primary" href="{{ url(auth()->user()->slug->url) }}">
-                    My Profile
-                </a>
-            </div>
-        </div>
-        <div class="row visible-xs">
-            <div class="col-xs-12 text-center">
-                <h3>Settings</h3>
-            </div>
-            <div class="col-xs-12 text-center">
-                <action-trigger text="Save Settings" event="save-settings"></action-trigger>
-                <hr class="divider inv sm">
-            </div>
-        </div>
-    </div>
-</div>
 <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12" v-tour-guide="">
+            <div class="col-xs-12 col-sm-4 col-md-3">
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="active">
+                        <a href="{{ url('/dashboard/settings') }}">
+                            <i class="fa fa-cog" style="margin-right: 1em"></i> Settings
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url(auth()->user()->slug->url) }}">
+                            <i class="fa fa-user-circle" style="margin-right: 1em"></i> View Profile
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-9" v-tour-guide="">
                 <user-settings></user-settings>
             </div>
         </div>

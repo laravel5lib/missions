@@ -11,36 +11,19 @@
 		    <img class="img-xs" style="margin-right:-20px;opacity:.4;margin-top:4px;margin-bottom:4px;" src="/images/mm-icon-lightgray.png" alt="Missions.Me">
 		</div>
 			<ul class="nav navmenu-nav">
-				<li class="donate-nav"><a class="navDonate" href="/fundraisers">
-					<i class="fa fa-heart"></i> Donate To A Cause</a>
-				</li>
 				<li class="navlabel">Account</li>
-				<li v-if="auth" id="userMenu" slot="button" class="dropdown-toggle text-center" data-toggle="dropdown">
-					<a href="#">
-						<img class="img-xs img-circle av-left text-capitalize" :src="avatar" :alt="name"> {{ name }} <i class="fa fa-angle-down"></i>
-						</a>
-				</li>
-				<ul class="dropdown-menu offcanvas-dropdown">
-					<template v-if="auth" aria-labelledby="userMenu">
-						<li class=""><a :href="url" id="menu-profile-link">My Profile</a></li>
-						<li class=""><a href="/dashboard">Dashboard</a></li>
-						<li v-if="admin" class=""><a href="/admin">Admin</a></li>
-						<li class=""><a @click="logout">Sign Out</a></li>
-					</template>
-				</ul>
 				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding:10px 40px;" href="/login">Login</a></li>
 				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding: 10px 34px;border-left: 1px solid #242424;" href="/register">Sign Up</a></li>
 
-				<template v-if="isDashboard()">
-					<li class="navlabel">User</li>
-					<li><a href="/dashboard"><i class="fa fa-tachometer" style="margin-right:7px;"></i> Dashboard</a></li>
-					<li><a href="/dashboard/settings"><i class="fa fa-cog" style="margin-left:1px;margin-right:8px;"></i> Settings</a></li>
-					<li><a href="/dashboard/reservations"><i class="fa fa-ticket" style="margin-right:7px;"></i> Reservations</a></li>
-					<li><a href="/dashboard/records"><i class="fa fa-archive" style="margin-right:7px;"></i> Records</a></li>
-					<li v-if="normalizedManaging"><a href="/dashboard/groups"><i class="fa fa-users" style="margin-right:7px;"></i> Groups</a></li>
-					<li><a href="/dashboard/projects"><i class="fa fa-tint" style="margin-left:3px;margin-right:10px;"></i> Projects</a></li>
+				<li class=""><a href="/dashboard/settings" id="menu-profile-link"><i class="fa fa-user-circle" style="margin-right:7px;"></i>My Account</a></li>
+				<li><a href="/dashboard"><i class="fa fa-tachometer" style="margin-right:7px;"></i> Dashboard</a></li>
+				<li><a href="/dashboard/reservations"><i class="fa fa-ticket" style="margin-right:7px;"></i> Reservations</a></li>
+				<li><a href="/dashboard/records"><i class="fa fa-archive" style="margin-right:7px;"></i> Records</a></li>
+				<li v-if="normalizedManaging"><a href="/dashboard/groups"><i class="fa fa-users" style="margin-right:7px;"></i> Groups</a></li>
+				<li><a href="/dashboard/projects"><i class="fa fa-tint" style="margin-left:3px;margin-right:10px;"></i> Projects</a></li>
+				<li v-if="admin" class=""><a href="/admin"><i class="fa fa-cogs" style="margin-right:7px;"></i> Admin</a></li>
+				<li class=""><a @click="logout"><i class="fa fa-logout"></i> Sign Out</a></li>
 
-				</template>
 
 				<template v-if="isAdmin()">
 					<li class="navlabel">Admin</li>

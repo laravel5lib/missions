@@ -15,15 +15,16 @@
 				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding:10px 40px;" href="/login">Login</a></li>
 				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding: 10px 34px;border-left: 1px solid #242424;" href="/register">Sign Up</a></li>
 
-				<li class=""><a href="/dashboard/settings" id="menu-profile-link"><i class="fa fa-user-circle" style="margin-right:7px;"></i>My Account</a></li>
-				<li><a href="/dashboard"><i class="fa fa-tachometer" style="margin-right:7px;"></i> Dashboard</a></li>
-				<li><a href="/dashboard/reservations"><i class="fa fa-ticket" style="margin-right:7px;"></i> Reservations</a></li>
-				<li><a href="/dashboard/records"><i class="fa fa-archive" style="margin-right:7px;"></i> Records</a></li>
-				<li v-if="normalizedManaging"><a href="/dashboard/groups"><i class="fa fa-users" style="margin-right:7px;"></i> Groups</a></li>
-				<li><a href="/dashboard/projects"><i class="fa fa-tint" style="margin-left:3px;margin-right:10px;"></i> Projects</a></li>
-				<li v-if="admin" class=""><a href="/admin"><i class="fa fa-cogs" style="margin-right:7px;"></i> Admin</a></li>
-				<li class=""><a @click="logout"><i class="fa fa-logout"></i> Sign Out</a></li>
-
+				<template v-if="auth">
+					<li class=""><a href="/dashboard/settings" id="menu-profile-link"><i class="fa fa-user-circle" style="margin-right:7px;"></i>My Account</a></li>
+					<li><a href="/dashboard"><i class="fa fa-tachometer" style="margin-right:7px;"></i> Dashboard</a></li>
+					<li><a href="/dashboard/reservations"><i class="fa fa-ticket" style="margin-right:7px;"></i> Reservations</a></li>
+					<li><a href="/dashboard/records"><i class="fa fa-archive" style="margin-right:7px;"></i> Records</a></li>
+					<li v-if="normalizedManaging"><a href="/dashboard/groups"><i class="fa fa-users" style="margin-right:7px;"></i> Groups</a></li>
+					<li><a href="/dashboard/projects"><i class="fa fa-tint" style="margin-left:3px;margin-right:10px;"></i> Projects</a></li>
+					<li v-if="admin" class=""><a href="/admin"><i class="fa fa-cogs" style="margin-right:7px;"></i> Admin</a></li>
+					<li class=""><a @click="logout"><i class="fa fa-sign-out"></i> Log Out</a></li>
+				</template>
 
 				<template v-if="isAdmin()">
 					<li class="navlabel">Admin</li>
@@ -114,7 +115,9 @@
 				return this.admin && window.location.pathname.split('/')[1] === 'admin';
 			},
 			logout(){
-			    this.$http.post('/logout', null, {baseURL: ''});
+			    this.$http.post('/logout', null, {baseURL: ''}).then((response) => {
+                    window.location = '/login';
+                });
 			}
 		},
 		mounted(){

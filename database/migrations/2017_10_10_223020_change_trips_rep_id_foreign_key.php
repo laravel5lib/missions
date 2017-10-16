@@ -13,6 +13,8 @@ class ChangeTripsRepIdForeignKey extends Migration
      */
     public function up()
     {
+        Schema::disableForeignKeyConstraints();
+
         Schema::table('trips', function (Blueprint $table) {
             $table->dropForeign(['rep_id']);
 
@@ -20,6 +22,8 @@ class ChangeTripsRepIdForeignKey extends Migration
                 ->references('id')->on('representatives')
                 ->onDelete('set null');
         });
+
+        Schema::enableForeignKeyConstraints();
     }
 
     /**
@@ -29,6 +33,8 @@ class ChangeTripsRepIdForeignKey extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+        
         Schema::table('trips', function (Blueprint $table) {
             $table->dropForeign(['rep_id']);
 
@@ -36,5 +42,7 @@ class ChangeTripsRepIdForeignKey extends Migration
                 ->references('id')->on('users')
                 ->onDelete('set null');
         });
+
+        Schema::enableForeignKeyConstraints();
     }
 }

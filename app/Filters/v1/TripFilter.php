@@ -28,7 +28,7 @@ class TripFilter extends Filter
      */
     public $searchable = [
         'type', 'prospects', 'group.name', 'campaign.name', 'costs.name',
-        'deadlines.name', 'facilitators.name'
+        'deadlines.name', 'facilitators.first_name', 'facilitators.last_name'
     ];
 
     /**

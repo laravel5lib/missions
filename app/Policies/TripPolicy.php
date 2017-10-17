@@ -34,7 +34,7 @@ class TripPolicy extends BasePolicy
                 break;
 
             case 'requirements':
-                return $user->can('view_trips') && $user->can('requirements', Requirement::class);
+                return $user->can('view_trips') && $user->can('view', Requirement::class);
                 break;
 
             default:

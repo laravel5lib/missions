@@ -1,6 +1,6 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h5 class="text-capitalize">{{ $trip->campaign->name }}</h5>
+        <h5 class="text-capitalize">Overview</h5>
     </div>
     <div class="panel-body">
         <div class="row">
@@ -82,7 +82,7 @@
                         <hr class="divider">
                         @if($trip->rep_id)
                         <label>Trip Rep</label>
-                        <p><a href="/admin/users/{{ $trip->rep_id }}">{{ $trip->rep->name or ''}}</a></p>
+                        <p>{{ $trip->rep->name or 'not assigned'}}</p>
                         <hr class="divider">
                         @endif
                         <label>Tags</label>

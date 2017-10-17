@@ -10,17 +10,17 @@
                     <input type="text" 
                            class="form-control" 
                            v-model="options.params.search" 
-                           debounce="250" 
+                           @keyup="debouncedSearch"
                            placeholder="Search by codes or referral names">
                     <span class="input-group-addon">
-                        <i class="fa fa-circle-o-notch fa-spin" v-show="loading"></i>
+                        <i class="fa fa-circle-o-notch fa-spin" v-if="loading"></i>
                         <i class="fa fa-search" v-else></i>
                     </span>
                 </div>
             </div>
         </div>
     </div>
-    <table class="table table-striped" v-show="codes.length">
+    <table class="table table-striped" v-if="codes.length">
         <thead>
             <tr>
                 <th>Code</th>
@@ -31,14 +31,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="code in codes" track-by="id" transition="stagger" stagger="50">
+            <tr v-for="code in codes" :="code.id" transition="stagger" stagger="50">
                 <td><code>{{ code.code }}</code></td>
                 <td v-html="affiliate(code.rewardable)"></td>
-                <td>{{ code.use_count}} {{ code.use_count | pluralize 'time'}}</td>
-                <td>{{ code.created_at | moment 'lll' }}</td>
+                <td>{{ code.use_count}} {{ pluralize(code.use_count , 'time')}}</td>
+                <td>{{ code.created_at | moment('lll') }}</td>
                 <td>
                     <button class="btn btn-xs btn-primary" 
-                            v-show="code.deleted_at" 
+                            v-if="code.deleted_at"
                             @click="activate(code.id)">
                         Activate
                     </button>
@@ -57,7 +57,7 @@
     <div class="panel-footer">
         <div class="row">
             <div class="col-xs-12 text-center">
-                <pagination :pagination.sync="pagination" :callback="fetch"></pagination>
+                <pagination :pagination="pagination" pagination-key="pagination" :callback="fetch"></pagination>
             </div>
         </div>
     </div>
@@ -76,6 +76,7 @@
     }
 </style>
 <script type="text/javascript">
+    import _ from 'underscore';
     export default {
         name: 'promocodes',
         props: {
@@ -101,17 +102,13 @@
             }
         },
         watch: {
-            'options.params.search': function (val, oldVal) {
+            'options.params.search'(val, oldVal) {
                 this.pagination.current_page = 1;
-                this.fetch();
-            }
-        },
-        events: {
-            'promotionalStatusChanged': function (msg) {
-                this.fetch();
+//                this.fetch();
             }
         },
         methods: {
+            debouncedSearch: _.debounce(function() { this.fetch() }, 250),
             fetch() {
                 this.loading = true;
 
@@ -119,12 +116,12 @@
                     page: this.pagination.current_page
                 });
 
-                this.$http.get('promocodes', this.options).then(function (response) {
-                    this.codes = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('promocodes', this.options).then((response) => {
+                    this.codes = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     this.loading = false;
-                }, function (error) {
-                    this.$dispatch('showError', 'Unable to get data from server.');
+                }, (error) =>  {
+                    this.$root.$emit('showError', 'Unable to get data from server.');
                     this.loading = false;
                 });
             },
@@ -134,24 +131,28 @@
                 return '<i class="fa fa-external-link text-muted"></i> <a href="/admin/reservations/'+rewardable.data.id+'" target="_blank">' + rewardable.data.given_names + ' ' + rewardable.data.surname + '</a>';
             },
             activate(codeId) {
-                this.$http.put('promocodes/' + codeId + '/restore').then(function (response) {
-                    this.$dispatch('showSuccess', 'Promo code activated.');
+                this.$http.put('promocodes/' + codeId + '/restore').then((response) => {
+                    this.$root.$emit('showSuccess', 'Promo code activated.');
                     this.fetch();
-                }, function (error) {
-                    this.$dispatch('showError', 'Could not activate promo code.');
+                }, (error) =>  {
+                    this.$root.$emit('showError', 'Could not activate promo code.');
                 });
             },
             deactivate(codeId) {
-                this.$http.delete('promocodes/' + codeId).then(function (response) {
-                    this.$dispatch('showSuccess', 'Promo code deactivated.');
+                this.$http.delete('promocodes/' + codeId).then((response) => {
+                    this.$root.$emit('showSuccess', 'Promo code deactivated.');
                     this.fetch();
-                }, function (error) {
-                    this.$dispatch('showError', 'Could not deactivate promo code.');
+                }, (error) =>  {
+                    this.$root.$emit('showError', 'Could not deactivate promo code.');
                 });
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
+
+            this.$root.$on('promotionalStatusChanged', () => {
+                this.fetch();
+            });
         }
     }
 </script>

@@ -5,16 +5,16 @@ use App\Models\v1\Report;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 
-class ExporterTest extends TestCase
+class ExporterTest extends BrowserKitTestCase
 {
     /** @test */
     public function returns_a_collection_of_columns()
     {
         $exporter = new Exporter([]);
 
-        $collection = $exporter->getColumns( collect([]) );
+        $collection = $exporter->getColumns(collect([]));
 
-        $this->assertTrue($collection instanceOf Collection ?: false);
+        $this->assertTrue($collection instanceof Collection ?: false);
     }
 
     /** @test */
@@ -34,9 +34,9 @@ class ExporterTest extends TestCase
     {
         $exporter = new Exporter([]);
 
-        $collection = $exporter->getData( collect([]) );
+        $collection = $exporter->getData(collect([]));
 
-        $this->assertTrue($collection instanceOf Collection ?: false);
+        $this->assertTrue($collection instanceof Collection ?: false);
     }
 
     /** @test */
@@ -58,19 +58,6 @@ class ExporterTest extends TestCase
         $data = $exporter->getFilteredData();
 
         $this->assertTrue(is_array($data));
-    }
-
-    /** @test */
-    public function creates_a_csv_file()
-    {
-        $exporter = new Exporter([]);
-
-        $data = $exporter->create([], 'Export', 'test_file');
-
-        $this->assertTrue( Storage::disk('s3')->exists($data->file['full']) );
-
-        // clean up
-        Storage::disk('s3')->delete($data->file['full']);
     }
 
     /** @test */

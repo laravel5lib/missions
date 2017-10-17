@@ -90,6 +90,71 @@ return [
         ]
     ],
     'admin' => [
+        'toolbar' => [
+            [
+                'icon' => 'globe',
+                'label' => 'Campaigns',
+                'url' => 'admin/campaigns',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Campaign'
+            ],
+            [
+                'icon' => 'ticket',
+                'label' => 'Reservations',
+                'url' => 'admin/reservations',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Reservation'
+            ],
+            [
+                'icon' => 'users',
+                'label' => 'Groups',
+                'url' => 'admin/groups',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Group'
+            ],
+            [
+                'icon' => 'user',
+                'label' => 'Users',
+                'url' => 'admin/users',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\User'
+            ],
+            [
+                'icon' => 'user-circle-o',
+                'label' => 'Trip&nbsp;Reps',
+                'url' => 'admin/representatives',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Representative'
+            ],
+            [
+                'icon' => 'usd',
+                'label' => 'Transactions',
+                'url' => 'admin/transactions',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Transaction'
+            ],
+            [
+                'icon' => 'tint',
+                'label' => 'Projects',
+                'url' => 'admin/causes',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Project'
+            ],
+            [
+                'icon' => 'archive',
+                'label' => 'Records',
+                'url' => 'admin/records',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Reservation'
+            ],
+            [
+                'icon' => 'line-chart',
+                'label' => 'Reports',
+                'url' => 'admin/reports',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Report'
+            ],
+        ],
         'project' => [
             [
                 'label' => 'Details',
@@ -115,35 +180,51 @@ return [
         'records' => [
             [
                 'label' => 'Passports',
-                'url' => 'passports'
+                'url' => 'passports',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Passport'
             ],
             [
                 'label' => 'Visas',
-                'url' => 'visas'
+                'url' => 'visas',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Visa'
             ],
             [
                 'label' => 'Medical Releases',
-                'url' => 'medical-releases'
+                'url' => 'medical-releases',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\MedicalRelease'
             ],
             [
                 'label' => 'Media Credentials',
-                'url' => 'media-credentials'
+                'url' => 'media-credentials',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Credential'
             ],
             [
                 'label' => 'Medical Credentials',
-                'url' => 'medical-credentials'
+                'url' => 'medical-credentials',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Credential'
             ],
             [
                 'label' => 'Referrals',
-                'url' => 'referrals'
+                'url' => 'referrals',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Referral'
             ],
             [
                 'label' => 'Testimonies',
-                'url' => 'essays'
+                'url' => 'essays',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Essay'
             ],
             [
                 'label' => 'Influencer Applications',
-                'url' => 'influencers'
+                'url' => 'influencers',
+                'action' => 'view',
+                'policy' => 'App\Models\v1\Essay'
             ]
         ],
         'reservation' => [

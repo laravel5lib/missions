@@ -3,6 +3,8 @@
         <component :is="currentView" 
                    :promoter-type="promoterType" 
                    :promoter-id="promoterId"
+                   @load-view="toView"
+                   @promotionalStatusChanged=""
                    :id="id"
                    transition="fade" 
                    transition-mode="out-in">
@@ -26,7 +28,7 @@
     import details from './promotionals/details.vue';
     export default {
         name: 'promotionals',
-        components: [list, createEdit, details],
+        components: {list, createEdit, 'promo-details': details},
         props: {
           'promoterType': {
             type: String,
@@ -39,16 +41,14 @@
         },
         data() {
             return {
-                currentView: 'list'
-            }
-        },
-        events: {
-            'load-view': function (msg) {
-                this.toView(msg);
+                currentView: 'list',
+                id: null,
             }
         },
         methods: {
             toView(data){
+                if(data.view === 'details')
+                    data.view = 'promo-details';
                 this.currentView = data.view;
                 this.id = data.id;
             }

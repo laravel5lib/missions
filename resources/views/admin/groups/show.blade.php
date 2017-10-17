@@ -20,11 +20,16 @@
                             Manage <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="create">New</a></li>
-                            <li><a href="{{ Request::url() }}/edit">Edit</a></li>
-                            {{--<li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>--}}
-                            {{--<li role="separator" class="divider"></li>--}}
-                            <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
+                            @can('create', $group)
+                                <li><a href="create">New</a></li>
+                            @endcan
+                            @can('update', $group)
+                                <li><a href="{{ Request::url() }}/edit">Edit</a></li>
+                            @endcan
+                            @can('delete', $group)
+                                <li role="separator" class="divider"></li>
+                                <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
+                            @endcan
                         </ul>
                     </div><!-- end btn-group -->
                 </div><!-- end btn-group -->

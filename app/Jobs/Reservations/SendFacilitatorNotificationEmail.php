@@ -42,11 +42,14 @@ class SendFacilitatorNotificationEmail extends Job implements ShouldQueue
         // admin monitors
         $emails = $emails + ['matt@missions.me', 'neil@missions.me'];
 
-        if( ! count($emails)) return false;
+        if (! count($emails)) {
+            return false;
+        }
 
-        $mailer->send('emails.reservations.notification',
+        $mailer->send(
+            'emails.reservations.notification',
             ['reservation' => $reservation],
-            function($m) use($reservation, $emails) {
+            function ($m) use ($reservation, $emails) {
                 $m->bcc($emails)->subject('Congrats! Someone signed up for your trip.');
             }
         );

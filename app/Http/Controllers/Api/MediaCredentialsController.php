@@ -20,22 +20,22 @@ class MediaCredentialsController extends Controller
 
     /**
      * Get a list of media credentials
-     * 
+     *
      * @return response
      */
     public function index(Request $request)
     {
-       $credentials = $this->credential
+        $credentials = $this->credential
                            ->media()
                            ->filter($request->all())
                            ->paginate($request->get('per_page', 10));
 
-       return $this->response->paginator($credentials, new CredentialTransformer);
+        return $this->response->paginator($credentials, new CredentialTransformer);
     }
 
     /**
      * Get a media credential by it's id
-     * 
+     *
      * @param  String $id
      * @return response
      */
@@ -48,7 +48,7 @@ class MediaCredentialsController extends Controller
 
     /**
      * Create a new media credential
-     * 
+     *
      * @param  MediaCredentialRequest $request
      * @return response
      */
@@ -68,7 +68,7 @@ class MediaCredentialsController extends Controller
 
     /**
      * Update a media credential
-     * 
+     *
      * @param  mediaCredentialRequest $request
      * @param  String                   $id
      * @return response
@@ -91,7 +91,7 @@ class MediaCredentialsController extends Controller
 
     /**
      * Soft delete a media credential
-     * 
+     *
      * @param  String $id
      * @return response
      */

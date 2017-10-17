@@ -14,8 +14,8 @@ class EloquentAccommodation extends EloquentRepository implements Accommodation
     protected $model;
 
     protected $attributes = [
-        'name', 'address_one', 'address_two', 'city','state', 
-        'zip', 'phone', 'fax', 'country_code', 'email', 'url', 
+        'name', 'address_one', 'address_two', 'city','state',
+        'zip', 'phone', 'fax', 'country_code', 'email', 'url',
         'region_id', 'short_desc'
     ];
 
@@ -23,5 +23,4 @@ class EloquentAccommodation extends EloquentRepository implements Accommodation
     {
         $this->model = $model;
     }
-
 }

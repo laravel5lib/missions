@@ -29,7 +29,9 @@ class UsersController extends Controller
     {
         $user = $this->auth->user();
 
-        if(! $user) return $this->response->errorUnauthorized();
+        if (! $user) {
+            return $this->response->errorUnauthorized();
+        }
 
         return $this->response->item($user, new UserTransformer);
     }

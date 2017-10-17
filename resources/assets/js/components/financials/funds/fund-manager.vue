@@ -3,9 +3,9 @@
         <div class="col-md-4">
             <fund-editor :id="id"></fund-editor>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-8" v-if="app.user.can.view_transactions">
             <div class="collapse" id="createTransaction">
-                <transaction-form :fund-id="id"></transaction-form>
+                <transaction-form :fund-id="id" @transactionCreated="transactionCreated"></transaction-form>
             </div>
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -17,7 +17,9 @@
                     </admin-transactions-list>
                 </div><!-- end panel-body -->
             </div>
-            <slot></slot>
+            <template v-if="app.user.can.view_notes">
+                <slot></slot>
+            </template>
         </div>
     </section>
 </template>
@@ -28,14 +30,18 @@
     export default{
         name: 'fund-manager',
         props: {
-            'id': {
+            id: {
                 type: String,
                 required: true
-            }
+            },
+            stripeKey: {
+                type: String,
+                default: null
+            },
         },
         data(){
             return{
-
+                app: MissionsMe
             }
         },
         components:{
@@ -43,10 +49,10 @@
             transactionForm,
             adminTransactionsList
         },
-        events: {
-            'transactionCreated': function() {
-                this.$broadcast('reconcileFund');
-                this.$broadcast('refreshTransactions');
+        methods: {
+            transactionCreated() {
+                this.$emit('reconcileFund');
+                this.$emit('refreshTransactions');
             }
         }
     }

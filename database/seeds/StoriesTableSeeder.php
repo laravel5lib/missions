@@ -15,7 +15,7 @@ class StoriesTableSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        factory(App\Models\v1\Story::class, 40)->create()->each(function($story) use($faker) {
+        factory(App\Models\v1\Story::class, 40)->create()->each(function ($story) use ($faker) {
 
             $story->publish([
                 [

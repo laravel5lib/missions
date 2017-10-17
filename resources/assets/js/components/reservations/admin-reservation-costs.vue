@@ -1,6 +1,6 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
     <div style="position:relative;">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
 
         <button class="btn btn-primary btn-xs" @click="add">
             <span class="fa fa-plus"></span> Add Existing
@@ -24,7 +24,7 @@
             <template v-for="cost in reservation.costs.data">
                 <tr>
                     <!--<td class="text-center">
-                        <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{due.status|capitalize}}</small>
+                        <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{ due.status|capitalize }}</small>
                     </td>-->
                     <td class="text-muted">
 
@@ -32,8 +32,8 @@
                         <i class="fa fa-unlock" v-else @click="costLocking(cost, true)"></i>
                     </td>
                     <td>{{ cost.name || cost.cost }}</td>
-                    <td>{{ cost.type|capitalize}}</td>
-                    <td>{{ cost.amount| currency }}</td>
+                    <td>{{ cost.type|capitalize }}</td>
+                    <td>{{ currency(cost.amount) }}</td>
                     <td>
                         <a class="btn btn-danger btn-xs" @click="confirmRemove(cost)"><i class="fa fa-times"></i></a>
                     </td>
@@ -42,24 +42,21 @@
             </tbody>
         </table>
 
-        <modal title="Add Costs" :show.sync="showAddModal" effect="fade" width="800" :callback="addCosts">
+        <modal title="Add Costs" :value="showAddModal" @closed="showAddModal=false" effect="fade" width="800" :callback="addCosts">
             <div slot="modal-body" class="modal-body">
-                <validator name="AddCost">
+
                     <form class="for" novalidate>
-                        <div class="form-group" :class="{ 'has-error': checkForError('costs') }">
+                        <div class="form-group" :class="{ 'has-error': errors.has('costs') }">
                             <label class="control-label">Available Costs</label>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
-                                      label="name"></v-select>
-                            <select hidden="" v-model="user_id" v-validate:costs="{ required: true }" multiple>
-                                <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
-                            </select>
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple v-model="selectedCosts" :options="availableCosts"
+                                      label="name" name="costs" v-validate="'required'"></v-select>
                         </div>
                     </form>
-                </validator>
+
             </div>
         </modal>
 
-        <modal class="text-center" :show.sync="deleteModal" title="Delete Cost" small="true">
+        <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" :small="true">
             <div slot="modal-body" class="modal-body text-center" v-if="selectedCost">Delete {{ selectedCost.name }}?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -67,7 +64,7 @@
             </div>
         </modal>
 
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+        <alert v-model="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Good job!</strong>
             <p>{{successMessage}}</p>
@@ -121,10 +118,7 @@
                 console.log(moment(a).isBetween(start, stop));
                 return moment(a).isBetween(start, stop);
             },
-            checkForError(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$AddCost[field].invalid && this.attemptSubmit;
-            },
+
             checkForEditCostError(field) {
                 // if user clicked submit button while the field is invalid trigger error styles
                 return this.$EditCost[field].invalid && this.attemptSubmit;
@@ -146,7 +140,7 @@
             costLocking(cost, status) {
                 cost.locked = status;
                    let costs = [];
-                _.each(this.reservation.costs.data, function (c) {
+                _.each(this.reservation.costs.data, (c) => {
                     costs.push({id: c.cost_id, locked: c.locked});
                 });
 
@@ -177,7 +171,7 @@
             updateCost(){
                 // prep current costs
                 let costs = [];
-                _.each(this.reservation.costs.data, function (cost) {
+                _.each(this.reservation.costs.data, (cost) => {
                     if (cost.cost_id === this.editedCost.cost_id) {
                         costs.push({
                             id: this.editedCost.cost_id,
@@ -189,7 +183,7 @@
                     } else {
                         costs.push({id: cost.cost_id, locked: cost.locked});
                     }
-                }.bind(this));
+                });
 
                 let reservation = this.preppedReservation;
                 reservation.costs = costs;
@@ -203,7 +197,7 @@
             remove(cost){
                 let reservation = this.preppedReservation;
                 reservation.costs = [];
-                _.each(this.reservation.costs.data, function (cs) {
+                _.each(this.reservation.costs.data, (cs) => {
                     if (cs.cost_id !== cost.cost_id) {
                         reservation.costs.push({ id: cs.cost_id, locked: cs.locked})
                     }
@@ -215,13 +209,13 @@
             addCosts(){
                 // prep current costs
                 let currentCostIds = [];
-                _.each(this.reservation.costs.data, function (cost) {
+                _.each(this.reservation.costs.data, (cost) => {
                     currentCostIds.push({ id: cost.id || cost.cost_id, locked: cost.locked })
                 });
 
                 // prep added costs
                 let selectedCostIds = [];
-                _.each(this.selectedCosts, function (cost) {
+                _.each(this.selectedCosts, (cost) => {
                     selectedCostIds.push({ id: cost.id })
                 });
 
@@ -241,7 +235,7 @@
 
                 // get only ids of current costs so we don't change anything
                 trip.costs = [];
-                _.each(this.reservation.trip.data.costs.data, function (dl) {
+                _.each(this.reservation.trip.data.costs.data, (dl) => {
                     trip.costs.push({id: dl.id});
                 });
                 trip.costs.push(this.newDeadline);
@@ -250,8 +244,8 @@
                 delete trip.rep_id;
 
                 // this.$refs.spinner.show();
-                this.$http.put('trips/' + trip.id, trip).then(function (response) {
-                    let thisTrip = response.body.data;
+                this.$http.put('trips/' + trip.id, trip).then((response) => {
+                    let thisTrip = response.data.data;
                     this.selectedcosts = new Array(this.newDeadline);
 
                     return this.addCosts();
@@ -266,10 +260,10 @@
             doUpdate(reservation, success){
 
                 // this.$refs.spinner.show();
-                return this.resource.update(reservation).then(function (response) {
-                    this.setReservationData(response.body.data);
+                return this.resource.put(reservation).then((response) => {
+                    this.setReservationData(response.data.data);
                     this.selectedCosts = [];
-                    this.$root.$emit('AdminReservation:CostsUpdated', response.body.data);
+                    this.$root.$emit('AdminReservation:CostsUpdated', response.data.data);
                     this.successMessage = success || 'Costs updated Successfully';
                     this.showSuccess = true;
                     // this.$refs.spinner.hide();
@@ -289,15 +283,15 @@
                 };
 
                 // get available costs intersect with current
-                this.availableCosts = _.filter(reservation.trip.data.costs.data, function (cost) {
+                this.availableCosts = _.filter(reservation.trip.data.costs.data, (cost) => {
                     return !_.findWhere(reservation.costs.data, {cost_id: cost.id, type: 'incremental' || 'optional'})
                 });
             }
         },
-        ready(){
+        mounted(){
             // this.$refs.spinner.show();
-            this.resource.get().then(function (response) {
-                this.setReservationData(response.body.data);
+            this.resource.get().then((response) => {
+                this.setReservationData(response.data.data);
                 // this.$refs.spinner.hide();
             });
 

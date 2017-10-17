@@ -1,7 +1,8 @@
 /*
- * Slim v4.6.4 - Image Cropping Made Easy
+ * Slim v4.14.3 - Image Cropping Made Easy
  * Copyright (c) 2017 Rik Schennink - http://slimimagecropper.com
  */
+/* eslint-disable */
 export default typeof window !== 'undefined' ? (function() {
 
 // custom event polyfill for IE10
@@ -2544,6 +2545,8 @@ if (!HTMLCanvasElement.prototype.toBlob) {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _arguments = arguments;
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2768,7 +2771,7 @@ var send = function send(url, data, requestDecorator, progress, success, err) {
 
 	// if request decorator defined pass XMLHttpRequest instance to decorator
 	if (requestDecorator) {
-		requestDecorator(xhr);
+		requestDecorator(xhr, data);
 	}
 
 	// handle state changes
@@ -2919,7 +2922,11 @@ var getFileNameWithoutExtension = function getFileNameWithoutExtension(path) {
 };
 
 var blobToFile = function blobToFile(blob, name) {
-	blob.lastModifiedDate = new Date();
+	if ('lastModified' in File.prototype) {
+		blob.lastModified = new Date();
+	} else {
+		blob.lastModifiedDate = new Date();
+	}
 	blob.name = name;
 	return blob;
 };
@@ -2934,28 +2941,32 @@ var resourceIsBase64Data = function resourceIsBase64Data(resource) {
 	);
 };
 
-var loadRemoteURL = function loadRemoteURL(fetcher, url, err, cb) {
+var loadRemoteURL = function loadRemoteURL(fetcher, fetchRequestDecorator, loadRequestDecorator, url, err, cb) {
+
+	fetcher = '' + fetcher + (fetcher.indexOf('?') !== -1 ? '&' : '?') + 'url=' + url;
 
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', fetcher + '?url=' + url, true);
+	xhr.open('GET', fetcher, true);
+	fetchRequestDecorator(xhr);
 	xhr.responseType = 'json';
-	xhr.onload = function (e) {
+	xhr.onload = function () {
 
 		if (this.response.status === 'failure') {
 			err(this.response.message);
 			return;
 		}
 
-		loadURL(this.response.body, cb);
+		loadURL(this.response.body, loadRequestDecorator, cb);
 	};
 
 	xhr.send();
 };
 
-var loadURL = function loadURL(url, cb) {
+var loadURL = function loadURL(url, requestDecorator, cb) {
 
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', url, true);
+	requestDecorator(xhr);
 	xhr.responseType = 'blob';
 	xhr.onload = function (e) {
 
@@ -2986,6 +2997,18 @@ var base64ToByteString = function base64ToByteString(dataURI) {
 
 	// to bytestring
 	return atob(dataPartCleaned);
+};
+
+var base64ToArrayBuffer = function base64ToArrayBuffer(dataURI) {
+
+	var byteString = base64ToByteString(dataURI);
+	var ab = new ArrayBuffer(byteString.length);
+	var ia = new Uint8Array(ab);
+
+	for (var i = 0; i < byteString.length; i++) {
+		ia[i] = byteString.charCodeAt(i);
+	}
+	return ab;
 };
 
 var base64ToBlob = function base64ToBlob(dataURI, filename) {
@@ -3020,6 +3043,33 @@ var createBlob = function createBlob(data, mimeType) {
 	return new Blob([data], {
 		type: mimeType
 	});
+};
+
+var arrayBufferConcat = function arrayBufferConcat(buffers) {
+	var length = 0;
+	var buffer = null;
+
+	for (var i in buffers) {
+		if (!_arguments.hasOwnProperty(i)) {
+			continue;
+		}
+		buffer = buffers[i];
+		length += buffer.byteLength;
+	}
+
+	var joined = new Uint8Array(length);
+	var offset = 0;
+
+	for (var _i in buffers) {
+		if (!_arguments.hasOwnProperty(_i)) {
+			continue;
+		}
+		buffer = buffers[_i];
+		joined.set(new Uint8Array(buffer), offset);
+		offset += buffer.byteLength;
+	}
+
+	return joined.buffer;
 };
 
 var getImageAsCanvas = function getImageAsCanvas(src, size, callback) {
@@ -3100,7 +3150,8 @@ var transformCanvas = function transformCanvas(canvas) {
 	var rotation = transforms.rotation,
 	    crop = transforms.crop,
 	    size = transforms.size,
-	    filters = transforms.filters;
+	    filters = transforms.filters,
+	    minSize = transforms.minSize;
 
 	// do crop transforms
 
@@ -3203,7 +3254,7 @@ var transformCanvas = function transformCanvas(canvas) {
 		var scalarY = size.height / result.height;
 		var scalar = Math.min(scalarX, scalarY);
 
-		scaleCanvas(result, scalar, size);
+		scaleCanvas(result, scalar, size, minSize);
 
 		// sharpen result
 		if (filters.sharpen > 0) {
@@ -3214,18 +3265,21 @@ var transformCanvas = function transformCanvas(canvas) {
 	cb(result);
 };
 
-function scaleCanvas(canvas, scalar, bounds) {
+function scaleCanvas(canvas, scalar, bounds, min) {
 
 	// if not scaling down, bail out
 	if (scalar >= 1) {
 		return;
 	}
 
-	var targetWidth = Math.min(bounds.width, Math.round(canvas.width * scalar));
-	var targetHeight = Math.min(bounds.height, Math.round(canvas.height * scalar));
 	var w = canvas.width;
 	var h = canvas.height;
-	var tmp = canvas;
+
+	// calculate min target width and height
+	var targetWidth = Math.max(min.width, Math.min(bounds.width, Math.round(canvas.width * scalar)));
+	var targetHeight = Math.max(min.height, Math.min(bounds.height, Math.round(canvas.height * scalar)));
+
+	var tmp = cloneCanvas(canvas);
 	var c = void 0;
 	var ctx = void 0;
 
@@ -3253,6 +3307,7 @@ function scaleCanvas(canvas, scalar, bounds) {
 
 	canvas.width = targetWidth;
 	canvas.height = targetHeight;
+
 	ctx = canvas.getContext('2d');
 	ctx.drawImage(tmp, 0, 0, targetWidth, targetHeight);
 }
@@ -3359,10 +3414,13 @@ var cloneCanvasScaled = function cloneCanvasScaled(original, scalar) {
 	duplicate.width = original.width;
 	duplicate.height = original.height;
 	ctx.drawImage(original, 0, 0);
-	if (scalar > 0 && scalar != 1) {
+	if (scalar > 0 && scalar !== 1) {
 		scaleCanvas(duplicate, scalar, {
 			width: Math.round(original.width * scalar),
 			height: Math.round(original.height * scalar)
+		}, {
+			width: 0,
+			height: 0
 		});
 	}
 
@@ -3462,7 +3520,10 @@ var cloneFile = function cloneFile(file) {
 	}
 	var dupe = file.slice(0, file.size, type || file.type);
 	dupe.name = file.name;
-	if (file.lastModifiedDate) {
+
+	if ('lastModified' in File.prototype && file.lastModified) {
+		dupe.lastModified = new Date(file.lastModified);
+	} else if (file.lastModifiedDate) {
 		dupe.lastModifiedDate = new Date(file.lastModifiedDate);
 	}
 	return dupe;
@@ -5231,7 +5292,7 @@ var FileHopper = function () {
   * @param options
   * @constructor
   */
-	var DragDropEvents = ['dragover', 'dragleave', 'drop'];
+	var DragDropEvents = ['dragenter', 'dragover', 'dragleave', 'drop'];
 
 	return function () {
 		function FileHopper() {
@@ -5324,6 +5385,7 @@ var FileHopper = function () {
 			value: function handleEvent(e) {
 
 				switch (e.type) {
+					case 'dragenter':
 					case 'dragover':
 						this._onDragOver(e);
 						break;
@@ -5596,6 +5658,11 @@ var Popover = function () {
 				}
 				this._element.appendChild(this._inner);
 			}
+		}, {
+			key: 'className',
+			set: function set(value) {
+				this._element.className = 'slim-popover' + (value === null ? '' : ' ' + value);
+			}
 		}]);
 
 		return Popover;
@@ -5795,6 +5862,24 @@ var Slim = function () {
 			}
 		}
 	}, {
+		key: 'setForceSize',
+		value: function setForceSize(dimensions, callback) {
+
+			if (typeof dimensions === 'string') {
+				dimensions = stringToSize(dimensions);
+			}
+
+			if (!dimensions || !dimensions.width || !dimensions.height) {
+				return;
+			}
+
+			this._options.size = clone(dimensions);
+			this._options.forceSize = clone(dimensions);
+			this._data.actions.size = clone(dimensions);
+
+			this.setRatio(this._options.forceSize.width + ':' + this._options.forceSize.height, callback);
+		}
+	}, {
 		key: 'setRatio',
 		value: function setRatio(ratio, callback) {
 			var _this11 = this;
@@ -5870,7 +5955,7 @@ var Slim = function () {
 				this._initialCrop = this._options.crop;
 			}
 
-			this._load(src, callback);
+			this._load(src, callback, { blockPush: options.blockPush });
 		}
 	}, {
 		key: 'upload',
@@ -6067,6 +6152,17 @@ var Slim = function () {
 				this._output.type = 'hidden';
 				this._output.name = this._input.name || this._options.defaultInputName;
 				this._element.appendChild(this._output);
+			} else {
+				var initialData = null;
+				try {
+					initialData = JSON.parse(this._output.value);
+				} catch (e) {}
+				if (initialData) {
+					var img = new Image();
+					img.src = initialData.output.image;
+					img.setAttribute('data-filename', initialData.output.name);
+					this._element.insertBefore(img, this._element.firstChild);
+				}
 			}
 
 			// prevent the original file input field from posting (value will be duplicated to output field)
@@ -6078,6 +6174,8 @@ var Slim = function () {
 			// test if contains initial image
 			var initialImage = this._getInitialImage();
 			var initialImageSrc = (initialImage || {}).src;
+			var initialImageName = initialImage ? initialImage.getAttribute('data-filename') : null;
+
 			if (initialImageSrc) {
 				this._hasInitialImage = true;
 			} else {
@@ -6171,7 +6269,7 @@ var Slim = function () {
 
 				this._load(initialImageSrc, function () {
 					_this12._onInit();
-				});
+				}, { name: initialImageName });
 			} else {
 				this._onInit();
 			}
@@ -6188,7 +6286,7 @@ var Slim = function () {
 			var done = function done() {
 				// we call this async so the constructor of Slim has returned before the onInit is called, allowing clean immidiate destroy
 				var timer = setTimeout(function () {
-					_this13._options.didInit.apply(_this13, [_this13.data]);
+					_this13._options.didInit.apply(_this13, [_this13.data, _this13]);
 				}, 0);
 				_this13._timers.push(timer);
 			};
@@ -6539,6 +6637,7 @@ var Slim = function () {
 
 			// no preview, so possible to drop file
 			if (list.contains('slim-file-hopper')) {
+				e.preventDefault();
 				this._openFileDialog();
 				return;
 			}
@@ -6743,6 +6842,7 @@ var Slim = function () {
    * Loads a resource (blocking operation)
    * @param resource
    * @param callback(err)
+   * @param options
    * @private
    */
 
@@ -6750,6 +6850,9 @@ var Slim = function () {
 		key: '_load',
 		value: function _load(resource, callback) {
 			var _this18 = this;
+
+			var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
 
 			// stop here
 			if (this._isBeingDestroyed) {
@@ -6764,7 +6867,7 @@ var Slim = function () {
 				this._doRemove(function () {
 
 					_this18._replaceTimeout = setTimeout(function () {
-						_this18._load(resource, callback);
+						_this18._load(resource, callback, options);
 					}, 100);
 				});
 
@@ -6818,40 +6921,52 @@ var Slim = function () {
 
 				if (resourceIsBase64Data(resource)) {
 					// resource is base64 data, turn into file
-					this._load(base64ToBlob(resource), callback);
+					this._load(base64ToBlob(resource), callback, options);
 				} else {
 
 					// will take a while, show loading indicator
 					load();
 
 					// resource is url, load with XHR
-					loadURL(resource, function (file) {
+					loadURL(resource, this._options.willLoad, function (file) {
 						// continue with file object
-						_this18._load(file, callback);
+						_this18._load(file, callback, options);
 					});
 				}
 
 				// don't continue, wait for load
 				return;
-			} else if (typeof resource.remote !== 'undefined' && this._options.fetcher) {
-
-				loadRemoteURL(this._options.fetcher, resource.remote, function (error) {
-
-					exit();
-
-					_this18._onRemoteURLProblem('<p>' + error + '</p>');
-
-					if (callback) {
-						callback.apply(_this18, ['remote-url-problem']);
-					}
-				}, function (file) {
-					// continue with file object
-					_this18._load(file, callback);
-				});
-
-				// don't continue wait for server fetch
-				return;
 			}
+
+			// is dropped link
+			else if (typeof resource.remote !== 'undefined') {
+
+					// test if happens to be base64 data
+					if (resourceIsBase64Data(resource.remote)) {
+						this._load(base64ToBlob(resource.remote), callback, options);
+						return;
+					}
+
+					if (this._options.fetcher) {
+
+						loadRemoteURL(this._options.fetcher, this._options.willFetch, this._options.willLoad, resource.remote, function (error) {
+
+							exit();
+
+							_this18._onRemoteURLProblem('<p>' + error + '</p>');
+
+							if (callback) {
+								callback.apply(_this18, ['remote-url-problem']);
+							}
+						}, function (file) {
+							// continue with file object
+							_this18._load(file, callback, options);
+						});
+					}
+
+					// don't continue wait for server fetch
+					return;
+				}
 
 			// let's continue with file resource
 			var file = resource;
@@ -6887,7 +7002,7 @@ var Slim = function () {
 			}
 
 			// continue
-			this._data.input.name = getFileNameByFile(file);
+			this._data.input.name = options && options.name ? options.name : getFileNameByFile(file);
 			this._data.input.type = getFileTypeByFile(file);
 			this._data.input.size = file.size;
 			this._data.input.file = file;
@@ -6935,7 +7050,7 @@ var Slim = function () {
 					return;
 				}
 
-				var status = _this18._options.didLoad.apply(_this18, [file, image, meta]);
+				var status = _this18._options.didLoad.apply(_this18, [file, image, meta, _this18]);
 				if (status !== true) {
 
 					rewind();
@@ -7039,13 +7154,23 @@ var Slim = function () {
 					}
 
 					_this18._removeState('busy');
+				},
+
+				// options for canvas load
+				{
+					blockPush: options.blockPush
 				});
 			});
 		}
 	}, {
 		key: '_loadCanvas',
-		value: function _loadCanvas(image, ready, complete) {
+		value: function _loadCanvas(image, ready, complete, options) {
 			var _this19 = this;
+
+			// set default options object if not supplied
+			if (!options) {
+				options = {};
+			}
 
 			// halt here if cropper is currently being destroyed
 			if (this._isBeingDestroyed) {
@@ -7107,7 +7232,7 @@ var Slim = function () {
 				var willUpload = false;
 
 				// can only do auto upload when service is defined and push is enabled...
-				if (_this19._options.service && _this19._options.push) {
+				if (_this19._options.service && _this19._options.push && !options.blockPush) {
 
 					// ...and is not transformation of initial image
 					// + is not instant edit mode
@@ -7164,6 +7289,16 @@ var Slim = function () {
 				sharpen: this._options.filterSharpen / 100
 			};
 
+			// if should force minimum size on output image
+			if (this._options.forceMinSize) {
+				actions.minSize = this._options.minSize;
+			} else {
+				actions.minSize = {
+					width: 0,
+					height: 0
+				};
+			}
+
 			transformCanvas(image, actions, function (transformedImage) {
 
 				var outputImage = transformedImage;
@@ -7179,6 +7314,18 @@ var Slim = function () {
 					ctx.drawImage(transformedImage, 0, 0, _this20._options.size.width, _this20._options.size.height);
 				}
 
+				// make sure min size is respected when size is equal to min size
+				if (_this20._options.forceMinSize && _this20._options.size && _this20._options.minSize.width === _this20._options.size.width && _this20._options.minSize.height === _this20._options.size.height && (outputImage.width < _this20._options.minSize.width || outputImage.height < _this20._options.minSize.height)) {
+
+					var w = Math.max(outputImage.width, _this20._options.minSize.width);
+					var h = Math.max(outputImage.height, _this20._options.minSize.height);
+					outputImage = create('canvas');
+					outputImage.width = w;
+					outputImage.height = h;
+					var _ctx = outputImage.getContext('2d');
+					_ctx.drawImage(transformedImage, 0, 0, w, h);
+				}
+
 				// store output
 				_this20._data.output.width = outputImage.width;
 				_this20._data.output.height = outputImage.height;
@@ -7188,7 +7335,7 @@ var Slim = function () {
 
 					_this20._data = transformedData;
 
-					_this20._options.didTransform.apply(_this20, [_this20.data]);
+					_this20._options.didTransform.apply(_this20, [_this20.data, _this20]);
 
 					ready(_this20._data.output.image);
 				});
@@ -7198,7 +7345,7 @@ var Slim = function () {
 		key: '_onTransformCanvas',
 		value: function _onTransformCanvas(ready) {
 
-			this._options.willTransform.apply(this, [this.data, ready]);
+			this._options.willTransform.apply(this, [this.data, ready, this]);
 		}
 
 		/**
@@ -7262,7 +7409,7 @@ var Slim = function () {
 
 			this._removeState('editor');
 
-			this._options.didCancel.apply(this);
+			this._options.didCancel.apply(this, [this]);
 
 			this._showButtons();
 
@@ -7310,7 +7457,7 @@ var Slim = function () {
 			this._applyTransforms(this._data.input.image, function (transformedImage) {
 
 				// user confirmed the crop (and changes have been applied to data)
-				_this22._options.didConfirm.apply(_this22, [_this22.data]);
+				_this22._options.didConfirm.apply(_this22, [_this22.data, _this22]);
 
 				// set new image result
 				var images = _this22._getInOut();
@@ -7491,8 +7638,8 @@ var Slim = function () {
 
 					_this24._store(data);
 
-					_this24._options.didSave.apply(_this24, [data]);
-				}]);
+					_this24._options.didSave.apply(_this24, [data, _this24]);
+				}, this]);
 			}
 
 			if (this._isBeingDestroyed) {
@@ -7524,14 +7671,14 @@ var Slim = function () {
 						}
 
 						// we did upload data
-						_this24._options.didUpload.apply(_this24, [err, data, res]);
+						_this24._options.didUpload.apply(_this24, [err, data, res, _this24]);
 
 						_this24._removeState('upload');
 
 						// done!
 						callback(err, data, res);
 					});
-				}]);
+				}, this]);
 			}
 
 			// if no service, we're done here
@@ -7578,99 +7725,150 @@ var Slim = function () {
 		value: function _upload(data, callback) {
 			var _this25 = this;
 
-			var formData = new FormData();
+			this.requestOutput(function (fileData, formData) {
 
-			// if image data is defined, turn it into a file object (we can send files if we're uploading)
-			if (this._data.output.image !== null && this._options.uploadBase64 === false) {
-				var output = base64ToBlob(data.output.image, data.output.name);
-				var field = 'slim_output_' + this._uid;
-				data.output.image = null;
-				data.output.field = field;
-				formData.append(field, output, data.output.name);
-			}
+				var statusNode = _this25._element.querySelector('.slim-upload-status');
 
-			// output dataset
-			formData.append(this._output.name, JSON.stringify(data));
+				var requestDecorator = _this25._options.willRequest;
 
-			// if input should be posted along, append data
-			// to FormData object as file
-			if (inArray('input', this._options.post)) {
-				formData.append(this._inputReference, this._data.input.file, this._data.input.file.name);
-			}
+				// callback methods
+				var onProgress = function onProgress(loaded, total) {
+					_this25._updateProgress(Math.max(.1, loaded / total));
+				};
 
-			var statusNode = this._element.querySelector('.slim-upload-status');
-
-			var requestDecorator = this._options.willRequest;
-
-			send(
-			// url to service
-			this._options.service,
-
-			// data
-			formData,
-
-			// decorator (useful to add headers to request
-			requestDecorator,
-
-			// progress
-			function (loaded, total) {
-
-				_this25._updateProgress(Math.max(.1, loaded / total));
-			},
-
-			// success
-			function (obj) {
-
-				var timer = setTimeout(function () {
-
-					// it's possible that Slim has been destroyed in the mean time.
-					if (_this25._isBeingDestroyed) {
-						return;
-					}
-
-					statusNode.innerHTML = _this25._options.statusUploadSuccess;
-					statusNode.setAttribute('data-state', 'success');
-					statusNode.style.opacity = 1;
-
-					// hide status update after 2 seconds
+				var onSuccess = function onSuccess(obj) {
 					var timer = setTimeout(function () {
-						statusNode.style.opacity = 0;
-					}, 2000);
+
+						// it's possible that Slim has been destroyed in the mean time.
+						if (_this25._isBeingDestroyed) {
+							return;
+						}
+
+						statusNode.innerHTML = _this25._options.statusUploadSuccess;
+						statusNode.setAttribute('data-state', 'success');
+						statusNode.style.opacity = 1;
+
+						// hide status update after 2 seconds
+						var timer = setTimeout(function () {
+							statusNode.style.opacity = 0;
+						}, 2000);
+
+						_this25._timers.push(timer);
+					}, 250);
 
 					_this25._timers.push(timer);
-				}, 250);
 
-				_this25._timers.push(timer);
+					callback(null, obj);
+				};
 
-				callback(null, obj);
-			},
+				var onError = function onError(status) {
 
-			// error
-			function (status) {
+					var html = '';
+					if (status === 'file-too-big') {
+						html = _this25._options.statusContentLength;
+					} else {
+						html = _this25._options.didReceiveServerError.apply(_this25, [status, _this25._options.statusUnknownResponse, _this25]);
+					}
 
-				var html = '';
-				if (status === 'file-too-big') {
-					html = _this25._options.statusContentLength;
-				} else {
-					html = _this25._options.didReceiveServerError.apply(_this25, [status, _this25._options.statusUnknownResponse]);
+					// when an error occurs the status update is not automatically hidden
+					var timer = setTimeout(function () {
+
+						statusNode.innerHTML = html;
+						statusNode.setAttribute('data-state', 'error');
+						statusNode.style.opacity = 1;
+					}, 250);
+
+					_this25._timers.push(timer);
+
+					callback(status);
+				};
+
+				// use default send method or custom implementation
+				if (typeof _this25._options.service === 'string') {
+					send(_this25._options.service, formData, requestDecorator, onProgress, onSuccess, onError);
+				} else if (typeof _this25._options.service === 'function') {
+					_this25._options.service.apply(_this25, [_this25._options.serviceFormat === 'file' ? fileData : formData, onProgress, // function(loaded, total) {}   // loaded bytes (number), total bytes (number)
+					onSuccess, // function(response) {} 		// response (object or string)
+					onError // function(error) {} 			// error message (string)
+					]);
+				}
+			}, data);
+		}
+	}, {
+		key: 'requestOutput',
+		value: function requestOutput(cb, data) {
+			var _this26 = this;
+
+			if (!this._data.input.file) {
+				cb(null, null);
+				return;
+			}
+
+			if (!data) {
+				data = this.dataBase64;
+			}
+
+			// copy the meta data of the original file to the output
+			loadImage.parseMetaData(this._data.input.file,
+
+			// receives image data from input file
+			function (imageData) {
+
+				var fileData = [];
+				var formData = new FormData();
+
+				// if input should be posted along, append data
+				// to FormData object as file
+				if (inArray('input', _this26._options.post)) {
+
+					// add to data array
+					fileData.push(_this26._data.input.file);
+
+					// add to formdata
+					formData.append(_this26._inputReference, _this26._data.input.file, _this26._data.input.file.name);
 				}
 
-				// when an error occurs the status update is not automatically hidden
-				var timer = setTimeout(function () {
+				// if image data is defined, turn it into a file object (we can send files if we're uploading)
+				if (inArray('output', _this26._options.post) && _this26._data.output.image !== null && _this26._options.uploadBase64 === false) {
 
-					statusNode.innerHTML = html;
-					statusNode.setAttribute('data-state', 'error');
-					statusNode.style.opacity = 1;
-				}, 250);
+					var output = base64ToBlob(data.output.image, data.output.name);
 
-				_this25._timers.push(timer);
+					// if image head available, inject in output
+					if (imageData.imageHead && _this26._options.copyImageHead) {
 
-				callback(status);
+						try {
+
+							output = new Blob([imageData.imageHead, loadImage.blobSlice.call(output, 20)], { type: getMimeTypeFromDataURI(data.output.image) });
+
+							output = blobToFile(output, data.output.name);
+						} catch (e) {}
+					}
+
+					// add to data array
+					fileData.push(output);
+
+					// add to formdata
+					var field = 'slim_output_' + _this26._uid;
+					data.output.image = null; // clear base64 data
+					data.output.field = field;
+					formData.append(field, output, data.output.name);
+				}
+
+				// output dataset
+				formData.append(_this26._output.name, JSON.stringify(data));
+
+				// done
+				cb(fileData, formData);
+			}, {
+				maxMetaDataSize: 262144,
+				disableImageHead: false
 			});
 		}
 	}, {
 		key: '_showEditor',
 		value: function _showEditor() {
+
+			SlimPopover.className = this._options.popoverClassName;
 
 			SlimPopover.show();
 
@@ -7799,7 +7997,7 @@ var Slim = function () {
 	}, {
 		key: '_hideButtons',
 		value: function _hideButtons(callback) {
-			var _this26 = this;
+			var _this27 = this;
 
 			if (!this._btnGroup) {
 				return;
@@ -7811,7 +8009,7 @@ var Slim = function () {
 				fromOpacity: 1,
 				opacity: 0,
 				allDone: function allDone() {
-					_this26._btnGroup.style.display = 'none';
+					_this27._btnGroup.style.display = 'none';
 					if (callback) {
 						callback();
 					}
@@ -7840,7 +8038,7 @@ var Slim = function () {
 	}, {
 		key: '_doEdit',
 		value: function _doEdit() {
-			var _this27 = this;
+			var _this28 = this;
 
 			// if no input data available, can't edit anything
 			if (!this._data.input.image) {
@@ -7879,17 +8077,17 @@ var Slim = function () {
 			// handle editor load
 			function () {
 
-				_this27._showEditor();
+				_this28._showEditor();
 
-				_this27._hideButtons();
+				_this28._hideButtons();
 
-				_this27._hideStatus();
+				_this28._hideStatus();
 			});
 		}
 	}, {
 		key: '_doRemove',
 		value: function _doRemove(done) {
-			var _this28 = this;
+			var _this29 = this;
 
 			// cannot remove when is only one image
 			if (this._isImageOnly()) {
@@ -7921,20 +8119,20 @@ var Slim = function () {
 
 			var timer = setTimeout(function () {
 
-				if (_this28._isBeingDestroyed) {
+				if (_this29._isBeingDestroyed) {
 					return;
 				}
 
-				_this28._hideButtons(function () {
+				_this29._hideButtons(function () {
 
-					_this28._toggleButton('upload', true);
+					_this29._toggleButton('upload', true);
 				});
 
-				_this28._hideStatus();
+				_this29._hideStatus();
 
-				_this28._hideResult();
+				_this29._hideResult();
 
-				_this28._options.didRemove.apply(_this28, [data]);
+				_this29._options.didRemove.apply(_this29, [data, _this29]);
 
 				if (done) {
 					done();
@@ -7948,7 +8146,7 @@ var Slim = function () {
 	}, {
 		key: '_doUpload',
 		value: function _doUpload(callback) {
-			var _this29 = this;
+			var _this30 = this;
 
 			// if no input data available, can't upload anything
 			if (!this._data.input.image) {
@@ -7961,22 +8159,22 @@ var Slim = function () {
 			this._hideButtons(function () {
 
 				// block upload button
-				_this29._toggleButton('upload', false);
+				_this30._toggleButton('upload', false);
 
-				_this29._save(function (err, data, res) {
+				_this30._save(function (err, data, res) {
 
-					_this29._removeState('upload');
-					_this29._stopProgress();
+					_this30._removeState('upload');
+					_this30._stopProgress();
 
 					if (callback) {
-						callback.apply(_this29, [err, data, res]);
+						callback.apply(_this30, [err, data, res]);
 					}
 
 					if (err) {
-						_this29._toggleButton('upload', true);
+						_this30._toggleButton('upload', true);
 					}
 
-					_this29._showButtons();
+					_this30._showButtons();
 				});
 			});
 		}
@@ -7994,7 +8192,7 @@ var Slim = function () {
 	}, {
 		key: '_doDestroy',
 		value: function _doDestroy() {
-			var _this30 = this;
+			var _this31 = this;
 
 			// set destroy flag to halt any running functionality
 			this._isBeingDestroyed = true;
@@ -8011,7 +8209,7 @@ var Slim = function () {
 			// this removes the image hopper if it's attached
 			if (this._imageHopper) {
 				HopperEvents.forEach(function (e) {
-					_this30._imageHopper.element.removeEventListener(e, _this30);
+					_this31._imageHopper.element.removeEventListener(e, _this31);
 				});
 				this._imageHopper.destroy();
 				this._imageHopper = null;
@@ -8020,7 +8218,7 @@ var Slim = function () {
 			// this block removes the image editor
 			if (this._imageEditor) {
 				ImageEditorEvents.forEach(function (e) {
-					_this30._imageEditor.element.removeEventListener(e, _this30);
+					_this31._imageEditor.element.removeEventListener(e, _this31);
 				});
 				this._imageEditor.destroy();
 				this._imageEditor = null;
@@ -8028,7 +8226,7 @@ var Slim = function () {
 
 			// remove button event listeners
 			nodeListToArray(this._btnGroup.children).forEach(function (btn) {
-				btn.removeEventListener('click', _this30);
+				btn.removeEventListener('click', _this31);
 			});
 
 			// stop listening to input
@@ -8053,12 +8251,12 @@ var Slim = function () {
 			attributes.forEach(function (attribute) {
 
 				// if attribute  is contained in original element attribute list and is the same, don't remove
-				if (matchesAttributeInList(attribute, _this30._originalElementAttributes)) {
+				if (matchesAttributeInList(attribute, _this31._originalElementAttributes)) {
 					return;
 				}
 
 				// else remove
-				_this30._originalElement.removeAttribute(attribute.name);
+				_this31._originalElement.removeAttribute(attribute.name);
 			});
 
 			this._originalElementAttributes.forEach(function (attribute) {
@@ -8069,7 +8267,7 @@ var Slim = function () {
 				}
 
 				// add attribute
-				_this30._originalElement.setAttribute(attribute.name, attribute.value);
+				_this31._originalElement.setAttribute(attribute.name, attribute.value);
 			});
 
 			// now destroyed this counter so the total Slim count can be lowered
@@ -8125,6 +8323,11 @@ var Slim = function () {
 			this.setRotation(rotation, null);
 		}
 	}, {
+		key: 'forceSize',
+		set: function set(dimensions) {
+			this.setForceSize(dimensions, null);
+		}
+	}, {
 		key: 'ratio',
 		set: function set(ratio) {
 			this.setRatio(ratio, null);
@@ -8164,6 +8367,7 @@ var Slim = function () {
 
 				// call this service to submit cropped data
 				service: null,
+				serviceFormat: null,
 
 				// sharpen filter value, really low values might improve image output
 				filterSharpen: 0,
@@ -8176,8 +8380,8 @@ var Slim = function () {
 
 				// minimum size of cropped area object with width and height property
 				minSize: {
-					width: 100,
-					height: 100
+					width: 0,
+					height: 0
 				},
 
 				// maximum file size in MB to upload
@@ -8198,6 +8402,8 @@ var Slim = function () {
 				// the forced output size of the image
 				forceSize: null,
 
+				forceMinSize: true,
+
 				// disable drop to replace
 				dropReplace: true,
 
@@ -8210,8 +8416,14 @@ var Slim = function () {
 					height: 4096
 				},
 
+				// copies the input image meta data to the output image
+				copyImageHead: false,
+
 				// enable or disable rotation
 				rotateButton: true,
+
+				// popover classname
+				popoverClassName: null,
 
 				// label HTML to show inside drop area
 				label: '<p>Drop your image here</p>',
@@ -8250,7 +8462,9 @@ var Slim = function () {
 				willRemove: function willRemove(data, cb) {
 					cb();
 				},
-				willRequest: function willRequest(xhr) {}
+				willRequest: function willRequest(xhr, data) {},
+				willFetch: function willFetch(xhr) {},
+				willLoad: function willLoad(xhr) {}
 
 			};
 
@@ -8384,11 +8598,25 @@ var Slim = function () {
 		// the forced output size of the image
 		'forceSize': defaultSize,
 
+		'forceMinSize': defaultTrue,
+
 		// the internal data canvas size
 		'internalCanvasSize': defaultSize,
 
 		// url to post to
 		'service': function service(v) {
+			if (typeof v === 'undefined') {
+				return null;
+			}
+			var fn = toFunctionReference(v);
+			if (fn) {
+				return fn;
+			}
+			return v;
+		},
+
+		// format of service data
+		'serviceFormat': function serviceFormat(v) {
 			return typeof v === 'undefined' ? null : v;
 		},
 
@@ -8450,12 +8678,18 @@ var Slim = function () {
 		// bool determining if initial image should be saved
 		'saveInitialImage': defaultFalse,
 
+		// copies input image head to output image
+		'copyImageHead': defaultFalse,
+
 		// rotate button
 		'rotateButton': defaultTrue,
 
 		// default labels
 		'label': defaultLabel,
-		'labelLoading': defaultLabel
+		'labelLoading': defaultLabel,
+
+		// class name to put on popover element
+		'popoverClassName': passThrough
 
 	};
 
@@ -8475,7 +8709,7 @@ var Slim = function () {
 	});
 
 	// the will callbacks
-	['Transform', 'Save', 'Remove', 'Request'].forEach(function (cb) {
+	['Transform', 'Save', 'Remove', 'Request', 'Load', 'Fetch'].forEach(function (cb) {
 		defaults['will' + cb] = defaultFunction;
 	});
 
@@ -8500,6 +8734,9 @@ var Slim = function () {
 
 		// no file reader support
 		typeof window.FileReader === 'undefined' ||
+
+		// no blob slicing (can't dupe files)
+		!('slice' in Blob.prototype) ||
 
 		// no .createObjectURL support, used by download method but also convenient to exclude Android 4.3 and lower
 		// Android 4.3 and lower don't support XHR2 responseType blob

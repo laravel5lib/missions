@@ -36,8 +36,7 @@ class Story extends Model
 
     public function publish(array $publications)
     {
-        foreach($publications as $publication)
-        {
+        foreach ($publications as $publication) {
             $this->createPublication($publication['type'], $publication['id']);
         }
 

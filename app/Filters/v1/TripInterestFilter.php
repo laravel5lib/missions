@@ -22,7 +22,7 @@ class TripInterestFilter extends Filter
      *
      * @var array
      */
-    public $searchable = ['name', 'email', 'phone', 'communication_preferences'];
+    public $searchable = ['name', 'email'];
 
     /**
      * Find by trip id.
@@ -32,7 +32,9 @@ class TripInterestFilter extends Filter
      */
     public function trip($id)
     {
-        if(! $id) return $this;
+        if (! $id) {
+            return $this;
+        }
 
         return $this->where('trip_id', $id);
     }
@@ -45,7 +47,9 @@ class TripInterestFilter extends Filter
      */
     public function status($status)
     {
-        if(! $status) return $this;
+        if (! $status) {
+            return $this;
+        }
 
         return $this->where('status', $status);
     }
@@ -58,9 +62,11 @@ class TripInterestFilter extends Filter
      */
     public function tripType($type)
     {
-        if(! $type) return $this;
+        if (! $type) {
+            return $this;
+        }
 
-        return $this->whereHas('trip', function($trip) use($type) {
+        return $this->whereHas('trip', function ($trip) use ($type) {
             $trip->where('type', $type);
         });
     }
@@ -73,9 +79,11 @@ class TripInterestFilter extends Filter
      */
     public function group($id)
     {
-        if(! $id) return $this;
+        if (! $id) {
+            return $this;
+        }
 
-        return $this->whereHas('trip', function($trip) use($id) {
+        return $this->whereHas('trip', function ($trip) use ($id) {
             return $trip->where('group_id', $id);
         });
     }
@@ -88,9 +96,11 @@ class TripInterestFilter extends Filter
      */
     public function campaign($id)
     {
-        if(! $id) return $this;
+        if (! $id) {
+            return $this;
+        }
 
-        return $this->whereHas('trip', function($trip) use($id) {
+        return $this->whereHas('trip', function ($trip) use ($id) {
             return $trip->where('campaign_id', $id);
         });
     }

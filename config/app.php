@@ -4,6 +4,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Name
+    |--------------------------------------------------------------------------
+    |
+    | This value is the name of your application. This value is used when the
+    | framework needs to place the application's name in a notification or
+    | any other location as required by the application or its packages.
+    */
+
+    'name' => 'Missions.Me',
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |
@@ -140,43 +152,49 @@ return [
         Illuminate\Foundation\Providers\FoundationServiceProvider::class,
         Illuminate\Hashing\HashServiceProvider::class,
         Illuminate\Mail\MailServiceProvider::class,
+        Illuminate\Notifications\NotificationServiceProvider::class,
         Illuminate\Pagination\PaginationServiceProvider::class,
         Illuminate\Pipeline\PipelineServiceProvider::class,
         Illuminate\Queue\QueueServiceProvider::class,
         Illuminate\Redis\RedisServiceProvider::class,
         Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
         Illuminate\Session\SessionServiceProvider::class,
+        Laravel\Tinker\TinkerServiceProvider::class,
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
 
         /*
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,
+        // App\Providers\BroadcastServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\PromocodesServiceProvider::class,
         App\Providers\BackendServiceProvider::class,
         App\Providers\AccountingServiceProvider::class,
+        App\Providers\ComposerServiceProvider::class,
 
         /*
          * Third Party Providers...
          */
         Dingo\Api\Provider\LaravelServiceProvider::class,
-        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         EloquentFilter\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Cartalyst\Stripe\Laravel\StripeServiceProvider::class,
         Conner\Tagging\Providers\TaggingServiceProvider::class,
-        Silber\Bouncer\BouncerServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
-        Haleks\Markdown\MarkdownServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
-        FactoryStories\Providers\StoryFactoryServiceProvider::class,
-
+        FactoryStories\Providers\ServiceProvider::class,
+        GrahamCampbell\Markdown\MarkdownServiceProvider::class,
+        Laracademy\Commands\MakeServiceProvider::class,
+        Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
+        Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class
     ],
 
     /*
@@ -196,6 +214,8 @@ return [
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
         'Blade' => Illuminate\Support\Facades\Blade::class,
+        'Broadcast' => Illuminate\Support\Facades\Broadcast::class,
+        'Bus' => Illuminate\Support\Facades\Bus::class,
         'Cache' => Illuminate\Support\Facades\Cache::class,
         'Config' => Illuminate\Support\Facades\Config::class,
         'Cookie' => Illuminate\Support\Facades\Cookie::class,
@@ -209,6 +229,7 @@ return [
         'Lang' => Illuminate\Support\Facades\Lang::class,
         'Log' => Illuminate\Support\Facades\Log::class,
         'Mail' => Illuminate\Support\Facades\Mail::class,
+        'Notification' => Illuminate\Support\Facades\Notification::class,
         'Password' => Illuminate\Support\Facades\Password::class,
         'Queue' => Illuminate\Support\Facades\Queue::class,
         'Redirect' => Illuminate\Support\Facades\Redirect::class,
@@ -224,12 +245,14 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Stripe' => Cartalyst\Stripe\Laravel\Facades\Stripe::class,
-        'Bouncer' => Silber\Bouncer\BouncerFacade::class,
-        'Markdown' => Haleks\Markdown\Facades\Markdown::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
         'Promocodes' => App\Facades\Promocodes::class,
-
+        'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
+        'SEOMeta'   => Artesaos\SEOTools\Facades\SEOMeta::class,
+        'OpenGraph' => Artesaos\SEOTools\Facades\OpenGraph::class,
+        'Twitter'   => Artesaos\SEOTools\Facades\TwitterCard::class,
+        'SEO' => Artesaos\SEOTools\Facades\SEOTools::class
     ],
 
 ];

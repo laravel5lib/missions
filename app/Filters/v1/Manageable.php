@@ -4,7 +4,8 @@ namespace App\Filters\v1;
 
 use App\Models\v1\User;
 
-trait Manageable {
+trait Manageable
+{
 
     /**
      * By the managing/facilitating user.
@@ -16,13 +17,11 @@ trait Manageable {
     {
         $user = User::findOrFail($user_id);
 
-        $facilitated_users = $user->facilitating->flatMap(function ($trip)
-        {
+        $facilitated_users = $user->facilitating->flatMap(function ($trip) {
             return $trip->reservations->pluck('user_id');
         });
 
-        $managed_users = $user->managing->flatMap(function ($group)
-        {
+        $managed_users = $user->managing->flatMap(function ($group) {
             return $group->trips->flatMap(function ($trip) {
                 return $trip->reservations->pluck('user_id');
             });
@@ -30,7 +29,7 @@ trait Manageable {
 
         $users = $facilitated_users->merge($managed_users)->unique()->all();
 
-        if ( key_exists('user', $this->input)) {
+        if (key_exists('user', $this->input)) {
             $users = array_prepend($users, $this->input['user']);
         }
 

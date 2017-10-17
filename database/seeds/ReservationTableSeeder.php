@@ -11,8 +11,7 @@ class ReservationTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\v1\Reservation::class, config('seeders.reservations'))->create()->each(function($r)
-        {
+        factory(App\Models\v1\Reservation::class, config('seeders.reservations'))->create()->each(function ($r) {
 
             $r->companions()->save(factory(App\Models\v1\Companion::class)->make());
 
@@ -31,20 +30,17 @@ class ReservationTableSeeder extends Seeder
     {
         $active = $res->trip->activeCosts()->get();
 
-        $maxDate = $active->where('type', 'incremental')->max('active_at');
+        $maxDate = $active->whereStrict('type', 'incremental')->max('active_at');
 
-        $incrementalCosts = $active->filter(function ($value) use ($maxDate)
-        {
+        $incrementalCosts = $active->filter(function ($value) use ($maxDate) {
             return $value->type == 'incremental' && $value->active_at == $maxDate;
         });
 
-        $staticCosts = $active->filter(function ($value)
-        {
+        $staticCosts = $active->filter(function ($value) {
             return $value->type == 'static';
         });
 
-        $optionalCosts = $active->filter(function ($value)
-        {
+        $optionalCosts = $active->filter(function ($value) {
             return $value->type == 'optional';
         })->random(1);
 
@@ -100,5 +96,4 @@ class ReservationTableSeeder extends Seeder
             'ended_at' => $res->trip->started_at
         ]);
     }
-
 }

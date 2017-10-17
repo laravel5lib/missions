@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
     <div class="panel panel-default">
         <div class="panel-heading">
             <h5>Payments Due</h5>
@@ -8,7 +8,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <label>Balance Due</label>
-                        <p>{{ due.balance | currency }}</p>
+                        <p>{{ currency(due.balance) }}</p>
                         <hr class="divider inv hidden-lg">
                     </div>
                     <div class="col-md-6">
@@ -17,9 +17,9 @@
                         <hr class="divider inv hidden-lg">
                     </div>
                     <div class="col-md-3">
-                        <label>{{ due.due_at | moment 'll' }}</label>
+                        <label>{{ due.due_at | moment('ll') }}</label>
                         <p>
-                            <span class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending' }">{{due.status|capitalize}}</span>
+                            <span class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending' }">{{ due.status|capitalize }}</span>
                         </p>
                         <hr class="divider inv hidden-lg">
                     </div>
@@ -76,24 +76,24 @@
 
             }
         },
-        ready(){
-            /*this.resource.get().then(function (response) {
-             this.setProjectData(response.body.data)
+        mounted(){
+            /*this.resource.get().then((response) => {
+             this.setProjectData(response.data.data)
              });*/
 
-            this.resource.get().then(function (response) {
-                this.setProjectData(response.body.data)
+            this.resource.get().then((response) => {
+                this.setProjectData(response.data.data)
                 // this.$refs.spinner.hide();
             });
 
             //Listen to Event Bus
             // this.$root.$on('Project:CostsUpdated', function (data) {
             //     this.setProjectData(data)
-            // }.bind(this));
+            // });
 
             // this.$root.$on('Project:CostsReverted', function (data) {
             //     this.setProjectData(data)
-            // }.bind(this));
+            // });
 
         }
     }

@@ -6,40 +6,24 @@
 			<span class="icon-bar"></span>
 			<span style="color:#f6323e;font-size:7px;text-align:center;text-transform:uppercase;line-height:0em;margin-top:7px;display:block;">Menu</span>
 		</button>
-		<aside :show.sync="showRight" placement="right" :width="275">
-		<div slot="header" class="text-center">
+		<mm-aside :show="showRight" @open="showRight=true" @close="showRight=false" placement="right" :width="275">
+			<div slot="header" class="text-center">
 		    <img class="img-xs" style="margin-right:-20px;opacity:.4;margin-top:4px;margin-bottom:4px;" src="/images/mm-icon-lightgray.png" alt="Missions.Me">
 		</div>
 			<ul class="nav navmenu-nav">
-				<li class="donate-nav"><a class="navDonate" href="/fundraisers"><i class="fa fa-heart"></i> Donate To A Cause</a>
-				</li>
-				</li>
 				<li class="navlabel">Account</li>
-				<li v-if="auth" id="userMenu" slot="button" class="dropdown-toggle text-center" data-toggle="dropdown">
-					<a href="#">
-						<img class="img-xs img-circle av-left text-capitalize" :src="avatar" :alt="name"> {{ name }} <i class="fa fa-angle-down"></i>
-						</a>
-				</li>
-				<ul class="dropdown-menu offcanvas-dropdown">
-					<template v-if="auth" aria-labelledby="userMenu">
-						<li class=""><a :href="url" id="menu-profile-link">My Profile</a></li>
-						<li class=""><a href="/dashboard">Dashboard</a></li>
-						<li v-if="admin" class=""><a href="/admin">Admin</a></li>
-						<li class=""><a href="/logout">Sign Out</a></li>
-					</template>
-				</ul>
 				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding:10px 40px;" href="/login">Login</a></li>
-				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding: 10px 34px;border-left: 1px solid #242424;" href="/login">Sign Up</a></li>
+				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding: 10px 34px;border-left: 1px solid #242424;" href="/register">Sign Up</a></li>
 
-				<template v-if="isDashboard()">
-					<li class="navlabel">User</li>
+				<template v-if="auth">
+					<li class=""><a href="/dashboard/settings" id="menu-profile-link"><i class="fa fa-user-circle" style="margin-right:7px;"></i>My Account</a></li>
 					<li><a href="/dashboard"><i class="fa fa-tachometer" style="margin-right:7px;"></i> Dashboard</a></li>
-					<li><a href="/dashboard/settings"><i class="fa fa-cog" style="margin-left:1px;margin-right:8px;"></i> Settings</a></li>
 					<li><a href="/dashboard/reservations"><i class="fa fa-ticket" style="margin-right:7px;"></i> Reservations</a></li>
 					<li><a href="/dashboard/records"><i class="fa fa-archive" style="margin-right:7px;"></i> Records</a></li>
-					<li v-if="managing"><a href="/dashboard/groups"><i class="fa fa-users" style="margin-right:7px;"></i> Groups</a></li>
+					<li v-if="normalizedManaging"><a href="/dashboard/groups"><i class="fa fa-users" style="margin-right:7px;"></i> Groups</a></li>
 					<li><a href="/dashboard/projects"><i class="fa fa-tint" style="margin-left:3px;margin-right:10px;"></i> Projects</a></li>
-
+					<li v-if="admin" class=""><a href="/admin"><i class="fa fa-cogs" style="margin-right:7px;"></i> Admin</a></li>
+					<li class=""><a @click="logout"><i class="fa fa-sign-out"></i> Log Out</a></li>
 				</template>
 
 				<template v-if="isAdmin()">
@@ -63,9 +47,9 @@
 
 				<!-- 1N1D-->
 				<li class="navlabel">1Nation1Day</li>
-				<li><a target="_blank" href="http://1nation1day.com/">2017 Nicaragua</a></li>
-				<li><a target="_blank" href="http://1nation1day.com/dominican">2015 Dominican</a></li>
-				<li><a target="_blank" href="http://1nation1day.com/honduras">2013 Honduras</a></li>
+				<li><a href="http://1nation1day.com/">2017 Nicaragua</a></li>
+				<li><a href="http://1nation1day.com/dominican">2015 Dominican</a></li>
+				<li><a href="http://1nation1day.com/honduras">2013 Honduras</a></li>
 
 				<!-- Causes -->
 				<li class="navlabel">Causes</li>
@@ -85,7 +69,7 @@
 				<li><a href="/support">Give To Missions.Me</a></li>
 				<li><a href="/contact">Contact Us</a></li>
 			</ul>
-		</aside>
+		</mm-aside>
 	</li>
 </template>
 <script type="text/javascript">
@@ -93,12 +77,10 @@
 		name: 'top-nav',
 		props: {
 			'managing': {
-				type: Boolean,
-				default: false,
-				coerce: function (val) {
-					return parseInt(val) > 0;
-				}
+				type: String,
+				default: '0',
 			},
+
 		},
 		data(){
 			return {
@@ -110,11 +92,11 @@
 		        return !!this.$root.user
 			},
 			admin() {
-		        return this.auth ? _.contains(_.pluck(this.$root.user.roles.data, 'name'), 'admin') : false;
+		        return this.auth ? _.contains(_.pluck(this.$root.user.roles.data, 'name'), 'super_admin') : false;
 			},
-			/*managing() {
-		        return this.auth ? this.$root.user : '';
-			},*/
+			normalizedManaging() {
+                return parseInt(this.managing) > 0;
+            },
 			name() {
 		        return this.auth ? this.$root.user.name : '';
 			},
@@ -132,8 +114,13 @@
 			isAdmin(){
 				return this.admin && window.location.pathname.split('/')[1] === 'admin';
 			},
+			logout(){
+			    this.$http.post('/logout', null, {baseURL: ''}).then((response) => {
+                    window.location = '/login';
+                });
+			}
 		},
-		ready(){
+		mounted(){
 
 		}
 	}

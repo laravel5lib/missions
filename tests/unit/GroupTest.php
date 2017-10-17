@@ -2,7 +2,7 @@
 
 use App\Models\v1\Group;
 
-class GroupTest extends TestCase
+class GroupTest extends BrowserKitTestCase
 {
     /** @test */
     public function defaults_to_approved_on_creation()

@@ -3,8 +3,9 @@
 use Carbon\Carbon;
 use App\Models\v1\Referral;
 
-class ReferralTest extends TestCase
-{   
+class ReferralTest extends BrowserKitTestCase
+{
+
     /**
      * @test
      */
@@ -34,5 +35,4 @@ class ReferralTest extends TestCase
 
         $this->assertEquals('received', $referral->status);
     }
-
 }

@@ -7,7 +7,7 @@
 			<div class="row visible-xs-block">
 				<div class="col-xs-12">
 					<div class="btn-group btn-group-justified btn-group-xs" style="display:block;" role="group" aria-label="...">
-						<a @click="backStep()" class="btn btn-default" :class="{'disabled': currentStep.view === 'step1' }" role="button">
+						<a @click="backStep" class="btn btn-default" :class="{'disabled': currentStep.view === 'step2' }" role="button">
 							<i class="fa fa-chevron-left"></i>
 						</a>
 						<div class="btn-group" role="group">
@@ -46,12 +46,13 @@
 
 					</ul>
 				</div>
-				<div class="col-sm-7 col-md-8 {{currentStep.view}}">
-					<spinner v-ref:validationSpinner size="xl" :fixed="false" text="Validating"></spinner>
-					<spinner v-ref:reservationspinner size="xl" :fixed="true" text="Creating Reservation"></spinner>
-					<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
+				<div class="col-sm-7 col-md-8" :class="currentStep.view">
+					<spinner ref="validationSpinner" size="xl" :fixed="false" text="Validating"></spinner>
+					<spinner ref="reservationspinner" size="xl" :fixed="true" text="Creating Reservation"></spinner>
+					<keep-alive>
+						<component :is="currentStep.view"  transition="fade" transition-mode="out-in" @step-completion="stepCompleted"></component>
+					</keep-alive>
 
-					</component>
 				</div>
 
 			</div>
@@ -59,9 +60,9 @@
 		<div class="panel-footer text-right">
 			<div class="btn-group btn-group" role="group" aria-label="...">
 				<!--<a class="btn btn-link" data-dismiss="modal">Cancel</a>-->
-				<a class="btn btn-default" @click="backStep()" :class="{'disabled': currentStep.view === 'step1' }">Back</a>
-				<a class="btn btn-primary" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep()">Continue</a>
-				<a class="btn btn-primary" v-if="wizardComplete" @click="finish()">Finish</a>
+				<a class="btn btn-default" @click="backStep" :class="{'disabled': currentStep.view === 'step2' }">Back</a>
+				<a class="btn btn-primary" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep">Continue</a>
+				<a class="btn btn-primary" v-else @click="finish">Finish</a>
 			</div>
 		</div>
 	</div>
@@ -74,11 +75,8 @@
 	.fade-enter, .fade-leave {
 		opacity: 0;
 	}
-
-	.step1 {}
 </style>
 <script type="text/javascript">
-	import login from '../login.vue';
 	import tos from './registration/tos.vue';
 	import roca from './registration/roca.vue';
 	import basicInfo from './registration/basic-info.vue';
@@ -89,10 +87,18 @@
 	export default{
 		name: 'trip-registration-wizard',
 		props: ['tripId', 'stripeKey'],
-		data(){
+        components: {
+            'step2': tos,
+            'step3': roca,
+            'step4': basicInfo,
+            'step5': additionalOptions,
+            'step6': paymentDetails,
+            'step7': deadlineAgreement,
+            'step8': review,
+        },
+        data(){
 			return {
 				stepList:[
-					{name: 'Login/Register', view: 'step1', complete:false}, // login component skipped for now
 					{name: 'Legal (Terms of Service)', view: 'step2', complete:false},
 					{name: 'Rules of Conduct Agreement', view: 'step3', complete:false},
 					{name: 'Basic Traveler Information', view: 'step4', complete:false},
@@ -102,7 +108,6 @@
 					{name: 'Review', view: 'step8', complete:false}
 				],
 				currentStep: null,
-//				canContinue: false,
 				trip: {},
 				tripCosts: {},
 				deadlines:[],
@@ -110,7 +115,6 @@
 				wizardComplete: false,
 
 				// user generated data
-				userData: null,
 				selectedOptions: null,
 				userInfo: {},
 				paymentInfo: {},
@@ -125,7 +129,10 @@
 		computed: {
 			canContinue(){
 				return this.currentStep.complete;
-			}
+			},
+            userData(){
+			    return this.$root.user;
+            }
 		},
 		methods: {
 			toStep(step){
@@ -146,7 +153,7 @@
                 this.currentStep = step;
                 if (step.view === 'step6') {
                     this.detailsConfirmed = false;
-                    this.$nextTick(function () {
+                    this.$nextTick(() =>  {
                         this.currentStep.complete = false;
                         this.$emit('payment-complete', false);
                     });
@@ -162,36 +169,39 @@
 				}, this);
 			},
 			nextStep(){
-				var thisChild;
+				let thisChild;
 				switch (this.currentStep.view) {
 					case 'step4':
-
 						// find child
 						this.$children.forEach(function (child) {
-							if (child.hasOwnProperty('$BasicInfo'))
+							if (child.hasOwnProperty('handle') && child.handle === 'BasicInfo')
 								thisChild = child;
 						});
 
 						// if form is invalid do not continue
-						if (thisChild.$BasicInfo.invalid) {
-							thisChild.attemptedContinue = true;
-							return false;
-						}
-						this.nextStepCallback();
+                        thisChild.$validator.validateAll().then(result => {
+                            if (!result) {
+                                thisChild.attemptedContinue = true;
+                                return false;
+                            }
+                            this.userInfo = thisChild.userInfo;
+                            this.nextStepCallback();
+                        });
+
 						break;
 					case 'step6':
 						// find child
 						if (this.upfrontTotal > 0) {
                             this.$children.forEach(function (child) {
-                                if (child.hasOwnProperty('$PaymentDetails'))
+                                if (child.hasOwnProperty('handle') && child.handle === 'PaymentDetails')
                                     thisChild = child;
                             });
                             // promise needed to wait for async response from stripe
                             $.when(thisChild.createToken())
-	                                .done(function (success) {
-	                                    this.$refs.validationspinner.hide();
+	                                .done(success => {
+	                                    this.$refs.validationSpinner.hide();
 	                                    this.nextStepCallback();
-	                                }.bind(this));
+	                                });
                         } else {
                             this.nextStepCallback();
                         }
@@ -209,50 +219,50 @@
 				}, this);
 			},
 			finish(){
-				this.$refs.reservationspinner.show();
-
-				var data = {
-					// reservation data
-					height_a: this.userInfo.heightA,
-					height_b: this.userInfo.heightB,
-					weight: this.userInfo.weight,
-					desired_role: this.userInfo.desired_role.value,
-					given_names: this.userInfo.firstName,
-					surname: this.userInfo.lastName,
-					gender: this.userInfo.gender,
-					status: this.userInfo.relationshipStatus,
-					shirt_size: this.userInfo.size,
-					birthday: moment(this.userInfo.dobMonth + '-' + this.userInfo.dobDay + '-' + this.userInfo.dobYear, 'MM-DD-YYYY').format('YYYY-MM-DD'),
-					address: this.userInfo.address,
-					city: this.userInfo.city,
-					state: this.userInfo.state,
-					zip: this.userInfo.zipCode,
-					country_code: this.userInfo.country,
-					email: this.userInfo.email,
-					phone_one: this.userInfo.phone,
-					phone_two: this.userInfo.mobile,
-					user_id: this.userData.id,
-					avatar_upload_id: this.userInfo.avatar_upload_id,
+                let data = {
+                    // reservation data
+                    height_a: this.userInfo.heightA,
+                    height_b: this.userInfo.heightB,
+                    weight: this.userInfo.weight,
+                    desired_role: this.userInfo.desired_role.value,
+                    given_names: this.userInfo.firstName,
+                    surname: this.userInfo.lastName,
+                    gender: this.userInfo.gender,
+                    status: this.userInfo.relationshipStatus,
+                    shirt_size: this.userInfo.size,
+                    birthday: moment(this.userInfo.dobMonth + '-' + this.userInfo.dobDay + '-' + this.userInfo.dobYear, 'MM-DD-YYYY').format('YYYY-MM-DD'),
+                    address: this.userInfo.address,
+                    city: this.userInfo.city,
+                    state: this.userInfo.state,
+                    zip: this.userInfo.zipCode,
+                    country_code: this.userInfo.country,
+                    email: this.userInfo.email,
+                    phone_one: this.userInfo.phone,
+                    phone_two: this.userInfo.mobile,
+                    user_id: this.userData.id,
+                    avatar_upload_id: this.userInfo.avatar_upload_id,
 //					trip_id: this.tripId,
-					companion_limit: this.companion_limit,
-					costs: this.prepareFinalCosts(),
+                    companion_limit: this.companion_limit,
+                    costs: this.prepareFinalCosts(),
 
-					// payment data
-					amount: this.upfrontTotal,
-					description: 'Reservation payment',
-					currency: 'USD', // determined from card token,
+                    // payment data
+                    amount: this.upfrontTotal,
+                    description: 'Reservation payment',
+                    currency: 'USD', // determined from card token,
 
                     promocode: this.promocode,
 
-				};
+                };
+                this.$refs.reservationspinner.show();
+
 				if (this.upfrontTotal > 0) {
 				    _.extend(data, {
                         token: this.paymentInfo.token,
                         payment: {
                             type: 'card',
-                            brand: this.detectCardType(this.paymentInfo.card.number) || 'visa',
-                            last_four: this.paymentInfo.card.number.substr(-4),
-                            cardholder: this.paymentInfo.card.cardholder,
+                            brand: this.paymentInfo.card.brand || 'visa',
+                            last_four: this.paymentInfo.card.last4,
+                            cardholder: this.paymentInfo.card.name,
                         }
 				    });
 				}
@@ -262,7 +272,7 @@
 				} else {
 					data.donor = {
 						name: this.userInfo.firstName + ' ' + this.userInfo.lastName,
-						company: '',
+						// company: null,
 						email: this.userInfo.email,
 						phone: this.userInfo.phone,
 						zip: this.userInfo.zipCode,
@@ -271,18 +281,18 @@
 				}
 
 
-				this.$http.post('trips/' + this.tripId + '/register', data).then(function (response) {
+				this.$http.post('trips/' + this.tripId + '/register', data).then((response) => {
 //					this.stripeDeferred.resolve(true);
 					this.$refs.reservationspinner.hide();
 
-					window.location.href = '/dashboard/reservations/' + response.body.data.id;
+					window.location.href = '/dashboard/reservations/' + response.data.data.id;
 					this.$refs.reservationspinner.hide();
-				}, function (response) {
+				}, (error) =>  {
                     this.$refs.reservationspinner.hide();
-                    console.log(response);
-					this.$root.$emit('showError', response.body.message);
-                    this.fallbackStep(this.stepList[5]); // return to payment details step
-					this.paymentErrors.push(response.body.message);
+                    console.log(error.response);
+					this.$root.$emit('showError', error.response.data.message);
+                    this.fallbackStep(this.stepList[4]); // return to payment details step
+					this.paymentErrors.push(error.response.data.message);
 				});
 
 
@@ -290,7 +300,7 @@
 			prepareFinalCosts(){
 			    let finalCosts = [];
 			    let unionCosts = _.union(this.tripCosts.incremental, [this.selectedOptions], this.tripCosts.static);
-			    _.each(unionCosts, function (cost) {
+			    _.each(unionCosts, (cost) => {
 				    if (_.isObject(cost))
                         finalCosts.push(cost);
                 });
@@ -298,7 +308,7 @@
 			},
 			detectCardType(number) {
 				// http://stackoverflow.com/questions/72768/how-do-you-detect-credit-card-type-based-on-number
-				var re = {
+				let re = {
 					electron: /^(4026|417500|4405|4508|4844|4913|4917)\d+$/,
 					maestro: /^(5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)\d+$/,
 					dankort: /^(5019)\d+$/,
@@ -312,31 +322,27 @@
 					jcb: /^(?:2131|1800|35\d{3})\d{11}$/
 				};
 
-				for(var key in re) {
+				for(let key in re) {
 					if(re[key].test(number)) {
 						return key
 					}
 				}
-			}
-		},
-		components: {
-			'step1': login,
-			'step2': tos,
-			'step3': roca,
-			'step4': basicInfo,
-			'step5': additionalOptions,
-			'step6': paymentDetails,
-			'step7': deadlineAgreement,
-			'step8': review,
+			},
+			stepCompleted(val) {
+                this.currentStep.complete = val;
+                if (this.currentStep.view === 'step8')
+                    this.wizardComplete = val;
+			},
 		},
 		created(){
 			// login component skipped for now
 			this.currentStep = this.stepList[0];
 		},
-		ready(){
-			//get trip costs
-			var resource = this.$resource('trips{/id}', { include: 'costs:status(active),costs.payments,deadlines,requirements' });
-			resource.query({id: this.tripId}).then(function (trip) {
+		mounted(){
+            let self = this;
+            //get trip costs
+			let resource = this.$resource('trips{/id}', { include: 'costs:status(active),costs.payments,deadlines,requirements' });
+			resource.query({id: this.tripId}).then((trip) => {
 				this.trip = trip.data.data;
 				// deadlines, requirements, and companion_limit
 				this.deadlines =  trip.data.data.deadlines.data;
@@ -344,7 +350,7 @@
 				this.companion_limit = trip.data.data.companion_limit;
 
 				// filter costs by type
-				var optionalArr = [], staticArr = [], incrementalArr = [];
+				let optionalArr = [], staticArr = [], incrementalArr = [];
 				trip.data.data.costs.data.forEach(function (cost) {
 					switch (cost.type) {
 						case 'static':
@@ -365,8 +371,7 @@
 				}
 			});
 
-			let self = this;
-			this.$root.$on('userHasLoggedIn', function (val) {
+			this.$root.$on('userHasLoggedIn', (val) =>  {
 				// expecting userData object
 				self.userData = val;
 				self.currentStep.complete = !!val;

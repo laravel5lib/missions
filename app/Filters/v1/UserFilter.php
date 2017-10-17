@@ -9,7 +9,7 @@ class UserFilter extends Filter
      * @var array
      */
     public $sortable = [
-        'name', 'email', 'alt_email', 'zip',
+        'first_name', 'last_name', 'email', 'alt_email', 'zip',
         'country_code', 'state', 'city', 'created_at',
         'updated_at', 'birthday'
     ];
@@ -20,7 +20,7 @@ class UserFilter extends Filter
      * @var array
      */
     public $searchable = [
-        'name', 'email', 'alt_email', 'city', 'state',
+        'first_name', 'last_name', 'email', 'alt_email', 'city', 'state',
         'phone_one', 'phone_two', 'zip'
     ];
 
@@ -32,7 +32,9 @@ class UserFilter extends Filter
      */
     public function isPublic($isPublic)
     {
-        if( ! $isPublic) return $this;
+        if (! $isPublic) {
+            return $this;
+        }
 
         return $isPublic == 'yes' ?
             $this->where('public', true) :
@@ -47,7 +49,9 @@ class UserFilter extends Filter
      */
     public function gender($gender)
     {
-        if ( ! $gender) return $this;
+        if (! $gender) {
+            return $this;
+        }
 
         return $this->where('gender', $gender);
     }
@@ -60,7 +64,9 @@ class UserFilter extends Filter
      */
     public function status($status)
     {
-        if ( ! $status) return $this;
+        if (! $status) {
+            return $this;
+        }
 
         return $this->where('status', $status);
     }
@@ -73,7 +79,9 @@ class UserFilter extends Filter
      */
     public function country($countries)
     {
-        if ($countries = []) return $this;
+        if ($countries = []) {
+            return $this;
+        }
 
         return $this->whereIn('country_code', $countries);
     }
@@ -86,9 +94,11 @@ class UserFilter extends Filter
      */
     public function url($url)
     {
-        if ( ! $url) return $this;
+        if (! $url) {
+            return $this;
+        }
 
-        return $this->whereHas('slug', function($slug) use($url) {
+        return $this->whereHas('slug', function ($slug) use ($url) {
             return $slug->where('url', $url);
         });
     }
@@ -101,16 +111,18 @@ class UserFilter extends Filter
      */
     public function fundraiser($url)
     {
-        if ( ! $url) return $this;
+        if (! $url) {
+            return $this;
+        }
 
-        return $this->whereHas('fundraisers', function($fundraiser) use($url) {
-           $fundraiser->where('url', $url);
+        return $this->whereHas('fundraisers', function ($fundraiser) use ($url) {
+            $fundraiser->where('url', $url);
         });
     }
 
     /**
      * Is a rep
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function rep()

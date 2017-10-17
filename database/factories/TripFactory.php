@@ -3,12 +3,15 @@
 /**
  * Generic Trip
  */
-$factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker) {
     return [
         'id'              => $faker->unique()->uuid,
-        'group_id'        => $faker->uuid,
-        'campaign_id'     => $faker->uuid,
+        'group_id'        => function() {
+            return factory(App\Models\v1\Group::class)->create()->id;
+        },
+        'campaign_id'     => function() {
+            return factory(App\Models\v1\Campaign::class)->create()->id;
+        },
         'spots'           => random_int(10, 500),
         'companion_limit' => random_int(0, 3),
         'country_code'    => function (array $trip) {
@@ -45,8 +48,7 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
 /**
  * Ministry trip
  */
-$factory->defineAs(App\Models\v1\Trip::class, 'ministry', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Trip::class, 'ministry', function (Faker\Generator $faker) use ($factory) {
     $trip = $factory->raw(App\Models\v1\Trip::class);
 
     return array_merge($trip, [
@@ -57,8 +59,7 @@ $factory->defineAs(App\Models\v1\Trip::class, 'ministry', function (Faker\Genera
 /**
  * Medical trip
  */
-$factory->defineAs(App\Models\v1\Trip::class, 'medical', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Trip::class, 'medical', function (Faker\Generator $faker) use ($factory) {
     $trip = $factory->raw(App\Models\v1\Trip::class);
 
     return array_merge($trip, [
@@ -69,8 +70,7 @@ $factory->defineAs(App\Models\v1\Trip::class, 'medical', function (Faker\Generat
 /**
  * Family trip
  */
-$factory->defineAs(App\Models\v1\Trip::class, 'family', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Trip::class, 'family', function (Faker\Generator $faker) use ($factory) {
     $trip = $factory->raw(App\Models\v1\Trip::class);
 
     return array_merge($trip, [
@@ -81,8 +81,7 @@ $factory->defineAs(App\Models\v1\Trip::class, 'family', function (Faker\Generato
 /**
  * International trip
  */
-$factory->defineAs(App\Models\v1\Trip::class, 'international', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Trip::class, 'international', function (Faker\Generator $faker) use ($factory) {
     $trip = $factory->raw(App\Models\v1\Trip::class);
 
     return array_merge($trip, [
@@ -93,8 +92,7 @@ $factory->defineAs(App\Models\v1\Trip::class, 'international', function (Faker\G
 /**
  * Media trip
  */
-$factory->defineAs(App\Models\v1\Trip::class, 'media', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Trip::class, 'media', function (Faker\Generator $faker) use ($factory) {
     $trip = $factory->raw(App\Models\v1\Trip::class);
 
     return array_merge($trip, [
@@ -105,8 +103,7 @@ $factory->defineAs(App\Models\v1\Trip::class, 'media', function (Faker\Generator
 /**
  * Leader trip
  */
-$factory->defineAs(App\Models\v1\Trip::class, 'leader', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Trip::class, 'leader', function (Faker\Generator $faker) use ($factory) {
     $trip = $factory->raw(App\Models\v1\Trip::class);
 
     return array_merge($trip, [

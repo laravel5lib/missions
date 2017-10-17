@@ -26,8 +26,6 @@ class UserWithEverything extends FactoryStory
     {
         $user = factory(User::class)->create();
 
-        $user->assign('member');
-
         $user->slug()
             ->save(factory(Slug::class)->make([
                 'url' => str_slug($user->name)
@@ -51,5 +49,7 @@ class UserWithEverything extends FactoryStory
         $user->visas()->save(factory(Visa::class)->make());
         $user->referrals()->save(factory(Referral::class)->make());
         $user->medicalReleases()->save(factory(MedicalRelease::class)->make());
+
+        return $user;
     }
 }

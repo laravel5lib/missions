@@ -40,5 +40,4 @@ class ItineraryFilter extends Filter
 
         return $this->where('curator_type', $param[0]);
     }
-
 }

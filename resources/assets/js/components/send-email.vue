@@ -1,9 +1,9 @@
 <template>
 <div>
-  <a :class="class" @click="confirm = true">
+  <a :class="classes" @click="confirm = true">
     <i :class="icon" v-if="icon"></i> {{ label }}
   </a>
-  <modal :title="label" :show.sync="confirm" effect="fade" small="true" ok-text="Send" :callback="fire">
+  <modal :title="label" :value="confirm" @closed="confirm=false" effect="fade" :small="true" ok-text="Send" :callback="fire">
     <div slot="modal-body" class="modal-body text-center">
       <h5>Send Email?</h5>
       <hr class="divider inv">
@@ -34,7 +34,7 @@
         type: String,
         default: null
       },
-      class: {
+      classes: {
         type: String,
         default: null
       }
@@ -48,12 +48,12 @@
       fire() {
         this.confirm = false;
         this.$http.post('commands', {command: this.command, parameters: this.parameters})
-            .then(function(response) {
+            .then((response) => {
               console.log(response);
-              this.$dispatch('showSuccess', 'Your request was processed successfully.');
-            }, function (error) {
+              this.$root.$emit('showSuccess', 'Your request was processed successfully.');
+            }, (error) =>  {
               console.log(error);
-              this.$dispatch('showError', 'Unable to process your request.');
+              this.$root.$emit('showError', 'Unable to process your request.');
             });
       }
     }

@@ -1,7 +1,7 @@
 <template>
     <div>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-        <template v-if="isUser()">
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
+        <template v-if="isUser">
         <div class="panel panel-default panel-body">
             <div class="row">
                 <div class="col-xs-8">
@@ -32,7 +32,7 @@
                         </label>
                         <textarea v-show="!newMarkedContentToggle" class="form-control" id="newStoryContent" v-model="selectedStory.content" minlength="1" rows="10"></textarea>
                         <div class="collapse" :class="{ 'in': newMarkedContentToggle }">
-                            <div class="well" v-html="selectedStory.content | marked"></div>
+                            <div class="well" v-html="marked(selectedStory.content)"></div>
                         </div>
                     </div>
                     <div class="checkbox">
@@ -52,22 +52,22 @@
                 <p class="lead text-muted text-center">No stories yet.</p>
             </div>
         </div>
-        <div class="panel panel-default" v-for="story in stories">
-            <div class="panel-heading" role="tab" id="heading-{{ story.id }}">
+        <div class="panel panel-default" v-for="(story, index) in stories">
+            <div class="panel-heading" role="tab" :id="'heading-' + story.id">
                 <h5>
-                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ story.id }}" aria-expanded="true" aria-controls="collapseOne">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" :href="'#collapse-' + story.id" aria-expanded="true" aria-controls="collapseOne">
                         {{ story.title }}
                     <i class="fa fa-chevron-down pull-right"></i></a>
                 </h5>
             </div>
-            <div id="collapse-{{ story.id }}" class="panel-collapse collapse {{ $index == 0 ? 'in' : '' }}" role="tabpanel" aria-labelledby="heading-{{ story.id }}">
+            <div :id="'collapse-' + story.id" class="panel-collapse collapse" :class="{ 'in': index === 0}" role="tabpanel" :aria-labelledby="'heading-' + story.id">
                 <div class="panel-body" v-if="editMode !== story.id">
                 <div class="row">
                     <div class="col-sm-8">
-                        <h5 class="media-heading" style="margin:4px 0 10px;"><a href="#">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment 'll' }}.</small></h5>
+                        <h5 class="media-heading" style="margin:4px 0 10px;"><a href="#">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment('ll') }}.</small></h5>
                     </div>
                     <div class="col-sm-4 text-right hidden-xs">
-                        <div style="padding: 0;" v-if="isUser()">
+                        <div style="padding: 0;" v-if="isUser">
                             <div role="group" aria-label="...">
                                 <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,editMode = story.id"><i class="fa fa-pencil"></i> Edit</a>
                                 <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,deleteModal = true"><i class="fa fa-trash"></i> Delete</a>
@@ -75,7 +75,7 @@
                         </div>
                     </div>
                     <div class="col-sm-4 text-center visible-xs">
-                        <div style="padding: 0;" v-if="isUser()">
+                        <div style="padding: 0;" v-if="isUser">
                             <div role="group" aria-label="...">
                                 <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,editMode = story.id"><i class="fa fa-pencil"></i> Edit</a>
                                 <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,deleteModal = true"><i class="fa fa-trash"></i> Delete</a>
@@ -83,7 +83,7 @@
                         </div>
                     </div>
                 </div>
-                    <p class="small">{{{ story.content | marked }}}</p>
+                    <p class="small" v-html="marked(story.content)"></p>
                 </div>
                 <div class="panel-body" v-if="editMode === story.id">
                     <form>
@@ -93,7 +93,7 @@
                         </div>
                         <div class="form-group">
                             <label for="selectedStoryContent">Content
-                                <button class="btn btn-default-hollow btn-sm" type="button" data-toggle="collapse" data-target="#markdownPrev{{$index}}"
+                                <button class="btn btn-default-hollow btn-sm" type="button" data-toggle="collapse" :data-target="'#markdownPrev' + index"
                                         aria-expanded="false" aria-controls="markdownPrev" @click="editMarkedContentToggle = !editMarkedContentToggle">
                                     <span v-show="!editMarkedContentToggle">Preview</span>
                                     <span v-show="editMarkedContentToggle">Edit</span>
@@ -104,7 +104,7 @@
                             </label>
                             <textarea v-show="!editMarkedContentToggle" class="form-control" id="selectedStoryContent" v-model="selectedStory.content" minlength="1" rows="20"></textarea>
                             <div class="collapse" :class="{ 'in': editMarkedContentToggle }">
-                                <div class="well" v-html="selectedStory.content | marked"></div>
+                                <div class="well" v-html="marked(selectedStory.content)"></div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -116,10 +116,10 @@
             </div>
         </div>
         <div class="col-sm-12 text-center">
-            <pagination :pagination.sync="pagination" :callback="searchStories"></pagination>
+            <pagination :pagination="pagination" pagination-key="pagination" :callback="searchStories"></pagination>
         </div>
 
-        <modal v-if="isUser()" :show.sync="deleteModal" title="Remove Passport" small="true">
+        <modal v-if="isUser" :value="deleteModal" @closed="deleteModal=false" title="Remove Passport" :small="true">
             <div slot="modal-body" class="modal-body">Delete this Story?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -130,7 +130,7 @@
     </div>
 </template>
 <script type="text/javascript">
-    var marked = require('marked');
+    let marked = require('marked');
     export default{
         name: 'fundraisers-stories',
         props:['id', 'sponsorId'],
@@ -159,18 +159,16 @@
 
             }
         },
-        watch: {},
-        filters: {
-            marked: marked,
-        },
-        methods:{
+        computed: {
             isUser(){
                 return this.$root.user && this.sponsorId === this.$root.user.id;
             },
-            removeStory(story){
+        },
+        methods:{
+            marked: marked, removeStory(story){
                 if(story) {
-                    this.$http.delete('stories/' + story.id).then(function (response) {
-                        this.stories = _.reject(this.stories, function (item) {
+                    this.$http.delete('stories/' + story.id).then((response) => {
+                        this.stories = _.reject(this.stories, (item) => {
                             return item.id === story.id;
                         });
                         this.resetData();
@@ -191,16 +189,13 @@
                     }
 
                     // this.$refs.spinner.show();
-                    this.$http.put('stories/' + story.id, story).then(function (response) {
+                    this.$http.put('stories/' + story.id, story).then((response) => {
                         this.editMode = false;
                         this.resetData();
                         //this.searchStories();
                         // this.$refs.spinner.hide();
-                        return response.body.data;
-                    }, function (error) {
-                        // this.$refs.spinner.hide();
-                        //TODO add error alert
-                    });
+                        return response.data.data;
+                    }).catch(this.$root.handleApiError);
                 }
             },
             createStory(story){
@@ -213,15 +208,12 @@
                     }
 
                     // this.$refs.spinner.show();
-                    this.$http.post('stories', story).then(function (response) {
+                    this.$http.post('stories', story).then((response) => {
                         this.newMode = false;
                         this.resetData();
                         this.searchStories();
                         // this.$refs.spinner.hide();
-                    }, function (error) {
-                        // this.$refs.spinner.hide();
-                        //TODO add error alert
-                    });
+                    }, this.$root.handleApiError);
                 }
             },
             searchStories(){
@@ -230,14 +222,11 @@
                     fundraiser: this.id,
                     page: this.pagination.current_page,
                     per_page: this.per_page,
-                }}).then(function(response) {
-                    this.stories = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                }}).then((response) => {
+                    this.stories = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
-                }, function (error) {
-                    // this.$refs.spinner.hide();
-                    //TODO add error alert
-                });
+                }, this.$root.handleApiError);
             },
             resetData(){
                 this.selectedStory =  {
@@ -250,7 +239,7 @@
                 this.includeProfile = false;
             }
         },
-        ready(){
+        mounted(){
             this.searchStories();
         }
     }

@@ -52,7 +52,9 @@ class ReservationRequirementTransformer extends TransformerAbstract
     {
         $document = $requirement->document;
 
-        if( ! $document) return null;
+        if (! $document) {
+            return null;
+        }
 
         switch ($requirement->document_type) {
             case 'travel_itineraries':

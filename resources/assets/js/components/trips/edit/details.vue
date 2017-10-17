@@ -1,26 +1,23 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
 	<div class="row">
 		<div class="col-sm-12">
-			<validator name="TripDetails" @valid="onValid">
+
 				<form id="TripDetailsForm" class="form-horizontal" novalidate>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Campaign</label>
 						<div class="col-sm-10">
-							<p>{{$parent.trip.campaign.name|capitalize}}</p>
+							<p>{{$parent.trip.campaign.name ? $parent.trip.campaign.name[0].toUpperCase() + $parent.trip.campaign.name.slice(1) : ''}}</p>
 						</div>
 					</div>
-					<div class="form-group" :class="{ 'has-error': checkForError('group') }">
+					<div class="form-group" :class="{ 'has-error': errors.has('group') }">
 						<label class="col-sm-2 control-label">Group</label>
 						<div class="col-sm-10">
-							<v-select @keydown.enter.prevent="" class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
-									  label="name"></v-select>
-							<select hidden v-model="group_id" v-validate:group="{ required: true}">
-								<option :value="group.id" v-for="group in groups">{{group.name}}</option>
-							</select>
+							<v-select @keydown.enter.prevent="" class="form-control" id="group" v-model="groupObj" :options="groups" :on-search="getGroups"
+									  label="name" name="group" v-validate="'required'"></v-select>
 						</div>
 					</div>
 
-					<div class="form-group" :class="{ 'has-error': checkForError('description') }">
+					<div class="form-group" :class="{ 'has-error': errors.has('description') }">
 						<label for="description" class="col-sm-2 control-label">
 							Description
 							<button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#markdownPrev" aria-expanded="false" aria-controls="markdownPrev">
@@ -31,23 +28,22 @@
 							<div class="row">
 								<div class="col-sm-12">
 									<textarea name="description" id="description" rows="5" v-model="description"
-											  class="form-control"
-											  v-validate:description="{ required: true}"></textarea>
+											  class="form-control" v-validate="'required'"></textarea>
 								</div>
 								<div class="col-sm-12 collapse" id="markdownPrev">
 									<br>
-									<div class="well" v-html="description | marked"></div>
+									<div class="well" v-html="marked(description)"></div>
 								</div>
 							</div>
 
 						</div>
 					</div>
 
-					<div class="form-group" :class="{ 'has-error': checkForError('type') }">
+					<div class="form-group" :class="{ 'has-error': errors.has('type') }">
 						<label for="type" class="col-sm-2 control-label">Type</label>
 						<div class="col-sm-10">
 							<select id="type" class="form-control input-sm" v-model="type"
-									v-validate:type="{ required: true }" required>
+									name="type" v-validate="'required'" required>
 								<option value="">-- select --</option>
 								<option value="ministry">Ministry</option>
 								<option value="family">Family</option>
@@ -59,23 +55,23 @@
 						</div>
 					</div>
 
-					<div class="form-group" :class="{ 'has-error': checkForError('prospects') }">
+					<div class="form-group" :class="{ 'has-error': errors.has('prospects') }">
 						<label class="col-sm-2 control-label">Perfect For</label>
 						<div class="col-sm-10">
-							<v-select @keydown.enter.prevent="" multiple class="form-control" id="group" :value.sync="prospectsObj"
+							<v-select @keydown.enter.prevent="" multiple class="form-control" id="group" v-model="prospectsObj"
 									  :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
-							<select hidden multiple v-model="prospects" v-validate:prospects="{ required: true}">
+							<select hidden multiple v-model="prospects" name="prospects" v-validate="'required'">
 								<option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
 								</option>
 							</select>
 						</div>
 					</div>
 
-					<div class="form-group" :class="{ 'has-error': checkForError('difficulty') }">
+					<div class="form-group" :class="{ 'has-error': errors.has('difficulty') }">
 						<label for="difficulty" class="col-sm-2 control-label">Difficulty</label>
 						<div class="col-sm-10">
 							<select id="difficulty" class="form-control input-sm" v-model="difficulty"
-									v-validate:difficulty="{ required: true }" required>
+									name="difficulty" v-validate="'required'" required>
 								<option value="">-- select --</option>
 								<option value="level_1">Level 1</option>
 								<option value="level_2">Level 2</option>
@@ -84,13 +80,13 @@
 						</div>
 					</div>
 
-					<div class="form-group" :class="{ 'has-error': checkForError('companions') }">
+					<div class="form-group" :class="{ 'has-error': errors.has('companions') }">
 						<label for="companion_limit" class="col-sm-2 control-label">Companion Limit</label>
 						<div class="col-sm-10">
 							<div class="input-group input-group-sm">
 								<span class="input-group-addon"><i class="fa fa-users"></i></span>
 								<input type="number" id="companion_limit" v-model="companion_limit" class="form-control"
-									   v-validate:companions="{ required: true, min:0 }"/>
+									   name="companions" v-validate="'required|min:0'"/>
 							</div>
 							<div class="help-block">Number of companions a user can have. Leave at 0 to disable
 								companions.
@@ -98,46 +94,42 @@
 						</div>
 					</div>
 
-					<div class="form-group" :class="{ 'has-error': (checkForError('start') || checkForError('end')) }">
+					<div class="form-group" :class="{ 'has-error': (errors.has('start') || errors.has('end')) }">
 						<label for="started_at" class="col-sm-2 control-label">Dates</label>
 						<div class="col-sm-10">
 							<div class="row">
 								<div class="col-sm-6">
 									<div class="input-group input-group-sm"
-										 :class="{ 'has-error': checkForError('start') }">
+										 :class="{ 'has-error': errors.has('start') }">
 										<span class="input-group-addon">Start</span>
-										<date-picker class="form-control input-sms" :model.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+										<date-picker class="form-control input-sms" v-model="started_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
 										<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
-											   v-validate:start="{ required: true }" required>
+											   name="start" v-validate="'required'" required>
 									</div>
 								</div>
 								<div class="col-sm-6">
 									<div class="input-group input-group-sm"
-										 :class="{ 'has-error': checkForError('end') }">
+										 :class="{ 'has-error': errors.has('end') }">
 										<span class="input-group-addon">End</span>
-										<date-picker class="form-control input-sms" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+										<date-picker class="form-control input-sms" v-model="ended_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
 										<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
-											   v-validate:end="{ required: true }" required>
+											   name="end" v-validate="'required'" required>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 
-					<div class="form-group" :class="{ 'has-error': checkForError('rep') }">
+					<div class="form-group" :class="{ 'has-error': errors.has('rep') }">
 						<label class="col-sm-2 control-label">Trip Rep.</label>
 						<div class="col-sm-10">
-							<v-select @keydown.enter.prevent="" multiple class="form-control" id="rep" :value.sync="repObj" :options="reps"
+							<v-select @keydown.enter.prevent="" multiple class="form-control" id="rep" v-model="repObj" :options="reps"
 									  label="name"></v-select>
-							<!--v-validate:rep="{ required: false}"-->
-							<select hidden v-model="rep_id">
-								<option v-for="rep in reps" :value="rep">{{rep}}</option>
-							</select>
 						</div>
 					</div>
 
 				</form>
-			</validator>
+
 		</div>
 	</div>
 </template>
@@ -213,7 +205,7 @@
 		methods: {
 			populateWizardData(onValid){
 				if (!onValid)
-					this.$validate(true);
+
 				$.extend(this.$parent.wizardData, {
 					group_id: this.group_id,
 					description: this.description,
@@ -229,36 +221,35 @@
 			},
 			getGroups(search, loading){
 				loading(true);
-				this.$http.get('groups', { params: { search: search } }).then(function (response) {
-					this.groups = response.body.data;
+				this.$http.get('groups', { params: { search: search } }).then((response) => {
+					this.groups = response.data.data;
 					loading(false);
 				});
 			},
 			onValid(){
 				this.populateWizardData(true);
-				this.$dispatch('details', true);
+				this.$emit('details', true);
 			},
 			checkForError(field){
 				// if user clicked continue button while the field is invalid trigger error styles
 				return this.$TripDetails[field.toLowerCase()].invalid && this.attemptedContinue
 			},
 		},
-		activate(done){
+		activated(){
 			$('html, body').animate({scrollTop: 0}, 300);
 
 			// get some groups
-			this.$http.get('groups').then(function (response) {
-				this.groups = response.body.data;
+			this.$http.get('groups').then((response) => {
+				this.groups = response.data.data;
 			});
-			done();
 		},
 		events: {
 			'trip'(val){
-				this.$http.get('groups/' + val.group_id).then(function (response) {
-					this.groupObj = response.body.data;
+				this.$http.get('groups/' + val.group_id).then((response) => {
+					this.groupObj = response.data.data;
 				});
 				var arr = [];
-				_.forEach(this.prospectsList, function (prospect) {
+				_.forEach(this.prospectsList, (prospect) => {
 					if ( _.contains(val.prospects, prospect.value))
 						arr.push(prospect);
 				});

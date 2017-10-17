@@ -3,7 +3,7 @@
 /*
  * Generic Testimony Essay
  */
-$factory->define(App\Models\v1\Essay::class, function(Faker\Generator $faker) {
+$factory->define(App\Models\v1\Essay::class, function (Faker\Generator $faker) {
     return [
         'author_name' => $faker->firstName . ' ' . $faker->lastName,
         'user_id' => $faker->uuid,

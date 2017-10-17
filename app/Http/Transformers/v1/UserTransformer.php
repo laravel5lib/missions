@@ -15,7 +15,7 @@ class UserTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'reservations', 'notes', 'managing', 'facilitating',
         'passports', 'visas', 'uploads', 'accolades', 'fundraisers',
-        'medical_releases', 'roles', 'links', 'abilities'
+        'medical_releases', 'roles', 'links', 'permissions'
     ];
 
     /**
@@ -31,6 +31,8 @@ class UserTransformer extends TransformerAbstract
         return [
             'id'           => $user->id,
             'name'         => $user->name,
+            'first_name'   => $user->first_name,
+            'last_name'    => $user->last_name,
             'email'        => $user->email,
             'password'     => $user->password,
             'alt_email'    => $user->alt_email,
@@ -64,11 +66,11 @@ class UserTransformer extends TransformerAbstract
         ];
     }
 
-    public function includeAbilities(User $user)
+    public function includePermissions(User $user)
     {
-        $abilities = $user->getAbilities();
+        $permissions = $user->getAllPermissions();
 
-        return $this->collection($abilities, new AbilityTransformer);
+        return $this->collection($permissions, new PermissionTransformer);
     }
 
     /**
@@ -213,5 +215,4 @@ class UserTransformer extends TransformerAbstract
 
         return $this->collection($roles, new RoleTransformer);
     }
-
 }

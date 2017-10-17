@@ -1,19 +1,19 @@
 <template>
 	<div>
-		<aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+		<mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 				<div class="form-group">
 					<label>Travel Group</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-					          :value.sync="filters.groups" :options="groupsOptions" label="name"
+					          v-model="filters.groups" :options="groupsOptions" label="name"
 					          placeholder="Filter by Groups"></v-select>
 				</div>
 
 				<hr class="divider inv sm">
 				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetPlansFilter()"><i class="fa fa-times"></i> Reset Filters</button>
 			</form>
-		</aside>
+		</mm-aside>
 
 		<template v-if="isAdminRoute">
 			<div class="row">
@@ -28,7 +28,7 @@
 							</div>
 						</div>
 						<div class="input-group input-group-sm">
-							<input type="text" class="form-control" v-model="search" debounce="500" placeholder="Search for anything">
+							<input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search for anything">
 							<span class="input-group-addon"><i class="fa fa-search"></i></span>
 						</div>
 						<button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
@@ -59,7 +59,7 @@
 		<div style="position:relative;" class="panel panel-default">
 
             <div class="list-group" v-if="plans.length">
-              <div class="list-group-item" v-for="plan in plans">
+              <div class="list-group-item" v-for="(plan, planIndex) in plans">
 
                 <div class="row">
                     <div class="col-sm-6">
@@ -68,9 +68,9 @@
                             <span class="badge">{{ plan.occupants_count }} occupants</span>
                             <br />
 	                        <small>
-		                        <template v-for="group in plan.groups.data">
+		                        <template v-for="(group, groupIndex) in plan.groups.data">
 			                        {{ group.name }}
-			                        <template v-if="($index + 1) < plan.groups.data.length">&middot;</template>
+			                        <template v-if="(groupIndex + 1) < plan.groups.data.length">&middot;</template>
 		                        </template>
 	                        </small>
                         </h4>
@@ -78,13 +78,13 @@
                     </div>
                     <div class="col-sm-6">
                         <label>Rooms</label><br />
-                        <span v-for="(key, val) in plan.rooms_count">
-                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key | capitalize}}: <strong>{{val}}</strong></p>
+                        <span v-for="(val, key, index) in plan.rooms_count">
+                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="index != 0"> &middot; </span>{{ key|capitalize }}: <strong>{{val}}</strong></p>
                         </span>
                         <br />
                         <label>Rooms Allowed</label><br />
-                        <span v-for="(key, val) in plan.room_types">
-                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key | capitalize}}: <strong>{{val}}</strong></p>
+                        <span v-for="(val, key, index) in plan.room_types">
+                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="index != 0"> &middot; </span>{{ key|capitalize }}: <strong>{{val}}</strong></p>
                         </span>
                         <p>
                             <hr class="divider sm">
@@ -100,7 +100,7 @@
                 </div>
               </div>
               <div class="text-center">
-                  <pagination :pagination.sync="pagination"
+                  <pagination :pagination="pagination" pagination-key="pagination"
                               :callback="getRoomingPlans"
                               size="small">
                   </pagination>
@@ -112,28 +112,28 @@
 		</div>
 
 		<!-- Modals -->
-		<modal title="Create a new Plan" small ok-text="Create" :callback="newPlan" :show.sync="showPlanModal">
+		<modal title="Create a new Plan" small ok-text="Create" :callback="newPlan" :value="showPlanModal" @closed="showPlanModal=false">
 			<div slot="modal-body" class="modal-body">
-				<validator name="PlanCreate">
-					<form id="PlanCreateForm">
-						<div class="form-group" :class="{'has-error': $PlanCreate.planname.invalid}">
+
+					<form id="PlanCreateForm" data-vv-scope="plan-create">
+						<div class="form-group" :class="{'has-error': errors.has('planname', 'plan-create')}">
 							<label for="createPlanCallsign" class="control-label">Plan Name</label>
-							<input @keydown.enter.prevent="" type="text" class="form-control" id="createPlanCallsign" placeholder="" v-validate:planname="['required']" v-model="selectedNewPlan.name">
+							<input @keydown.enter.prevent="" type="text" class="form-control" id="createPlanCallsign" placeholder="" name="planname" v-validate="'required'" v-model="selectedNewPlan.name">
 						</div>
 
-						<div class="form-group" :class="{'has-error': $PlanCreate.plandesc.invalid}">
+						<div class="form-group" :class="{'has-error': errors.has('plandesc', 'plan-create')}">
 							<label for="createPlanDesc" class="control-label">Short Description</label>
-							<textarea autosize="selectedNewPlan.short_desc" class="form-control" id="createPlanDesc" v-model="selectedNewPlan.short_desc" v-validate:plandesc="['required']"></textarea>
+							<textarea autosize="selectedNewPlan.short_desc" class="form-control" id="createPlanDesc" v-model="selectedNewPlan.short_desc" name="plandesc" v-validate="'required'"></textarea>
 						</div>
 
-						<div class="form-group" :class="{'has-error': $PlanCreate.teamgroup.invalid}" v-if="isAdminRoute">
+						<div class="form-group" :class="{'has-error': errors.has('teamgroup', 'plan-create')}" v-if="isAdminRoute">
 							<label>Travel Groups</label>
 							<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-							          :value.sync="selectedNewPlan.groups" :options="groupsOptions" label="name"
+							          v-model="selectedNewPlan.groups" :options="groupsOptions" label="name" data-vv-name="teamgroup" v-validate="'required|min:1'" data-vv-scope="plan-create" data-vv-value-path="value"
 							          placeholder="Assign Travel Groups"></v-select>
-							<select class="hidden" v-model="selectedNewPlan.groups" multiple v-validate:teamgroup="['required']">
-								<option :value="group" v-for="group in groupsOptions">{{group.name | capitalize}}</option>
-							</select>
+							<!--<select class="hidden" v-model="selectedNewPlan.groups" multiple name="teamgroup" v-validate="'required'">
+								<option :value="group" v-for="group in groupsOptions">{{ group.name|capitalize }}</option>
+							</select>-->
 						</div>
 
 						<div class="row">
@@ -145,31 +145,28 @@
 							</div>
 						</div>
 					</form>
-				</validator>
+
 			</div>
 		</modal>
-		<modal title="Plan Settings" ok-text="Update" :callback="updatePlanSettings" :show.sync="showPlanSettingsModal">
+		<modal title="Plan Settings" ok-text="Update" :callback="updatePlanSettings" :value="showPlanSettingsModal" @closed="showPlanSettingsModal=false">
 			<div slot="modal-body" class="modal-body" v-if="selectedPlan && selectedPlanSettings">
-				<validator name="PlanSettings">
-					<form id="PlanCreateForm" class="form-horizontal">
-						<div class="form-group" :class="{'has-error': $PlanSettings.planname.invalid}">
+
+					<form id="PlanCreateForm" class="form-horizontal" data-vv-scope="plan-settings">
+						<div class="form-group" :class="{'has-error': errors.has('planname', 'plan-settings')}">
 							<label for="updatePlanCallsign" class="control-label">Plan Name</label>
-							<input @keydown.enter.prevent="" type="text" class="form-control" id="updatePlanCallsign" placeholder="" v-validate:planname="['required']" v-model="selectedPlanSettings.name">
+							<input @keydown.enter.prevent="" type="text" class="form-control" id="updatePlanCallsign" placeholder="" name="planname" v-validate="'required'" v-model="selectedPlanSettings.name">
 						</div>
 
-						<div class="form-group" :class="{'has-error': $PlanSettings.plandesc.invalid}">
+						<div class="form-group" :class="{'has-error': errors.has('plandesc', 'plan-settings')}">
 							<label for="updatePlanDesc" class="control-label">Short Description</label>
-							<textarea autosize="selectedPlanSettings.short_desc" class="form-control" id="updatePlanDesc" v-model="selectedPlanSettings.short_desc" v-validate:plandesc="['required']"></textarea>
+							<textarea autosize="selectedPlanSettings.short_desc" class="form-control" id="updatePlanDesc" v-model="selectedPlanSettings.short_desc" name="plandesc" v-validate="'required'"></textarea>
 						</div>
 
-						<div class="form-group" :class="{'has-error': $PlanSettings.teamgroup.invalid}" v-if="isAdminRoute">
+						<div class="form-group" :class="{'has-error': errors.has('teamgroup', 'plan-settings')}" v-if="isAdminRoute">
 							<label>Travel Groups</label>
 							<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-							          :value.sync="selectedPlanSettings.groups" :options="groupsOptions" label="name"
+							          v-model="selectedPlanSettings.groups" :options="groupsOptions" label="name" name="teamgroup" v-validate="'required'"
 							          placeholder="Assign Travel Groups"></v-select>
-							<select class="hidden" v-model="selectedPlanSettings.groups" multiple v-validate:teamgroup="['required']">
-								<option :value="group" v-for="group in groupsOptions">{{group.name | capitalize}}</option>
-							</select>
 						</div>
 
 						<div class="form-group" v-for="type in roomTypes">
@@ -188,11 +185,11 @@
 							<!--<p v-else v-text="selectedPlanSettings.locked ? 'Yes' : 'No'"></p>-->
 						</div>
 					</form>
-				</validator>
+
 
 			</div>
 		</modal>
-		<modal title="Delete Rooming Plan" small ok-text="Delete" :callback="deletePlan" :show.sync="showPlanDeleteModal">
+		<modal title="Delete Rooming Plan" small ok-text="Delete" :callback="deletePlan" :value="showPlanDeleteModal" @closed="showPlanDeleteModal=false">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="selectedDeletePlan">
 					Are you sure you want to delete plan: "{{selectedDeletePlan.name}}" ?
@@ -275,9 +272,7 @@
                 },
 	            deep: true
             },
-		    search() {
-                this.getRoomingPlans();
-		    },
+
             per_page() {
                 this.getRoomingPlans();
 		    },
@@ -289,19 +284,20 @@
                 };
             },
             loadManager(plan) {
-                this.$dispatch('rooming-wizard:plan-selected', plan);
+                this.$emit('plan-selected', plan);
             },
             getRoomTypes(){
                 return this.$http.get('rooming/types', { params: { campaign: this.campaignId, per_page: 100 }})
-	                .then(function (response) {
-                        return this.roomTypes = response.body.data;
+	                .then((response) => {
+                        return this.roomTypes = response.data.data;
                     },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
-                        return response.body.data;
+                        return response.data.data;
                     });
             },
-	        getRoomingPlans(){
+            debouncedSearch: _.debounce(function() { this.getRoomingPlans(); }, 500),
+            getRoomingPlans(){
                 let params = {
                     include: '',
                 };
@@ -323,33 +319,35 @@
                 }
                 this.exportFilters = params;
 
-                return this.PlansResource.get(params).then(function (response) {
-	                this.pagination = response.body.meta.pagination;
-	                this.plans = response.body.data;
+                return this.PlansResource.get(params).then((response) => {
+	                this.pagination = response.data.meta.pagination;
+	                this.plans = response.data.data;
 	                return this.plans;
-                })
+                }, this.$root.handleApiError)
 	        },
             getGroups(search, loading){
-                loading ? loading(true) : void 0;
-                let promise = this.$http.get('groups', { params: {search: search} }).then(function (response) {
-                    this.groupsOptions = response.body.data;
+                let promise = this.$http.get('groups', { params: {search: search} });
+	            loading ? loading(true) : void 0;
+                promise.then((response) => {
+                    this.groupsOptions = response.data.data;
                     if (loading) {
                         loading(false);
-                    } else {
-                        return promise;
                     }
-                });
+                }, this.$root.handleApiError);
+                if (!loading)
+                    return promise;
             },
             getCampaigns(search, loading){
+                let promise = this.$http.get('campaigns', { params: {search: search} });
                 loading ? loading(true) : void 0;
-                let promise = this.$http.get('campaigns', { params: {search: search} }).then(function (response) {
-                    this.campaignsOptions = response.body.data;
+                promise.then((response) => {
+                    this.campaignsOptions = response.data.data;
                     if (loading) {
                         loading(false);
-                    } else {
-                        return promise;
                     }
-                });
+                }, this.$root.handleApiError);
+                if (!loading)
+                    return promise;
             },
             openPlanSettingsModal(plan) {
                 this.showPlanSettingsModal = true;
@@ -362,7 +360,7 @@
                 };
 
                 // We need to loop through each room type to create an object to reference the plan types present
-                _.each(this.roomTypes, function (type) {
+                _.each(this.roomTypes, (type) => {
                     // the settings will be traced by the type ids
 	                // then we will attempt to find the assignment in the current plan's settings (expecting a number) or set to 0
 	                let assignment = plan.room_types.hasOwnProperty(type.name) ? plan.room_types[type.name] : 0;
@@ -377,12 +375,12 @@
                 this.selectedDeletePlan = plan;
             },
 	        handleRoomTypeSettings(plan, settings, promises) {
-                _.each(settings, function (val, property) {
+                _.each(settings, (val, property) => {
                     let promise;
                     if (property.indexOf('_method') === -1 && !_.contains(['short_desc', 'name', 'groups', 'group_ids', 'locked'], property)) {
                         if (settings[property + '_method'] === 'PUT') {
                             if (val > 0) {
-                                promise = this.PlansResource.update({
+                                promise = this.PlansResource.put({
                                     plan: plan.id, path: 'types', pathId: property
                                 }, { available_rooms: val });
                             } else {
@@ -395,50 +393,55 @@
                         } else {
                             // only create setting if val > 0
                             if (val > 0)
-                                promise = this.PlansResource.save({ plan: plan.id, path: 'types'}, {
+                                promise = this.PlansResource.post({ plan: plan.id, path: 'types'}, {
                                     room_type_id: property,
                                     available_rooms: val
                                 });
                         }
                         if (promise) {
                             // we only need to catch errors here
-                            promise.catch(function (response) {
-                                console.log(response.body.message);
+                            promise.catch((response) =>  {
+                                console.log(response.data.message);
                             });
                             promises.push(promise);
                         }
                     }
 
-                }.bind(this));
+                });
 	        },
             updatePlanSettings() {
-                let promises = [];
-                let settingsData = _.extend({}, this.selectedPlanSettings);
-                settingsData.group_ids = _.pluck(settingsData.groups, 'id');
-                delete settingsData.groups;
+                this.$validator.validateAll('plan-settings').then(result => {
+	                if(result) {
+                        let promises = [];
+                        let settingsData = _.extend({}, this.selectedPlanSettings);
+                        settingsData.group_ids = _.pluck(settingsData.groups, 'id');
+                        delete settingsData.groups;
 
-                // update name and short_desc properties
-	            promises.push(this.PlansResource.update({ plan: this.selectedPlan.id},
-		            { name: settingsData.name, short_desc: settingsData.short_desc, group_ids: settingsData.group_ids, locked: settingsData.locked}));
+                        // update name and short_desc properties
+                        promises.push(this.PlansResource.put({ plan: this.selectedPlan.id},
+                            { name: settingsData.name, short_desc: settingsData.short_desc, group_ids: settingsData.group_ids, locked: settingsData.locked}));
 
-	            this.handleRoomTypeSettings(this.selectedPlan, settingsData, promises);
+                        this.handleRoomTypeSettings(this.selectedPlan, settingsData, promises);
 
-                Promise.all(promises).then(function () {
-                    this.showPlanSettingsModal = false;
-                    this.$root.$emit('showSuccess', this.selectedPlan.name + ' settings updated successfully.');
-                    this.getRoomingPlans().then(function () {
-                        this.selectedPlan = null;
-                        this.selectedPlanSettings = null;
-                    });
-                }.bind(this));
+                        Promise.all(promises).then(() => {
+                            this.showPlanSettingsModal = false;
+                            this.$root.$emit('showSuccess', this.selectedPlan.name + ' settings updated successfully.');
+                            this.getRoomingPlans().then(() => {
+                                this.selectedPlan = null;
+                                this.selectedPlanSettings = null;
+                            });
+                        });
 
+                    }
+                })
+                
             },
             deletePlan() {
                 let plan = _.extend({}, this.selectedDeletePlan);
-                this.PlansResource.delete({ plan: plan.id}).then(function (response) {
+                this.PlansResource.delete({ plan: plan.id}).then((response) => {
                     this.showPlanDeleteModal = false;
                     this.$root.$emit('showInfo', plan.name + ' Deleted!');
-                    this.plans = _.reject(this.plans, function (obj) {
+                    this.plans = _.reject(this.plans, (obj) => {
                         return plan.id === obj.id;
                     });
                 });
@@ -457,13 +460,13 @@
                 };
 
                 // We need to loop through each room type to create an object to reference the plan types present
-                _.each(this.roomTypes, function (type) {
+                _.each(this.roomTypes, (type) => {
                     // the settings will be traced by the type ids
                     // then we will attempt to find the assignment in the current plan's settings (expecting a number) or set to 0
                     obj.room_types_settings[type.id] = 0;
                     // we are using method to track which room types need to be updated or posted
                     obj.room_types_settings[type.id + '_method'] = 'POST';
-                }.bind(this));
+                });
                 this.selectedNewPlan = obj;
             },
             newPlan() {
@@ -476,36 +479,39 @@
                 data.group_ids = _.pluck(data.groups, 'id');
                 delete data.groups;
 
-                if (this.$PlanCreate.valid) {
-                    return this.PlansResource.save(data, { include: 'group' }).then(function (response) {
-                        let plan = response.body.data;
+                this.$validator.validateAll('plan-create').then(result => {
+                    if (result) {
+                        return this.PlansResource.post(data, { include: 'group' }).then((response) => {
+                            let plan = response.data.data;
 
-                        // update created plan with
-                        let promises = [];
-                        this.handleRoomTypeSettings(plan, room_types_settings, promises);
-                        Promise.all(promises).then(function () {
-                            this.getRoomingPlans();
-                            this.$root.$emit('showSuccess', data.name + ' created successfully');
-                            this.showPlanModal = false;
-                        }.bind(this));
-                    }, function (response) {
-                        console.log(response);
-                        this.$root.$emit('showError', response.body.message);
-                        return response.body.data;
-                    });
-                } else {
-                    this.$root.$emit('showError', 'Please provide a name for the new plan');
-                }
+                            // update created plan with
+                            let promises = [];
+                            this.handleRoomTypeSettings(plan, room_types_settings, promises);
+                            Promise.all(promises).then(() => {
+                                this.getRoomingPlans();
+                                this.$root.$emit('showSuccess', data.name + ' created successfully');
+                                this.showPlanModal = false;
+                            });
+                        }, (response) =>  {
+                            console.log(response);
+                            this.$root.$emit('showError', response.data.message);
+                            return response.data.data;
+                        });
+                    } else {
+                        this.$root.$emit('showError', 'Please provide a name for the new plan');
+                    }
+                });
+
             },
 	        handlePlanGroupAssociations(){
 
 	        },
         },
-        ready(){
+        mounted(){
             if (this.isAdminRoute) {
                 this.getGroups();
             }
-			this.getRoomingPlans().then(function (plans) {
+			this.getRoomingPlans().then((plans) => {
 				if (this.isAdminRoute && location.search.length > 1) {
                     let plan;
                     let searchObj = this.$root.convertSearchToObject();
@@ -520,13 +526,13 @@
             });
 			this.getRoomTypes();
 
-            this.$root.$on('campaign-scope', function (val) {
+            this.$root.$on('campaign-scope', (val) =>  {
                 this.campaignId = val ? val.id : '';
                 if (val && val.id) {
                     this.getRoomingPlans();
                     this.getRoomTypes();
                 }
-            }.bind(this));
+            });
         }
     }
 </script>

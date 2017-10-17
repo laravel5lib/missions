@@ -1,26 +1,31 @@
 <?php
 
-class RoomTypesEndpoint extends TestCase
+use App\Models\v1\Campaign;
+
+class RoomTypesEndpoint extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /** @test */
     public function fetches_all_room_types()
     {
         $types = factory(App\Models\v1\RoomType::class, 3)->create();
 
-        $this->get('api/rooms/types')
+        $this->get('api/rooming/types')
              ->assertResponseOk()
              ->seeJsonStructure([
                 'data' => [
                     '*' => [
                         'id',
+                        'campaign_id',
                         'name',
-                        'occupancy',
+                        'rules',
                         'created_at',
                         'updated_at',
                         'deleted_at'
                     ]
                 ]
-            ]);
+             ]);
     }
 
     /** @test */
@@ -28,35 +33,39 @@ class RoomTypesEndpoint extends TestCase
     {
         $type = factory(App\Models\v1\RoomType::class)->create();
 
-        $this->get('api/rooms/types/' . $type->id)
+        $this->get('api/rooming/types/' . $type->id)
              ->assertResponseOk()
-             ->seeJson(['id' => $type->id, 'name' => $type->name, 'occupancy' => $type->occupancy]);
+             ->seeJson(['id' => $type->id, 'name' => $type->name]);
     }
 
     /** @test */
     public function creates_new_room_type()
     {
-        $type = ['name' => 'Double', 'occupancy' => 2];
+        $campaign = factory(Campaign::class)->create();
 
-        $this->post('api/rooms/types', $type)
+        $type = [
+            'name' => 'Double',
+            'rules' => ['occupancy_limit' => 2],
+            'campaign_id' => $campaign->id
+        ];
+
+        $this->post('api/rooming/types', $type)
              ->assertResponseOk()
-             ->seeInDatabase('room_types', $type)
-             ->seeJson(['name' => 'Double']);
+             ->seeJson(['name' => 'Double', 'campaign_id' => $campaign->id]);
     }
 
     /** @test */
     public function updates_a_room_type()
     {
         $type = factory(App\Models\v1\RoomType::class)->create([
-            'name' => 'Double', 'occupancy' => 2
+            'name' => 'Double'
         ]);
 
-        $update = ['name' => 'Triple', 'occupancy' => 3];
+        $update = ['name' => 'Triple'];
 
-        $this->put('api/rooms/types/' . $type->id, $update)
+        $this->put('api/rooming/types/' . $type->id, $update)
              ->assertResponseOk()
-             ->seeInDatabase('room_types', $update)
-             ->seeJson(['name' => 'Triple', 'occupancy' => 3]);
+             ->seeJson(['name' => 'Triple']);
     }
 
     /** @test */
@@ -64,7 +73,7 @@ class RoomTypesEndpoint extends TestCase
     {
         $type = factory(App\Models\v1\RoomType::class)->create();
 
-        $this->delete('api/rooms/types/' . $type->id)
+        $this->delete('api/rooming/types/' . $type->id)
              ->dontSeeInDatabase('room_types', ['id' => $type->id, 'deleted_at' => null])
              ->assertResponseStatus(204);
     }

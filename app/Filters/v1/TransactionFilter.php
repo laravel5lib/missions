@@ -88,7 +88,9 @@ class TransactionFilter extends Filter
      */
     public function minAmount($amount)
     {
-        if (! $amount) return null;
+        if (! $amount) {
+            return null;
+        }
 
         return $this->where('amount', '>=', $amount);
     }
@@ -101,7 +103,9 @@ class TransactionFilter extends Filter
      */
     public function maxAmount($amount)
     {
-        if (! $amount) return null;
+        if (! $amount) {
+            return null;
+        }
 
         return $this->where('amount', '<=', $amount);
     }
@@ -114,7 +118,9 @@ class TransactionFilter extends Filter
      */
     public function minDate($date)
     {
-        if (! $date) return null;
+        if (! $date) {
+            return null;
+        }
 
         return $this->whereDate('created_at', '>=', $date);
     }
@@ -127,7 +133,9 @@ class TransactionFilter extends Filter
      */
     public function maxDate($date)
     {
-        if (! $date) return null;
+        if (! $date) {
+            return null;
+        }
 
         return $this->whereDate('created_at', '<=', $date);
     }

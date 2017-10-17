@@ -2,27 +2,38 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
+use App\Models\v1\Essay;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Traits\SEOTools;
 
 class InfluencersController extends Controller
 {
+    use SEOTools;
+
     public function create()
     {
+        $this->authorize('create', Essay::class);
+
+        $this->seo()->setTitle('Add Influencer Application');
+
         return view('admin.records.influencers.create');
     }
-    
-    public function show($id)
-    {
-        $essay = $this->api->get('essays/' . $id);
 
-        return view('admin.records.influencers.show', compact('essay'));
+    public function show(Essay $influencer)
+    {
+        $this->authorize('view', $influencer);
+
+        $this->seo()->setTitle($influencer->author_name . ' - Influencer Application');
+
+        return view('admin.records.influencers.show')->with('essay', $influencer);
     }
 
-    public function edit($id)
+    public function edit(Essay $influencer)
     {
-        return view('admin.records.influencers.edit', compact('id'));
+        $this->authorize('update', $influencer);
+
+        $this->seo()->setTitle('Edit Influencer Application');
+
+        return view('admin.records.influencers.edit')->with('id', $influencer->id);
     }
 }

@@ -26,7 +26,7 @@ class AdminWithEverything extends FactoryStory
     {
         $user = factory(User::class, 'admin')->create($params);
 
-        $user->assign('admin');
+        $user->assignRole('super_admin');
 
         $user->slug()
             ->save(factory(Slug::class)

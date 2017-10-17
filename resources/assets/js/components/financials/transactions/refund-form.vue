@@ -1,6 +1,6 @@
 <template>
     <div class="panel panel-default panel-body">
-        <spinner v-ref:transactionspinner size="xl" :fixed="false" text="Processing..."></spinner>
+        <spinner ref="transactionspinner" size="xl" :fixed="false" text="Processing..."></spinner>
         <div class="row">
             <div class="col-xs-12">
                 <label>Amount</label>
@@ -53,11 +53,11 @@
                     reason: this.reason,
                     transaction_id: this.transactionId,
                     type: 'refund'
-                }).then(function (response) {
+                }).then((response) => {
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showSuccess', 'Transaction successfully refunded.');
-                    window.location = '/admin/transactions/' + response.body.data.id;
-                },function (response) {
+                    window.location = '/admin/transactions/' + response.data.data.id;
+                },(response) =>  {
                     this.$root.$emit.transactionspinner.hide();
                     this.$root.$emit('showError', 'There are errors on the form.');
                 });

@@ -1,6 +1,6 @@
 <template>
     <div style="position: relative;">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="row">
             <div class="col-sm-12">
                 <form class="form-inline text-right" novalidate>
@@ -70,11 +70,13 @@
                         </ul>
                     </div>
                     <button class="btn btn-default btn-sm" type="button" @click="resetFilter()">Reset Filters <i class="fa fa-times"></i></button>
-                    <export-utility url="projects/export"
-                                    :options="exportOptions"
-                                    :filters="exportFilters">
-                    </export-utility>
-                    <a class="btn btn-primary btn-sm" href="/admin/causes/{{ causeId }}/projects/create">New <i class="fa fa-plus"></i></a>
+                    <template v-if="app.user.can.create_reports">
+                        <export-utility url="projects/export"
+                                        :options="exportOptions"
+                                        :filters="exportFilters">
+                        </export-utility>
+                    </template>
+                    <a class="btn btn-primary btn-sm" :href="'/admin/causes/' +  causeId  + '/projects/create'">New <i class="fa fa-plus"></i></a>
                 </form>
             </div>
         </div>
@@ -117,21 +119,21 @@
             </tr>
             </thead>
             <tbody v-if="projects.length > 0">
-            <tr v-for="project in projects|filterBy search|orderBy orderByField direction">
-                <td v-if="isActive('name')">{{project.name|capitalize}}</td>
-                <td v-if="isActive('type')">{{project.initiative.data.type|capitalize}}</td>
-                <td v-if="isActive('country')">{{project.initiative.data.country.name|capitalize}}</td>
-                <td v-if="isActive('sponsor')">{{project.sponsor.data.name|capitalize}}</td>
+            <tr v-for="project in orderByProp(projects, orderByField, direction)">
+                <td v-if="isActive('name')">{{ project.name|capitalize }}</td>
+                <td v-if="isActive('type')">{{ project.initiative.data.type|capitalize }}</td>
+                <td v-if="isActive('country')">{{ project.initiative.data.country.name|capitalize }}</td>
+                <td v-if="isActive('sponsor')">{{ project.sponsor.data.name|capitalize }}</td>
                 <td v-if="isActive('goal')">$ {{project.goal}}</td>
-                <td v-if="isActive('funds_raised')">{{project.amount_raised|currency}}</td>
+                <td v-if="isActive('funds_raised')">{{currency(project.amount_raised)}}</td>
                 <td v-if="isActive('percent_raised')">{{project.percent_raised}}%</td>
                 <td v-if="isActive('funded_at')">
-                    <span v-if="project.funded">{{project.funded_at|moment 'll'}}</span>
+                    <span v-if="project.funded">{{project.funded_at|moment('ll')}}</span>
                     <span v-else>In progress</span>
                 </td>
-                <td v-if="isActive('created_at')">{{project.created_at|moment 'll'}}</td>
+                <td v-if="isActive('created_at')">{{project.created_at|moment('ll')}}</td>
                 <td>
-                    <a href="/admin/projects/{{project.id}}"><i class="fa fa-cog"></i></a>
+                    <a :href="`/admin/projects/${project.id}`"><i class="fa fa-cog"></i></a>
                 </td>
             </tr>
             </tbody>
@@ -144,7 +146,7 @@
             <tr>
                 <td colspan="10">
                     <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination"
+                        <pagination :pagination="pagination" pagination-key="pagination"
                                     :callback="searchProjects"
                                     size="small">
                         </pagination>
@@ -172,6 +174,7 @@
         },
         data(){
             return{
+                app: MissionsMe,
                 projects: [],
                 orderByField: 'name',
                 direction: 1,
@@ -196,14 +199,14 @@
             }
         },
         watch: {
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.page = 1;
                 this.searchProjects();
             },
-            'page': function (val, oldVal) {
+            'page'(val, oldVal) {
                 this.searchProjects();
             },
-            'per_page': function (val, oldVal) {
+            'per_page'(val, oldVal) {
                 this.searchProjects();
             }
         },
@@ -250,14 +253,14 @@
             searchProjects(){
                 // this.$refs.spinner.show();
                 var params = this.getParameters();
-                this.$http.get('projects', { params: params }).then(function (response) {
-                    this.pagination = response.body.meta.pagination;
-                    this.projects = response.body.data;
+                this.$http.get('projects', { params: params }).then((response) => {
+                    this.pagination = response.data.meta.pagination;
+                    this.projects = response.data.data;
                     // this.$refs.spinner.hide();
                 })
             }
         },
-        ready(){
+        mounted(){
             this.searchProjects();
         }
     }

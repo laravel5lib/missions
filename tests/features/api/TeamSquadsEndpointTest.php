@@ -1,7 +1,9 @@
 <?php
 
-class TeamSquadsEndpointTest extends TestCase
+class TeamSquadsEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
+
     /** @test */
     public function fetches_all_squads_in_team()
     {
@@ -20,7 +22,7 @@ class TeamSquadsEndpointTest extends TestCase
                         'callsign'
                     ]
                 ]
-            ]);
+             ]);
     }
 
     /** @test */
@@ -36,7 +38,7 @@ class TeamSquadsEndpointTest extends TestCase
              ->seeJson([
                 'id' => $squad->id,
                 'callsign' => $squad->callsign
-            ]);
+             ]);
     }
 
     /** @test */
@@ -51,7 +53,7 @@ class TeamSquadsEndpointTest extends TestCase
              ->seeJson([
                 'team_id'  => $team->id,
                 'callsign' => 'Group #1'
-            ]);
+             ]);
     }
 
     /** @test */
@@ -67,7 +69,7 @@ class TeamSquadsEndpointTest extends TestCase
              ->seeJson([
                 'team_id'  => $team->id,
                 'callsign' => 'Group #2'
-            ]);
+             ]);
     }
 
     /** @test */

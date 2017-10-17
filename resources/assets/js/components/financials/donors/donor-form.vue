@@ -1,22 +1,26 @@
 <template>
     <div class="panel panel-default">
-        <validator name="validation" :classes="{ invalid: 'has-error' }">
-            <spinner v-ref:donorspinner size="xl" :fixed="false" text="Saving..."></spinner>
-            <spinner v-ref:spinner size="xl" :fixed="false" text="Loading..."></spinner>
+
+            <spinner ref="donorspinner" size="xl" :fixed="false" text="Saving..."></spinner>
+            <spinner ref="spinner" size="xl" :fixed="false" text="Loading..."></spinner>
             <div class="panel-heading">
                 <h5>Personal Details</h5>
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-6" v-validate-class>
-                        <label>Name</label>
-                        <input type="text"
-                               class="form-control"
-                               v-model="donor.name"
-                               initial="off"
-                               v-validate:name="{required: true}">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6" v-error-handler="{ value: donor.first_name, client: 'firstname' }">
+                                <label>First Name</label>
+                                <input type="text" class="form-control" v-model="donor.first_name" name="firstname" v-validate="'required'">
+                            </div>
+                            <div class="col-md-6" v-error-handler="{ value: donor.last_name, client: 'lastname' }">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control" v-model="donor.last_name" name="lastname" v-validate="'required'">
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label>Company</label>
                         <input type="text" class="form-control" v-model="donor.company">
                     </div>
@@ -27,13 +31,9 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-6" v-validate-class>
+                    <div class="col-md-6" v-error-handler="{ value: donor.email, handle: 'email' }">
                         <label>Email</label>
-                        <input type="text"
-                               class="form-control"
-                               v-model="donor.email"
-                               initial="off"
-                               v-validate:email="{email: true}">
+                        <input type="text" class="form-control" v-model="donor.email" name="email" v-validate="'email'">
                     </div>
                     <div class="col-md-6">
                         <label>Phone</label>
@@ -57,17 +57,17 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6" v-validate-class>
+                    <div class="col-md-6">
                         <label>Zip/Postal Code</label>
-                        <input type="text" class="form-control" v-model="donor.zip" initial="off"
-                               v-validate:zip="{required: true}">
+                        <input type="text" class="form-control" v-model="donor.zip"
+                               name="zip" v-validate="'required'">
                     </div>
-                    <div class="col-md-6" v-validate-class>
+                    <div class="col-md-6" v-error-handler="{ value: donor.country_code, client: 'country' }">
                         <label>Country</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="country" :debounce="250"
-                                  :value.sync="countryCodeObj" :options="countries" label="name"
-                                  placeholder="Select a country" initial="off"
-                                  v-validate:country_code="{required: true}"></v-select>
+                                  v-model="countryCodeObj" :options="UTILITIES.countries" label="name"
+                                  placeholder="Select a country"
+                                  name="country" v-validate="'required'"></v-select>
                     </div>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label>Account Type</label>
-                        <select class="form-control" v-model="donor.account_type" @change="donor.account_id = null" initial="off">
+                        <select class="form-control" v-model="donor.account_type" @change="donor.account_id = null" >
                             <option :value="null">Guest</option>
                             <option value="users">Member</option>
                             <option value="groups">Group</option>
@@ -87,10 +87,10 @@
                     <div class="col-md-6" v-if="donor.account_type" :class="{'has-error' : accountError}">
                         <label>Account Holder</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="accountHolder" :debounce="250" :on-search="getUsers"
-                                  :value.sync="userObj" :options="users" label="name"
+                                  v-model="userObj" :options="users" label="name"
                                   placeholder="Select a user" v-if="donor.account_type == 'users'"></v-select>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="accountHolder" :debounce="250" :on-search="getGroups"
-                                  :value.sync="groupObj" :options="groups" label="name"
+                                  v-model="groupObj" :options="groups" label="name"
                                   placeholder="Select a group" v-if="donor.account_type == 'groups'"></v-select>
                         <span v-if="accountError" class="text-danger">Account already in use.</span>
                     </div>
@@ -106,14 +106,17 @@
                 <button class="btn btn-primary" v-if="!isUpdate" @click="create">Create</button>
                 <button class="btn btn-primary" v-if="isUpdate" @click="update">Save</button>
             </div>
-        </validator>
+
     </div>
 </template>
 <script type="text/javascript">
+    import utilities from '../../utilities.mixin';
+    import errorHandler from '../../error-handler.mixin';
     import vSelect from "vue-select";
     export default{
         name: 'donor-form',
         components: { vSelect },
+        mixins: [errorHandler, utilities],
         props: {
             'isUpdate': {
                 required: false,
@@ -127,7 +130,8 @@
         data() {
             return {
                 donor: {
-                    name: null,
+                    first_name: null,
+                    last_name: null,
                     company: null,
                     email: null,
                     phone: null,
@@ -140,7 +144,6 @@
                     account_id: null,
                     customer_id: null
                 },
-                countries: [],
                 users: [],
                 groups: [],
                 countryCodeObj: null,
@@ -150,41 +153,38 @@
             }
         },
         watch: {
-            'countryCodeObj': function (val) {
+            'countryCodeObj'(val, oldVal) {
                  _.isObject(val) ? this.donor.country_code = val.code : this.donor.country_code  = null;
             },
-            'userObj': function (val) {
+            'userObj'(val, oldVal) {
                  _.isObject(val) ? this.donor.account_id = val.id : this.donor.account_id  = null;
             },
-            'groupObj': function (val) {
+            'groupObj'(val, oldVal) {
                  _.isObject(val) ? this.donor.account_id = val.id : this.donor.account_id  = null;
             }
         },
         methods: {
-            checkForError(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$Donor[field].invalid;
-            },
             fetch() {
-                this.$http.get('donors/' + this.donorId).then(function (response) {
-                    this.donor.name = response.body.data.name;
-                    this.donor.company = response.body.data.company;
-                    this.donor.email = response.body.data.email;
-                    this.donor.phone = response.body.data.phone;
-                    this.donor.address = response.body.data.address;
-                    this.donor.city = response.body.data.city;
-                    this.donor.state = response.body.data.state;
-                    this.donor.zip = response.body.data.zip;
-                    this.donor.country_code = response.body.data.country.code;
-                    this.countryCodeObj = response.body.data.country;
-                    this.donor.account_type = response.body.data.account_type;
-                    this.donor.account_id = response.body.data.account_id;
-                    this.donor.customer_id = response.body.data.customer_id;
+                this.$http.get('donors/' + this.donorId).then((response) => {
+                    this.donor.first_name = response.data.data.first_name;
+                    this.donor.last_name = response.data.data.last_name;
+                    this.donor.company = response.data.data.company;
+                    this.donor.email = response.data.data.email;
+                    this.donor.phone = response.data.data.phone;
+                    this.donor.address = response.data.data.address;
+                    this.donor.city = response.data.data.city;
+                    this.donor.state = response.data.data.state;
+                    this.donor.zip = response.data.data.zip;
+                    this.donor.country_code = response.data.data.country.code;
+                    this.countryCodeObj = response.data.data.country;
+                    this.donor.account_type = response.data.data.account_type;
+                    this.donor.account_id = response.data.data.account_id;
+                    this.donor.customer_id = response.data.data.customer_id;
 
                     if(this.donor.account_type == 'users') {
-                        this.userObj = {'id': response.body.data.account_id, 'name': response.body.data.account_name}
+                        this.userObj = {'id': response.data.data.account_id, 'name': response.data.data.account_name}
                     } else {
-                        this.groupObj = {'id': response.body.data.account_id, 'name': response.body.data.account_name}
+                        this.groupObj = {'id': response.data.data.account_id, 'name': response.data.data.account_name}
                     }
 
                 });
@@ -192,39 +192,41 @@
             create() {
                 this.$refs.donorspinner.show();
                 // validate manually
-                var self = this
-                this.$validate(true, function () {
-                    if (self.$validation.invalid) {
+                this.$validator.validateAll().then(result =>  {
+                    if (result) {
+                        this.$http.post('donors', this.donor).then((response) => {
+                            this.$refs.donorspinner.hide();
+                            this.reset();
+                            this.$root.$emit('showSuccess', 'Donor created successfully.');
+                            this.$emit('donor-created', response.data.data.id);
+                        },(response) =>  {
+                            this.$refs.donorspinner.hide();
+                            this.$root.$emit('showError', 'There are errors on the form');
+                        });
+                    } else {
+                        this.$refs.donorspinner.hide();
+                        this.$root.$emit('showError', 'There are errors on the form');
                     }
                 })
-                this.$http.post('donors', this.donor).then(function (response) {
-                    this.$refs.donorspinner.hide();
-                    this.reset();
-                    this.$dispatch('showSuccess', 'Donor created successfully.');
-                    this.$dispatch('donor-created', response.body.data.id);
-                },function (response) {
-                    this.$refs.donorspinner.hide();
-                    this.$dispatch('showError', 'There are errors on the form');
-                });
             },
             update() {
                 this.accountError = false;
                 // this.$refs.spinner.show();
-                this.$http.put('donors/' + this.donorId, this.donor).then(function (response) {
-                    this.$dispatch('showSuccess', 'Donor updated successfully.');
+                this.$http.put('donors/' + this.donorId, this.donor).then((response) => {
+                    this.$root.$emit('showSuccess', 'Donor updated successfully.');
                     // this.$refs.spinner.hide();
-                },function (response) {
+                },(response) =>  {
                     if(_.contains(_.keys(response.errors), 'account_id')) {
                         this.accountError = true;
                     }
-                    this.$dispatch('showError', 'There are errors on the form.');
+                    this.$root.$emit('showError', 'There are errors on the form.');
                     // this.$refs.spinner.hide();
                 });
             },
             cancel() {
                 this.reset();
                 if (this.$parent != this.$root) {
-				    this.$dispatch('cancel');
+				    this.$emit('cancel');
 			    } else {
 			        if( this.isUpdate) {
 			            return window.location.href = '/admin/donors/' + this.donorId;
@@ -233,7 +235,8 @@
 			    }
             },
             reset() {
-                this.donor.name = null;
+                this.donor.first_name = null;
+                this.donor.last_name = null;
                 this.donor.company = null;
                 this.donor.email = null;
                 this.donor.phone = null;
@@ -246,29 +249,22 @@
                 this.donor.account_id = null;
                 this.donor.customer_id =  null;
             },
-            getCountries() {
-                // this.$refs.spinner.show();
-                this.$http.get('utilities/countries').then(function (response) {
-                    this.countries = response.body.countries;
-                    // this.$refs.spinner.hide();
-                });
-            },
             getUsers(search) {
                 // this.$refs.spinner.show();
-                this.$http.get('users?per_page=10', { params: {search: search} }).then(function (response) {
-                    this.users = response.body.data;
+                this.$http.get('users?per_page=10', { params: {search: search} }).then((response) => {
+                    this.users = response.data.data;
                     // this.$refs.spinner.hide();
                 });
             },
             getGroups(search) {
                 // this.$refs.spinner.show();
-                this.$http.get('groups?per_page=10', { params: {search: search} }).then(function (response) {
-                    this.groups = response.body.data;
+                this.$http.get('groups?per_page=10', { params: {search: search} }).then((response) => {
+                    this.groups = response.data.data;
                     // this.$refs.spinner.hide();
                 });
             }
         },
-        ready() {
+        mounted() {
             if (this.isUpdate) {
                 this.fetch();
             }

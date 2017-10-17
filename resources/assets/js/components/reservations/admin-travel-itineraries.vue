@@ -1,20 +1,20 @@
 <template>
 	<div style="position:relative;">
-		<validator name="TravelItineraries">
+
 			<form id="TravelItinerariesForm" novalidate>
-				<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+				<spinner ref="spinner" size="sm" text="Loading"></spinner>
 
 				<accordion :one-at-atime="true" type="info">
-					<panel is-open="false" :header="itinerary.name" v-for="itinerary in itineraries" v-ref:iList>
+					<panel is-open="false" :header="itinerary.name" v-for="itinerary in itineraries" ref="iList">
 						<div v-for="item in itinerary.items">
 							<h5>Activty</h5>
-							<travel-activity v-ref:activity :activity="item.activity"></travel-activity>
+							<travel-activity ref="activity" :activity="item.activity"></travel-activity>
 
 							<h5>Transport</h5>
-							<travel-transport v-ref:transport :reservation-id="reservationId" :transport="item.transport"></travel-transport>
+							<travel-transport ref="transport" :reservation-id="reservationId" :transport="item.transport"></travel-transport>
 
 							<h5>Hub</h5>
-							<travel-hub v-ref:hub :hub="item.hub"></travel-hub>
+							<travel-hub ref="hub" :hub="item.hub"></travel-hub>
 
 							<hr class="divider sm">
 
@@ -31,7 +31,7 @@
 					New Itinerary
 				</button>
 			</form>
-		</validator>
+
 	</div>
 </template>
 <style></style>
@@ -151,33 +151,33 @@
         },
         methods: {
             getItineraries(){
-                this.$http.get('itineraries', {params: {include: '',}}).then(function (response) {
-                    this.itineraries = response.body.data;
+                this.$http.get('itineraries', {params: {include: '',}}).then((response) => {
+                    this.itineraries = response.data.data;
                 });
             },
             deleteItinerary(itinerary){
-                this.$http.delete('itineraries/travel', itinerary).then(function (response) {
-                    //this.itineraries.push(response.body.data);
+                this.$http.delete('itineraries/travel', itinerary).then((response) => {
+                    //this.itineraries.push(response.data.data);
                 });
             },
             saveItinerary(itinerary){
-                this.$http.post('itineraries/travel', itinerary).then(function (response) {
-                    this.itineraries.push(response.body.data);
+                this.$http.post('itineraries/travel', itinerary).then((response) => {
+                    this.itineraries.push(response.data.data);
                 });
             },
             updateItinerary(itinerary){
-                this.$http.put('itineraries/travel/' + itinerary.id, itinerary).then(function (response) {
-                    return itinerary = response.body.data;
+                this.$http.put('itineraries/travel/' + itinerary.id, itinerary).then((response) => {
+                    return itinerary = response.data.data;
                 });
             },
             newItinerary(){
                 this.itineraries.push(this.itineraryObj);
             },
         },
-        ready(){
+        mounted(){
 //            this.getItineraries();
 
-//            this.saveItinerary();
+//            this.postItinerary();
         }
     }
 </script>

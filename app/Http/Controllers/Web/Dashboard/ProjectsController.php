@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Web\Dashboard;
 
-use App\Http\Controllers\Controller;
 use App\Models\v1\Project;
 use App\Models\v1\ProjectCause;
+use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Traits\SEOTools;
 
 class ProjectsController extends Controller
 {
+    use SEOTools;
+
     /**
      * @var Project
      */
@@ -33,6 +36,8 @@ class ProjectsController extends Controller
      */
     public function index()
     {
+        $this->seo()->setTitle('Projects');
+
         return view('dashboard.projects.index');
     }
 
@@ -45,8 +50,9 @@ class ProjectsController extends Controller
      */
     public function show($id, $tab = 'details')
     {
-
         $project = $this->project->findOrFail($id);
+
+        $this->seo()->setTitle(title_case($project->name . ' ' . $tab));
 
         return view('dashboard.projects.' . $tab, compact('project', 'tab'));
     }

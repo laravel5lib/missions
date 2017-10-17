@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h5>Payments Due</h5>
@@ -8,7 +8,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <label>Balance Due</label>
-                        <p>{{ due.balance | currency }}</p>
+                        <p>{{ currency(due.balance)}}</p>
                         <hr class="divider inv hidden-lg">
                     </div>
                     <div class="col-md-6">
@@ -18,9 +18,9 @@
                     </div>
                     <div class="col-md-3">
                         <label v-if="due.type === 'static'">Immediately</label>
-                        <label v-else>Due {{ due.due_at | moment 'll' true }}</label>
+                        <label v-else>Due {{ due.due_at | moment('ll', true) }}</label>
                         <p>
-                            <span class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending' }">{{due.status|capitalize}}</span>
+                            <span class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending' }">{{ due.status|capitalize }}</span>
                         </p>
                         <hr class="divider inv hidden-lg">
                     </div>
@@ -54,8 +54,8 @@
         },
         methods: {
             dateIsBetween(a, b){
-                    var start = b === 0 ? moment().startOf('month') : moment().add(1, 'month').startOf('month');
-                var stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
+                let start = b === 0 ? moment().startOf('month') : moment().add(1, 'month').startOf('month');
+                let stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
                 console.log(moment(a).isBetween(start, stop));
                 return moment(a).isBetween(start, stop);
             },
@@ -79,19 +79,19 @@
 
             }
         },
-        ready(){
-            /*this.resource.get().then(function (response) {
-                this.setReservationData(response.body.data)
+        mounted(){
+            /*this.resource.get().then((response) => {
+                this.setReservationData(response.data.data)
             });*/
 
             //Listen to Event Bus
-            this.$root.$on('Reservation:CostsUpdated', function (data) {
+            this.$root.$on('Reservation:CostsUpdated', (data) => {
                 this.setReservationData(data)
-            }.bind(this));
+            });
 
-            this.$root.$on('Reservation:CostsReverted', function (data) {
+            this.$root.$on('Reservation:CostsReverted', (data) => {
                 this.setReservationData(data)
-            }.bind(this));
+            });
 
         }
     }

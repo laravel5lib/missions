@@ -1,7 +1,7 @@
 <template>
     <div>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
+        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
@@ -40,7 +40,7 @@
                 <hr class="divider inv sm">
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
-        </aside>
+        </mm-aside>
         
         <div class="row">
             <div class="col-sm-12">
@@ -172,10 +172,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="fund in funds|filterBy search|orderBy orderByField direction">
+            <tr v-for="fund in orderByProp(funds, orderByField, direction)">
                 <td v-if="isActive('name')" v-text="fund.name"></td>
                 <td v-if="isActive('type')">
-                    <span class="label label-default" v-text="fund.type|capitalize"></span>
+                    <span class="label label-default">{{fund.type|capitalize}}</span>
                 </td>
                 <td v-if="isActive('item')">
                     <code>{{ fund.item }}</code>
@@ -184,16 +184,16 @@
                     <code>{{ fund.class }}</code>
                 </td>
                 <td v-if="isActive('balance')">
-                    <span v-text="fund.balance|currency" :class="{'text-success': fund.balance > 0, 'text-danger': fund.balance < 0}"></span>
+                    <span :class="{'text-success': fund.balance > 0, 'text-danger': fund.balance < 0}">{{currency(fund.balance)}}</span>
                 </td>
-                <td><a href="/admin/funds/{{ fund.id }}"><i class="fa fa-cog"></i></a></td>
+                <td><a :href="`/admin/funds/${ fund.id }`"><i class="fa fa-cog"></i></a></td>
             </tr>
             </tbody>
             <tfoot>
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination" size="small" :callback="searchFunds"></pagination>
+                        <pagination :pagination="pagination" pagination-key="pagination" size="small" :callback="searchFunds"></pagination>
                     </div>
                 </td>
             </tr>
@@ -238,13 +238,14 @@
                 search: '',
                 activeFields: ['name', 'type', 'balance', 'class'],
                 maxActiveFields: 5,
+                maxActiveFieldsOptions: [3, 4, 5, 6, 7, 8],
 
                 // filter vars
                 filters: {
                     tags: [],
                     minBalance: null,
                     maxBalance: null,
-                    type: null,
+                    type: '',
                     archived: false
                 },
                 showFilters: false,
@@ -263,14 +264,14 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: function (val) {
+                handler(val, oldVal) {
                     console.log(val);
                     this.pagination.current_page = 1;
                     this.searchFunds();
                 },
                 deep: true
             },
-            'archived': function (val) {
+            'archived'(val, oldVal) {
                 if (val) {
                     this.filters.archived = true;
                     this.searchFunds();
@@ -279,15 +280,15 @@
                     this.searchFunds();
                 }
             },
-            'direction': function (val) {
+            'direction'(val, oldVal) {
                 this.searchFunds();
             },
-            'tagsString': function (val) {
+            'tagsString'(val, oldVal) {
                 let tags = val.split(/[\s,]+/);
                 this.filters.tags = tags[0] !== '' ? tags : '';
                 this.searchFunds();
             },
-            'activeFields': function (val, oldVal) {
+            'activeFields'(val, oldVal) {
                 // if the orderBy field is removed from view
                 if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
                     // default to first visible field
@@ -295,12 +296,12 @@
                 }
                 this.updateConfig();
             },
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.page = 1;
                 this.pagination.current_page = 1;
                 this.searchFunds();
             },
-            'per_page': function (val, oldVal) {
+            'per_page'(val, oldVal) {
                 this.searchFunds();
             },
 
@@ -370,20 +371,20 @@
             searchFunds(){
                 let params = this.getListSettings();
                 // this.$refs.spinner.show();
-                this.$http.get('funds', { params: params }).then(function (response) {
+                this.$http.get('funds', { params: params }).then((response) => {
                     let self = this;
-                    this.funds = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                    this.funds = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
-                }, function (error) {
+                }, (error) =>  {
                     // this.$refs.spinner.hide();
                     //TODO add error alert
-                }).then(function () {
+                }).then(() => {
                     this.updateConfig();
                 });
             }
         },
-        ready() {
+        mounted() {
             // load view state
             if (localStorage[this.storageName]) {
                 let config = JSON.parse(localStorage[this.storageName]);

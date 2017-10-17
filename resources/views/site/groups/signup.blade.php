@@ -16,12 +16,12 @@
     <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+            <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-sm-12 text-center">
-                                <label>Trip Interest</label>
+                                <h4>I'm Interested in a Trip!</h4>
                             </div>
                         </div>
                         <hr class="divider inv sm">

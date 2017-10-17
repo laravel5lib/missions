@@ -46,5 +46,4 @@ class PaymentTransformer extends TransformerAbstract
 
         return $this->item($cost, new CostTransformer);
     }
-
 }

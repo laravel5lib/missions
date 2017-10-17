@@ -1,6 +1,6 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
     <div style="position:relative;">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
 
         <button class="btn btn-primary btn-xs" @click="add">
             <span class="fa fa-plus"></span> Add Existing
@@ -24,7 +24,7 @@
             <template v-for="cost in project.costs.data">
                 <tr>
                     <!--<td class="text-center">
-                        <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{due.status|capitalize}}</small>
+                        <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{ due.status|capitalize }}</small>
                     </td>-->
                     <td class="text-muted">
 
@@ -32,8 +32,8 @@
                         <i class="fa fa-unlock" v-else @click="costLocking(cost, true)"></i>
                     </td>
                     <td>{{ cost.name || cost.cost }}</td>
-                    <td>{{ cost.type|capitalize}}</td>
-                    <td>{{ cost.amount| currency }}</td>
+                    <td>{{ cost.type|capitalize }}</td>
+                    <td>{{ currency(cost.amount) }}</td>
                     <td>
                         <a class="btn btn-danger btn-xs" @click="confirmRemove(cost)"><i class="fa fa-times"></i></a>
                     </td>
@@ -42,24 +42,19 @@
             </tbody>
         </table>
 
-        <modal title="Add Costs" :show.sync="showAddModal" effect="fade" width="800" :callback="addCosts">
+        <modal title="Add Costs" :value="showAddModal" @closed="showAddModal=false" effect="fade" width="800" :callback="addCosts">
             <div slot="modal-body" class="modal-body">
-                <validator name="AddCost">
-                    <form class="for" novalidate>
-                        <div class="form-group" :class="{ 'has-error': checkForError('costs') }">
-                            <label class="control-label">Available Costs</label>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
-                                      label="name"></v-select>
-                            <select hidden="" v-model="user_id" v-validate:costs="{ required: true }" multiple>
-                                <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
-                            </select>
-                        </div>
-                    </form>
-                </validator>
+                <form name="AddCost" class="for" novalidate>
+                    <div class="form-group" :class="{ 'has-error': errors.has('costs') }">
+                        <label class="control-label">Available Costs</label>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple v-model="selectedCosts" :options="availableCosts"
+                                  label="name" name="costs" v-validate="'required'"></v-select>
+                    </div>
+                </form>
             </div>
         </modal>
 
-        <modal class="text-center" :show.sync="deleteModal" title="Delete Cost" small="true">
+        <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" :small="true">
             <div slot="modal-body" class="modal-body text-center">Delete {{ selectedCost.name }}?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -67,7 +62,7 @@
             </div>
         </modal>
 
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+        <alert v-model="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Done</strong>
             <p>{{successMessage}}</p>
@@ -101,7 +96,6 @@
                     enforced: false,
                 },
                 selectedCost: null,
-                resource: this.$resource('projects/' + this.id, { include: 'dues,costs.payments,initiative.costs.payments' }),
                 showAddModal: false,
                 deleteModal: false,
                 showNewModal: false,
@@ -120,10 +114,6 @@
                 let stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
                 console.log(moment(a).isBetween(start, stop));
                 return moment(a).isBetween(start, stop);
-            },
-            checkForError(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$AddCost[field].invalid && this.attemptSubmit;
             },
             checkForEditCostError(field) {
                 // if user clicked submit button while the field is invalid trigger error styles
@@ -146,7 +136,7 @@
             costLocking(cost, status) {
                 cost.locked = status;
                 let costs = [];
-                _.each(this.project.costs.data, function (c) {
+                _.each(this.project.costs.data, (c) => {
                     costs.push({id: c.cost_id, locked: c.locked});
                 });
 
@@ -177,7 +167,7 @@
             updateCost(){
                 // prep current costs
                 let costs = [];
-                _.each(this.project.costs.data, function (cost) {
+                _.each(this.project.costs.data, (cost) => {
                     if (cost.cost_id === this.editedCost.cost_id) {
                         costs.push({
                             id: this.editedCost.cost_id,
@@ -189,7 +179,7 @@
                     } else {
                         costs.push({id: cost.cost_id, locked: cost.locked});
                     }
-                }.bind(this));
+                });
 
                 let project = this.preppedProject;
                 project.costs = costs;
@@ -203,7 +193,7 @@
             remove(cost){
                 let project = this.preppedProject;
                 project.costs = [];
-                _.each(this.project.costs.data, function (cs) {
+                _.each(this.project.costs.data, (cs) => {
                     if (cs.cost_id !== cost.cost_id) {
                         project.costs.push({ id: cs.cost_id, locked: cs.locked})
                     }
@@ -215,13 +205,13 @@
             addCosts(){
                 // prep current costs
                 let currentCostIds = [];
-                _.each(this.project.costs.data, function (cost) {
+                _.each(this.project.costs.data, (cost) => {
                     currentCostIds.push({ id: cost.id || cost.cost_id, locked: cost.locked })
                 });
 
                 // prep added costs
                 let selectedCostIds = [];
-                _.each(this.selectedCosts, function (cost) {
+                _.each(this.selectedCosts, (cost) => {
                     selectedCostIds.push({ id: cost.id })
                 });
 
@@ -241,7 +231,7 @@
 
                 // get only ids of current costs so we don't change anything
                 initiative.costs = [];
-                _.each(this.project.initiative.data.costs.data, function (dl) {
+                _.each(this.project.initiative.data.costs.data, (dl) => {
                     initiative.costs.push({id: dl.id});
                 });
                 initiative.costs.push(this.newDeadline);
@@ -250,8 +240,8 @@
                 delete initiative.rep_id;
 
                 // this.$refs.spinner.show();
-                this.$http.put('initiatives/' + initiative.id, initiative).then(function (response) {
-                    let thisInitiative = response.body.data;
+                this.$http.put('initiatives/' + initiative.id, initiative).then((response) => {
+                    let thisInitiative = response.data.data;
                     this.selectedcosts = new Array(this.newDeadline);
 
                     return this.addCosts();
@@ -266,10 +256,10 @@
             doUpdate(project, success){
 
                 // this.$refs.spinner.show();
-                return this.resource.update(project).then(function (response) {
-                    this.setProjectData(response.body.data);
+                return this.$http.put(`projects/${this.id}?include=dues,costs.payments,initiative.costs.payments`, project).then((response) => {
+                    this.setProjectData(response.data.data);
                     this.selectedCosts = [];
-                    this.$root.$emit('AdminProject:CostsUpdated', response.body.data);
+                    this.$root.$emit('AdminProject:CostsUpdated', response.data.data);
                     this.successMessage = success || 'Costs updated Successfully';
                     this.showSuccess = true;
                     // this.$refs.spinner.hide();
@@ -287,15 +277,17 @@
                 };
 
                 // get available costs intersect with current
-                this.availableCosts = _.filter(project.initiative.data.costs.data, function (cost) {
+                this.availableCosts = _.filter(project.initiative.data.costs.data, (cost) => {
                     return !_.findWhere(project.costs.data, {cost_id: cost.id, type: 'incremental' || 'optional'})
                 });
             }
         },
-        ready(){
+        mounted(){
             // this.$refs.spinner.show();
-            this.resource.get().then(function (response) {
-                this.setProjectData(response.body.data);
+            this.$http.get(`projects/${this.id}`, { params: {
+                include: 'dues,costs.payments,initiative.costs.payments'
+            }}).then((response) => {
+                this.setProjectData(response.data.data);
                 // this.$refs.spinner.hide();
             });
 

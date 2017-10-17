@@ -1,6 +1,6 @@
 <template>
     <div>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="row">
             <div class="col-sm-12">
                 <form class="form-inline text-right" novalidate>
@@ -54,12 +54,14 @@
                             </li>
                         </ul>
                     </div>
-                    <button class="btn btn-default btn-sm" type="button" @click="resetFilter()">Reset Filters <i class="fa fa-times"></i></button>
-                    <export-utility url="initiatives/export"
-                                    :options="exportOptions"
-                                    :filters="exportFilters">
-                    </export-utility>
-                    <a class="btn btn-primary btn-sm" href="/admin/causes/{{ causeId }}/initiatives/create">New <i class="fa fa-plus"></i></a>
+                    <button class="btn btn-default btn-sm" type="button" @click="resetFilter">Reset Filters <i class="fa fa-times"></i></button>
+                    <template v-if="app.user.can.create_reports">
+                        <export-utility url="initiatives/export"
+                                        :options="exportOptions"
+                                        :filters="exportFilters">
+                        </export-utility>
+                    </template>
+                    <a class="btn btn-primary btn-sm" :href="'/admin/causes/' +  causeId  + '/initiatives/create'">New <i class="fa fa-plus"></i></a>
                 </form>
             </div>
         </div>
@@ -97,15 +99,15 @@
             </tr>
             </thead>
             <tbody v-if="initiatives.length > 0">
-            <tr v-for="initiative in initiatives|filterBy search|orderBy orderByField direction">
-                <td v-if="isActive('type')">{{initiative.type|capitalize}}</td>
-                <td v-if="isActive('country')">{{initiative.country.name|capitalize}}</td>
-                <td v-if="isActive('started_at')">{{initiative.started_at|moment 'll'}}</td>
-                <td v-if="isActive('ended_at')">{{initiative.ended_at|moment 'll'}}</td>
+            <tr v-for="initiative in orderByProp(initiatives, orderByField, direction)">
+                <td v-if="isActive('type')">{{ initiative.type|capitalize }}</td>
+                <td v-if="isActive('country')">{{ initiative.country.name|capitalize }}</td>
+                <td v-if="isActive('started_at')">{{initiative.started_at|moment('ll')}}</td>
+                <td v-if="isActive('ended_at')">{{initiative.ended_at|moment('ll')}}</td>
                 <td v-if="isActive('projects')">{{initiative.projects_count}}</td>
-                <td v-if="isActive('created_at')">{{initiative.created_at|moment 'll'}}</td>
+                <td v-if="isActive('created_at')">{{initiative.created_at|moment('ll')}}</td>
                 <td>
-                    <a href="/admin/initiatives/{{initiative.id}}"><i class="fa fa-cog"></i></a>
+                    <a :href="`/admin/initiatives/${initiative.id}`"><i class="fa fa-cog"></i></a>
                 </td>
             </tr>
             </tbody>
@@ -118,7 +120,7 @@
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination"
+                        <pagination :pagination="pagination" pagination-key="pagination"
                                     :callback="searchInitiatives"
                                     size="small">
                         </pagination>
@@ -146,6 +148,7 @@
         },
         data(){
             return{
+                app: MissionsMe,
                 initiatives: [],
                 orderByField: 'started_at',
                 direction: 1,
@@ -171,14 +174,14 @@
             }
         },
         watch: {
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.page = 1;
                 this.searchInitiatives();
             },
-            'page': function (val, oldVal) {
+            'page'(val, oldVal) {
                 this.searchInitiatives();
             },
-            'per_page': function (val, oldVal) {
+            'per_page'(val, oldVal) {
                 this.searchInitiatives();
             }
         },
@@ -224,14 +227,14 @@
             searchInitiatives(){
                 // this.$refs.spinner.show();
                 var params = this.getParameters();
-                this.$http.get('causes/' + this.causeId + '/initiatives', { params: params }).then(function (response) {
-                    this.pagination = response.body.meta.pagination;
-                    this.initiatives = response.body.data;
+                this.$http.get('causes/' + this.causeId + '/initiatives', { params: params }).then((response) => {
+                    this.pagination = response.data.meta.pagination;
+                    this.initiatives = response.data.data;
                     // this.$refs.spinner.hide();
                 })
             }
         },
-        ready(){
+        mounted(){
             this.searchInitiatives();
         }
     }

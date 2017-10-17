@@ -1,7 +1,7 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
 	<div class="row">
 		<div class="col-sm-12">
-			<validator name="TripReqs" @valid="onValid">
+
 				<form id="TripReqs" class="form-horizontal" novalidate>
 
 					<div class="form-group">
@@ -20,15 +20,15 @@
 									New Requirement
 								</div>
 								<div class="panel-body">
-									<validator name="TripReqsCreate">
+
 										<form class="form" novalidate>
 											<div class="row">
 												<div class="col-sm-12">
 													<div class="row">
 														<div class="col-sm-6">
-															<div class="form-group" :class="{'has-error': checkForError('name')}">
+															<div class="form-group" :class="{'has-error': errors.has('name')}">
 																<label for="name">Name</label>
-																<select id="name" class="form-control input-sm" v-model="newReq.name" v-validate:name="{ required: true }">
+																<select id="name" class="form-control input-sm" v-model="newReq.name" name="name" v-validate="'required'">
 																	<option value="">-- select --</option>
 																	<option :value="option" v-for="option in resources">{{option}}</option>
 																</select>
@@ -46,21 +46,21 @@
 
 													<div class="row">
 														<div class="col-sm-6">
-															<div class="form-group" :class="{'has-error': checkForError('grace') }">
+															<div class="form-group" :class="{'has-error': errors.has('grace') }">
 																<label for="grace_period">Grace Period</label>
-																<div class="input-group input-group-sm" :class="{'has-error': checkForErrorPayment('grace') }">
+																<div class="input-group input-group-sm" :class="{'has-error': errors.hasPayment('grace') }">
 																	<input id="grace_period" type="number" class="form-control" number v-model="newReq.grace_period"
-																		   v-validate:grace="{required: true, min:0}">
+																		   name="grace" v-validate="'required|min:0'">
 																	<span class="input-group-addon">Days</span>
 																</div>
 															</div>
 														</div>
 														<div class="col-sm-6">
-															<div class="form-group" :class="{'has-error': checkForError('due')}">
+															<div class="form-group" :class="{'has-error': errors.has('due')}">
 																<label for="due_at">Due</label>
-																<date-picker :input-sm="true" :model.sync="newReq.due_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+																<date-picker input-sm v-model="newReq.due_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
 																<input type="datetime" id="due_at" class="form-control input-sm hidden"
-																	   v-model="newReq.due_at" v-validate:due="{required: true}">
+																	   v-model="newReq.due_at" name="due" v-validate="'required'">
 															</div>
 
 														</div>
@@ -76,7 +76,7 @@
 												</div>
 											</div>
 										</form>
-									</validator>
+
 								</div>
 								<div class="panel-footer text-right">
 									<a class="btn btn-xs btn-default" @click="toggleNewRequirement=false"><i class="fa fa-times"></i> Cancel</a>
@@ -98,14 +98,14 @@
 								</tr>
 								</thead>
 								<tbody>
-								<tr v-for="requirement in requirements|orderBy 'due_at'">
+								<tr v-for="requirement in orderByProp(requirements, 'due_at')">
 									<td>{{requirement.name}}</td>
 									<td>{{requirement.document_type}}</td>
 									<td>
 										{{requirement.due_at|moment}}
 									</td>
 									<td>
-										{{requirement.grace_period}} {{requirement.amount_owed|pluralize 'day'}}
+										{{requirement.grace_period}} {{pluralize(requirement.amount_owed, 'day')}}
 									</td>
 									<!--<td>{{requirement.enforced}}</td>-->
 									<td>
@@ -118,7 +118,7 @@
 						</div>
 					</div>
 				</form>
-			</validator>
+
 		</div>
 	</div>
 </template>
@@ -164,7 +164,7 @@
 
 			onValid(){
 				this.populateWizardData();
-				this.$dispatch('reqs', true);
+				this.$emit('reqs', true);
 				//this.$parent.details = this.details;
 			},
 			checkForError(field){
@@ -189,13 +189,12 @@
 				}
 			}
 		},
-		activate(done){
+		activated(){
 			$('html, body').animate({scrollTop: 0}, 300);
 			$.extend(this, {
 				requirements: this.$parent.trip.requirements,
 			});
-			this.$dispatch('reqs', true);
-			done();
+			this.$emit('reqs', true);
 		}
 	}
 </script>

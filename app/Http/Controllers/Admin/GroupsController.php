@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\v1\Group;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Traits\SEOTools;
 
 class GroupsController extends Controller
 {
+    use SEOTools;
 
     /**
      * @var Group
@@ -31,6 +33,8 @@ class GroupsController extends Controller
     {
         $this->authorize('view', $this->group);
 
+        $this->seo()->setTitle('Groups');
+
         return view('admin.groups.index');
     }
 
@@ -46,6 +50,8 @@ class GroupsController extends Controller
 
         $group = $this->api->get('groups/'.$id, ['include' => 'trips']);
 
+        $this->seo()->setTitle($group->name . ' Group');
+
         return view('admin.groups.show')->with('group', $group);
     }
 
@@ -59,6 +65,8 @@ class GroupsController extends Controller
     {
         $this->authorize('edit', $this->group);
 
+        $this->seo()->setTitle('Edit Group');
+
         return view('admin.groups.edit')->with('id', $id);
     }
 
@@ -70,6 +78,8 @@ class GroupsController extends Controller
     public function create()
     {
         $this->authorize('create', $this->group);
+
+        $this->seo()->setTitle('Create Group');
 
         return view('admin.groups.create');
     }

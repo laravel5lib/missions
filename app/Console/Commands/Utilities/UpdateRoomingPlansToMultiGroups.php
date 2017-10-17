@@ -45,7 +45,7 @@ class UpdateRoomingPlansToMultiGroups extends Command
     {
         $plans = $this->plan->with('groups')->getAll();
 
-        foreach($plans as $plan) {
+        foreach ($plans as $plan) {
             $plan->groups()->sync(['group_id' => $plan->group_id]);
         }
     }

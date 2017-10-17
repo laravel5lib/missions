@@ -1,10 +1,10 @@
 <template>
     <div style="position:relative">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <template v-if="reservations.length">
             <div class="col-xs-6 col-md-4" v-for="reservation in paginatedReservations">
                 <div class="panel panel-default">
-                    <img class="img-responsive" :src="'/api/' + reservation.avatar.source + '?q=25'" alt="{{ reservation.name }}">
+                    <img class="img-responsive" :src="'/api/' + reservation.avatar.source + '?q=25'" :alt=" reservation.name ">
                     <div class="panel-body text-center">
                         <h6>{{ reservation.given_names }} {{ reservation.surname }}</h6>
                     </div>
@@ -61,11 +61,11 @@
             }
         },
         watch:{
-            'page': function (val, oldVal) {
+            'page'(val, oldVal) {
                 this.pagination.current_page = val;
                 this.paginate();
             },
-            'reservations':function (val) {
+            'reservations':(val) =>  {
                 if(val.length) {
                     this.paginate();
                 }
@@ -78,7 +78,7 @@
                 var start = (this.pagination.current_page - 1) * this.per_page;
                 var end   = start + this.per_page;
                 var range = _.range(start, end);
-                _.each(range, function (index) {
+                _.each(range, (index) => {
                     if (this.reservations[index])
                         array.push(this.reservations[index]);
                 }, this);
@@ -86,7 +86,7 @@
             },
 
         },
-        ready(){
+        mounted(){
             console.log(this.reservations);
             this.pagination.total_pages = Math.ceil(this.reservations.length / this.per_page);
             this.paginate();

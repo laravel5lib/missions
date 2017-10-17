@@ -3,7 +3,8 @@ namespace App\Services;
 
 use App\Models\v1\Reservation;
 
-class Transportation {
+class Transportation
+{
 
     private $reservation;
     private $transports;
@@ -31,10 +32,9 @@ class Transportation {
             'Dep Arr AM' => null,
         ]);
 
-        collect($this->transports)->filter(function($transport) {
+        collect($this->transports)->filter(function ($transport) {
             return $transport->designation == 'outbound';
-        })->each(function ($transport) use($data)
-        {
+        })->each(function ($transport) use ($data) {
             $data['Hotel Dep'] = $transport->depart_at->subHours(3)->format('h:i a');
             $data['Dep Board'] = $transport->depart_at->subHours(1)->format('h:i a');
             $data['Dep Flight'] = strtoupper($transport->vessel_no);
@@ -60,10 +60,9 @@ class Transportation {
             'Ret Arr AM' => null
         ]);
 
-        collect($this->transports)->filter(function($transport) {
+        collect($this->transports)->filter(function ($transport) {
             return $transport->designation == 'return';
-        })->each(function ($transport) use($data)
-        {
+        })->each(function ($transport) use ($data) {
             $data['Ret Board'] = $transport->depart_at->subHours(1)->format('h:i a');
             $data['Ret Flt'] = strtoupper($transport->vessel_no);
             $data['Ret Time'] = $transport->depart_at->format('h:i a');

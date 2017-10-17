@@ -47,8 +47,9 @@ class Filter extends ModelFilter
         $column = $param[0];
         $direction = isset($param[1]) ? $param[1] : 'asc';
 
-        if ( in_array($column, $this->sortable) )
+        if (in_array($column, $this->sortable)) {
             return $this->orderBy($column, $direction);
+        }
 
         return $this;
     }
@@ -61,32 +62,29 @@ class Filter extends ModelFilter
      */
     public function search($terms)
     {
-        return $this->where(function($query) use ($terms)
-        {
-            foreach($this->searchable as $column) {
+        return $this->where(function ($query) use ($terms) {
+            foreach ($this->searchable as $column) {
                 if (strpos($column, '.')) {
-
                     list($field, $relationship) = explode(".", strrev($column), 2);
 
-                    $query->orWhereHas(strrev($relationship), function($col) use($field, $terms) {
+                    $query->orWhereHas(strrev($relationship), function ($col) use ($field, $terms) {
 
                         $keywords = explode(' ', $terms);
 
-                        foreach($keywords as $term) {
+                        foreach ($keywords as $term) {
                             $col->orWhere(strrev($field), 'LIKE', "%$term%");
                         }
                     });
                 } else {
                     $keywords = explode(' ', $terms);
 
-                    foreach($keywords as $term) {
+                    foreach ($keywords as $term) {
                         $query->orWhere($column, 'LIKE', "%$term%");
                     }
                 }
             }
 
-           return $query;
-
+            return $query;
         });
     }
 
@@ -109,5 +107,4 @@ class Filter extends ModelFilter
     {
         $this->whereDate('created_at', '<=', $date);
     }
-
 }

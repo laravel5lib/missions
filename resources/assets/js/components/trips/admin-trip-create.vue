@@ -8,36 +8,26 @@
 					</a>
 			</ul>
 		</div>
-		<div class="col-sm-8 col-md-9 {{currentStep.view}}">
-			<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
+		<div class="col-sm-8 col-md-9" :class="currentStep.view">
+			<keep-alive><component :is="currentStep.view" transition="fade" transition-mode="out-in">
 
-			</component>
+		</component></keep-alive>
+
 			<div class="alert alert-danger alert-dismissible" role="alert" v-if="!stepList[0].valid && !!$children[0].attemptedContinue">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<strong>Uh Oh!</strong> The Details form still contains errors. Please correct them before saving.
 			</div>
 			<hr>
 			<div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
-				<a class="btn btn-link" @click="back()">Cancel</a>
-				<a class="btn btn-default" v-if="currentStep.view !== 'step1'" @click="backStep()">Back</a>
-				<a class="btn btn-primary" v-if="!wizardComplete" @click="nextStep()">Continue</a>
-				<a class="btn btn-primary" v-if="wizardComplete" @click="finish()">Finish</a>
+				<a class="btn btn-link" @click="back">Cancel</a>
+				<a class="btn btn-default" v-if="currentStep.view !== 'step1'" @click="backStep">Back</a>
+				<a class="btn btn-primary" v-if="!wizardComplete" @click="nextStep">Continue</a>
+				<a class="btn btn-primary" v-if="wizardComplete" @click="finish">Finish</a>
 			</div>
 		</div>
 		<hr>
 	</div>
 </template>
-<style>
-	.fade-transition {
-		transition: opacity .3s ease;
-	}
-
-	.fade-enter, .fade-leave {
-		opacity: 0;
-	}
-
-	.step1 {}
-</style>
 <script type="text/javascript">
 	import details from './create/details.vue';
 	import settings from './create/settings.vue';
@@ -86,11 +76,12 @@
 				window.location.href = window.location.href.split('/create')[0];
 			},
 			childValidationTrigger(){
-				var self = this;
+				let self = this;
 				// find child
-				var thisChild = _.find(this.$children, function (child) {
+				let thisChild = _.find(this.$children, function (child) {
 					return child.hasOwnProperty(self.currentStep.form);
 				});
+
 
 				// if form is invalid mark as invalid step, but continue anyway
 				this.currentStep.valid = !thisChild[this.currentStep.form].invalid;
@@ -121,16 +112,16 @@
 				}, this);
 			},
 			finish(){
-				// if details form is incomplete
+                let resource = this.$resource('trips');
+                // if details form is incomplete
 				if (!this.stepList[0].valid) {
 					// show error and discontinue
 					return false;
 				}
 
-				var resource = this.$resource('trips');
-				resource.save(null, this.wizardData).then(function (resp) {
+				resource.post({}, this.wizardData).then((resp) => {
 					window.location.href = '/admin' + resp.data.data.links[0].uri;
-				}, function (error) {
+				}, (error) =>  {
 					console.log(error);
 				});
 			}
@@ -138,8 +129,8 @@
 		created(){
 			this.currentStep = this.stepList[0];
 
-			this.$http.get('campaigns/' + this.campaignId).then(function (response) {
-				this.campaign = response.body.data;
+			this.$http.get('campaigns/' + this.campaignId).then((response) => {
+				this.campaign = response.data.data;
 			});
 		},
 		events: {
@@ -161,3 +152,4 @@
 		}
 	}
 </script> 
+<style></style>

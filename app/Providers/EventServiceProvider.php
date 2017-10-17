@@ -2,20 +2,20 @@
 
 namespace App\Providers;
 
+use App\Models\v1\Campaign;
 use App\Models\v1\Cost;
 use App\Models\v1\Todo;
 use App\Models\v1\Trip;
 use App\Models\v1\User;
-use App\Models\v1\Group;
 use App\Models\v1\Upload;
 use App\Models\v1\Payment;
+use App\Models\v1\Group;
 use App\Models\v1\Project;
-use App\Models\v1\Campaign;
-use App\Models\v1\Referral;
 use App\Models\v1\ProjectCause;
 use App\Models\v1\TripInterest;
 use App\Jobs\SendReferralRequestEmail;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -36,12 +36,13 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\TripInterestWasCreated' => [
             'App\Listeners\NotifyFacilitatorsOfNewTripInterest',
-            'App\Listeners\NotifyTripRepOfNewTripInterest'
+            'App\Listeners\NotifyTripRepOfNewTripInterest',
+            // 'App\Listeners\SendTripInterestConfirmationEmail'
         ]
     ];
 
     /**
-     * The subscriber classes to register.
+     * Register any events for your application.
      *
      * @var array
      */
@@ -54,12 +55,11 @@ class EventServiceProvider extends ServiceProvider
     /**
      * Register any other events for your application.
      *
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
      * @return void
      */
-    public function boot(DispatcherContract $events)
+    public function boot()
     {
-        parent::boot($events);
+        parent::boot();
 
         Trip::created(function ($trip) {
             $name = generateFundName($trip);
@@ -117,8 +117,6 @@ class EventServiceProvider extends ServiceProvider
         });
 
         User::created(function ($user) {
-            $user->assign('member');
-
             $banner = Upload::randomBanner(['user'])->first();
             $user->banner_upload_id = $banner ? $banner->id : null;
             $user->save();
@@ -152,16 +150,6 @@ class EventServiceProvider extends ServiceProvider
 
                 $cost->costAssignable->payments()->sync();
             }
-        });
-
-        TripInterest::created(function ($interest) {
-            $interest->todos()->saveMany([
-                new Todo(['task' => '1st Email Sent']),
-                new Todo(['task' => '1st Call Made']),
-                new Todo(['task' => '2nd Contact Made']),
-                new Todo(['task' => '3rd Contact Made']),
-                new Todo(['task' => '4th Contact Made'])
-            ]);
         });
     }
 }

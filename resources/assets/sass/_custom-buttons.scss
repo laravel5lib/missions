@@ -2,6 +2,32 @@
 // Buttons
 // --------------------------------------------------
 
+.swal-button {
+  display: inline-block;
+  margin-bottom: 0; // For input.btn
+  font-weight: $btn-font-weight;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
+  border: 1px solid transparent;
+  white-space: nowrap;
+  @include button-size($padding-base-vertical, $padding-base-horizontal*2, $font-size-base, $line-height-base, $btn-border-radius-base);
+  @include user-select(none);
+  @include transition(all .2s ease-in-out);
+  @include box-shadow(0 2px 4px rgba(0,0,0,.18));
+}
+
+.swal-button--confirm {
+  @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
+}
+
+.swal-button--cancel {
+  color: $link-color;
+  font-weight: 700;
+  border-radius: 4px;
+}
 
 // Base styles
 // --------------------------------------------------
@@ -20,6 +46,7 @@
   @include button-size($padding-base-vertical, $padding-base-horizontal*2, $font-size-base, $line-height-base, $btn-border-radius-base);
   @include user-select(none);
   @include transition(all .2s ease-in-out);
+  @include box-shadow(0 2px 4px rgba(0,0,0,.18));
 
   &,
   &:active,
@@ -95,7 +122,7 @@ a.btn {
 // Danger and error appear as red
 .btn-danger {
   @include button-variant($btn-danger-color, $btn-danger-bg, $btn-danger-border);
-} 
+}
 
 // Hollow buttons
 // -------------------------
@@ -174,7 +201,7 @@ a.btn {
     border-color: lighten($btn-danger-border, 10%) !important;
     text-decoration: none;
   }
-} 
+}
 
 
 // Link buttons

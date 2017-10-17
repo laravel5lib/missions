@@ -23,6 +23,7 @@ class StoriesController extends Controller
     public function __construct(Story $story)
     {
         $this->story = $story;
+        $this->middleware('auth:api', ['except' => ['index']]);
     }
 
     /**
@@ -35,6 +36,7 @@ class StoriesController extends Controller
     {
         $stories = $this->story
             ->filter($request->all())
+            ->latest()
             ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($stories, new StoryTransformer);

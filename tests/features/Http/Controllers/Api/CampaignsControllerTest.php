@@ -7,6 +7,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class CampaignsControllerTest extends TestCase
 {
+     use AuthenticatedUserSetup;
+
     /** @test */
     public function creates_a_campaign()
     {
@@ -16,15 +18,15 @@ class CampaignsControllerTest extends TestCase
             'short_desc' => 'Baz foo bar lorem ipsum',
             'page_url' => 'foo-bar',
             'page_src' => '_baz',
-            'started_at' => '2017-01-01',
-            'ended_at' => '2017-01-07',
-            'published_at' => '2017-01-01'
+            'started_at' => '2017-01-01 00:00:00',
+            'ended_at' => '2017-01-07 00:00:00',
+            'published_at' => '2017-01-01 00:00:00'
         ];
 
         $this->post('/api/campaigns', $campaign);
 
-        $this->seeInDatabase('campaigns', array_except($campaign, ['page_url']))
-            ->seeInDatabase('slugs', ['url' => 'foo-bar']);
+        $this->assertDatabaseHas('campaigns', array_except($campaign, ['page_url']))
+            ->assertDatabaseHas('slugs', ['url' => 'foo-bar']);
     }
 
     /** @test */
@@ -37,7 +39,7 @@ class CampaignsControllerTest extends TestCase
             'name' => 'Baz', 'page_url' => 'baz-foo-bar'
         ]);
 
-        $this->seeInDatabase('campaigns', ['id' => $campaign->id, 'name' => 'Baz'])
-            ->seeInDatabase('slugs', ['slugable_id' => $campaign->id, 'url' => 'baz-foo-bar']);
+        $this->assertDatabaseHas('campaigns', ['id' => $campaign->id, 'name' => 'Baz'])
+            ->assertDatabaseHas('slugs', ['slugable_id' => $campaign->id, 'url' => 'baz-foo-bar']);
     }
 }

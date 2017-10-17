@@ -1,6 +1,6 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
     <div>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="row">
             <div class="col-xs-4">
                 <button class="btn btn-primary btn-sm" @click="add">
@@ -39,7 +39,7 @@
                         </div>
                         <div class="col-md-3">
                             <label>Amount</label>
-                            <p>{{ cost.amount|currency }}</p>
+                            <p>{{ currency(cost.amount) }}</p>
                             <hr class="divider inv hidden-lg">
                         </div>
                         <div class="col-md-6">
@@ -52,24 +52,21 @@
             </div>
         </div><!-- end panel -->
 
-        <modal title="Add Costs" :show.sync="showAddModal" effect="fade" width="800" :callback="addCosts" ok-text="Add">
+        <modal title="Add Costs" :value="showAddModal" @closed="showAddModal=false" effect="fade" width="800" :callback="addCosts" ok-text="Add">
             <div slot="modal-body" class="modal-body">
-                <validator name="AddCost">
+
                     <form class="for" novalidate>
-                        <div class="form-group" :class="{ 'has-error': checkForError('costs') }">
+                        <div class="form-group" :class="{ 'has-error': errors.has('costs') }">
                             <label class="control-label">Available Costs</label>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple v-model="selectedCosts" :options="availableCosts"
                                       label="name"></v-select>
-                            <select hidden="" v-model="user_id" v-validate:costs="{ required: true }" multiple>
-                                <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
-                            </select>
                         </div>
                     </form>
-                </validator>
+
             </div>
         </modal>
 
-        <modal class="text-center" :show.sync="deleteModal" title="Delete Cost" small="true">
+        <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" :small="true">
             <div slot="modal-body" class="modal-body text-center" v-if="selectedCost">Delete {{ selectedCost.name }}?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -108,7 +105,7 @@
             }
         },
         watch: {
-            'temporaryCosts': function (val) {
+            'temporaryCosts'(val, oldVal) {
                 //debugger;
             }
         },
@@ -118,10 +115,6 @@
                 let stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
                 console.log(moment(a).isBetween(start, stop));
                 return moment(a).isBetween(start, stop);
-            },
-            checkForError(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$AddCost[field].invalid && this.attemptSubmit;
             },
             isPast(date){
                 return moment().isAfter(date);
@@ -145,26 +138,26 @@
 
                 // remove cost from temporary array
                 if (this.selectedCost.unsaved) {
-                    this.temporaryCosts = _.reject(this.temporaryCosts, function (tempCost) {
+                    this.temporaryCosts = _.reject(this.temporaryCosts, (tempCost) => {
                         if (tempCost === this.selectedCost) {
                             return true;
                         } else {
                             // generate due based on added costs' payments
                             temporaryDues = _.union(temporaryDues, this.generatePaymentsFromCost(this.selectedCost));
                         }
-                    }.bind(this));
+                    });
 
                     temporaryDues = _.uniq(temporaryDues);
                     this.temporaryCosts = _.uniq(this.temporaryCosts);
                 } else {
-                    this.project.costs.data = _.reject(this.project.costs.data, function (tempCost) {
+                    this.project.costs.data = _.reject(this.project.costs.data, (tempCost) => {
                         if (tempCost === this.selectedCost) {
-                            res.dues.data = _.reject(res.dues.data, function (due) {
+                            res.dues.data = _.reject(res.dues.data, (due) => {
                                 return due.cost === tempCost.name;
                             });
                             return true;
                         }
-                    }.bind(this));
+                    });
 
                     temporaryDues = _.uniq(temporaryDues);
                     this.temporaryCosts = _.uniq(this.temporaryCosts);
@@ -187,12 +180,12 @@
                 let res = jQuery.extend(true, {}, this.project);
 
                 // Add selected costs to temporary list
-                _.each(this.selectedCosts, function (cost) {
+                _.each(this.selectedCosts, (cost) => {
                     cost.unsaved = true;
                     this.temporaryCosts.push(cost);
                     // generate due based on added costs' payments
                     temporaryDues = _.union(temporaryDues, this.generatePaymentsFromCost(cost));
-                }.bind(this));
+                });
                 temporaryDues = _.uniq(temporaryDues);
                 this.temporaryCosts = _.uniq(this.temporaryCosts);
 
@@ -210,7 +203,7 @@
             generatePaymentsFromCost(cost){
                 let temporaryDues = [];
                 // generate due based on added costs' payments
-                _.each(cost.payments.data, function (payment) {
+                _.each(cost.payments.data, (payment) => {
                     temporaryDues.push({
                         amount: payment.amount_owed,
                         balance: payment.balance_due,
@@ -227,18 +220,18 @@
             doUpdate(){
                 let costIds = [];
 
-                _.each(this.listedCosts, function (cost) {
+                _.each(this.listedCosts, (cost) => {
                     costIds.push({id: cost.id || cost.cost_id, locked: cost.locked})
                 });
 
                 let res = jQuery.extend(true, {}, this.project);
                 res.costs = costIds
 
-                return this.resource.update(res).then(function (response) {
-                    this.setProjectData(response.body.data);
+                return this.resource.put(res).then((response) => {
+                    this.setProjectData(response.data.data);
                     this.selectedCosts = [];
                     this.temporaryCosts = [];
-                    this.$dispatch('showSuccess', 'Costs updated successfully.');
+                    this.$root.$emit('showSuccess', 'Costs updated successfully.');
                 });
             },
             setProjectData(project){
@@ -261,24 +254,24 @@
                 this.selectedCosts = [];
 
                 // get available optional costs intersect with current
-                this.availableCosts = _.filter(this.project.initiative.data.costs.data, function (cost) {
+                this.availableCosts = _.filter(this.project.initiative.data.costs.data, (cost) => {
                     if (!_.findWhere(this.project.costs.data, {cost_id: cost.id}) && !_.findWhere(this.temporaryCosts, {id: cost.id}) && cost.type === 'optional') {
                         cost.removal = false;
                         return true;
                     };
-                }.bind(this));
+                });
             },
             revert(){
                 this.temporaryCosts = [];
-                this.resource.get().then(function (response) {
-                    this.setProjectData(response.body.data);
+                this.resource.get().then((response) => {
+                    this.setProjectData(response.data.data);
                 });
             },
         },
-        ready(){
+        mounted(){
             // this.$refs.spinner.show();
-            this.resource.get().then(function (response) {
-                this.setProjectData(response.body.data);
+            this.resource.get().then((response) => {
+                this.setProjectData(response.data.data);
                 // this.$refs.spinner.hide();
             });
         }

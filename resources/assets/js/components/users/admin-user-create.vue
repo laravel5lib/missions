@@ -1,21 +1,26 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="CreateUser" :groups="['passwordGroup']">
+<template >
+
         <form id="CreateUserForm" class="form-horizontal" novalidate style="position:relative;">
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
                 <div class="col-sm-12">
-                    <label for="name" class="control-label">Name</label>
-                    <input type="text" class="form-control" name="name" id="name" v-model="name" debounce="250"
-                           placeholder="User Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
-                           maxlength="100" minlength="1" required>
+                    <div class="row">
+                        <div class="col-md-6" v-error-handler="{ value: first_name, client: 'firstname' }">
+                            <label>First Name</label>
+                            <input type="text" class="form-control" v-model="first_name" name="firstname" v-validate="'required|min:1|max:100'">
+                        </div>
+                        <div class="col-md-6" v-error-handler="{ value: last_name, client: 'lastname' }">
+                            <label>Last Name</label>
+                            <input type="text" class="form-control" v-model="last_name" name="lastname" v-validate="'required|min:1|max:100'">
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
                     <div v-error-handler="{ value: email, handle: 'email' }">
                         <label for="name" class="control-label">Email</label>
-                        <input type="email" class="form-control" name="email" id="email" v-model="email"
-                           v-validate:email="{ required: true, minlength:1, maxlength:100 }">
+                        <input type="email" class="form-control" name="email" id="email" v-model="email" v-validate="'required|min:1|max:100'">
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -24,14 +29,17 @@
                 </div>
             </div>
 
-            <div class="row" :class="{ 'has-error': checkForError('password')||checkForError('passwordconfirmation') }">
+            <div class="row" :class="{ 'has-error': errors.has('password')|| errors.has('passwordconfirmation') }">
                 <div class="col-sm-12">
                     <label for="name" class="control-label">Password</label>
                     <div class="row" v-error-handler="{ value: password, handle: 'password' }">
                         <div class="col-sm-6">
-                            <div class="input-group" :class="{ 'has-error': checkForError('password') }">
-                                <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password"
-                                       v-validate:password="{ required: true, minlength:8 }" placeholder="Enter password"
+                            <div class="input-group" :class="{ 'has-error': errors.has('password') }">
+                                <input v-if="showPassword" type="text" class="form-control" v-model="password"
+                                       name="password" placeholder="Enter password" v-validate="'min:8'"
+                                       group="passwordGroup">
+                                <input v-else type="password" class="form-control" v-model="password"
+                                       name="password" placeholder="Enter password" v-validate="'min:8'"
                                        group="passwordGroup">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
@@ -42,9 +50,12 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="input-group" :class="{ 'has-error': checkForError('passwordconfirmation') }">
-                                <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password_confirmation"
-                                       v-validate:passwordconfirmation="{ required: true, minlength:8 }" placeholder="Enter password again"
+                            <div class="input-group" :class="{ 'has-error': errors.has('passwordconfirmation') }">
+                                <input v-if="showPassword" type="text" class="form-control" v-model="password_confirmation"
+                                       name="passwordconfirmation" placeholder="Enter password again" v-validate="'required|min:8'"
+                                       group="passwordGroup">
+                                <input v-else type="password" class="form-control" v-model="password_confirmation"
+                                       name="passwordconfirmation" placeholder="Enter password again" v-validate="'required|min:8'"
                                        group="passwordGroup">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
@@ -55,7 +66,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="help-block" v-if="$CreateUser.passwordGroup.invalid && attemptSubmit">Passwords do not match!</div>
+                    <div class="help-block" v-if="password !== password_confirmation && errors.has('password') && errors.has('passwordconfirmation')">Passwords do not match!</div>
                     <div class="help-block">Password must be at least 8 characters long</div>
                 </div>
             </div>
@@ -216,10 +227,10 @@
                     <div class="col-sm-6">
                         <label for="gender" class="control-label">Gender</label><br>
                         <label class="radio-inline">
-                            <input type="radio" name="gender" id="gender" value="Male" v-model="gender" v-validate:gender="{required: {rule: true}}"> Male
+                            <input type="radio" name="gender" id="gender" value="Male" v-model="gender" v-validate="'required'"> Male
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="gender2" id="gender2" value="Female" v-model="gender" v-validate:gender> Female
+                            <input type="radio" name="gender" id="gender2" value="Female" v-model="gender"> Female
                         </label>
                     </div>
                 </div>
@@ -227,10 +238,10 @@
                     <div class="col-sm-6">
                         <label for="status" class="control-label">Status</label><br>
                         <label class="radio-inline">
-                            <input type="radio" name="status" id="status" value="Single" v-model="status" v-validate:status="{required: {rule: true}}"> Single
+                            <input type="radio" name="status" id="status" value="Single" v-model="status" v-validate="'required'"> Single
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="status2" id="status2" value="Married" v-model="status" v-validate:status> Married
+                            <input type="radio" name="status" id="status2" value="Married" v-model="status"> Married
                         </label>
                     </div>
                 </div>
@@ -275,19 +286,13 @@
                 <div class="col-sm-4">
                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
-                        <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
-                            <option :value="country.code" v-for="country in countries">{{country.name}}</option>
-                        </select>
+                        <v-select @keydown.enter.prevent="" name="country" class="form-control" id="country" v-model="countryCodeObj" v-validate="'required'" :options="UTILITIES.countries" label="name"></v-select>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div  v-error-handler="{ value: timezone, handle: 'timezone' }">
                         <label for="timezone" class="control-label">Timezone</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
-                        <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
-                            <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
-                        </select>
+                        <v-select @keydown.enter.prevent="" name="timezone" v-validate="'required'" class="form-control" id="timezone" v-model="timezone" :options="UTILITIES.timezones"></v-select>
                     </div>
                 </div>
             </div>
@@ -296,13 +301,15 @@
                 <div class="col-sm-6">
                     <div>
                         <label for="infoPhone">Phone 1</label>
-                        <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
+                        <!--<input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">-->
+                        <phone-input v-model="phone_one" name="phone" id="infoPhone"></phone-input>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div>
                         <label for="infoMobile">Phone 2</label>
-                        <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
+                        <!--<input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">-->
+                        <phone-input v-model="phone_two" name="phone" id="infoMobile"></phone-input>
                     </div>
                 </div>
             </div>
@@ -314,7 +321,7 @@
                         <input type="radio" name="public" id="public" :value="true" v-model="public"> Public
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="public2" id="public2" :value="false" v-model="public"> Private
+                        <input type="radio" name="public" id="public2" :value="false" v-model="public"> Private
                     </label>
                 </div>
             </div>
@@ -323,7 +330,7 @@
                     <label for="url" class="control-label">Url Slug</label>
                     <div class="input-group">
                         <span class="input-group-addon">www.missions.me/</span>
-                        <input type="text" id="url" v-model="url" class="form-control" required v-validate:url="{ required: !!public }"/>
+                        <input type="text" id="url" v-model="url" class="form-control" required name="url" v-validate="!!public ? 'required' : ''"/>
                     </div>
                 </div>
             </div>
@@ -334,32 +341,32 @@
                     <a @click="submit()" class="btn btn-primary">Create</a>
                 </div>
             </div>
-            <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
+            <alert v-model="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
                 <span class="icon-info-circled alert-icon-float-left"></span>
                 <strong>Oh No!</strong>
                 <p>There are errors on the form.</p>
             </alert>
         </form>
-    </validator>
+
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";
     import errorHandler from'../error-handler.mixin';
+    import utilities from '../utilities.mixin'
     export default{
         name: 'admin-user-create',
         components: {vSelect},
-        mixins: [errorHandler],
+        mixins: [utilities, errorHandler],
         data(){
             return {
-                name: '',
+                first_name: '',
+                last_name: '',
                 email: '',
                 alt_email: '',
                 password: '',
                 password_confirmation: '',
                 bio: '',
                 status: '',
-                birthday: null,
-                country_code: null,
                 timezone: null,
                 phone_one: '',
                 phone_two: '',
@@ -376,90 +383,87 @@
 //                typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
                 attemptSubmit: false,
                 showError: false,
-                countries: [],
                 countryCodeObj: null,
-                timezones: [],
                 showPassword: false,
                 timezoneObj: null,
                 dobMonth: null,
                 dobDay: null,
                 dobYear: null,
-
-                // mixin settings
-                validatorHandle: 'CreateUser',
             }
         },
         watch: {
-            'name': function (val) {
+            'name'(val, oldVal) {
                 if (typeof val === 'string') {
                     // pre-populate slug
-                    this.$http.get('utilities/make-slug/' + val, { params: { hideLoader: true } }).then(function (response) {
-                        this.url = response.body.slug;
+                    this.$http.get('utilities/make-slug/' + val, { params: { hideLoader: true } }).then((response) => {
+                        this.url = response.data.slug;
                     });
                 }
             }
         },
         computed: {
-            country_code() {
-                return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+            country_code: {
+                get() {
+                    return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+                },
+                set() {}
             },
-            birthday() {
-                return this.dobYear && this.dobMonth && this.dobDay
+            birthday: {
+                get() {
+                    return this.dobYear && this.dobMonth && this.dobDay
                         ? moment(this.dobMonth + '-' + this.dobDay + '-' + this.dobYear, 'MM-DD-YYYY').format('YYYY-MM-DD')
                         : null;
-            }
-        },
-        methods: {
-            checkForError(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$CreateUser[field].invalid && this.attemptSubmit;
-            },
-            submit(){
-                this.resetErrors();
-                if (this.$CreateUser.valid) {
-                    let resource = this.$resource('users');
+                },
+                set() {
 
-                    resource.save(null, {
-                        name: this.name,
-                        email: this.email,
-                        alt_email: this.alt_email,
-                        password: this.password,
-                        password_confirmation: this.password_confirmation,
-                        bio: this.bio,
-                        birthday: this.birthday,
-                        type: this.type,
-                        country_code: this.country_code,
-                        timezone: this.timezone,
-                        phone_one: this.phone_one,
-                        phone_two: this.phone_two,
-                        address: this.address,
-                        city: this.city,
-                        state: this.state,
-                        zip: this.zip,
-                        status: this.status,
-                        gender: this.gender,
-                        public: this.public,
-                        url: this.public ? this.url : undefined,
-                    }).then(function (resp) {
-                        window.location.href = '/admin' + resp.data.data.links[0].uri;
-                    }, function (error) {
-                        this.errors = error.data.errors
-                        this.showError = true;
-                        console.log(error);
-                    });
-                } else {
-                    this.showError = true;
                 }
             }
         },
-        ready(){
-            let countriesPromise = this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.body.countries;
-            });
+        methods: {
+            submit(){
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        let resource = this.$resource('users');
 
-            let timezonesPromise = this.$http.get('utilities/timezones').then(function (response) {
-                this.timezones = response.body.timezones;
-            });
+                        resource.post({}, {
+                            first_name: this.first_name,
+                            last_name: this.last_name,
+                            email: this.email,
+                            alt_email: this.alt_email,
+                            password: this.password,
+                            password_confirmation: this.password_confirmation,
+                            bio: this.bio,
+                            birthday: this.birthday,
+                            type: this.type,
+                            country_code: this.country_code,
+                            timezone: this.timezone,
+                            phone_one: this.phone_one,
+                            phone_two: this.phone_two,
+                            address: this.address,
+                            city: this.city,
+                            state: this.state,
+                            zip: this.zip,
+                            status: this.status,
+                            gender: this.gender,
+                            public: this.public,
+                            url: this.public ? this.url : undefined,
+                        }).then((resp) => {
+                            window.location.href = '/admin' + resp.data.data.links[0].uri;
+                        }, (error) =>  {
+                            this.errors = error.data.errors
+                            this.showError = true;
+                            console.log(error);
+                        });
+                    } else {
+                        this.showError = true;
+                    }
+                });
+            }
+        },
+        mounted(){
+            let promises = [];
+            promises.push(this.getCountries());
+            promises.push(this.getTimezones());
         }
     }
 </script> 

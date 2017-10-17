@@ -3,7 +3,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+                <spinner ref="spinner" size="sm" text="Loading"></spinner>
                 <div class="col-sm-8">
                     <h5>{{ promo.name }}</h5>
                 </div>
@@ -24,7 +24,7 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-sm-4">
-                    {{ promo.reward | currency }}<br>
+                    {{ currency(promo.reward) }}<br>
                     <label>Credit Amount</label>
                 </div>
                 <div class="col-sm-4">
@@ -39,11 +39,11 @@
             <div class="row">
                 <hr class="divider">
                 <div class="col-sm-4">
-                    {{ promo.created_at | moment 'lll' }}<br>
+                    {{ promo.created_at | moment('lll') }}<br>
                     <label>Created</label>
                 </div>
                 <div class="col-sm-4">
-                    {{ promo.updated_at | moment 'lll' }}<br>
+                    {{ promo.updated_at | moment('lll') }}<br>
                     <label>Updated</label>
                 </div>
                 <div class="col-sm-4">
@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <modal title="Stop Promotional" small :show.sync="showStopModal">
+    <modal title="Stop Promotional" small :value="showStopModal" @closed="showStopModal=false">
         <div slot="modal-body" class="modal-body">Are you sure you want to stop this promotional? Doing so will deactivate all it's promo codes. You can always undo this action or reactivate individual promo codes.</div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default" @click="showStopModal = false">Cancel</button>
@@ -67,7 +67,7 @@
           </div>
     </modal>
 
-    <modal title="Start Promotional" small :show.sync="showStartModal">
+    <modal title="Start Promotional" small :value="showStartModal" @closed="showStartModal=false">
         <div slot="modal-body" class="modal-body">Are you sure you want to start this promotional? Doing so will activate all it's promo codes. You can always undo this action or deactivate individual promo codes.</div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default" @click="showStartModal = false">Cancel</button>
@@ -75,7 +75,7 @@
           </div>
     </modal>
 
-    <modal title="Delete Forever" small :show.sync="showDeleteModal">
+    <modal title="Delete Forever" small :value="showDeleteModal" @closed="showDeleteModal=false">
         <div slot="modal-body" class="modal-body">Are you sure you want to delete this promotional and all it's promo codes? This action cannot be undone.</div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default" @click="showDeleteModal = false">Keep</button>
@@ -97,7 +97,7 @@
             required: true
           }
         },
-        components: [promocodes],
+        components: {promocodes},
         data() {
             return {
                 promo: {
@@ -114,7 +114,6 @@
                 showDeleteModal: false
             }
         },
-        events: {},
         computed: {
             expires() {
                 if (this.promo.expires_at) return moment(this.promo.expires_at).format('lll');
@@ -129,14 +128,14 @@
         },
         methods: {
             fetch() {
-                this.$http.get('promotionals/' + this.id).then(function (response) {
-                    this.promo = response.body.data;
-                }, function (error) {
-                    this.$dispatch('showError', 'Unable to get data from server.');
+                this.$http.get('promotionals/' + this.id).then((response) => {
+                    this.promo = response.data.data;
+                }, (error) =>  {
+                    this.$root.$emit('showError', 'Unable to get data from server.');
                 });
             },
             callView(data) {
-                this.$dispatch('load-view', data);
+                this.$emit('load-view', data);
             },
             showModal() {
                 if (this.promo.deleted_at) return this.showStartModal = true;
@@ -145,41 +144,41 @@
             },
             deactivate()
             {
-                this.$http.delete('promotionals/' + this.id).then(function (response) {
-                    this.$dispatch('showSuccess', 'Deactivated successfully.');
+                this.$http.delete('promotionals/' + this.id).then((response) => {
+                    this.$root.$emit('showSuccess', 'Deactivated successfully.');
                     this.showStopModal = false;
                     this.fetch();
-                    this.$broadcast('promotionalStatusChanged');
-                }, function (error) {
-                    this.$dispatch('showError', 'Unable to deactivate on server.');
+                    this.$emit('promotionalStatusChanged');
+                }, (error) =>  {
+                    this.$root.$emit('showError', 'Unable to deactivate on server.');
                 });
             },
             deleteForever()
             {
-                this.$http.delete('promotionals/' + this.id +'?force=true').then(function (response) {
-                    this.$dispatch('showSuccess', 'Deleted promotional.');
+                this.$http.delete('promotionals/' + this.id +'?force=true').then((response) => {
+                    this.$root.$emit('showSuccess', 'Deleted promotional.');
                     this.showDeleteModal = false;
                     this.callView({view: 'list'});
-                }, function (error) {
-                    this.$dispatch('showError', 'Unable to delete on server.');
+                }, (error) =>  {
+                    this.$root.$emit('showError', 'Unable to delete on server.');
                 });
             },
             activate()
             {
-                this.$http.put('promotionals/' + this.id + '/restore').then(function (response) {
-                    this.$dispatch('showSuccess', 'Activated successfully.');
+                this.$http.put('promotionals/' + this.id + '/restore').then((response) => {
+                    this.$root.$emit('showSuccess', 'Activated successfully.');
                     this.showStartModal = false;
                     this.fetch();
-                    this.$broadcast('promotionalStatusChanged');
-                }, function (error) {
-                    this.$dispatch('showError', 'Unable to activate on server.');
+                    this.$emit('promotionalStatusChanged');
+                }, (error) =>  {
+                    this.$root.$emit('showError', 'Unable to activate on server.');
                 });
             },
             callView(data) {
-                this.$dispatch('load-view', data);
+                this.$emit('load-view', data);
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

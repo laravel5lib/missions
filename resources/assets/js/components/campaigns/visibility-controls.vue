@@ -46,7 +46,7 @@
             </div>
         </div>
         <div class="panel-footer text-center">
-            <button class="btn btn-primary" @click="save()">Save</button>
+            <button class="btn btn-primary" @click="save">Save</button>
         </div>
     </div>
 </template>
@@ -71,12 +71,12 @@
         methods: {
             fetch() {
                 let self = this;
-                this.$http.get('campaigns/' + this.campaignId).then(function (response) {
-                    self.publish_squads = response.body.data.publish_squads;
-                    self.publish_rooms = response.body.data.publish_rooms;
-                    self.publish_regions = response.body.data.publish_regions;
-                    self.publish_transports = response.body.data.publish_transports;
-                    self.reservations_locked = response.body.data.reservations_locked;
+                this.$http.get('campaigns/' + this.campaignId).then((response) => {
+                    self.publish_squads = response.data.data.publish_squads;
+                    self.publish_rooms = response.data.data.publish_rooms;
+                    self.publish_regions = response.data.data.publish_regions;
+                    self.publish_transports = response.data.data.publish_transports;
+                    self.reservations_locked = response.data.data.reservations_locked;
                 });
             },
             save() {
@@ -87,17 +87,17 @@
                     publish_regions: self.publish_regions,
                     publish_transports: self.publish_transports,
                     reservations_locked: self.reservations_locked
-               }).then(function (response) {
-                    this.$dispatch('showSuccess', 'Assignment(s) Visibility Updated.');
-                    self.publish_squads = response.body.data.publish_squads;
-                    self.publish_rooms = response.body.data.publish_rooms;
-                    self.publish_regions = response.body.data.publish_regions;
-                    self.publish_transports = response.body.data.publish_transports;
-                    self.reservations_locked = response.body.data.reservations_locked;
+               }).then((response) => {
+                    this.$root.$emit('showSuccess', 'Assignment(s) Visibility Updated.');
+                    self.publish_squads = response.data.data.publish_squads;
+                    self.publish_rooms = response.data.data.publish_rooms;
+                    self.publish_regions = response.data.data.publish_regions;
+                    self.publish_transports = response.data.data.publish_transports;
+                    self.reservations_locked = response.data.data.reservations_locked;
                });
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

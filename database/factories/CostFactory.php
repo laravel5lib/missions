@@ -3,8 +3,7 @@
 /**
  * Generic Cost (trip default)
  */
-$factory->define(App\Models\v1\Cost::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Cost::class, function (Faker\Generator $faker) {
     return [
         'id'                   => $faker->unique()->uuid,
         'name'                 => $faker->catchPhrase,
@@ -20,8 +19,7 @@ $factory->define(App\Models\v1\Cost::class, function (Faker\Generator $faker)
 /**
  * Generic Project Cost
  */
-$factory->defineAs(App\Models\v1\Cost::class, 'project', function (Faker\Generator $faker) use($factory)
-{
+$factory->defineAs(App\Models\v1\Cost::class, 'project', function (Faker\Generator $faker) use ($factory) {
     $cost = $factory->raw(App\Models\v1\Cost::class);
 
     return array_merge($cost, [
@@ -33,8 +31,7 @@ $factory->defineAs(App\Models\v1\Cost::class, 'project', function (Faker\Generat
 /**
  * Super Early Cost
  */
-$factory->defineAs(App\Models\v1\Cost::class, 'super', function (Faker\Generator $faker) use($factory)
-{
+$factory->defineAs(App\Models\v1\Cost::class, 'super', function (Faker\Generator $faker) use ($factory) {
     $cost = $factory->raw(App\Models\v1\Cost::class);
 
     return array_merge($cost, [
@@ -49,8 +46,7 @@ $factory->defineAs(App\Models\v1\Cost::class, 'super', function (Faker\Generator
 /**
  * Early Cost
  */
-$factory->defineAs(App\Models\v1\Cost::class, 'early', function (Faker\Generator $faker) use($factory)
-{
+$factory->defineAs(App\Models\v1\Cost::class, 'early', function (Faker\Generator $faker) use ($factory) {
     $cost = $factory->raw(App\Models\v1\Cost::class);
 
     return array_merge($cost, [
@@ -65,8 +61,7 @@ $factory->defineAs(App\Models\v1\Cost::class, 'early', function (Faker\Generator
 /**
  * General Registration Cost
  */
-$factory->defineAs(App\Models\v1\Cost::class, 'general', function (Faker\Generator $faker) use($factory)
-{
+$factory->defineAs(App\Models\v1\Cost::class, 'general', function (Faker\Generator $faker) use ($factory) {
     $cost = $factory->raw(App\Models\v1\Cost::class);
 
     return array_merge($cost, [
@@ -81,8 +76,7 @@ $factory->defineAs(App\Models\v1\Cost::class, 'general', function (Faker\Generat
 /**
  * Late Registration Cost
  */
-$factory->defineAs(App\Models\v1\Cost::class, 'late', function (Faker\Generator $faker) use($factory)
-{
+$factory->defineAs(App\Models\v1\Cost::class, 'late', function (Faker\Generator $faker) use ($factory) {
     $cost = $factory->raw(App\Models\v1\Cost::class);
 
     return array_merge($cost, [
@@ -97,8 +91,7 @@ $factory->defineAs(App\Models\v1\Cost::class, 'late', function (Faker\Generator 
 /**
  * Double Room Request Cost
  */
-$factory->defineAs(App\Models\v1\Cost::class, 'double', function (Faker\Generator $faker) use($factory)
-{
+$factory->defineAs(App\Models\v1\Cost::class, 'double', function (Faker\Generator $faker) use ($factory) {
     $cost = $factory->raw(App\Models\v1\Cost::class);
 
     return array_merge($cost, [
@@ -113,8 +106,7 @@ $factory->defineAs(App\Models\v1\Cost::class, 'double', function (Faker\Generato
 /**
  * Triple Room Request Cost
  */
-$factory->defineAs(App\Models\v1\Cost::class, 'triple', function (Faker\Generator $faker) use($factory)
-{
+$factory->defineAs(App\Models\v1\Cost::class, 'triple', function (Faker\Generator $faker) use ($factory) {
     $cost = $factory->raw(App\Models\v1\Cost::class);
 
     return array_merge($cost, [
@@ -129,8 +121,7 @@ $factory->defineAs(App\Models\v1\Cost::class, 'triple', function (Faker\Generato
 /**
  * Deposit Cost
  */
-$factory->defineAs(App\Models\v1\Cost::class, 'deposit', function (Faker\Generator $faker) use($factory)
-{
+$factory->defineAs(App\Models\v1\Cost::class, 'deposit', function (Faker\Generator $faker) use ($factory) {
     $cost = $factory->raw(App\Models\v1\Cost::class);
 
     return array_merge($cost, [
@@ -145,8 +136,7 @@ $factory->defineAs(App\Models\v1\Cost::class, 'deposit', function (Faker\Generat
 /**
  * Generic Static Cost
  */
-$factory->defineAs(App\Models\v1\Cost::class, 'static', function (Faker\Generator $faker) use($factory)
-{
+$factory->defineAs(App\Models\v1\Cost::class, 'static', function (Faker\Generator $faker) use ($factory) {
     $cost = $factory->raw(App\Models\v1\Cost::class);
 
     return array_merge($cost, [

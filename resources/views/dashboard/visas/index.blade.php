@@ -23,6 +23,10 @@
 
 @section('tab')
 
-<visas-list user-id="{{ auth()->user()->id }}"></visas-list>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <visas-list user-id="{{ auth()->user()->id }}"></visas-list>
+    </div>
+</div>
 
 @endsection

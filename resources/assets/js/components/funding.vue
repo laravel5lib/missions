@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-8">
                     <h5 v-if="fund">
-                        <a :href="'/admin/funds/' + fund.id" v-if="firstUrlSegment == 'admin'">
+                        <a :href="'/admin/funds/' + fund.id" v-if="firstUrlSegment === 'admin'">
                             {{ fund.name }}
                         </a>
                         <span v-else>
@@ -50,12 +50,12 @@
 
         <hr class="divider inv sm">
         <div style="position:relative">
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <template v-if="activeView === 'donor'">
                 <div class="list-group">
-                    <div class="list-group-item" role="tab" id="heading-{{ donor.id }}" v-for="donor in donors">
+                    <div class="list-group-item" role="tab" :id="'heading-' + donor.id" v-for="donor in donors">
                         <h5>
-                            {{ donor.name }} <span class="small">donated <span class="text-success">{{donor.total_donated|currency}}</span></span>
+                            {{ donor.name }} <span class="small">donated <span class="text-success">{{currency(donor.total_donated)}}</span></span>
                         </h5>
                     </div>
                 </div>
@@ -64,16 +64,16 @@
                         <nav>
                             <ul class="pagination pagination-sm">
                                 <li>
-                                    <a>{{ donorPagination.total }} {{ activeView | capitalize }}s</a>
+                                    <a>{{ donorPagination.total }} {{ activeView|capitalize }}s</a>
                                 </li>
                                 <li :class="{ 'disabled': donorPagination.current_page == 1 }">
-                                    <a aria-label="Previous" @click="donorPagination.current_page = donorPagination.current_page-1">
+                                    <a aria-label="Previous" @click="donorPaginateBack">
                                         <span aria-hidden="true">&laquo; Back</span>
                                     </a>
                                 </li>
                                 <!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
-                                <li :class="{ 'disabled': donorPagination.current_page == donorPagination.total_pages }">
-                                    <a aria-label="Next" @click="donorPagination.current_page = donorPagination.current_page+1">
+                                <li :class="{ 'disabled': donorPagination.current_page === donorPagination.total_pages && donorPagination.total_pages > donorPagination.current_page+1 }">
+                                    <a aria-label="Next" @click="donorPaginateNext">
                                         <span aria-hidden="true">Next &raquo;</span>
                                     </a>
                                 </li>
@@ -85,18 +85,18 @@
             <template v-if="activeView !== 'donor'">
                 <div class="list-group">
                     <div class="list-group-item text-center" v-if="pagination.total === 0">No transactions found.</div>
-                    <div class="list-group-item" role="tab" id="heading-{{ transaction.id }}" v-for="transaction in transactions">
+                    <div class="list-group-item" role="tab" :id="'heading' + transaction.id" v-for="transaction in transactions">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h5><span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{ transaction.amount|currency }}</span><span class="small"> &middot; {{ transaction.type|uppercase }}</span>
+                                <h5><span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{ currency(transaction.amount) }}</span><span class="small"> &middot; {{ transaction.type.toUpperCase() }}</span>
                                 <small v-if="contains(['donation'], transaction.type)" class="small">by
                                 <span v-if="!transaction.anonymous">{{ transaction.donor.data.name }}</span>
                                 <span v-else>an anonymous donor</span>
-                                 <!--on {{ transaction.created_at|moment 'll'}}--></small>
+                                 <!--on {{ transaction.created_at|moment('ll')}}--></small>
                                 </h5>
                             </div><!-- end col -->
                             <div class="col-sm-6">
-                                <h5 class="pull-right"><i class="fa fa-clock-o icon-left"></i> {{ transaction.created_at|moment 'll'}}</h5>
+                                <h5 class="pull-right"><i class="fa fa-clock-o icon-left"></i> {{ transaction.created_at|moment('ll')}}</h5>
                             </div><!-- end col -->
                         </div><!-- end row -->
                         <small v-if="transaction.details">
@@ -114,13 +114,13 @@
                                     <a>{{ pagination.total }} {{ pagination.total > 1 ? 'Activities' : 'Activity' }}</a>
                                 </li>
                                 <li :class="{ 'disabled': pagination.current_page == 1 }">
-                                    <a aria-label="Previous" @click="pagination.current_page = pagination.current_page-1">
+                                    <a aria-label="Previous" @click="paginateBack">
                                         <span aria-hidden="true">&laquo; Back</span>
                                     </a>
                                 </li>
                                 <!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
-                                <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                                    <a aria-label="Next" @click="pagination.current_page = pagination.current_page+1">
+                                <li :class="{ 'disabled': pagination.current_page === pagination.total_pages && pagination.total_pages > pagination.current_page+1 }">
+                                    <a aria-label="Next" @click="paginateNext">
                                         <span aria-hidden="true">Next &raquo;</span>
                                     </a>
                                 </li>
@@ -157,7 +157,7 @@
             marked: marked,
         },
         computed:{
-            action: function () {
+            action: () =>  {
                 switch (this.type) {
                     case 'donation':
                     default:
@@ -172,10 +172,10 @@
             }
         },
         watch: {
-            'donorPagination.current_page': function (val, oldVal) {
+            'donorPagination.current_page'(val, oldVal) {
                 this.searchDonors();
             },
-            'pagination.current_page': function (val, oldVal) {
+            'pagination.current_page'(val, oldVal) {
                 this.searchTransactions(this.type);
             },
         },
@@ -192,24 +192,44 @@
             },
             searchDonors(){
                 // this.$refs.spinner.show();
-                this.$http.get('funds/'+ this.fundId +'/donors', { params: {page: this.donorPagination.current_page} }).then(function (response) {
-                    this.donors = _.toArray(response.body.data);
-                    this.donorPagination = response.body.meta.pagination;
+                this.$http.get('funds/'+ this.fundId +'/donors', { params: {page: this.donorPagination.current_page} }).then((response) => {
+                    this.donors = _.toArray(response.data.data);
+                    this.donorPagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 });
             },
             searchTransactions(type){
                 // this.$refs.spinner.show();
-                this.$http.get('transactions', { params: {include: 'donor', fund: this.fundId, page: this.pagination.current_page, per_page: this.per_page} }).then(function (response) {
-                    this.transactions = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('transactions', { params: {include: 'donor', fund: this.fundId, page: this.pagination.current_page, per_page: this.per_page} }).then((response) => {
+                    this.transactions = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 });
-            }
+            },
+            donorPaginateBack() {
+                if (this.donorPagination.current_page !== 1) {
+                    this.donorPagination.current_page -= 1;
+                }
+            },
+            donorPaginateNext() {
+                if (this.donorPagination.current_page !== this.donorPagination.total_pages && this.donorPagination.total_pages > this.donorPagination.current_page+1) {
+                    this.donorPagination.current_page += 1;
+                }
+            },
+            paginateBack() {
+                if (this.pagination.current_page !== 1) {
+                    this.pagination.current_page -= 1;
+                }
+            },
+            paginateNext() {
+                if (this.pagination.current_page !== this.pagination.total_pages && this.pagination.total_pages > this.pagination.current_page+1) {
+                    this.pagination.current_page += 1;
+                }
+            },
         },
-        ready(){
-            this.$http.get('funds/' + this.fundId).then(function (response) {
-                this.fund = response.body.data;
+        mounted(){
+            this.$http.get('funds/' + this.fundId).then((response) => {
+                this.fund = response.data.data;
             });
 
 

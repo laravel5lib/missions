@@ -18,8 +18,6 @@ class NewUser extends FactoryStory
     {
         $user = factory(User::class, 'new')->create();
 
-        $user->assign('member');
-
         $user->slug()
             ->save(factory(Slug::class)->make([
                 'url' => str_slug($user->name)

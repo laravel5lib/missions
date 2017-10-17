@@ -1,6 +1,6 @@
 <template>
     <div>
-        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
@@ -25,9 +25,9 @@
                     </select>
                 </div>
                 <hr class="divider inv sm">
-                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
-        </aside>
+        </mm-aside>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
@@ -35,7 +35,7 @@
                         <h5>Trips</h5>
                     </div>
                     <div class="col-sm-4 text-right">
-                        <a class="btn btn-primary btn-sm" href="/admin/campaigns/{{campaignId}}/trips/create"><i class="fa fa-plus icon-left"></i> New</a>
+                        <a class="btn btn-primary btn-sm" :href="'/admin/campaigns/'+campaignId+'/trips/create'"><i class="fa fa-plus icon-left"></i> New</a>
                     </div>
                 </div>
             </div><!-- end panel-heading -->
@@ -186,24 +186,24 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="trip in trips|filterBy search|orderBy orderByField direction">
+                    <tr v-for="trip in orderByProp(trips, orderByField, direction)">
                         <td v-if="isActive('name')">{{trip.group.data.name}}</td>
-                        <td v-if="isActive('type')">{{trip.type|capitalize}}</td>
-                        <td v-if="isActive('status')">{{trip.status|capitalize}}</td>
-                        <td v-if="isActive('dates')">{{trip.started_at|moment 'll' false true}} - <br>{{trip.ended_at|moment 'll' false true}}</td>
+                        <td v-if="isActive('type')">{{ trip.type|capitalize }}</td>
+                        <td v-if="isActive('status')">{{ trip.status|capitalize }}</td>
+                        <td v-if="isActive('dates')">{{trip.started_at|moment('ll', false, true)}} - <br>{{trip.ended_at|moment('ll', false, true)}}</td>
 
                         <td v-if="isActive('rep')" v-text="trip.rep"></td>
                         <td v-if="isActive('spots')" v-text="trip.spots"></td>
-                        <td v-if="isActive('starting_cost')" v-text="trip.starting_cost | currency"></td>
+                        <td v-if="isActive('starting_cost')">{{currency(trip.starting_cost)}}</td>
                         <td v-if="isActive('companion_limit')" v-text="trip.companion_limit"></td>
-                        <td v-if="isActive('difficulty')" v-text="trip.difficulty|capitalize"></td>
-                        <td v-if="isActive('created_at')" v-text="trip.created_at|moment 'll'"></td>
-                        <td v-if="isActive('updated_at')" v-text="trip.updated_at|moment 'll'"></td>
+                        <td v-if="isActive('difficulty')">{{trip.difficulty|capitalize}}</td>
+                        <td v-if="isActive('created_at')">{{trip.created_at|moment('ll')}}</td>
+                        <td v-if="isActive('updated_at')">{{trip.updated_at|moment('ll')}}</td>
 
                         <td v-if="isActive('public')"><i class="fa fa-check" v-if="trip.public"></i></td>
                         <td v-if="isActive('reservations')">{{trip.reservations}}</td>
                         <td class="text-center">
-                            <a href="/admin/trips/{{ trip.id }}"><i class="fa fa-gear"></i></a>
+                            <a :href="'/admin/trips/'+ trip.id"><i class="fa fa-gear"></i></a>
                         </td>
                     </tr>
                     </tbody>
@@ -211,7 +211,7 @@
                     <tr>
                         <td colspan="7">
                             <div class="col-sm-12 text-center">
-        						<pagination :pagination.sync="pagination" :callback="searchTrips"></pagination>
+        						<pagination :pagination="pagination" pagination-key="pagination" :callback="searchTrips"></pagination>
                             </div>
                         </td>
                     </tr>
@@ -222,6 +222,8 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
+    import $ from 'jquery';
     import exportUtility from '../export-utility.vue';
     export default{
         name: 'admin-campaign-trips',
@@ -276,13 +278,13 @@
             }
         },
         watch: {
-            'orderByField': function (val) {
+            'orderByField' (val)  {
                 this.searchTrips();
             },
-            'direction': function (val) {
+            'direction' (val)  {
                 this.searchTrips();
             },
-            'activeFields': function (val, oldVal) {
+            'activeFields' (val, oldVal) {
                 // if the orderBy field is removed from view
                 if (!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
                     // default to first visible field
@@ -291,23 +293,25 @@
                 // this.updateConfig();
             },
             'filters': {
-                handler: function (val) {
+                handler(val) {
                     // console.log(val);
                     this.searchTrips();
                 },
                 deep: true
             },
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.page = 1;
-                this.searchTrips();
             },
-            'per_page': function (val, oldVal) {
+            'per_page'(val, oldVal) {
                 this.searchTrips();
             }
         },
         computed:{
         },
         methods:{
+            debouncedSearch: _.debounce(function () {
+                this.searchTrips();
+            }, 250),
             isActive(field){
                 return _.contains(this.activeFields, field);
             },
@@ -337,17 +341,16 @@
                 };
                 $.extend(params, this.filters);
                 this.exportFilters = params;
-                this.$http.get('trips', { params: params }).then(function (response) {
-                    this.pagination = response.body.meta.pagination;
-                    this.trips = response.body.data;
-                }, function (error) {
+                this.$http.get('trips', { params: params }).then((response) => {
+                    this.pagination = response.data.meta.pagination;
+                    this.trips = response.data.data;
+                }, (error) =>  {
                 })
             }
 
         },
-        activate(done){
+        mounted(){
             this.searchTrips();
-            done();
         }
     }
 </script>

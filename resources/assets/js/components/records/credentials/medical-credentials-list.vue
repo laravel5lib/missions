@@ -1,15 +1,15 @@
 <template>
 	<div class="row">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="col-xs-12 text-right">
 			<form class="form-inline">
-				<div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
+				<div style="margin-right:5px;" class="checkbox" v-if="isFacilitator && ! firstUrlSegment == 'admin'">
 					<label>
 						<input type="checkbox" v-model="includeManaging"> Include my group's medical credentials
 					</label>
 				</div>
 				<div class="input-group input-group-sm">
-					<input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
+					<input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search">
 					<span class="input-group-addon"><i class="fa fa-search"></i></span>
 				</div>
 			</form>
@@ -39,11 +39,11 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label>CREATED ON</label>
-                            <p class="small">{{medical_credential.created_at|moment 'lll'}}</p>
+                            <p class="small">{{medical_credential.created_at|moment('lll')}}</p>
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{medical_credential.updated_at|moment 'lll'}}</p>
+                            <p class="small">{{medical_credential.updated_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
 				</div><!-- end panel-body -->
@@ -57,9 +57,9 @@
 			</div>
 		</div>
 		<div class="col-xs-12 text-center">
-			<pagination :pagination.sync="pagination" :callback="searchMedicals"></pagination>
+			<pagination :pagination="pagination" pagination-key="pagination" :callback="searchMedicals"></pagination>
 		</div>
-		<modal :show.sync="deleteModal" title="Remove Medical Credential" small="true">
+		<modal :value="deleteModal" title="Remove Medical Credential" :small="true">
 			<div slot="modal-body" class="modal-body">Delete this Medical Credential?</div>
 			<div slot="modal-footer" class="modal-footer">
 				<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -71,6 +71,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import exportUtility from '../../export-utility.vue';
     import importUtility from '../../import-utility.vue';
     export default {
@@ -164,23 +165,26 @@
             }
         },
         computed: {
-            isFacilitator() {
-                return this.trips.length > 0 ? true : false;
-            }
+            isFacilitator: {
+                get() {
+                    return this.trips.length > 0 ? true : false;
+                },
+                set() {}
+            },
         },
         watch: {
             'filters': {
-                handler: function (val) {
+                handler(val, oldVal) {
                     this.pagination.current_page = 1;
                     this.searchMedicals();
                 },
                 deep: true
             },
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
-                this.searchMedicals();
+//                this.searchMedicals();
             },
-            'includeManaging': function (val, oldVal) {
+            'includeManaging'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.searchMedicals();
             }
@@ -188,8 +192,11 @@
         },
         methods: {
             setMedical(medical) {
-                this.$dispatch('set-document', medical);
+                this.$emit('set-document', medical);
             },
+            debouncedSearch: _.debounce(function() {
+                this.searchMedicals()
+            }, 250),
             searchMedicals(){
                 let params = {
                     user: this.userId,
@@ -203,15 +210,15 @@
 //                    params.manager = this.userId;
 //                params.include = '';
                 $.extend(params, this.filters);
-                this.$http.get('credentials/medical', {params: params}).then(function (response) {
-                    this.medical_credentials = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('credentials/medical', {params: params}).then((response) => {
+                    this.medical_credentials = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     this.loaded = true;
                 });
             },
             removeMedicalCredential(medical_credential){
                 if (medical_credential) {
-                    this.$http.delete('credentials/medical/' + medical_credential.id).then(function (response) {
+                    this.$http.delete('credentials/medical/' + medical_credential.id).then((response) => {
                         this.medical_credentials.$remove(medical_credential);
                         this.paginatedMedical_credentials.$remove(medical_credential);
                         this.pagination.total_pages = Math.ceil(this.medical_credentials.length / this.per_page);
@@ -225,9 +232,10 @@
 	            return _.findWhere(this.roles, { value: role}).name;
 	        }
         },
-        ready(){
-            this.$http.get('users/' + this.userId).then(function (response) {
-                let user = response.body.data;
+        mounted(){
+            let userId = this.userId || this.$root.user.id;
+            this.$http.get('users/' + userId).then((response) => {
+                let user = response.data.data;
                 let managing = [];
 
                 if (user.facilitating) {
@@ -237,7 +245,7 @@
                 }
 
                 if (user.managing) {
-                    _.each(user.managing.data, function (group) {
+                    _.each(user.managing.data, (group) => {
                         managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                     });
                     this.trips = _.union(this.trips, managing);

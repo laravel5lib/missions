@@ -56,27 +56,31 @@ class Due extends Model
         if ($this->due_at
             ->timezone($timezone)
             ->addDays($this->grace_period)
-            ->isPast() and $this->outstanding_balance > 0)
+            ->isPast() and $this->outstanding_balance > 0) {
             return 'overdue';
+        }
 
-        if ($this->due_at->timezone($timezone)->isPast() and $this->outstanding_balance > 0)
+        if ($this->due_at->timezone($timezone)->isPast() and $this->outstanding_balance > 0) {
             return 'late';
+        }
 
-        if ($this->due_at > $this->payment->due_at 
-                and $this->due_at->timezone($timezone)->isFuture() 
+        if ($this->due_at > $this->payment->due_at
+                and $this->due_at->timezone($timezone)->isFuture()
                 and $this->outstanding_balance > 0
-            )
+            ) {
             return 'extended';
+        }
 
-        if ($this->outstanding_balance == 0)
+        if ($this->outstanding_balance == 0) {
             return 'paid';
+        }
 
         return 'pending';
     }
 
     /**
      * Return dues that are extended.
-     * 
+     *
      * @param  $query
      * @param  Date $date
      * @return mixed
@@ -91,7 +95,7 @@ class Due extends Model
 
     /**
      * Return dues that are pending.
-     * 
+     *
      * @param  $query
      * @return mixed
      */
@@ -103,9 +107,9 @@ class Due extends Model
 
     /**
      * Return dues that are overdue
-     * 
-     * @param  $query 
-     * @return mixed   
+     *
+     * @param  $query
+     * @return mixed
      */
     public function scopeOverdue($query)
     {
@@ -115,9 +119,9 @@ class Due extends Model
 
     /**
      * Return dues that are late
-     * 
-     * @param  $query 
-     * @return mixed   
+     *
+     * @param  $query
+     * @return mixed
      */
     public function scopeLate($query)
     {
@@ -127,9 +131,9 @@ class Due extends Model
 
     /**
      * Return dues that are paid
-     * 
-     * @param  $query 
-     * @return mixed   
+     *
+     * @param  $query
+     * @return mixed
      */
     public function scopePaid($query)
     {
@@ -181,7 +185,7 @@ class Due extends Model
      */
     private function getTimezone()
     {
-        if($this->payable instanceof Project) {
+        if ($this->payable instanceof Project) {
             $timezone = $this->payable->sponsor->timezone;
         } else {
             $timezone = $this->payable->user->timezone;

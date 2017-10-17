@@ -93,7 +93,7 @@ class CampaignTransport extends Model
     {
         $this->load('passengers.reservation.trip.group');
 
-        if ($this->passengers)
+        if ($this->passengers) {
             $groups = $this->passengers()
                 ->get()
                 ->pluck('reservation')
@@ -103,6 +103,7 @@ class CampaignTransport extends Model
                 ->pluck('group')
                 ->flatten()
                 ->unique();
+        }
 
         return $groups;
 
@@ -113,11 +114,12 @@ class CampaignTransport extends Model
     {
         $this->load('passengers.reservation');
 
-        if ($this->passengers)
+        if ($this->passengers) {
             $designations = $this->passengers()
                 ->get()
                 ->pluck('reservation.designation')
                 ->unique();
+        }
 
         return $designations;
 

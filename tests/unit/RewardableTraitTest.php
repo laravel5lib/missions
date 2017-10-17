@@ -1,10 +1,10 @@
 <?php
 
-class RewardableTraitTest extends TestCase
+class RewardableTraitTest extends BrowserKitTestCase
 {
     /** @test */
     public function create_codes()
-    {   
+    {
         $this->assertTrue(true);
         
         // $campaign = factory(App\Models\v1\Campaign::class)->create();

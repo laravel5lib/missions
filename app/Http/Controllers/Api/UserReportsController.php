@@ -24,26 +24,26 @@ class UserReportsController extends Controller
 
     /**
      * Get all user reports
-     * 
+     *
      * @param  string  $userId
      * @param  Request $request
      * @return response
      */
-    public function index($userId, Request $request)
+    public function index($userId)
     {
         $reports = $this->user
-             ->findOrFail($userId)
-             ->reports()
-             ->filter($request->all())
-             ->orderBy('created_at', 'desc')
-             ->paginate($request->get('per_page', 10));
+            ->findOrFail($userId)
+            ->reports()
+            ->filter(request()->all())
+            ->orderBy('created_at', 'desc')
+            ->paginate(request()->get('per_page', 10));
 
         return $this->response->paginator($reports, new ReportTransformer);
     }
 
     /**
      * Delete the report
-     * 
+     *
      * @param  string $id
      * @return response
      */
@@ -54,7 +54,7 @@ class UserReportsController extends Controller
         Storage::disk('s3')->delete($report->source);
 
         $report->delete();
-        
+
         return $this->response->noContent();
     }
 }

@@ -3,8 +3,9 @@
 use App\Models\v1\User;
 use App\Models\v1\MedicalRelease;
 
-class MedicalReleasesEndpointTest extends TestCase
+class MedicalReleasesEndpointTest extends BrowserKitTestCase
 {
+    use AuthenticatedUserSetup;
 
     /**
      * @test
@@ -22,8 +23,8 @@ class MedicalReleasesEndpointTest extends TestCase
             ->seeJsonStructure([
                 'data' => [
                     '*' => [
-                        'id', 'user_id', 'name', 'ins_provider', 'ins_policy_no', 
-                        'is_risk', 'has_conditions', 'has_allergies', 
+                        'id', 'user_id', 'name', 'ins_provider', 'ins_policy_no',
+                        'is_risk', 'has_conditions', 'has_allergies',
                         'emergency_contact', 'created_at', 'updated_at'
                     ]
                 ]
@@ -37,7 +38,7 @@ class MedicalReleasesEndpointTest extends TestCase
     {
         $release = factory(MedicalRelease::class)->make([
             'name' => 'joe',
-            'user_id' => function() {
+            'user_id' => function () {
                 return factory(User::class)->create()->id;
             },
             'conditions' => [
@@ -82,7 +83,7 @@ class MedicalReleasesEndpointTest extends TestCase
     {
         $release = factory(MedicalRelease::class)->create([
             'name' => 'joe',
-            'user_id' => function() {
+            'user_id' => function () {
                 return factory(User::class)->create()->id;
             }
         ]);

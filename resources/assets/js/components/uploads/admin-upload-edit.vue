@@ -1,29 +1,26 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml" xmlns:v-crop="http://www.w3.org/1999/xhtml">
-    <validator name="CreateUpload">
+<template  xmlns:v-crop="http://www.w3.org/1999/xhtml">
+
         <form id="CreateUploadForm" class="form-horizontal" novalidate @submit="prevent" style="position:relative">
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
                 <label for="name" class="col-sm-2 control-label">Name</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="name" id="name" v-model="name"
-                           placeholder="Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Name" name="name" v-validate="'required|min:1|max:100'"
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
             <div class="form-group" v-error-handler="{ value: tags, handle: 'tags' }">
                 <label for="tags" class="col-sm-2 control-label">Tags</label>
                 <div class="col-sm-10">
-                    <v-select @keydown.enter.prevent=""  id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
-                    <select hidden id="tags" name="tags" v-model="tags" multiple v-validate:tags="{ required:true }">
-                        <option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
-                    </select>
+                    <v-select @keydown.enter.prevent=""  id="tags" class="form-control" name="tags" v-validate="'required'" multiple v-model="tags" :options="tagOptions"></v-select>
                 </div>
             </div>
             <div class="form-group" v-error-handler="{ value: type, handle: 'type' }">
                 <label for="type" class="col-sm-2 control-label">Type</label>
                 <div class="col-sm-10">
-                    <select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" disabled>
-                        <option :value="">-- select type --</option>
+                    <select class="form-control" id="type" v-model="type" name="type" v-validate="'required'" disabled>
+                        <option value="">-- select type --</option>
                         <option value="avatar">Image (Avatar) - 1280 x 1280</option>
                         <option value="banner">Image (Banner) - 1300 x 500</option>
                         <option value="other">Image (other) - no set dimensions</option>
@@ -90,11 +87,11 @@
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <a href="/admin/uploads" class="btn btn-default">Cancel</a>
-                    <a @click="submit()" class="btn btn-primary">Update</a>
+                    <a @click="submit" class="btn btn-primary">Update</a>
                 </div>
             </div>
         </form>
-    </validator>
+
 </template>
 <script type="text/javascript">
     import vSelect from 'vue-select'
@@ -148,20 +145,14 @@
             }
         },
         watch: {
-            'type': function (val, oldVal) {
+            'type'(val, oldVal) {
                 this.typeObj = _.findWhere(this.typePaths, {type: val});
                 this.path = this.typeObj.path;
                 if (this.file)
                     this.adjustSelectByType();
             },
-            'tags': function (val) {
-                this.$validate('tags', true);
-            }
-        },
-        events:{
-            'vueCrop-api':function (api) {
-                // make api available on scope
-                window.vueCropApi = this.vueCropApi = api;
+            'tags'(val, oldVal) {
+
             }
         },
         methods: {
@@ -197,32 +188,29 @@
             prevent(e){
                 e.preventDefault();
             },
-            /*checkForError(field){
-                // if upload clicked submit button while the field is invalid trigger error styles 
-                return this.$CreateUpload[field].invalid && this.attemptSubmit;
-            },*/
             submit(){
-                this.resetErrors();
-                if (this.$CreateUpload.valid) {
-                    this.resource.update({id:this.uploadId}, {
-                        name: this.name,
-                        tags: this.tags,
-                        type: this.type,
-                        path: this.path,
-                        file: this.file||undefined,
-                        x_axis: parseInt(this.x_axis / this.imageAspectRatio)||undefined,
-                        y_axis: parseInt(this.y_axis / this.imageAspectRatio)||undefined,
-                        width: parseInt(this.coords.w / this.imageAspectRatio)||undefined,
-                        height: parseInt(this.coords.h / this.imageAspectRatio)||undefined,
-                    }).then(function (resp) {
-                        console.log(resp);
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        this.resource.put({id: this.uploadId}, {
+                            name: this.name,
+                            tags: this.tags,
+                            type: this.type,
+                            path: this.path,
+                            file: this.file || undefined,
+                            x_axis: parseInt(this.x_axis / this.imageAspectRatio) || undefined,
+                            y_axis: parseInt(this.y_axis / this.imageAspectRatio) || undefined,
+                            width: parseInt(this.coords.w / this.imageAspectRatio) || undefined,
+                            height: parseInt(this.coords.h / this.imageAspectRatio) || undefined,
+                        }).then((resp) => {
+                            console.log(resp);
 //                    	this.resultImage = resp.data;
-                        window.location.href = '/admin/uploads';
+                            window.location.href = '/admin/uploads';
 //                        window.location.href = '/admin' + resp.data.data.links[0].uri;
-                    }, function (error) {
-                        console.log(error);
-                    });
-                }
+                        }, (error) => {
+                            console.log(error);
+                        });
+                    }
+                })
             },
             handleImage(e){
                 var self = this;
@@ -256,9 +244,14 @@
                 }
             }
         },
-        ready(){
-            this.resource.get({id:this.uploadId}).then(function (response) {
-                var upload = response.body.data;
+        mounted(){
+            this.$root.$on('vueCrop-api', (api) => {
+                // make api available on scope
+                window.vueCropApi = this.vueCropApi = api;
+            })
+
+            this.resource.get({id:this.uploadId}).then((response) => {
+                var upload = response.data.data;
                 this.name = upload.name;
                 this.tags = upload.tags;
                 this.type = upload.type;

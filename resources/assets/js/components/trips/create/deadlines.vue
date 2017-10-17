@@ -1,7 +1,7 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
 	<div class="row">
 		<div class="col-sm-12">
-			<validator name="TripDeadlines" @valid="onValid">
+
 				<form id="TripDeadlines" class="form-horizontal" novalidate>
 
 					<div class="form-group">
@@ -20,32 +20,32 @@
 									New Deadline
 								</div>
 								<div class="panel-body">
-									<validator name="TripDeadlinesCreate">
+
 										<form class="form" novalidate>
 											<div class="row">
 												<div class="col-sm-12">
-													<div class="form-group" :class="{'has-error': checkForError('item')}">
+													<div class="form-group" :class="{'has-error': errors.has('item')}">
 														<label for="name">Name</label>
 														<input type="text" id="name" v-model="newDeadline.name" class="form-control input-sm">
 													</div>
 
 													<div class="row">
 														<div class="col-sm-6">
-															<div class="form-group" :class="{'has-error': checkForError('grace') }">
+															<div class="form-group" :class="{'has-error': errors.has('grace') }">
 																<label for="grace_period">Grace Period</label>
-																<div class="input-group input-group-sm" :class="{'has-error': checkForErrorPayment('grace') }">
+																<div class="input-group input-group-sm" :class="{'has-error': errors.hasPayment('grace') }">
 																	<input id="grace_period" type="number" class="form-control" number v-model="newDeadline.grace_period"
-																		   v-validate:grace="{required: true, min:0}">
+																		   name="grace" v-validate="'required|min:0'">
 																	<span class="input-group-addon">Days</span>
 																</div>
 															</div>
 														</div>
 														<div class="col-sm-6">
-															<div class="form-group" :class="{'has-error': checkForError('due')}">
+															<div class="form-group" :class="{'has-error': errors.has('due')}">
 																<label for="due_at">Due</label>
-																<date-picker :input-sm="true" :model.sync="newDeadline.due_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+																<date-picker input-sm v-model="newDeadline.due_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
 																<input type="datetime" id="due_at" class="form-control input-sm hidden"
-																	   v-model="newDeadline.due_at" v-validate:due="{required: true}">
+																	   v-model="newDeadline.due_at" name="due" v-validate="'required'">
 															</div>
 
 														</div>
@@ -61,7 +61,7 @@
 												</div>
 											</div>
 										</form>
-									</validator>
+
 								</div>
 								<div class="panel-footer text-right">
 									<a class="btn btn-xs btn-default" @click="toggleNewDeadline=false">
@@ -84,10 +84,10 @@
 								</tr>
 								</thead>
 								<tbody>
-								<tr v-for="deadline in deadlines|orderBy 'due_at'">
+								<tr v-for="deadline in orderByProp(deadlines, 'due_at')">
 									<td>{{deadline.name}}</td>
 									<td>{{deadline.due_at|moment}}</td>
-									<td>{{deadline.grace_period}} {{deadline.grace_period|pluralize 'day'}}</td>
+									<td>{{deadline.grace_period}} {{pluralize(deadline.grace_period, 'day')}}</td>
 									<td>{{deadline.enforced}}</td>
 									<td>
 										<!--<a @click="editPayment(payment, cost)"><i class="fa fa-pencil"></i></a>-->
@@ -99,7 +99,7 @@
 						</div>
 					</div>
 				</form>
-			</validator>
+
 		</div>
 	</div>
 </template>
@@ -135,10 +135,7 @@
 			},
 			onValid(){
 				this.populateWizardData();
-				this.$dispatch('deadlines', true);
-			},
-			checkForError(field){
-				return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
+				this.$emit('deadlines', true);
 			},
 			resetDeadline(){
 				this.newDeadline = {
@@ -151,18 +148,19 @@
 			},
 			addDeadline(){
 				this.attemptedAddDeadline = true;
-				if(this.$TripDeadlinesCreate.valid) {
-					this.deadlines.push(this.newDeadline);
-					this.resetDeadline();
-					this.toggleNewDeadline = false;
-					this.attemptedAddDeadline = false;
-				}
-			}
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        this.deadlines.push(this.newDeadline);
+                        this.resetDeadline();
+                        this.toggleNewDeadline = false;
+                        this.attemptedAddDeadline = false;
+                    }
+                });
+			},
 		},
-		activate(done){
+		activated(){
 			$('html, body').animate({scrollTop: 0}, 300);
-			this.$dispatch('deadlines', true);
-			done();
+			this.$emit('deadlines', true);
 		}
 	}
 </script>

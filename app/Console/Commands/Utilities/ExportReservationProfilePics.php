@@ -50,10 +50,10 @@ class ExportReservationProfilePics extends Command
 
         $bar = $this->output->createProgressBar(count($reservations));
 
-        foreach ($reservations as $reservation)
-        {
+        foreach ($reservations as $reservation) {
             if ($reservation->avatar) {
-                $filename = sprintf("%s_%s_%s",
+                $filename = sprintf(
+                    "%s_%s_%s",
                     snake_case(teamRole($reservation->desired_role)),
                     snake_case($reservation->given_names),
                     snake_case($reservation->surname)
@@ -75,10 +75,8 @@ class ExportReservationProfilePics extends Command
                         $reservation->avatar->source,
                         '/export/reservations/images/' . $path . '/' . $filename.'.jpg'
                     );
-                } catch(FileExistsException $e) {
-
-                } catch(FileNotFoundException $e){
-
+                } catch (FileExistsException $e) {
+                } catch (FileNotFoundException $e) {
                 }
             }
 

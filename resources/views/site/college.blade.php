@@ -1,12 +1,14 @@
 @extends('site.layouts.default')
 
+@section('title', 'Missions.Me College (MMC)')
+
 @section('scripts')
 <script>
 $('.launch-modal').on('click', function(e){
     e.preventDefault();
     $( '#' + $(this).data('video-modal') ).modal();
 });
-$('.video-modal').on('hide.bs.modal', function(e) {    
+$('.video-modal').on('hide.bs.modal', function(e) {
     var $if = $(e.delegateTarget).find('iframe');
     var src = $if.attr("src");
     $if.attr("src", '/empty.html');

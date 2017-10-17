@@ -1,6 +1,6 @@
 <template>
     <div class="row" v-if="loaded" style="position:relative">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="col-sm-12">
             <div class="text-center">
                 <form novalidate>
@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="col-sm-12 text-center">
-                    <pagination :pagination.sync="pagination" :callback="searchEssays"></pagination>
+                    <pagination :pagination="pagination" pagination-key="pagination" :callback="searchEssays"></pagination>
                 </div>
             </div>
         </div>
@@ -91,9 +91,9 @@
             setEssay(essay){
                 if(essay) {
                     this.essay = essay;
-                    this.reservationResource.update({id: this.reservationId}, {
+                    this.reservationResource.put({id: this.reservationId}, {
                         testimony_id: essay.id
-                    }).then(function (response) {
+                    }).then((response) => {
                         this.toggleChangeState();
                     });
                 }
@@ -108,15 +108,15 @@
 
             },
             searchEssays(){
-                this.$http.get('essays/?user=' + this.userId, { params: { page: this.pagination.current_page } }).then(function (response) {
-                    this.essays = response.body.data;
-                    this.pagination = response.body.meta.pagination;
-                    this.essay = _.findWhere(response.body.data, {id: this.essayId});
+                this.$http.get('essays/?user=' + this.userId, { params: { page: this.pagination.current_page } }).then((response) => {
+                    this.essays = response.data.data;
+                    this.pagination = response.data.meta.pagination;
+                    this.essay = _.findWhere(response.data.data, {id: this.essayId});
                     this.loaded = true;
                 });
             }
         },
-        ready(){
+        mounted(){
             this.searchEssays();
         }
     }

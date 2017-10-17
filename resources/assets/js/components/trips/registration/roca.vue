@@ -49,12 +49,12 @@
 		},
 		watch:{
 			'$parent.rocaAgree'(val, oldVal) {
-				this.$dispatch('roca-agree', val)
+//				this.$emit('roca-agree', val)
+                this.$emit('step-completion', val)
 			}
 		},
-		activate(done){
+		activated(){
 			$('html, body').animate({scrollTop : 200},300);
-			done();
 		}
 	}
 </script>

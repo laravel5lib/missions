@@ -4,10 +4,11 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-6">
-                    <h5>Notes</h5>
+                    <h3>Notes</h3>
                 </div>
-                <div class="col-xs-6 text-right" v-if="canModify">
-                    <button class="btn btn-primary btn-xs" @click="prepareNew">
+                <div class="col-xs-6 text-right" v-if="app.user.can.create_notes">
+                    <hr class="divider inv sm"
+                    <button class="btn btn-primary" @click="prepareNew">
                         <span v-if="! newMode">New <i class="fa fa-plus"></i></span>
                         <span v-if="newMode">List <i class="fa fa-list-ul"></i></span>
                     </button>
@@ -42,7 +43,7 @@
                     <input type="text"
                            class="form-control"
                            v-model="search"
-                           debounce="250"
+                           @keyup="debouncedSearch"
                            placeholder="Search notes by subject, author or content...">
 
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
@@ -53,16 +54,20 @@
                     <div class="col-xs-8">
                         <h5 class="list-group-item-heading">{{ note.subject }}
                             <br> <small>
-                                By {{ note.user.data.name }} &middot; {{ note.created_at | moment 'llll' }}
+                                By {{ note.user.data.name }} &middot; {{ note.created_at | moment('llll') }}
                                 <span v-if="note.created_at != note.updated_at">(modified)</span>
                             </small>
                         </h5>
                     </div>
-                    <div class="col-xs-4 text-right" v-if="note.user.data.id == user_id">
-                        <button class="btn btn-xs btn-link" @click="prepareEdit(note)">
+                    <div class="col-xs-4 text-right">
+                        <button class="btn btn-xs btn-link"
+                                @click="prepareEdit(note)"
+                                v-if="note.user.data.id === user_id">
                             <i class="fa fa-pencil"></i>
                         </button>
-                        <button class="btn btn-xs btn-link" @click="selectedNote.id = note.id,deleteModal = true">
+                        <button class="btn btn-xs btn-link"
+                                @click="selectedNote.id = note.id,deleteModal = true"
+                                v-if="note.user.data.id === user_id || app.user.can.delete_notes">
                             <i class="fa fa-times"></i>
                         </button>
                     </div>
@@ -77,7 +82,7 @@
             <div class="list-group-item text-center" v-if="pagination.per_page < pagination.total">
                 <nav>
                     <ul class="pager">
-                        <li :class="{ 'disabled': pagination.current_page == 1 }" class="previous">
+                        <li :class="{ 'disabled': pagination.current_page === 1 }" class="previous">
                             <a aria-label="Previous" @click="page=pagination.current_page-1">
                                 <span aria-hidden="true">&laquo; Newer</span>
                             </a>
@@ -93,7 +98,7 @@
             </div>
         </div>
 
-        <modal class="text-center" :show.sync="deleteModal" title="Delete Note" small="true">
+        <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Note" :small="true">
             <div slot="modal-body" class="modal-body text-center">Delete this Note?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -105,6 +110,7 @@
 </template>
 <script>
     import $ from 'jquery';
+    import _ from 'underscore'
     export default{
         name: 'notes',
         props: {
@@ -144,21 +150,21 @@
                 showSuccess: false,
                 showError: false,
                 deleteModal: false,
-                message: null
+                message: null,
+                app: MissionsMe
             }
         },
         watch : {
-            'page': function (val, oldVal) {
+            'page'(val, oldVal) {
                 this.fetch();
             },
-            'per_page': function (val, oldVal) {
+            'per_page'(val, oldVal) {
                 this.fetch();
             },
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.page = 1;
-                this.fetch();
             },
-            'id': function (val, oldVal) {
+            'id'(val, oldVal) {
                 this.selectedNote.noteable_id = val;
                 this.fetch();
             }
@@ -169,6 +175,9 @@
             }
         },
         methods: {
+            debouncedSearch: _.debounce(function () {
+                this.fetch();
+            }, 250),
             prepareNew() {
                 this.newMode = ! this.newMode;
                 this.editMode = false;
@@ -198,9 +207,9 @@
                     params = params + '|' + this.id;
                 }
 
-                this.$http.get('notes' + params).then(function (response) {
-                    this.notes = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('notes' + params).then((response) => {
+                    this.notes = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                 });
             },
             save() {
@@ -214,22 +223,22 @@
                 event.preventDefault();
                 $.extend(this.selectedNote, {'user_id' : this.userId});
 
-                this.$http.post('notes', this.selectedNote).then(function () {
+                this.$http.post('notes', this.selectedNote).then(() => {
                     this.reset();
                     this.fetch();
-                    this.$dispatch('showSuccess', 'Note created successfully.');
-                }, function () {
-                    this.$dispatch('showError', 'There are errors on the form.');
+                    this.$root.$emit('showSuccess', 'Note created successfully.');
+                }, () =>  {
+                    this.$root.$emit('showError', 'There are errors on the form.');
                 });
             },
             edit() {
                 event.preventDefault();
-                this.$http.put('notes/' + this.selectedNote.id, this.selectedNote).then(function () {
+                this.$http.put('notes/' + this.selectedNote.id, this.selectedNote).then(() => {
                     this.reset();
                     this.fetch();
-                    this.$dispatch('showSuccess', 'Note saved successfully.');
-                }, function () {
-                    this.$dispatch('showError', 'There are errors on the form.');
+                    this.$root.$emit('showSuccess', 'Note saved successfully.');
+                }, () =>  {
+                    this.$root.$emit('showError', 'There are errors on the form.');
                 });
             },
             reset() {
@@ -241,21 +250,20 @@
                 this.editMode = false;
             },
             remove(note) {
-                this.$http.delete('notes/' + note.id).then(function () {
-                    // remove note from collection
-                    this.notes.$remove(note.id);
+                this.$http.delete('notes/' + note.id).then(() => {
                     // reset selected
                     this.reset();
                     // re-fetch list
                     this.fetch();
-                    this.$dispatch('showSuccess', 'Note deleted.');
-                }, function () {
-                    this.$dispatch('showError', 'Unable to delete note.');
+                    this.$root.$emit('showSuccess', 'Note deleted.');
+                }, () =>  {
+                    this.$root.$emit('showError', 'Unable to delete note.');
                 });
             }
         },
-        ready() {
+        mounted() {
             this.fetch()
+            console.log(MissionsMe.user.can.create_notes);
         }
     }
 </script>

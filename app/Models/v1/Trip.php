@@ -120,18 +120,18 @@ class Trip extends Model
     }
 
     /**
-     * Get the trip's user rep.
+     * Get the trip's rep.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function rep()
     {
-        return $this->belongsTo(User::class, 'rep_id');
+        return $this->belongsTo(Representative::class, 'rep_id');
     }
 
     /**
      * Get the trip's promotionals.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function promotionals()
@@ -236,10 +236,10 @@ class Trip extends Model
      */
     public function setTodosAttribute($value)
     {
-        $todos = collect($value)->transform(function($item) {
+        $todos = collect($value)->transform(function ($item) {
             return trim(strtolower($item));
         });
-        
+
         $this->attributes['todos'] = json_encode($todos);
     }
 
@@ -260,20 +260,25 @@ class Trip extends Model
      */
     public function syncDeadlines($deadlines)
     {
-        if ( ! $deadlines) return;
+        if (! $deadlines) {
+            return;
+        }
 
-        $ids = $this->deadlines()->lists('id', 'id');
+        $ids = $this->deadlines()->pluck('id', 'id');
 
-        foreach($deadlines as $deadline)
-        {
-            if( ! isset($deadline['id'])) $deadline['id'] = null;
+        foreach ($deadlines as $deadline) {
+            if (! isset($deadline['id'])) {
+                $deadline['id'] = null;
+            }
 
             array_forget($ids, $deadline['id']);
 
             $this->deadlines()->updateOrCreate(['id' => $deadline['id']], $deadline);
         }
 
-        if( ! $ids->isEmpty()) Deadline::destroy($ids);
+        if (! $ids->isEmpty()) {
+            Deadline::destroy($ids);
+        }
     }
 
     /**
@@ -283,20 +288,25 @@ class Trip extends Model
      */
     public function syncCosts($costs)
     {
-        if ( ! $costs) return;
+        if (! $costs) {
+            return;
+        }
 
-        $ids = $this->costs()->lists('id', 'id');
+        $ids = $this->costs()->pluck('id', 'id');
 
-        foreach($costs as $cost)
-        {
-            if( ! isset($cost['id'])) $cost['id'] = null;
+        foreach ($costs as $cost) {
+            if (! isset($cost['id'])) {
+                $cost['id'] = null;
+            }
 
             array_forget($ids, $cost['id']);
 
             $this->costs()->updateOrCreate(['id' => $cost['id']], $cost);
         }
 
-        if( ! $ids->isEmpty()) Cost::destroy($ids);
+        if (! $ids->isEmpty()) {
+            Cost::destroy($ids);
+        }
     }
 
     /**
@@ -306,20 +316,25 @@ class Trip extends Model
      */
     public function syncRequirements($requirements)
     {
-        if ( ! $requirements) return;
+        if (! $requirements) {
+            return;
+        }
 
-        $ids = $this->requirements()->lists('id', 'id');
+        $ids = $this->requirements()->pluck('id', 'id');
 
-        foreach($requirements as $requirement)
-        {
-            if( ! isset($requirement['id'])) $requirement['id'] = null;
+        foreach ($requirements as $requirement) {
+            if (! isset($requirement['id'])) {
+                $requirement['id'] = null;
+            }
 
             array_forget($ids, $requirement['id']);
 
             $this->requirements()->updateOrCreate(['id' => $requirement['id']], $requirement);
         }
 
-        if( ! $ids->isEmpty()) Requirement::destroy($ids);
+        if (! $ids->isEmpty()) {
+            Requirement::destroy($ids);
+        }
     }
 
     /**
@@ -329,7 +344,9 @@ class Trip extends Model
      */
     public function syncFacilitators($user_ids = null)
     {
-        if ( is_null($user_ids)) return;
+        if (is_null($user_ids)) {
+            return;
+        }
 
         $this->facilitators()->sync($user_ids);
     }
@@ -341,7 +358,9 @@ class Trip extends Model
      */
     public function isPublished()
     {
-        if (is_null($this->published_at)) return false;
+        if (is_null($this->published_at)) {
+            return false;
+        }
 
         return $this->published_at <= Carbon::now() ? true : false;
     }
@@ -375,7 +394,7 @@ class Trip extends Model
         $this->published_at->isFuture() ? 'scheduled' : $status;
 
         // close it if no more spots are available
-        $status = $this->spots === 0 ? 'closed' : $status;
+        $status = $this->spots == 0 ? 'closed' : $status;
 
         // close it if past closing date
         $status = $this->closed_at->isPast() ? 'closed' : $status;
@@ -434,5 +453,4 @@ class Trip extends Model
     {
         return $query->where('public', false);
     }
-
 }

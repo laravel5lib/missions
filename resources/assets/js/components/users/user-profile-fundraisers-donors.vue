@@ -1,26 +1,27 @@
 <template>
     <div style="position:relative">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div v-if="display && donors.length > 0">
-            <div class="btn-group btn-group-sm" role="group" aria-label="...">
-                <div class="btn-group btn-group-sm" role="group">
-                    <button type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donors'}" @click="toggleView('donors')">Donors</button>
-                </div>
-                <div class="btn-group btn-group-sm" role="group">
-                    <button type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donations'}" @click="toggleView('donations')">Donations</button>
-                </div>
-            </div>
+
+            <ul class="nav nav-tabs">
+                <li :class="{'active': activeView === 'donors'}">
+                    <a @click="toggleView('donors')">Donors</a>
+                </li>
+                <li :class="{'active': activeView === 'donations'}">
+                    <a @click="toggleView('donations')">Donations</a>
+                </li>
+            </ul>
 
             <hr class="divider inv sm">
             <template v-if="activeView==='donors'">
                 <div class="panel panel-default" v-for="donor in donors">
-                    <div class="panel-heading" role="tab" id="heading-{{ donor.id }}">
+                    <div class="panel-heading" role="tab" :id="'heading-' + donor.id">
                         <h5 class="text-capitalize">
                             <a role="button" :href="'/'+donor.account_url" v-if="donor.account_url">
-                                {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
+                                {{ donor.name }} <span class="small">{{currency(donor.total_donated)}}</span>
                             </a>
                             <span v-else>
-                                {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
+                                {{ donor.name }} <span class="small">{{currency(donor.total_donated)}}</span>
                             </span>
                         </h5>
                     </div>
@@ -29,12 +30,12 @@
 
             <template v-if="activeView === 'donations'">
                 <div class="panel panel-default" v-for="donation in donations">
-                    <div class="panel-heading" role="tab" id="heading-{{ donation.id }}">
+                    <div class="panel-heading" role="tab" :id="'heading-' + donation.id">
                         <h5>
-                            <span class="text-success">{{ donation.amount|currency }}</span> was donated<br>
-                            <small class="small">by 
-                                <a class="text-capitalize" 
-                                   :href="'/'+donation.donor.data.account_url" 
+                            <span class="text-success">{{ currency(donation.amount) }}</span> was donated<br>
+                            <small class="small">by
+                                <a class="text-capitalize"
+                                   :href="'/'+donation.donor.data.account_url"
                                    v-if="!donation.anonymous && donation.donor.data.account_url">
                                     {{ donation.name }}
                                 </a>
@@ -42,7 +43,7 @@
                                     {{ donation.name }}
                                 </span>
                                 <span v-if="donation.anonymous">an anonymous donor</span>
-                                on {{ donation.created_at|moment 'll'}}
+                                on {{ donation.created_at|moment('ll')}}
                             </small>
                             <br /><small>{{ donation.details.comment }}</small>
                         </h5>
@@ -98,8 +99,8 @@
             marked: marked,
         },
         watch: {
-            'page': function (val, oldVal) {
-                
+            'page'(val, oldVal) {
+
                 if (this.activeView == 'donors') {
                     this.searchDonors();
                 } else {
@@ -137,35 +138,39 @@
                     id: this.id,
                     per_page: this.per_page,
                     page: this.page
-                }}).then(function (response) {
-                    this.donors = _.toArray(response.body.data);
-                    this.pagination = response.body.meta.pagination;
+                }}).then((response) => {
+                    this.donors = _.toArray(response.data.data);
+                    this.pagination = response.data.meta.pagination;
                 });
             },
             searchDonations(){
                 this.$http.get('fundraisers/'+ this.id + '/donations', { params: {
-                    id: this.id, 
+                    id: this.id,
                     include: 'donor',
                     per_page: this.per_page,
                     page: this.page
-                }}).then(function (response) {
-                    this.donations = _.toArray(response.body.data);
-                    this.pagination = response.body.meta.pagination;
+                }}).then((response) => {
+                    this.donations = _.toArray(response.data.data);
+                    this.pagination = response.data.meta.pagination;
                 });
             }
         },
-        ready(){
-            this.$root.$on('Fundraiser:DisplayDonors', function (display) {
+        mounted(){
+            this.$root.$on('Fundraiser:DisplayDonors', (display) => {
                 this.display = display;
 
                 if (this.display) {
                     this.searchDonors();
                 }
-            }.bind(this));
+            });
 
             if (this.display) {
                 this.searchDonors();
             }
+
+            this.$root.$on('DonateForm:complete', (val) => {
+                this.searchDonors();
+            });
         }
     }
 </script>

@@ -1,53 +1,48 @@
 <template>
 	<div>
 		<div v-if="transport">
-			<validator name="TravelTransport">
+
 				<form id="TravelTransportForm" novalidate >
 					<section>
 						<div class="form-group" v-error-handler="{ value: transport, client: 'transporttype' }">
-							<label for="travel_methodA">Travel Method</label>
+							<label for="transporttype">Travel Method</label>
 							<template v-if="editMode">
-								<select class="form-control" name="travel_method" id="travel_method"
-								        v-validate:transporttype="['required']" v-model="transport.type">
+								<select class="form-control" id="travel_method"
+								        name="transporttype" v-validate="'required'" v-model="transport.type">
 									<option value="">-- Select--</option>
-									<option :value="option" v-for="option in travelTypeOptions">{{option | capitalize}}</option>
+									<option :value="option" v-for="option in travelTypeOptions">{{ option|capitalize }}</option>
 								</select>
 							</template>
 
-							<p v-else>{{ transport.type | uppercase }}</p>
+							<p v-else>{{ transport.type.toUpperCase() }}</p>
 						</div>
 
 						<template v-if="transport && transport.type === 'flight'">
 							<div class="form-group" v-error-handler="{ value: transport.name, client: 'airline' }">
 								<label v-if="!manualAirlineData" for="travel_methodA">Airline</label>
 								<template v-if="editMode">
-									<v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
-									          :value.sync="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
+									<v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" name="airline" id="airlineFilter" :debounce="250" :on-search="getAirlines"
+									          v-model="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name" v-validate="'required'"
 									          placeholder="Select Airline"></v-select>
-									<select v-if="!manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate:airline="['required']"
-									        v-model="transport.name">
-										<option :value="airline.name" v-for="airline in UTILITIES.airlines">
-											{{airline.extended_name | capitalize}}
-										</option>
-									</select>
 									<label><input type="checkbox" v-model="manualAirlineData"> Airline not listed</label>
 								</template>
-								<p v-else>{{ transport.name | uppercase }}</p>
+								<p v-else>{{ transport.name.toUpperCase() }}</p>
 								<template v-if="manualAirlineData && editMode">
 									<div class="form-group">
 										<label for="">Airline</label>
 										<input type="text" class="form-control" v-model="transport.name" v-if="editMode">
-										<p v-else>{{ transport.name | uppercase }}</p>
+										<p v-else>{{ transport.name.toUpperCase() }}</p>
+									</div>
 									<div class="form-group">
 										<label for="">Callsign</label>
 										<input type="text" class="form-control" v-model="transport.call_sign" v-if="editMode">
-										<p v-else>{{ transport.name | uppercase }}</p>
+										<p v-else>{{ transport.name.toUpperCase() }}</p>
 									</div>
 								</template>
 								<div class="form-group">
 									<label for="">Flight No.</label>
 									<input type="text" class="form-control" v-model="transport.vessel_no" v-if="editMode">
-									<p v-else>{{ transport.vessel_no | uppercase }}</p>
+									<p v-else>{{ transport.vessel_no.toUpperCase() }}</p>
 								</div>
 							</div>
 						</template>
@@ -56,30 +51,30 @@
 							<div class="form-group">
 								<label for="">Company</label>
 								<input type="text" class="form-control" v-model="transport.name" v-if="editMode">
-								<p v-else>{{ transport.name | uppercase }}</p>
+								<p v-else>{{ transport.name.toUpperCase() }}</p>
 							</div>
 							<div class="form-group">
 								<label for="">Schedule/Route No.</label>
 								<input type="text" class="form-control" v-model="transport.vessel_no" v-if="editMode">
-								<p v-else>{{ transport.vessel_no | uppercase }}</p>
+								<p v-else>{{ transport.vessel_no.toUpperCase() }}</p>
 							</div>
 						</template>
 
-						<template v-if="transport && transport.type === 'train'" v-if="editMode">
+						<template v-if="transport && transport.type === 'train'">
 							<div class="form-group">
 								<label for="travel_methodB">Company</label>
 								<template v-if="editMode">
 									<select class="form-control" name="travel_methodB" id="train"
-									        v-validate:train="['required']" v-model="transport.name">
-										<option :value="option" v-for="option in trainOptions">{{option | capitalize}}</option>
+									        v-model="transport.name" v-validate="'required'">
+										<option :value="option" v-for="option in trainOptions">{{ option|capitalize }}</option>
 									</select>
 								</template>
-								<p v-else>{{ transport.name | uppercase }}</p>
+								<p v-else>{{ transport.name.toUpperCase() }}</p>
 							</div>
 							<div class="form-group">
 								<label for="">Train No.</label>
 								<input type="text" class="form-control" v-model="transport.vessel_no" v-if="editMode">
-								<p v-else>{{ transport.vessel_no | uppercase }}</p>
+								<p v-else>{{ transport.vessel_no.toUpperCase() }}</p>
 							</div>
 						</template>
 
@@ -88,18 +83,18 @@
 								<label for="travel_methodB">Company</label>
 								<template v-if="editMode">
 									<select class="form-control" name="travel_methodB" id="train"
-									        v-validate:train="['required']" v-model="transport.name">
-										<option :value="option" v-for="option in vehicleOptions">{{option | capitalize}}
+									        v-validate="'required'" v-model="transport.name">
+										<option :value="option" v-for="option in vehicleOptions">{{ option|capitalize }}
 										</option>
 									</select>
 								</template>
 
-								<p v-else>{{ transport.name | uppercase }}</p>
+								<p v-else>{{ transport.name.toUpperCase() }}</p>
 							</div>
 						</template>
 					</section>
 				</form>
-			</validator>
+
 		</div>
 
 	</div>
@@ -141,7 +136,6 @@
         },
         data(){
             return {
-                validatorHandle: 'TravelTransport',
 
                 //logic variables
                 travelTypeOptions: ['flight', 'bus', 'vehicle', 'train'],
@@ -172,9 +166,9 @@
                 this.transport.domestic = false;
             },
             'transport.name'(val) {
-                this.$nextTick(function () {
-                    if (_.isFunction(this.$validate))
-                        this.$validate(true);
+                this.$nextTick(() =>  {
+
+
                 });
             },
 	        'transport.type'(val, oldVal) {
@@ -187,40 +181,40 @@
 
         },
 	    computed: {
-            'isUpdate': function() {
+            'isUpdate'() {
                 return this && this.transport.hasOwnProperty('id') && _.isString(this.transport.id);
 		    }
 	    },
-        events: {
+        /*events: {
             'validate-itinerary'() {
-                this.resetErrors();
+                this.$validator.validateAll();
             }
-        },
+        },*/
         methods: {
             getAirline(reference){
-                return this.$http.get('utilities/airlines/' + reference).then(function (response) {
-                    return response.body.data;
+                return this.$http.get('utilities/airlines/' + reference).then((response) => {
+                    return response.data.data;
                 },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                     });
             },
             update(){
-                this.$http.put('transports/' + this.transport.id, this.transport).then(function (response) {
+                this.$http.put('transports/' + this.transport.id, this.transport).then((response) => {
                     this.$emit('showSuccess', 'Itinerary Travel Details Updated');
                 },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                     });
             }
         },
-        ready(){
+        mounted(){
             let self = this;
             let promises = [];
             if (this.transport.type === 'flight')
 	            promises.push(this.getAirlines(this.transport.name, false));
 
-            Promise.all(promises).then(function (values) {
+            Promise.all(promises).then((values) => {
                 // Update state data
                 if (self.isUpdate) {
                     // select airline
@@ -233,10 +227,6 @@
                     }
 	                //console.log(self.selectedAirlineObj);
                 }
-                self.$nextTick(function () {
-                    if (_.isFunction(self.$validate))
-                        self.$validate(true);
-                });
 
             });
 

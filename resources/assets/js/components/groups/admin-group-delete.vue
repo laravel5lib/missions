@@ -28,10 +28,10 @@
         },
         methods: {
             deleteUser(){
-                this.$http.delete('groups/' + this.groupId).then(function (response) {
+                this.$http.delete('groups/' + this.groupId).then((response) => {
                     console.log(response);
                     window.location.href = '/admin/groups';
-                }, function (error) {
+                }, (error) =>  {
                     console.log(error);
                 })
             }

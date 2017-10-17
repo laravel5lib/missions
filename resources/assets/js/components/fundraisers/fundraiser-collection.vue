@@ -12,7 +12,7 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-xs-12">
-                    <fundraisers-manager :id="fundraiser.id" :sponsor-id="fundraiser.sponsor_id" :editable=1></fundraisers-manager>
+                    <fundraisers-manager :id="fundraiser.id" :sponsor-id="fundraiser.sponsor_id" :editable="1" @fundraiserSettingsChanged="fundraiserSettingsChanged"></fundraisers-manager>
                 </div>
             </div>
         </div>
@@ -37,20 +37,18 @@
                 return '/' + fundraiser.sponsor.data.url + '/' + fundraiser.url;
             },
             fetch() {
-                this.$http.get('fundraisers/', { params: { fund: this.fundId, include: 'sponsor' } }).then(function (response) {
-                    this.fundraisers = response.body.data;
-                }, function (error) {
-                    this.$dispatch('showError', 'Unable to retreive fundraisers.');
+                this.$http.get('fundraisers/', { params: { fund: this.fundId, include: 'sponsor' } }).then((response) => {
+                    this.fundraisers = response.data.data;
+                }, (error) =>  {
+                    this.$root.$emit('showError', 'Unable to retreive fundraisers.');
                 });
-            }
-        },
-        events: {
-            'fundraiserSettingsChanged': function (fundraiser) {
+            },
+            fundraiserSettingsChanged(fundraiser) {
                 _.findWhere(this.fundraisers, {id: fundraiser.id}).name = fundraiser.name;
                 _.findWhere(this.fundraisers, {id: fundraiser.id}).url = fundraiser.url;
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

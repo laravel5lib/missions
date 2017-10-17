@@ -5,7 +5,8 @@ namespace App\Http\Transformers\v1;
 use App\Models\v1\Transaction;
 use League\Fractal\TransformerAbstract;
 
-class TransactionTransformer extends TransformerAbstract {
+class TransactionTransformer extends TransformerAbstract
+{
 
     protected $availableIncludes = ['donor', 'fund'];
 
@@ -60,7 +61,9 @@ class TransactionTransformer extends TransformerAbstract {
     {
         $donor = $transaction->donor;
 
-        if ( ! $donor) return null;
+        if (! $donor) {
+            return null;
+        }
 
         return $this->item($donor, new DonorTransformer);
     }

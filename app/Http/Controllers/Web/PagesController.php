@@ -23,8 +23,9 @@ class PagesController extends Controller
     {
         $fundraiser = $this->fundraiser->where('url', $slug)->first();
 
-        if ($fundraiser)
+        if ($fundraiser) {
             return redirect($fundraiser->sponsor->slug->url.'/'.$slug);
+        }
 
         return $this->redirect_to_controller($slug);
     }
@@ -33,14 +34,15 @@ class PagesController extends Controller
     {
         $resource = $this->lookup_resource_by_slug($slug);
 
-        if ( ! $resource)
-          return $this->load_page($slug);
+        if (! $resource) {
+            return $this->load_page($slug);
+        }
 
         return $this->find_controller($resource);
     }
 
     private function lookup_resource_by_slug($slug)
-    {    
+    {
         $resource = $this->slug->where('url', $slug)->first();
 
         return $resource ? $resource : null;
@@ -58,8 +60,7 @@ class PagesController extends Controller
         $controllers = collect([
             'campaigns' => '\CampaignsController',
             'groups' => '\GroupsController',
-            'users' => '\UsersController',
-            'causes' => '\CausesController'
+            'users' => '\UsersController'
         ]);
 
         return app($namespace.$controllers->get($resource->slugable_type))

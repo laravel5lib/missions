@@ -7,7 +7,7 @@
 					<div class="form-group">
 						<label>Travel Groups</label>
 						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-						          :value.sync="groupsArr" :options="groupsOptions" label="name"
+						          v-model="groupsArr" :options="groupsOptions" label="name"
 						          placeholder="Filter Groups"></v-select>
 					</div>
 				</template>
@@ -15,7 +15,7 @@
 					<div class="form-group">
 						<label>Groups</label>
 						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-						          :value.sync="groupsArr" :options="groupsOptions" label="name"
+						          v-model="groupsArr" :options="groupsOptions" label="name"
 						          placeholder="Filter Groups"></v-select>
 					</div>
 				</template>
@@ -24,7 +24,7 @@
 			<div class="form-group" v-if="propertyExists('campaign')">
 				<label>Campaign</label>
 				<v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
-				          :value.sync="campaignObj" :options="campaignOptions" label="name"
+				          v-model="campaignObj" :options="campaignOptions" label="name"
 				          placeholder="Filter by Campaign"></v-select>
 			</div>
 
@@ -46,15 +46,15 @@
 
 				<div class="form-group" v-if="propertyExists('role')">
 					<label v-text="teams ? 'Role' : 'Desired Role'"></label>
-					<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRolesSearch"
-					          :value.sync="roleObj" :options="UTILITIES.roles" label="name"
+					<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRoles"
+					          v-model="roleObj" :options="UTILITIES.roles" label="name"
 					          placeholder="Filter Roles"></v-select>
 				</div>
 
 				<div class="form-group" v-if="isAdminRoute && (propertyExists('users') || propertyExists('user'))">
 					<label>Managing Users</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
-					          :value.sync="usersArr" :options="usersOptions" label="name"
+					          v-model="usersArr" :options="usersOptions" label="name"
 					          placeholder="Filter Users"></v-select>
 				</div>
 
@@ -82,7 +82,7 @@
 						<label>Applied Cost</label>
 						<select class="form-control input-sm" v-model="filters.dueName" style="width:100%;">
 							<option value="">Any Cost</option>
-							<option v-for="option in dueOptions" v-bind:value="option">
+							<option v-for="option in dueOptions" :value="option">
 								{{ option }}
 							</option>
 						</select>
@@ -118,7 +118,7 @@
 					<label>Region Assignment</label>
                     <select  class="form-control input-sm" v-model="filters.region">
                         <option value="">Any</option>
-                        <option :value="region.id" v-for="region in regionOptions | orderBy 'name'">{{ region.name}}</option>
+                        <option :value="region.id" v-for="region in regionOptionsOrdered">{{ region.name}}</option>
                     </select>
 				</div>
 
@@ -128,7 +128,7 @@
 						<label>Requirements</label>
 						<select class="form-control input-sm" v-model="filters.requirementName" style="width:100%;">
 							<option value="">Any Requirement</option>
-							<option v-for="option in requirementOptions" v-bind:value="option">
+							<option v-for="option in requirementOptions" :value="option">
 								{{ option }}
 							</option>
 						</select>
@@ -152,7 +152,7 @@
 						<label>Todos</label>
 						<select class="form-control input-sm" v-model="filters.todoName" style="width:100%;">
 							<option value="">Any Todo</option>
-							<option v-for="option in todoOptions" v-bind:value="option">
+							<option v-for="option in todoOptions" :value="option">
 								{{ option }}
 							</option>
 						</select>
@@ -177,8 +177,8 @@
 					<label>Trip Rep</label>
 					<select class="form-control input-sm" v-model="filters.rep" style="width:100%;">
 						<option value="">Any Rep</option>
-						<option v-for="option in repOptions" v-bind:value="option.id">
-							{{ option.name | capitalize }}
+						<option v-for="option in repOptions" :value="option.id">
+							{{ option.name|capitalize }}
 						</option>
 					</select>
 				</div>
@@ -186,7 +186,7 @@
 
 				<div class="form-group" v-if="!teams && !rooms && propertyExists('shirtSize')">
 					<label>Shirt Size</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
+					<v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" v-model="shirtSizeArr" multiple
 					          :options="shirtSizeOptions" label="name" placeholder="Shirt Sizes"></v-select>
 				</div>
 
@@ -319,7 +319,7 @@
         components: {vSelect},
 	    props: {
             // Main object that contains all filters used by the parent component for API calls
-			filters: {
+			value: {
 			    type: Object,
 				required: true,
 				default: null
@@ -406,66 +406,90 @@
                 repOptions: [],
                 dueOptions: [],
                 hasTransportation: null,
-                traveling: null
+                traveling: null,
+                filters: {},
+                hasRoomInPlan: false,
+                noRoomInPlan: false,
             }
         },
+	    computed: {
+            regionOptionsOrdered() {
+                return _.sortBy(this.regionOptions, 'name');
+            }
+	    },
 	    watch: {
-            'filters': {
+            'value': {
                 handler (val, oldVal) {
                     if (this.starter)
                         return;
 
                     if (val.campaign) {
-                        if (this.campaignObj == null) {
-                            this.campaignObj = _.findWhere(this.campaignOptions, {id: val.campaign});
+                        if (this.campaignObj === null) {
+                            this.campaignObj = _.findWhere(this.campaignOptions, { id: val.campaign });
                         }
                     }
 
-                    this.pagination.current_page = 1;
-                    this.callback();
+                    //if (val !== oldVal) {
+                        this.filters = val;
+                        this.pagination.current_page = 1;
+                        this.callback();
+                    //}
                 },
                 deep: true
             },
-            'campaignObj' (val) {
+		    filters:{
+                handler(val, oldVal) {
+                    if (val !== oldVal) {
+                        this.$emit('input', val);
+                        this.$emit('update:value', val);
+                    }
+                },
+			    deep: true
+		    },
+            campaignObj (val) {
 		        this.filters.campaign = val ? val.id : null;
 		        if (val)
                     this.getRegions();
             },
-            'campaignId' (val) {
+            campaignId(val) {
                 this.getRegions();
             },
-		    'shirtSizeArr' (val) {
-		        this.filters.shirtSize = _.pluck(val, 'id') || [];
+		    shirtSizeArr (val) {
+                if ( this.propertyExists('shirtSize') )
+                    this.filters.shirtSize = _.pluck(val, 'id') || [];
 		     },
-		    'groupsArr' (val) {
-		        this.filters.groups = _.pluck(val, 'id') || [];
+		    groupsArr(val) {
+                if ( this.propertyExists('groups') )
+                    this.filters.groups = _.pluck(val, 'id') || [];
 		     },
-		    'usersArr' (val) {
-		        this.filters.user = _.pluck(val, 'id') || [];
+		    usersArr (val) {
+                if ( this.propertyExists('user') )
+		            this.filters.user = _.pluck(val, 'id') || [];
 		     },
-            'roleObj' (val) {
-                this.filters.role = val ? val.value : '';
+            roleObj (val) {
+                if ( this.propertyExists('role') )
+                    this.filters.role = val ? val.value : '';
             },
-            'facilitator' (val) {
+            facilitator (val) {
                 if (val) {
                     this.getRoles();
                 }
             },
-            'hasRoomInPlan' (val, oldVal) {
+            hasRoomInPlan (val, oldVal) {
                 if (val) {
                     this.filters.hasRoom = 'plans';
                 } else {
                     this.filters.hasRoom = null;
                 }
             },
-            'noRoomInPlan' (val, oldVal) {
+            noRoomInPlan (val, oldVal) {
                 if (val) {
                     this.filters.noRoom = 'plans';
                 } else {
                     this.filters.noRoom = null;
                 }
             },
-            'hasTransportation' (val, oldVal) {
+            hasTransportation (val, oldVal) {
                 if (val === 'yes') {
                     this.filters.inTransport = true;
                     this.filters.notInTransport = null;
@@ -477,7 +501,7 @@
                     this.filters.notInTransport = null;
                 }
             },
-            'traveling' (val, oldVal) {
+            traveling (val, oldVal) {
                 if (this.hasTransportation === 'yes') {
                     this.filters.traveling = val;
                     this.filters.notTraveling = null;
@@ -493,7 +517,6 @@
                     this.filters.notTraveling = null;
                 }
             }
-
 	    },
         methods: {
             propertyExists(property) {
@@ -504,71 +527,71 @@
             },
             getGroups(search, loading){
                 loading ? loading(true) : void 0;
-                let promise = this.$http.get('groups', { params: {search: search} }).then(function (response) {
-                    this.groupsOptions = response.body.data;
+                let promise = this.$http.get('groups', { params: {search: search} }).then((response) => {
+                    this.groupsOptions = response.data.data;
                     if (loading) {
                         loading(false);
                     } else {
                         return promise;
                     }
-                }, this.$root.handleApiError);
+                }).catch(this.$root.handleApiError);
             },
             getCampaigns(search, loading){
                 loading ? loading(true) : void 0;
-                let promise = this.$http.get('campaigns', { params: {search: search} }).then(function (response) {
-                    this.campaignOptions = response.body.data;
+                let promise = this.$http.get('campaigns', { params: {search: search} }).then((response) => {
+                    this.campaignOptions = response.data.data;
                     if (loading) {
                         loading(false);
                     } else {
                         return promise;
                     }
-                }, this.$root.handleApiError);
+                }).catch(this.$root.handleApiError);
             },
             getUsers(search, loading){
                 loading ? loading(true) : void 0;
-                let promise = this.$http.get('users', { params: {search: search} }).then(function (response) {
-                    this.usersOptions = response.body.data;
+                let promise = this.$http.get('users', { params: {search: search} }).then((response) => {
+                    this.usersOptions = response.data.data;
                     if (loading) {
                         loading(false);
                     } else {
                         return promise;
                     }
-                }, this.$root.handleApiError);
+                }).catch(this.$root.handleApiError);
             },
             getTodos(){
                 return this.$http.get('todos', { params: {
                     'type': 'reservations',
                     'per_page': 100,
                     'unique': true
-                }}).then(function (response) {
-                    this.todoOptions = _.uniq(_.pluck(response.body.data, 'task'));
-                }, this.$root.handleApiError);
+                }}).then((response) => {
+                    this.todoOptions = _.uniq(_.pluck(response.data.data, 'task'));
+                }).catch(this.$root.handleApiError);
             },
             getReps(){
-                return this.$http.get('users', { params: {
+                return this.$http.get('representatives', { params: {
                     'rep': true,
                     'per_page': 100
-                }}).then(function (response) {
-                    this.repOptions = response.body.data;
-                }, this.$root.handleApiError);
+                }}).then((response) => {
+                    this.repOptions = response.data.data;
+                }).catch(this.$root.handleApiError);
             },
             getRequirements(){
                 return this.$http.get('requirements', { params: {
                     'type': 'trips',
                     'per_page': 100,
                     'unique': true
-                }}).then(function (response) {
-                    this.requirementOptions = _.uniq(_.pluck(response.body.data, 'name'));
-                }, this.$root.handleApiError);
+                }}).then((response) => {
+                    this.requirementOptions = _.uniq(_.pluck(response.data.data, 'name'));
+                }).catch(this.$root.handleApiError);
             },
             getCosts(){
                 return this.$http.get('costs', { params: {
                     'assignment': 'trips',
                     'per_page': 100,
                     'unique': true
-                }}).then(function (response) {
-                    this.dueOptions = _.uniq(_.pluck(response.body.data, 'name'));
-                }, this.$root.handleApiError);
+                }}).then((response) => {
+                    this.dueOptions = _.uniq(_.pluck(response.data.data, 'name'));
+                }).catch(this.$root.handleApiError);
             },
             getRegions(){
                 let campaign = this.campaignId || this.filters.campaign;
@@ -576,17 +599,18 @@
                     'campaign': campaign,
                     'per_page': 100,
                     'unique': true
-                }}).then(function (response) {
-                    this.regionOptions = response.body.data;
-                }, this.$root.handleApiError);
+                }}).then((response) => {
+                    this.regionOptions = response.data.data;
+                }).catch(this.$root.handleApiError);
             },
         },
 	    created(){
 
         },
-        ready(){
+        mounted(){
+	        this.filters = this.value;
             let self = this;
-            this.$root.$on('reservations-filters:reset', function () {
+            this.$root.$on('reservations-filters:reset', () =>  {
                 // the reset callback handles reset of the filters object
 	            // variables that influence the filters object need to be reset here
                 self.groupsArr = [];
@@ -595,10 +619,10 @@
             });
 
             this.$root.$on('reservations-filters:update:filter', function (filters) {
-				self.filters = _.extend(self.filters, val);
+				self.filters = _.extend(self.filters, filters);
             });
 
-            this.$root.$on('reservations-filters:update-storage', function () {
+            this.$root.$on('reservations-filters:update-storage', () =>  {
                 if (self.storage) {
                     let config = window.localStorage[self.storage] ? JSON.parse(window.localStorage[self.storage]) : {};
                     config = _.extend(config, {
@@ -630,7 +654,7 @@
             if (this.campaignId || this.filters.campaign)
                 promises.push(this.getRegions());
 
-            Promise.all(promises).then(function () {
+            Promise.all(promises).then(() => {
                 if (!self.starter)
                     self.callback()
             });

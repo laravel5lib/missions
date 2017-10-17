@@ -4,19 +4,19 @@
             Import <span class="fa fa-upload"></span>
         </button>
 
-        <modal :title="title" :show.sync="showImportModal" effect="zoom" width="400" ok-text="Import" :callback="importList">
+        <modal :title="title" :value="showImportModal" @closed="showImportModal=false" effect="zoom" width="400" ok-text="Import" :callback="importList">
             <div slot="modal-body" class="modal-body">
-                <spinner v-ref:spinner size="sm" text="importing"></spinner>
+                <spinner ref="spinner" size="sm" text="importing"></spinner>
                 
                 <div class="alert alert-info" v-if="totalRows > 0">
                     <p>{{ totalRows }} records are being processed. An email will be sent when importing is completed.</p>
                 </div>
 
-                <validator name="validation" :classes="{ invalid: 'has-error' }">
+
                     <div class="row">
-                        <div v-validate-class class="col-sm-12 form-group">
+                        <div class="col-sm-12 form-group">
                             <label for="file" class="control-label">File</label>
-                            <input type="file" id="file" accept=".csv" v-model="importFile" @change="handleFile" class="form-control" initial="off" v-validate:file="{file: { rule: true, message: 'A valid .csv file is required.'}}">
+                            <input type="file" id="file" accept=".csv" :value="importFile" @change="handleFile" class="form-control" name="file" v-validate="'mimes:text/csv'">
                             <span class="help-block">.csv files only</span>
                         </div>
                     </div>
@@ -26,7 +26,7 @@
                             <label>Required Fields</label>
                         </div>
                         <div class="col-sm-4" v-for="required in requiredFields">
-                            <code>{{ required }}</code>
+                            <code v-text="required"></code>
                         </div>
                     </div>
                     <hr class="divider">
@@ -35,10 +35,10 @@
                             <label>Optional Fields</label>
                         </div>
                         <div class="col-sm-4" v-for="optional in optionalFields">
-                            <code>{{ optional }}</code>
+                            <code v-text="optional"></code>
                         </div>
                     </div>
-                </validator>
+
             </div>
         </modal>
     </div>
@@ -106,24 +106,24 @@
                 var self = this;
                 this.$validate(true, function() {
                     if (self.$validation.invalid) {
-                        self.$dispatch('showError', _.first(self.$validation.errors).message)
+                        self.$root.$emit('showError', _.first(self.$validation.errors).message)
                         throw new Error("Validation errors");
                     }
                 });
 
-                this.$http.post(this.url, {file: this.file||undefined, required: this.requiredFields, email: this.$root.user.email, parent_id: this.parentId}).then(function (response) {
-                    this.totalRows = response.body.total_rows;
-                    this.totalImported = response.body.total_imported;
-                    this.$dispatch('showSuccess', response.body.message);
-                    this.$dispatch('importComplete', true);
+                this.$http.post(this.url, {file: this.file||undefined, required: this.requiredFields, email: this.$root.user.email, parent_id: this.parentId}).then((response) => {
+                    this.totalRows = response.data.total_rows;
+                    this.totalImported = response.data.total_imported;
+                    this.$root.$emit('showSuccess', response.data.message);
+                    this.$emit('importComplete', true);
                     // this.showImportModal = false;
                     this.file = null;
                     this.importFile = null;
-                }, function (error) {
+                }, (error) =>  {
                     if (error.data.errors) {
-                        this.$dispatch('showError', _.first(_.toArray(error.data.errors)));
+                        this.$root.$emit('showError', _.first(_.toArray(error.data.errors)));
                     } else {
-                        this.$dispatch('showError', error.data.message);
+                        this.$root.$emit('showError', error.data.message);
                     }
                 })
             }

@@ -1,6 +1,6 @@
 <template>
     <div class="panel panel-default">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
 
         <div class="panel-heading">
             <div class="row">
@@ -10,7 +10,7 @@
                 <div class="col-xs-6 text-right">
                     <button class="btn btn-xs btn-default-hollow"
                             @click="editMode = !editMode"
-                            v-if="!editMode">
+                            v-if="!editMode && app.user.can.update_trip_interests">
                         Edit
                     </button>
                     <button class="btn btn-xs btn-default-hollow"
@@ -47,7 +47,7 @@
                               'label-success': interest.status == 'converted',
                               'label-default': interest.status == 'declined'
                               }">
-                            {{ interest.status | capitalize }}
+                            {{ interest.status|capitalize }}
                         </span>
                     </p>
                 </div>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="col-sm-6">
                     <label>Phone</label>
-                    <input class="form-control" v-model="interest.phone" v-if="editMode">
+                    <phone-input v-model="interest.phone" v-if="editMode"></phone-input>
                     <p v-else>{{ interest.phone }}</p>
                 </div>
             </div>
@@ -73,15 +73,18 @@
                         {{ interest.trip.campaign.name }} <br />
                         <small class="text-muted">
                             {{ interest.trip.group.name }} <br />
-                            <span class="label label-default">{{ interest.trip.type | capitalize }}</span>
+                            <span class="label label-default">{{ interest.trip.type|capitalize }}</span>
                         </small>
                     </p>
                 </div>
                 <div class="col-sm-6">
                     <label>Communication Preferences</label>
                     <h5>
-                        <span class="label label-default" style="margin-right:5px" v-for="preference in interest.communication_preferences">
-                            {{ preference | capitalize }}
+                        <span v-if=" ! interest.communication_preferences.length">
+                            None specified
+                        </span>
+                        <span class="label label-default" style="margin-right:5px" v-for="preference in interest.communication_preferences" v-else>
+                            {{ preference|capitalize }}
                         </span>
                     </h5>
                 </div>
@@ -90,16 +93,16 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label>Received at</label>
-                    <p>{{ interest.created_at | moment 'lll' }}</p>
+                    <p>{{ interest.created_at | moment('lll') }}</p>
                 </div>
                 <div class="col-sm-6">
                     <label>Last Updated at</label>
-                    <p>{{ interest.updated_at | moment 'lll' }}</p>
+                    <p>{{ interest.updated_at | moment('lll') }}</p>
                 </div>
             </div>
         </div>
 
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+        <alert v-model="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Done</strong>
             <p>{{ message }}</p>
@@ -111,6 +114,7 @@
     export default{
         data() {
             return {
+                app: MissionsMe,
                 interest: {},
                 showSuccess: false,
                 message: '',
@@ -128,8 +132,8 @@
                 // this.$refs.spinner.show();
                 this.$http.get('interests/' + this.id, { params: {
                     include: 'trip.campaign,trip.group'
-                }}).then(function (response) {
-                    let interest = response.body.data;
+                }}).then((response) => {
+                    let interest = response.data.data;
                     interest.trip = interest.trip.data;
                     interest.trip.campaign = interest.trip.campaign.data;
                     interest.trip.group = interest.trip.group.data;
@@ -139,7 +143,7 @@
             },
             save() {
                 // this.$refs.spinner.show();
-                this.$http.put('interests/' + this.id, this.interest).then(function (response) {
+                this.$http.put('interests/' + this.id, this.interest).then((response) => {
                     this.message = 'Trip interest updated';
                     this.showSuccess = true;
                     this.editMode = false;
@@ -147,7 +151,7 @@
                 });
             },
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

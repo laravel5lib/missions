@@ -37,7 +37,7 @@ class UpdateDues extends Job implements ShouldQueue
         if ($assignable instanceof Project) {
             $assignable->payments()->sync();
         } else {
-            $assignable->reservations->each(function($reservation) {
+            $assignable->reservations->each(function ($reservation) {
                 $reservation->payments()->sync();
             });
         }

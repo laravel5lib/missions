@@ -53,7 +53,7 @@ class CampaignsController extends Controller
      */
     public function show($param)
     {
-        $campaign = $this->campaign->whereId($param)->orWhereHas('slug', function($slug) use($param) {
+        $campaign = $this->campaign->whereId($param)->orWhereHas('slug', function ($slug) use ($param) {
             return $slug->where('url', $param);
         })->first();
 

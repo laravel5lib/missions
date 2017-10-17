@@ -2,7 +2,8 @@
 
 namespace App\Utilities\v1;
 
-class TeamRole {
+class TeamRole
+{
 
     protected static $leadership = [
         'GPLR' => 'Group Leader',
@@ -121,7 +122,7 @@ class TeamRole {
      */
     public static function get($code)
     {
-        $result = array_where(static::all(), function($key, $value) use($code) {
+        $result = array_where(static::all(), function ($value, $key) use ($code) {
             return $key === strtoupper($code);
         });
 
@@ -144,13 +145,14 @@ class TeamRole {
             $name = 'Medical Student';
         }
 
-        $result = array_where(static::all(), function($key, $value) use($name) {
+        $result = array_where(static::all(), function ($value, $key) use ($name) {
             return $value === trim($name);
         });
 
-        if (! $result) return 'MISS';
+        if (! $result) {
+            return 'MISS';
+        }
 
         return array_keys($result)[0];
     }
-
 }

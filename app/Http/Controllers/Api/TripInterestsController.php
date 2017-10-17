@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests;
+use App\Models\v1\Todo;
+use Illuminate\Http\Request;
+use App\Models\v1\TripInterest;
+use App\Jobs\ExportTripInterests;
+use App\Http\Controllers\Controller;
 use App\Events\TripInterestWasCreated;
 use App\Http\Requests\v1\ExportRequest;
 use App\Http\Requests\v1\TripInterestRequest;
 use App\Http\Transformers\v1\TripInterestTransformer;
-use App\Jobs\ExportTripInterests;
-use App\Models\v1\TripInterest;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 
 class TripInterestsController extends Controller
 {
@@ -38,7 +38,7 @@ class TripInterestsController extends Controller
      */
     public function index(Request $request)
     {
-        $interests = $this->interest->filter($request->all())->paginate();
+        $interests = $this->interest->current()->latest()->filter($request->all())->paginate();
 
         return $this->response->paginator($interests, new TripInterestTransformer);
     }
@@ -65,6 +65,13 @@ class TripInterestsController extends Controller
     public function store(TripInterestRequest $request)
     {
         $interest = $this->interest->create($request->all());
+
+        $interest->todos()->saveMany([
+            new Todo(['task' => '1st Contact']),
+            new Todo(['task' => '2nd Contact']),
+            new Todo(['task' => '3rd Contact']),
+            new Todo(['task' => '4th Contact'])
+        ]);
 
         event(new TripInterestWasCreated($interest));
 

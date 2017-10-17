@@ -1,6 +1,6 @@
 <template>
     <div>
-        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
@@ -19,9 +19,9 @@
                 </div>
 
                 <hr class="divider inv sm">
-                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
-        </aside>
+        </mm-aside>
         <div class="row">
             <div class="col-sm-12">
                 <form class="form-inline" novalidate>
@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+                        <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search for anything">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
                     <div id="toggleFilters" class="form-toggle-menu dropdown" style="display: inline-block;">
@@ -55,7 +55,7 @@
 							</li>
 
 							<li role="separator" class="divider"></li>
-							<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()">Reset Filters</button>
+							<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter">Reset Filters</button>
 						</ul>
                     </div>
                     <button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
@@ -67,7 +67,7 @@
         </div>
         <hr>
         <div style="position:relative">
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -98,19 +98,19 @@
                 <tbody>
                 <tr v-for="upload in uploads">
                     <td><img v-if="upload.type !== 'file'" :src="checkSource(upload.source)" width="100px"/></td>
-                    <td v-text="upload.name|capitalize"></td>
-                    <td v-text="upload.type|capitalize"></td>
-                    <td v-text="upload.tags|capitalize"></td>
-                    <td v-text="upload.created_at|moment 'll'"></td>
-                    <td v-text="upload.updated_at|moment 'll'"></td>
-                    <td class="text-center"><a href="/admin{{upload.links[0].uri}}/edit"><i class="fa fa-gear"></i></a></td>
+                    <td>{{upload.name|capitalize}}</td>
+                    <td>{{upload.type|capitalize}}</td>
+                    <td>{{upload.tags|capitalize}}</td>
+                    <td>{{upload.created_at|moment('ll')}}</td>
+                    <td>{{upload.updated_at|moment('ll')}}</td>
+                    <td class="text-center"><a :href="'/admin' + upload.links[0].uri + '/edit'"><i class="fa fa-gear"></i></a></td>
                 </tr>
                 </tbody>
                 <tfoot>
                 <tr>
                     <td colspan="7">
                         <div class="col-sm-12 text-center">
-                            <pagination :pagination.sync="pagination" :callback="searchUploads"></pagination>
+                            <pagination :pagination="pagination" pagination-key="pagination" :callback="searchUploads"></pagination>
                         </div>
                     </td>
                 </tr>
@@ -126,6 +126,7 @@
 </style>
 <script type="text/javascript">
     import $ from 'jquery';
+    import _ from 'underscore';
 	import vSelect from "vue-select";
 	export default{
         name: 'admin-uploads-list',
@@ -154,32 +155,32 @@
         watch: {
 			// watch filters obj
 			'filters': {
-				handler: function (val) {
+				handler(val, oldVal) {
 					// console.log(val);
                     this.pagination.current_page = 1;
                     this.searchUploads();
 				},
 				deep: true
 			},
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
-                this.searchUploads();
+//                this.searchUploads();
             },
-            'orderByField': function (val, oldVal) {
+            'orderByField'(val, oldVal) {
 				this.searchUploads();
             },
-            'direction': function (val, oldVal) {
+            'direction'(val, oldVal) {
 				this.searchUploads();
             },
-            'tagsString': function (val) {
+            'tagsString'(val, oldVal) {
                 let tags = val.split(/[\s,]+/);
                 this.filters.tags = tags[0] !== '' ? tags : '';
                 this.searchUploads();
             },
-            'page': function (val, oldVal) {
+            'page'(val, oldVal) {
 				this.searchUploads();
             },
-            'per_page': function (val, oldVal) {
+            'per_page'(val, oldVal) {
 				this.searchUploads();
             },
         },
@@ -201,6 +202,7 @@
 					tags: [],
 				}
 			},
+            debouncedSearch: _.debounce(function () { this.searchUploads(); }, 250),
             searchUploads(){
             	let params = {
 					include: '',
@@ -211,13 +213,13 @@
 				};
 
 				$.extend(params, this.filters);
-                return this.$http.get('uploads', { params: params }).then(function (response) {
-                    this.pagination = response.body.meta.pagination;
-                    this.uploads = response.body.data;
-                }, this.$root.handleApiErrors);
+                return this.$http.get('uploads', { params: params }).then((response) => {
+                    this.pagination = response.data.meta.pagination;
+                    this.uploads = response.data.data;
+                }, this.$root.handleApiError);
             },
         },
-        ready(){
+        mounted(){
 			// populate
             this.searchUploads();
 

@@ -35,9 +35,15 @@ class RequirementsReport extends Job implements ShouldQueue
     public function handle(Reservation $reservation)
     {
         $reservations = $reservation->filter(array_filter($this->request))
-                             ->with('requirements.requirement', 'costs',
-                                'trip.group', 'trip.campaign', 'trip.rep',
-                                'rep', 'user')
+                             ->with(
+                                 'requirements.requirement',
+                                 'costs',
+                                 'trip.group',
+                                 'trip.campaign',
+                                 'trip.rep',
+                                 'rep',
+                                 'user'
+                             )
                              ->get();
 
         $data = $this->columnize($reservations);
@@ -52,11 +58,11 @@ class RequirementsReport extends Job implements ShouldQueue
         $requirementColumns = $reservations->pluck('requirements')
              ->flatten()
              ->keyBy('requirement.name')
-             ->map(function($data) {
+             ->map(function ($data) {
                 return null;
-            })->all();
+             })->all();
 
-        return $reservations->map(function($reservation) use($requirementColumns) {
+        return $reservations->map(function ($reservation) use ($requirementColumns) {
             $data = [
                 'Given Names' => $reservation->given_names,
                 'Surname' => $reservation->surname,
@@ -67,21 +73,19 @@ class RequirementsReport extends Job implements ShouldQueue
                 'Trip Type' => $reservation->trip->type,
                 'Campaign' => $reservation->trip->campaign->name,
                 'Role' => teamRole($reservation->desired_role),
-                'Rooming Costs' => implode(", ", $reservation->costs()->type('optional')->get()->map(function($cost) {
-                    return $cost->name . ' ($'.number_format($cost->amountInDollars(),2).')';
+                'Rooming Costs' => implode(", ", $reservation->costs()->type('optional')->get()->map(function ($cost) {
+                    return $cost->name . ' ($'.number_format($cost->amountInDollars(), 2).')';
                 })->all()),
                 'Percent Funded' => $reservation->getPercentRaised()
             ];
 
             $data = collect($data)->merge($requirementColumns)->all();
 
-            foreach($reservation->requirements as $req)
-            {
+            foreach ($reservation->requirements as $req) {
                 $data[$req->requirement->name] = $req->status;
             }
 
             return $data;
-
         })->all();
     }
 }

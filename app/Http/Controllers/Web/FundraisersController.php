@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Traits\SEOTools;
 
 class FundraisersController extends Controller
 {
+    use SEOTools;
 
     /**
      * Get all fundraisers.
@@ -15,6 +17,8 @@ class FundraisersController extends Controller
     public function index()
     {
         $fundraisers = $this->api->get('fundraisers');
+
+        $this->seo()->setTitle('Fundraisers');
 
         return view('site.fundraisers.index', compact('fundraisers'));
     }
@@ -33,7 +37,9 @@ class FundraisersController extends Controller
             'url' => $fundraiser_slug
         ])->first();
 
-        if (! $fundraiser) abort(404);
+        if (! $fundraiser) {
+            abort(404);
+        }
 
         $loggedInUserId = auth()->check() ? auth()->user()->id : null;
 
@@ -41,7 +47,13 @@ class FundraisersController extends Controller
             abort(404);
         }
 
-        if (! $fundraiser) abort(404);
+        if (! $fundraiser) {
+            abort(404);
+        }
+
+        $this->seo()->setTitle($fundraiser->name)
+            ->opengraph()
+            ->setType('article');
 
         return view('site.fundraisers.show', compact('fundraiser'));
     }

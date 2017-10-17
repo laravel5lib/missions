@@ -1,13 +1,12 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template>
     <div>
-    <validator name="UserSettings" @touched="onTouched">
         <form id="UserSettingsForm" class="" novalidate style="position:relative;">
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="row">
-                <div class="col-sm-offset-2 col-sm-8">
+                <div class="col-sm-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h5>Account</h5>
+                            <h3>Account</h3>
                         </div>
                         <div class="panel-body">
                             <div class="row form-group">
@@ -35,43 +34,49 @@
                                 <div class="col-sm-12">
                                     <div class="collapse" id="avatarCollapse">
                                         <div class="well">
-                                            <upload-create-update v-if="!startUp" type="avatar" :name="id || 'avatar'" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :is-update="!!avatar_upload_id" :upload-id="avatar_upload_id" :tags="['User']"></upload-create-update>
+                                            <upload-create-update v-if="!startUp" type="avatar" :name="id || 'avatar'" lock-type ui-locked :ui-selector="2" is-child :is-update="!!avatar_upload_id" :upload-id="avatar_upload_id" :tags="['User']"  @uploads-complete="uploadsComplete"></upload-create-update>
                                         </div>
                                     </div>
                                     <div class="collapse" id="bannerCollapse">
                                         <div class="well">
-                                            <upload-create-update v-if="!startUp" type="banner" :name="id || 'banner'" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="6" :is-child="true" :tags="['User']"></upload-create-update>
+                                            <upload-create-update v-if="!startUp" type="banner" :name="id || 'banner'" lock-type ui-locked :ui-selector="1" :per-page="6" is-child :tags="['User']"  @uploads-complete="uploadsComplete"></upload-create-update>
                                         </div>
                                     </div>
                                     <hr class="divider inv" />
                                 </div>
                             </div><!-- end row -->
 
-                                <div class="row form-group" v-error-handler="{ value: name, handle: 'name' }">
+                                <div class="row form-group">
                                     <div class="col-sm-12">
-                                        <label for="name">Name</label>
-                                        <input type="text" class="form-control" name="name" id="name" v-model="name"
-                                               placeholder="User Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
-                                               maxlength="100" minlength="1" required>
+                                        <div class="row">
+                                            <div class="col-md-6" v-error-handler="{ value: first_name, client: 'firstname' }">
+                                                <label>First Name</label>
+                                                <input type="text" class="form-control" v-model="first_name" name="firstname" v-validate="'required|min:1|max:100'">
+                                            </div>
+                                            <div class="col-md-6" v-error-handler="{ value: last_name, client: 'lastname' }">
+                                                <label>Last Name</label>
+                                                <input type="text" class="form-control" v-model="last_name" name="lastname" v-validate="'required|min:1|max:100'">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row form-group" v-error-handler="{ value: email, handle: 'email' }">
                                     <div class="col-sm-12">
                                         <label for="name">Email</label>
                                         <input type="email" class="form-control" name="email" id="email" v-model="email"
-                                               v-validate:email="{ required: true, minlength:1, maxlength:100 }">
-                                        <div v-show="errors.email" class="help-block">{{errors.email}}</div>
+                                               v-validate="'required|min:1|max:100'">
+                                        <div v-show="errors.has('email')" class="help-block">{{errors.has('email')}}</div>
                                     </div>
                                 </div>
-                                <div class="row form-group" v-error-handler="{ value: alt_email, server: 'alt_email' }">
+                                <div class="row form-group" v-error-handler="{ value: alt_email, client: 'altemail', server: 'alt_email' }">
                                     <div class="col-sm-12">
                                         <label for="name">Alt. Email</label>
                                         <input type="email" class="form-control" name="alt_email" id="alt_email" v-model="alt_email">
-                                        <div v-show="errors.alt_email" class="help-block">{{errors.alt_email}}</div>
+                                        <div v-show="errors.has('altemail')" class="help-block">{{errors.has('altemail')}}</div>
                                     </div>
                                 </div>
 
-                                <div class="row form-group" :class="{ 'has-error': !!changePassword && (checkForError('password')||checkForError('passwordconfirmation')) }">
+                                <div class="row form-group" :class="{ 'has-error': !!changePassword && (errors.has('password')|| errors.has('passwordconfirmation') || SERVER_ERRORS.password) }">
                                     <div class="col-sm-12">
                                         <label for="name">Password</label>
                                         <div class="checkbox">
@@ -82,9 +87,11 @@
                                         </div>
                                         <div v-if="changePassword" class="row" v-error-handler="{ value: password, handle: 'password' }">
                                             <div class="col-sm-6">
-                                                <div class="input-group" :class="{ 'has-error': checkForError('password') }">
-                                                    <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password"
-                                                           v-validate:password="{ minlength:8 }" placeholder="Enter password">
+                                                <div class="input-group" :class="{ 'has-error': errors.has('password') }">
+                                                    <input v-if="showPassword === 'text'" type="text" class="form-control" v-model="password"
+                                                           name="password" placeholder="Enter password" v-validate="'required|min:8'">
+                                                    <input v-else type="password" class="form-control" v-model="password"
+                                                           name="password" placeholder="Enter password" v-validate="'required|min:8'">
                                                     <span class="input-group-btn">
                                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
                                                         <i class="fa fa-eye" v-if="!showPassword"></i>
@@ -94,9 +101,11 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
-                                                <div class="input-group" :class="{ 'has-error': checkForError('passwordconfirmation') }">
-                                                    <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password_confirmation"
-                                                           v-validate:passwordconfirmation="{ minlength:8 }" placeholder="Enter password again">
+                                                <div class="input-group" :class="{ 'has-error': errors.has('passwordconfirmation') }">
+                                                    <input v-if="showPassword === 'text'" type="text" class="form-control" v-model="password_confirmation"
+                                                           name="passwordconfirmation" placeholder="Enter password again" v-validate="'required|min:8'">
+                                                    <input v-else type="password" class="form-control" v-model="password_confirmation"
+                                                           name="passwordconfirmation" placeholder="Enter password again" v-validate="'required|min:8'">
                                                     <span class="input-group-btn">
                                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
                                                         <i class="fa fa-eye" v-if="!showPassword"></i>
@@ -151,10 +160,10 @@
                                     <label for="gender" class="col-sm-3">Gender</label>
                                     <div class="col-sm-9">
                                         <label class="radio-inline">
-                                            <input type="radio" name="gender" id="gender" value="male" v-model="gender" v-validate:gender="{required: {rule: true}}"> Male
+                                            <input type="radio" name="gender" id="gender" value="male" v-model="gender" v-validate="'required|in:male,female'"> Male
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="gender2" id="gender2" value="female" v-model="gender" v-validate:gender> Female
+                                            <input type="radio" name="gender" id="gender2" value="female" v-model="gender"> Female
                                         </label>
                                     </div>
                                 </div>
@@ -189,7 +198,7 @@
                                     <label for="url" class="control-label">Url Slug</label>
                                     <div class="input-group">
                                         <span class="input-group-addon">www.missions.me/</span>
-                                        <input type="text" id="url" v-model="url" class="form-control" required v-validate:url="{ required: !!public }"/>
+                                        <input type="text" id="url" v-model="url" class="form-control" required name="url" v-validate="'required'"/>
                                     </div>
                                 </div>
                             </div>
@@ -198,10 +207,10 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-offset-2 col-sm-8 tour-step-contact">
+                <div class="col-sm-12 tour-step-contact">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h5>Contact Info</h5>
+                            <h3>Contact Info</h3>
                         </div>
                         <div class="panel-body">
                             <div class="row form-group">
@@ -236,32 +245,32 @@
                                 <div class="col-sm-8">
                                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                                         <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
-                                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
-                                        <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
+                                        <v-select @keydown.enter.prevent="" v-validate="'required'" data-vv-name="country" data-vv-value-path="value" class="form-control" id="country" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
+                                        <!--<select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate="'required'">
                                             <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
-                                        </select>
+                                        </select>-->
                                     </div>
                                 </div>
                             </div>
                             <div class="row form-group" v-error-handler="{ value: timezone, handle: 'timezone' }">
                                 <div class="col-sm-12">
                                     <label for="timezone" class="control-label">Timezone</label>
-                                    <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="UTILITIES.timezones"></v-select>
-                                    <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
+                                    <v-select @keydown.enter.prevent="" class="form-control" id="timezone" v-validate="'required'" data-vv-name="timezone" data-vv-value-path="value" v-model="timezone" :options="UTILITIES.timezones"></v-select>
+                                    <!--<select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate="'required'">
                                         <option :value="timezone" v-for="timezone in UTILITIES.timezones">{{ timezone }}</option>
-                                    </select>
+                                    </select>-->
                                 </div>
                             </div>
 
 
                             <div class="row form-group">
                                 <div class="col-sm-6">
-                                    <label for="infoPhone">Phone 1</label>
-                                    <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
+                                    <phone-input v-model="phone_one" label="Phone 1"></phone-input>
+                                    <!--<label for="infoPhone">Phone 1</label>-->
                                 </div>
                                 <div class="col-sm-6">
-                                    <label for="infoMobile">Phone 2</label>
-                                    <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
+                                    <phone-input v-model="phone_two" label="Phone 2"></phone-input>
+                                    <!--<label for="infoMobile">Phone 2</label>-->
                                 </div>
                             </div>
                         </div>
@@ -269,10 +278,10 @@
                 </div><!-- end col -->
             </div>
             <div class="row">
-                <div class="col-sm-offset-2 col-sm-8 tour-step-social">
+                <div class="col-sm-12 tour-step-social">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h5>Social Media</h5>
+                            <h3>Social Media</h3>
                         </div>
                             <div class="panel-body">
                                 <div class="row form-group">
@@ -324,19 +333,19 @@
                     </div><!-- end col -->
                 </div><!-- end row -->
 
-                <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+                <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
                     <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
                 </modal>
             </form>
-        </validator>
     </div>
 </template>
-<style>
+<!--<style>
     .alert.top, .alert.top-right {
         top: 80px;
     }
-</style>
+</style>-->
 <script type="text/javascript">
+    import $ from 'jquery';
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
     import errorHandler from'../error-handler.mixin';
@@ -350,7 +359,8 @@
                 id: this.$root.user.id,
                 avatar: '',
                 banner: '',
-                name: '',
+                first_name: '',
+                last_name: '',
                 email: '',
                 alt_email: '',
                 password: null,
@@ -380,8 +390,6 @@
 
                 // logic variables
                 startUp: true,
-//                typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
-//                attemptSubmit: false,
                 countryCodeObj: null,
                 changePassword: false,
                 showPassword: false,
@@ -389,8 +397,6 @@
                 dobMonth: null,
                 dobDay: null,
                 dobYear: null,
-                resource: this.$resource('users/' + this.$root.user.id + '?include=links'),
-                errors: {},
                 showError: false,
                 showSuccess: false,
                 showSaveAlert: false,
@@ -400,14 +406,14 @@
                 avatar_upload_id: null,
                 selectedBanner: null,
                 banner_upload_id: null,
-
-                // mixin settings
-                validatorHandle: 'UserSettings',
             }
         },
         computed: {
-            country_code() {
-                return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+            country_code: {
+                get() {
+                    return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+                },
+                set() {},
             },
             birthday() {
                 return this.dobYear && this.dobMonth && this.dobDay
@@ -420,46 +426,48 @@
 
                 while ( startYear <= currentYear ) {
                         years.push(startYear++);
-                } 
+                }
 
                 return years;
             },
             days() {
-                var day = 1, days = [];
+                let day = 1, days = [];
                 while ( day <= 31 ) {
                         days.push(day++);
-                } 
+                }
 
                 return days;
             },
         },
-        events:{
-            'uploads-complete'(data){
+        methods: {
+            uploadsComplete(data){
                 switch(data.type){
                     case 'avatar':
                         this.selectedAvatar = data;
                         this.avatar_upload_id = data.id;
-                        jQuery('#avatarCollapse').collapse('hide');
+                        $('#avatarCollapse').collapse('hide');
                         break;
                     case 'banner':
                         this.selectedBanner = data;
                         this.banner_upload_id = data.id;
-                        jQuery('#bannerCollapse').collapse('hide');
+                        $('#bannerCollapse').collapse('hide');
                         break;
                 }
                 this.submit();
-            }
-        },
-        methods: {
+            },
             onTouched(){
                 this.hasChanged = true;
             },
             submit(){
-                this.resetErrors();
-                if (this.$UserSettings.valid) {
-                    // this.$refs.spinner.show();
-                    this.resource.update({
-                        name: this.name,
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.$root.$emit('showError', 'Please check the form.');
+                        return false;
+                    }
+
+                    this.$http.put(`users/${this.$root.user.id}?include=links`, {
+                        first_name: this.first_name,
+                        last_name: this.last_name,
                         email: this.email,
                         alt_email: this.alt_email,
                         password: this.changePassword ? this.password : undefined,
@@ -503,33 +511,32 @@
                                 url: this.website
                             }
                         ]
-                }).then(function (response) {
-                        this.setUserData(response.body.data);
-                        this.$dispatch('showSuccess', 'Settings updated successfully.');
+                }).then((response) => {
+                        this.setUserData(response.data.data);
+                        this.$root.$emit('showSuccess', 'Settings updated successfully.');
                         this.hasChanged = false;
 
+                        // update page profile links
                         if (this.public) {
                             let settingsProfileButton = document.getElementById('settings-profile-link');
                             if (settingsProfileButton)
-                                settingsProfileButton.attributes.href.value = '/' + response.body.data.url;
+                                settingsProfileButton.attributes.href.value = '/' + response.data.data.url;
 
                             let topProfileButton = document.getElementById('top-profile-link');
                             if (topProfileButton)
-                                topProfileButton.attributes.href.value = '/' + response.body.data.url;
+                                topProfileButton.attributes.href.value = '/' + response.data.data.url;
 
                             let menuProfileButton = document.getElementById('menu-profile-link');
                             if (menuProfileButton)
-                                menuProfileButton.attributes.href.value = '/' + response.body.data.url;
+                                menuProfileButton.attributes.href.value = '/' + response.data.data.url;
                         }
 
-                    }, function (error) {
+                    }, (error) =>  {
                         console.log(error);
-                        this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Please check the form.');
+                        this.SERVER_ERRORS = error.data.errors;
+                        this.$root.$emit('showError', 'Please check the form.');
                     });
-                } else {
-                    this.$dispatch('showError', 'Please check the form.');
-                }
+                })
             },
             back(force){
                 if (this.hasChanged && !force ) {
@@ -545,7 +552,8 @@
                 this.id = user.id;
                 this.avatar = user.avatar;
                 this.banner = user.banner;
-                this.name = user.name;
+                this.first_name = user.first_name;
+                this.last_name = user.last_name;
                 this.bio = user.bio;
                 this.type = user.type;
                 this.countryCodeObj = _.findWhere(this.UTILITIES.countries, {code: user.country_code});
@@ -572,26 +580,26 @@
                 this.instagram = _.findWhere(user.links.data, {name: "instagram"}) ? _.findWhere(user.links.data, {name: "instagram"}).url : null;
                 this.linkedIn = _.findWhere(user.links.data, {name: "linkedin"}) ? _.findWhere(user.links.data, {name: "linkedin"}).url : null;
                 this.website = _.findWhere(user.links.data, {name: "website"}) ? _.findWhere(user.links.data, {name: "website"}).url : null;
-                this.dobDay = moment(user.birthday).format('DD');
-                this.dobMonth = moment(user.birthday).format('MM');
+                this.dobDay = moment(user.birthday).format('D');
+                this.dobMonth = moment(user.birthday).format('M');
                 this.dobYear = moment(user.birthday).format('YYYY');
             }
         },
-        ready(){
+        mounted(){
             let promises = [];
             promises.push(this.getCountries());
             promises.push(this.getTimezones());
 
-            Promise.all(promises).then(function (values) {
-                this.resource.get().then(function (response) {
-                    this.setUserData(response.body.data);
+            this.$http.all(promises).then((values) => {
+                this.$http.get(`users/${this.$root.user.id}?include=links`).then((response) => {
+                    this.setUserData(response.data.data);
                     this.startUp = false;
-                }, this.$root.handleApiError);
-            }.bind(this));
+                }).catch(this.$root.handleApiError);
+            });
 
-            this.$root.$on('save-settings', function () {
+            this.$root.$on('save-settings', () =>  {
                 this.submit();
-            }.bind(this));
+            });
         }
     }
 </script> 

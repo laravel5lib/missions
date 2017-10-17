@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<component :is="currentView" transition="fade" transition-mode="out-in">>
+		<component :is="currentView" transition="fade" transition-mode="out-in" :campaign="campaignId" :groupId="groupId">
 			<!-- component changes when vm.currentview changes! -->
 		</component>
 	</div>

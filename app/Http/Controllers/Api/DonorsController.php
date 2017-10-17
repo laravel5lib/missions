@@ -70,7 +70,7 @@ class DonorsController extends Controller
      */
     public function store(DonorRequest $request)
     {
-        if ( ! $request->get('customer_id')) {
+        if (! $request->get('customer_id')) {
             // create customer with donor details
             $customer = $this->merchant->createCustomer($request->all());
 
@@ -80,8 +80,9 @@ class DonorsController extends Controller
 
         $donor = $this->donor->create($request->all());
 
-        if ($request->has('tags'))
+        if ($request->has('tags')) {
             $donor->tag($request->get('tags'));
+        }
 
         return $this->response->item($donor, new DonorTransformer);
     }
@@ -99,8 +100,9 @@ class DonorsController extends Controller
 
         $donor->update($request->all());
 
-        if ($request->has('tags'))
+        if ($request->has('tags')) {
             $donor->retag($request->get('tags'));
+        }
 
         return $this->response->item($donor, new DonorTransformer);
     }

@@ -1,8 +1,8 @@
 <template>
     <div>
-        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
-            <reservations-filters v-ref:filters :filters.sync="filters" :reset-callback="resetFilter" :pagination="pagination" :callback="getReservations" storage="DashboardReservations" :starter="startUp" :facilitator="isFacilitator" :trip-specific="!!tripId"></reservations-filters>
-        </aside>
+        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
+            <reservations-filters ref="filters" v-model="filters" :reset-callback="resetFilter" :pagination="pagination" pagination-key="pagination" :callback="getReservations" storage="DashboardReservations" :starter="startUp" :facilitator="isFacilitator" :trip-specific="!!tripId"></reservations-filters>
+        </mm-aside>
         <div class="row">
             <div class="col-xs-12 tour-step-find">
                 <form class="form-inline">
@@ -57,7 +57,7 @@
                 <hr class="divider sm inv">
             </div>
             <div class="col-xs-12 tour-step-list" style="position:relative">
-                <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+                <spinner ref="spinner" size="sm" text="Loading"></spinner>
                 <template v-if="reservations.length > 0">
                     <div class="row" v-if="layout == 'grid'">
                         <div class="col-xs-12 col-sm-6 col-md-4" v-for="reservation in reservations">
@@ -94,24 +94,24 @@
                                 <a :href="'/dashboard/reservations/' + reservation.id" class="list-group-item" v-for="reservation in reservations">
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            {{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}<br>
+                                            {{ reservation.surname|capitalize }}, {{ reservation.given_names|capitalize }}<br>
                                             <label>{{ reservation.desired_role.name }}</label>
                                             <hr class="divider inv sm visible-xs">
                                         </div><!-- end col -->
                                         <div class="col-sm-3">
-                                            {{ reservation.trip.data.campaign.data.name | capitalize }}<br>
-                                            <label>{{ reservation.trip.data.country_name | capitalize }}</label>
+                                            {{ reservation.trip.data.campaign.data.name|capitalize }}<br>
+                                            <label>{{ reservation.trip.data.country_name|capitalize }}</label>
                                             <hr class="divider inv sm visible-xs">
                                         </div><!-- end col -->
                                         <div class="col-sm-3">
-                                            {{ reservation.trip.data.group.data.name | capitalize }}<br>
-                                            <label>{{ reservation.trip.data.type | capitalize }}</label>
+                                            {{ reservation.trip.data.group.data.name|capitalize }}<br>
+                                            <label>{{ reservation.trip.data.type|capitalize }}</label>
                                             <hr class="divider inv sm visible-xs">
                                         </div><!-- end col -->
                                         <div class="col-sm-3">
                                             <span class="text-success">
                                             {{ reservation.percent_raised }}% &middot;
-                                            </span> <small class="text-muted">{{ reservation.total_raised | currency }} of {{ reservation.total_cost | currency }}</small>
+                                            </span> <small class="text-muted">{{ currency(reservation.total_raised) }} of {{ currency(reservation.total_cost) }}</small>
                                             <br>
                                             <tooltip effect="scale" placement="top" content="Complete">
                                                 <span class="label label-success">{{ complete(reservation) }}</span>
@@ -133,7 +133,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12 text-center">
-                            <pagination :pagination.sync="pagination" :callback="getReservations"></pagination>
+                            <pagination :pagination="pagination" pagination-key="pagination" :callback="getReservations"></pagination>
                         </div>
                     </div>
                 </template>
@@ -143,6 +143,7 @@
         <p class="text-center"><a class="btn btn-link btn-sm" href="/campaigns">Go On A Trip</a></p>
     </div>
 </div>
+    </div>
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";
@@ -195,7 +196,6 @@
                     todoStatus: null,
                     requirementName: '',
                     requirementStatus: '',
-                    due: '',
                     dueStatus: '',
                     rep: '',
                     sort: 'created_at',
@@ -259,31 +259,31 @@
             }
         },
         watch: {
-            'layout': function (val, oldVal) {
+            'layout'(val, oldVal) {
                 if (val !== oldVal && !this.startUp)
                     this.updateConfig();
             },
             // watch filters obj
             'filters': {
-                handler: function (val) {
+                handler(val, oldVal) {
                     if (this.startUp)
                         return;
                     this.updateConfig();
                 },
                 deep: true
             },
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.getReservations();
             },
-            'includeManaging': function (val, oldVal) {
+            'includeManaging'(val, oldVal) {
                 if (val !== oldVal && !this.startUp) {
                     this.updateConfig();
                     this.pagination.current_page = 1;
                     this.getReservations();
                 }
             },
-            'per_page': function (val, oldVal) {
+            'per_page'(val, oldVal) {
                 if (this.startUp)
                     return;
                 this.updateConfig();
@@ -291,8 +291,11 @@
             }
         },
         computed: {
-            isFacilitator() {
-                return this.trips.length > 0 ? true : false;
+            isFacilitator: {
+                get() {
+                    return this.trips.length > 0 ? true : false;
+                },
+                set() {}
             }
         },
         methods: {
@@ -350,9 +353,9 @@
                         this.lastReservationRequest.abort();
                     }
                     this.lastReservationRequest = xhr;
-                }}).then(function (response) {
-                    this.reservations = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                }}).then((response) => {
+                    this.reservations = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                 });
             },
             updateConfig(){
@@ -410,7 +413,7 @@
             },
 
         },
-        ready(){
+        mounted(){
             // load view state
             if (window.localStorage['DashboardReservations']) {
                 let config = JSON.parse(window.localStorage['DashboardReservations']);
@@ -420,8 +423,8 @@
                 this.includeManaging = config.includeManaging;
             }
 
-            let userPromise = this.$http.get('users/' + this.userId, { params: {include: 'facilitating,managing.trips'}}).then(function (response) {
-                let user = response.body.data;
+            let userPromise = this.$http.get('users/' + this.userId, { params: {include: 'facilitating,managing.trips'}}).then((response) => {
+                let user = response.data.data;
                 let managing = [];
 
                 if (user.facilitating.data.length) {
@@ -431,7 +434,7 @@
                 }
 
                 if (user.managing.data.length) {
-                    _.each(user.managing.data, function (group) {
+                    _.each(user.managing.data, (group) => {
                         managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                     });
                     this.trips = _.union(this.trips, managing);
@@ -453,10 +456,10 @@
 
             });
 
-            Promise.all([userPromise]).then(function (values) {
+            Promise.all([userPromise]).then((values) => {
                 this.startUp = false;
                 this.getReservations();
-            }.bind(this));
+            });
 
         }
     }

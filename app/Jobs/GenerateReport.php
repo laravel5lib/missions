@@ -39,10 +39,8 @@ class GenerateReport extends Job implements ShouldQueue
      */
     public function handle(Excel $excel, Report $report, Mailer $mail)
     {
-        $content = $excel->create($this->filename, function($excel)
-        {
-            $excel->sheet('Report', function($sheet)
-            {
+        $content = $excel->create($this->filename, function ($excel) {
+            $excel->sheet('Report', function ($sheet) {
                 $sheet->fromArray($this->data);
                 $sheet->freezeFirstRow();
             });
@@ -64,6 +62,5 @@ class GenerateReport extends Job implements ShouldQueue
             $message->to($this->user->email);
             $message->subject('Your report is ready!');
         });
-
     }
 }

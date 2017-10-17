@@ -49,7 +49,7 @@ class Cost extends Model
 
     /**
      * Get the amount in dollars
-     * 
+     *
      * @return string
      */
     public function amountInDollars()
@@ -61,7 +61,7 @@ class Cost extends Model
 
     /**
      * Set the amount attribute
-     * 
+     *
      * @param integer $value
      */
     public function setAmountAttribute($value)

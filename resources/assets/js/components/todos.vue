@@ -1,6 +1,6 @@
 <template>
 <div>
-    <alert :show.sync="showSuccess"
+    <alert v-model="showSuccess"
            placement="top-right"
            :duration="3000"
            type="success"
@@ -11,7 +11,7 @@
         <p>{{ message }}</p>
     </alert>
 
-    <alert :show.sync="showError"
+    <alert v-model="showError"
            placement="top-right"
            :duration="6000"
            type="danger"
@@ -24,10 +24,10 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h5>ToDos</h5>
+            <h3>Tasks</h3>
         </div>
         <div class="list-group">
-            <div class="list-group-item" v-if="canModify">
+            <div class="list-group-item" v-if="app.user.can.create_todos">
                 <div class="row">
                     <div class="col-xs-2 col-sm-1 text-muted">
                         <i class="fa fa-lg fa-plus-square-o" style="margin-right: 10px"></i>
@@ -61,10 +61,10 @@
                         <div class="col-xs-9 col-sm-10" @dblclick="editTodo(todo)" v-else>
                             <span :class="{ 'text-strike' : todo.completed_at }">{{ todo.task }}</span>
                             <small class="text-muted" v-if="todo.completed_at"><br />
-                                Completed on {{ todo.completed_at | moment 'llll' }} by {{ todo.user.data.name }}
+                                Completed on {{ todo.completed_at | moment('llll') }} by {{ todo.user.data.name }}
                             </small>
                         </div>
-                        <div class="col-xs-1 col-sm-1 text-right" v-if="canModify">
+                        <div class="col-xs-1 col-sm-1 text-right" v-if="app.user.can.delete_todos">
                             <i class="fa fa-times fa-lg text-muted remove-todo"
                                @click="selectedTodo = todo,deleteModal = true">
                             </i>
@@ -106,7 +106,7 @@
     </div>
     <p class="text-center"><small class="text-muted">Double-click to edit a todo.</small></p>
 
-    <modal class="text-center" :show.sync="deleteModal" title="Delete Todo" small="true">
+    <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Todo" :small="true">
         <div slot="modal-body" class="modal-body text-center">Delete this Todo?</div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -131,14 +131,11 @@
             'per_page': {
                 type: Number,
                 default: 10
-            },
-            'canModify': {
-                type: Number,
-                default: 0
             }
         },
         data() {
             return {
+                app: MissionsMe,
                 todos: {},
                 selectedTodo: {},
                 newTodo: {
@@ -160,24 +157,24 @@
             }
         },
         watch : {
-            'page': function (val, oldVal) {
+            'page'(val, oldVal) {
                 this.fetch();
             },
-            'per_page': function (val, oldVal) {
+            'per_page'(val, oldVal) {
                 this.fetch();
             },
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.page = 1;
                 this.fetch();
             },
-            'filterBy': function (val, oldVal) {
+            'filterBy'(val, oldVal) {
                 this.page = 1;
                 this.fetch();
             }
         },
         methods: {
             editTodo(todo) {
-                if ( ! this.canModify) return;
+                if ( ! app.user.can.update_todos) return;
                 this.editMode = true;
                 this.selectedTodo = todo;
             },
@@ -201,12 +198,12 @@
             createTodo() {
                 if (! this.newTodo.task) return;
 
-                this.$http.post('todos', this.newTodo).then(function () {
+                this.$http.post('todos', this.newTodo).then(() => {
                     this.newTodo.task = null;
                     this.message = 'Todo created successfully.';
                     this.showSuccess = true;
                     this.fetch();
-                },function () {
+                },() =>  {
                     this.message = 'Unable to add the todo.';
                     this.showError = true;
                 });
@@ -215,23 +212,23 @@
                 if (! this.selectedTodo.task) return;
                 if (! this.editMode && ! this.completeMode) return;
 
-                this.$http.put('todos/' + this.selectedTodo.id, this.selectedTodo).then(function () {
+                this.$http.put('todos/' + this.selectedTodo.id, this.selectedTodo).then(() => {
                     this.editMode = false;
                     this.completeMode = false;
                     this.selectedTodo = {};
                     this.fetch();
-                },function () {
+                },() =>  {
                     this.message = 'Unable to update the todo.';
                     this.showError = true;
                 });
             },
             remove(todo) {
-                this.$http.delete('todos/' + todo.id).then(function () {
+                this.$http.delete('todos/' + todo.id).then(() => {
                     this.fetch();
                     this.selectedTodo = {};
                     this.message = 'Todo deleted.';
                     this.showSuccess = true;
-                },function () {
+                },() =>  {
                     this.message = 'Unable to delete todo.';
                     this.showError = true;
                 });
@@ -259,18 +256,18 @@
                     params = params + '|' + this.id;
                 }
 
-                this.$http.get('todos' + params).then(function (response) {
-                    this.todos = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('todos' + params).then((response) => {
+                    this.todos = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                 });
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }
 </script>
-<style lang="scss" scoped>
+<style scoped>
     div.list-group-item {
         cursor: pointer;
     }

@@ -11,53 +11,14 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        (new AdminWithEverything)->create(['name' => 'Neil Keena', 'email' => 'neil@missions.me']);
+        (new AdminWithEverything)->create(['email' => 'admin@missions.me']);
 
-        // interns
         (new InternWithEverything)->create([
-            'name' => 'Taylor Jensen', 'email' => 'tjensen@missions.me'
-        ]);
-        (new InternWithEverything)->create([
-            'name' => 'Esther Gualtieri', 'email' => 'egultieri@missions.me'
-        ]);
-        (new InternWithEverything)->create([
-            'name' => 'Cooper Moore', 'email' => 'cmoore@missions.me'
-        ]);
-        (new InternWithEverything)->create([
-            'name' => 'Ethan Erway', 'email' => 'eerway@missions.me'
-        ]);
-        (new InternWithEverything)->create([
-            'name' => 'Joshua Hughes', 'email' => 'jhughes@missions.me'
-        ]);
-        (new InternWithEverything)->create([
-            'name' => 'Sergio Fielder', 'email' => 'sfielder@missions.me'
-        ]);
-        (new InternWithEverything)->create([
-            'name' => 'Julia Muccini', 'email' => 'jmuccini@missions.me'
-        ]);
-        (new InternWithEverything)->create([
-            'name' => 'Brittany Chamberlain', 'email' => 'bchamberlain@missions.me'
-        ]);
-        (new InternWithEverything)->create([
-            'name' => 'Abigail Davenport', 'email' => 'adavenport@missions.me'
-        ]);
-        (new InternWithEverything)->create([
-            'name' => 'Gloria Rodgers', 'email' => 'grodgers@missions.me'
-        ]);
-        (new InternWithEverything)->create([
-            'name' => 'Victoria Keller', 'email' => 'vkeller@missions.me'
+            'email' => 'intern@missions.me'
         ]);
 
+        (new InternWithEverything)->times(10)->create();
         (new UserWithEverything)->times(10)->create();
         (new NewUser)->times(10)->create();
-
-        (new CurrentCampaignWithTripsAndInterests)->create(['name' => 'The New Honduras', 'country_code' => 'hn']);
-        (new CurrentCampaignWithTripsAndInterests)->create(['name' => 'The Best Dominican', 'country_code' => 'do']);
-        (new CurrentCampaignWithTripsAndInterests)->create(['name' => 'Nicaragua Shines', 'country_code' => 'ni']);
-        // (new ArchivedCampaignWithTripsAndReservations)->times(3)->create();
-
-        (new NewReservation)->times(20)->create();
-        (new InProgressReservation)->times(70)->create();
-        // (new TravelReadyReservation)->times(10)->create();
     }
 }

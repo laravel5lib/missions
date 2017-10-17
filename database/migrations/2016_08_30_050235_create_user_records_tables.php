@@ -25,8 +25,7 @@ class CreateUserRecordsTables extends Migration
             $table->timestamps();
         });
 
-        Schema::table('passports', function($table)
-        {
+        Schema::table('passports', function ($table) {
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade');
@@ -50,8 +49,7 @@ class CreateUserRecordsTables extends Migration
             $table->softDeletes();
         });
 
-        Schema::table('visas', function($table)
-        {
+        Schema::table('visas', function ($table) {
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade');
@@ -75,8 +73,7 @@ class CreateUserRecordsTables extends Migration
             $table->timestamps();
         });
 
-        Schema::table('referrals', function($table)
-        {
+        Schema::table('referrals', function ($table) {
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade');
@@ -101,8 +98,7 @@ class CreateUserRecordsTables extends Migration
             $table->timestamps();
         });
 
-        Schema::table('contacts', function($table)
-        {
+        Schema::table('contacts', function ($table) {
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade');

@@ -41,7 +41,8 @@ class CostFilter extends Filter
      * @param $type
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function assignment($type) {
+    public function assignment($type)
+    {
         $param = preg_split('/\|+/', $type);
 
         if (isset($param[1])) {

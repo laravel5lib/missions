@@ -34,8 +34,7 @@ class PassportRequest extends FormRequest
             'user_id' => 'required|exists:users,id'
         ];
 
-        if($this->isMethod('put'))
-        {
+        if ($this->isMethod('put')) {
             $rules['user_id'] = 'exists:users,id';
         }
 

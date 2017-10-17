@@ -1,6 +1,6 @@
 <template>
     <div class="row" v-if="loaded" style="position:relative">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="col-sm-12">
             <div class="text-center">
                 <form novalidate>
@@ -23,9 +23,9 @@
                         <br>
                         <b>BIRTH COUNTRY:</b> {{visa.citizenship_name}}
                         <br>
-                        <b>ISSUED ON:</b> {{visa.issued_at|moment 'll'}}
+                        <b>ISSUED ON:</b> {{visa.issued_at|moment('ll')}}
                         <br>
-                        <b>EXPIRES ON:</b> {{visa.expires_at|moment 'll'}}
+                        <b>EXPIRES ON:</b> {{visa.expires_at|moment('ll')}}
                     </p>
                 </div>
             </div>
@@ -52,9 +52,9 @@
                                 <br>
                                 <b>BIRTH COUNTRY:</b> {{visa.citizenship_name}}
                                 <br>
-                                <b>ISSUED ON:</b> {{visa.issued_at|moment 'll'}}
+                                <b>ISSUED ON:</b> {{visa.issued_at|moment('ll')}}
                                 <br>
-                                <b>EXPIRES ON:</b> {{visa.expires_at|moment 'll'}}
+                                <b>EXPIRES ON:</b> {{visa.expires_at|moment('ll')}}
                             </p>
                         </div><!-- end panel-body -->
                         <div class="panel-footer" style="padding: 0;">
@@ -123,11 +123,11 @@
             }
         },
         watch:{
-            'page': function (val, oldVal) {
+            'page'(val, oldVal) {
                 this.pagination.current_page = val;
                 this.paginate();
             },
-            'visas':function (val) {
+            'visas':(val) =>  {
                 if(val.length) {
                     this.paginate();
                 }
@@ -140,7 +140,7 @@
                 var start = (this.pagination.current_page - 1) * this.per_page;
                 var end   = start + this.per_page;
                 var range = _.range(start, end);
-                _.each(range, function (index) {
+                _.each(range, (index) => {
                     if (this.visas[index])
                         array.push(this.visas[index]);
                 }, this);
@@ -149,9 +149,9 @@
             setVisa(visa){
                 if(visa) {
                     this.visa = visa;
-                    this.reservationResource.update({id: this.reservationId}, {
+                    this.reservationResource.put({id: this.reservationId}, {
                         visa_id: visa.id
-                    }).then(function (response) {
+                    }).then((response) => {
                         this.toggleChangeState();
                     });
                 }
@@ -166,11 +166,11 @@
 
             },
         },
-        ready(){
-            this.$http.get('users/me?include=visas').then(function (response) {
-                this.visas = response.body.data.visas.data;
+        mounted(){
+            this.$http.get('users/me?include=visas').then((response) => {
+                this.visas = response.data.data.visas.data;
                 this.pagination.total_pages = Math.ceil(this.visas.length / this.per_page);
-                this.visa = _.findWhere(response.body.data.visas.data, {id: this.visaId});
+                this.visa = _.findWhere(response.data.data.visas.data, {id: this.visaId});
                 this.loaded = true;
             });
         }

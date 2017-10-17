@@ -89,11 +89,11 @@ class ProjectCause extends Model
      */
     public function getCountries()
     {
-        $countries = collect($this->countries)->map(function($country) {
-           return  [
+        $countries = collect($this->countries)->map(function ($country) {
+            return  [
                'code' => $country,
                'name' => country($country)
-           ];
+            ];
         });
 
         return $countries->all();
@@ -108,5 +108,4 @@ class ProjectCause extends Model
     {
         return $this->morphOne(Fund::class, 'fundable');
     }
-
 }

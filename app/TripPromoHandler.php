@@ -31,5 +31,4 @@ class TripPromoHandler
 
         return $promos;
     }
-
 }

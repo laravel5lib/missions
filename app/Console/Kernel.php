@@ -18,19 +18,19 @@ class Kernel extends ConsoleKernel
         Commands\SendReservationConfirmationEmail::class, //Commands/Emails/Reservations/SendConfirmation
         Commands\SendReceiptEmail::class, //Commands/Email/SendReceipt
         Commands\HandleLatePayments::class, //Commands/Payments/Penalize
-//        Commands\TransferData::class, // TODO delete
         Commands\UsePromoCode::class, //Commands/PromoCodes/UseCode
         Commands\AddRoleToTrips::class, //Commands/Roles/Add
         Commands\AddTodoToTrips::class, //Commands/Tasks/Add
         Commands\AddRequirementToTrips::class, //Commands/Requirements/Add
-//        Commands\ExtractAccounting::class, // TODO delete
         Commands\ArchiveOldFunds::class, //Commands/Funds/Archive
         Commands\Requirements\Add::class,
         Commands\Requirements\Remove::class,
         Commands\Utilities\UpdateRoomingPlansToMultiGroups::class,
         Commands\Utilities\ExportReservationProfilePics::class,
         \Bugsnag\BugsnagLaravel\Commands\DeployCommand::class,
-        Commands\RunScenario::class
+        Commands\RunScenario::class,
+        Commands\AssignRoleToUser::class,
+        Commands\RemoveRoleFromUser::class
     ];
 
     /**
@@ -45,5 +45,14 @@ class Kernel extends ConsoleKernel
                   ->daily()
                   ->timezone('America/Detroit')
                   ->withoutOverlapping();
+    }
+    /**
+     * Register the Closure based commands for the application.
+     *
+     * @return void
+     */
+    protected function commands()
+    {
+        require base_path('routes/console.php');
     }
 }

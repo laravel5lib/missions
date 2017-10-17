@@ -43,17 +43,16 @@ class ArchiveOldFunds extends Command
     public function handle()
     {
         if ($this->confirm('Are you sure you want to archive all old funds? [y|N]')) {
-
             $reservations = $this->reservation->past()->has('fund')->with('fund')->get();
 
-            foreach($reservations as $reservation) {
+            foreach ($reservations as $reservation) {
                 $reservation->fund->archive();
                 $this->info('Archived fund '. $reservation->fund->id . ' [reservation]');
             }
 
             $trips = $this->trip->past()->has('fund')->with('fund')->get();
 
-            foreach($trips as $trip) {
+            foreach ($trips as $trip) {
                 $trip->fund->archive();
                 $this->info('Archived fund '. $trip->fund->id . ' [trip]');
             }

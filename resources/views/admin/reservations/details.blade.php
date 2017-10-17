@@ -162,10 +162,10 @@
     </div>
     <div class="panel-footer text-center">
         <hr class="divider inv sm">
-        <send-email label="Resend confirmation email" 
+        <send-email label="Resend confirmation email"
                  icon="fa fa-envelope icon-left"
-                 class="btn btn-default btn-sm"
-                 command="email:send-reservation-confirmation" 
+                 classes="btn btn-default btn-sm"
+                 command="email:send-reservation-confirmation"
                  :parameters="{id: '{{ $reservation->id }}', email: '{{ $reservation->user->email }}'}">
         </send-email>
     </div>

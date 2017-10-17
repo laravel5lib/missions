@@ -59,12 +59,12 @@ class Exporter extends Job implements ShouldQueue
 
     /**
      * Get the filtered data.
-     * 
+     *
      * @return array
      */
     public function getFilteredData()
     {
-        $data = $this->getData()->map(function($data) {
+        $data = $this->getData()->map(function ($data) {
             return $this->filter($data, $this->getFields());
         })->all();
 
@@ -79,14 +79,14 @@ class Exporter extends Job implements ShouldQueue
      */
     public function filter($data, array $fields)
     {
-        return $this->getColumns($data)->filter(function($value, $key) use($fields) {
+        return $this->getColumns($data)->filter(function ($value, $key) use ($fields) {
             return in_array($key, $fields, true);
         })->all();
     }
 
     /**
      * Get exportable columns.
-     * 
+     *
      * @param  Collection $data
      * @return Collection
      */
@@ -97,7 +97,7 @@ class Exporter extends Job implements ShouldQueue
 
     /**
      * Get requested fields.
-     * 
+     *
      * @return Collection
      */
     public function getFields()
@@ -107,11 +107,11 @@ class Exporter extends Job implements ShouldQueue
 
     /**
      * Get the requested data.
-     * 
+     *
      * @return Collection
      */
     public function getData()
-    {  
+    {
         $data = $this->data($this->request->all());
 
         return collect($data);
@@ -119,7 +119,7 @@ class Exporter extends Job implements ShouldQueue
 
     /**
      * Get the requested filename
-     * 
+     *
      * @return string
      */
     public function getFilename()
@@ -131,7 +131,7 @@ class Exporter extends Job implements ShouldQueue
 
     /**
      * Get report's author
-     * 
+     *
      * @return User
      */
     public function getAuthor()
@@ -141,7 +141,7 @@ class Exporter extends Job implements ShouldQueue
 
     /**
      * Get the author's user id
-     * 
+     *
      * @return string
      */
     public function getUserId()
@@ -151,7 +151,7 @@ class Exporter extends Job implements ShouldQueue
 
     /**
      * Get email to notify
-     * 
+     *
      * @return string
      */
     public function getEmail()
@@ -168,15 +168,13 @@ class Exporter extends Job implements ShouldQueue
      */
     public function create($data, $sheetname, $filename)
     {
-        $content = Excel::create($filename, function($excel) use($data, $sheetname) {
+        $content = Excel::create($filename, function ($excel) use ($data, $sheetname) {
 
-            $excel->sheet($sheetname, function($sheet) use($data) {
+            $excel->sheet($sheetname, function ($sheet) use ($data) {
 
                 $sheet->fromArray($data);
                 $sheet->freezeFirstRow();
-
             });
-
         })->string('csv');
 
         $this->putInStorage($filename, $content);
@@ -186,7 +184,7 @@ class Exporter extends Job implements ShouldQueue
 
     /**
      * Save the document in storage
-     * 
+     *
      * @param  string $filename
      * @param  string $content raw file content
      */
@@ -196,8 +194,8 @@ class Exporter extends Job implements ShouldQueue
         $file = $filename.'.csv';
 
         Storage::disk('s3')->put(
-            $path.$file, 
-            $content, 
+            $path.$file,
+            $content,
             'public'
         );
 
@@ -211,7 +209,7 @@ class Exporter extends Job implements ShouldQueue
 
     /**
      * Save a report record.
-     * 
+     *
      * @param  Report $report
      */
     public function saveReport(Report $report, $filename, $source, $userId = null)
@@ -267,7 +265,7 @@ class Exporter extends Job implements ShouldQueue
 
     /**
      * Set the report property
-     * 
+     *
      * @param Model $report;
      * @return Models
      */
@@ -278,7 +276,7 @@ class Exporter extends Job implements ShouldQueue
 
     /**
      * Set the report property
-     * 
+     *
      * @param array $file;
      * @return array
      */

@@ -1,18 +1,18 @@
 <template>
 	<div class="row">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="col-xs-12 text-right">
 			<form class="form-inline">
-				<div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
+				<div style="margin-right:5px;" class="checkbox" v-if="isFacilitator && ! firstUrlSegment == 'admin'">
 					<label>
 						<input type="checkbox" v-model="includeManaging"> Include my group's medical releases
 					</label>
 				</div>
 				<div class="input-group input-group-sm">
-					<input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
+					<input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search">
 					<span class="input-group-addon"><i class="fa fa-search"></i></span>
 				</div>
-                <template v-if="canExport">
+                <template v-if="app.user.can.create_reports">
     				<export-utility url="medical/releases/export"
     				                :options="exportOptions"
     				                :filters="exportFilters">
@@ -34,8 +34,6 @@
 						</h5>
 					</a>
 					<div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:25px;top:12px;">
-						<!--<a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/medical-releases/' + medical_release.id + '/edit'"><i
-								class="fa fa-pencil"></i></a>-->
 						<a @click="selectedMedicalRelease = medical_release,deleteModal = true"><i
 								class="fa fa-times"></i></a>
 					</div>
@@ -53,11 +51,11 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label>CREATED ON</label>
-                            <p class="small">{{medical_release.created_at|moment 'lll'}}</p>
+                            <p class="small">{{medical_release.created_at|moment('lll')}}</p>
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{medical_release.updated_at|moment 'lll'}}</p>
+                            <p class="small">{{medical_release.updated_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
 				</div><!-- end panel-body -->
@@ -71,10 +69,10 @@
 			</div>
 		</div>
 		<div class="col-xs-12 text-center">
-			<pagination :pagination.sync="pagination" :callback="searchMedicals"></pagination>
+			<pagination :pagination="pagination" pagination-key="pagination" :callback="searchMedicals"></pagination>
 
 		</div>
-		<modal :show.sync="deleteModal" title="Remove Medical Release" small="true">
+		<modal :value="deleteModal" title="Remove Medical Release" :small="true">
 			<div slot="modal-body" class="modal-body">Delete this Medical Release?</div>
 			<div slot="modal-footer" class="modal-footer">
 				<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -86,6 +84,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import exportUtility from '../../export-utility.vue';
     import importUtility from '../../import-utility.vue';
     export default{
@@ -103,6 +102,7 @@
         },
         data(){
             return {
+                app: MissionsMe,
                 medical_releases: [],
                 selectedMedicalRelease: null,
                 trips: [],
@@ -148,8 +148,11 @@
             }
         },
         computed: {
-            isFacilitator() {
-                return this.trips.length > 0 ? true : false;
+            isFacilitator: {
+                get() {
+                    return this.trips.length > 0 ? true : false;
+                },
+                set() {}
             },
             canExport() {
                 return this.firstUrlSegment == 'admin';
@@ -157,17 +160,17 @@
         },
         watch: {
             'filters': {
-                handler: function (val) {
+                handler(val, oldVal) {
                     this.pagination.current_page = 1;
                     this.searchMedicals();
                 },
                 deep: true
             },
-            'search': function (val, oldVal) {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
-                this.searchMedicals();
+//                this.searchMedicals();
             },
-            'includeManaging': function (val, oldVal) {
+            'includeManaging'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.searchMedicals();
             }
@@ -175,8 +178,11 @@
         },
         methods: {
             setMedical(medical) {
-                this.$dispatch('set-document', medical);
+                this.$emit('set-document', medical);
             },
+            debouncedSearch: _.debounce(function() {
+                this.searchMedicals()
+            }, 250),
             searchMedicals(){
                 let params = {
                     user: this.userId,
@@ -189,15 +195,15 @@
                     params.manager = this.userId;
                 params.include = 'conditions,allergies,uploads';
                 $.extend(params, this.filters);
-                this.$http.get('medical/releases', {params: params}).then(function (response) {
-                    this.medical_releases = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('medical/releases', {params: params}).then((response) => {
+                    this.medical_releases = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     this.loaded = true;
                 });
             },
             removeMedicalRelease(medical_release){
                 if (medical_release) {
-                    this.$http.delete('medical/releases/' + medical_release.id).then(function (response) {
+                    this.$http.delete('medical/releases/' + medical_release.id).then((response) => {
                         this.medical_releases.$remove(medical_release);
                         this.paginatedMedical_releases.$remove(medical_release);
                         this.pagination.total_pages = Math.ceil(this.medical_releases.length / this.per_page);
@@ -205,9 +211,10 @@
                 }
             }
         },
-        ready(){
-            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
-                let user = response.body.data;
+        mounted(){
+            let userId = this.userId || this.$root.user.id;
+            this.$http.get('users/' + userId + '?include=facilitating,managing.trips').then((response) => {
+                let user = response.data.data;
                 let managing = [];
 
                 if (user.facilitating.data.length) {
@@ -217,7 +224,7 @@
                 }
 
                 if (user.managing.data.length) {
-                    _.each(user.managing.data, function (group) {
+                    _.each(user.managing.data, (group) => {
                         managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                     });
                     this.trips = _.union(this.trips, managing);

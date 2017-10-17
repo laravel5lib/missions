@@ -30,8 +30,7 @@ class RegionRequest extends FormRequest
             'call_sign'    => 'sometimes|required|string|max:50'
         ];
 
-        if ($this->isMethod('put'))
-        {
+        if ($this->isMethod('put')) {
             $rules = [
                 'name'         => 'sometimes|required|string|max:100',
                 'country_code' => 'sometimes|required|in:' . Country::codes(),

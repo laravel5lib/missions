@@ -8,7 +8,7 @@
 						<hr class="divider inv">
 						<h3 class="text-center">First, find a group to travel with.</h3>
 						<p class="small">If you don't have a group, choose Missions.Me and we'll help place you on a team.</p>
-						<input type="text" class="form-control" v-model="searchText" debounce="500"
+						<input type="text" class="form-control" v-model="searchText" @keyup="debouncedSearchGroups"
 							   placeholder="Search anything (i.e. medical, teens, church name)">
 						<hr class="divider inv sm">
 						<p class="small text-center">Next, you'll pick your trip type.</p>
@@ -23,7 +23,7 @@
 
 		<template v-if="groups.length > 0">
 			<div class="container flex-container">
-				<!--<spinner v-ref:spinner size="sm" text="Loading"></spinner>-->
+				<!--<spinner ref="spinner" size="sm" text="Loading"></spinner>-->
 					<div v-for="group in groups" class="flex-row">
 						<div class="flex-col">
 							<div class="panel panel-default flex-item">
@@ -31,7 +31,7 @@
 								<a role="button" @click="selectGroup(group)">
 									<h5 style="margin:0px;">
 									<img :src="group.avatar" :alt="group.name" class="av-left img-circle img-xs">
-									{{group.name | truncate 30 '...'}}
+									{{group.name | truncate(30, '...')}}
 									</h5>
 								</a>
 								</div><!-- end panel-body -->
@@ -54,34 +54,38 @@
 
 		<div class="container">
 			<div class="col-sm-12 text-center">
-				<pagination :pagination.sync="pagination" :callback="searchGroups"></pagination>
+				<pagination :pagination="pagination" pagination-key="pagination" :callback="searchGroups"></pagination>
 			</div>
 		</div><!-- end container -->
 	</div>
 </template>
 <script type="text/javascript">
+	import _ from 'underscore';
 	export default {
 		name: 'campaign-groups',
-		props: ['id'],
+		props: ['campaign'],
 		data(){
 			return {
 				groups: [],
 				page: 1,
 				pagination: {current_page: 1},
-				searchText: ''
+				searchText: '',
 			}
 		},
 		watch: {
-			'searchText': function (val, oldVal) {
+			'searchText'(val, oldVal) {
 				this.pagination.current_page = 1;
 				this.page = 1;
-				this.searchGroups();
+//				this.searchGroups();
 			},
-			'page': function (val, oldVal) {
+			'page'(val, oldVal) {
 				this.searchGroups();
 			}
 		},
 		methods: {
+		    debouncedSearchGroups: _.debounce(function () {
+                this.searchGroups();
+            }, 500),
 			searchGroups() {
 				// search public groups with public published trips belongs to the given campaign id
 				// search by trip type, trip prospects, group type, and group name
@@ -89,13 +93,13 @@
 					include: "group",
 					onlyPublished: true,
 					onlyPublic: true,
-					campaign: this.id,
+					campaign: this.campaign,
 					per_page: 12,
 					search: this.searchText,
 					page: this.pagination.current_page
 				});
 
-				resource.query().then(function (trips) {
+				resource.query().then((trips) => {
 					this.pagination = trips.data.meta.pagination;
 					let arr = [];
 					for (let i in trips.data.data) {
@@ -109,9 +113,7 @@
 					this.groups = _.filter(arr, function(group) {
 						return group['public'] == true;
 					});
-				}, function (error) {
-					//TODO error alert message
-				});
+				}, this.$root.handleApiError);
 			},
 			selectGroup(group) {
 				if (this.$parent.currentView) {
@@ -120,12 +122,11 @@
 				}
 			}
 		},
-		ready(){
+		mounted(){
 			this.searchGroups();
 		},
-		activate(done){
-			this.id = this.$parent.campaignId;
-			done();
+		activated(){
+//			this.campaign = this.$parent.campaignId;
 		}
 	}
 </script>

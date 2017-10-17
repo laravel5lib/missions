@@ -1,9 +1,7 @@
 <template>
-	<div class='input-group date' :class="{'has-error': hasError, 'input-group-sm': inputSm}">
-		<span class='input-group-addon' v-if="addon !== ''">
-			{{addon}}
-		</span>
-		<input class='form-control' :name='name' type='text' :placeholder="placeholder"/>
+	<div class='input-group date' :class="{'input-group-sm': inputSm}">
+		<span class='input-group-addon' v-if="addon" v-text="addon"></span>
+		<input class="datepicker-input form-control" type="text" :placeholder="placeholder" :value="formattedValue" v-model="formattedValue" @keyup,change="emitValue">
 		<span class='input-group-addon' v-if="!inline">
 			<i class='fa fa-fw fa-calendar'></i>
 		</span>
@@ -18,12 +16,13 @@
 </style>
 <script type="text/javascript">
 	import $ from 'jquery';
+	import moment from 'moment';
     /**
      * The array of names of the tooltip messages of the datetime picker.
      *
      * This is a constant and should not be modified.
      */
-    var DATETIME_PICKER_TOOLTIPS = [
+    const DATETIME_PICKER_TOOLTIPS = [
         "today", "clear", "close",
         "selectMonth", "prevMonth", "nextMonth",
         "selectYear", "prevYear", "nextYear",
@@ -38,13 +37,13 @@
     /**
      * The default language used by this component.
      */
-    var DEFAULT_LANGUAGE = "en-US";
+    const DEFAULT_LANGUAGE = "en-US";
 
     /**
      * A datetime picker control.
      *
-     * @param model
-     *    the model bind to the control, which must be a two way binding variable.
+     * @param value
+     *    the value bind to the control, which must be a two way binding variable.
      * @param type
      *    the optional type of this datetime picker control. Available values are
      *    - "datetime": Indicating that this control is a datetime picker,
@@ -86,21 +85,11 @@
 		name: 'date-picker',
 //        replace: true,
 //        inherit: false,
-        data() {
-            return {
-
-            }
-        },
         props: {
-            model: {
+            value: {
                 required: true,
-                twoWay: true
             },
 	        inline: {
-                type: Boolean,
-		        default: false
-	        },
-	        hasError: {
                 type: Boolean,
 		        default: false
 	        },
@@ -129,118 +118,64 @@
             },
             datetimeFormat: {
                 type: String,
-                required: false,
-                default: "LLL"
+//                required: false,
+                default: "YYYY-MM-DD HH:mm:ss"
             },
             dateFormat: {
                 type: String,
-                required: false,
+//                required: false,
                 default: "YYYY-MM-DD"
             },
             timeFormat: {
                 type: String,
-                required: false,
+//                required: false,
                 default: "HH:mm:ss"
             },
+	        viewFormat: {
+                type: Array,
+		        default() { return ['']}
+	        },
             name: {
                 type: String,
                 required: false,
                 default: ""
             },
-            onChange: {
-                required: false,
-                default: null
+	        minDate: {
+                type: [String, Boolean],
+                validator (value) {
+                    return value !== true;
+                },
+                default: false,
+	        },
+	        maxDate: {
+                type: [String, Boolean],
+                validator (value) {
+                    return value !== true;
+                },
+		        default: false,
+	        },
+        },
+        data() {
+            return {
+                control: null,
+                formattedValue: null,
             }
         },
-        beforeCompile: function() {
-            this.isChanging = false;
-            this.control = null;
-        },
-        ready: function() {
-            // console.debug("datetime-picker.ready");
-            var options = {
-                useCurrent: false,
-                showClear: true,
-                showClose: false,
-	            inline: this.inline,
-                icons: {
-                    time: 'fa fa-clock-o',
-                    date: 'fa fa-calendar',
-                    up: 'fa fa-chevron-up',
-                    down: 'fa fa-chevron-down',
-                    previous: 'fa fa-chevron-left',
-                    next: 'fa fa-chevron-right',
-                    today: 'fa fa-dot-circle-o',
-                    clear: 'fa fa-trash',
-                    close: 'fa fa-times'
-                }
-            };
-            // set the locale
-            var language = this.language;
-            if (language === null || language === "") {
-                if (this.$language) {
-                    language = this.$language;
-                } else {
-                    language = DEFAULT_LANGUAGE;
-                }
-            }
-            options.locale = this.getLanguageCode(language);
-            // set the format
-            switch (this.type) {
-                case "date":
-                    options.format = this.dateFormat;
-                    break;
-                case "time":
-                    options.format = this.timeFormat;
-                    break;
-                case "datetime":
-                default:
-                    options.format = this.datetimeFormat;
-                    options.extraFormats = ['YYYY-MM-DD HH:mm:ss', 'LLL'];
-                    break;
-            }
-            // use the vue-i18n plugin for localize the tooltips
-            if (this.$i18n && this.$i18n.datetime_picker) {
-                var messages = this.$i18n.datetime_picker;
-                var tooltips = $.fn.datetimepicker.defaults.tooltips;
-                for (var i = 0; i < DATETIME_PICKER_TOOLTIPS.length; ++i) {
-                    var name = DATETIME_PICKER_TOOLTIPS[i];
-                    if (messages[name]) {
-                        tooltips[name] = messages[name];    // localize
-                    }
-                }
-                options.tooltips = tooltips;
-            }
-            // create the control
-            $(this.$el).datetimepicker(options);
-            this.control = $(this.$el).data("DateTimePicker");
-            // set the date to the current value of the model
-            this.control.date(this.model);
-            var me = this;
-            $(this.$el).on("dp.change", function () {
-                if (! me.isChanging) {
-                    me.isChanging = true;
-                    me.model = me.control.date();
-                    me.$nextTick(function () {
-                        me.isChanging = false;
-                        if (me.onChange) {
-                            me.onChange(me.model);
-                        }
-                    });
-                }
-            });
-        },
+	    computed: {},
         watch: {
-            "model": function(val, oldVal) {
-                if (! this.isChanging) {
-                    this.isChanging = true;
-                    this.control.date(val);
-                    this.isChanging = false;
-                    if (this.onChange) {
-                        this.onChange(val);
-                    }
+		    value(val, oldVal){
+		        if (val !== oldVal) {
+                    this.formattedValue = this.momentFilter(val, this.viewFormat[0] || false, this.viewFormat[1] || false, this.viewFormat[2] || false)
                 }
-            }
+		    },
+            minDate(val, oldVal) {
+				if (this.control)
+                    this.control.minDate(val)
+            },
+            maxDate(val, oldVal) {
+                if (this.control)
+                    this.control.maxDate(val)
+            },
         },
         methods: {
             /**
@@ -257,7 +192,7 @@
              * @return
              *    the language code of the locale.
              */
-            getLanguageCode: function(locale) {
+            getLanguageCode(locale) {
                 if (locale === null || locale.length === 0) {
                     return "en";
                 }
@@ -288,7 +223,111 @@
                             return locale.substr(0, 2);
                     }
                 }
+            },
+	        momentFilter(val, format, diff = false, noLocal = false) {
+                if (!format) {
+                    switch (this.type) {
+                        case "date":
+                            format = this.dateFormat;
+                            break;
+                        case "time":
+                            format = this.timeFormat;
+                            break;
+                        case "datetime":
+                        default:
+                            format = this.datetimeFormat;
+                            break;
+                    }
+                }
+                let date;
+		        if (!val) return val;
+
+		        if (noLocal) {
+		            return moment(val).startOf('minute').format(format); // do not convert to local
+		        }
+
+		        if (diff) {
+		            date = moment.utc(val).startOf('minute').local().fromNow();
+		        } else {
+                    date = moment.utc(val, format).startOf('minute').local().format(format);
+                }
+
+		        return date;
+		    },
+            emitValue (event) {
+                this.$emit('input', $(event.currentTarget).val());
+            },
+        },
+        created() {
+            this.control = null;
+        },
+        mounted() {
+            // console.debug("datetime-picker.ready");
+            let options = {
+                useCurrent: false,
+                showClear: true,
+                showClose: false,
+	            inline: this.inline,
+	            minDate: this.minDate,
+	            maxDate: this.maxDate,
+                icons: {
+                    time: 'fa fa-clock-o',
+                    date: 'fa fa-calendar',
+                    up: 'fa fa-chevron-up',
+                    down: 'fa fa-chevron-down',
+                    previous: 'fa fa-chevron-left',
+                    next: 'fa fa-chevron-right',
+                    today: 'fa fa-dot-circle-o',
+                    clear: 'fa fa-trash',
+                    close: 'fa fa-times'
+                }
+            };
+            // set the locale
+            let language = this.language;
+            if (language === null || language === "") {
+                if (this.$language) {
+                    language = this.$language;
+                } else {
+                    language = DEFAULT_LANGUAGE;
+                }
             }
-        }
+            options.locale = this.getLanguageCode(language);
+            // set the format
+            switch (this.type) {
+                case "date":
+                    options.format = this.dateFormat;
+                    break;
+                case "time":
+                    options.format = this.timeFormat;
+                    break;
+                case "datetime":
+                default:
+                    options.format = this.datetimeFormat;
+                    options.extraFormats = ['YYYY-MM-DD HH:mm:ss', 'LLL'];
+                    break;
+            }
+            // use the vue-i18n plugin for localize the tooltips
+            if (this.$i18n && this.$i18n.datetime_picker) {
+                let messages = this.$i18n.datetime_picker;
+                let tooltips = $.fn.datetimepicker.defaults.tooltips;
+                for (let i = 0; i < DATETIME_PICKER_TOOLTIPS.length; ++i) {
+                    let name = DATETIME_PICKER_TOOLTIPS[i];
+                    if (messages[name]) {
+                        tooltips[name] = messages[name];    // localize
+                    }
+                }
+                options.tooltips = tooltips;
+            }
+            // create the control
+            $(this.$el).datetimepicker(options);
+            this.control = $(this.$el).data("DateTimePicker");
+            // set the date to the current value of the value
+            this.control.date(this.value);
+//            var me = this;
+            $(this.$el).on("dp.change", () => {
+                this.formattedValue = this.momentFilter(this.control.date(), this.viewFormat[0] || false, this.viewFormat[1] || false, this.viewFormat[2] || false);
+                this.$emit('input', this.formattedValue);
+            });
+        },
 	};
 </script>

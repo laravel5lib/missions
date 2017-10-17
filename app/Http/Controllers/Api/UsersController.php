@@ -23,6 +23,7 @@ class UsersController extends Controller
     public function __construct(User $user)
     {
         $this->user = $user;
+        $this->middleware('auth:api');
     }
 
     /**
@@ -48,14 +49,13 @@ class UsersController extends Controller
      */
     public function show($id = null)
     {
-        if($id)
-        {
+        if ($id) {
             $user = $this->user->findOrFail($id);
-        }
-        else
-        {
+        } else {
             $user = $this->auth->user();
-            if(! $user) return $this->response->errorUnauthorized();
+            if (! $user) {
+                return $this->response->errorUnauthorized();
+            }
         }
 
         return $this->response->item($user, new UserTransformer());
@@ -68,14 +68,14 @@ class UsersController extends Controller
      * @return \Dingo\Api\Http\Response
      */
     public function store(UserRequest $request)
-    {   
+    {
         $request->merge(['password' => bcrypt($request->get('password'))]);
 
         $user = new User($request->except('url'));
         $user->save();
 
         $user->slug()->create([
-            'url' => $request->get('url', generate_slug( $request->get('name') ))
+            'url' => $request->get('url', generate_slug($request->get('name')))
         ]);
 
         dispatch(new SendWelcomeEmail($user));
@@ -92,15 +92,16 @@ class UsersController extends Controller
      */
     public function update(UserRequest $request, $id = null)
     {
-        if($id)
+        if ($id) {
             $user = $this->user->findOrFail($id);
-        else
+        } else {
             $user = $this->auth()->user();
+        }
 
         if ($request->get('password')) {
             $request->merge(['password' => bcrypt($request->get('password'))]);
         }
-        
+
         $user->update($request->except('url'));
 
         if ($request->has('links')) {
@@ -147,7 +148,7 @@ class UsersController extends Controller
 
     /**
      * Import a list of users.
-     * 
+     *
      * @param  UserListImport $import
      * @return response
      */

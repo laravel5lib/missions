@@ -41,6 +41,6 @@ class UpdateReservationDeadlines extends Job implements ShouldQueue
                                   ->deadlines;
 
                 $reservation->syncDeadlines($deadlines);
-            });
+             });
     }
 }

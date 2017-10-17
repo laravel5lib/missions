@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\v1\Interaction;
 
-
 use Dingo\Api\Http\FormRequest;
 
-class DecisionRequest extends FormRequest {
+class DecisionRequest extends FormRequest
+{
 
     /**
      * Determine if the user is authorized to make this request.

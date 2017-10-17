@@ -13,7 +13,6 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
-
 class StatsController extends Controller
 {
 
@@ -105,7 +104,4 @@ class StatsController extends Controller
 //
 //        return 'stats updated!';
 //    }
-
-
-
 }

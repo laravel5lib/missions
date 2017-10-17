@@ -8,9 +8,9 @@
 			<hr class="divider lg">
 		</template>
 
-		<validator name="TravelItineraries">
+
 			<form id="TravelItinerariesForm" novalidate>
-				<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+				<spinner ref="spinner" size="sm" text="Loading"></spinner>
 
 				<div v-if="itinerary">
 					<p>Please provide details about each step of your trip below.</p>
@@ -20,7 +20,7 @@
 						</label>
 					</div>
 					<accordion :one-at-atime="true" v-if="itinerary.items">
-						<panel :is-open.once="isArrival(item)" v-for="item in itinerary.items" v-ref:items>
+						<panel :is-open.once="isArrival(item)" v-for="item in itinerary.items" :key="item.id" ref="items">
 
                             <strong slot="header">
                                 <i class="fa fa-map-marker"></i> Step : {{ item.activity.name }}
@@ -39,11 +39,11 @@
 								<div class="alert alert-warning" v-show="returningOnOwn"><strong>NOTICE:</strong> By selecting this option, I am acknowledging that I will be arranging my own transportation home from the destination country.</div>
 							</div>
 
-							<travel-transport v-if="item.transport" v-ref:transport :edit-mode="editMode" :reservation-id="reservationId" :transport.sync="item.transport" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-transport>
+							<travel-transport v-if="item.transport" ref="transport" :edit-mode="editMode" :reservation-id="reservationId" :transport="item.transport" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-transport>
 
-							<travel-hub v-if="item.hub" v-ref:hub :edit-mode="editMode" :hub="item.hub" :transport-type="item.transport ? item.transport.type : null" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-hub>
+							<travel-hub v-if="item.hub" ref="hub" :edit-mode="editMode" :hub="item.hub" :transport-type="item.transport ? item.transport.type : null" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-hub>
 
-							<travel-activity v-ref:activity :edit-mode="editMode" :activity="item.activity" :simple="true" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id" :transport-domestic="item.transport && item.transport.domestic"></travel-activity>
+							<travel-activity ref="activity" :edit-mode="editMode" :activity="item.activity" :simple="true" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id" :transport-domestic="item.transport && item.transport.domestic" @updated="updateActivity"></travel-activity>
 
 						</panel>
 					</accordion>
@@ -62,14 +62,14 @@
 					</template>
 				</div>
 
-				<modal title="Make Changes" small :show.sync="showResetModal" ok-text="Confirm" :callback="resetItinerary">
+				<modal title="Make Changes" small :value="showResetModal" @closed="showResetModal=false" ok-text="Confirm" :callback="resetItinerary">
 					<div slot="modal-body" class="modal-body">
 						In order to make changes to a travel itinerary, you will need to start over and submit a new one. This action can't be undone. Do you want to continue making changes?
 					</div>
 				</modal>
 
 			</form>
-		</validator>
+
 
 	</div>
 </template>
@@ -100,13 +100,11 @@
         },
         data(){
             return {
-                // mixin settings
-                validatorHandle: 'TravelItineraries',
 
                 editMode: true,
                 itinerary: null,
                 activityTypes: [],
-                returningOnOwn: false,
+//                returningOnOwn: false,
 	            showResetModal: false,
             }
         },
@@ -131,31 +129,34 @@
                     return _.findWhere(this.activityTypes, { name: 'departure'});
             },
             connectionPresent() {
-                return this.itinerary.items && _.some(this.itinerary.items, function (item) {
+                return this.itinerary.items && _.some(this.itinerary.items, (item) => {
 					return item.activity.activity_type_id === this.connectionType.id;
-                }.bind(this));
+                });
 			},
 			departurePresent() {
-                return this.itinerary.items && _.some(this.itinerary.items, function (item) {
+                return this.itinerary.items && _.some(this.itinerary.items, (item) => {
                     return item.activity.activity_type_id === this.departureType.id;
-                }.bind(this));
+                });
 
             },
 			domesticArrivalPresent() {
-                return this.itinerary.items && _.some(this.itinerary.items, function (item) {
+                return this.itinerary.items && _.some(this.itinerary.items, (item) => {
                     return item.activity.activity_type_id === this.arrivalType.id && !!item.transport.domestic;
-                }.bind(this));
+                });
 
             },
-            returningOnOwn() {
-                return this.itinerary.items && _.some(this.itinerary.items, function (item) {
-                    if (item.activity.activity_type_id === this.departureType.id) {
-                       return !item.transport && !item.hub;
-                    }
-                    return false;
-                }.bind(this));
+            returningOnOwn: {
+                get() {
+                    return this.itinerary.items && _.some(this.itinerary.items, (item) => {
+                        if (item.activity.activity_type_id === this.departureType.id) {
+                            return !item.transport && !item.hub;
+                        }
+                        return false;
+                    });
+                },
+	            set() {}
             },
-			'isLocked': function() {
+			isLocked() {
 				if (this.isAdminRoute)
 					return false;
 
@@ -173,7 +174,7 @@
                 let itinerary = _.extend(itineraryObj, {
                     items: [],
                 });
-                _.each(itineraryObj.activities.data, function (activity) {
+                _.each(itineraryObj.activities.data, (activity) => {
                     // create item
                     let item = {
                         activity: {
@@ -224,55 +225,53 @@
             getItinerary(){
                 let doc_id = this.document ? this.document.id : this.$parent.requirement.document_id;
                 return this.$http.get('itineraries/' + doc_id, { params: { 'include': 'activities.hubs,activities.transports'}})
-	                .then(function (response) {
-	                    return this.setupItinerary(response.body.data);
+	                .then((response) => {
+	                    return this.setupItinerary(response.data.data);
 	                },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                     });
             },
             deleteItinerary(itinerary){
-                this.$http.delete('itineraries/travel', itinerary).then(function (response) {
+                this.$http.delete('itineraries/travel', itinerary).then((response) => {
                     this.$emit('showSuccess', 'Itinerary Deleted');
                 });
             },
             saveItinerary(itinerary){
                 // trigger validation styles
-                this.$broadcast('validate-itinerary');
-                let isInvalid = false;
+                this.$emit('validate-itinerary');
+
                 // iterate through each itinerary item and check validation status of each child form
-                isInvalid = _.some(this.$refs.items, function (item) {
-                    return _.some(this.$refs.items[0].$children, function (child) {
-                        let vState = child.$TravelTransport || child.$TravelHub || child.$TravelActivity;
-                        console.log(child.validatorHandle + ' invalid: ' + vState.invalid);
-                        return vState.invalid;
-                    }.bind(this));
-                }.bind(this));
-
-                if (isInvalid) {
-                    this.$root.$emit('showError', 'Please check your itinerary form.');
-                    return;
-                }
-
-                // if (this.returningOnOwn)
-                //    itinerary.items.pop();
-
-                return this.$http.post('itineraries/travel', itinerary, { params: { 'include': 'activities.hubs,activities.transports'}}).then(function (response) {
-                    //this.itinerary = response.body.data;
-                    let it = this.setupItinerary(response.body.data);
-                    this.editMode = false;
-                    this.setItinerary(response.body.data);
-                    this.$emit('showSuccess', 'Itinerary Saved');
-                    return it
-                },
-                    function (response) {
-                        console.log(response);
-//                        return response.body.data;
+                let validations = [];
+                _.each(this.$refs.items, item => {
+                    _.each(item.$children, child => {
+                        validations.push(child.$validator.validateAll());
                     });
+                });
+
+                Promise.all(validations).then(results => {
+                    if (_.contains(results, false)) {
+                        this.$root.$emit('showError', 'Please check your itinerary form.');
+                        return;
+                    }
+
+                    return this.$http.post('itineraries/travel', itinerary, { params: { 'include': 'activities.hubs,activities.transports'}}).then((response) => {
+                            //this.itinerary = response.data.data;
+                            let it = this.setupItinerary(response.data.data);
+                            this.editMode = false;
+                            this.setItinerary(response.data.data);
+                            this.$emit('showSuccess', 'Itinerary Saved');
+                            return it
+                        },
+                        (response) =>  {
+                            console.log(response);
+//                        return response.data.data;
+                        });
+                })
             },
             updateItinerary(itinerary){
                 // trigger validation styles
-                this.$broadcast('validate-itinerary');
+                this.$emit('validate-itinerary');
                 let isInvalid = false;
                 // iterate through each itinerary item and check validation status of each child form
                 isInvalid = _.some(this.$refs.items, function (item) {
@@ -280,22 +279,22 @@
                         let vState = child.$TravelTransport || child.$TravelHub || child.$TravelActivity;
                         console.log(child.validatorHandle + ' invalid: ' + vState.invalid);
                         return vState.invalid;
-                    }.bind(this));
-                }.bind(this));
+                    });
+                });
 
                 if (isInvalid) {
                     this.$root.$emit('showError', 'Please check your itinerary form.');
                     return;
                 }
 
-                return this.$http.put('itineraries/travel/' + itinerary.id, itinerary, { params: { 'include': 'activities.hubs,activities.transports'}}).then(function (response) {
-                    let it = this.setupItinerary(response.body.data);
+                return this.$http.put('itineraries/travel/' + itinerary.id, itinerary, { params: { 'include': 'activities.hubs,activities.transports'}}).then((response) => {
+                    let it = this.setupItinerary(response.data.data);
                     this.editMode = false;
-                    this.setItinerary(response.body.data);
+                    this.setItinerary(response.data.data);
                     this.$emit('showSuccess', 'Itinerary Saved');
                     return it;
                 },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                     });
             },
@@ -316,11 +315,11 @@
             },
             resetItinerary(){
                 if (this.itinerary.id) {
-                    this.$http.delete('itineraries/travel/' + this.itinerary.id).then(function (response) {
+                    this.$http.delete('itineraries/travel/' + this.itinerary.id).then((response) => {
                         this.unsetItinerary(this.itinerary);
                         console.log('Itinerary deleted');
                     },
-                        function (response) {
+                        (response) =>  {
                             console.log(response);
                         });
                 }
@@ -412,44 +411,43 @@
 	        },
 	        toggleEditMode() {
 	            this.editMode = true;
-	            this.$nextTick(function () {
-                    if ( _.isFunction(this.$validate) )
-                        this.$validate(true);
-                }.bind(this));
 	        },
             toggleResetModal(){
 	            this.showResetModal = !this.showResetModal;
             },
             setItinerary(itinerary) {
-                this.$dispatch('set-document', itinerary);
+                this.$emit('set-document', itinerary);
             },
             unsetItinerary(itinerary) {
-                this.$dispatch('unset-document', itinerary);
+                this.$emit('unset-document', itinerary);
             },
 	        getTypes() {
-	            return this.$http.get('utilities/activities/types').then(function (response) {
-                    return this.activityTypes = response.body;
+	            return this.$http.get('utilities/activities/types').then((response) => {
+                    return this.activityTypes = response.data;
                 },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                     });
 	        },
+	        updateActivity(activity) {
+				debugger;
+	        }
 
         },
-        ready(){
+        mounted(){
             let promises = [];
             // Get activity types
             promises.push(this.getTypes());
 
             let self = this;
-            Promise.all(promises).then(function (values) {
+            Promise.all(promises).then((values) => {
                 // initiate computed types
                 let arrival = self.arrivalType;
                 let departure = self.departureType;
                 let connection = self.connectionType;
                 return [arrival, departure, connection];
-            }).then(function () {
-                self.$nextTick(function () {
+            }).then(() => {
+                self.$nextTick(() =>  {
                     if (self.document || (self.$parent && self.$parent.requirement && self.$parent.requirement.document_id)) {
                         self.editMode = false;
                         self.getItinerary();

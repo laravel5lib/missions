@@ -4,7 +4,7 @@
             <div class="row visible-xs-block">
                 <div class="col-xs-12">
                     <div class="btn-group btn-group-justified btn-group-xs" style="display:block;" role="group" aria-label="...">
-                        <a @click="backStep()" class="btn btn-default" :class="{'disabled': currentStep.view === 'step1' }" role="button">
+                        <a @click="backStep" class="btn btn-default" :class="{'disabled': currentStep.view === 'step1' }" role="button">
                             <i class="fa fa-chevron-left"></i>
                         </a>
                         <div class="btn-group" role="group">
@@ -37,10 +37,12 @@
                     </ul>
                     <hr class="divider sm">
                 </div>
-                <div class="col-xs-12 {{currentStep.view}}">
-                    <spinner v-ref:validationSpinner size="xl" :fixed="false" text="Validating"></spinner>
-                    <spinner v-ref:reservationspinner size="xl" :fixed="true" text="Creating Reservation"></spinner>
-                    <component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive :for-admin="true"></component>
+                <div class="col-xs-12" :class="currentStep.view">
+                    <spinner ref="validationSpinner" size="xl" :fixed="false" text="Validating"></spinner>
+                    <spinner ref="reservationspinner" size="xl" :fixed="true" text="Creating Reservation"></spinner>
+                    <keep-alive>
+                        <component :is="currentStep.view" transition="fade" transition-mode="out-in" :for-admin="true" @step-completion="stepCompleted"></component>
+                    </keep-alive>
                 </div>
             </div>
         </div>
@@ -75,7 +77,7 @@
                     {name: 'Review', view: 'step3', complete:false}
                 ],
                 currentStep: null,
-                canContinue: false,
+//                canContinue: false,
                 trip: {},
                 tripCosts: {},
                 deadlines:[],
@@ -110,26 +112,26 @@
                 }, this);
             },
             nextStep(){
-                var thisChild;
+                let thisChild;
                 switch (this.currentStep.view) {
                     case 'step1':
 
                         // find child
                         this.$children.forEach(function (child) {
-                            if (child.hasOwnProperty('$BasicInfo'))
+                            if (child.hasOwnProperty('handle') && child.handle === 'BasicInfo')
                                 thisChild = child;
                         });
 
-                        // Touch fields for proper validation
-                        if ( _.isFunction(thisChild.$validate) )
-                            thisChild.$validate(true);
-
                         // if form is invalid do not continue
-                        if (thisChild.$BasicInfo.invalid) {
-                            thisChild.attemptedContinue = true;
-                            return false;
-                        }
-                        this.nextStepCallback();
+                        thisChild.$validator.validateAll().then(result => {
+                            if (!result) {
+                                thisChild.attemptedContinue = true;
+                                return false;
+                            }
+                            this.userInfo = thisChild.userInfo;
+                            this.nextStepCallback();
+                        });
+
                         break;
                     default:
                         this.nextStepCallback();
@@ -186,10 +188,10 @@
                 }
 
 
-                this.$http.post('reservations', data).then(function (response) {
+                this.$http.post('reservations', data).then((response) => {
                     this.$root.$emit('AdminTrip:RefreshReservations');
                     this.$refs.reservationspinner.hide();
-                    location.href = '/admin/reservations/' + response.body.data.id
+                    location.href = '/admin/reservations/' + response.data.data.id
                     /*$('#addReservationModal').modal('hide');
                     $.extend(this, {
                         stepList:[
@@ -213,10 +215,15 @@
                         upfrontTotal: 0,
                         fundraisingGoal: 0
                     })*/
-                }, function (response) {
+                }, (response) =>  {
                     console.log(response);
                     this.$refs.reservationspinner.hide();
                 });
+            },
+            stepCompleted(val) {
+                this.currentStep.complete = val;
+                if (this.currentStep.view === 'step8')
+                    this.wizardComplete = val;
             },
         },
         created(){
@@ -234,18 +241,18 @@
                 this.currentStep.complete = this.wizardComplete = val;
             }
         },
-        ready(){
+        mounted(){
             //get trip costs
-            this.$http.get('trips/' + this.tripId, { params: {include: 'costs:status(active),costs.payments,deadlines,requirements' }}).then(function (response) {
-                this.trip = response.body.data;
+            this.$http.get('trips/' + this.tripId, { params: { include: 'costs:status(active),costs.payments,deadlines,requirements' }}).then((response) => {
+                this.trip = response.data.data;
                 // deadlines, requirements, and companion_limit
-                this.deadlines =  response.body.data.deadlines.data;
-                this.requirements =  response.body.data.requirements.data;
-                this.companion_limit = response.body.data.companion_limit;
+                this.deadlines =  response.data.data.deadlines.data;
+                this.requirements =  response.data.data.requirements.data;
+                this.companion_limit = response.data.data.companion_limit;
 
                 // filter costs by type
                 var optionalArr = [], staticArr = [], incrementalArr = [];
-                response.body.data.costs.data.forEach(function (cost) {
+                response.data.data.costs.data.forEach(function (cost) {
                     switch (cost.type) {
                         case 'static':
                             staticArr.push(cost);

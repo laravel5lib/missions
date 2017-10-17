@@ -1,19 +1,19 @@
 <template>
     <section>
     <div class="row" v-if="loaded" style="position:relative">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="col-sm-12 tour-step-attach">
             <div class="text-center" v-if="list && ! isLocked">
                 <form novalidate>
                     <a class="btn btn-default-hollow btn-sm" @click="toggleChangeState()">
                         <span v-if="!changeState">
-                            <i class="fa fa-cog icon-left"></i> Manage
+                            <i class="fa fa-archive icon-left"></i> Use Existing
                         </span>
                         <span v-else>
-                            <i class="fa fa-times"></i> Cancel
+                            <i class="fa fa-times icon-left"></i> Cancel
                         </span>
                     </a>
-                    <a class="btn btn-primary-hollow btn-sm" href="/{{ firstUrlSegment }}/records/{{ url }}/create"><i class="fa fa-plus icon-left"></i> Create New</a>
+                    <a class="btn btn-primary-hollow btn-sm" :href="'/' + firstUrlSegment + '/records/' + url + '/create'"><i class="fa fa-plus icon-left"></i> Create New</a>
                     <a class="btn btn-default-hollow btn-sm" @click="removeDocument(document)" v-if="document">
                         <i class="fa fa-trash icon-left"></i> Remove
                     </a>
@@ -24,6 +24,8 @@
                 <div class="panel-body">
                     <component :is="docPreview"
                                :document="document"
+                               @set-decument="setDocument"
+                               @unset-decument="removeDocument"
                                :locked="isLocked"
                                keep-alive>
                     </component>
@@ -35,22 +37,28 @@
                                :document="document"
                                :reservation-id="requirement.reservation_id"
                                :locked="isLocked"
+                               @set-decument="setDocument"
+                               @unset-decument="removeDocument"
                                keep-alive>
                     </component>
                 </div>
             </div>
             <div v-if="!document && list" role="alert"><p class="text-muted text-center">
-                <em>This requirement has no {{ label | lowercase }}(s) assigned to it. Please select one or add one.</em>
+                <em>This requirement has no {{ label.toLowerCase() }}(s) assigned to it. Please select one or add one.</em>
             </p></div>
         </div>
 
         <div class="col-sm-12" v-if="changeState && list" transition="fade">
             <div class="row">
                 <div class="col-sm-12">
-                    <component :is="list"
-                               :user-id="managingUserId"
-                                selector keep-alive>
-                    </component>
+                    <keep-alive>
+                        <component :is="list"
+                                   :user-id="managingUserId"
+                                   @set-decument="setDocument"
+                                   @unset-decument="removeDocument"
+                                   selector></component>
+                    </keep-alive>
+
                 </div>
             </div>
         </div>
@@ -126,7 +134,7 @@
                 documents: [],
                 requirement: {},
                 //logic vars
-                requirementResource: this.$resource('reservations/{reservationId}/requirements/{requirementId}'),
+                requirementResource: this.$resource('reservations{/reservationId}/requirements{/requirementId}'),
                 loaded: false,
                 newState: false,
                 changeState: false,
@@ -143,12 +151,12 @@
             }
         },
         computed: {
-            'managingUserId': function() {
+            managingUserId() {
                 if (this.userId) return this.userId;
 
                 return this.$root.user.id;
             },
-            'isLocked': function() {
+            isLocked() {
                 if (this.isAdminRoute)
                     return false;
 
@@ -156,17 +164,17 @@
             }
         },
         watch:{
-            'search': function (val, oldVal) {
+            search(val, oldVal) {
                 this.page = 1;
                 this.fetch();
             },
-            'page': function (val, oldVal) {
+            page(val, oldVal) {
                 this.fetch();
             },
-            'per_page': function (val, oldVal) {
+            per_page(val, oldVal) {
                 this.fetch();
             },
-            'requirement.document_type': function (val, oldVal) {
+            'requirement.document_type'(val, oldVal) {
                 switch(val) {
                     case 'passports':
                         this.label = 'Passport';
@@ -243,29 +251,29 @@
             setDocument(document){
                 if(document) {
                     this.document = document;
-                    this.requirementResource.update({
+                    this.requirementResource.put({
                         reservationId: this.reservationId,
                         requirementId: this.requirementId},
                     {
                         document_id: document.id,
                         status: 'reviewing'
-                    }).then(function (response) {
+                    }).then((response) => {
                         this.toggleChangeState();
-                        this.$dispatch('set-status', response.body.data);
+                        this.$emit('set-status', response.data.data);
                     });
                 }
             },
             removeDocument(document){
                 if(document) {
-                    this.requirementResource.update({
+                    this.requirementResource.put({
                         reservationId: this.reservationId,
                         requirementId: this.requirementId},
                     {
                         document_id: null,
                         status: 'incomplete'
-                    }).then(function (response) {
+                    }).then((response) => {
                         this.document = null;
-                        this.$dispatch('set-status', response.body.data);
+                        this.$emit('set-status', response.data.data);
                     });
                 }
             },
@@ -278,7 +286,7 @@
                 this.changeState = false;
             },
             fetch() {
-                var params = {
+                let params = {
                     user: this.$root.user.id,
                     manager: this.$root.user.id,
                 };
@@ -286,22 +294,14 @@
                     reservationId: this.reservationId,
                     requirementId: this.requirementId,
                     include: 'document'
-                }).then(function (response) {
-                    this.requirement = response.body.data;
-                    this.document = response.body.data.document ? response.body.data.document.data : null;
+                }).then((response) => {
+                    this.requirement = response.data.data;
+                    this.document = response.data.data.document ? response.data.data.document.data : null;
                     this.loaded = true;
                 });
-            }
-        },
-        events: {
-            'set-document': function(document) {
-                this.setDocument(document);
             },
-            'unset-document': function(document) {
-                this.removeDocument(document);
-            }
         },
-        ready(){
+        mounted(){
             this.fetch();
         }
     }

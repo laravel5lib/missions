@@ -50,24 +50,24 @@
             <div class="col-md-4 col-sm-12 panel panel-default text-center">
                 <div class="panel-body">
                     <label>Start Date</label>
-                    <p>{{ campaign.started_at | moment 'll' false true }}</p>
+                    <p>{{ campaign.started_at | moment('ll', false, true) }}</p>
 
                     <hr class="divider">
                     <label>End Date</label>
-                    <p>{{ campaign.ended_at | moment 'll' false true }}</p>
+                    <p>{{ campaign.ended_at | moment('ll', false, true) }}</p>
   
                     <hr class="divider">
                     <label>Created At</label>
-                    <p>{{ campaign.created_at | moment 'lll' }}</p>
+                    <p>{{ campaign.created_at | moment('lll') }}</p>
        
                     <hr class="divider">
                     <label>Updated At</label>
-                    <p>{{ campaign.updated_at | moment 'lll' }}</p>
+                    <p>{{ campaign.updated_at | moment('lll') }}</p>
           			
           			<div v-if="campaign.published_at">
                     	<hr class="divider">
                     	<label>Published At</label>
-                    	<p>{{ campaign.published_at | moment 'lll' }}</p>
+                    	<p>{{ campaign.published_at | moment('lll') }}</p>
                     </div>
  
                 </div><!-- end panel-body -->
@@ -81,13 +81,14 @@
 		props: ['campaignId'],
 		data(){
 			return {
-				campaign: {}
+                editMode: false,
+				campaign: {},
+                resource: this.$resource('campaigns{/id}', {'include': 'trips.group'})
 			}
 		},
 		created(){
-			let resource = this.$resource('campaigns{/id}', {'include': 'trips.group'});
-			resource.get({id: this.campaignId}).then(function(response) {
-				this.campaign = response.body.data;
+			this.resource.get({id: this.campaignId}).then((response) => {
+				this.campaign = response.data.data;
 			});
 		}
 	}

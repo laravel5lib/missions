@@ -32,10 +32,8 @@ class StatFilter extends Filter
      */
     public function region($id)
     {
-        return $this->whereHas('team', function($team) use($id)
-        {
-            $team->whereHas('region', function($region) use($id)
-            {
+        return $this->whereHas('team', function ($team) use ($id) {
+            $team->whereHas('region', function ($region) use ($id) {
                 $region->where('id', $id);
             });
         });

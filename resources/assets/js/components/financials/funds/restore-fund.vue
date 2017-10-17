@@ -34,9 +34,9 @@
         },
         methods: {
             restore(){
-                this.$http.put('funds/' + this.id + '/restore').then(function (response) {
+                this.$http.put('funds/' + this.id + '/restore').then((response) => {
                     window.location.href = '/admin/funds/' + this.id;
-                }, function (error) {
+                }, (error) =>  {
                     this.dispatch('showError', 'Unable to restore');
                 })
             }

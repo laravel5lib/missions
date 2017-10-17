@@ -1,5 +1,7 @@
 @extends('site.layouts.default')
 
+@section('title', 'Contact Missions.Me')
+
 @section('content')
 <div class="content-page-header">
     <img class="img-responsive" src="images/contact/contact-header.jpg" alt="Contact Us">

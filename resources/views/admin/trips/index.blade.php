@@ -18,7 +18,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <admin-trips></admin-trips>
+                <admin-trips-list></admin-trips-list>
             </div>
         </div>
     </div>

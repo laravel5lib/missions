@@ -1,178 +1,192 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template>
 	<div class="panel panel-default">
-		<validator name="UpdateCampaign" @touched="onTouched">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 
-			<div class="panel-heading">
-				<h3>Edit Campaign</h3>
-			</div>
-
-			<form id="UpdateCampaignForm" class="form-horizontal" novalidate>
-
-				<div class="panel-body">
-
-					<div class="row">
-						<div class="col-sm-4">
-							<h5>Campaign Details</h5>
-							<p class="text-muted">These details appear to the end-user in the <a href="/campaigns" target="_blank">campaign cards</a>.</p>
-						</div>
-						<div class="col-sm-8">
-							<div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
-								<div class="col-xs-12">
-									<label for="name">Name</label>
-									<input type="text" class="form-control" name="name" id="name" v-model="name"
-										   placeholder="Campaign Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
-										   maxlength="100" minlength="1" required>
-							    </div>
-							</div>
-							<div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
-								<div class="col-sm-12 col-md-8 col-lg-6">
-									<label for="country">Country</label>
-									<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
-											  label="name"></v-select>
-									<select hidden name="country" id="country" class="hidden" v-model="country_code"
-											v-validate:country="{ required: true }">
-										<option :value="country.code" v-for="country in countries">{{country.name}}</option>
-									</select>
-								</div>
-							</div>
-							<div class="form-group" v-error-handler="{ value: description, handle: 'description' }">
-								<div class="col-xs-12">
-									<label for="description">Description</label>
-									<textarea name="short_desc" id="description" rows="5" v-model="short_desc" class="form-control"
-											  v-validate:description="{ required: true, minlength:1, maxlength:255 }" maxlength="255"
-											  minlength="1"></textarea>
-									<div v-if="short_desc" class="help-block">{{short_desc.length}}/255 characters remaining</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-xs-12">
-									<h5>
-										<img class="av-left img-md"
-											:src="selectedAvatar.source ? (selectedAvatar.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100">
-										<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
-											data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
-											<i class="fa fa-camera icon-left"></i> Set Thumbnail
-										</button>
-									</h5>
-									<div class="collapse" id="avatarCollapse">
-										<div class="well">
-											<upload-create-update type="avatar" :lock-type="true" :is-child="true"
-																  :tags="['campaign']"></upload-create-update>
-										</div>
-									</div>
-								</div>
-							</div>
-
-						</div>
-					</div>
-
-					<hr class="divider">
-
-					<div class="row">
-						<div class="col-sm-4">
-							<h5>Campaign Dates</h5>
-							<p class="text-muted">The start and end of the campaign. <br />These dates are visible to the end-user.</p>
-						</div>
-						<div class="col-sm-8">
-							<div class="form-group" :class="{ 'has-error': checkForError('start') }">
-								<div class="col-sm-12 col-md-8 col-lg-6">
-									<label for="started_at">Start</label>
-									<date-picker v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }" :model.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-									<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
-									       v-validate:start="{ required: true }" required>
-									<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>
-								</div>
-							</div>
-							<div class="form-group" :class="{ 'has-error': checkForError('end') }">
-								<div class="col-sm-12 col-md-8 col-lg-6">
-									<label for="started_at">End</label>
-									<date-picker v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-									<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
-									       v-validate:end="{ required: true }" required>
-									<div v-if="errors.ended_at" class="help-block">{{errors.ended_at.toString()}}</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<hr class="divider">
-
-					<div class="row">
-						<div class="col-sm-4">
-							<h5>Campaign Page</h5>
-							<p class="text-muted">The public-facing campaign landing page.</p>
-						</div>
-						<div class="col-sm-8">
-							<div class="form-group">
-								<div class="col-sm-12 col-md-8 col-lg-6">
-									<label for="published_at">Publish Date</label>
-									<date-picker :model.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-									<input type="datetime" class="form-control hidden"
-										   v-model="published_at|moment 'YYYY-MM-DD HH:mm:ss'" id="published_at">
-								    <span class="help-block">Publish now, in the future, or leave blank to save it as a "draft".</span>
-								</div>
-							</div>
-							<template v-if="published_at">
-								<div class="form-group" v-error-handler="{ value: page_url, client: 'url', server: 'page_url' }">
-									<div class="col-sm-12">
-										<label for="description">Page Url</label>
-										<div class="input-group">
-											<span class="input-group-addon">www.missions.me/campaigns/</span>
-											<input type="text" id="page_url" v-model="page_url" class="form-control"
-												   v-validate:url="{ required: false }"/>
-										</div>
-									</div>
-								</div>
-
-								<div class="form-group" v-error-handler="{ value: page_src, client: 'src', server: 'page_src' }">
-									<div class="col-sm-12">
-										<label for="description">Page Source</label>
-										<div class="input-group">
-											<input type="text" id="page_src" v-model="page_src" class="form-control"
-												   v-validate:src="{ required: false }"/>
-											<span class="input-group-addon">.blade.php</span>
-										</div>
-										<span class="help-block">The filename located at: <code>/resources/views/sites/campaigns/partials/</code>
-									</div>
-								</div>
-							</template>
-						</div>
-					</div>
-
+		<div class="panel-heading">
+			<h3>Edit Campaign</h3>
 		</div>
-		<div class="panel-footer">
-			<div class="form-group">
-				<hr class="divider inv md">
-				<div class="col-xs-4">
-					<button @click.prevent class="btn btn-link"
-					   data-toggle="modal"
-					   data-target="#deleteConfirmationModal">
-				   		<i class="fa fa-trash"></i> Delete
-			   		</button>
+
+		<form id="UpdateCampaignForm" class="form-horizontal" novalidate>
+
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-sm-4">
+						<h5>Campaign Details</h5>
+						<p class="text-muted">These details appear to the end-user in the <a href="/campaigns" target="_blank">campaign cards</a>.</p>
+					</div>
+					<div class="col-sm-8">
+						<div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
+							<div class="col-xs-12">
+								<label for="name">Name</label>
+								<input type="text"
+									   class="form-control"
+									   name="name"
+									   id="name"
+									   v-model="name"
+									   placeholder="Campaign Name"
+									   v-validate="'required|min:1|max:100'"
+									   maxlength="100"
+									   minlength="1">
+						    </div>
+						</div>
+						<div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
+							<div class="col-sm-12 col-md-8 col-lg-6">
+								<label for="country">Country</label>
+	                    		<v-select @keydown.enter.prevent=""
+	                    				  class="form-control"
+	                    				  name="country"
+	                    				  v-validate="'required'"
+	                    				  id="country"
+	                    				  v-model="countryCodeObj"
+	                    				  :options="UTILITIES.countries"
+	                    				  label="name">
+	                    		</v-select>
+							</div>
+						</div>
+						<div class="form-group" v-error-handler="{ value: short_desc, handle: 'description' }">
+							<div class="col-xs-12">
+								<label for="description">Description</label>
+								<textarea id="description"
+										  rows="5"
+										  v-model="short_desc"
+										  class="form-control"
+										  name="description"
+										  maxlength="255"
+										  v-validate="'required|min:1|max:255'"
+										  minlength="1">
+								</textarea>
+	                    		<div v-if="short_desc" class="help-block">{{short_desc.length}}/255 characters remaining</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-xs-12">
+								<h5>
+									<img class="av-left img-md"
+										:src="selectedAvatar.source ? (selectedAvatar.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'"
+										width="100">
+									<button class="btn btn-primary-hollow btn-sm"
+										    type="button"
+										    data-toggle="collapse"
+										    data-target="#avatarCollapse"
+										    aria-expanded="false"
+										    aria-controls="avatarCollapse">
+										<i class="fa fa-camera icon-left"></i> Set Thumbnail
+									</button>
+								</h5>
+								<div class="collapse" id="avatarCollapse">
+									<div class="well">
+										<upload-create-update type="avatar"
+															  lock-type
+															  is-child
+															  :tags="['campaign']"
+															  @uploads-complete="uploadsComplete">
+										</upload-create-update>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div class="col-xs-8 text-right">
-					<a @click.prevent="back()" class="btn btn-default">Go Back</a>
-					<a @click.prevent="update()" class="btn btn-primary">Save Changes</a>
+				<hr class="divider">
+				<div class="row">
+					<div class="col-sm-4">
+						<h5>Campaign Dates</h5>
+						<p class="text-muted">The start and end of the campaign and when it should be publicly visable. <br />These dates are visible to the end-user.</p>
+					</div>
+					<div class="col-sm-8">
+						<div class="form-group" :class="{ 'has-error': errors.has('start') }">
+							<div class="col-sm-12 col-md-8 col-lg-6">
+								<label for="started_at">Start</label>
+								<date-picker v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }"
+											 v-model="started_at"
+											 :view-format="['YYYY-MM-DD HH:mm:ss']"
+											 name="start"
+											 v-validate="'required'">
+								</date-picker>
+								<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>
+							</div>
+						</div>
+						<div class="form-group" :class="{ 'has-error': errors.has('end') }">
+							<div class="col-sm-12 col-md-8 col-lg-6">
+								<label for="started_at">End</label>
+								<date-picker v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }"
+											 v-model="ended_at"
+											 :view-format="['YYYY-MM-DD HH:mm:ss']"
+											 name="end"
+											 v-validate="'required'">
+							    </date-picker>
+								<div v-if="errors.ended_at" class="help-block">{{errors.ended_at.toString()}}</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-12 col-md-8 col-lg-6">
+								<label for="published_at">Published</label>
+								<date-picker v-model="published_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
+							    <span class="help-block">Publish now, in the future, or leave blank to save it as a "draft".</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<hr class="divider" v-if="published_at">
+				<div class="row" v-if="published_at">
+					<div class="col-sm-4">
+						<h5>Campaign Page</h5>
+						<p class="text-muted">The public-facing campaign landing page.</p>
+					</div>
+					<div class="col-sm-8">
+						<div class="form-group" v-error-handler="{ value: page_url, client: 'url', server: 'page_url' }">
+							<div class="col-sm-12">
+								<label for="page_url">Page Url</label>
+								<div class="input-group">
+									<span class="input-group-addon">www.missions.me/campaigns/</span>
+									<input type="text"
+										   id="page_url"
+										   v-model="page_url"
+										   class="form-control"
+										   name="url"
+										   v-validate="''"/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" v-error-handler="{ value: page_src, client: 'src', server: 'page_src' }">
+							<div class="col-sm-12">
+								<label for="page_src">Page Source</label>
+								<div class="input-group">
+									<input type="text"
+										   id="page_src"
+										   v-model="page_src"
+										   class="form-control"
+										   name="src"
+										   v-validate="''"/>
+									<span class="input-group-addon">.blade.php</span>
+								</div>
+								<span class="help-block">The filename located at:
+									<code>/resources/views/sites/campaigns/partials/</code>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div><!-- end panel-body -->
+			<div class="panel-footer">
+				<div class="form-group">
+					<hr class="divider inv md">
+					<div class="col-xs-4">
+						<button @click.prevent="" class="btn btn-link"
+						   data-toggle="modal"
+						   data-target="#deleteConfirmationModal">
+					   		<i class="fa fa-trash"></i> Delete
+				   		</button>
+					</div>
+					<div class="col-xs-8 text-right">
+						<a @click.prevent="back()" class="btn btn-default">Go Back</a>
+						<a @click.prevent="update()" class="btn btn-primary">Save Changes</a>
+					</div>
 				</div>
 			</div>
-
-		</div>
 		</form>
-		</validator>
 
-		<alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
-			<span class="icon-ok-circled alert-icon-float-left"></span>
-			<strong>Well Done!</strong>
-			<p>Profile updated</p>
-		</alert>
-		<alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
-			<span class="icon-ok-circled alert-icon-float-left"></span>
-			<strong>Oh No!</strong>
-			<p>There are errors on the form.</p>
-		</alert>
-
-		<modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel"
+		<modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel"
 			   :callback="forceBack">
 			<div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
 		</modal>
@@ -200,24 +214,23 @@
 			</div>
 		</div>
 
-	</div>
+	</div><!-- end panel -->
 </template>
 <script type="text/javascript">
     import _ from 'underscore';
     import vSelect from "vue-select";
 	import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
+    import utilities from'../utilities.mixin';
     import errorHandler from'../error-handler.mixin';
 	export default{
 		name: 'campaign-edit',
 		components: {vSelect, 'upload-create-update': adminUploadCreateUpdate},
-        mixins: [errorHandler],
+        mixins: [utilities, errorHandler],
 		props: ['campaignId'],
 		data(){
 			return {
-				countries: [],
 				countryCodeObj: null,
 				name: null,
-				country_code: null,
 				short_desc: null,
 				started_at: null,
 				ended_at: null,
@@ -235,28 +248,22 @@
 				showError: false,
 				showSaveAlert: false,
 				hasChanged: false,
-                // mixin settings
-                validatorHandle: 'UpdateCampaign',
             }
 		},
 		computed:{
-			country_code(){
-				return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+			country_code:{
+			    get() {
+                    return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+                },
+				set() {}
 			}
 		},
 		methods: {
-			checkForError(field){
-				// if user clicked submit button while the field is invalid trigger error styles 
-				return this.$UpdateCampaign[field].invalid && this.attemptSubmit;
-			},
 			convertToSlug(text){
 				return text.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-');
 			},
-			onTouched(){
-				this.hasChanged = true;
-			},
 			back(force){
-				if (this.hasChanged && !force ) {
+				if (this.isFormDirty && !force ) {
 					this.showSaveAlert = true;
 					return false;
 				}
@@ -266,81 +273,66 @@
 				return this.back(true);
 			},
 			update(){
-				// Touch fields for proper validation
-				if ( _.isFunction(this.$validate) )
-					this.$validate(true);
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        this.resource.put({id: this.campaignId}, {
+                            name: this.name,
+                            country_code: this.country_code,
+                            short_desc: this.short_desc,
+                            started_at: this.started_at,
+                            ended_at: this.ended_at,
+                            published_at: moment(this.published_at).format('YYYY-MM-DD HH:mm:ss'),
+                            page_url: this.page_url,
+                            page_src: this.page_src,
+                            avatar_upload_id: this.avatar_upload_id,
+                            banner_upload_id: this.banner_upload_id,
 
-				this.resetErrors();
-				if (this.$UpdateCampaign.valid) {
-					// this.$refs.spinner.show();
-					this.resource.update({id: this.campaignId}, {
-						name: this.name,
-						country_code: this.country_code,
-						short_desc: this.short_desc,
-						started_at: this.started_at,
-						ended_at: this.ended_at,
-						published_at: moment(this.published_at).format('YYYY-MM-DD HH:mm:ss'),
-						page_url: this.page_url,
-						page_src: this.page_src,
-						avatar_upload_id: this.avatar_upload_id,
-						banner_upload_id: this.banner_upload_id,
-
-					}).then(function (resp) {
-						resp.data.data.published_at = moment(resp.data.data.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS');
-						$.extend(this, resp.data.data);
-//						window.location.href = '/admin/campaigns/'
-						this.showSuccess = true;
-						this.hasChanged = false;
-						// this.$refs.spinner.hide();
-					}, function (error) {
-						this.errors = error.data.errors;
-						this.showError = true;
-                        console.log(response);
-                        return error
-					});
-				} else {
-					this.showError = true;
-				}
+                        }).then((resp) => {
+                            resp.data.data.published_at = moment(resp.data.data.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS');
+                            $.extend(this, resp.data.data);
+                            this.showSuccess = true;
+                            this.hasChanged = false;
+                        }, (error) => {
+                            this.errors = error.data.errors;
+                            this.showError = true;
+                            console.log(response);
+                            return error
+                        });
+                    } else {
+                        this.showError = true;
+                        return
+                    }
+                });
 			},
 			deleteCampaign(){
-				// delete campaign
-				// this.$refs.spinner.show();
-				this.resource.delete({id: this.campaignId}).then(function(response) {
+				this.resource.delete({id: this.campaignId}).then((response) => {
 					window.location.href = '/admin/campaigns/'
-				}, function (response) {
+				}, (response) =>  {
                     console.log(response);
                     return response
                 });
-			}
-		},
-		events:{
-			'uploads-complete'(data){
-				switch(data.type){
-					case 'avatar':
-						this.selectedAvatar = data;
-						this.avatar_upload_id = data.id;
-						jQuery('#avatarCollapse').collapse('hide');
-						break;
-					case 'banner':
-						this.selectedBanner = data;
-						this.banner_upload_id = data.id;
-						jQuery('#bannerCollapse').collapse('hide');
-						break;
-				}
-			}
-		},
+			},
+            uploadsComplete(data){
+                switch(data.type){
+                    case 'avatar':
+                        this.selectedAvatar = data;
+                        this.avatar_upload_id = data.id;
+                        jQuery('#avatarCollapse').collapse('hide');
+                        break;
+                    case 'banner':
+                        this.selectedBanner = data;
+                        this.banner_upload_id = data.id;
+                        jQuery('#bannerCollapse').collapse('hide');
+                        break;
+                }
+            }
+        },
 		created(){
-			// this.$refs.spinner.show();
-			this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.body.countries;
-			}, function (response) {
-                console.log(response);
-                return response
-            });
+			this.getCountries();
 
 			// get campaign data
-			this.resource.get({id: this.campaignId}).then(function(response) {
-				let campaign = response.body.data;
+			this.resource.get({id: this.campaignId}).then((response) => {
+				let campaign = response.data.data;
 				this.name = campaign.name;
 				this.short_desc = campaign.description;
 				this.started_at = campaign.started_at;
@@ -348,13 +340,13 @@
 				this.published_at = campaign.published_at;
 				this.page_url = campaign.page_url;
 				this.page_src = campaign.page_src;
-				this.countryCodeObj = _.findWhere(this.countries, { name: campaign.country });
+				this.countryCodeObj = _.findWhere(this.UTILITIES.countries, { name: campaign.country });
 				this.country_code = this.countryCodeObj.code;
 				this.avatar_upload_id = campaign.avatar_upload_id;
 				this.banner_upload_id = campaign.banner_upload_id;
 				this.selectedAvatar.source = campaign.avatar;
 				this.selectedBanner.source = campaign.banner;
-			}, function (response) {
+			}, (response) =>  {
                 console.log(response);
                 return response
             });

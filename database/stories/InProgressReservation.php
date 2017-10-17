@@ -18,10 +18,10 @@ class InProgressReservation extends BaseReservation
     public function build($params = [])
     {
         // choose a random trip or create a new one
-        $tripId = array_rand(Trip::pluck('id', 'id')->toArray()) ?: (new RandomTrip)->create();
+        $tripId = array_rand(Trip::pluck('id', 'id')->toArray()) ?: (new RandomTrip)->create()->id;
 
         // choose a random user or create a new one
-        $userId = array_rand(User::pluck('id', 'id')->toArray()) ?: (new UserWithEverything)->create();
+        $userId = array_rand(User::pluck('id', 'id')->toArray()) ?: (new UserWithEverything)->create()->id;
 
         $reservation = factory(Reservation::class)->create([
             'trip_id' => $tripId,
@@ -34,11 +34,6 @@ class InProgressReservation extends BaseReservation
         $this->add_todos($reservation);
         $this->add_fundraiser($reservation);
         $this->make_deposit($reservation);
-
-        // complete some requirements randomly
-        // $attachedRequirements = array_rand([
-        //     'passport', 'medical_release', 'essay'
-        // ], 2);
 
         // add some funds to the reservation
         $this->add_funds($reservation, $percentStart = 10, $percentEnd = 90);

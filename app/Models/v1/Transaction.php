@@ -129,7 +129,7 @@ class Transaction extends Model
      */
     public function scopeFrom($query, $date)
     {
-       return $query->where('created_at', '>=', $date);
+        return $query->where('created_at', '>=', $date);
     }
 
     /**

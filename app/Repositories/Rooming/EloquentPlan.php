@@ -24,7 +24,7 @@ class EloquentPlan extends EloquentRepository implements Plan
 
     /**
      * Modify an existing plan and update in storage.
-     * 
+     *
      * @param  RoomingPlanRequest $request
      * @return EloquentCollection
      */
@@ -39,7 +39,7 @@ class EloquentPlan extends EloquentRepository implements Plan
 
     /**
      * Lock a rooming plan so it can no longer be modified.
-     * 
+     *
      * @return Mixed
      */
     public function lock($id)
@@ -53,7 +53,7 @@ class EloquentPlan extends EloquentRepository implements Plan
 
     /**
      * Unlock a locked rooming plan so it can be modified.
-     * 
+     *
      * @return Mixed
      */
     public function unlock($id)
@@ -80,5 +80,4 @@ class EloquentPlan extends EloquentRepository implements Plan
 
         return $plan;
     }
-
 }

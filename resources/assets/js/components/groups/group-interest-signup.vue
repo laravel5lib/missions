@@ -1,48 +1,47 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template>
     <div>
-        <validator name="Interest">
+
         <form novalidate id="TripInterestSignupForm">
-            <spinner v-ref:validationSpinner size="xl" :fixed="false" text="Saving"></spinner>
+            <spinner ref="validationSpinner" size="xl" :fixed="false" text="Sending..."></spinner>
             <div class="row">
-                <div class="col-xs-12" v-error-handler="{ value: campaign, handle: 'campaign' }">
+                <div class="col-xs-12" v-error-handler="{ value: campaign_id, handle: 'campaign_id' }">
                     <label>Campaign of Interest</label>
-                    <select v-model="campaign_id" class="form-control" v-validate:campaign="{required: true}">
+                    <select v-model="campaign_id" class="form-control" name="campaign_id" v-validate="'required'">
                         <option v-for="campaign in campaigns" :value="campaign.data.id">
-                            {{   campaign.data.name }}
+                            {{ campaign.data.name }}
                         </option>
                     </select>
                 </div>
             </div>
             <hr class="divider inv sm">
             <div class="row" v-if="campaign_id">
-                <div class="col-xs-12" v-error-handler="{ value: trip, handle: 'trip' }">
+                <div class="col-xs-12" v-error-handler="{ value: interest.trip_id, handle: 'trip_id' }">
                     <label>Trip Type</label>
-                    <select name="campaign" v-model="interest.trip_id" class="form-control" v-validate:trip="{required: true}">
+                    <select name="trip_id" v-model="interest.trip_id" class="form-control" v-validate="'required'">
                         <option v-for="trip in trips" :value="trip.id">
-                            {{ trip.type | capitalize }} Trip
+                            {{ trip.type|capitalize }} Trip
                         </option>
                     </select>
                 </div>
             </div>
             <hr class="divider inv sm">
             <div class="row">
-                <div class="col-xs-12" v-error-handler="{ value: name, handle: 'name' }">
+                <div class="col-xs-12" v-error-handler="{ value: interest.name, handle: 'name' }">
                     <label>Name</label>
-                    <input type="text" class="form-control" v-model="interest.name" v-validate:name="{required: true}">
+                    <input type="text" class="form-control" v-model="interest.name" name="name" v-validate="'required'">
                 </div>
             </div>
             <hr class="divider inv sm">
             <div class="row">
-                <div class="col-xs-12" v-error-handler="{ value: email, handle: 'email' }">
+                <div class="col-xs-12" v-error-handler="{ value: interest.email, handle: 'email' }">
                     <label>Email</label>
-                    <input type="text" class="form-control" v-model="interest.email" v-validate:email="{required: true, email: true}">
+                    <input type="text" class="form-control" v-model="interest.email" name="email" v-validate="'required|email'">
                 </div>
             </div>
             <hr class="divider inv sm">
             <div class="row">
-                <div class="col-xs-12">
-                    <label>Phone</label>
-                    <input type="text" class="form-control" v-model="interest.phone | phone">
+                <div class="col-xs-12" v-error-handler="{ value: interest.phone, handle: 'phone' }">
+                    <phone-input name="phone" v-model="interest.phone" label="Phone" v-validate="'required'"></phone-input>
                 </div>
             </div>
             <hr class="divider inv sm">
@@ -65,15 +64,18 @@
             </div>
             <hr class="divider inv md">
             <div class="row">
-                <div class="col-sm-12 text-center">
+                <div class="col-sm-12">
                     <div class="form-group">
-                        <a class="btn btn-primary" @click="save()">Submit</a>
+                        <span class="help-block">By submitting this form you agree to our <a href="/tos" target="_blank">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>. You are also stating your interest in this trip and that you would like a Missions.Me representative to contact you.</span>
+                        <div class="text-center">
+                            <a class="btn btn-primary" @click="save()">Submit</a>
+                        </div>
                     </div>
                 </div>
             </div>
 
         </form>
-        </validator>
+
     </div>
 </template>
 <script type="text/javascript">
@@ -86,6 +88,10 @@
             return{
                 group: {},
                 interest: {
+                    trip_id: null,
+                    name: null,
+                    email: null,
+                    phone: null,
                     communication_preferences: [],
                     status: 'undecided'
                 },
@@ -103,10 +109,6 @@
             }
         },
         methods: {
-            /*checkForError(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$Interest[field].invalid && this.attemptSubmit;
-            },*/
             removeDuplicates(arr, prop) {
                 let new_arr = [];
                 let lookup  = {};
@@ -122,35 +124,50 @@
                 return new_arr;
             },
             save() {
-                this.resetErrors();
-                if (this.$Interest.valid) {
-                    this.$refs.validationspinner.show();
-                    this.$http.post('interests', this.interest).then(function (response) {
-                        this.$refs.validationspinner.hide();
-                        this.showSuccess = true;
+
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        swal("Oops!", "That doesn't look right. Please check what you entered.", "error", {
+                            button: true
+                        });
+                        return false;
+                    }
+
+                    this.$refs.validationSpinner.show();
+                    this.$http.post('interests', this.interest).then((response) => {
+                        this.$refs.validationSpinner.hide();
+                        swal("Thank you!", "Your interest has been submitted. You'll be hearing from us soon.", "success", {
+                            button: true,
+                            timer: 3000
+                        });
                         this.attemptSubmit = false;
                         this.interest = {
+                            trip_id: null,
+                            name: null,
+                            email: null,
+                            phone: null,
                             communication_preferences: [],
                             status: 'undecided'
                         };
                         this.campaign_id = '';
                         console.log(response);
-                    }).then(function (error) {
+                    }).catch((error) => {
                         this.errors = error.data.errors;
-                        this.$refs.validationspinner.hide();
+                        this.$refs.validationSpinner.hide();
                         console.log(error);
-                        this.$dispatch('showSuccess', 'Request sent')
+                        swal("Oops!", "Something didn't go right. Can you try again?", "error", {
+                            button: true,
+                            timer: 3000
+                        });
                     });
-                } else {
-                    this.$dispatch('showError', 'Please check the form for errors.')
-                }
+                });
             }
         },
-        ready() {
-            this.$http.get('trips?groups[]=' + this.id, { params: {status: 'current', include: 'group,campaign'} }).then(function (response) {
-                // this.group = response.body.data.group.data;
-                this.allTrips = response.body.data;
-                let campaigns = _.mapObject(response.body.data, 'campaign');
+        mounted() {
+            this.$http.get('trips?groups[]=' + this.id, { params: {status: 'current', include: 'group,campaign'} }).then((response) => {
+                // this.group = response.data.data.group.data;
+                this.allTrips = response.data.data;
+                let campaigns = _.mapObject(response.data.data, 'campaign');
                 this.campaigns = this.removeDuplicates(campaigns, 'id');
                 console.log(this.campaigns);
             })

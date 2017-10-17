@@ -47,7 +47,7 @@ class FundsReport extends Job implements ShouldQueue
 
     private function columnize($reservations)
     {
-        return $reservations->map(function($reservation) {
+        return $reservations->map(function ($reservation) {
             return [
                 'given_names' => $reservation->given_names,
                 'surname' => $reservation->surname,
@@ -60,17 +60,17 @@ class FundsReport extends Job implements ShouldQueue
                 'amount_raised' => $reservation->totalRaisedInDollars(),
                 'outstanding' => $reservation->totalOwedInDollars(),
                 'percent_raised' => $reservation->getPercentRaised().'%',
-                'incremental_costs' => implode(", ", $reservation->costs()->type('incremental')->get()->map(function($cost) {
-                    return $cost->name . ' ($'.number_format($cost->amountInDollars(),2).')';
+                'incremental_costs' => implode(", ", $reservation->costs()->type('incremental')->get()->map(function ($cost) {
+                    return $cost->name . ' ($'.number_format($cost->amountInDollars(), 2).')';
                 })->all()),
-                'static_costs' => implode(", ", $reservation->costs()->type('static')->get()->map(function($cost) {
-                    return $cost->name . ' ($'.number_format($cost->amountInDollars(),2).')';
+                'static_costs' => implode(", ", $reservation->costs()->type('static')->get()->map(function ($cost) {
+                    return $cost->name . ' ($'.number_format($cost->amountInDollars(), 2).')';
                 })->all()),
-                'optional_costs' => implode(", ", $reservation->costs()->type('optional')->get()->map(function($cost) {
-                    return $cost->name . ' ($'.number_format($cost->amountInDollars(),2).')';
+                'optional_costs' => implode(", ", $reservation->costs()->type('optional')->get()->map(function ($cost) {
+                    return $cost->name . ' ($'.number_format($cost->amountInDollars(), 2).')';
                 })->all()),
-                'payments' => implode(", ", $reservation->dues->map(function($due) {
-                    return $due->payment->cost->name. ' [balance: $'.number_format($due->outstandingBalanceInDollars(),2).'] ('.$due->getStatus().')';
+                'payments' => implode(", ", $reservation->dues->map(function ($due) {
+                    return $due->payment->cost->name. ' [balance: $'.number_format($due->outstandingBalanceInDollars(), 2).'] ('.$due->getStatus().')';
                 })->all())
             ];
         })->all();

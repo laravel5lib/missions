@@ -1,21 +1,27 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="EditUser" @touched="onTouched">
+<template >
+    <div>
         <form id="EditUserForm" class="form-horizontal" novalidate style="position:relative;">
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-            <div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
+            <div class="form-group">
                 <div class="col-sm-12">
-                    <label for="name" class="control-label">Name</label>
-                    <input type="text" class="form-control" name="name" id="name" v-model="name"
-                           placeholder="User Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
-                           maxlength="100" minlength="1" required>
+                    <div class="row">
+                        <div class="col-md-6" v-error-handler="{ value: first_name, client: 'firstname' }">
+                            <label>First Name</label>
+                            <input type="text" class="form-control" v-model="first_name" name="firstname" v-validate="'required|min:1|max:100'">
+                        </div>
+                        <div class="col-md-6" v-error-handler="{ value: last_name, client: 'lastname' }">
+                            <label>Last Name</label>
+                            <input type="text" class="form-control" v-model="last_name" name="lastname" v-validate="'required|min:1|max:100'">
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
                     <div v-error-handler="{ value: email, handle: 'email' }">
-                    <label for="name" class="control-label">Email</label>
-                    <input type="email" class="form-control" name="email" id="email" v-model="email"
-                           v-validate:email="{ required: true, minlength:1, maxlength:100 }">
+                        <label for="name" class="control-label">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" v-model="email"
+                               v-validate="'required|min:1|max:100'">
                     </div>
                 </div>
                 <div class="col-sm-6" v-error-handler="{ value: alt_email, server: 'alt_email' }">
@@ -24,7 +30,7 @@
                 </div>
             </div>
 
-            <div class="form-group" :class="{ 'has-error': !!changePassword && (checkForError('password')||checkForError('passwordconfirmation')) }">
+            <div class="form-group" :class="{ 'has-error': !!changePassword && (errors.has('password')|| errors.has('passwordconfirmation')) }">
                 <div class="col-sm-12">
                     <label for="name" class="control-label">Password</label>
                     <div class="checkbox">
@@ -35,9 +41,9 @@
                     </div>
                     <div v-if="changePassword" class="row" v-error-handler="{ value: password, handle: 'password' }" >
                         <div class="col-sm-6">
-                            <div class="input-group" :class="{ 'has-error': checkForError('password') }">
+                            <div class="input-group" :class="{ 'has-error': errors.has('password') }">
                                 <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password"
-                                       v-validate:password="{ minlength:8 }" placeholder="Enter password">
+                                       name="password="{ minlength:8 }" placeholder" v-validate="Enter password">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
                                         <i class="fa fa-eye" v-if="!showPassword"></i>
@@ -47,9 +53,9 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="input-group" :class="{ 'has-error': checkForError('passwordconfirmation') }">
+                            <div class="input-group" :class="{ 'has-error': errors.has('passwordconfirmation') }">
                                 <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password_confirmation"
-                                       v-validate:passwordconfirmation="{ minlength:8 }" placeholder="Enter password again">
+                                       name="passwordconfirmation="{ minlength:8 }" placeholder" v-validate="Enter password again">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
                                         <i class="fa fa-eye" v-if="!showPassword"></i>
@@ -223,10 +229,10 @@
                     <div v-error-handler="{ value: gender, handle: 'gender' }">
                         <label for="gender" class="control-label">Gender</label><br>
                         <label class="radio-inline">
-                            <input type="radio" name="gender" id="gender" value="male" v-model="gender" v-validate:gender="{required: {rule: true}}"> Male
+                            <input type="radio" name="gender" id="gender" value="male" v-model="gender" v-validate="'required'"> Male
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="gender2" id="gender2" value="female" v-model="gender" v-validate:gender> Female
+                            <input type="radio" name="gender" id="gender2" value="female" v-model="gender"> Female
                         </label>
                     </div>
                 </div>
@@ -234,10 +240,10 @@
                     <div v-error-handler="{ value: gender, handle: 'status' }">
                         <label for="status" class="control-label">Status</label><br>
                         <label class="radio-inline">
-                            <input type="radio" name="status" id="status" value="single" v-model="status" v-validate:status="{required: {rule: true}}"> Single
+                            <input type="radio" name="status" id="status" value="single" v-model="status" v-validate="'required'"> Single
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="status2" id="status2" value="married" v-model="status" v-validate:status> Married
+                            <input type="radio" name="status" id="status2" value="married" v-model="status"> Married
                         </label>
                     </div>
                 </div>
@@ -247,7 +253,7 @@
                 <div class="col-sm-12">
                     <label class="control-label" for="bio">Bio</label>
                     <textarea class="form-control" v-model="bio" id="bio" placeholder="User Bio" maxlength="120"></textarea>
-                    <span class="help-block">Characters left: {{120 - (bio.length||0)}}</span>
+                    <span class="help-block">Characters left: {{120 - (bio ? bio.length : 0)}}</span>
                 </div>
             </div>
             <div class="row">
@@ -259,48 +265,44 @@
 
             <div class="row">
                 <div class="col-sm-6">
-                        <label for="infoCity">City</label>
-                        <input type="text" class="form-control" v-model="city" id="infoCity" placeholder="City">
+                    <label for="infoCity">City</label>
+                    <input type="text" class="form-control" v-model="city" id="infoCity" placeholder="City">
                 </div>
                 <div class="col-sm-6">
-                        <label for="infoState">State/Prov.</label>
-                        <input type="text" class="form-control" v-model="state" id="infoState" placeholder="State/Province">
+                    <label for="infoState">State/Prov.</label>
+                    <input type="text" class="form-control" v-model="state" id="infoState" placeholder="State/Province">
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-sm-4">
-                        <label for="infoZip">ZIP/Postal Code</label>
-                        <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
+                    <label for="infoZip">ZIP/Postal Code</label>
+                    <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
                 </div>
                 <div class="col-sm-4">
                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
-                        <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
-                            <option :value="country.code" v-for="country in countries">{{country.name}}</option>
-                        </select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" name="country" v-validate="'required'" id="country" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div v-error-handler="{ value: timezone, handle: 'timezone' }">
                         <label for="timezone" class="control-label">Timezone</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
-                        <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
-                            <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
-                        </select>
+                        <v-select @keydown.enter.prevent=""  name="timezone" v-validate="'required'" class="form-control" id="timezone" v-model="timezone" :options="UTILITIES.timezones"></v-select>
                     </div>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-sm-6">
-                        <label for="infoPhone">Phone 1</label>
-                        <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
+                    <label for="infoPhone">Phone 1</label>
+                    <!--<input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">-->
+                    <phone-input v-model="phone_one" name="phone" id="infoPhone"></phone-input>
                 </div>
                 <div class="col-sm-6">
-                        <label for="infoMobile">Phone 2</label>
-                        <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
+                    <label for="infoMobile">Phone 2</label>
+                    <!--<input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">-->
+                    <phone-input v-model="phone_two" name="phone" id="infoMobile"></phone-input>
                 </div>
             </div>
 
@@ -311,7 +313,7 @@
                         <input type="radio" name="public" id="public" :value="true" v-model="public"> Public
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="public2" id="public2" :value="false" v-model="public"> Private
+                        <input type="radio" name="public" id="public2" :value="false" v-model="public"> Private
                     </label>
                 </div>
             </div>
@@ -320,41 +322,46 @@
                     <label for="url" class="control-label">Url Slug</label>
                     <div class="input-group">
                         <span class="input-group-addon">www.missions.me/</span>
-                        <input type="text" id="url" v-model="url" class="form-control" required v-validate:url="{ required: !!public }"/>
+                        <input type="text" id="url" v-model="url" class="form-control" required name="url" v-validate="!!public ? 'required' : ''"/>
                     </div>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-12 text-center">
-                    <a @click="back()" class="btn btn-default">Cancel</a>
-                    <a @click="submit()" class="btn btn-primary">Update</a>
+                <div class="col-sm-12 text-right">
+                    <a @click="back" class="btn btn-link">Cancel</a>
+                    <a @click="submit" class="btn btn-primary">Save Changes</a>
                 </div>
             </div>
         </form>
-        <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+        <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
-    </validator>
+    </div>
+
+
 </template>
 <script type="text/javascript">
+    import _ from 'underscore'
     import vSelect from "vue-select";
     import errorHandler from'../error-handler.mixin';
+    import utilities from '../utilities.mixin'
     export default{
         name: 'admin-user-edit',
         props: ['userId'],
         components: {vSelect},
-        mixins: [errorHandler],
+        mixins: [utilities, errorHandler],
         data(){
             return {
-                name: '',
+                first_name: '',
+                last_name: '',
                 email: '',
                 alt_email: '',
                 password: null,
                 password_confirmation: null,
                 bio: '',
                 status: '',
-                birthday: null,
-                country_code: null,
+//                birthday: null,
+//                country_code: null,
                 timezone: null,
                 phone_one: '',
                 phone_two: '',
@@ -367,9 +374,7 @@
                 gender: null,
                 admin: false,
 
-                countries: [],
                 countryCodeObj: null,
-                timezones: [],
                 changePassword: false,
                 showPassword: false,
                 timezoneObj: null,
@@ -385,20 +390,24 @@
             }
         },
         computed: {
-            country_code() {
-                return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+            country_code: {
+                get() {
+                    return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+                },
+                set() {}
             },
-            birthday() {
-                return this.dobYear && this.dobMonth && this.dobDay
-                        ? moment(this.dobMonth + '-' + this.dobDay + '-' + this.dobYear, 'MM-DD-YYYY').format('YYYY-MM-DD')
-                        : null;
+            birthday: {
+                get() {
+                    return this.dobYear && this.dobMonth && this.dobDay
+                            ? moment(this.dobMonth + '-' + this.dobDay + '-' + this.dobYear, 'MM-DD-YYYY').format('YYYY-MM-DD')
+                            : null;
+                },
+                set() {
+
+                }
             }
         },
         methods: {
-            /*checkForError(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$EditUser[field].invalid && this.attemptSubmit;
-            },*/
             onTouched(){
                 this.hasChanged = true;
             },
@@ -413,62 +422,61 @@
                 return this.back(true);
             },
             submit(){
-                this.resetErrors();
-                if (this.$EditUser.valid) {
-                    this.resource.update({id: this.userId}, {
-                        name: this.name,
-                        email: this.email,
-                        alt_email: this.alt_email,
-                        password: this.changePassword ? this.password : undefined,
-                        password_confirmation: this.changePassword ? this.password_confirmation : undefined,
-                        bio: this.bio,
-                        type: this.type,
-                        birthday: this.birthday,
-                        country_code: this.country_code,
-                        timezone: this.timezone,
-                        phone_one: this.phone_one,
-                        phone_two: this.phone_two,
-                        address: this.address,
-                        city: this.city,
-                        state: this.state,
-                        zip: this.zip,
-                        status: this.status,
-                        gender: this.gender,
-                        public: this.public,
-                        url: this.public ? this.url : undefined,
-                    }).then(function (resp) {
-                        this.$root.$emit('showSuccess', 'User updated.');
-                        this.hasChanged = false;
-                        let that = this;
-                        setTimeout(function () {
-                            window.location.href = '/' + that.firstUrlSegment + '/users/' + that.userId;
-                        }, 1000);
-                    }, function (error) {
-                        this.$root.$emit('showError', 'There are errors on the form.');
-                        console.log(error);
-                        this.errors = error.data.errors;
-                    });
-                } else {
-                    this.showError = true;
-                }
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        this.resource.put({id: this.userId}, {
+                            first_name: this.first_name,
+                            last_name: this.last_name,
+                            email: this.email,
+                            alt_email: this.alt_email,
+                            password: this.changePassword ? this.password : undefined,
+                            password_confirmation: this.changePassword ? this.password_confirmation : undefined,
+                            bio: this.bio,
+                            type: this.type,
+                            birthday: this.birthday,
+                            country_code: this.country_code,
+                            timezone: this.timezone,
+                            phone_one: this.phone_one,
+                            phone_two: this.phone_two,
+                            address: this.address,
+                            city: this.city,
+                            state: this.state,
+                            zip: this.zip,
+                            status: this.status,
+                            gender: this.gender,
+                            public: this.public,
+                            url: this.public ? this.url : undefined,
+                        }).then((resp) => {
+                            this.$root.$emit('showSuccess', 'User updated.');
+                            this.hasChanged = false;
+                            let that = this;
+                            setTimeout(() => {
+                                window.location.href = '/' + that.firstUrlSegment + '/users/' + that.userId;
+                            }, 1000);
+                        }, (error) => {
+                            this.$root.$emit('showError', 'There are errors on the form.');
+                            console.log(error);
+                            this.errors = error.data.errors;
+                        });
+                    } else {
+                        this.showError = true;
+                    }
+                })
             }
         },
-        ready(){
-            let countriesPromise = this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.body.countries;
-            });
+        mounted(){
+            let promises = [];
+            promises.push(this.getCountries());
+            promises.push(this.getTimezones());
 
-            let timezonesPromise = this.$http.get('utilities/timezones').then(function (response) {
-                this.timezones = response.body.timezones;
-            });
-
-            Promise.all([countriesPromise, timezonesPromise]).then(function (values) {
-                this.resource.get({id: this.userId}).then(function (response) {
-                    let user = response.body.data;
-                    this.name = user.name;
+            Promise.all(promises).then((values) => {
+                this.resource.get({id: this.userId}).then((response) => {
+                    let user = response.data.data;
+                    this.first_name = user.first_name;
+                    this.last_name = user.last_name;
                     this.bio = user.bio;
                     this.type = user.type;
-                    this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
+                    this.countryCodeObj = _.findWhere(this.UTILITIES.countries, {code: user.country_code});
                     this.country_code = user.country_code;
                     this.timezone = user.timezone;
                     this.phone_one = user.phone_one;
@@ -487,11 +495,11 @@
                     this.dobDay = moment(user.birthday).format('DD');
                     this.dobMonth = moment(user.birthday).format('MM');
                     this.dobYear = moment(user.birthday).format('YYYY');
-                }, function (response) {
+                }, (response) =>  {
                     console.log('Loading Failed! :(');
                     console.log(response);
                 });
-            }.bind(this))
+            })
         }
     }
 </script> 

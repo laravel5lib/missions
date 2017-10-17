@@ -1,6 +1,6 @@
 <template>
     <div>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="row">
             <p v-if="trips.length < 1" class="text-center text-muted lead">
                 This group does not have any trips yet. Please check back soon!
@@ -11,24 +11,25 @@
                         <h5 class="text-uppercase text-center">{{ trip.type|capitalize }} Trip</h5>
                     </div><!-- end panel-heading -->
                     <div class="panel-body text-center">
-                        <p class="badge">{{ trip.status | capitalize }}</p><br>
-                        <img :src="trip.campaign.data.avatar" alt="{{ trip.campaign.data.name }}" class="img-circle img-md">
+                        <p class="badge">{{ trip.status|capitalize }}</p><br>
+                        <img :src="trip.campaign.data.avatar" :alt=" trip.campaign.data.name " class="img-circle img-md">
                         <h4>{{ trip.campaign.data.name }}</h4>
                         <p class="small">{{ trip.country_name }}</p>
                         <label>Travel Date</label>
-                        <p>{{ trip.started_at|moment 'MMMM DD' false true }} - {{ trip.ended_at|moment 'LL' false true }}</p>
+                        <p>{{ trip.started_at|moment('MMMM DD', false, true) }} - {{ trip.ended_at|moment('LL', false, true) }}</p>
                         <p class="text-left" data-toggle="tooltip" data-placement="top" title="Reservations"><i class="fa fa-user"></i> {{ trip.reservations }}</p>
                         <p><a class="btn btn-primary btn-block" :href="id + trip.links[0].uri">Details</a></p>
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->
             </div><!-- end col -->
             <div v-if="trips.length" class="col-sm-12 text-center">
-                <pagination :pagination.sync="pagination" :callback="searchTrips"></pagination>
+                <pagination :pagination="pagination" pagination-key="pagination" :callback="searchTrips"></pagination>
             </div>
         </div><!-- end row -->
     </div>
 </template>
 <script type="text/javascript">
+    import $ from 'jquery';
     export default{
         name: 'dashboard-group-trips',
         props: ['id'],
@@ -43,19 +44,16 @@
         methods:{
             searchTrips(){
                 // this.$refs.spinner.show();
-                this.resource.query().then(function(response){
-                    this.trips = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.resource.query().then((response) =>{
+                    this.trips = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
-                }, function (error) {
-                    // this.$refs.spinner.hide();
-                    //TODO add error alert
-                }).then(function () {
+                }, this.$root.handleApiError).then(() => {
                     $('[data-toggle="tooltip"]').tooltip();
                 });
             }
         },
-        ready(){
+        mounted(){
             this.searchTrips();
         }
     }

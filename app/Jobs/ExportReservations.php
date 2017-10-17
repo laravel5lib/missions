@@ -66,9 +66,9 @@ class ExportReservations extends Exporter
 
     private function getCompanions($companions)
     {
-        $array = $companions->map(function($companion) {
-            return $companion->given_names . ' ' 
-                    . $companion->surname 
+        $array = $companions->map(function ($companion) {
+            return $companion->given_names . ' '
+                    . $companion->surname
                     . '('. $companion->pivot->relationship .')';
         })->all();
 
@@ -79,7 +79,7 @@ class ExportReservations extends Exporter
 
     private function getPayments($dues)
     {
-        $array = $dues->map(function($due) {
+        $array = $dues->map(function ($due) {
             return $this->getPaymentDetails($due);
         })->all();
 
@@ -90,7 +90,7 @@ class ExportReservations extends Exporter
 
     private function getPaymentDetails($due)
     {
-        return $due->payment->cost->name 
+        return $due->payment->cost->name
             . ' [balance: $'
             . number_format($due->outstandingBalanceInDollars(), 2)
             . '] ('
@@ -101,7 +101,7 @@ class ExportReservations extends Exporter
     private function getCosts($reservation, $type)
     {
         $array = $this->getCostsByType($reservation, $type)
-                      ->map(function($cost) {
+                      ->map(function ($cost) {
                           return $this->getCostDetails($cost);
                       })->all();
 
@@ -117,12 +117,12 @@ class ExportReservations extends Exporter
 
     private function getCostDetails($cost)
     {
-        return $cost->name . ' ($'.number_format($cost->amountInDollars(),2).')';
+        return $cost->name . ' ($'.number_format($cost->amountInDollars(), 2).')';
     }
 
     private function getRequirements($requirements)
     {
-        $array = $requirements->map(function($requirement) {
+        $array = $requirements->map(function ($requirement) {
             return $requirement->requirement->name . ' ('.$requirement->status.')';
         })->all();
 
@@ -133,7 +133,7 @@ class ExportReservations extends Exporter
 
     private function getDeadlines($deadlines)
     {
-        $array = $deadlines->map(function($deadline) {
+        $array = $deadlines->map(function ($deadline) {
             return $deadline->name . ' ('.$deadline->date->format('M d, Y').')';
         })->all();
 

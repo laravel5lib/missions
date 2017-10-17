@@ -32,28 +32,27 @@ $api->version('v1', [
     $api->put('representatives/{id}/avatar', 'RepresentativeAvatarController@update');
     $api->resource('representatives', 'RepresentativeController');
 
+    $api->get('download/{path}', function ($path) {
+        $headers = [
+            'Content-Type' => Storage::mimetype($path),
+            'Content-Disposition' => 'attachment',
+        ];
+
+        return response()->make(Storage::get($path), 200, $headers);
+    })->where('path', '.+');
+
+    $api->get('play/{path}', function ($path) {
+        return response()->make(Storage::disk('s3')->get($path), 200, [
+            'Content-Type' => 'audio/mp3'
+        ]);
+    })->where('path', '.+');
+
 
     $api->group(['middleware' => ['api.auth']], function($api) {
 
         $api->resource('uploads', 'UploadsController');
         $api->get('images/{path}', 'UploadsController@display')->where('path', '.+');
         $api->get('files/{path}', 'UploadsController@display_file')->where('path', '.+');
-
-        $api->get('download/{path}', function ($path) {
-
-            $headers = [
-                'Content-Type' => Storage::mimetype($path),
-                'Content-Disposition' => 'attachment'
-            ];
-
-            return response()->make(Storage::get($path), 200, $headers);
-        })->where('path', '.+');
-
-        $api->get('play/{path}', function ($path) {
-            return response()->make(Storage::disk('s3')->get($path), 200, [
-                'Content-Type' => 'audio/mp3'
-            ]);
-        })->where('path', '.+');
 
         $api->post('/register', 'AuthenticationController@register');
         $api->post('/login', 'AuthenticationController@authenticate');

@@ -38,7 +38,7 @@ $api->version('v1', [
             'Content-Disposition' => 'attachment',
         ];
 
-        return response()->make(Storage::get($path), 200, $headers);
+        return response()->make(Storage::disk('s3')->get($path), 200, $headers);
     })->where('path', '.+');
 
     $api->get('play/{path}', function ($path) {

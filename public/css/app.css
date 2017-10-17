@@ -13202,6 +13202,7 @@ button.list-group-item-danger.active:focus {
 
 .panel-body {
   padding: 15px;
+  background-color: #fdfdfd;
 }
 
 .panel-body:before, .panel-body:after {
@@ -13216,6 +13217,7 @@ button.list-group-item-danger.active:focus {
 .panel-heading {
   padding: 10px 15px;
   border-bottom: 1px solid transparent;
+  background-color: #ffffff;
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
 }

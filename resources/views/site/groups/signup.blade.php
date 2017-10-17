@@ -18,13 +18,10 @@
         <div class="row">
             <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
                 <div class="panel panel-default">
+                    <div class="panel-heading text-center">
+                        <h4>I'm Interested in a Trip!</h4>
+                    </div>
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-12 text-center">
-                                <h4>I'm Interested in a Trip!</h4>
-                            </div>
-                        </div>
-                        <hr class="divider inv sm">
                         <group-interest-signup id="{{ $group->id }}"></group-interest-signup>
                     </div>
                 </div>

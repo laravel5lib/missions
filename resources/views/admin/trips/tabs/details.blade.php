@@ -82,7 +82,7 @@
                         <hr class="divider">
                         @if($trip->rep_id)
                         <label>Trip Rep</label>
-                        <p><a href="/admin/users/{{ $trip->rep_id }}">{{ $trip->rep->name or ''}}</a></p>
+                        <p>{{ $trip->rep->name or 'not assigned'}}</p>
                         <hr class="divider">
                         @endif
                         <label>Tags</label>

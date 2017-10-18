@@ -36,7 +36,8 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\TripInterestWasCreated' => [
             'App\Listeners\NotifyFacilitatorsOfNewTripInterest',
-            'App\Listeners\NotifyTripRepOfNewTripInterest'
+            'App\Listeners\NotifyTripRepOfNewTripInterest',
+            // 'App\Listeners\SendTripInterestConfirmationEmail'
         ]
     ];
 
@@ -149,16 +150,6 @@ class EventServiceProvider extends ServiceProvider
 
                 $cost->costAssignable->payments()->sync();
             }
-        });
-
-        TripInterest::created(function ($interest) {
-            $interest->todos()->saveMany([
-                new Todo(['task' => '1st Email Sent']),
-                new Todo(['task' => '1st Call Made']),
-                new Todo(['task' => '2nd Contact Made']),
-                new Todo(['task' => '3rd Contact Made']),
-                new Todo(['task' => '4th Contact Made'])
-            ]);
         });
     }
 }

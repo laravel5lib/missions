@@ -75,7 +75,7 @@ Vue.component('admin-campaign-trips', require('./components/campaigns/admin-camp
 Vue.component('admin-trip-reservations', require('./components/trips/admin-trip-reservations-list.vue'));
 Vue.component('admin-trip-facilitators', require('./components/trips/admin-trip-facilitators.vue'));
 Vue.component('admin-trip-duplicate', require('./components/trips/admin-trip-duplicate.vue'));
-Vue.component('admin-trip-create-update', require('./components/trips/admin-trip-create-update.vue'));
+Vue.component('campaign-trip-form', require('./components/trips/CampaignTripForm.vue'));
 Vue.component('cost-manager', require('./components/admin/cost-manager.vue'));
 Vue.component('admin-trip-description', require('./components/trips/admin-trip-description.vue'));
 Vue.component('deadlines-manager', require('./components/admin/deadlines-manager.vue'));
@@ -145,6 +145,12 @@ Vue.component('admin-users-list', require('./components/users/admin-users-list.v
 Vue.component('admin-user-create', require('./components/users/admin-user-create.vue'));
 Vue.component('admin-user-edit', require('./components/users/admin-user-edit.vue'));
 Vue.component('admin-user-delete', require('./components/users/admin-user-delete.vue'));
+
+/**
+ * Representative Components
+ */
+Vue.component('representative-list', require('./components/representatives/RepresentativeList.vue'));
+Vue.component('representative-edit-form', require('./components/representatives/RepresentativeEditForm.vue'));
 
 /**
  * Records Components
@@ -236,13 +242,13 @@ Vue.component('bootstrap-alert-error', {
     template: '<div><div :class="\'alert alert-danger alert-dismissible error-\' + field + \'-\' + validator" role="alert" v-bind="message"></div></div>',
 });
 Vue.component('phone-input', {
-    template: '<div><label for="infoPhone" v-if="label" v-text="label"></label><input ref="input" type="text" id="infoPhone" :class="classes" :value="value" @input="updateValue($event.target.value)" @focus="selectAll" @blur="formatValue" :placeholder="placeholder"></div>',
+    template: '<div><label for="infoPhone" v-if="label" v-text="label"></label><input ref="input" :name="name" type="text" id="infoPhone" :class="classes" :value="value" @input="updateValue($event.target.value)" @focus="selectAll" @blur="formatValue" :placeholder="placeholder"></div>',
     props: {
         value: { type: String, default: '' },
         label: { type: String, default: '' },
         classes: { type: String, default: 'form-control'},
         placeholder: { type: String, default: '(123) 456-7890' },
-
+        name: { type: String, default: 'phone' }
     },
     methods: {
         updateValue(value) {

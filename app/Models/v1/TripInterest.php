@@ -5,10 +5,11 @@ namespace App\Models\v1;
 use App\UuidForKey;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TripInterest extends Model
 {
-    use UuidForKey, Filterable;
+    use UuidForKey, Filterable, SoftDeletes;
 
     protected $fillable = [
         'name', 'email', 'phone', 'communication_preferences', 'trip_id', 'status'
@@ -46,5 +47,12 @@ class TripInterest extends Model
     public function todos()
     {
         return $this->morphMany(Todo::class, 'todoable');
+    }
+
+    public function scopeCurrent($query)
+    {
+        return $query->whereHas('trip', function ($trip) {
+            return $trip->current();
+        });
     }
 }

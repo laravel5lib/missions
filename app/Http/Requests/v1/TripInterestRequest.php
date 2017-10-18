@@ -27,10 +27,10 @@ class TripInterestRequest extends FormRequest
             'trip_id' => 'required|exists:trips,id',
             'name' => 'required|string',
             'email' => 'required|email',
-            'phone' => 'string',
-            'communication_preferences' => 'array',
+            'phone' => 'required|string',
+            'communication_preferences' => 'nullable|array',
             'communication_preferences.*' => 'in:email,phone,text',
-            'status' => 'string'
+            'status' => 'nullable|string'
         ];
     }
 }

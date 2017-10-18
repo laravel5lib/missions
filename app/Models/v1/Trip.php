@@ -120,13 +120,13 @@ class Trip extends Model
     }
 
     /**
-     * Get the trip's user rep.
+     * Get the trip's rep.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function rep()
     {
-        return $this->belongsTo(User::class, 'rep_id');
+        return $this->belongsTo(Representative::class, 'rep_id');
     }
 
     /**

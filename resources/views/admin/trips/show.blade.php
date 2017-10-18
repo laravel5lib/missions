@@ -1,73 +1,61 @@
 @extends('admin.layouts.default')
 
 @section('content')
-<div class="white-header-bg">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-8">
-                <h3 class="text-capitalize">
-                    {{ $trip->group->name }}'s {{ $trip->type }} Trip <br />
-                    <small>
-                        <i class="fa fa-map-marker"></i> {{ country($trip->country_code) }} &middot;
-                        <i class="fa fa-globe"></i> {{ $trip->campaign->name }}
-                    </small>
-                </h3>
-            </div>
-            <div class="col-sm-4 text-right">
-                <hr class="divider inv sm">
-                <div class="btn-group">
-                    <a href="{{ url('/admin/campaigns/'.$trip->campaign->id.'/trips') }}" class="btn btn-primary-darker"><span class="fa fa-chevron-left icon-left"></span></a>
+    <div class="white-header-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8">
+                    <h3 class="text-capitalize">
+                        {{ $trip->group->name }}'s {{ $trip->type }} Trip <br />
+                        <small>
+                            <i class="fa fa-map-marker"></i> {{ country($trip->country_code) }} &middot;
+                            <i class="fa fa-globe"></i> {{ $trip->campaign->name }}
+                        </small>
+                    </h3>
+                </div>
+                <div class="col-sm-4 text-right">
+                    <hr class="divider inv">
                     <div class="btn-group">
-                        <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Manage <i class="fa fa-angle-down"></i>
-                        </a>
-                        <ul class="dropdown-menu">
-                            @can('update', $trip)
-                            <li>
-                                <a href="{{ url('/admin/trips/' . $trip->id . '/edit')}}">Edit</a>
-                            </li>
-                            @endcan
-                            @can('create', \App\Models\v1\Reservation::class)
-                            <li>
-                                <a data-toggle="modal"
-                                   data-target="#addReservationModal"
-                                   data-backdrop="static">
-                                    Create Reservation
-                                </a>
-                            </li>
-                            @endcan
-                            @can('create', $trip)
-                            <li>
-                                <a data-toggle="modal" data-target="#duplicationModal">Duplicate</a>
-                            </li>
-                            @endcan
-                            @can('delete', $trip)
-                            <li role="separator" class="divider"></li>
-                            <li>
-                                <a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a>
-                            </li>
-                            @endcan
-                        </ul>
-                    </div><!-- end btn-group -->
+                        <a href="{{ url('/admin/campaigns/'.$trip->campaign->id.'/trips') }}" class="btn btn-link"><span class="fa fa-chevron-left icon-left"></span></a>
+                        <div class="btn-group">
+                            <a type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Manage <i class="fa fa-angle-down"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                @can('update', $trip)
+                                <li>
+                                    <a href="{{ url('/admin/trips/' . $trip->id . '/edit')}}">Edit</a>
+                                </li>
+                                @endcan
+                                @can('create', \App\Models\v1\Reservation::class)
+                                <li>
+                                    <a data-toggle="modal"
+                                       data-target="#addReservationModal"
+                                       data-backdrop="static">
+                                        Create Reservation
+                                    </a>
+                                </li>
+                                @endcan
+                                @can('create', $trip)
+                                <li>
+                                    <a data-toggle="modal" data-target="#duplicationModal">Duplicate</a>
+                                </li>
+                                @endcan
+                                @can('delete', $trip)
+                                <li role="separator" class="divider"></li>
+                                <li>
+                                    <a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a>
+                                </li>
+                                @endcan
+                            </ul>
+                        </div><!-- end btn-group -->
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<hr class="divider inv lg">
+    <hr class="divider inv lg">
     <div class="container">
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
-                <a href="#details" aria-controls="home" role="tab" data-toggle="tab">Details</a>
-            </li>
-            @can('view', \App\Models\v1\Reservation::class)
-                <li role="presentation">
-                    <a href="#reservations" aria-controls="profile" role="tab" data-toggle="tab">Reservations</a>
-                </li>
-            @endcan
-        </ul>
-
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane fade in active" id="details">
                 <div class="row">

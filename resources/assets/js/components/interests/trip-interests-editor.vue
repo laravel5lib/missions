@@ -4,25 +4,8 @@
 
         <div class="panel-heading">
             <div class="row">
-                <div class="col-xs-6">
+                <div class="col-xs-12">
                     <h5>Details</h5>
-                </div>
-                <div class="col-xs-6 text-right">
-                    <button class="btn btn-xs btn-default-hollow"
-                            @click="editMode = !editMode"
-                            v-if="!editMode && app.user.can.update_trip_interests">
-                        Edit
-                    </button>
-                    <button class="btn btn-xs btn-default-hollow"
-                            @click="editMode = !editMode"
-                            v-if="editMode">
-                        Cancel
-                    </button>
-                    <button class="btn btn-xs btn-primary"
-                            @click="save"
-                            v-if="editMode">
-                        Save
-                    </button>
                 </div>
             </div>
         </div>
@@ -80,7 +63,10 @@
                 <div class="col-sm-6">
                     <label>Communication Preferences</label>
                     <h5>
-                        <span class="label label-default" style="margin-right:5px" v-for="preference in interest.communication_preferences">
+                        <span v-if=" ! interest.communication_preferences.length">
+                            None specified
+                        </span>
+                        <span class="label label-default" style="margin-right:5px" v-for="preference in interest.communication_preferences" v-else>
                             {{ preference|capitalize }}
                         </span>
                     </h5>
@@ -95,6 +81,30 @@
                 <div class="col-sm-6">
                     <label>Last Updated at</label>
                     <p>{{ interest.updated_at | moment('lll') }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="row">
+                <div class="col-xs-4">
+                    <button class="btn btn-link" @click="archive"><i class="fa fa-archive"></i> Archive</button>
+                </div>
+                <div class="col-xs-8 text-right">
+                    <button class="btn btn-default"
+                            @click="editMode = !editMode"
+                            v-if="!editMode && app.user.can.update_trip_interests">
+                        Edit
+                    </button>
+                    <button class="btn btn-default-hollow"
+                            @click="editMode = !editMode"
+                            v-if="editMode">
+                        Cancel
+                    </button>
+                    <button class="btn btn-primary"
+                            @click="save"
+                            v-if="editMode">
+                        <i class="fa fa-save"></i> Save
+                    </button>
                 </div>
             </div>
         </div>
@@ -145,6 +155,26 @@
                     this.showSuccess = true;
                     this.editMode = false;
                     this.fetch();
+                });
+            },
+            archive() {
+                swal("Are you sure?", "This will store the interest in the archives.", "warning", {
+                    buttons: ["Nevermind", "Archive"]
+                })
+                .then((value) => {
+                    if (value) {
+                        this.$http.delete('interests/' + this.id).then((response) => {
+                            swal("Archived!", "Trip interested archived.", "success", {
+                                closeOnClickOutside: false
+                            })
+                            .then((value) => {
+                                if (value) {
+                                    window.location.href = '/admin/reservations/prospects';
+                                }
+                            });
+                            this.editMode = false;
+                        });
+                    }
                 });
             },
         },

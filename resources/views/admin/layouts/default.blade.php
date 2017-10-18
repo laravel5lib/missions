@@ -10,7 +10,6 @@
   <div id="admin-page-wrap"><!-- page-wrap important for sticky footer -->
     @yield('content')
   </div>
-  @include('_footer')
 @endsection
 
 @section('scripts')

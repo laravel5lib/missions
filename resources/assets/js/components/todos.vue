@@ -24,10 +24,10 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h5>ToDos</h5>
+            <h3>Tasks</h3>
         </div>
         <div class="list-group">
-            <div class="list-group-item" v-if="canModify">
+            <div class="list-group-item" v-if="app.user.can.create_todos">
                 <div class="row">
                     <div class="col-xs-2 col-sm-1 text-muted">
                         <i class="fa fa-lg fa-plus-square-o" style="margin-right: 10px"></i>
@@ -64,7 +64,7 @@
                                 Completed on {{ todo.completed_at | moment('llll') }} by {{ todo.user.data.name }}
                             </small>
                         </div>
-                        <div class="col-xs-1 col-sm-1 text-right" v-if="canModify">
+                        <div class="col-xs-1 col-sm-1 text-right" v-if="app.user.can.delete_todos">
                             <i class="fa fa-times fa-lg text-muted remove-todo"
                                @click="selectedTodo = todo,deleteModal = true">
                             </i>
@@ -131,14 +131,11 @@
             'per_page': {
                 type: Number,
                 default: 10
-            },
-            'canModify': {
-                type: Number,
-                default: 0
             }
         },
         data() {
             return {
+                app: MissionsMe,
                 todos: {},
                 selectedTodo: {},
                 newTodo: {
@@ -177,7 +174,7 @@
         },
         methods: {
             editTodo(todo) {
-                if ( ! this.canModify) return;
+                if ( ! app.user.can.update_todos) return;
                 this.editMode = true;
                 this.selectedTodo = todo;
             },

@@ -18,7 +18,7 @@ class TransactionFilter extends Filter
     public $searchable = [
         'details->last_four',
         'details->brand', 'details->cardholder', 'details->number',
-        'details->charge_id', 'fund.name', 'donor.name',
+        'details->charge_id', 'fund.name', 'donor.first_name', 'donor.last_name',
         'fund.class', 'fund.item', 'donor.phone', 'donor.email'
     ];
 

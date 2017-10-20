@@ -59,7 +59,7 @@
                     </div>
                 </div>
 
-                <modal-donate title="{{ $fundraiser->fund->name }}" stripe-key="{{ env('STRIPE_KEY') }}" auth="{{ auth()->check() ? 1 : 0 }}"
+                <modal-donate title="{{ $fundraiser->fund->name }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}" auth="{{ auth()->check() ? 1 : 0 }}"
                               type="{{ $type or '' }}" type-id="{{ $slug or '' }}" fund-id="{{ $fundraiser->fund->id }}" recipient="{{ $fundraiser->fund->name }}"></modal-donate>
 
                 <div class="sharethis-inline-share-buttons"></div>

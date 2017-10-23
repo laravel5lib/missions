@@ -10,7 +10,7 @@
                 </h5>
             </div>
             <div class="col-xs-6 text-right tour-step-request">
-                <a class="btn btn-primary btn-xs" href="mailto:{{ $rep->email }}?subject=New Companion(s) Request&body=Please list the names, emails and your relationship to of those whom you'd like to be travel companions with. Please remember that you have a limited number of companions available. Thank you! Your trip rep will contact you soon.">
+                <a class="btn btn-primary btn-xs" href="mailto:{{ $rep ? $rep->email : 'go@missions.me' }}?subject=New Companion(s) Request&body=Please list the names, emails and your relationship to of those whom you'd like to be travel companions with. Please remember that you have a limited number of companions available. Thank you! Your trip rep will contact you soon.">
                     <span class="fa fa-group"></span> Request Companions
                 </a>
             </div>

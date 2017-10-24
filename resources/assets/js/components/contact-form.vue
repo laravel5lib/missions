@@ -29,7 +29,7 @@
             <div class="form-group" :class="{ 'has-error': errors.has('comments') }">
                 <div class="col-sm-12">
                     <label for="name">Questions, Comments, or Ideas</label>
-                    <textarea type="text" class="form-control" name="comments" id="comments" v-model="comments" name="comments="'required'" rows=10 maxlength" v-validate="500" autosize></textarea>
+                    <textarea type="text" class="form-control" name="comments" id="comments" v-model="comments" rows=10 maxlength="500" v-validate="'required'" autosize></textarea>
                 </div>
             </div>
             <div class="form-group">

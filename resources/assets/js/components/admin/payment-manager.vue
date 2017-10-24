@@ -23,7 +23,7 @@
             <tr v-for="payment in orderByProp(payments, 'due_at')" class="toolbar">
                 <td class="col-xs-3">{{ currency(payment.amount_owed) }}</td>
                 <td class="col-xs-2">{{ payment.percent_owed.toFixed(2) }}%</td>
-                <td class="col-xs-3" v-if="payment.due_at">{{ payment.due_at|moment('lll') }}</td>
+                <td class="col-xs-3" v-if="payment.due_at">{{ payment.due_at|mFormat('ll') }}</td>
                 <td class="col-xs-3" v-else>Upfront</td>
                 <td class="col-xs-2">{{ payment.upfront ? 'N/A' : payment.grace_period }} {{ payment.upfront ? '' : (payment.grace_period > 1 ? 'days' : 'day') }}</td>
                 <td class="col-xs-2">
@@ -86,7 +86,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="dueAt">Due Date</label><br />
-                                    <date-picker v-model="newPayment.due_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
+                                    <date-picker v-model="newPayment.due_at" :view-format="['YYYY-MM-DD HH:mm:ss']" type="date"></date-picker>
                                 </div>
                             </div>
                             <div class="col-sm-12">

@@ -278,14 +278,14 @@
                     }
                 },
                 transactions: null,
-                funds: null,
+                funds: [],
                 toFund: null,
                 fromFund: null,
                 selectedFund: null,
                 designatedFund: {
                     name: null
                 },
-                donors: null,
+                donors: [],
                 selectedDonor: null,
                 card: {
                     cardholder: null,
@@ -346,11 +346,11 @@
                     }
                 };
                 this.transactions = null;
-                this.funds = null;
+                this.funds = [];
                 this.toFund = null;
                 this.fromFund = null;
                 this.selectedFund = null;
-                this.donors = null;
+                this.donors = [];
                 this.selectedDonor = null;
                 this.card = {
                     cardholder: null,
@@ -489,6 +489,7 @@
                     this.$http.post('transactions', data).then((response) => {
                         this.$refs.transactionspinner.hide();
                         this.$root.$emit('showSuccess', 'Transaction successfully created.');
+//                        this.$root.$emit('transactionCreated');
                         this.$emit('transactionCreated');
                         this.reset();
                     },(response) =>  {

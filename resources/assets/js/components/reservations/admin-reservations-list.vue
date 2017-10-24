@@ -8,17 +8,30 @@
 			<div class="col-sm-12">
 				<form class="form-inline" novalidate>
                 	<div class="form-inline" style="display: inline-block;">
-                    	<div class="form-group">
+                    	<div class="form-group" style="margin-right: 1rem">
 	                        <label>Show</label>
 	                        <select class="form-control  input-sm" v-model="per_page">
 	                            <option v-for="option in perPageOptions" :value="option">{{option}}</option>
 	                        </select>
                         </div>
+						<div class="form-group">
+							<label><i class="fa fa-search"></i> Search By</label>
+							<select class="form-control  input-sm" v-model="searchBy">
+								<option value="given_names">Given Names</option>
+								<option value="surname">Surname</option>
+								<option value="email">Email</option>
+								<option value="phone_one">Primary Phone</option>
+								<option vallue="phone_two">Secondary Phone</option>
+							</select>
+						</div>
                     </div>
-                    <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" v-model="search" debounce="500" placeholder="Search for anything">
-                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    <div class="input-group input-group-sm" style="margin-right: 1rem">
+                        <input type="text" class="form-control" v-model="search" debounce="500" placeholder="Enter a search term">
+                        <span class="input-group-btn">
+							<button class="btn btn-default" @click.prevent="searchReservations()"> Search</button>
+						</span>
                     </div>
+					<hr class="divider inv visible-xs visible-sm">
                     <div id="toggleFields" class="form-toggle-menu dropdown" style="display: inline-block;">
                         <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         Fields
@@ -132,11 +145,11 @@
 						</ul>
                     </div>
 					<button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
-						Filters
 						<i class="fa fa-filter"></i>
 					</button>
 					<template v-if="app.user.can.create_reports">
 						<export-utility url="reservations/export"
+										label=""
 										:options="exportOptions"
 										:filters="exportFilters">
 						</export-utility>
@@ -262,7 +275,7 @@
 					<td v-if="isActive('gender')">{{reservation.gender|capitalize}}</td>
 					<td v-if="isActive('status')">{{reservation.status|capitalize}}</td>
 					<td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
-					<td v-if="isActive('email')">{{reservation.user.data.email|capitalize}}</td>
+					<td v-if="isActive('email')">{{reservation.email}}</td>
 					<td v-if="isActive('designation')">{{reservation.arrival_designation|capitalize}}</td>
 					<td v-if="isActive('requirements')">
 						<div style="position:relative;">
@@ -350,6 +363,7 @@
 				perPageOptions: [5, 10, 25, 50, 100],
 				pagination: {current_page: 1},
 				search: '',
+				searchBy: 'given_names',
 				activeFields: ['given_names', 'surname', 'group', 'campaign', 'type', 'percent_raised'],
 				maxActiveFields: 6,
 				maxActiveFieldsOptions: [2, 3, 4, 5, 6, 7, 8, 9],
@@ -481,11 +495,6 @@
 				}
 				this.updateConfig();
 			},
-			'search'(val, oldVal) {
-//                this.page = 1;
-                this.pagination.current_page = 1;
-                this.searchReservations();
-			},
 			'per_page'(val, oldVal) {
                 this.updateConfig();
                 this.searchReservations();
@@ -604,7 +613,7 @@
                     notInTransport: null,
                     traveling: null,
                     notTraveling: null,
-                    region: '',
+					region: ''
                 };
 			},
 			country(code){
@@ -617,6 +626,7 @@
 				let params = {
 					trip_id: this.tripId ? new Array(this.tripId) : undefined,
 					include: 'trip.campaign,trip.group,costs.payments,user,requirements,rep,fund,squads.team',
+					searchBy: this.searchBy,
 					search: this.search ? this.search.trim() : this.search,
 					per_page: this.per_page,
 					page: this.pagination.current_page,

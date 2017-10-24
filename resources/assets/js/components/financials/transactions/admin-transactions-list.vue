@@ -541,7 +541,7 @@
                 this.searchTransactions();
             });
 
-            // load view state
+          // load view state
             if (localStorage[this.storageName]) {
                 this.filters.minDate = null;
                 this.filters.maxDate = null;

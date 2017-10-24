@@ -51,8 +51,8 @@
         },
         methods: {
             transactionCreated() {
-                this.$emit('reconcileFund');
-                this.$emit('refreshTransactions');
+                this.$root.$emit('reconcileFund');
+                this.$root.$emit('refreshTransactions');
             }
         }
     }

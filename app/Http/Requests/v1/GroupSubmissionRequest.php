@@ -33,14 +33,13 @@ class GroupSubmissionRequest extends FormRequest
             'type'         => 'required|in:church,business,nonprofit,youth,other',
             'timezone'     => 'required|timezone',
             'country_code' => 'required|in:' . Country::codes(),
-            'description'  => 'string|max:120',
-            'address_one'  => 'string',
-            'address_two'  => 'string',
-            'city'         => 'string',
-            'state'        => 'string',
-            'zip'          => 'string',
+            'address_one'  => 'nullable|string',
+            'address_two'  => 'nullable|string',
+            'city'         => 'nullable|string',
+            'state'        => 'nullable|string',
+            'zip'          => 'nullable|string',
             'phone_one'    => 'required|string',
-            'phone_two'    => 'string',
+            'phone_two'    => 'nullable|string',
             'email'        => 'required|email'
         ];
     }

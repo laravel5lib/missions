@@ -62,7 +62,7 @@
                         <p><span class="label label-default">{{ cost.type|capitalize }}</span></p>
                     </div>
                     <div class="col-sm-10">
-                        <p class="small"><i class="fa fa-calendar-o"></i> Effective Date: <em class="text-primary">{{ cost.active_at|moment('lll') }}</em></p>
+                        <p class="small"><i class="fa fa-calendar-o"></i> Effective Date: <em class="text-primary">{{ cost.active_at|mFormat('ll') }}</em></p>
                     </div>
                 </div>
                 <div class="row">
@@ -118,7 +118,7 @@
                                     <div class="form-group" :class="{'has-error': errors.has('costActive', 'cost-create')}">
                                         <label for="newCost_active_at">Effective Date</label>
                                         <br>
-                                        <date-picker v-model="newCost.active_at" :view-format="['YYYY-MM-DD HH:mm:ss']" name="costActive" v-validate="'required'"></date-picker>
+                                        <date-picker v-model="newCost.active_at" type="date" :view-format="['YYYY-MM-DD HH:mm:ss']" name="costActive" v-validate="'required'"></date-picker>
                                         <span class="help-block">This is when the cost goes into effect and will be applied. You should stagger this date for sets of incremental costs.</span>
                                     </div>
                                     <div class="form-group" :class="{'has-error': errors.has('costDescription', 'cost-create')}">
@@ -163,7 +163,7 @@
                                     <div class="form-group" :class="{'has-error': errors.has('costActive', 'cost-edit')}">
                                         <label for="selectedCost_active_at">Effective Date</label>
                                         <br>
-                                        <date-picker v-model="selectedCost.active_at" :view-format="['YYYY-MM-DD HH:mm:ss']" data-vv-value-path="model" name="costActive" v-validate="'required'"></date-picker>
+                                        <date-picker v-model="selectedCost.active_at" type="date" :view-format="['YYYY-MM-DD HH:mm:ss']" data-vv-value-path="model" name="costActive" v-validate="'required'"></date-picker>
                                         <span class="help-block">This is when the cost goes into effect and will be applied. You should stagger this date for sets of incremental costs.</span>
                                     </div>
                                     <div class="form-group" :class="{'has-error': errors.has('costAmount', 'cost-edit')}">

@@ -176,7 +176,9 @@
 					phone_one: '',
 					complete_at: '',
 				});
-			},
+              this.$validator.reset();
+
+            },
 			getCauses() {
 				this.$http
 						.get(`causes`)

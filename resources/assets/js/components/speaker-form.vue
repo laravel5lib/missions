@@ -102,6 +102,8 @@
                     zip: '',
                     comments: '',
                 });
+              this.$validator.reset();
+
             },
             submit() {
                 let data = {

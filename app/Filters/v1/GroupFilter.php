@@ -42,6 +42,14 @@ class GroupFilter extends Filter
         }
     }
 
+    /**
+     * Extended method NOT WORKING
+     */
+    public function search($terms)
+    {
+        return $this->where('name', 'LIKE', "%$terms%");
+    }
+
 
     /**
      * Find by public or private

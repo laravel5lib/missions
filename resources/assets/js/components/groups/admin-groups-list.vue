@@ -245,7 +245,7 @@
                 per_page: 10,
                 perPageOptions: [5, 10, 25, 50, 100],
                 pagination: {current_page: 1},
-                search: '',
+                search: null,
                 filters: {
                     status: '',
                     type: ''
@@ -333,21 +333,21 @@
             resetFilter(){
                 this.orderByField = 'name';
                 this.direction = 1;
-                this.search = '';
+                this.search = null;
                 this.status = '';
                 this.type = '';
             },
-            debouncedSearch: _.debounce(function() { this.searchgroups() }, 250),
+            debouncedSearch: _.debounce(function() { this.searchGroups() }, 250),
             searchGroups(){
                 this.$http.get('groups', { params: {
-                    include: 'trips:status(active),notes',
-                    sort: this.orderByField + (this.direction ? ' ASC' : ' DESC'),
                     isPublic: this.filters.status,
                     type: this.filters.type,
                     search: this.search,
                     per_page: this.per_page,
                     page: this.pagination.current_page,
-                    pending: this.pending ? true : null
+                    pending: this.pending ? true : null,
+                    include: 'trips:status(active),notes',
+                    sort: this.orderByField + (this.direction ? '|asc' : '|desc'),
                 }}).then((response) => {
                     this.pagination = response.data.meta.pagination;
                     this.groups = response.data.data;

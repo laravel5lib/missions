@@ -328,7 +328,8 @@
                 return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields
             },
             setOrderByField(field){
-                return this.orderByField = field, this.direction = 1;
+              this.direction = 1;
+              this.orderByField = field;
             },
             resetFilter(){
                 this.orderByField = 'name';
@@ -339,16 +340,17 @@
             },
             debouncedSearch: _.debounce(function() { this.searchgroups() }, 250),
             searchGroups(){
-                this.$http.get('groups', { params: {
-                    include: 'trips:status(active),notes',
-                    sort: this.orderByField + (this.direction ? ' ASC' : ' DESC'),
-                    isPublic: this.filters.status,
-                    type: this.filters.type,
-                    search: this.search,
-                    per_page: this.per_page,
-                    page: this.pagination.current_page,
-                    pending: this.pending ? true : null
-                }}).then((response) => {
+              let params = {
+                include: 'trips:status(active),notes',
+                sort: `${this.orderByField}|${this.direction === 1 ? 'ASC' : 'DESC'}`,
+                isPublic: this.filters.status,
+                type: this.filters.type,
+                search: this.search,
+                per_page: this.per_page,
+                page: this.pagination.current_page,
+                pending: this.pending ? true : null
+              };
+                this.$http.get('groups', { params: params }).then((response) => {
                     this.pagination = response.data.meta.pagination;
                     this.groups = response.data.data;
                 }, (error) =>  {

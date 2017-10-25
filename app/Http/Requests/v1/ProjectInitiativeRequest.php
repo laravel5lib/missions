@@ -28,10 +28,10 @@ class ProjectInitiativeRequest extends FormRequest
             'type'         => 'required|max:50',
             'country_code' => 'required|in:' . Country::codes(),
             'short_desc'   => 'required|max:255',
-            'upload_id'    => 'exists:uploads,id',
-            'active'       => 'boolean',
-            'started_at'   => 'required|date',
-            'ended_at'     => 'required|date'
+            'upload_id'    => 'nullable|exists:uploads,id',
+            'active'       => 'nullable|boolean',
+            'started_at'   => 'required|date_format:Y-m-d H:i:s',
+            'ended_at'     => 'required|date_format:Y-m-d H:i:s'
         ];
     }
 }

@@ -32,10 +32,23 @@
                 </div>
                 <div class="col-sm-6">
                     <label>Start Date</label>
-                    <input type="text" class="form-control" v-model="initiative.started_at" v-if="editMode">
+                    <template v-if="editMode">
+                        <date-picker v-model="initiative.started_at"
+                                        :view-format="['YYYY-MM-DD HH:mm:ss']"
+                                        v-error-handler="{ value: initiative.started_at, client: 'start', server: 'started_at' }" name="start"
+                                        v-validate="'required'">
+                        </date-picker>
+                    </template>
                     <p v-else>{{ initiative.started_at | moment('ll') }}</p>
+
                     <label>End Date</label>
-                    <input type="text" class="form-control" v-model="initiative.ended_at" v-if="editMode">
+                    <template v-if="editMode">
+                        <date-picker v-model="initiative.ended_at"
+                                        :view-format="['YYYY-MM-DD HH:mm:ss']"
+                                        v-error-handler="{ value: initiative.ended_at, client: 'end', server: 'ended_at' }" name="end"
+                                        v-validate="'required'">
+                        </date-picker>
+                    </template>
                     <p v-else>{{ initiative.ended_at | moment('ll') }}</p>
                 </div>
             </div>
@@ -54,11 +67,16 @@
     </div>
 </template>
 <script>
+    import utilities from'../utilities.mixin';
+    import errorHandler from'../error-handler.mixin';
     export default {
         name: 'initiative-editor',
+        mixins: [utilities, errorHandler],
         data() {
             return{
                 initiative: {
+                    started_at: null,
+                    ended_at: null,
                     country: {
                         code: null
                     }
@@ -135,7 +153,7 @@
                 }
             }
         },
-        ready () {
+        mounted () {
             if ( ! this.newOnly) {
                 this.fetch();
                 this.editMode = false;

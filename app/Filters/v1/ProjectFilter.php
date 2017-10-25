@@ -19,12 +19,10 @@ class ProjectFilter extends Filter
      */
     public $sortable = ['name', 'created_at'];
 
-    /**
-     * Default searchable fields.
-     *
-     * @var array
-     */
-    public $searchable = ['name', 'user.name', 'group.name', 'initiative.type'];
+    public function search($terms)
+    {
+        return $this->where('name', 'LIKE', "%$terms%");
+    }
 
     /**
      * Is currently active.

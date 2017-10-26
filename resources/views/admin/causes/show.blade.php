@@ -49,16 +49,16 @@
             <div class="col-md-6">
                 <div class="circle-tile ">
                     <div class="circle-tile-content">
-                        <div class="circle-tile-description">New</div>
+                        <div class="circle-tile-description">Current</div>
                         <div class="circle-tile-name">{{ $cause->name }} Projects</div>
                         <div class="circle-tile-number">{{ $cause->projects()->new()->count() }}</div>
                     </div>
                 </div>
                 <div class="circle-tile ">
                     <div class="circle-tile-content">
-                        <div class="circle-tile-description">Funded</div>
+                        <div class="circle-tile-description">Total</div>
                         <div class="circle-tile-name">{{ $cause->name }} Projects</div>
-                        <div class="circle-tile-number">{{ $cause->projects()->funded()->count() }}</div>
+                        <div class="circle-tile-number">{{ $cause->projects()->count() }}</div>
                     </div>
                 </div>
             </div>

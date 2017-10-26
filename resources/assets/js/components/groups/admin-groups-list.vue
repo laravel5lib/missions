@@ -245,7 +245,7 @@
                 per_page: 10,
                 perPageOptions: [5, 10, 25, 50, 100],
                 pagination: {current_page: 1},
-                search: '',
+                search: null,
                 filters: {
                     status: '',
                     type: ''
@@ -334,11 +334,11 @@
             resetFilter(){
                 this.orderByField = 'name';
                 this.direction = 1;
-                this.search = '';
+                this.search = null;
                 this.status = '';
                 this.type = '';
             },
-            debouncedSearch: _.debounce(function() { this.searchgroups() }, 250),
+            debouncedSearch: _.debounce(function() { this.searchGroups() }, 250),
             searchGroups(){
               let params = {
                 include: 'trips:status(active),notes',

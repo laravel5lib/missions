@@ -100,23 +100,20 @@
 					onlyPublished: true,
 					onlyPublic: true,
 					groups: new Array(this.groupId),
-					campaign: this.campaignId,
+					campaign: this.campaign,
 					sort: 'spots|desc',
-					//per_page: 8,
-					//search: this.searchText,
 					page: this.pagination.current_page,
 				});
-				// this.$refs.spinner.show();
 				resource.query().then((response) => {
 					this.pagination = response.data.meta.pagination;
 					this.trips = response.data.data;
 
-					let cId = this.campaignId, calcLowest = this.calcStartingCost;
+					let cId = this.campaign, calcLowest = this.calcStartingCost;
 					_.each(this.trips, function (trip, index, list) {
 						list[index].lowest = calcLowest(trip.costs.data);
 					});
 				}, (error) =>  {
-					// this.$refs.spinner.hide();
+					console.log(error);
 				});
 			},
 			calcStartingCost(costs) {
@@ -138,14 +135,9 @@
             });
             this.getTrips();
 
-			if (this.groupId && this.campaignId && this.groupId.length>0 && !this.$parent.currentView) {
+			if (this.groupId && this.campaign && this.groupId.length>0 && !this.$parent.currentView) {
 				this.getTrips();
 			}
-		},
-		activated(){
-//			this.groupId = this.$parent.groupId;
-//			this.campaign = this.$parent.campaignId;
-
 		}
 	}
 </script>

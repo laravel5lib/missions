@@ -60,6 +60,7 @@
                                   :value="selectedSponsor"
                                   :options="sponsors"
                                   :on-search="getSponsors"
+                                  v-model="selectedSponsor"
                                   label="name"
                                   v-if="editMode">
                         </v-select>
@@ -243,7 +244,7 @@
                     this.editMode = false;
                     this.$refs.loader.hide();
                     this.$root.$emit('showSuccess', 'Your changes were saved successfully.');
-                },function() {
+                }).catch((error) => {
                     this.$refs.loader.hide();
                     this.$root.$emit('showError', 'There are problems with the form.');
                 });
@@ -253,7 +254,7 @@
                 this.$http.post('projects', this.project).then((response) => {
                     this.$refs.loader.hide();
                     window.location = '/admin/projects/' + response.data.data.id;
-                },function() {
+                }).catch((error) => {
                     this.$refs.loader.hide();
                     this.$root.$emit('showError', 'There are problems with the form.');
                 });

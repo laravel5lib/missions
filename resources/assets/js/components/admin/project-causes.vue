@@ -1,40 +1,44 @@
 <template>
     <div>
-        <div class="row">
-            <div class="col-sm-12">
-                <form class="form-inline text-right" novalidate>
-                    <template v-if="app.user.can.create_reports">
-                        <export-utility url="causes/export"
-                             :options="exportOptions"
-                             :filters="exportFilters">
-                        </export-utility>
-                    </template>
-                </form>
-            </div>
-        </div>
-        <hr>
-        <div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-            <div v-for="(cause, index) in causes" class="col-sm-6 col-md-4" style="display:flex">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h5 class="text-center">{{ cause.name }}</h5>
-                    </div>
-                    <div class="panel-body text-center">
-                        <!--<p class="badge">{{ cause.status|capitalize }}</p><br>-->
-                        <p class="small">{{ cause.short_desc }}</p>
-                        <label>Countries</label>
-                        <p class="small"><span v-for="country in cause.countries">
-								{{ country.name }}<span v-show="index + 1 != cause.countries.length">, </span>
-						</span></p>
-                        <label>Projects Funded</label>
-                        <p>{{ cause.projects_funded }}</p>
-                        <!--<h3 class="text-success">{{ currency(trip.starting_cost) }}</h3>-->
-                        <a :href="'/admin/causes/' +  cause.id  + '/current-projects'" class="btn btn-primary-hollow btn-sm"><i class="fa fa-cog"></i> Manage</a>
+        <div class="row">         
+            <div class="col-xs-12 panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <h3>Project Causes</h3>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <hr class="divider inv sm">
+                            <button data-toggle="modal" data-target="#causeEditor" class="btn btn-primary">
+                                <i class="fa fa-plus icon-left"></i> New 
+                            </button>
+                        </div>
                     </div>
                 </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Cause</th>
+                            <th>Countries</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(cause, index) in causes">
+                            <td>{{ cause.name }}</td>
+                            <td>
+                                <span v-for="country in cause.countries">
+                                    {{ country.name }}<span v-show="index + 1 != cause.countries.length">, </span>
+                                </span>
+                            </td>
+                            <td>
+                                <a :href="'/admin/causes/' +  cause.id  + '/current-projects'"><i class="fa fa-cog"></i> Manage</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </div><!-- end row -->
-
+        </div>
     </div>
 </template>
 <script type="text/javascript">

@@ -562,7 +562,9 @@
                 this.email ='';
                 this.spoke_to_rep = undefined;
                 this.attemptSubmit = false;
-                $('#collapseGroupForm').collapse('hide');
+              this.$validator.reset();
+              $('#collapseGroupForm').collapse('hide');
+
             },
             submit(){
                 this.$validator.validateAll().then(result => {

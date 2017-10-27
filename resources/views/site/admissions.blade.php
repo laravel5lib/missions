@@ -76,7 +76,7 @@
 						    </div>
 						    <div id="collapseOne" class="panel-collapse collapse">
 						      <div class="panel-body">
-						        <p class="small">The main components of Missions.Me College is to grow, serve, lead and go. The vision of Missions.Me is what drives our students to live the impossible. Our students have the opportunity to earn an associates or bachelors degree online with our accredited partner Southeastern University. As part of their education, students will earn college credit by serving within our ministry and leading others to live the impossible. Students will also attend at least one mission trip a year.</p>
+						        <p class="small">The main components of Missions.Me College is to grow, serve, lead and go. The vision of Missions.Me is what drives our students to live the impossible. Our students have the opportunity to earn an associates or bachelors degree online with Southeastern University. As part of their education, students will earn college credit by serving within our ministry and leading others to live the impossible. Students will also attend at least one mission trip a year.</p>
 						      </div>
 						    </div>
 						  </div>
@@ -123,25 +123,13 @@
 						</div><!-- end panel -->
 						<div class="panel panel-default panel-primary">
 						    <div class="panel-heading">
-						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">
-						          When does the program start and end?
-						        </a>
-						    </div>
-						    <div id="collapseSeven" class="panel-collapse collapse">
-						      <div class="panel-body">
-						        <p class="small">August 21, 2017 - August 4, 2018</p>
-						      </div>
-						    </div>
-						</div><!-- end panel -->
-						<div class="panel panel-default panel-primary">
-						    <div class="panel-heading">
 						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseEleven">
 						          When is the application deadline?
 						        </a>
 						    </div>
 						    <div id="collapseEleven" class="panel-collapse collapse">
 						      <div class="panel-body">
-						        <p class="small">The application deadline for Fall 2017 is currently closed. Applications are currently open for Fall 2018.</p>
+						        <p class="small">Missions.Me College is currently accepting applications for Fall 2018. There are a limited number of spots in our program, so completing the application as possible is encouraged. Admission will be closed once the spots are filled.</p>
 						      </div>
 						    </div>
 						</div><!-- end panel -->
@@ -183,20 +171,6 @@
 						      </div>
 						    </div>
 					  	</div><!-- end panel -->
-						<div class="panel panel-default panel-primary">
-						    <div class="panel-heading">
-						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwelve">
-						          What degrees are offered?
-						        </a>
-						    </div>
-						    <div id="collapseTwelve" class="panel-collapse collapse">
-						      <div class="panel-body">
-						        <p class="small">Students can enroll in one of 3 degree programs offered through the Southeastern University extension site here at MMC. The academic programs of choice are the Associate of Arts (AA), Associate of Ministerial Leadership (AML) and Bachelor of Science in Ministerial Leadership.</p>
-
-								<p class="small">You can see what specific classes are offered in each academic program by clicking here and by clicking on the appropriate degree program.</p>
-						      </div>
-						    </div>
-						</div><!-- end panel -->
 						<div class="panel panel-default panel-primary">
 						    <div class="panel-heading">
 						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThirteen">

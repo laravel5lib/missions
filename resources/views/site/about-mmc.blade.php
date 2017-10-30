@@ -29,7 +29,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 		    <li><a href="/academics">Academics</a></li>
 		    <li><a href="/student-life">Student Life</a></li>
 		    <li><a href="/admissions">Admissions</a></li>
-		    <li><a href="/mmc-faqs">FAQ's</a></li>
+		    <li><a href="/admissions#faq">FAQ's</a></li>
 		    <li class="pull-right"><a class="btn-college-nav" target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></li>
 		</ul>
 		<div class="btn-group btn-group-justified visible-xs-block visible-sm-block" role="group">
@@ -57,9 +57,13 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">About MMC</h2>
 				</div>
 				<div class="col-sm-8 col-md-9">
-					<p class="small">Missions.Me College (MMC) is an extension site of Southeastern University, an accredited university located in Lakeland, Florida. Through MMC, students will have the opportunity to pursue an associate degree and/or bachelor degree. Students will enroll in a full time course load every semester, putting them on track to earn their associate degree in 2 years or bachelor’s degree in 4 years. Students with previous college credits may be eligible to transfer their previous credits into our program as well.</p>
+					<p class="small">Missions.Me College (MMC) is an extension site of Southeastern University, an accredited** university located in Lakeland, Florida. Through Southeastern University, students will have the opportunity to pursue an associate degree and/or bachelor degree. Students will enroll in a full time course load every semester, putting them on track to earn their associate degree in 2 years or bachelor’s degree in 4 years. Students with previous college credits may be eligible to transfer their previous credits.</p>
 
-					<p class="small">Students have variety in their schedules, allowing them to engage and learn in a multitude of ways. Students will receive college credits through their online coursework and by serving in our ministry practicum. Students will also participate in weekly leadership training and Chapels led by our Missions.Me Staff. Our Missions.Me College students also will participate in our world changing mission trips.</p>
+					<p class="small">Students have variety in their schedules, allowing them to engage and learn in a multitude of ways. Students will receive college credits through their SEU online coursework and by serving in our ministry practicum. Students will also participate in weekly leadership training and Chapels led by our Missions.Me Staff. The Missions.Me College students will participate in our world changing mission trips.</p>
+
+					<hr class="divider inv">
+					
+					<p class="small" style="font-size:11px;">**SEU Accreditation: Southeastern University is accredited by the Southern Association of Colleges and Schools Commission on Colleges to award associate, baccalaureate, masters, and doctorate degrees. Contact the Commission on Colleges at 1866 Southern Lane, Decatur, GA 30033-4097 or call 404-679-4500 for questions about the accreditation of Southeastern University.</p>
 				</div><!-- end col -->
 			</div><!-- end row -->
 		</div><!-- end content-section -->

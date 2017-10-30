@@ -271,8 +271,8 @@
 					data.donor_id = this.donor_id;
 				} else {
 					data.donor = {
-						name: this.userInfo.firstName + ' ' + this.userInfo.lastName,
-						// company: null,
+						first_name: this.userInfo.firstName,
+						last_name: this.userInfo.lastName,
 						email: this.userInfo.email,
 						phone: this.userInfo.phone,
 						zip: this.userInfo.zipCode,

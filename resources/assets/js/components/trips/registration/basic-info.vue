@@ -364,13 +364,6 @@
                     return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
                 }, set() {}
 			},
-			user_id(){
-				if (this.$parent.hasOwnProperty('userData') && _.isObject(this.userObj)) {
-					this.$parent.userData = this.userObj;
-
-                }
-				return  _.isObject(this.userObj) ? this.userObj.id : null;
-			},
 			dobYear: {
                 get() {
                     return this.dobYearCalc;
@@ -416,15 +409,21 @@
 		    '$parent.trip'(val){
 		        this.getRoles(val.team_roles);
 		    },
-			'userObj'(val){
-		        if (this.forAdmin) {
-                    if (val && val.id) {
-                        this.setLocalUserData();
-                    } else {
-                        this.toggleUserData()
+			userObj: {
+		      deep: true,
+              handler(val) {
+                if (this.forAdmin) {
+                  if (val && val.id) {
+                    this.setLocalUserData();
+                    if (this.$parent.hasOwnProperty('userData') && _.isObject(this.userObj)) {
+                      this.$parent.userData = this.userObj;
                     }
+                  } else {
+                    this.toggleUserData()
+                  }
                 }
-			},
+              }
+            },
             /*isFormDirty(){
 			    this.$validator.validateAll().then(result => {
 			        if (result)

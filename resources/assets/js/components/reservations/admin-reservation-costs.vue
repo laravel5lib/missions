@@ -98,7 +98,9 @@
                     enforced: false,
                 },
                 selectedCost: null,
-                resource: this.$resource('reservations/' + this.id, { include: 'dues,costs.payments,trip.costs.payments' }),
+                resource: this.$resource(`reservations/${this.id}`, {
+                  include: 'dues,costs.payments,trip.costs.payments'
+                }),
                 showAddModal: false,
                 deleteModal: false,
                 showNewModal: false,
@@ -260,7 +262,7 @@
             doUpdate(reservation, success){
 
                 // this.$refs.spinner.show();
-                return this.resource.put(reservation).then((response) => {
+                return this.resource.put({}, reservation).then((response) => {
                     this.setReservationData(response.data.data);
                     this.selectedCosts = [];
                     this.$root.$emit('AdminReservation:CostsUpdated', response.data.data);

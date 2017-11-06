@@ -299,22 +299,15 @@
 					{value: "nursing students", name: "Nursing Students"}
 				],
 				attemptedContinue: false,
-				// details data
 				groupObj: null,
-				//group_id: '',
-				description: '',
 				type: '',
 				difficulty: '',
 				companion_limit: 0,
 				prospectsObj: null,
-				//prospects: [],
 				started_at: '',
 				ended_at: '',
 				repObj: null,
-				//rep_id: '',
 				rolesObj: null,
-				//team_roles: [],
-				// details data
 				spots: null,
 				closed_at: moment().format('YYYY-MM-DD HH:mm:ss'),
 				published_at: null,

@@ -24,8 +24,8 @@
                 <div class="panel-body">
                     <component :is="docPreview"
                                :document="document"
-                               @set-decument="setDocument"
-                               @unset-decument="removeDocument"
+                               @set-document="setDocument"
+                               @unset-document="removeDocument"
                                :locked="isLocked"
                                keep-alive>
                     </component>
@@ -37,8 +37,8 @@
                                :document="document"
                                :reservation-id="requirement.reservation_id"
                                :locked="isLocked"
-                               @set-decument="setDocument"
-                               @unset-decument="removeDocument"
+                               @set-document="setDocument"
+                               @unset-document="removeDocument"
                                keep-alive>
                     </component>
                 </div>
@@ -54,8 +54,8 @@
                     <keep-alive>
                         <component :is="list"
                                    :user-id="managingUserId"
-                                   @set-decument="setDocument"
-                                   @unset-decument="removeDocument"
+                                   @set-document="setDocument"
+                                   @unset-document="removeDocument"
                                    selector></component>
                     </keep-alive>
 

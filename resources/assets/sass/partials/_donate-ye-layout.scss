@@ -1,0 +1,66 @@
+.donate-ye-bg {
+  color:#fff;
+  background: $gray-darker url(../../images/donate/year-end-bg-lg.jpg) no-repeat center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  padding: 100px 0 100px;
+  h6 {
+    color:rgba(255, 255, 255, 0.8);
+  }
+  .donate-ye-logo {
+    padding-top: 28%;
+  }
+  /* Large devices (large desktops, 1200px and up) */
+  @media screen and (max-width:1200px) {
+      h2 {
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      .donate-ye-logo {
+        padding-top: 40%;
+      }
+      background: $gray-darker url(../../images/donate/year-end-bg-md.jpg) no-repeat center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+      padding: 100px 0 100px;
+  }
+  /* Medium devices (desktops, 992px and up) */
+  @media screen and (max-width:992px) {
+      h2 {
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+      .donate-ye-logo {
+        padding-top: 45%;
+      }
+      background: $gray-darker url(../../images/donate/year-end-bg-sm.jpg) no-repeat center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+      padding: 100px 0 100px;
+  }
+  /* Small devices (tablets, 768px and up) */
+  @media screen and (max-width:768px) {
+      h2 {
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+      .donate-ye-logo {
+        padding-top: 10%;
+        padding-right: 10%;
+        padding-left: 10%;
+        margin-bottom:25px;
+      }
+      background: $gray-darker url(../../images/donate/year-end-bg-xs.jpg) no-repeat center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+      padding: 30px 0 30px;
+  }
+}

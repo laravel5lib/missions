@@ -26,20 +26,15 @@
 					</div>
 				</div>
 			</div>
-			<div v-for="todo in todos" class="list-group-item">
+			<div v-for="(todo, index) in todos" class="list-group-item">
 				<div class="row">
 					<div class="col-xs-10">
 						{{ todo }}
 					</div>
 					<div class="col-xs-2 text-right">
-						<!--<tooltip content="Edit">
-							<i class="fa fa-pencil fa-lg text-muted remove-todo"
-							   @click="selectedTodo = todo,editMode = true">
-							</i>
-						</tooltip>-->
 						<tooltip content="Delete">
 							<i class="fa fa-trash fa-lg text-muted remove-todo"
-							   @click="selectedTodo = todo,deleteModal = true">
+							   @click="removeThisIndex = index,deleteModal = true">
 							</i>
 						</tooltip>
 					</div>
@@ -50,7 +45,7 @@
 			<div slot="modal-body" class="modal-body text-center">Delete this Todo?</div>
 			<div slot="modal-footer" class="modal-footer">
 				<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
-				<button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedTodo)'>Delete</button>
+				<button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(removeThisIndex)'>Delete</button>
 			</div>
 		</modal>
 	</div>
@@ -58,20 +53,21 @@
 
 </template>
 <script type="text/javascript">
-    export default{
+    export default {
     	name: 'admin-trip-todos',
         props: ['id'],
-        data(){
-            return{
+        data() {
+            return {
 				newTodo: '',
-                todos:[],
+                todos: [],
                 resource: this.$resource('trips/' + this.id + '/todos'),
 				newMode: false,
 				// editMode: false,
 				showError: false,
 				selectedTodo:null,
 				deleteModal: false,
-				errorMessage: null
+				errorMessage: null,
+				removeThisIndex: null
             }
         },
         methods:{
@@ -79,10 +75,11 @@
 				this.newMode = false;
 				this.editMode = false;
 				this.newTodo = '';
+				this.removeThisIndex = null;
 			},
 			createTodo() {
 				if (! this.newTodo) return;
-				this.todos.push(this.newTodo);
+				this.todos ? this.todos.push(this.newTodo) : this.todos = [this.newTodo];
 				// this.$refs.spinner.show();
 				this.resource.post({}, {todos: this.todos}).then((response) => {
 					this.todos = response.data.data;
@@ -94,8 +91,8 @@
 					// this.$refs.spinner.hide();
 				});
 			},
-			remove() {
-				this.todos.$remove(this.selectedTodo);
+			remove(index) {
+				this.todos.splice(index, 1);
 				// this.$refs.spinner.show();
 				this.resource.post({}, {todos: this.todos}).then((response) => {
 					this.todos = response.data.data;

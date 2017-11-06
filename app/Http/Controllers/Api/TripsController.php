@@ -116,7 +116,24 @@ class TripsController extends Controller
     {
         $trip = $this->trip->findOrFail($id);
 
-        $trip->update($request->all());
+        $trip->update([
+            'campaign_id'     => $request->get('campaign_id', $trip->campaign_id),
+            'group_id'        => $request->get('group_id', $trip->group_id),
+            'country_code'    => $request->get('country_code', $trip->country_code),
+            'type'            => $request->get('type', $trip->type),
+            'difficulty'      => $request->get('difficulty', $trip->difficulty),
+            'started_at'      => $request->get('started_at', $trip->started_at),
+            'ended_at'        => $request->get('ended_at', $trip->ended_at),
+            'closed_at'       => $request->get('closed_at', $trip->closed_at),
+            'rep_id'          => $request->get('rep_id', $trip->rep_id),
+            'spots'           => $request->get('spots', $trip->spots),
+            'todos'           => $request->get('todos', $trip->todos),
+            'prospects'       => $request->get('prospects', $trip->prospects),
+            'team_roles'      => $request->get('team_roles', $trip->team_roles),
+            'description'     => $request->get('description', $trip->description),
+            'published_at'    => $request->get('published_at', $trip->published_at),
+            'companion_limit' => $request->get('companion_limit', $trip->companion_limit)
+        ]);
 
         if ($request->has('tags')) {
             $trip->retag($request->get('tags'));

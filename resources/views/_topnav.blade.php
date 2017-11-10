@@ -60,9 +60,9 @@
         </ul>
       @else
         <li>
-          <div class="btn-group hidden-xs" style="margin-right:20px;">
-            <a class="btn btn-link" href="{{ url('/login') }}">Log In</a>
-            <a class="btn btn-primary" href="{{ url('/register') }}">Sign Up</a>
+          <div class="hidden-xs" style="margin-right:20px;">
+            <a href="{{ url('/login') }}"><h5 style="display:inline-block;margin-right:15px;">Log In</h5></a>
+            <a class="btn btn-default-hollow" href="{{ url('/donate') }}">Donate</a>
           </div>
         </li>
       @endif

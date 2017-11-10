@@ -10022,8 +10022,6 @@ fieldset[disabled] .swal-button--confirm.focus {
   user-select: none;
   -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
-  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
 }
 
 .btn:focus, .btn.focus, .btn:active:focus, .btn:active.focus, .btn.active:focus, .btn.active.focus {
@@ -10034,13 +10032,15 @@ fieldset[disabled] .swal-button--confirm.focus {
 .btn:hover, .btn:focus, .btn.focus {
   color: #fff !important;
   text-decoration: none;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn:active, .btn.active {
   outline: 0;
   background-image: none;
-  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }
 
 .btn.disabled, .btn[disabled],
@@ -22003,7 +22003,7 @@ video::-webkit-media-text-track-display {
  * Custom partials
  */
 .home-campaign-header {
-  color: #fff;
+  color: #242424;
   background: #3e3e3e url(../../images/advance/adv-web-bg-lg.jpg) no-repeat center fixed;
   background-size: cover;
   padding: 100px 0 100px;
@@ -22013,7 +22013,7 @@ video::-webkit-media-text-track-display {
 }
 
 .home-campaign-header h6 {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .home-campaign-header .video-inner {
@@ -22136,6 +22136,66 @@ video::-webkit-media-text-track-display {
 }
 
 /* Year End Donate Layout */
+.interrupter-pop {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: fixed;
+  right: 1em;
+  bottom: 1em;
+  z-index: 10;
+  width: 28em;
+  height: 10em;
+  margin-bottom: 0px !important;
+  padding: .8em .8em;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+  color: #808080;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='52' viewBox='0 0 52 52'%3E%3Cpath fill='%23e6e6e6' fill-opacity='0.21' d='M0 17.83V0h17.83a3 3 0 0 1-5.66 2H5.9A5 5 0 0 1 2 5.9v6.27a3 3 0 0 1-2 5.66zm0 18.34a3 3 0 0 1 2 5.66v6.27A5 5 0 0 1 5.9 52h6.27a3 3 0 0 1 5.66 0H0V36.17zM36.17 52a3 3 0 0 1 5.66 0h6.27a5 5 0 0 1 3.9-3.9v-6.27a3 3 0 0 1 0-5.66V52H36.17zM0 31.93v-9.78a5 5 0 0 1 3.8.72l4.43-4.43a3 3 0 1 1 1.42 1.41L5.2 24.28a5 5 0 0 1 0 5.52l4.44 4.43a3 3 0 1 1-1.42 1.42L3.8 31.2a5 5 0 0 1-3.8.72zm52-14.1a3 3 0 0 1 0-5.66V5.9A5 5 0 0 1 48.1 2h-6.27a3 3 0 0 1-5.66-2H52v17.83zm0 14.1a4.97 4.97 0 0 1-1.72-.72l-4.43 4.44a3 3 0 1 1-1.41-1.42l4.43-4.43a5 5 0 0 1 0-5.52l-4.43-4.43a3 3 0 1 1 1.41-1.41l4.43 4.43c.53-.35 1.12-.6 1.72-.72v9.78zM22.15 0h9.78a5 5 0 0 1-.72 3.8l4.44 4.43a3 3 0 1 1-1.42 1.42L29.8 5.2a5 5 0 0 1-5.52 0l-4.43 4.44a3 3 0 1 1-1.41-1.42l4.43-4.43a5 5 0 0 1-.72-3.8zm0 52c.13-.6.37-1.19.72-1.72l-4.43-4.43a3 3 0 1 1 1.41-1.41l4.43 4.43a5 5 0 0 1 5.52 0l4.43-4.43a3 3 0 1 1 1.42 1.41l-4.44 4.43c.36.53.6 1.12.72 1.72h-9.78zm9.75-24a5 5 0 0 1-3.9 3.9v6.27a3 3 0 1 1-2 0V31.9a5 5 0 0 1-3.9-3.9h-6.27a3 3 0 1 1 0-2h6.27a5 5 0 0 1 3.9-3.9v-6.27a3 3 0 1 1 2 0v6.27a5 5 0 0 1 3.9 3.9h6.27a3 3 0 1 1 0 2H31.9z'%3E%3C/path%3E%3C/svg%3E");
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-transition: ease-in bottom 350ms;
+  transition: ease-in bottom 350ms;
+}
+
+.interrupter-pop figure {
+  display: inline-block;
+}
+
+.interrupter-pop figure img {
+  width: 235px;
+}
+
+.interrupter-pop .interrupter-content {
+  margin-left: 20px;
+  display: inline-block;
+}
+
+.interrupter-pop .interrupter-content h5 {
+  color: #242424;
+  margin-top: 0px;
+}
+
+.interrupter-pop .interrupter-content .fa-gift {
+  color: #808080;
+}
+
+.interrupter-pop .fa-close {
+  cursor: pointer;
+  position: absolute;
+  top: 0.75em;
+  right: 0.75em;
+  width: 1em;
+  height: 1em;
+}
+
+/* Interrupter Pop Up On Lower Right */
 /*
  * Variables...
  */

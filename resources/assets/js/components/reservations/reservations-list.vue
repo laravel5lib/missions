@@ -340,7 +340,10 @@
                 }
                 $.extend(params, this.filters);
 
-                if (this.groupOnly) {
+                if (this.filters.age[0] === 0 && this.filters.age[1] === 120 )
+                    params.age = null;
+
+              if (this.groupOnly) {
 //                    this.filters.groups = this.groupId;
                     params.groups = new Array(this.groupId);
                     params.trip = new Array(this.tripId);

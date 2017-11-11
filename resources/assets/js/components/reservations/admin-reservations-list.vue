@@ -653,6 +653,9 @@
                     due: this.due,
                 });
 
+              if (this.filters.age[0] === 0 && this.filters.age[1] === 120 )
+                params.age = null;
+
 				this.exportFilters = params;
 
 				return params;

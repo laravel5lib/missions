@@ -107,6 +107,23 @@
     <script src="{{ mix('js/app.js') }}"></script>
     @yield('scripts')
 
+    <script>
+        // Popup control
+		$(document).ready(function(){
+            if($.cookie('showpopup') == 'false'){
+                $("#yearendpopup").hide();
+            }
+
+			$("#closepopup").click(function(){
+                $("#yearendpopup").hide();
+                var date = new Date();
+                var minutes = 30;
+                date.setTime(date.getTime() + (minutes * 60 * 100));
+                $.cookie('showpopup', false, { expires: date });
+			});
+		});
+	</script>
+
     @prod
     <!-- Hotjar Tracking Code for https://missions.me -->
     <script>

@@ -1,5 +1,5 @@
 .home-campaign-header {
-  color:#fff;
+  color:$gray-base;
   background: $gray-darker url(../../images/advance/adv-web-bg-lg.jpg) no-repeat center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -7,7 +7,7 @@
   background-size: cover;
   padding: 100px 0 100px;
   h6 {
-    color:rgba(255, 255, 255, 0.8);
+    color:rgba(0, 0, 0, 0.6);
   }
   .video-inner {
     border-radius: 6px;

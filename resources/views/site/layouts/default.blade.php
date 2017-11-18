@@ -11,7 +11,7 @@
 </div>
 <div class="interrupter-pop panel panel-default hidden-xs" data-aos="fade-up" id="yearendpopup">
 	<figure>
-		<img class="img-responsive" src="images/donate/ye-2017/year-end-thumb.jpg" />
+		<img class="img-responsive" src="/images/donate/ye-2017/year-end-thumb.jpg" />
 	</figure>
 	<div class="interrupter-content">
 		<h5>Give A Year End Gift</h5>

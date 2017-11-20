@@ -22203,7 +22203,10 @@ video::-webkit-media-text-track-display {
 
 .story-of-layout .red-small {
   max-width: 20px;
-  margin-left: 0;
+}
+
+.story-of-layout .video-outer {
+  margin-bottom: 20px;
 }
 
 .story-of-layout .video-inner {
@@ -22233,6 +22236,18 @@ video::-webkit-media-text-track-display {
   background: #3e3e3e url(../../images/storyof/stadium-light-bg-lg.jpg) no-repeat center fixed;
   background-size: cover;
   padding: 0px 0 80px;
+}
+
+.story-of-layout .flag-light-bg {
+  background: #3e3e3e url(../../images/storyof/flag-stadium-light-bg-lg.jpg) no-repeat center fixed;
+  background-size: cover;
+  padding: 80px 0 80px;
+}
+
+.story-of-layout .leaders-light-bg {
+  background: #3e3e3e url(../../images/storyof/leaders-conf-light-bg-lg.jpg) no-repeat center fixed;
+  background-size: cover;
+  padding: 80px 0 80px;
 }
 
 .story-of-layout .cta-stadium-bg {
@@ -22271,6 +22286,16 @@ video::-webkit-media-text-track-display {
     background-size: cover;
     padding: 0px 0 80px;
   }
+  .story-of-layout .flag-light-bg {
+    background: #3e3e3e url(../../images/storyof/flag-stadium-light-bg-md.jpg) no-repeat center fixed;
+    background-size: cover;
+    padding: 80px 0 80px;
+  }
+  .story-of-layout .leaders-light-bg {
+    background: #3e3e3e url(../../images/storyof/leaders-conf-light-bg-md.jpg) no-repeat center fixed;
+    background-size: cover;
+    padding: 80px 0 80px;
+  }
   .story-of-layout .cta-stadium-bg {
     color: #fff;
     background: #3e3e3e url(../../images/storyof/cta-stadium-bg-md.jpg) no-repeat center fixed;
@@ -22290,6 +22315,16 @@ video::-webkit-media-text-track-display {
     background: #3e3e3e url(../../images/storyof/stadium-light-bg-sm.jpg) no-repeat center fixed;
     background-size: cover;
     padding: 0px 0 80px;
+  }
+  .story-of-layout .flag-light-bg {
+    background: #3e3e3e url(../../images/storyof/flag-stadium-light-bg-sm.jpg) no-repeat center fixed;
+    background-size: cover;
+    padding: 80px 0 80px;
+  }
+  .story-of-layout .leaders-light-bg {
+    background: #3e3e3e url(../../images/storyof/leaders-conf-light-bg-sm.jpg) no-repeat center fixed;
+    background-size: cover;
+    padding: 80px 0 80px;
   }
   .story-of-layout .cta-stadium-bg {
     color: #fff;
@@ -22321,6 +22356,16 @@ video::-webkit-media-text-track-display {
     background: #3e3e3e url(../../images/storyof/stadium-light-bg-xs.jpg) no-repeat center fixed;
     background-size: cover;
     padding: 0px 0 10px;
+  }
+  .story-of-layout .flag-light-bg {
+    background: #3e3e3e url(../../images/storyof/flag-stadium-light-bg-xs.jpg) no-repeat center fixed;
+    background-size: cover;
+    padding: 80px 0 80px;
+  }
+  .story-of-layout .leaders-light-bg {
+    background: #3e3e3e url(../../images/storyof/leaders-conf-light-bg-xs.jpg) no-repeat center fixed;
+    background-size: cover;
+    padding: 80px 0 80px;
   }
   .story-of-layout .cta-stadium-bg {
     color: #fff;

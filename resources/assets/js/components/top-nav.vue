@@ -53,7 +53,7 @@
 
 				<!-- Causes -->
 				<li class="navlabel">Causes</li>
-				<li><a href="/projects">1Nation1Day</a></li>
+				<li><a href="/1nation1day">1Nation1Day</a></li>
 				<li><a href="/orphans">Rescue Orphans</a></li>
 				<li><a href="/water">Clean Water</a></li>
 				<li><a href="/medical">Medical Missions</a></li>

@@ -135,10 +135,10 @@
                                  :parameters="{id: '{{ $user->id }}', email: '{{ $user->email }}'}">
                 </send-email>
                 @hasanyrole('super_admin|admin|staff_general|intern')
-                <a href="{{ url('admin/users/'.$user->id.'/impersonate') }}"
+                {{--  <a href="{{ url('admin/users/'.$user->id.'/impersonate') }}"
                    class="btn btn-default btn-md btn-block">
                    <i class="fa fa-user-secret"></i> Temporarily Login As This User
-                </a>
+                </a>  --}}
                 @endhasanyrole
                 <hr class="divider inv">
                 @hasanyrole('super_admin|admin')

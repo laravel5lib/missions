@@ -119,7 +119,7 @@
 					$('#AddManagerModal').modal('hide');
 					// this.$refs.spinner.hide();
 				}, (response) =>  {
-                    this.SERVER_ERRORS = response.data.errors;
+                    this.SERVER_ERRORS = response.response.data.errors;
                     console.log(response);
 					// this.$refs.spinner.hide();
 					//TODO add error alert

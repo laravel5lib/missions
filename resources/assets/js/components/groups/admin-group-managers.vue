@@ -102,7 +102,7 @@
 			},
 			removeManager(manager) {
 				// Remove Manager
-				this.managers.$remove(manager);
+				this.managers = _.reject(this.managers, (m) => m.id === manager.id);
 				let managersArr = this.managers;
 				this.group.managers = _.pluck(managersArr, 'id');
 				this.updateGroup();

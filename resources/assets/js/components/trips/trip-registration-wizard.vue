@@ -336,7 +336,7 @@
 		},
 		created(){
 			// login component skipped for now
-			this.currentStep = this.stepList[0];
+			this.currentStep = this.stepList[3];
 		},
 		mounted(){
             let self = this;
@@ -379,36 +379,5 @@
 				self.nextStep();
 			})
 		},
-		events: {
-			/*'userHasLoggedIn'(val){
-			    debugger;
-				// expecting userData object
-				this.userData = val;
-				this.currentStep.complete = !!val;
-				// force next step
-				this.nextStep();
-			},*/
-			'tos-agree'(val){
-				this.currentStep.complete = val;
-			},
-			'roca-agree'(val){
-				this.currentStep.complete = val;
-			},
-			'basic-info'(val){
-				this.currentStep.complete = val
-			},
-			'ato-complete'(val){
-				this.currentStep.complete = val;
-			},
-			'payment-complete'(val){
-				this.currentStep.complete = val;
-			},
-			'deadline-agree'(val){
-				this.currentStep.complete = val;
-			},
-			'review'(val){
-				this.currentStep.complete = this.wizardComplete = val;
-			}
-		}
 	}
 </script>

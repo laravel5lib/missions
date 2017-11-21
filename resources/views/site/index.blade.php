@@ -118,7 +118,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
             <h1 class="dash-trailing" data-aos="fade-left">1Nation1Day</h1>
             <p class="large-line-height large-type" data-aos="fade-left">We are now living in a new missions era.  The vision of 1Nation1Day is to unite the global church for the salvation and transformation of nations.</p>
             <hr class="divider inv">
-            <a href="/1n1d17" class="btn btn-info" data-aos="fade-left">Learn More</a>
+            <a href="/1nation1day" class="btn btn-info" data-aos="fade-left">Learn More</a>
           </div><!-- end col -->
         </div><!-- end row -->
       </div><!-- end content-section -->

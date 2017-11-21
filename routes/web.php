@@ -120,7 +120,7 @@ $this->get('/{slug}/signup', 'GroupsController@signup')
 $this->get('/{slug}/trips', 'CampaignsController@trips')
      ->where('sponsor_slug', '^(?!api).*$');
 $this->get('/{sponsor_slug}/{fundraiser_slug}', 'FundraisersController@show')
-     ->where('sponsor_slug', '^(?!api).*$');
+     ->where('sponsor_slug', '^(?!api).*$')->name('fundraiser');
 $this->get('/{slug}', 'PagesController@show')
      ->where('sponsor_slug', '^(?!api).*$')
      ->middleware(['lowercase']);

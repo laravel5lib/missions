@@ -208,8 +208,16 @@
 	<img class="img-responsive" src="images/medical/medical-bg.jpg" alt="Medical">
 		<div class="c-page-bg-text">
 			<div class="col-sm-8 col-sm-offset-2 text-center">
-				<h2>Start funding a medical team.</h2>
-				<p><a class="btn btn-primary btn-lg" href="/donate/medical-mission-cause">Donate To The Cause</a></p>
+				{{--  <h2>Start funding a medical team.</h2>
+				<p><a class="btn btn-primary btn-lg" href="/donate/medical-mission-cause">Donate To The Cause</a></p>  --}}
+				<h2>Go on a Trip</h2>
+				<p>
+					<a class="btn btn-primary btn-lg" href="/trips/e095de68-557c-4919-8686-b83576ed1b55">Dominican</a>
+					<a class="btn btn-primary btn-lg" href="/trips/aa92e24d-a8c6-4534-bcbd-3c044e08e5b8">Honduras</a>
+				</p>
+				<p>
+					<a class="text-white" href="/donate/medical-mission-cause">or Donate to the Cause</a>
+				</p>
 			</div>
 		</div><!-- end c-page-header-content -->
 </div><!-- end c-page-header -->

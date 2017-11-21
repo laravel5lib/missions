@@ -59,15 +59,20 @@
           @endif
         </ul>
       @else
-        <li>
-          <div class="hidden-xs" style="margin-right:20px;">
+        <li class="hidden-xs">
             <a href="{{ url('/login') }}"><h5 style="display:inline-block;margin-right:15px;">Log In</h5></a>
-            <a class="btn btn-default-hollow" href="{{ url('/donate') }}">Donate</a>
-          </div>
         </li>
       @endif
 
-      <top-nav managing="{{ (auth()->check() && auth()->user()->managing()->count()) or 0 }}"></top-nav>
+      @unless(request()->route()->named('fundraiser'))
+      <li>
+        <div class="hidden-xs" style="margin-right:20px;">
+          <a class="btn btn-default-hollow" href="{{ url('/donate') }}">Donate</a>
+        </div>
+      </li>
+      @endunless
+
+      <top-nav managing="{{ (auth()->check() && auth()->user()->managing()->count()) or 0 }}" fundraiser="{{ request()->route()->named('fundraiser') or 0 }}"></top-nav>
 
     </div><!-- /.navbar-right -->
   </div><!-- end container -->

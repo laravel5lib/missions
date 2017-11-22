@@ -253,7 +253,7 @@ Vue.component('phone-input', {
     },
     methods: {
         updateValue(value) {
-            if (value === '') {
+            if (value === '' || value === null) {
                 this.$refs.input.value = value;
             } else {
                 this.$refs.input.value = value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
@@ -261,7 +261,7 @@ Vue.component('phone-input', {
             this.$emit('input', this.$refs.input.value);
         },
         formatValue() {
-            if (this.value === '') {
+            if (this.value === '' || this.value === null) {
                 this.$refs.input.value = this.value;
             } else {
                 this.$refs.input.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');

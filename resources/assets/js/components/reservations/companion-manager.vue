@@ -177,8 +177,8 @@ export default {
             this.reservations = [];
             this.fetch();
         }, (response) =>  {
-            console.log(_.first(_.toArray(response.data.errors)));
-            this.$root.$emit('showError', _.first(_.toArray(response.data.errors)));
+            console.log(_.first(_.toArray(response.response.data.errors)));
+            this.$root.$emit('showError', _.first(_.toArray(response.response.data.errors)));
         });
     },
     leave() {

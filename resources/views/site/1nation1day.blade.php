@@ -9,6 +9,11 @@
 	<div class="content-section">
 		<div class="row">
 			<div class="col-sm-10 col-sm-offset-1 text-center">
+					<img style="max-width:80px;padding:8px;" src="../images/storyof/1n1d13-logo.png" />
+					<img style="max-width:80px;padding:8px;" src="../images/storyof/1n1d15-logo.png" />
+					<img style="max-width:80px;padding:8px;" src="../images/storyof/1n1d17-logo.png" />
+				<hr class="divider inv lg">
+				<hr class="divider inv lg">
 				<h5 class="text-uppercase text-primary">The Vision</h5>
 				<h1 class="text-oswald text-uppercase">The salvation and transformation of entire nations</h1>
 				<hr class="divider inv lg">

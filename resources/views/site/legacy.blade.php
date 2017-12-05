@@ -15,9 +15,15 @@
 			<div class="col-sm-8 col-sm-offset-2">
                 <h3 class="text-primary">Greetings Legacy Partners,</h3>
 
-                <p>As the summer comes to a close we wanted to take a moment and thank each and every one of you for your tremendous support this summer while sharing some of the exciting things happening this fall and next summer.</p>
+                <p>It’s Thanksgiving week, and as we naturally reflect on what we are thankful for I’m reminded of Paul’s words to God’s people in Philippi.</p>
 
-                <p>As always, if you need anything please feel free to reach out to us directly.</p>
+								<p>“Every time I think of you, I give thanks to my God.” Philippians 1:3</p>
+
+								<p>It’s a simple statement, but profound. As a ministry we are incredibly thankful for you but if you take it a step further your outrageous generosity has caused people around the world to give thanks to God. You are literally an answer to someone’s prayer.</p>
+
+								<p>We cannot thank you enough for standing with us in 2017 as we truly believe that this is just the beginning.</p>
+
+								<p>Wishing you a very Happy Thanksgiving!</p>
 
                 <hr class="divider inv">
                 <p>Blessings!</p>
@@ -36,7 +42,7 @@
 				<hr class="divider inv">
 				<div class="video-outer">
 					<div class="video-inner">
-						<iframe src="https://player.vimeo.com/video/234718889?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+						<iframe src="https://player.vimeo.com/video/243914965?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 					</div>
 				</div>
 			</div><!-- end col -->

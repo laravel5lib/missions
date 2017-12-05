@@ -70,7 +70,7 @@ class ReservationsController extends Controller
      */
     public function edit($reservationId)
     {
-        $this->authorize('edit', $this->reservation);
+        $this->authorize('update', $this->reservation);
 
         $this->seo()->setTitle('Edit Reservation');
 

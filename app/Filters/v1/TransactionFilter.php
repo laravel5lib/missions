@@ -16,6 +16,7 @@ class TransactionFilter extends Filter
      * @var array
      */
     public $searchable = [
+        'amount',
         'details->last_four',
         'details->brand', 'details->cardholder', 'details->number',
         'details->charge_id', 'fund.name', 'donor.first_name', 'donor.last_name',
@@ -91,8 +92,8 @@ class TransactionFilter extends Filter
         if (! $amount) {
             return null;
         }
-
-        return $this->where('amount', '>=', $amount);
+        // Match DB values -> amount * 100
+        return $this->where('amount', '>=', $amount * 100);
     }
 
     /**
@@ -107,7 +108,8 @@ class TransactionFilter extends Filter
             return null;
         }
 
-        return $this->where('amount', '<=', $amount);
+        // Match DB values -> amount * 100
+        return $this->where('amount', '<=', $amount * 100);
     }
 
     /**

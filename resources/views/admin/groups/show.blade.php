@@ -62,11 +62,15 @@
                                         <hr class="divider">
                                     @endunless
                                     <div class="row">
-                                        <div class="col-sm-6 text-center">
+                                        <div class="col-sm-4 text-center">
                                             <label>Type</label>
                                             <p>{{ $group->type }}</p>
                                         </div>
-                                        <div class="col-sm-6 text-center">
+                                        <div class="col-sm-4 text-center">
+                                            <label>Created At</label>
+                                            <p>{{ $group->created_at->toDayDateTimeString() }}</p>
+                                        </div>
+                                        <div class="col-sm-4 text-center">
                                             <label>Status</label>
                                             <p>{{ $group->public ? 'Public': 'Private' }}</p>
                                         </div>

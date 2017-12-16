@@ -157,7 +157,7 @@
 						      </div>
 						    </div>
 						</div><!-- end panel -->
-						<div class="panel panel-default panel-primary">
+						{{--  <div class="panel panel-default panel-primary">
 						    <div class="panel-heading">
 						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseSix">
 						          How does food and housing work?
@@ -170,7 +170,7 @@
 								<p class="small">Food is not included in the general tuition. However, we can accommodate a meal plan into your tuition that includes a monthly dining debit card that you will be able to use for groceries, restaurants, and midnight pizza runs.</p>
 						      </div>
 						    </div>
-					  	</div><!-- end panel -->
+					  	</div><!-- end panel -->  --}}
 						<div class="panel panel-default panel-primary">
 						    <div class="panel-heading">
 						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThirteen">

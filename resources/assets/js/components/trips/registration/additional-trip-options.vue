@@ -6,10 +6,9 @@
 			<hr class="divider inv sm"/>
 
 			<form novalidate name="AdditionalOptionsForm">
-				<div class="" v-for="(option, index) in optionalCosts">
+				<div class="" v-for="(option, index) in optionalCosts" :key="option.id">
 					<label style="display:block" :for="'option' + index">
-						<input type="radio" :id="'option' + index" v-model="selectedOptions" :value="option"
-						       name="additional" v-validate="index === 0 ? 'required' : ''">
+						<input type="radio" :id="'option' + index" v-model="selectedOptions" :value="option.id" name="additional" v-validate="index === 0 ? 'required' : ''">
 						{{option.name}}
 						<span class="pull-right">{{currency(option.amount)}}</span>
 					</label>
@@ -40,21 +39,27 @@
     computed: {
       optionalCosts() {
         let arr = this.$parent.tripCosts.optional || [];
-        if (!arr.length) {
-          this.$emit('step-completion', true);
+        if (arr.length) {
+          this.selectedOptions = arr[0].id;
         }
+        this.$emit('step-completion', true);
+
         return _.sortBy(arr, 'name');
       }
     },
     watch: {
       optionalCosts(val) {
         if (_.isArray(val) && val.length > 0) {
-          this.selectedOptions = val[0];
-          this.$emit('step-completion', true);
+          this.selectedOptions = val[0].id;
         }
       },
       selectedOptions(val, oldVal) {
-        this.$parent.selectedOptions = val;
+        this.$parent.selectedOptions = _.where(this.optionalCosts, { id: val});
+        if (val) {
+          this.$nextTick(() => {
+            this.$emit('step-completion', true);
+          });
+        }
       },
       isFormDirty() {
         this.$emit('step-completion', true);

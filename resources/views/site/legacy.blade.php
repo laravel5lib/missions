@@ -15,18 +15,12 @@
 			<div class="col-sm-8 col-sm-offset-2">
                 <h3 class="text-primary">Greetings Legacy Partners,</h3>
 
-                <p>It’s Thanksgiving week, and as we naturally reflect on what we are thankful for I’m reminded of Paul’s words to God’s people in Philippi.</p>
+                <p>I wanted to reach out and thank you for such an extraordinary year at Missions.Me. We had the opportunity to be in Peru last week in preparation for 1Nation1Day 2019 and it was amazing. As many of you know, we were also able to be with the spiritual leaders of Nicaragua a couple of weeks ago and I wanted to take a moment and share both of those updates with you. All of this is possible because of you!</p>
 
-								<p>“Every time I think of you, I give thanks to my God.” Philippians 1:3</p>
-
-								<p>It’s a simple statement, but profound. As a ministry we are incredibly thankful for you but if you take it a step further your outrageous generosity has caused people around the world to give thanks to God. You are literally an answer to someone’s prayer.</p>
-
-								<p>We cannot thank you enough for standing with us in 2017 as we truly believe that this is just the beginning.</p>
-
-								<p>Wishing you a very Happy Thanksgiving!</p>
+								<p>Thank you for your continued dedication support.</p>
 
                 <hr class="divider inv">
-                <p>Blessings!</p>
+                <p>Merry Christmas,</p>
                 <h5 class="text-primary"><em>Gabe</em></h5>
 			</div>
 		</div><!-- end row -->
@@ -42,7 +36,14 @@
 				<hr class="divider inv">
 				<div class="video-outer">
 					<div class="video-inner">
-						<iframe src="https://player.vimeo.com/video/243914965?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+						<iframe src="https://player.vimeo.com/video/248055644?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+					</div>
+				</div>
+
+				<hr class="divider inv">
+				<div class="video-outer">
+					<div class="video-inner">
+						<iframe src="https://player.vimeo.com/video/247859393?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 					</div>
 				</div>
 			</div><!-- end col -->

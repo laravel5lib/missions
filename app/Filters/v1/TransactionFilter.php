@@ -10,22 +10,16 @@ class TransactionFilter extends Filter
     */
     public $relations = [];
 
-    /**
-     * Fields that can be searched.
-     *
-     * @var array
-     */
-    public $searchable = [
-        'amount',
-        'details->last_four',
-        'details->brand', 'details->cardholder', 'details->number',
-        'details->charge_id', 'fund.name', 'donor.first_name', 'donor.last_name',
-        'fund.class', 'fund.item', 'donor.phone', 'donor.email'
-    ];
-
     public $sortable = [
         'type', 'amount', 'created_at'
     ];
+
+    public function search($keywords)
+    {
+        return $this->whereHas('fund', function($query) use($keywords) {
+            $query->where('name', 'LIKE', "%$keywords%");
+        });
+    }
 
     public function anonymous()
     {

@@ -1,282 +1,280 @@
 <template ref="BasicInfo">
 	<div class="row">
 		<div class="col-sm-12">
+			<form novalidate name="BasicInfoForm" id="BasicInfoForm">
+				<template v-if="forAdmin">
+					<div class="col-sm-12">
+						<div class="form-group" :class="{ 'has-error': errors.has('manager') }">
+							<label for="infoManager">Reservation Manager</label>
+							<v-select @keydown.enter.prevent="" class="form-control" name="manager" id="infoManager" v-validate="'required'" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
+						</div>
+					</div>
+				</template>
+				<!--<template>-->
+				<div class="col-sm-12">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" v-model="onBehalf" @change="toggleUserData">
+							This reservation is for someone else.
+						</label>
+					</div>
+				</div>
+				<!--</template>-->
 
-				<form novalidate name="BasicInfoForm" id="BasicInfoForm">
-					<template v-if="forAdmin">
+				<div class="col-md-6">
+					<div class="form-group" v-error-handler="{value: desired_role, handle: 'role'}">
+						<label for="desiredRole">Desired Team Role</label>
+						<select class="form-control input-sm" id="desiredRole" v-model="desired_role" name="role" v-validate="'required'">
+							<option v-for="role in UTILITIES.roles" :value="{value: role.value, name: role.name}">{{role.name}}</option>
+						</select>
+					</div><!-- end form-group -->
+					<label>Given Names</label>
+					<div class="row">
 						<div class="col-sm-12">
-							<div class="form-group" :class="{ 'has-error': errors.has('manager') }">
-								<label for="infoManager">Reservation Manager</label>
-								<v-select @keydown.enter.prevent="" class="form-control" name="manager" id="infoManager" v-validate="'required'" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
+							<div class="form-group" v-error-handler="{value: firstName, handle: 'firstName'}">
+								<!--<label for="infoFirstName">First</label>-->
+								<input type="text" class="form-control input-sm" v-model="firstName"
+								       name="firstName" placeholder="First & Middle Names" v-validate="'required'"
+								       id="infoFirstName">
 							</div>
 						</div>
-					</template>
-					<!--<template>-->
+					</div>
+					<label>Surname</label>
+					<div class="row">
 						<div class="col-sm-12">
-							<div class="checkbox">
+							<div class="form-group" v-error-handler="{value: lastName, handle: 'lastName'}">
+								<!--<label for="infoLastName">Last</label>-->
+								<input type="text" class="form-control input-sm" v-model="lastName"
+								       name="lastName" placeholder="Last Name" v-validate="'required'"
+								       id="infoLastName">
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group" v-error-handler="{ value: email, handle: 'email'}">
+						<label for="infoEmailAddress">Email Address</label>
+						<input type="text" class="form-control input-sm" v-model="email" id="infoEmailAddress"
+						       name="email" v-validate="'required|email'">
+					</div>
+
+					<label>Date of Birth</label>
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="form-group" :class="{ 'has-error': errors.has('dobMonth') }">
+								<!--<label for="infoDobMonth">Month</label>-->
+								<select class="form-control input-sm" v-model="dobMonth"
+								        name="dobMonth" id="infoDobMonth" v-validate="'required'">
+									<option value="">Month</option>
+									<option value="01">January</option>
+									<option value="02">February</option>
+									<option value="03">March</option>
+									<option value="04">April</option>
+									<option value="05">May</option>
+									<option value="06">June</option>
+									<option value="07">July</option>
+									<option value="08">August</option>
+									<option value="09">September</option>
+									<option value="10">October</option>
+									<option value="11">November</option>
+									<option value="12">December</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group" :class="{ 'has-error': errors.has('dobDay') }">
+								<!--<label for="infoDobDay">Day</label>-->
+								<select class="form-control input-sm" v-model="dobDay"
+								        name="dobDay" id="infoDobDay" v-validate="'required'">
+									<option value="">Day</option>
+									<option value="01">01</option>
+									<option value="02">02</option>
+									<option value="03">03</option>
+									<option value="04">04</option>
+									<option value="05">05</option>
+									<option value="06">06</option>
+									<option value="07">07</option>
+									<option value="08">08</option>
+									<option value="09">09</option>
+									<option value="10">10</option>
+									<option value="11">11</option>
+									<option value="12">12</option>
+									<option value="13">13</option>
+									<option value="14">14</option>
+									<option value="15">15</option>
+									<option value="16">16</option>
+									<option value="17">17</option>
+									<option value="18">18</option>
+									<option value="19">19</option>
+									<option value="20">20</option>
+									<option value="21">21</option>
+									<option value="22">22</option>
+									<option value="23">23</option>
+									<option value="24">24</option>
+									<option value="25">25</option>
+									<option value="26">26</option>
+									<option value="27">27</option>
+									<option value="28">28</option>
+									<option value="29">29</option>
+									<option value="30">30</option>
+									<option value="31">31</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group" :class="{ 'has-error': errors.has('dobYear') }">
+								<!--<label for="infoDobYear">Year</label>-->
+								<select class="form-control input-sm" v-model="dobYearCalc"
+								        name="dobYear" id="infoDobYear" v-validate="'required'">
+									<option value="">Year</option>
+									<option v-for="year in selectableYears" :value="year">
+										{{ year }}
+									</option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6" v-error-handler="{value: gender, handle: 'gender', messages: { req: 'Select a gender' }}">
+							<label>Gender</label>
+							<div :class="{ 'has-error': errors.has('gender') }">
 								<label>
-									<input type="checkbox" v-model="onBehalf" @change="toggleUserData">
-									This reservation is for someone else.
+									<input type="radio" v-model="gender" name="gender" v-validate="'required'"
+									       value="male"> Male
+								</label>
+							</div>
+							<div :class="{ 'has-error': errors.has('gender') }">
+								<label>
+									<input type="radio" v-model="gender" name="gender" value="female"> Female
 								</label>
 							</div>
 						</div>
-					<!--</template>-->
 
-					<div class="col-md-6">
-						<div class="form-group" v-error-handler="{value: desired_role, handle: 'role'}">
-							<label for="desiredRole">Desired Team Role</label>
-								<select class="form-control input-sm" id="desiredRole" v-model="desired_role" name="role" v-validate="'required'">
-									<option v-for="role in UTILITIES.roles" :value="{value: role.value, name: role.name}">{{role.name}}</option>
+						<div class="col-sm-6">
+							<div class="form-group" :class="{ 'has-error': errors.has('relationshipStatus') }">
+								<label for="infoRelStatus">Relationship Status</label>
+								<select class="form-control input-sm" v-model="relationshipStatus"
+								        name="relationshipStatus" id="infoRelStatus" v-validate="'required'">
+									<option value="single">Single</option>
+									<option value="engaged">Engaged</option>
+									<option value="married">Married</option>
+									<option value="divorced">Divorced</option>
+									<option value="widowed">Widowed</option>
+
 								</select>
-						</div><!-- end form-group -->
-						<label>Given Names</label>
-						<div class="row">
-							<div class="col-sm-12">
-								<div class="form-group" v-error-handler="{value: firstName, handle: 'firstName'}">
-									<!--<label for="infoFirstName">First</label>-->
-									<input type="text" class="form-control input-sm" v-model="firstName"
-										   name="firstName" placeholder="First & Middle Names" v-validate="'required'"
-										   id="infoFirstName">
-								</div>
 							</div>
 						</div>
-						<label>Surname</label>
-						<div class="row">
-							<div class="col-sm-12">
-								<div class="form-group" v-error-handler="{value: lastName, handle: 'lastName'}">
-									<!--<label for="infoLastName">Last</label>-->
-									<input type="text" class="form-control input-sm" v-model="lastName"
-										   name="lastName" placeholder="Last Name" v-validate="'required'"
-										   id="infoLastName">
-								</div>
-							</div>
-						</div>
+					</div>
 
-						<div class="form-group" v-error-handler="{ value: email, handle: 'email'}">
-							<label for="infoEmailAddress">Email Address</label>
-							<input type="text" class="form-control input-sm" v-model="email" id="infoEmailAddress"
-								   name="email" v-validate="'required|email'">
-						</div>
-
-						<label>Date of Birth</label>
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group" :class="{ 'has-error': errors.has('dobMonth') }">
-									<!--<label for="infoDobMonth">Month</label>-->
-									<select class="form-control input-sm" v-model="dobMonth"
-											name="dobMonth" id="infoDobMonth" v-validate="'required'">
-										<option value="">Month</option>
-										<option value="01">January</option>
-										<option value="02">February</option>
-										<option value="03">March</option>
-										<option value="04">April</option>
-										<option value="05">May</option>
-										<option value="06">June</option>
-										<option value="07">July</option>
-										<option value="08">August</option>
-										<option value="09">September</option>
-										<option value="10">October</option>
-										<option value="11">November</option>
-										<option value="12">December</option>
-									</select>
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="row">
+								<div class="col-sm-12">
+									<label for="infoHeightA">Height</label>
 								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group" :class="{ 'has-error': errors.has('dobDay') }">
-									<!--<label for="infoDobDay">Day</label>-->
-									<select class="form-control input-sm" v-model="dobDay"
-											name="dobDay" id="infoDobDay" v-validate="'required'">
-										<option value="">Day</option>
-										<option value="01">01</option>
-										<option value="02">02</option>
-										<option value="03">03</option>
-										<option value="04">04</option>
-										<option value="05">05</option>
-										<option value="06">06</option>
-										<option value="07">07</option>
-										<option value="08">08</option>
-										<option value="09">09</option>
-										<option value="10">10</option>
-										<option value="11">11</option>
-										<option value="12">12</option>
-										<option value="13">13</option>
-										<option value="14">14</option>
-										<option value="15">15</option>
-										<option value="16">16</option>
-										<option value="17">17</option>
-										<option value="18">18</option>
-										<option value="19">19</option>
-										<option value="20">20</option>
-										<option value="21">21</option>
-										<option value="22">22</option>
-										<option value="23">23</option>
-										<option value="24">24</option>
-										<option value="25">25</option>
-										<option value="26">26</option>
-										<option value="27">27</option>
-										<option value="28">28</option>
-										<option value="29">29</option>
-										<option value="30">30</option>
-										<option value="31">31</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group" :class="{ 'has-error': errors.has('dobYear') }">
-									<!--<label for="infoDobYear">Year</label>-->
-									<select class="form-control input-sm" v-model="dobYearCalc"
-											name="dobYear" id="infoDobYear" v-validate="'required'">
-										<option value="">Year</option>
-										<option v-for="year in selectableYears" :value="year">
-											{{ year }}
-										</option>
-									</select>
-								</div>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-sm-6" v-error-handler="{value: gender, handle: 'gender', messages: { req: 'Select a gender' }}">
-								<label>Gender</label>
-								<div :class="{ 'has-error': errors.has('gender') }">
-									<label>
-										<input type="radio" v-model="gender" name="gender" v-validate="'required'"
-											   value="male"> Male
-									</label>
-								</div>
-								<div :class="{ 'has-error': errors.has('gender') }">
-									<label>
-										<input type="radio" v-model="gender" name="gender" value="female"> Female
-									</label>
-								</div>
-							</div>
-
-							<div class="col-sm-6">
-								<div class="form-group" :class="{ 'has-error': errors.has('relationshipStatus') }">
-									<label for="infoRelStatus">Relationship Status</label>
-									<select class="form-control input-sm" v-model="relationshipStatus"
-											name="relationshipStatus" id="infoRelStatus" v-validate="'required'">
-										<option value="single">Single</option>
-										<option value="engaged">Engaged</option>
-										<option value="married">Married</option>
-										<option value="divorced">Divorced</option>
-										<option value="widowed">Widowed</option>
-
-									</select>
-								</div>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-sm-12">
-								<div class="row">
-									<div class="col-sm-12">
-										<label for="infoHeightA">Height</label>
-									</div>
-									<div class="col-sm-6">
-										<div class="form-group" :class="{ 'has-error': errors.has('heightA') }">
-											<div class="input-group input-group-sm">
-												<input type="number" class="form-control" id="infoHeightA" v-model="heightA" number min="0" max="10" name="heightA" v-validate="'required'">
-												<div class="input-group-addon" v-text="heightUnitA"></div>
-											</div>
+								<div class="col-sm-6">
+									<div class="form-group" :class="{ 'has-error': errors.has('heightA') }">
+										<div class="input-group input-group-sm">
+											<input type="number" class="form-control" id="infoHeightA" v-model="heightA" number min="0" max="10" name="heightA" v-validate="'required'">
+											<div class="input-group-addon" v-text="heightUnitA"></div>
 										</div>
 									</div>
-									<div class="col-sm-6">
-										<div class="form-group" :class="{ 'has-error': errors.has('heightB') }">
-											<div class="input-group input-group-sm">
-												<input type="number" class="form-control"  v-model="heightB" number min="0" max="11" name="heightB" v-validate="'required'">
-												<div class="input-group-addon" v-text="heightUnitB"></div>
-											</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group" :class="{ 'has-error': errors.has('heightB') }">
+										<div class="input-group input-group-sm">
+											<input type="number" class="form-control"  v-model="heightB" number min="0" max="11" name="heightB" v-validate="'required'">
+											<div class="input-group-addon" v-text="heightUnitB"></div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
+					</div>
 
-						<div class="row">
-							<div class="col-sm-6">
-								<div class="form-group" :class="{ 'has-error': errors.has('weight') }">
-									<label for="infoWeight">Weight</label>
-									<div class="input-group input-group-sm">
-										<input type="number" class="form-control" id="infoWeight" v-model="weight" number min="0" name="weight" v-validate="'required'">
-										<div class="input-group-addon" v-text="weightUnit"></div>
-									</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group" :class="{ 'has-error': errors.has('weight') }">
+								<label for="infoWeight">Weight</label>
+								<div class="input-group input-group-sm">
+									<input type="number" class="form-control" id="infoWeight" v-model="weight" number min="0" name="weight" v-validate="'required'">
+									<div class="input-group-addon" v-text="weightUnit"></div>
 								</div>
 							</div>
-							<div class="col-sm-6">
-								<div class="form-group" :class="{ 'has-error': errors.has('size') }">
-									<label for="infoShirtSize">Shirt Sizes</label>
-									<select class="form-control input-sm" v-model="size" name="size" v-validate="'required'"
-											id="infoShirtSize">
-										<option value="XS">XS (Extra Small)</option>
-										<option value="S">S (Small)</option>
-										<option value="M">M (Medium)</option>
-										<option value="L">L (Large)</option>
-										<option value="XL">XL (Extra Large)</option>
-										<option value="XXL">XXL (2 Extra Large)</option>
-										<option value="XXXL">XXXL (3 Extra Large)</option>
-									</select>
-								</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group" :class="{ 'has-error': errors.has('size') }">
+								<label for="infoShirtSize">Shirt Sizes</label>
+								<select class="form-control input-sm" v-model="size" name="size" v-validate="'required'"
+								        id="infoShirtSize">
+									<option value="XS">XS (Extra Small)</option>
+									<option value="S">S (Small)</option>
+									<option value="M">M (Medium)</option>
+									<option value="L">L (Large)</option>
+									<option value="XL">XL (Extra Large)</option>
+									<option value="XXL">XXL (2 Extra Large)</option>
+									<option value="XXXL">XXXL (3 Extra Large)</option>
+								</select>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
-						<div class="form-group" :class="{ 'has-error': errors.has('address') }">
-							<label for="infoAddress">Address</label>
-							<input type="text" class="form-control input-sm" v-model="address"
-								   name="address" id="infoAddress" v-validate="'required'"
-								   placeholder="Street Address">
-						</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group" :class="{ 'has-error': errors.has('address') }">
+						<label for="infoAddress">Address</label>
+						<input type="text" class="form-control input-sm" v-model="address"
+						       name="address" id="infoAddress" v-validate="'required'"
+						       placeholder="Street Address">
+					</div>
 
-						<div class="row">
-							<div class="col-sm-12">
-								<div class="form-group" :class="{ 'has-error': errors.has('city') }">
-									<label for="infoCity">City</label>
-									<input type="text" class="form-control input-sm" v-model="city"
-										   name="city" id="infoCity" placeholder v-validate="'required'">
-								</div>
-							</div>
-							<div class="col-sm-12">
-								<div class="form-group" :class="{ 'has-error': errors.has('state') }">
-									<label for="infoState">State/Prov.</label>
-									<input type="text" class="form-control input-sm" v-model="state"
-										   name="state" id="infoState" placeholder v-validate="'required'">
-								</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="form-group" :class="{ 'has-error': errors.has('city') }">
+								<label for="infoCity">City</label>
+								<input type="text" class="form-control input-sm" v-model="city"
+								       name="city" id="infoCity" placeholder v-validate="'required'">
 							</div>
 						</div>
-
-						<div class="row">
-							<div class="col-sm-6">
-								<div class="form-group" :class="{ 'has-error': errors.has('zip') }">
-									<label for="infoZip">Zip/Postal Code</label>
-									<input type="text" class="form-control input-sm" v-model="zipCode"
-										   name="zip" id="infoZip" placeholder="12345" v-validate="'required'">
-								</div>
+						<div class="col-sm-12">
+							<div class="form-group" :class="{ 'has-error': errors.has('state') }">
+								<label for="infoState">State/Prov.</label>
+								<input type="text" class="form-control input-sm" v-model="state"
+								       name="state" id="infoState" placeholder v-validate="'required'">
 							</div>
-							<div class="col-sm-12">
-								<div class="form-group" :class="{ 'has-error': errors.has('country') }">
-									<label for="infoCountry">Country</label>
-									<v-select @keydown.enter.prevent="" name="country" v-validate="'required'" class="form-control" id="infoCountry" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
-								</div>
-							</div>
-						</div>
-
-						<div class="form-group" :class="{ 'has-error': errors.has('phone') }">
-							<label for="infoPhone">Home Phone</label>
-							<phone-input v-validate="'required|min:10'" id="infoPhone" name="phone" v-model="phone"></phone-input>
-							<!--<input type="text" class="form-control input-sm" v-model="phone | phone"-->
-								   <!--name="phone="'required|min:10'" id="infoPhone" placeholder" v-validate="123-456-7890">-->
-						</div>
-
-						<div class="form-group" :class="{ 'has-error': errors.has('mobile') }">
-							<label for="infoMobile">Cell Phone</label>
-							<phone-input v-validate="'required|min:10'" id="infoMobile" name="mobile" v-model="mobile"></phone-input>
-							<!--<input type="text" class="form-control input-sm" v-model="mobile | phone"-->
-								   <!--name="mobile="'required|min:10'" :classes="{ invalid: 'has-error'}" id="infoMobile" placeholder" v-validate="123-456-7890">-->
 						</div>
 					</div>
-				</form>
 
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group" :class="{ 'has-error': errors.has('zip') }">
+								<label for="infoZip">Zip/Postal Code</label>
+								<input type="text" class="form-control input-sm" v-model="zipCode"
+								       name="zip" id="infoZip" placeholder="12345" v-validate="'required'">
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group" :class="{ 'has-error': errors.has('country') }">
+								<label for="infoCountry">Country</label>
+								<v-select @keydown.enter.prevent="" name="country" v-validate="'required'" class="form-control" id="infoCountry" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group" :class="{ 'has-error': errors.has('phone') }">
+						<label for="infoPhone">Home Phone</label>
+						<phone-input v-validate="'required|min:10'" id="infoPhone" name="phone" v-model="phone"></phone-input>
+						<!--<input type="text" class="form-control input-sm" v-model="phone | phone"-->
+						<!--name="phone="'required|min:10'" id="infoPhone" placeholder" v-validate="123-456-7890">-->
+					</div>
+
+					<div class="form-group" :class="{ 'has-error': errors.has('mobile') }">
+						<label for="infoMobile">Cell Phone</label>
+						<phone-input v-validate="'required|min:10'" id="infoMobile" name="mobile" v-model="mobile"></phone-input>
+						<!--<input type="text" class="form-control input-sm" v-model="mobile | phone"-->
+						<!--name="mobile="'required|min:10'" :classes="{ invalid: 'has-error'}" id="infoMobile" placeholder" v-validate="123-456-7890">-->
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 </template>
@@ -463,15 +461,15 @@
                 }
 			},
 			setLocalUserData(){
-                let user = this.forAdmin ? this.userObj : this.$parent.userData;
-                let names = user.name.split(' ');
+			  let user = this.forAdmin ? this.userObj : this.$parent.userData;
+              let birthdays = moment(user.birthday, 'YYYY-MM-DD');
+              let names = user.name.split(' ');
                 this.firstName = _.first(names);
                 this.lastName = names.length > 1 ? _.last(names) : null;
 
-                let birthdays = user.birthday.split('-');
-                this.dobDay = birthdays[2];
-                this.dobMonth = birthdays[1];
-                this.dobYearCalc = (parseInt(birthdays[0]) - this.currentYear + 100).toString();
+                this.dobDay = birthdays.format('DD');
+                this.dobMonth = birthdays.format('MM');
+                this.dobYearCalc = birthdays.format('YYYY');
 
                 this.email = user.email;
                 this.gender = user.gender ? user.gender.toLowerCase() : null;
@@ -489,17 +487,21 @@
 			}
 		},
 		activated(){
-			if (this.forAdmin) {
-				this.onBehalf = true;
-			}
+          let promises = [];
+          if (this.forAdmin) {
+			this.onBehalf = true;
+          }
 
-			this.getCountries();
+		  promises.push(this.getCountries());
+		  promises.push(this.getRoles(this.$parent.trip.team_roles));
+		  this.$http.all(promises).then((vals) => {
+		    if (!this.onBehalf)
+		      this.setLocalUserData();
+		  });
 
-			this.getRoles(this.$parent.trip.team_roles);
-
-            this.$emit('step-completion', true);
-			if (this.isAdminRoute)
-				$('html, body').animate({scrollTop: 200}, 300);
+		  this.$emit('step-completion', true);
+		  if (this.isAdminRoute)
+		    $('html, body').animate({scrollTop: 200}, 300);
 		}
 	}
 </script>

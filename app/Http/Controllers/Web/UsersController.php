@@ -21,6 +21,6 @@ class UsersController extends Controller
 
         $this->seo()->setTitle($user->name);
 
-        return view('site.users.profile', compact('user'));
+        return view('site.users.profile', compact('user'))->with('isProfile', true);
     }
 }

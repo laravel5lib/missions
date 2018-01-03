@@ -33,7 +33,7 @@ class GroupsController extends Controller
 
         $this->seo()->setTitle($group->name);
 
-        return view('site.groups.profile', compact('group'));
+        return view('site.groups.profile', compact('group'))->with('isProfile', true);
     }
 
     public function signup($slug)

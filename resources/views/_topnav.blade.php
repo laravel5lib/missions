@@ -64,7 +64,7 @@
         </li>
       @endif
 
-      @unless(request()->route()->named('fundraiser'))
+      @unless(request()->route()->named('fundraiser') or isset($isProfile))
       <li>
         <div class="hidden-xs" style="margin-right:20px;">
           <a class="btn btn-default-hollow" href="{{ url('/donate') }}">Donate</a>

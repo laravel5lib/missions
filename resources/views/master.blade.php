@@ -107,7 +107,7 @@
     <script src="{{ mix('js/app.js') }}"></script>
     @yield('scripts')
 
-    <script>
+    {{--  <script>
         // Popup control
 		$(document).ready(function(){
             if($.cookie('showpopup') == 'false'){
@@ -122,7 +122,7 @@
                 $.cookie('showpopup', false, { expires: date });
 			});
 		});
-	</script>
+	</script>  --}}
 
     @prod
     <!-- Hotjar Tracking Code for https://missions.me -->

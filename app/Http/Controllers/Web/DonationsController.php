@@ -29,10 +29,6 @@ class DonationsController extends Controller
 
         $this->seo()->setTitle('Donate to ' . $fund->name);
 
-        if ($fund->slug === 'general') {
-            return view('site.donate-year-end', compact('recipient', 'type', 'slug', 'id'));
-        }
-
         return view('site.donate', compact('recipient', 'type', 'slug', 'id'));
     }
 }

@@ -99,6 +99,9 @@ $this->get('/go/{slug?}', function ($slug = null) {
     }
     return redirect('/'.$slug);
 });
+$this->get('/1n1d19', function() {
+    return redirect('/travel-with-us/signup?trip_id=4f3705a8-fbae-45fe-927f-c3042a8d9127');
+});
 
 /*
 |--------------------------------------------------------------------------

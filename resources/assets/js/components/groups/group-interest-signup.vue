@@ -3,28 +3,30 @@
 
 		<form novalidate id="TripInterestSignupForm">
 			<spinner ref="validationSpinner" size="xl" :fixed="false" text="Sending..."></spinner>
-			<div class="row">
-				<div class="col-xs-12" v-error-handler="{ value: campaign_id, handle: 'campaign_id' }">
-					<label>Campaign of Interest</label>
-					<select v-model="campaign_id" class="form-control" name="campaign_id" v-validate="'required'">
-						<option v-for="campaign in campaigns" :value="campaign.data.id">
-							{{ campaign.data.name }}
-						</option>
-					</select>
-				</div>
-			</div>
-			<hr class="divider inv sm">
-			<div class="row" v-if="campaign_id">
-				<div class="col-xs-12" v-error-handler="{ value: interest.trip_id, handle: 'trip_id' }">
-					<label>Trip Type</label>
-					<select name="trip_id" v-model="interest.trip_id" class="form-control" v-validate="'required'">
-						<option v-for="trip in trips" :value="trip.id">
-							{{ trip.type | capitalize }} Trip
-						</option>
-					</select>
-				</div>
-			</div>
-			<hr class="divider inv sm">
+      <template v-if="!preselected">
+      <div class="row">
+        <div class="col-xs-12" v-error-handler="{ value: campaign_id, handle: 'campaign_id' }">
+          <label>Campaign of Interest</label>
+          <select v-model="campaign_id" class="form-control" name="campaign_id" v-validate="'required'">
+            <option v-for="campaign in campaigns" :value="campaign.data.id">
+              {{ campaign.data.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <hr class="divider inv sm">
+      <div class="row" v-if="campaign_id">
+        <div class="col-xs-12" v-error-handler="{ value: interest.trip_id, handle: 'trip_id' }">
+          <label>Trip Type</label>
+          <select name="trip_id" v-model="interest.trip_id" class="form-control" v-validate="'required'">
+            <option v-for="trip in trips" :value="trip.id">
+              {{ trip.type | capitalize }} Trip
+            </option>
+          </select>
+        </div>
+      </div>
+      <hr class="divider inv sm">
+      </template>
 			<div class="row">
 				<div class="col-xs-12" v-error-handler="{ value: interest.name, handle: 'name' }">
 					<label>Name</label>
@@ -88,7 +90,7 @@
   export default {
     name: 'group-interest-signup',
     mixins: [errorHandler],
-    props: ['id'],
+    props: ['id', 'preselected'],
     data() {
       return {
         group: {},
@@ -170,9 +172,15 @@
       }
     },
     mounted() {
+      if (this.preselected) {
+        this.interest.trip_id = this.preselected;
+      }
+
       this.$http.get('trips?groups[]=' + this.id, {
         params: {
           status: 'current',
+          onlyPublic: true,
+          onlyPublished: true,
           include: 'group,campaign'
         }
       }).then((response) => {

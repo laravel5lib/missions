@@ -39,10 +39,6 @@
     computed: {
       optionalCosts() {
         let arr = this.$parent.tripCosts.optional || [];
-        if (arr.length) {
-          this.selectedOptions = arr[0].id;
-        }
-        this.$emit('step-completion', true);
 
         return _.sortBy(arr, 'name');
       }

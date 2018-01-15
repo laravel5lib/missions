@@ -455,28 +455,28 @@
         },
         mounted() {
 		    // Stripe script
-            let elements = this.stripe.elements();
-            this.cardElement = elements.create('card', {
-                style: {
+			this.$nextTick(function () {
+				let elements = this.stripe.elements();
+				this.cardElement = elements.create('card', {
+					style: {
 
-                }
-            });
-            this.cardElement.mount('#card-element');
+					}
+				});
+				this.cardElement.mount('#card-element');
 
-            this.cardElement.on('change', (event) => {
-                this.setOutcome(event);
-            });
+				this.cardElement.on('change', (event) => {
+					this.setOutcome(event);
+				});
 
-            this.$emit('step-completion', true);
+				this.$emit('step-completion', true);
 
-            if (this.devMode) {
-				this.cardNumber = '';
-				this.cardCVC = '';
-				this.cardYear = '2019';
-				this.cardMonth = '1';
-			}
-
-
+				if (this.devMode) {
+					this.cardNumber = '';
+					this.cardCVC = '';
+					this.cardYear = '2019';
+					this.cardMonth = '1';
+				}
+			});
 		},
 		activated(){
 			$('html, body').animate({scrollTop : 200},300);

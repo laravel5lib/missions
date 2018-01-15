@@ -236,12 +236,14 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 <div class="dark-bg-primary">
 	<div class="container" style="padding:20px 0;">
 			<div class="col-xs-12 col-xs-offset-0 col-sm-10 col-sm-offset-1 text-center">
-				<h3 class="hidden-xs">Apply today and learn about your next steps. <a style="margin-left:20px;" class="btn btn-white-hollow btn-md" target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></h3>
+				<h3 class="hidden-xs">Apply today and start living the impossible. <a style="margin-left:20px;" class="btn btn-white-hollow btn-md" target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></h3>
 				<div class="visible-xs">
-					<h3>Apply today and learn about your next steps.</h3>
+					<h3>Apply today and start living the impossible.</h3>
 					<a class="btn btn-white-hollow btn-md" target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a>
 				</div>
 			</div><!-- end col -->
 	</div><!-- end container -->
 </div><!-- end gray-light-bg -->
+<hr class="divider" style="margin:0;">
+@include('partials.college.questions')
 @endsection

@@ -39,10 +39,6 @@
     computed: {
       optionalCosts() {
         let arr = this.$parent.tripCosts.optional || [];
-        if (arr.length) {
-          this.selectedOptions = arr[0].id;
-        }
-        this.$emit('step-completion', true);
 
         return _.sortBy(arr, 'name');
       }
@@ -51,10 +47,11 @@
       optionalCosts(val) {
         if (_.isArray(val) && val.length > 0) {
           this.selectedOptions = val[0].id;
+          this.$parent.selectedOptions = _.where(this.optionalCosts, { id: this.selectedOptions})[0];
         }
       },
       selectedOptions(val, oldVal) {
-        this.$parent.selectedOptions = _.where(this.optionalCosts, { id: val});
+        this.$parent.selectedOptions = _.where(this.optionalCosts, { id: val})[0];
         if (val) {
           this.$nextTick(() => {
             this.$emit('step-completion', true);

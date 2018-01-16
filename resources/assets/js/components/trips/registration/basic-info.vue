@@ -261,7 +261,7 @@
 			<div class="row">
 				<div class="col-sm-4">
 					<h5>Team Placement</h5>
-					<p class="text-muted">Please select your desired team role. Depending on your selection, the role may require addtional travel documents.</p>
+					<p class="text-muted">Please select your desired team role. Depending on your selection, the role may require additional travel documents.</p>
 						
 					<p class="text-muted">Missions.Me reserves the right to make all final team placement and role selections. We cannot garantee your selection. Thanks for understanding!</p>
 				</div>

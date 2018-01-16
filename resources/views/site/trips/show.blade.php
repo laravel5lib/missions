@@ -62,7 +62,13 @@
                     @if($trip->status <> 'active')
                         <btn class="btn btn-default btn-lg btn-block" disabled>Registration Closed</btn>
                     @else
-                        <a href="/trips/{{ $trip->id }}/register" class="btn btn-info btn-lg btn-block">Register Now</a>
+                        <a href="/trips/{{ $trip->id }}/register" class="btn btn-info btn-lg btn-block">
+                            @if(auth()->check())
+                                Register Now
+                            @else
+                                Sign in and Register
+                            @endif
+                        </a>
                     @endif
 
                     @unless($trip->reservations->count() < 2)

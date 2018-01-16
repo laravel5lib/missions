@@ -7,13 +7,12 @@
         <div class="row">
             <div class="col-sm-8">
                 <h3 class="hidden-xs text-capitalize">
-                    <img class="img-circle img-sm av-left" src="{{ image($trip->group->getAvatar()->source . '?w=100') }}">{{ $trip->group->name }} <small>&middot; {{ $trip->type }}</small>
+                    <img class="img-circle img-sm av-left" src="{{ image($trip->group->getAvatar()->source . '?w=100') }}">{{ $trip->group->name }}
                 </h3>
                 <div class="visible-xs text-center text-capitalize">
                     <hr class="divider inv">
                     <img class="img-circle img-sm" src="{{ image($trip->group->getAvatar()->source . '?w=100') }}">
                     <h4 style="margin-bottom:0;">{{ $trip->group->name }}</h4>
-                    <label>{{ $trip->type }}</label>
                     <hr class="divider inv">
                 </div>
             </div><!-- end col -->
@@ -77,6 +76,11 @@
                         </h5>
                     @endunless
 
+                    <hr class="divider lg">
+                    <h6 class="text-center text-uppercase small text-muted">Type</h6>
+                    <h4 class="text-uppercase text-center">
+                        {{ $trip->type }} Trip
+                    </h4>
                     <hr class="divider lg">
                     <h6 class="text-uppercase text-center">
                         <i class="fa fa-map-marker"></i> {{ country($trip->country_code) }}

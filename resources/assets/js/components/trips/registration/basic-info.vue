@@ -278,45 +278,6 @@
 			<hr class="divider">
 
 			<div class="row">
-				<div class="col-sm-8 col-sm-offset-4">
-					<div class="row">
-						<div class="col-sm-12">
-							<label for="infoHeightA">Height</label>
-						</div>
-						<div class="col-sm-6">
-							<div class="form-group" :class="{ 'has-error': errors.has('heightA') }">
-								<div class="input-group">
-									<input type="number" class="form-control" id="infoHeightA" v-model="heightA" number min="0" max="10" name="heightA" v-validate="'required'">
-									<div class="input-group-addon" v-text="heightUnitA"></div>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-6">
-							<div class="form-group" :class="{ 'has-error': errors.has('heightB') }">
-								<div class="input-group">
-									<input type="number" class="form-control"  v-model="heightB" number min="0" max="11" name="heightB" v-validate="'required'">
-									<div class="input-group-addon" v-text="heightUnitB"></div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6">
-							<div class="form-group" :class="{ 'has-error': errors.has('weight') }">
-								<label for="infoWeight">Weight</label>
-								<div class="input-group">
-									<input type="number" class="form-control" id="infoWeight" v-model="weight" number min="0" name="weight" v-validate="'required'">
-									<div class="input-group-addon" v-text="weightUnit"></div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<hr class="divider">
-
-			<div class="row">
 				<div class="col-sm-12">
 					<div class="checkbox">
 						<label>

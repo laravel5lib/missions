@@ -57,10 +57,7 @@ class TripRegistrationRequest extends FormRequest
             'currency'           => 'required_unless:amount,0|string',
             'payment'            => 'required_unless:amount,0|array',
             'payment.type'       => 'required_unless:amount,0|in:cash,check,card',
-            'payment.number'     => 'required_if:payment.type,check|string',
-            'weight'             => 'required|numeric',
-            'height_a'           => 'required|numeric',
-            'height_b'           => 'required|numeric'
+            'payment.number'     => 'required_if:payment.type,check|string'
         ];
 
         return $rules;

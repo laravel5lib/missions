@@ -209,14 +209,6 @@ class TripsController extends Controller
             ];
         }
 
-        $weight = $request->get('weight'); // kilograms
-        $height = (int) $request->get('height_a').$request->get('height_b'); // centimeters
-
-        if ($request->get('country_code') == 'us') {
-            $weight = convert_to_kg($request->get('weight'));
-        }
-            $height = convert_to_cm($request->get('height_a'), $request->get('height_b'));
-
         $reservation = $trip->reservations()
             ->create([
                 'given_names' => trim($request->get('given_names')),
@@ -236,8 +228,6 @@ class TripsController extends Controller
                 'email' => trim(strtolower($request->get('email'))),
                 'desired_role' => $request->get('desired_role'),
                 'shirt_size' => $request->get('shirt_size'),
-                'height' => $height,
-                'weight' => $weight,
                 'avatar_upload_id' => $request->get('avatar_upload_id'),
                 'companion_limit' => $trip->companion_limit
             ]);

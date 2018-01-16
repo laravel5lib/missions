@@ -296,7 +296,7 @@
 		},
 		created(){
 			// login component skipped for now
-			this.currentStep = this.stepList[0];
+			this.currentStep = this.stepList[2]; // DON'T FORGET TO CHANGE BACK TO 0
 		},
 		mounted(){
             let self = this;

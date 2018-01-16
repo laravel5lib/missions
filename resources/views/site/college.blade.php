@@ -104,7 +104,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 					</div><!-- end col -->
 					<div class="col-sm-4">
 						<div class="panel panel-default">
-							<a class="launch-modal" data-toggle="modal" data-target="#expVid"><img class="img-responsive" src="/images/college/vid-thumbs/testimonials.jpg" /></a>
+							<a class="launch-modal" data-toggle="modal" data-target="#expVid"><img class="img-responsive" src="/images/college/vid-thumbs/stud-life-thumb.jpg" /></a>
 							<div class="panel-body text-center">
 								<h6 class="text-uppercase">The Experience</h6>
 								<p class="small">Hear what former students have to say.</p>
@@ -225,7 +225,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
                 <div class="modal-video">
                     <div class="video-outer">
                       <div class="video-inner">
-                        <iframe src="https://player.vimeo.com/video/130333477" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                        <iframe src="https://player.vimeo.com/video/251202310?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
                       </div>
                     </div>
                 </div>

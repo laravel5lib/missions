@@ -1,17 +1,30 @@
 @extends('site.layouts.default')
 
 @section('content')
-<div class="dark-bg-primary">
 <div class="container">
-	<div class="col-sm-12 col-sm-0">
-		<hr class="divider inv xlg">
-		<h1 class="text-center">Let's Go!</h1>
-		<h4 class="text-center">Register to start changing the world!</h4>
-		<hr class="divider inv xlg">
-		<trip-registration-wizard trip-id="{{ $trip->id }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}"></trip-registration-wizard>
-		<hr class="divider inv xlg">
+	<hr class="divider inv md">
+	<div class="col-sm-12">
+		<h2>Trip Registration</h2>
 	</div>
-</div>
+	<div class="col-lg-9">
+		<trip-registration-wizard trip-id="{{ $trip->id }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}"></trip-registration-wizard>
+	</div>
+	<div class="col-lg-3">
+		<div class="panel panel-default">
+			<div class="panel-body text-center">
+				<img src="{{ image($trip->group->getAvatar()->source) }}" class="img img-responsive">
+				<h4 class="text-uppercase">{{ ucwords($trip->type) }} Trip</h4>
+				<h5 class="text-muted"><i class="fa fa-map-marker"></i> {{ country($trip->country_code) }}</h5>
+				<hr class="divider inv lg">
+				<h5>{{ $trip->group->name }}</h5>
+				<p>
+					{{ $trip->started_at->format('M d') }} - {{ $trip->ended_at->format('M d') }}
+					<br /> {{ $trip->ended_at->format('Y') }}
+				</p>
+			</div>
+		</div>
+	</div>
+	<hr class="divider inv xlg">
 </div>
 @endsection
 

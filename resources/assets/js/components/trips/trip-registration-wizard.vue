@@ -1,52 +1,11 @@
 <template>
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h5>{{ trip.country_name }} Trip Registration</h5>
+			<h5>{{ currentStep.name }}</h5>
 		</div>
 		<div class="panel-body">
-			<div class="row visible-xs-block">
-				<div class="col-xs-12">
-					<div class="btn-group btn-group-justified btn-group-xs" style="display:block;" role="group" aria-label="...">
-						<a @click="backStep" class="btn btn-default" :class="{'disabled': currentStep.view === 'step2' }" role="button">
-							<i class="fa fa-chevron-left"></i>
-						</a>
-						<div class="btn-group" role="group">
-							<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button"
-							   aria-haspopup="true" aria-expanded="false">
-								{{ currentStep.name }} <span class="caret"></span>
-							</a>
-							<ul class="dropdown-menu dropdown-menu-right">
-								<li role="step" v-for="step in stepList" :class="{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view && !step.complete}">
-									<a @click="toStep(step)">
-										<span class="fa" :class="{'fa-chevron-right':!step.complete, 'fa-check': step.complete}"></span>
-										{{step.name}}
-									</a>
-								</li>
-							</ul>
-						</div>
-						<!--<a class="btn btn-default" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep()">
-							<i class="fa fa-chevron-right"></i>
-						</a>
-						<a class="btn btn-primary" v-if="wizardComplete" @click="finish()">
-							<i class="fa fa-check"></i>
-						</a>-->
-					</div>
-				</div>
-			</div>
-			<hr class="divider visible-xs">
 			<div class="row">
-				<div class="col-sm-5 col-md-4 hidden-xs">
-					<ul class="nav nav-pills nav-stacked">
-						<li role="step" v-for="step in stepList" :class="{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view && !step.complete}">
-							<a @click="toStep(step)">
-								<span class="fa" :class="{'fa-chevron-right':!step.complete, 'fa-check': step.complete}"></span>
-								{{step.name}}
-							</a>
-						</li>
-
-					</ul>
-				</div>
-				<div class="col-sm-7 col-md-8" :class="currentStep.view">
+				<div class="col-sm-12" :class="currentStep.view">
 					<spinner ref="validationSpinner" size="xl" :fixed="false" text="Validating"></spinner>
 					<spinner ref="reservationspinner" size="xl" :fixed="true" text="Creating Reservation"></spinner>
 					<keep-alive>
@@ -58,12 +17,13 @@
 			</div>
 		</div>
 		<div class="panel-footer text-right">
-			<div class="btn-group btn-group" role="group" aria-label="...">
-				<!--<a class="btn btn-link" data-dismiss="modal">Cancel</a>-->
-				<a class="btn btn-default" @click="backStep" :class="{'disabled': currentStep.view === 'step2' }">Back</a>
-				<a class="btn btn-primary" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep">Continue</a>
+				<a class="btn btn-link pull-left" @click="backStep" :class="{'disabled': currentStep.view === 'step2' }">
+					<i class="fa fa-angle-double-left"></i> Back
+				</a>
+				<a class="btn btn-primary" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep">
+					Next <i class="fa fa-angle-double-right"></i>
+				</a>
 				<a class="btn btn-primary" v-else @click="finish">Finish</a>
-			</div>
 		</div>
 	</div>
 </template>
@@ -101,7 +61,7 @@
 				stepList:[
 					{name: 'Legal (Terms of Service)', view: 'step2', complete:false},
 					{name: 'Rules of Conduct Agreement', view: 'step3', complete:false},
-					{name: 'Basic Traveler Information', view: 'step4', complete:false},
+					{name: 'Traveler Information', view: 'step4', complete:false},
 					{name: 'Rooming Options', view: 'step5', complete:false},
 					{name: 'Payment Details', view: 'step6', complete:false},
 					{name: 'Deadline Agreements', view: 'step7', complete:false},

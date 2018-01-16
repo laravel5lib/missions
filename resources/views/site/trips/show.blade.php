@@ -78,6 +78,10 @@
                     @endunless
 
                     <hr class="divider lg">
+                    <h6 class="text-uppercase text-center">
+                        <i class="fa fa-map-marker"></i> {{ country($trip->country_code) }}
+                    </h6>
+                    <hr class="divider lg">
                     <h6 class="text-center text-uppercase small text-muted">Start Date</h6>
                     <h4 class="text-center">{{ $trip->started_at->format('F d, Y') }}</h4>
                     <hr class="divider inv">

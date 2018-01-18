@@ -92,69 +92,71 @@
 					</table>
 				</div>
 				<hr class="divider" />
-				<h4>Cost Deadlines</h4>
-				<div class="panel panel-default" v-for="cost in costs.static">
-					<!-- Default panel contents -->
-					<div class="panel-heading">
-						{{cost.name}}
-						<span class="pull-right">{{currency(cost.amount)}}</span>
+				<!--<div class="col-sm-12">
+					<h4>Cost Deadlines</h4>
+					<div class="panel panel-default" v-for="cost in costs.static">
+						&lt;!&ndash; Default panel contents &ndash;&gt;
+						<div class="panel-heading">
+							{{cost.name}}
+							<span class="pull-right">{{currency(cost.amount)}}</span>
+						</div>
+						<div class="panel-body">
+							<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
+							<div class="list-group">
+								<div class="list-group-item" v-for="payment in cost.payments.data">
+									<h4 class="list-group-item-heading">
+										Deadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}
+									</h4>
+									<p class="list-group-item-text">
+										The amount of <b>{{currency(payment.amount_owed)}}</b>, {{payment.percent_owed}}&percnt; of the total amount, is due.
+									</p>
+								</div>
+							</div>
+						</div>
 					</div>
-					<div class="panel-body">
-						<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
-						<div class="list-group">
-							<div class="list-group-item" v-for="payment in cost.payments.data">
-								<h4 class="list-group-item-heading">
-									Deadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}
-								</h4>
-								<p class="list-group-item-text">
-									The amount of <b>{{currency(payment.amount_owed)}}</b>, {{payment.percent_owed}}&percnt; of the total amount, is due.
-								</p>
+					<div class="panel panel-default" v-for="cost in costs.incremental">
+						&lt;!&ndash; Default panel contents &ndash;&gt;
+						<div class="panel-heading">
+							{{cost.name}}
+							<span class="pull-right">{{currency(cost.amount)}}</span>
+						</div>
+						<div class="panel-body">
+							<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
+							<div class="list-group">
+								<div class="list-group-item" v-for="payment in cost.payments.data">
+									<h4 class="list-group-item-heading">
+										Deadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}
+									</h4>
+									<p class="list-group-item-text">
+										The amount of <b>{{currency(payment.amount_owed)}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
+										If this amount is not received by the deadline, additional costs may be applied.
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-default" v-for="cost in selectedOptionalCosts">
+						&lt;!&ndash; Default panel contents &ndash;&gt;
+						<div class="panel-heading">
+							{{cost.name}}
+							<span class="pull-right">{{currency(cost.amount)}}</span>
+						</div>
+						<div class="panel-body">
+							<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
+							<div class="list-group">
+								<div class="list-group-item" v-for="payment in cost.payments.data">
+									<h4 class="list-group-item-heading">
+										Deadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}
+									</h4>
+									<p class="list-group-item-text">
+										The amount of <b>{{currency(payment.amount_owed)}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
+									</p>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="panel panel-default" v-for="cost in costs.incremental">
-					<!-- Default panel contents -->
-					<div class="panel-heading">
-						{{cost.name}}
-						<span class="pull-right">{{currency(cost.amount)}}</span>
-					</div>
-					<div class="panel-body">
-						<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
-						<div class="list-group">
-							<div class="list-group-item" v-for="payment in cost.payments.data">
-								<h4 class="list-group-item-heading">
-									Deadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}
-								</h4>
-								<p class="list-group-item-text">
-									The amount of <b>{{currency(payment.amount_owed)}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
-									If this amount is not received by the deadline, additional costs may be applied.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="panel panel-default" v-for="cost in selectedOptionalCosts">
-					<!-- Default panel contents -->
-					<div class="panel-heading">
-						{{cost.name}}
-						<span class="pull-right">{{currency(cost.amount)}}</span>
-					</div>
-					<div class="panel-body">
-						<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
-						<div class="list-group">
-							<div class="list-group-item" v-for="payment in cost.payments.data">
-								<h4 class="list-group-item-heading">
-									Deadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}
-								</h4>
-								<p class="list-group-item-text">
-									The amount of <b>{{currency(payment.amount_owed)}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<hr>
+				<hr>-->
 				<div class="col-sm-12">
 					<div class="checkbox">
 						<label>

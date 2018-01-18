@@ -211,6 +211,12 @@
             fundraisingGoal(){
                 return this.totalCosts - this.upfrontTotal;
             },
+            costs(){
+	            return this.$parent.tripCosts || [];
+            },
+            selectedOptionalCosts(){
+                return [this.$parent.selectedOptions] || [];
+            },
             staticCosts(){
                 return this.$parent.tripCosts.static || [];
             },

@@ -19,6 +19,18 @@
 					</div>
 				</div>
 				<div class="col-md-12">
+					<ul class="list-group">
+						<li class="list-group-item">
+							<h5 class="list-group-item-heading">
+								Total Amount Due Now
+								<span class="pull-right">
+									{{currency(upfrontTotal, '$', 'USD')}}
+								</span>
+							</h5>
+						</li>
+					</ul>
+				</div>
+				<div class="col-md-12">
 					<div id="paymentAlerts" v-if="$parent.paymentErrors.length > 0">
 						<div v-for="error in $parent.paymentErrors" class="alert alert-danger alert-dismissible"
 						     role="alert">
@@ -107,11 +119,6 @@
 			    handle: 'PaymentDetails',
 				title: 'Payment Details',
 				paymentComplete: false,
-				//staticCosts: [],
-				//incrementalCosts: [],
-				//selectedOptions: [],
-				//upfrontTotal:0,
-				//totalCosts: 0,
 				attemptedCreateToken: false,
 				promo: '',
                 promoValid: false,
@@ -237,16 +244,6 @@
                     return results;
                 })();
                 return years;
-            },
-            cardParams() {
-                return {
-                    cardholder: this.cardHolderName,
-                    number: this.cardNumber,
-                    exp_month: this.cardMonth,
-                    exp_year: this.cardYear,
-                    cvc: this.cardCVC,
-                    zip: this.cardZip
-                };
             },
         },
 		watch: {
@@ -389,7 +386,7 @@
 					this.cardMonth = '1';
 				}
 			});
-		},
+        },
 		activated(){
 			$('html, body').animate({scrollTop : 200},300);
 		}

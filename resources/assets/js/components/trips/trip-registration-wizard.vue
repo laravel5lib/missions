@@ -152,23 +152,6 @@
                         });
 
 						break;
-					case 'payment':
-						// find child
-						if (this.upfrontTotal > 0) {
-                            this.$children.forEach(function (child) {
-                                if (child.hasOwnProperty('handle') && child.handle === 'PaymentDetails')
-                                    thisChild = child;
-                            });
-                            // promise needed to wait for async response from stripe
-                            $.when(thisChild.createToken())
-	                                .done(success => {
-	                                    this.$refs.validationSpinner.hide();
-	                                    this.nextStepCallback();
-	                                });
-                        } else {
-                            this.nextStepCallback();
-                        }
-						break;
 					default:
 						this.nextStepCallback();
 				}
@@ -181,7 +164,25 @@
 					}
 				}, this);
 			},
-			finish(){
+            finish() {
+              let thisChild;
+              // find child
+              if (this.upfrontTotal > 0) {
+                this.$children.forEach(function (child) {
+                  if (child.hasOwnProperty('handle') && child.handle === 'PaymentDetails')
+                    thisChild = child;
+                });
+                // promise needed to wait for async response from stripe
+                $.when(thisChild.createToken())
+                  .done(success => {
+                    this.$refs.validationSpinner.hide();
+                    this.finishConfirmed();
+                  });
+              } else {
+                this.finishConfirmed();
+              }
+            },
+			finishConfirmed(){
                 let data = {
                     // reservation data
                     height_a: this.userInfo.heightA,

@@ -207,6 +207,7 @@
 			    handle: 'PaymentAgreement',
 				title: 'Payment Agreement',
                 paymentAgree: false,
+                promoValid: false,
 			}
 		},
         computed: {

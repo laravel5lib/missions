@@ -29,6 +29,8 @@ class TripRegistrationTest extends TestCase
         Passport::actingAs($this->user);
         
         $trip = factory(Trip::class)->create();
+        $trip->costs()->save(factory(Cost::class)->make());
+        $trip->deadlines()->save(factory(Deadline::class)->make());
 
         $response = $this->json('POST', "/api/trips/{$trip->id}/register", $this->formData());
         
@@ -39,6 +41,11 @@ class TripRegistrationTest extends TestCase
                 'surname' => 'Doe'
             ]
         ]);
+
+        $reservation = $trip->reservations->first();
+
+        $this->assertNotNull($reservation->fund->id);
+        $this->assertNotEmpty($reservation->todos);
     }
 
     private function formData()

@@ -31,13 +31,14 @@ class TripRegistrationController extends Controller
      */
     public function store($id, TripRegistrationRequest $request)
     {
-        $trip = $this->trip->findOrFail($id);
-
         if ($request->get('amount') > 0) {
             $request = $this->handleDeposit($request);
         }
 
-        $reservation = $this->createReservation($request, $trip);
+        $reservation = $this->createReservation(
+            $request, 
+            $this->trip->findOrFail($id)
+        );
 
         event(new RegisteredForTrip($reservation, $request));
 

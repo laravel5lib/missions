@@ -41,7 +41,8 @@
 	import roca from './registration/roca.vue';
 	import basicInfo from './registration/basic-info.vue';
 	import additionalOptions from './registration/additional-trip-options.vue';
-	import paymentDetails from './registration/payment-details.vue';
+	import paymentAgreement from './registration/payment-agreement.vue';
+	import payment from './registration/payment.vue';
 	import deadlineAgreement from './registration/deadline-agreement.vue';
 	import review from './registration/review.vue';
 	export default{
@@ -52,9 +53,10 @@
             'step3': roca,
             'step4': basicInfo,
             'step5': additionalOptions,
-            'step6': paymentDetails,
             'step7': deadlineAgreement,
-            'step8': review,
+            // 'step8': review,
+            'paymentAgreement': paymentAgreement,
+            'payment': payment,
         },
         data(){
 			return {
@@ -63,10 +65,11 @@
 					{name: 'Rules of Conduct Agreement', view: 'step3', complete:false},
 					{name: 'Traveler Information', view: 'step4', complete:false},
 					{name: 'Rooming Options', view: 'step5', complete:false},
-					{name: 'Payment Details', view: 'step6', complete:false},
 					{name: 'Deadline Agreements', view: 'step7', complete:false},
-					{name: 'Review', view: 'step8', complete:false}
-				],
+					// {name: 'Review', view: 'step8', complete:false},
+                    {name: 'Financial Agreement', view: 'paymentAgreement', complete:false},
+                    {name: 'Payment', view: 'payment', complete:false},
+                ],
 				currentStep: null,
 				trip: {},
 				tripCosts: {},
@@ -111,7 +114,7 @@
 
                 // negate step completion
                 this.currentStep = step;
-                if (step.view === 'step6') {
+                if (step.view === 'payment') {
                     this.detailsConfirmed = false;
                     this.$nextTick(() =>  {
                         this.currentStep.complete = false;
@@ -149,7 +152,7 @@
                         });
 
 						break;
-					case 'step6':
+					case 'payment':
 						// find child
 						if (this.upfrontTotal > 0) {
                             this.$children.forEach(function (child) {
@@ -266,37 +269,15 @@
                 });
 			    return finalCosts;
 			},
-			detectCardType(number) {
-				// http://stackoverflow.com/questions/72768/how-do-you-detect-credit-card-type-based-on-number
-				let re = {
-					electron: /^(4026|417500|4405|4508|4844|4913|4917)\d+$/,
-					maestro: /^(5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)\d+$/,
-					dankort: /^(5019)\d+$/,
-					interpayment: /^(636)\d+$/,
-					unionpay: /^(62|88)\d+$/,
-					visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
-					mastercard: /^5[1-5][0-9]{14}$/,
-					amex: /^3[47][0-9]{13}$/,
-					diners: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
-					discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/,
-					jcb: /^(?:2131|1800|35\d{3})\d{11}$/
-				};
-
-				for(let key in re) {
-					if(re[key].test(number)) {
-						return key
-					}
-				}
-			},
 			stepCompleted(val) {
                 this.currentStep.complete = val;
-                if (this.currentStep.view === 'step8')
+                if (this.currentStep.view === 'payment')
                     this.wizardComplete = val;
 			},
 		},
 		created(){
 			// login component skipped for now
-			this.currentStep = this.stepList[2]; // DON'T FORGET TO CHANGE BACK TO 0
+			this.currentStep = this.stepList[3]; // DON'T FORGET TO CHANGE BACK TO 0
 		},
 		mounted(){
             let self = this;

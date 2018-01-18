@@ -15,87 +15,26 @@
 				</div>
 			</div>
 			<hr>
-			<h4>Cost Deadlines</h4>
-			<div class="panel panel-default" v-for="cost in costs.static">
-				<!-- Default panel contents -->
-				<div class="panel-heading">
-					{{cost.name}}
-					<span class="pull-right">{{currency(cost.amount)}}</span>
-				</div>
-				<div class="panel-body">
-					<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
-					<div class="list-group">
-						<div class="list-group-item" v-for="payment in cost.payments.data">
-							<h4 class="list-group-item-heading">
-								Deadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}
-							</h4>
-							<p class="list-group-item-text">
-								The amount of <b>{{currency(payment.amount_owed)}}</b>, {{payment.percent_owed}}&percnt; of the total amount, is due.
-							</p>
-						</div>
+			<template v-if="deadlines.length">
+				<h4>Other Deadlines</h4>
+				<div class="list-group">
+					<div class="list-group-item" v-for="deadline in deadlines">
+						<h4 class="list-group-item-heading">
+							{{deadline.name}}
+						</h4>
+						<p class="list-group-item-text">
+							This {{deadline.enforced ? 'must' : 'should'}} be completed by {{ toDate(deadline.date) }}.
+						</p>
 					</div>
 				</div>
-			</div>
-			<div class="panel panel-default" v-for="cost in costs.incremental">
-				<!-- Default panel contents -->
-				<div class="panel-heading">
-					{{cost.name}}
-					<span class="pull-right">{{currency(cost.amount)}}</span>
-				</div>
-				<div class="panel-body">
-					<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
-					<div class="list-group">
-						<div class="list-group-item" v-for="payment in cost.payments.data">
-							<h4 class="list-group-item-heading">
-								Deadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}
-							</h4>
-							<p class="list-group-item-text">
-								The amount of <b>{{currency(payment.amount_owed)}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
-								If this amount is not received by the deadline, additional costs may be applied.
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="panel panel-default" v-for="cost in selectedOptionalCosts">
-				<!-- Default panel contents -->
-				<div class="panel-heading">
-					{{cost.name}}
-					<span class="pull-right">{{currency(cost.amount)}}</span>
-				</div>
-				<div class="panel-body">
-					<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
-					<div class="list-group">
-						<div class="list-group-item" v-for="payment in cost.payments.data">
-							<h4 class="list-group-item-heading">
-								Deadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}
-							</h4>
-							<p class="list-group-item-text">
-								The amount of <b>{{currency(payment.amount_owed)}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<hr>
-			<h4>Other Deadlines</h4>
-			<div class="list-group">
-				<div class="list-group-item" v-for="deadline in deadlines">
-					<h4 class="list-group-item-heading">
-						{{deadline.name}}
-					</h4>
-					<p class="list-group-item-text">
-						This {{deadline.enforced ? 'must' : 'should'}} be completed by {{ toDate(deadline.date) }}.
-					</p>
-				</div>
-			</div>
+			</template>
 
 		</div>
 		<div class="col-sm-12">
 			<div class="checkbox">
 				<label>
 					<input type="checkbox" v-model="deadlineAgree">
-					I have read and agree to the Deadlines listed.
+					I have read and agree to provide the information above before the given due dates or risk being dropped from the trip.
 				</label>
 			</div>
 		</div>
@@ -109,7 +48,7 @@
 		name: 'deadline-agreement',
 		data(){
 			return {
-				title: 'Deadline Agreement',
+				title: 'Requirements',
 				deadlineAgree: false,
 			}
 		},

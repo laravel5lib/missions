@@ -106,10 +106,10 @@
 			fallbackStep(step){
 			    // negate last step completion
                 this.wizardComplete = false;
-                this.stepList[7].complete = false;
+                this.stepList[5].complete = false;
 
                 // negate second last step completion
-                this.stepList[6].complete = false;
+                this.stepList[4].complete = false;
                 this.rocaAgree = false;
 
                 // negate step completion
@@ -255,7 +255,7 @@
                     this.$refs.reservationspinner.hide();
                     console.log(error.response);
 					this.$root.$emit('showError', error.response.data.message);
-                    this.fallbackStep(this.stepList[4]); // return to payment details step
+                    //this.fallbackStep(this.stepList[4]); // return to payment details step
 					this.paymentErrors.push(error.response.data.message);
 				});
 
@@ -278,7 +278,7 @@
 		},
 		created(){
 			// login component skipped for now
-			this.currentStep = this.stepList[3]; // DON'T FORGET TO CHANGE BACK TO 0
+			this.currentStep = this.stepList[0]; // DON'T FORGET TO CHANGE BACK TO 0
 		},
 		mounted(){
             let self = this;

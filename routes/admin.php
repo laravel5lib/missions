@@ -9,11 +9,7 @@ use Artesaos\SEOTools\Facades\SEOMeta;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    SEOMeta::setTitle('Admin Dashboard');
-
-    return view('admin.index');
-})->middleware(['can:access_backend']);
+Route::get('/', 'AdminController@index')->middleware(['can:access_backend']);
 
 Route::get('users/stop', 'UsersController@stopImpersonate');
 Route::get('users/{id}/impersonate', 'UsersController@impersonate');

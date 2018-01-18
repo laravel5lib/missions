@@ -1,7 +1,4 @@
 @extends('admin.layouts.default')
-@inject('interests', 'App\Models\v1\TripInterest')
-@inject('reservations', 'App\Models\v1\Reservation')
-@inject('campaigns', 'App\Models\v1\Campaign')
 
 @section('content')
   <div class="white-header-bg">
@@ -22,7 +19,7 @@
       </div>
     </div>
     <div class="row">
-      @foreach($campaigns->active()->get() as $campaign)
+      @foreach($campaigns as $campaign)
       <div class="col-lg-3 col-sm-6">
         <div class="circle-tile ">
           <a href="admin/campaigns/{{ $campaign->id }}"><div class="circle-tile-heading"><img class="img-responsive img-circle" src="{{ image($campaign->getAvatar()->source.'?w=200&h=200&fit=stretch') }}"></div></a>
@@ -49,7 +46,7 @@
           </div>
           <table class="table table-hover">
             <tbody>
-            @foreach($interests->latest()->take(5)->get() as $interest)
+            @foreach($interests as $interest)
               <tr onclick="window.location.href = 'admin/interests/{{ $interest->id }}'" style="cursor: pointer;">
                 <td style="padding:5px 15px;vertical-align:middle;font-size:12px;">{{ $interest->name }}</td>
                 <td style="padding:5px 15px;vertical-align:middle;font-size:12px;">
@@ -75,7 +72,7 @@
           </div>
           <table class="table table-hover">
             <tbody>
-            @foreach($reservations->current()->latest()->take(5)->get() as $reservation)
+            @foreach($reservations as $reservation)
               <tr onclick="window.location.href = 'admin/reservations/{{ $reservation->id }}'" style="cursor: pointer;">
                 <td style="padding:5px 15px;vertical-align:middle;font-size:12px;">{{ $reservation->given_names }}</td>
                 <td style="padding:5px 15px;vertical-align:middle;font-size:12px;">

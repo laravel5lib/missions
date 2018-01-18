@@ -1,7 +1,7 @@
 <template>
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h5>{{ currentStep.name }}</h5>
+			<h4>{{ currentStep.name }}</h4>
 		</div>
 		<div class="panel-body">
 			<div class="row">
@@ -17,13 +17,15 @@
 			</div>
 		</div>
 		<div class="panel-footer text-right">
+				<hr class="divider inv">
 				<a class="btn btn-link pull-left" @click="backStep" :class="{'disabled': currentStep.view === 'step2' }">
 					<i class="fa fa-angle-double-left"></i> Back
 				</a>
 				<a class="btn btn-primary" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep">
 					Next <i class="fa fa-angle-double-right"></i>
 				</a>
-				<a class="btn btn-primary" v-else @click="finish">Finish</a>
+				<a class="btn btn-primary" v-else @click="finish">Make Payment and Finish</a>
+				<hr class="divider inv">
 		</div>
 	</div>
 </template>
@@ -54,21 +56,19 @@
             'step4': basicInfo,
             'step5': additionalOptions,
             'requirements': deadlineAgreement,
-            // 'step8': review,
             'paymentAgreement': paymentAgreement,
             'payment': payment,
         },
         data(){
 			return {
 				stepList:[
-					{name: 'Legal (Terms of Service)', view: 'step2', complete:false},
+					{name: 'Terms of Service Agreement', view: 'step2', complete:false},
 					{name: 'Rules of Conduct Agreement', view: 'step3', complete:false},
 					{name: 'Traveler Information', view: 'step4', complete:false},
 					{name: 'Rooming Options', view: 'step5', complete:false},
-					{name: 'Requirements', view: 'requirements', complete:false},
-					// {name: 'Review', view: 'step8', complete:false},
-                    {name: 'Financial Agreement', view: 'paymentAgreement', complete:false},
-                    {name: 'Payment', view: 'payment', complete:false},
+					{name: 'Financial Agreement', view: 'paymentAgreement', complete:false},
+					{name: 'Travel Requirements', view: 'requirements', complete:false},
+                    {name: 'Review & Deposit', view: 'payment', complete:false},
                 ],
 				currentStep: null,
 				trip: {},

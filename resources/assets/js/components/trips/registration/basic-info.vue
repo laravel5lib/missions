@@ -3,21 +3,11 @@
 		<div class="col-sm-12">
 			<form novalidate name="BasicInfoForm" id="BasicInfoForm">
 
-			<div class="row">
-				<template v-if="forAdmin">
-					<div class="col-sm-12 col-md-8 col-md-offset-4">
-						<div class="form-group" :class="{ 'has-error': errors.has('manager') }">
-							<label for="infoManager">Reservation Manager</label>
-							<v-select @keydown.enter.prevent="" class="form-control" name="manager" id="infoManager" v-validate="'required'" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-						</div>
-					</div>
-				</template>
+			<div class="row" v-if="forAdmin">
 				<div class="col-sm-12 col-md-8 col-md-offset-4">
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" v-model="onBehalf" @change="toggleUserData">
-							This reservation is for someone else.
-						</label>
+					<div class="form-group" :class="{ 'has-error': errors.has('manager') }">
+						<label for="infoManager">Reservation Manager</label>
+						<v-select @keydown.enter.prevent="" class="form-control" name="manager" id="infoManager" v-validate="'required'" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
 					</div>
 				</div>
 			</div>
@@ -508,14 +498,13 @@
 
 		  promises.push(this.getCountries());
 		  promises.push(this.getRoles(this.$parent.trip.team_roles));
-		  this.$http.all(promises).then((vals) => {
-		    if (!this.onBehalf)
-		      this.setLocalUserData();
-		  });
+		//   this.$http.all(promises).then((vals) => {
+		//     if (!this.onBehalf)
+		//       this.setLocalUserData();
+		//   });
 
 		  this.$emit('step-completion', true);
-		  if (this.isAdminRoute)
-		    $('html, body').animate({scrollTop: 200}, 300);
+		  $('html, body').animate({scrollTop: 0}, 300);
 		}
 	}
 </script>

@@ -1,18 +1,52 @@
 <template >
 	<div class="row">
 		<div class="col-sm-12">
-			<h4>Payment Details</h4>
-			<hr>
+            <address>
+                <strong>{{userInfo.firstName}} {{userInfo.lastName}}</strong><br>
+                {{userInfo.address}}<br>
+                {{userInfo.city}}, {{userInfo.state}} {{userInfo.zipCode}}<br>
+                {{userInfo.country_name}}<br>
+            </address>
+                <hr class="divider">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label>Date of Birth</label><p>{{userInfo.dob}}</p>
+                    </div><!-- end col -->
+                    <div class="col-sm-3">
+                        <label>Gender</label><p>{{ userInfo.gender|capitalize }}</p>
+                    </div><!-- end col -->
+                    <div class="col-sm-3">
+                        <label>Relationship Status</label><p>{{ userInfo.relationshipStatus|capitalize }}</p>
+                    </div><!-- end col -->
+                    <div class="col-sm-3">
+                        <label>Role</label><p>{{userInfo.desired_role.name}}</p>
+                    </div><!-- end col -->
+                </div><!-- end row -->
+                <hr class="divider">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label><i class="fa fa-phone"></i> Phone</label><p>{{userInfo.phone}}</p>
+                    </div>
+                    <div class="col-sm-4">
+                        <label><i class="fa fa-mobile"></i> Mobile</label><p>{{userInfo.mobile}}</p>
+                    </div>
+                    <div class="col-sm-4">
+                        <label><i class="fa fa-envelope"></i> Email</label><p>{{userInfo.email}}</p>
+                    </div><!-- end col -->
+                </div><!-- end row -->
+
+            <hr class="divider">
+			<h5>Payment Details</h5>
 			<div class="row">
 				<div class="col-md-12">
 					<div class="form-group" :class="{ 'has-error': promoValid === false && promoError, 'has-success': promoValid > 0 }">
 						<label for="cardHolderName">Promo Code</label>
 						<div class="input-group">
-							<span class="input-group-addon input-sm"><span class="fa" :class="{'fa-check' : promoValid, 'fa-times' : promoError !== '' && !promoValid, 'fa-gift': !promoValid && promoError === ''}"></span></span>
-							<input type="text" class="form-control input-sm" id="promo" placeholder=""
+							<span class="input-group-addon"><span class="fa" :class="{'fa-check' : promoValid, 'fa-times' : promoError !== '' && !promoValid, 'fa-gift': !promoValid && promoError === ''}"></span></span>
+							<input type="text" class="form-control" id="promo" placeholder=""
 						       v-model="promo" />
 							<span class="input-group-btn">
-						        <button class="btn btn-default btn-sm" type="button" @click.prevent="checkPromo">Apply</button>
+						        <button class="btn btn-default" type="button" @click.prevent="checkPromo">Apply</button>
 							</span>
 						</div>
 						<div class="help-block" v-if="promoError" v-text="promoError"></div>
@@ -44,8 +78,8 @@
 									<div class="form-group" :class="{ 'has-error': errors.has('cardholdername') }">
 										<label for="cardHolderName">Card Holder's Name</label>
 										<div class="input-group">
-											<span class="input-group-addon input-sm"><span class="fa fa-user"></span></span>
-											<input type="text" class="form-control input-sm" id="cardHolderName" placeholder="Name on card"
+											<span class="input-group-addon"><span class="fa fa-user"></span></span>
+											<input type="text" class="form-control" id="cardHolderName" placeholder="Name on card"
 												   v-model="cardHolderName" name="cardholdername" v-validate="'required'" autofocus/>
 										</div>
 									</div>
@@ -53,7 +87,7 @@
 								<div class="col-sm-12 col-md-6">
 									<div class="form-group" :class="{ 'has-error': errors.has('email') }">
 										<label for="infoEmailAddress">Billing Email Address</label>
-										<input type="text" class="form-control input-sm" v-model="cardEmail" name="email" id="infoEmailAddress" v-validate="'required|email'">
+										<input type="text" class="form-control" v-model="cardEmail" name="email" id="infoEmailAddress" v-validate="'required|email'">
 									</div>
 								</div>
 							</div>
@@ -158,6 +192,9 @@
 			}
 		},
         computed: {
+            userInfo(){
+				return this.$parent.userInfo;
+			},
             fundraisingGoal(){
                 return this.totalCosts - this.upfrontTotal;
             },

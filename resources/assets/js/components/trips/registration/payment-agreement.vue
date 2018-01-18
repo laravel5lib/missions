@@ -1,8 +1,6 @@
 <template >
 	<div class="row">
 		<div class="col-sm-12">
-			<h4>Financial Agreement</h4>
-			<hr>
 			<div class="row">
 				<div class="col-md-12">
 					<ul class="list-group">
@@ -161,7 +159,13 @@
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" v-model="paymentAgree">
-							I have read and agree to the above financial deadlines and amounts.
+							I have read and agree to meet the above financial deadlines and amounts or risk being dropped from the trip. 
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" v-model="noRefundAgree">
+							I understand that all donations are considered 501(C)3 tax-deductible donations (not payments for goods or services) and are 100% non-refundable and non-transferable.
 						</label>
 					</div>
 				</div>
@@ -207,6 +211,7 @@
 			    handle: 'PaymentAgreement',
 				title: 'Payment Agreement',
                 paymentAgree: false,
+				noRefundAgree: false,
                 promoValid: false,
 			}
 		},
@@ -293,8 +298,15 @@
         },
 		watch: {
           paymentAgree(val) {
-            this.$emit('step-completion', val);
-          }
+			  if (this.noRefundAgree) {
+            	this.$emit('step-completion', val);
+			  }
+          },
+		  noRefundAgree(val) {
+			  if (this.paymentAgree) {
+				this.$emit('step-completion', val);
+			  }
+		  }
 		},
         methods: {
             toDate(date){
@@ -307,7 +319,7 @@
         },
         mounted() {},
 		activated(){
-			$('html, body').animate({scrollTop : 200},300);
+			$('html, body').animate({scrollTop : 0},300);
 		}
 	}
 </script>

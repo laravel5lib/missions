@@ -39,7 +39,7 @@
         <h4>Latest Records</h4>
         <hr class="divider lg">
       </div>
-      <div class="col-md-6">
+      {{--  <div class="col-md-6">
         <div class="panel panel-default">
           <div class="panel-heading">
             <h5>Newest Prospects</h5>
@@ -64,7 +64,7 @@
             <a class="small" style="color:#bcbcbc;" href="{{ url('/admin/reservations/prospects') }}">View All Prospects</a>
           </div><!-- end panel-footer -->
         </div>
-      </div>
+      </div>  --}}
       <div class="col-md-6">
         <div class="panel panel-default">
           <div class="panel-heading">

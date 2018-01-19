@@ -73,11 +73,11 @@ export default {
       let validationObject, genericMessage;
       let messagesArrName = value.scope ? `${value.client}-${value.scope}` : value.client;
       this.DISPLAYED_MESSAGES[messagesArrName] = [];
-
+      
       // Lets first package server errors for iteration
       if (this.SERVER_ERRORS[value.server]) {
         _.each(this.SERVER_ERRORS[value.server], function (error, index) {
-          this.DISPLAYED_MESSAGES[messagesArrName].push(`<div class='help-block server-validation-error'>${error}</div>`);
+          this.DISPLAYED_MESSAGES[messagesArrName].push(`<div class='help-block server-validation-error sever-msg'>${error}</div>`);
           // this.DISPLAYED_MESSAGES[messagesArrName].push(error);
         });
       }
@@ -97,7 +97,7 @@ export default {
           }
 
           // this.DISPLAYED_MESSAGES[messagesArrName].push( reqMessage);
-          this.DISPLAYED_MESSAGES[messagesArrName].push(`<div class='help-block server-validation-error'>${reqMessage}</div>`);
+          this.DISPLAYED_MESSAGES[messagesArrName].push(`<div class='help-block server-validation-error req-msg'>${reqMessage}</div>`);
         }
 
         if (validationObject.rule.includes('min')) {
@@ -111,7 +111,7 @@ export default {
           }
           if (minMessage !== genericMessage) {
             // this.DISPLAYED_MESSAGES[messagesArrName].push(minMessage);
-            this.DISPLAYED_MESSAGES[messagesArrName].push(`<div class='help-block server-validation-error'>${minMessage}</div>`);
+            this.DISPLAYED_MESSAGES[messagesArrName].push(`<div class='help-block server-validation-error min-msg'>${minMessage}</div>`);
           }
         }
 
@@ -126,7 +126,7 @@ export default {
           }
           if (maxMessage !== genericMessage) {
             // this.DISPLAYED_MESSAGES[messagesArrName].push(maxMessage);
-            this.DISPLAYED_MESSAGES[messagesArrName].push(`<div class='help-block server-validation-error'>${maxMessage}</div>`);
+            this.DISPLAYED_MESSAGES[messagesArrName].push(`<div class='help-block server-validation-error max-msg'>${maxMessage}</div>`);
           }
         }
 
@@ -142,7 +142,7 @@ export default {
           }
           if (emailMessage !== genericMessage) {
             // this.DISPLAYED_MESSAGES[messagesArrName].push(emailMessage);
-            this.DISPLAYED_MESSAGES[messagesArrName].push(`<div class='help-block server-validation-error'>${emailMessage}</div>`);
+            this.DISPLAYED_MESSAGES[messagesArrName].push(`<div class='help-block server-validation-error email-msg'>${emailMessage}</div>`);
           }
         }
 
@@ -158,7 +158,7 @@ export default {
           }
           if (datetimeMessage !== genericMessage) {
             this.DISPLAYED_MESSAGES[messagesArrName].push(datetimeMessage);
-            this.DISPLAYED_MESSAGES[messagesArrName].push(`<div class='help-block server-validation-error'>${datetimeMessage}</div>`);
+            this.DISPLAYED_MESSAGES[messagesArrName].push(`<div class='help-block server-validation-error date-msg'>${datetimeMessage}</div>`);
           }
         }
       }
@@ -171,7 +171,7 @@ export default {
       if (errorsBlock) {
         $(errorsBlock).find('.server-validation-error').remove();
         if (this.SERVER_ERRORS[value.server] || value.client && this.errors.has(value.client, scope)) {
-          setTimeout(() => { $(errorsBlock).append(this.DISPLAYED_MESSAGES[messagesArrName]) }, 0);
+          $(errorsBlock).append(this.DISPLAYED_MESSAGES[messagesArrName]);
         }
       } else {
         let inputGroup = $(el).hasClass('input-group') ? el : el.getElementsByClassName('input-group')[0];
@@ -179,13 +179,12 @@ export default {
         if (inputGroup) {
           $(el).parent().find('.server-validation-error').remove();
           if (this.SERVER_ERRORS[value.server] || value.client && this.errors.has(value.client, scope)) {
-            setTimeout(() => { $(inputGroup).after(this.DISPLAYED_MESSAGES[messagesArrName]) }, 0);
+            $(inputGroup).after(this.DISPLAYED_MESSAGES[messagesArrName]);
           }
         } else {
-          // debugger;
           $(el).find('.server-validation-error').remove();
           if (this.SERVER_ERRORS[value.server] || value.client && this.errors.has(value.client, scope)) {
-            setTimeout(() => { inputEl.after(this.DISPLAYED_MESSAGES[messagesArrName]) }, 0);
+            inputEl.after(this.DISPLAYED_MESSAGES[messagesArrName]);
           }
         }
       }

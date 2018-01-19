@@ -154,9 +154,6 @@
 				title: 'Payment Details',
 				paymentComplete: false,
 				attemptedCreateToken: false,
-				promo: '',
-                promoValid: false,
-                promoError: '',
 
 				//card vars
 				card: null,
@@ -292,9 +289,6 @@
                     this.$emit('step-completion', val);
                 }
 			},
-			'promo' (val, oldVal) {
-                this.promoError = '';
-            }
 		},
 		events: {
 			'VueStripe::create-card-token'()  {
@@ -344,14 +338,6 @@
                     }
                 }
             },
-            checkPromo(){
-                this.$http.post('trips/'+ this.$parent.tripId +'/promo', {promocode: this.promo} ).then((response) => {
-                    this.promoValid = parseInt(response.data.replace(/,+/, ''));
-                }, function(error) {
-                    this.promoError = error.data.message;
-                    this.promoValid = false;
-                });
-            },
             createToken() {
                 this.stripeDeferred = $.Deferred();
                 this.$validator.validateAll().then(result => {
@@ -386,7 +372,6 @@
                     };
                     this.$parent.upfrontTotal = this.upfrontTotal;
                     this.$parent.fundraisingGoal = this.fundraisingGoal;
-                    this.$parent.promocode = this.promoValid ? this.promo : null;
                     this.stripeDeferred.resolve(true);
                 } else if (result.error) {
                     this.$root.$emit('showError', result.error.message);

@@ -55,7 +55,7 @@
 				<div class="col-sm-8">
 					<label>Date of Birth</label>
 					<div class="row">
-						<div class="col-sm-4">
+						<div class="col-sm-4" v-error-handler="{value: dobMonth, handle: 'dobMonth'}">
 							<div class="form-group" :class="{ 'has-error': errors.has('dobMonth') }">
 								<select class="form-control input" v-model="dobMonth"
 								        name="dobMonth" id="infoDobMonth" v-validate="'required'">
@@ -76,7 +76,7 @@
 								<span class="help-block">Month</span>
 							</div>
 						</div>
-						<div class="col-sm-4">
+						<div class="col-sm-4" v-error-handler="{value: dobDay, handle: 'dobDay'}">
 							<div class="form-group" :class="{ 'has-error': errors.has('dobDay') }">
 								<select class="form-control" v-model="dobDay"
 								        name="dobDay" id="infoDobDay" v-validate="'required'">
@@ -116,7 +116,7 @@
 								<span class="help-block">Day</span>
 							</div>
 						</div>
-						<div class="col-sm-4">
+						<div class="col-sm-4" v-error-handler="{value: dobYearCalc, handle: 'dobYear'}">
 							<div class="form-group" :class="{ 'has-error': errors.has('dobYear') }">
 								<select class="form-control" v-model="dobYearCalc"
 								        name="dobYear" id="infoDobYear" v-validate="'required'">
@@ -128,26 +128,27 @@
 								<span class="help-block">Year</span>
 							</div>
 						</div>
+						<div class="col-sm-12 errors-block"></div>
 					</div>
 
-					<div v-error-handler="{value: gender, handle: 'gender', messages: { req: 'Select a gender' }}">
-						<label>Gender</label>
+					<label>Gender</label>
+					<div class="row" v-error-handler="{value: gender, handle: 'gender', messages: { req: 'Select a gender' }}">
 						<div :class="{ 'has-error': errors.has('gender') }">
-							<label>
-								<input type="radio" v-model="gender" name="gender" v-validate="'required'"
-										value="male"> Male
+							<label :class="{ 'text-danger': errors.has('gender') }">
+								<input type="radio" v-model="gender" name="gender" v-validate="'required|in:male,female'"
+								       value="male">&nbsp;Male
 							</label>
 						</div>
 						<div :class="{ 'has-error': errors.has('gender') }">
-							<label>
-								<input type="radio" v-model="gender" name="gender" value="female"> Female
+							<label :class="{ 'text-danger': errors.has('gender') }">
+								<input type="radio" v-model="gender" name="gender" value="female">&nbsp;Female
 							</label>
 						</div>
+						<div class="col-sm-12 errors-block"></div>
 					</div>
-
 					<hr class="divider inv">
 
-					<div class="form-group" :class="{ 'has-error': errors.has('relationshipStatus') }">
+					<div class="form-group" v-error-handler="{value: relationshipStatus, handle: 'relationshipStatus'}">
 						<label for="infoRelStatus">Relationship Status</label>
 						<select class="form-control" v-model="relationshipStatus"
 								name="relationshipStatus" id="infoRelStatus" v-validate="'required'">
@@ -156,7 +157,6 @@
 							<option value="married">Married</option>
 							<option value="divorced">Divorced</option>
 							<option value="widowed">Widowed</option>
-
 						</select>
 					</div>
 				</div>
@@ -175,11 +175,11 @@
 						<input type="text" class="form-control" v-model="email" id="infoEmailAddress"
 						       name="email" v-validate="'required|email'">
 					</div>
-					<div class="form-group" :class="{ 'has-error': errors.has('phone') }">
+					<div class="form-group" v-error-handler="{ value: phone, handle: 'phone' }">
 						<label for="infoPhone">Home Phone</label>
 						<phone-input v-validate="'required|min:10'" id="infoPhone" name="phone" v-model="phone"></phone-input>
 					</div>
-					<div class="form-group" :class="{ 'has-error': errors.has('mobile') }">
+					<div class="form-group" v-error-handler="{ value: mobile, handle: 'mobile' }">
 						<label for="infoMobile">Cell Phone</label>
 						<phone-input v-validate="'required|min:10'" id="infoMobile" name="mobile" v-model="mobile"></phone-input>
 					</div>
@@ -194,28 +194,28 @@
 					<p class="text-muted">We need your home or mailing address so we can send you important materials related to your trip. This information is also required for trip accommodation and transportation arrangements.</p>
 				</div>
 				<div class="col-sm-8">
-					<div class="form-group" :class="{ 'has-error': errors.has('address') }">
+					<div class="form-group" v-error-handler="{value: address, handle: 'address'}">
 						<label for="infoAddress">Address</label>
 						<input type="text" class="form-control" v-model="address"
 						       name="address" id="infoAddress" v-validate="'required'"
 						       placeholder="Mailing Address">
 					</div>
-					<div class="form-group" :class="{ 'has-error': errors.has('city') }">
+					<div class="form-group" v-error-handler="{value: city, handle: 'city'}">
 						<label for="infoCity">City</label>
 						<input type="text" class="form-control" v-model="city"
 								name="city" id="infoCity" placeholder v-validate="'required'">
 					</div>
-					<div class="form-group" :class="{ 'has-error': errors.has('state') }">
+					<div class="form-group" v-error-handler="{value: state, handle: 'state'}">
 						<label for="infoState">State/Prov.</label>
 						<input type="text" class="form-control" v-model="state"
 								name="state" id="infoState" placeholder v-validate="'required'">
 					</div>
-					<div class="form-group" :class="{ 'has-error': errors.has('zip') }">
+					<div class="form-group" v-error-handler="{value: zipCode, handle: 'zip'}">
 						<label for="infoZip">Zip/Postal Code</label>
 						<input type="text" class="form-control" v-model="zipCode"
 								name="zip" id="infoZip" placeholder="12345" v-validate="'required'">
 					</div>
-					<div class="form-group" :class="{ 'has-error': errors.has('country') }">
+					<div class="form-group" v-error-handler="{value: country, handle: 'country'}">
 						<label for="infoCountry">Country</label>
 						<v-select @keydown.enter.prevent="" name="country" v-validate="'required'" class="form-control" id="infoCountry" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
 					</div>
@@ -230,7 +230,7 @@
 					<p class="text-muted">Let us know your shirt size so we can send you an exclusive team shirt!</p>
 				</div>
 				<div class="col-sm-8">
-					<div class="form-group" :class="{ 'has-error': errors.has('size') }">
+					<div class="form-group" v-error-handler="{value: size, handle: 'size'}">
 						<label for="infoShirtSize">Size</label>
 						<select class="form-control" v-model="size" name="size" v-validate="'required'"
 								id="infoShirtSize">
@@ -271,7 +271,7 @@
 				<div class="col-sm-12">
 					<div class="checkbox">
 						<label>
-							<input type="checkbox">
+							<input type="checkbox" v-model="confirmInfo">
 							I have verified that all the above information is completely accurate and up-to-date.
 						</label>
 					</div>
@@ -310,7 +310,7 @@
 				onBehalf: false,
 
 				// basic info data
-				desired_role: {value: 'MISS', name: 'Missionary'},
+				desired_role: null,
 				address: null,
 				city: null,
 				state: null,
@@ -332,6 +332,7 @@
 				weight: null,
 				avatar_upload_id: null,
 //				userInfo: {}
+			    confirmInfo: false,
 			}
 		},
 		computed: {
@@ -407,6 +408,13 @@
 			}
 		},
 		watch: {
+		  confirmInfo(val) {
+		    if (val) {
+              this.$validator.validateAll().then(result => {
+                if (result) this.$emit('step-completion', val);
+              });
+            }
+		  },
 		    // fail safe for poor loading
 		    '$parent.trip'(val){
 		        this.getRoles(val.team_roles);
@@ -498,12 +506,13 @@
 
 		  promises.push(this.getCountries());
 		  promises.push(this.getRoles(this.$parent.trip.team_roles));
-		//   this.$http.all(promises).then((vals) => {
-		//     if (!this.onBehalf)
-		//       this.setLocalUserData();
-		//   });
+          this.$http.all(promises).then((vals) => {
+            if (_.contains(this.$parent.trip.team_roles, 'MISS'))
+              this.desired_role = { value: 'MISS', name: 'Missionary' };
+            // if (!this.onBehalf)
+            //   this.setLocalUserData();
+          });
 
-		  this.$emit('step-completion', true);
 		  $('html, body').animate({scrollTop: 0}, 300);
 		}
 	}

@@ -26,7 +26,7 @@ class PaymentRequest extends FormRequest
         return [
             'amount_owed' => 'required|numeric',
             'percent_owed' => 'required|numeric',
-            'due_at' => 'date',
+            'due_at' => 'nullable|date',
             'upfront' => 'boolean',
             'grace_period' => 'required|numeric'
         ];

@@ -93,8 +93,11 @@
 			canContinue(){
 				return this.currentStep.complete;
 			},
-            userData(){
-			    return this.$root.user;
+            userData:{
+			  get(val) {
+                return this.$root.user;
+			  },
+			  set(val) {}
             }
 		},
 		methods: {
@@ -126,6 +129,9 @@
             },
 			backStep(){
 				this.stepList.some(function(step, i, list) {
+                    if (this.currentStep.view === 'payment')
+                        this.wizardComplete = false;
+
 					if (this.currentStep.view === step.view){
 						return this.currentStep = list[i-1];
 					}

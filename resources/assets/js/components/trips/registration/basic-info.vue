@@ -410,7 +410,12 @@
 		  confirmInfo(val) {
 		    if (val) {
               this.$validator.validateAll().then(result => {
-                if (result) this.$emit('step-completion', val);
+                if (result)
+                  this.$emit('step-completion', val);
+                else setTimeout(() => {
+                  // uncheck the checkbox so that they must verify again
+                  this.confirmInfo = false;
+                }, 1000);
               });
             }
 		  },

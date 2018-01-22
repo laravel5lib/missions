@@ -21,10 +21,10 @@
 				<a class="btn btn-link pull-left" @click="backStep" :class="{'disabled': currentStep.view === 'step2' }">
 					<i class="fa fa-angle-double-left"></i> Back
 				</a>
-				<a class="btn btn-primary" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep">
+				<a class="btn btn-primary" v-if="this.currentStep.view === 'payment'" @click="finish">Make Payment and Finish</a>
+				<a class="btn btn-primary" v-else :class="{'disabled': !canContinue }" @click="nextStep">
 					Next <i class="fa fa-angle-double-right"></i>
 				</a>
-				<a class="btn btn-primary" v-else @click="finish">Make Payment and Finish</a>
 				<hr class="divider inv">
 		</div>
 	</div>

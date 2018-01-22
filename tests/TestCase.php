@@ -1,44 +1,38 @@
 <?php
 
-abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
-{
-    use DatabaseSetup;
+namespace Tests;
 
-    /**
-     * The base URL to use while testing the application.
-     *
-     * @var string
-     */
-    protected $baseUrl = 'http://localhost';
+use App\Exceptions\Handler;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+
+abstract class TestCase extends BaseTestCase
+{
+    use CreatesApplication;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->setupDatabase();
+        $this->disableExceptionHandling();
     }
 
-    /**
-     * Creates the application.
-     *
-     * @return \Illuminate\Foundation\Application
-     */
-    public function createApplication()
+    protected function disableExceptionHandling()
     {
-        $app = require __DIR__.'/../bootstrap/app.php';
+        $this->oldExceptionHandler = $this->app->make(ExceptionHandler::class);
 
-        $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
-
-        return $app;
-    }
-
-    protected function tearDown()
-    {
-        $refl = new ReflectionObject($this);
-        foreach ($refl->getProperties() as $prop) {
-            if (!$prop->isStatic() && 0 !== strpos($prop->getDeclaringClass()->getName(), 'PHPUnit_')) {
-                $prop->setAccessible(true);
-                $prop->setValue($this, null);
+        $this->app->instance(ExceptionHandler::class, new class extends Handler {
+            public function __construct() {}
+            public function report(\Exception $e) {}
+            public function render($request, \Exception $e) {
+                throw $e;
             }
-        }
+        });
+    }
+
+    protected function withExceptionHandling()
+    {
+        $this->app->instance(ExceptionHandler::class, $this->oldExceptionHandler);
+
+        return $this;
     }
 }

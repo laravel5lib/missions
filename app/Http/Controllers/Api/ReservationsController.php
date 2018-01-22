@@ -70,14 +70,6 @@ class ReservationsController extends Controller
      */
     public function store(ReservationRequest $request)
     {
-        $weight = $request->get('weight'); // kilograms
-        $height = (int) $request->get('height_a').$request->get('height_b'); // centimeters
-
-        if ($request->get('country_code') == 'us') {
-            $weight = convert_to_kg($request->get('weight'));
-        }
-            $height = convert_to_cm($request->get('height_a'), $request->get('height_b'));
-
         $reservation = $this->reservation->create([
             'given_names' => trim($request->get('given_names')),
             'surname' => trim($request->get('surname')),
@@ -96,8 +88,6 @@ class ReservationsController extends Controller
             'email' => trim(strtolower($request->get('email'))),
             'desired_role' => $request->get('desired_role'),
             'shirt_size' => $request->get('shirt_size'),
-            'height' => $height,
-            'weight' => $weight,
             'avatar_upload_id' => $request->get('avatar_upload_id'),
             'trip_id' => $request->get('trip_id')
         ]);
@@ -139,8 +129,6 @@ class ReservationsController extends Controller
             'desired_role' => $request->get('desired_role', $reservation->desired_role),
             'shirt_size' => $request->get('shirt_size', $reservation->shirt_size),
             'companion_limit' => $request->get('companion_limit', $reservation->companion_limit),
-            // 'height' => $height,
-            // 'weight' => $weight,
             'trip_id' => $request->get('trip_id', $reservation->trip_id)
         ]);
 

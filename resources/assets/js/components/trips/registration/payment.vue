@@ -39,20 +39,6 @@
 			<h5>Payment Details</h5>
 			<div class="row">
 				<div class="col-md-12">
-					<div class="form-group" :class="{ 'has-error': promoValid === false && promoError, 'has-success': promoValid > 0 }">
-						<label for="cardHolderName">Promo Code</label>
-						<div class="input-group">
-							<span class="input-group-addon"><span class="fa" :class="{'fa-check' : promoValid, 'fa-times' : promoError !== '' && !promoValid, 'fa-gift': !promoValid && promoError === ''}"></span></span>
-							<input type="text" class="form-control" id="promo" placeholder=""
-						       v-model="promo" />
-							<span class="input-group-btn">
-						        <button class="btn btn-default" type="button" @click.prevent="checkPromo">Apply</button>
-							</span>
-						</div>
-						<div class="help-block" v-if="promoError" v-text="promoError"></div>
-					</div>
-				</div>
-				<div class="col-md-12">
 					<ul class="list-group">
 						<li class="list-group-item">
 							<h5 class="list-group-item-heading">

@@ -36,21 +36,19 @@
                 </div><!-- end row -->
 
             <hr class="divider">
-			<h5>Payment Details</h5>
 			<div class="row">
 				<div class="col-md-12">
-					<ul class="list-group">
-						<li class="list-group-item">
-							<h5 class="list-group-item-heading">
-								Total Amount Due Now
-								<span class="pull-right">
-									{{currency(upfrontTotal, '$', 'USD')}}
-								</span>
-							</h5>
-						</li>
-					</ul>
+                    <h4>
+                        Total Amount Due Now
+                        <span class="pull-right text-primary">
+                            {{currency(upfrontTotal, '$', 'USD')}}
+                        </span>
+                    </h4>
+                    <p class="small text-muted">This amount is non-refundable and required to secure your spot on the trip.</p>
+                    <hr class="divider">
 				</div>
 				<div class="col-md-12">
+                    <h5>Payment Details</h5>
 					<div id="paymentAlerts" v-if="$parent.paymentErrors.length > 0">
 						<div v-for="error in $parent.paymentErrors" class="alert alert-danger alert-dismissible"
 						     role="alert">
@@ -396,7 +394,7 @@
 			});
         },
 		activated(){
-			$('html, body').animate({scrollTop : 200},300);
+			$('html, body').animate({scrollTop : 0},300);
 		}
 	}
 </script>

@@ -9,10 +9,9 @@
 						<label for="infoManager">Reservation Manager</label>
 						<v-select @keydown.enter.prevent="" class="form-control" name="manager" id="infoManager" v-validate="'required'" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
 					</div>
+					<hr class="divider">
 				</div>
 			</div>
-
-			<hr class="divider">
 
 			<div class="row">
 				<div class="col-sm-4">

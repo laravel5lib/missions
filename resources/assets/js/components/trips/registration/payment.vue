@@ -104,8 +104,8 @@
 <style>
 	#StripeForm .field {
 		display: block;
-		height: 34px;
-		padding: 8px 6px;
+		height: 47px;
+		padding: 12px 18px;
 		font-size: 14px;
 		color: #555555;
 		background-color: #fff;

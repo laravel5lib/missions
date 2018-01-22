@@ -33,6 +33,7 @@ $api->version('v1', [
     $api->post('speaker', 'UtilitiesController@sendSpeakerRequestEmail');
     $api->post('sponsor-project', 'UtilitiesController@sendProjectSponsorEmail');
     $api->post('groups/submit', 'GroupsController@submit');
+    $api->get('referrals/{id}', 'ReferralsController@show');
 
     $api->put('representatives/{id}/avatar', 'RepresentativeAvatarController@update');
     $api->resource('representatives', 'RepresentativeController');

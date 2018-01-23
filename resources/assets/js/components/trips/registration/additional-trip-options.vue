@@ -1,10 +1,6 @@
 <template>
 	<div class="row">
-		<div class="col-sm-12" style="max-height: 500px;overflow-y: auto;">
-			<h4>Rooming and Additional Trip Options</h4>
-			<hr class="divider"/>
-			<hr class="divider inv sm"/>
-
+		<div class="col-sm-12">
 			<form novalidate name="AdditionalOptionsForm">
 				<div class="" v-for="(option, index) in optionalCosts" :key="option.id">
 					<label style="display:block" :for="'option' + index">
@@ -16,7 +12,7 @@
 					<hr class="divider lg">
 				</div>
 				<h5 v-if="optionalCosts.length==0">
-					No additional options available
+					No rooming options available
 				</h5>
 			</form>
 
@@ -32,7 +28,7 @@
     mixins: [errorHandler],
     data() {
       return {
-        title: 'Additional Trip Options',
+        title: 'Rooming Options',
         selectedOptions: null
       }
     },
@@ -65,7 +61,7 @@
     methods: {},
     mounted() {},
     activated() {
-      $('html, body').animate({scrollTop: 200}, 300);
+      $('html, body').animate({scrollTop: 0}, 300);
     }
   }
 </script>

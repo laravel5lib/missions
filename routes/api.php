@@ -33,6 +33,7 @@ $api->version('v1', [
     $api->post('speaker', 'UtilitiesController@sendSpeakerRequestEmail');
     $api->post('sponsor-project', 'UtilitiesController@sendProjectSponsorEmail');
     $api->post('groups/submit', 'GroupsController@submit');
+    $api->get('referrals/{id}', 'ReferralsController@show');
 
     $api->put('representatives/{id}/avatar', 'RepresentativeAvatarController@update');
     $api->resource('representatives', 'RepresentativeController');
@@ -89,7 +90,7 @@ $api->version('v1', [
         $api->post('trips/import', 'TripsController@import');
         $api->get('trips/{id}/todos', 'TripTodosController@index');
         $api->post('trips/{id}/todos', 'TripTodosController@store');
-        $api->post('trips/{id}/register', 'TripsController@register');
+        $api->post('trips/{id}/register', 'TripRegistrationController@store');
         $api->post('trips/{id}/promo', 'TripsController@checkPromoCode');
         $api->post('interests/export', 'TripInterestsController@export');
         $api->resource('reservations', 'ReservationsController');

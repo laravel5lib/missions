@@ -1,112 +1,54 @@
 <template >
 	<div class="row">
 		<div class="col-sm-12">
-			<h4>Payment Details</h4>
-			<hr>
+            <address>
+                <strong>{{userInfo.firstName}} {{userInfo.lastName}}</strong><br>
+                {{userInfo.address}}<br>
+                {{userInfo.city}}, {{userInfo.state}} {{userInfo.zipCode}}<br>
+                {{userInfo.country_name}}<br>
+            </address>
+                <hr class="divider">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label>Date of Birth</label><p>{{userInfo.dob}}</p>
+                    </div><!-- end col -->
+                    <div class="col-sm-3">
+                        <label>Gender</label><p>{{ userInfo.gender|capitalize }}</p>
+                    </div><!-- end col -->
+                    <div class="col-sm-3">
+                        <label>Relationship Status</label><p>{{ userInfo.relationshipStatus|capitalize }}</p>
+                    </div><!-- end col -->
+                    <div class="col-sm-3">
+                        <label>Role</label><p>{{userInfo.desired_role.name}}</p>
+                    </div><!-- end col -->
+                </div><!-- end row -->
+                <hr class="divider">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label><i class="fa fa-phone"></i> Phone</label><p>{{userInfo.phone}}</p>
+                    </div>
+                    <div class="col-sm-4">
+                        <label><i class="fa fa-mobile"></i> Mobile</label><p>{{userInfo.mobile}}</p>
+                    </div>
+                    <div class="col-sm-4">
+                        <label><i class="fa fa-envelope"></i> Email</label><p>{{userInfo.email}}</p>
+                    </div><!-- end col -->
+                </div><!-- end row -->
+
+            <hr class="divider">
 			<div class="row">
 				<div class="col-md-12">
-					<ul class="list-group">
-						<li class="list-group-item">
-							Item
-							<span class="pull-right">Cost</span>
-						</li>
-						<li class="list-group-item" v-for="cost in staticCosts">
-							<h5 class="list-group-item-heading">
-								{{cost.name}}
-								<span class="pull-right">{{currency(cost.amount)}}</span>
-								<hr class="divider sm inv">
-								<p class="small">{{cost.description}}</p>
-							</h5>
-							<p class="list-group-item-text">
-
-							</p>
-							<table class="table">
-								<tbody>
-									<tr v-for="p in cost.payments.data" :class="{'text-danger': p.upfront}">
-										<td>{{p.percent_owed}}% is Due {{toDate(p.due_at)}}</td>
-										<td class="text-right">{{p.upfront ? '-': ''}}{{currency(p.amount_owed)}}</td>
-									</tr>
-								</tbody>
-							</table>
-						</li>
-						<li class="list-group-item" v-for="cost in incrementalCosts">
-							<h5 class="list-group-item-heading">
-								{{cost.name}}
-								<span class="pull-right">{{currency(cost.amount)}}</span>
-								<hr class="divider sm inv">
-								<p class="small">{{cost.description}}</p>
-							</h5>
-							<p class="list-group-item-text">
-
-							</p>
-							<table class="table">
-								<tbody>
-									<tr v-for="p in cost.payments.data" :class="{'text-danger': p.upfront}">
-										<td>{{p.percent_owed}}% is Due {{toDate(p.due_at)}}</td>
-										<td class="text-right">{{p.upfront ? '-': ''}}{{currency(p.amount_owed)}}</td>
-									</tr>
-								</tbody>
-							</table>
-						</li>
-						<li class="list-group-item">
-							<h5 class="list-group-item-heading">
-								{{selectedOptions.name}}
-								<span class="pull-right">{{currency(selectedOptions.amount)}}</span>
-								<hr class="divider sm inv">
-								<p class="small">{{selectedOptions.description}}</p>
-							</h5>
-							<p class="list-group-item-text">
-
-							</p>
-							<table class="table">
-								<tbody>
-									<tr v-for="p in selectedOptions.payments.data" :class="{'text-danger': p.upfront}">
-										<td>{{p.percent_owed}}% is Due {{toDate(p.due_at)}}</td>
-										<td class="text-right">{{p.upfront ? '-': ''}}{{currency(p.amount_owed)}}</td>
-									</tr>
-								</tbody>
-							</table>
-						</li>
-					</ul>
-
-					<table class="table table-hover">
-						<tfoot>
-							<tr>
-								<td style="border-top:2px solid #000000;">Fundraising Goal</td>
-								<td style="border-top:2px solid #000000;" class="text-right">{{currency(totalCosts)}}</td>
-							</tr>
-							<tr>
-								<td>Up-front Charges</td>
-								<td class="text-danger text-right">-{{currency(upfrontTotal)}}</td>
-							</tr>
-							<tr v-if="promoValid">
-								<td>Promo Credit</td>
-								<td class="text-danger text-right">{{-currency(promoValid)}}</td>
-							</tr>
-							<tr>
-								<td style="border-top:2px solid #000000;"><h5>Total to Raise</h5></td>
-								<td style="border-top:2px solid #000000;"><h5 class="text-success text-right">{{ promoValid ? fundraisingGoal - promoValid : currency(fundraisingGoal)}}</h5></td>
-							</tr>
-
-						</tfoot>
-					</table>
-				</div>
-				<hr class="divider" />
-				<div class="col-md-12">
-					<div class="form-group" :class="{ 'has-error': promoValid === false && promoError, 'has-success': promoValid > 0 }">
-						<label for="cardHolderName">Promo Code</label>
-						<div class="input-group">
-							<span class="input-group-addon input-sm"><span class="fa" :class="{'fa-check' : promoValid, 'fa-times' : promoError !== '' && !promoValid, 'fa-gift': !promoValid && promoError === ''}"></span></span>
-							<input type="text" class="form-control input-sm" id="promo" placeholder=""
-						       v-model="promo" />
-							<span class="input-group-btn">
-						        <button class="btn btn-default btn-sm" type="button" @click.prevent="checkPromo">Apply</button>
-							</span>
-						</div>
-						<div class="help-block" v-if="promoError" v-text="promoError"></div>
-					</div>
+                    <h4>
+                        Total Amount Due Now
+                        <span class="pull-right text-primary">
+                            {{currency(upfrontTotal, '$', 'USD')}}
+                        </span>
+                    </h4>
+                    <p class="small text-muted">This amount is non-refundable and required to secure your spot on the trip.</p>
+                    <hr class="divider">
 				</div>
 				<div class="col-md-12">
+                    <h5>Payment Details</h5>
 					<div id="paymentAlerts" v-if="$parent.paymentErrors.length > 0">
 						<div v-for="error in $parent.paymentErrors" class="alert alert-danger alert-dismissible"
 						     role="alert">
@@ -120,8 +62,8 @@
 									<div class="form-group" :class="{ 'has-error': errors.has('cardholdername') }">
 										<label for="cardHolderName">Card Holder's Name</label>
 										<div class="input-group">
-											<span class="input-group-addon input-sm"><span class="fa fa-user"></span></span>
-											<input type="text" class="form-control input-sm" id="cardHolderName" placeholder="Name on card"
+											<span class="input-group-addon"><span class="fa fa-user"></span></span>
+											<input type="text" class="form-control" id="cardHolderName" placeholder="Name on card"
 												   v-model="cardHolderName" name="cardholdername" v-validate="'required'" autofocus/>
 										</div>
 									</div>
@@ -129,7 +71,7 @@
 								<div class="col-sm-12 col-md-6">
 									<div class="form-group" :class="{ 'has-error': errors.has('email') }">
 										<label for="infoEmailAddress">Billing Email Address</label>
-										<input type="text" class="form-control input-sm" v-model="cardEmail" name="email" id="infoEmailAddress" v-validate="'required|email'">
+										<input type="text" class="form-control" v-model="cardEmail" name="email" id="infoEmailAddress" v-validate="'required|email'">
 									</div>
 								</div>
 							</div>
@@ -160,8 +102,8 @@
 <style>
 	#StripeForm .field {
 		display: block;
-		height: 34px;
-		padding: 8px 6px;
+		height: 47px;
+		padding: 12px 18px;
 		font-size: 14px;
 		color: #555555;
 		background-color: #fff;
@@ -195,15 +137,7 @@
 			    handle: 'PaymentDetails',
 				title: 'Payment Details',
 				paymentComplete: false,
-				//staticCosts: [],
-				//incrementalCosts: [],
-				//selectedOptions: [],
-				//upfrontTotal:0,
-				//totalCosts: 0,
 				attemptedCreateToken: false,
-				promo: '',
-                promoValid: false,
-                promoError: '',
 
 				//card vars
 				card: null,
@@ -239,6 +173,9 @@
 			}
 		},
         computed: {
+            userInfo(){
+				return this.$parent.userInfo;
+			},
             fundraisingGoal(){
                 return this.totalCosts - this.upfrontTotal;
             },
@@ -326,16 +263,6 @@
                 })();
                 return years;
             },
-            cardParams() {
-                return {
-                    cardholder: this.cardHolderName,
-                    number: this.cardNumber,
-                    exp_month: this.cardMonth,
-                    exp_year: this.cardYear,
-                    cvc: this.cardCVC,
-                    zip: this.cardZip
-                };
-            },
         },
 		watch: {
 			'paymentComplete'(val, oldVal) {
@@ -346,9 +273,6 @@
                     this.$emit('step-completion', val);
                 }
 			},
-			'promo' (val, oldVal) {
-                this.promoError = '';
-            }
 		},
 		events: {
 			'VueStripe::create-card-token'()  {
@@ -398,14 +322,6 @@
                     }
                 }
             },
-            checkPromo(){
-                this.$http.post('trips/'+ this.$parent.tripId +'/promo', {promocode: this.promo} ).then((response) => {
-                    this.promoValid = parseInt(response.data.replace(/,+/, ''));
-                }, function(error) {
-                    this.promoError = error.data.message;
-                    this.promoValid = false;
-                });
-            },
             createToken() {
                 this.stripeDeferred = $.Deferred();
                 this.$validator.validateAll().then(result => {
@@ -440,7 +356,6 @@
                     };
                     this.$parent.upfrontTotal = this.upfrontTotal;
                     this.$parent.fundraisingGoal = this.fundraisingGoal;
-                    this.$parent.promocode = this.promoValid ? this.promo : null;
                     this.stripeDeferred.resolve(true);
                 } else if (result.error) {
                     this.$root.$emit('showError', result.error.message);
@@ -477,9 +392,9 @@
 					this.cardMonth = '1';
 				}
 			});
-		},
+        },
 		activated(){
-			$('html, body').animate({scrollTop : 200},300);
+			$('html, body').animate({scrollTop : 0},300);
 		}
 	}
 </script>

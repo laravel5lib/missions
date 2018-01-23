@@ -17,9 +17,9 @@
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<h5>Mailing Address</h5>
-						<p>145 S. Livernois Rd.<br>
-							Suite 308<br>
-							Rochester Hills, MI 48307</p>
+						<p>34270 Pacific Coast Hwy<br>
+						Suite C<br>
+						Dana Point, CA 92629</p>
 						<hr class="divider lg">
 						<h5>Phone</h5>
 						<p>(877) 369-4532</p>

@@ -9,10 +9,10 @@
                 <p>Anyone traveling under the age of 18 is required to have a legal guardian complete this form. This document must be <strong>completed, signed and notarized</strong>. Please mail the orginal (photocopies not accepted) notarized document to the below address:<p>
 
                 <p>
-                    Missions.Me</br>
-                    145 S. Livernois Rd.<br>
-                    Suite 308<br>
-                    Rochester Hills, MI 48307
+                    Missions.Me<br>
+                    34270 Pacific Coast Hwy.<br> 
+                    Suite C<br>
+                    Dana Point, CA 92629
                 </p>
 
                 <p class="text-center"><a class="btn btn-primary btn-sm" href="/downloads/minors_release.pdf" target="_blank">

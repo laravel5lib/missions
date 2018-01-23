@@ -76,8 +76,9 @@
 				<address>
 					<strong>Missions.Me</strong><br>
 					<a href="https://missions.me">https://missions.me</a><br>
-					145 S. Livernois Rd. Suite 308<br>
-					Rochester Hills, MI 48307<br>
+					34270 Pacific Coast Hwy<br>
+					Suite C<br>
+					Dana Point, CA 92629
 					<a href="tel:8773694532">877.369.4532</a><br>
 					<a href="mailto:go@missions.me">go@missions.me</a>
 				</address>

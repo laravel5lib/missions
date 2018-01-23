@@ -94,11 +94,11 @@
 							</tr>
 							<tr v-if="promoValid">
 								<td>Promo Credit</td>
-								<td class="text-danger text-right">{{-currency(promoValid, '$', 'USD')}}</td>
+								<td class="text-danger text-right">-{{currency(promoValid, '$', 'USD')}}</td>
 							</tr>
 							<tr>
 								<td style="border-top:2px solid #000000;"><h5>Total to Raise</h5></td>
-								<td style="border-top:2px solid #000000;"><h5 class="text-success text-right">{{ promoValid ? fundraisingGoal - promoValid : currency(fundraisingGoal, '$', 'USD')}}</h5></td>
+								<td style="border-top:2px solid #000000;"><h5 class="text-success text-right">{{ currency(promoValid ? fundraisingGoal - promoValid : fundraisingGoal, '$', 'USD')}}</h5></td>
 							</tr>
 
 						</tfoot>

@@ -331,7 +331,7 @@
         methods: {
           checkPromo(){
             this.$http.post(`trips/${this.$parent.tripId}/promo`, {promocode: this.promo}).then((response) => {
-              this.promoValid = parseInt(response.data.replace(/,+/, ''));
+              this.promoValid = parseInt(response.data);
               this.$parent.promocode = this.promoValid ? this.promo : null;
             }, (error) => {
               this.promoError = error.message;

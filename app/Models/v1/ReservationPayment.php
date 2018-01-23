@@ -76,19 +76,9 @@ class ReservationPayment
             $dues = collect($dues);
         }
 
-        // get lowest due_at in dues,
-        $min = $dues->reject(function ($due) {
-            return is_null($due['due_at']);
-        })->min('due_at');
+        $data = $dues->map(function ($due) {
 
-        // subtract a day from that date and apply as date for nulls
-        $upfrontDate = is_null($min) ? Carbon::now() : $min->subDay();
-
-        $data = $dues->map(function ($due) use ($upfrontDate) {
-            
-            $date = $upfrontDate->isPast() ? $upfrontDate : Carbon::now();
-
-            is_null($due['due_at']) ? $due['due_at'] = $date : $due['due_at'];
+            is_null($due['due_at']) ? $due['due_at'] = Carbon::now() : $due['due_at'];
 
             return new Due($due);
         })->all();

@@ -123,13 +123,13 @@
 						<div class="col-sm-4"><h4>Medical Conditions</h4></div>
 						<div class="col-sm-8">
 							<div class="form-group">
-								<label>Are you currently taking any medication?</label><br>
+								<label>Are you taking medication for any existing conditions?</label><br>
 								<div class="radio-inline">
-									<label><input type="radio" name="takesMedication" v-model="takesMedication"
+									<label><input type="radio" name="takesMedication" v-model="takesConditionMedication"
 									              :value="true" v-validate="'required'">Yes</label>
 								</div>
 								<div class="radio-inline">
-									<label><input type="radio" name="takesMedication" v-model="takesMedication"
+									<label><input type="radio" name="takesMedication" v-model="takesConditionMedication"
 									              :value="false">No</label>
 								</div>
 							</div>
@@ -180,13 +180,13 @@
 						<div class="col-sm-4"><h4>Allergies</h4></div>
 						<div class="col-sm-8">
 							<div class="form-group">
-								<label>Are you currently taking any medication?</label><br>
+								<label>Are you taking medication for any specific allergies?</label><br>
 								<div class="radio-inline">
-									<label><input type="radio" name="takesMedication" v-model="takesMedication"
+									<label><input type="radio" name="takesMedication" v-model="takesAllergyMedication"
 									              :value="true" v-validate="'required'">Yes</label>
 								</div>
 								<div class="radio-inline">
-									<label><input type="radio" name="takesMedication" v-model="takesMedication"
+									<label><input type="radio" name="takesMedication" v-model="takesAllergyMedication"
 									              :value="false">No</label>
 								</div>
 							</div>
@@ -238,7 +238,7 @@
 						<div class="col-sm-8">
 							<form name="newContact">
 								<div class="row">
-									<div class="col-sm-6">
+									<div class="col-sm-12">
 										<div v-error-handler="{ value: emergency_contact.name, handle: 'emergencyname' }">
 											<label>Name</label>
 											<input type="text" class="form-control" v-model="emergency_contact.name"
@@ -246,7 +246,7 @@
 											       required>
 										</div>
 									</div>
-									<div class="col-sm-6">
+									<div class="col-sm-12">
 										<div v-error-handler="{ value: emergency_contact.email, handle: 'emergencyemail', messages: { email: 'Please enter a valid email address.'} }">
 											<label>Email</label>
 											<input type="email" class="form-control" v-model="emergency_contact.email"
@@ -256,14 +256,14 @@
 									</div>
 								</div>
 								<div class="row">
-									<div class="col-sm-6">
+									<div class="col-sm-12">
 										<div v-error-handler="{ value: emergency_contact.phone, handle: 'emergencyphone' }">
 											<label>Phone</label>
 											<phone-input v-model="emergency_contact.phone" name="emergencyphone"
 											             v-validate="'required'"></phone-input>
 										</div>
 									</div>
-									<div class="col-sm-6">
+									<div class="col-sm-12">
 										<div v-error-handler="{ value: emergency_contact.relationship, handle: 'emergencyrelationship' }">
 											<label>Relationship</label>
 											<select class="form-control" v-model="emergency_contact.relationship"
@@ -331,11 +331,11 @@
 					<div class="col-xs-6">
 						<hr class="divider sm inv">
 						<ol class="carousel-indicators">
-							<li v-for="i in 5" :class="{'active': currentStep === i}"></li>
+							<li v-for="i in 6" :class="{'active': currentStep === i}"></li>
 						</ol>
 					</div>
 					<div class="col-xs-6 text-right">
-						<button type="button" class="btn btn-primary-hollow" @click="backStep">Back</button>
+						<button :disabled="currentStep === 1" type="button" class="btn btn-primary-hollow" @click="backStep">Back</button>
 						<button v-if="currentStep !== 6" type="button" class="btn btn-primary" @click="nextStep">
 							Continue
 						</button>
@@ -754,6 +754,8 @@
 
         currentStep: 1,
         takesMedication: null,
+        takesConditionMedication: null,
+        takesAllergyMedication: null,
         medicallyDiagnosed: null,
         hasAllergies: null,
         agreement: false,
@@ -781,7 +783,29 @@
     },
     methods: {
       backStep() {
-        this.currentStep--;
+        switch (this.currentStep) {
+          case 4:
+            if (this.medicallyDiagnosed) {
+              this.currentStep--;
+            } else {
+              this.currentStep -= 2;
+            }
+            break;
+          case 5:
+            if (this.hasAllergies) {
+              this.currentStep--;
+            } else {
+              if (this.medicallyDiagnosed) {
+                this.currentStep -= 2;
+              } else {
+                this.currentStep -= 3;
+              }
+            }
+            break;
+          default:
+            this.currentStep--;
+        }
+
       },
       nextStep() {
         this.$validator.validateAll().then(result => {
@@ -789,7 +813,29 @@
             this.$root.$emit('showError', 'Please check form.');
             return false;
           }
-          this.currentStep++;
+
+          switch (this.currentStep) {
+            case 2:
+              if (this.medicallyDiagnosed) {
+                this.currentStep++;
+              } else {
+                if (this.hasAllergies) {
+                  this.currentStep += 2;
+                } else {
+                  this.currentStep += 3;
+                }
+              }
+              break;
+            case 3:
+              if (this.hasAllergies) {
+                this.currentStep++;
+              } else {
+                this.currentStep += 2;
+              }
+              break;
+            default:
+              this.currentStep++;
+          }
         });
       },
       getUsers(search, loading) {

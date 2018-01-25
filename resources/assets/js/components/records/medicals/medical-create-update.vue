@@ -4,7 +4,7 @@
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-xs-8">
-						<h5 class="panel-header">Medical Release</h5>
+						<h3 class="panel-header">Medical Release</h3>
 					</div>
 				</div>
 			</div>

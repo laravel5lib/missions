@@ -33497,7 +33497,7 @@ module.exports = function tsml (sa) {
 
 /**
  * @license
- * Video.js 6.3.3 <http://videojs.com/>
+ * Video.js 6.4.0 <http://videojs.com/>
  * Copyright Brightcove, Inc. <https://www.brightcove.com/>
  * Available under Apache License Version 2.0
  * <https://github.com/videojs/video.js/blob/master/LICENSE>
@@ -33516,7 +33516,7 @@ var safeParseTuple = _interopDefault(__webpack_require__("./node_modules/safe-js
 var xhr = _interopDefault(__webpack_require__("./node_modules/xhr/index.js"));
 var vtt = _interopDefault(__webpack_require__("./node_modules/videojs-vtt.js/lib/browser-index.js"));
 
-var version = "6.3.3";
+var version = "6.4.0";
 
 /**
  * @file browser.js
@@ -35377,9 +35377,11 @@ function off(elem, type, fn) {
   };
 
   // Are we removing all bound events?
-  if (!type) {
+  if (type === undefined) {
     for (var t in data.handlers) {
-      removeType(t);
+      if (Object.prototype.hasOwnProperty.call(data.handlers || {}, t)) {
+        removeType(t);
+      }
     }
     return;
   }
@@ -37118,18 +37120,21 @@ var Component = function () {
   Component.prototype.ready = function ready(fn) {
     var sync = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-    if (fn) {
-      if (this.isReady_) {
-        if (sync) {
-          fn.call(this);
-        } else {
-          // Call the function asynchronously by default for consistency
-          this.setTimeout(fn, 1);
-        }
-      } else {
-        this.readyQueue_ = this.readyQueue_ || [];
-        this.readyQueue_.push(fn);
-      }
+    if (!fn) {
+      return;
+    }
+
+    if (!this.isReady_) {
+      this.readyQueue_ = this.readyQueue_ || [];
+      this.readyQueue_.push(fn);
+      return;
+    }
+
+    if (sync) {
+      fn.call(this);
+    } else {
+      // Call the function asynchronously by default for consistency
+      this.setTimeout(fn, 1);
     }
   };
 
@@ -37809,11 +37814,13 @@ var Component = function () {
 
 
   Component.prototype.setTimeout = function setTimeout(fn, timeout) {
+    var _this2 = this;
+
     fn = bind(this, fn);
 
     var timeoutId = window.setTimeout(fn, timeout);
     var disposeFn = function disposeFn() {
-      this.clearTimeout(timeoutId);
+      return _this2.clearTimeout(timeoutId);
     };
 
     disposeFn.guid = 'vjs-timeout-' + timeoutId;
@@ -37875,12 +37882,14 @@ var Component = function () {
 
 
   Component.prototype.setInterval = function setInterval(fn, interval) {
+    var _this3 = this;
+
     fn = bind(this, fn);
 
     var intervalId = window.setInterval(fn, interval);
 
     var disposeFn = function disposeFn() {
-      this.clearInterval(intervalId);
+      return _this3.clearInterval(intervalId);
     };
 
     disposeFn.guid = 'vjs-interval-' + intervalId;
@@ -37947,14 +37956,14 @@ var Component = function () {
 
 
   Component.prototype.requestAnimationFrame = function requestAnimationFrame(fn) {
-    var _this2 = this;
+    var _this4 = this;
 
     if (this.supportsRaf_) {
       fn = bind(this, fn);
 
       var id = window.requestAnimationFrame(fn);
       var disposeFn = function disposeFn() {
-        return _this2.cancelAnimationFrame(id);
+        return _this4.cancelAnimationFrame(id);
       };
 
       disposeFn.guid = 'vjs-raf-' + id;
@@ -38749,7 +38758,10 @@ var ModalDialog = function (_Component) {
         this.on(this.el_.ownerDocument, 'keydown', bind(this, this.handleKeyPress));
       }
 
+      // Hide controls and note if they were enabled.
+      this.hadControls_ = player.controls();
       player.controls(false);
+
       this.show();
       this.conditionalFocus_();
       this.el().setAttribute('aria-hidden', 'false');
@@ -38815,7 +38827,10 @@ var ModalDialog = function (_Component) {
       this.off(this.el_.ownerDocument, 'keydown', bind(this, this.handleKeyPress));
     }
 
-    player.controls(true);
+    if (this.hadControls_) {
+      player.controls(true);
+    }
+
     this.hide();
     this.el().setAttribute('aria-hidden', 'true');
 
@@ -40171,6 +40186,10 @@ var parseUrl = function parseUrl(url) {
 
   if (details.protocol === 'https:') {
     details.host = details.host.replace(/:443$/, '');
+  }
+
+  if (!details.protocol) {
+    details.protocol = window.location.protocol;
   }
 
   if (addToBody) {
@@ -43795,7 +43814,6 @@ var PlayToggle = function (_Button) {
 
 
   PlayToggle.prototype.handleSeeked = function handleSeeked(event) {
-    // remove the ended class
     this.removeClass('vjs-ended');
 
     if (this.player_.paused()) {
@@ -43816,6 +43834,7 @@ var PlayToggle = function (_Button) {
 
 
   PlayToggle.prototype.handlePlay = function handlePlay(event) {
+    this.removeClass('vjs-ended');
     this.removeClass('vjs-paused');
     this.addClass('vjs-playing');
     // change the button text to "Pause"
@@ -43974,7 +43993,7 @@ var TimeDisplay = function (_Component) {
       'aria-live': 'off'
     }, createEl('span', {
       className: 'vjs-control-text',
-      textContent: this.localize(this.contentText_)
+      textContent: this.localize(this.controlText_)
     }));
 
     this.updateTextNode_();
@@ -43991,9 +44010,14 @@ var TimeDisplay = function (_Component) {
 
 
   TimeDisplay.prototype.updateTextNode_ = function updateTextNode_() {
-    if (this.textNode_) {
-      this.contentEl_.removeChild(this.textNode_);
+    if (!this.contentEl_) {
+      return;
     }
+
+    while (this.contentEl_.firstChild) {
+      this.contentEl_.removeChild(this.contentEl_.firstChild);
+    }
+
     this.textNode_ = document.createTextNode(this.formattedTime_ || '0:00');
     this.contentEl_.appendChild(this.textNode_);
   };
@@ -44182,14 +44206,17 @@ var DurationDisplay = function (_TimeDisplay) {
   function DurationDisplay(player, options) {
     classCallCheck(this, DurationDisplay);
 
+    // we do not want to/need to throttle duration changes,
+    // as they should always display the changed duration as
+    // it has changed
     var _this = possibleConstructorReturn(this, _TimeDisplay.call(this, player, options));
 
-    _this.on(player, ['durationchange',
+    _this.on(player, 'durationchange', _this.updateContent);
 
     // Also listen for timeupdate (in the parent) and loadedmetadata because removing those
     // listeners could have broken dependent applications/libraries. These
     // can likely be removed for 7.0.
-    'loadedmetadata'], _this.throttledUpdateContent);
+    _this.on(player, 'loadedmetadata', _this.throttledUpdateContent);
     return _this;
   }
 
@@ -44511,19 +44538,80 @@ var Slider = function (_Component) {
     // Set a horizontal or vertical class on the slider depending on the slider type
     _this.vertical(!!_this.options_.vertical);
 
-    _this.on('mousedown', _this.handleMouseDown);
-    _this.on('touchstart', _this.handleMouseDown);
-    _this.on('focus', _this.handleFocus);
-    _this.on('blur', _this.handleBlur);
-    _this.on('click', _this.handleClick);
-
-    _this.on(player, 'controlsvisible', _this.update);
-
-    if (_this.playerEvent) {
-      _this.on(player, _this.playerEvent, _this.update);
-    }
+    _this.enable();
     return _this;
   }
+
+  /**
+   * Are controls are currently enabled for this slider or not.
+   *
+   * @return {boolean}
+   *         true if controls are enabled, false otherwise
+   */
+
+
+  Slider.prototype.enabled = function enabled() {
+    return this.enabled_;
+  };
+
+  /**
+   * Enable controls for this slider if they are disabled
+   */
+
+
+  Slider.prototype.enable = function enable() {
+    if (this.enabled()) {
+      return;
+    }
+
+    this.on('mousedown', this.handleMouseDown);
+    this.on('touchstart', this.handleMouseDown);
+    this.on('focus', this.handleFocus);
+    this.on('blur', this.handleBlur);
+    this.on('click', this.handleClick);
+
+    this.on(this.player_, 'controlsvisible', this.update);
+
+    if (this.playerEvent) {
+      this.on(this.player_, this.playerEvent, this.update);
+    }
+
+    this.removeClass('disabled');
+    this.setAttribute('tabindex', 0);
+
+    this.enabled_ = true;
+  };
+
+  /**
+   * Disable controls for this slider if they are enabled
+   */
+
+
+  Slider.prototype.disable = function disable() {
+    if (!this.enabled()) {
+      return;
+    }
+    var doc = this.bar.el_.ownerDocument;
+
+    this.off('mousedown', this.handleMouseDown);
+    this.off('touchstart', this.handleMouseDown);
+    this.off('focus', this.handleFocus);
+    this.off('blur', this.handleBlur);
+    this.off('click', this.handleClick);
+    this.off(this.player_, 'controlsvisible', this.update);
+    this.off(doc, 'mousemove', this.handleMouseMove);
+    this.off(doc, 'mouseup', this.handleMouseUp);
+    this.off(doc, 'touchmove', this.handleMouseMove);
+    this.off(doc, 'touchend', this.handleMouseUp);
+    this.removeAttribute('tabindex');
+
+    this.addClass('disabled');
+
+    if (this.playerEvent) {
+      this.off(this.player_, this.playerEvent, this.update);
+    }
+    this.enabled_ = false;
+  };
 
   /**
    * Create the `Button`s DOM element.
@@ -45224,7 +45312,9 @@ var SeekBar = function (_Slider) {
     var _this = possibleConstructorReturn(this, _Slider.call(this, player, options));
 
     _this.update = throttle(bind(_this, _this.update), 50);
-    _this.on(player, ['timeupdate', 'ended'], _this.update);
+    _this.on(player, 'timeupdate', _this.update);
+    _this.on(player, 'ended', _this.handleEnded);
+
     return _this;
   }
 
@@ -45245,33 +45335,80 @@ var SeekBar = function (_Slider) {
   };
 
   /**
+   * This function updates the play progress bar and accessiblity
+   * attributes to whatever is passed in.
+   *
+   * @param {number} currentTime
+   *        The currentTime value that should be used for accessiblity
+   *
+   * @param {number} percent
+   *        The percentage as a decimal that the bar should be filled from 0-1.
+   *
+   * @private
+   */
+
+
+  SeekBar.prototype.update_ = function update_(currentTime, percent) {
+    var duration = this.player_.duration();
+
+    // machine readable value of progress bar (percentage complete)
+    this.el_.setAttribute('aria-valuenow', (percent * 100).toFixed(2));
+
+    // human readable value of progress bar (time complete)
+    this.el_.setAttribute('aria-valuetext', this.localize('progress bar timing: currentTime={1} duration={2}', [formatTime(currentTime, duration), formatTime(duration, duration)], '{1} of {2}'));
+
+    // Update the `PlayProgressBar`.
+    this.bar.update(getBoundingClientRect(this.el_), percent);
+  };
+
+  /**
    * Update the seek bar's UI.
    *
    * @param {EventTarget~Event} [event]
    *        The `timeupdate` or `ended` event that caused this to run.
    *
    * @listens Player#timeupdate
+   *
+   * @returns {number}
+   *          The current percent at a number from 0-1
+   */
+
+
+  SeekBar.prototype.update = function update(event) {
+    var percent = _Slider.prototype.update.call(this);
+
+    this.update_(this.getCurrentTime_(), percent);
+    return percent;
+  };
+
+  /**
+   * Get the value of current time but allows for smooth scrubbing,
+   * when player can't keep up.
+   *
+   * @return {number}
+   *         The current time value to display
+   *
+   * @private
+   */
+
+
+  SeekBar.prototype.getCurrentTime_ = function getCurrentTime_() {
+    return this.player_.scrubbing() ? this.player_.getCache().currentTime : this.player_.currentTime();
+  };
+
+  /**
+   * We want the seek bar to be full on ended
+   * no matter what the actual internal values are. so we force it.
+   *
+   * @param {EventTarget~Event} [event]
+   *        The `timeupdate` or `ended` event that caused this to run.
+   *
    * @listens Player#ended
    */
 
 
-  SeekBar.prototype.update = function update() {
-    var percent = _Slider.prototype.update.call(this);
-    var duration = this.player_.duration();
-
-    // Allows for smooth scrubbing, when player can't keep up.
-    var time = this.player_.scrubbing() ? this.player_.getCache().currentTime : this.player_.currentTime();
-
-    // machine readable value of progress bar (percentage complete)
-    this.el_.setAttribute('aria-valuenow', (percent * 100).toFixed(2));
-
-    // human readable value of progress bar (time complete)
-    this.el_.setAttribute('aria-valuetext', this.localize('progress bar timing: currentTime={1} duration={2}', [formatTime(time, duration), formatTime(duration, duration)], '{1} of {2}'));
-
-    // Update the `PlayProgressBar`.
-    this.bar.update(getBoundingClientRect(this.el_), percent);
-
-    return percent;
+  SeekBar.prototype.handleEnded = function handleEnded(event) {
+    this.update_(this.player_.duration(), 1);
   };
 
   /**
@@ -45283,11 +45420,7 @@ var SeekBar = function (_Slider) {
 
 
   SeekBar.prototype.getPercent = function getPercent() {
-
-    // Allows for smooth scrubbing, when player can't keep up.
-    var time = this.player_.scrubbing() ? this.player_.getCache().currentTime : this.player_.currentTime();
-
-    var percent = time / this.player_.duration();
+    var percent = this.getCurrentTime_() / this.player_.duration();
 
     return percent >= 1 ? 1 : percent;
   };
@@ -45331,6 +45464,28 @@ var SeekBar = function (_Slider) {
 
     // Set new time (tell player to seek to new time)
     this.player_.currentTime(newTime);
+  };
+
+  SeekBar.prototype.enable = function enable() {
+    _Slider.prototype.enable.call(this);
+    var mouseTimeDisplay = this.getChild('mouseTimeDisplay');
+
+    if (!mouseTimeDisplay) {
+      return;
+    }
+
+    mouseTimeDisplay.show();
+  };
+
+  SeekBar.prototype.disable = function disable() {
+    _Slider.prototype.disable.call(this);
+    var mouseTimeDisplay = this.getChild('mouseTimeDisplay');
+
+    if (!mouseTimeDisplay) {
+      return;
+    }
+
+    mouseTimeDisplay.hide();
   };
 
   /**
@@ -45470,10 +45625,9 @@ var ProgressControl = function (_Component) {
     var _this = possibleConstructorReturn(this, _Component.call(this, player, options));
 
     _this.handleMouseMove = throttle(bind(_this, _this.handleMouseMove), 25);
-    _this.on(_this.el_, 'mousemove', _this.handleMouseMove);
-
     _this.throttledHandleMouseSeek = throttle(bind(_this, _this.handleMouseSeek), 25);
-    _this.on(['mousedown', 'touchstart'], _this.handleMouseDown);
+
+    _this.enable();
     return _this;
   }
 
@@ -45549,6 +45703,62 @@ var ProgressControl = function (_Component) {
     var seekBar = this.getChild('seekBar');
 
     seekBar.handleMouseMove(event);
+  };
+
+  /**
+   * Are controls are currently enabled for this progress control.
+   *
+   * @return {boolean}
+   *         true if controls are enabled, false otherwise
+   */
+
+
+  ProgressControl.prototype.enabled = function enabled() {
+    return this.enabled_;
+  };
+
+  /**
+   * Disable all controls on the progress control and its children
+   */
+
+
+  ProgressControl.prototype.disable = function disable() {
+    this.children().forEach(function (child) {
+      return child.disable && child.disable();
+    });
+
+    if (!this.enabled()) {
+      return;
+    }
+
+    this.off(['mousedown', 'touchstart'], this.handleMouseDown);
+    this.off(this.el_, 'mousemove', this.handleMouseMove);
+    this.handleMouseUp();
+
+    this.addClass('disabled');
+
+    this.enabled_ = false;
+  };
+
+  /**
+   * Enable all controls on the progress control and its children
+   */
+
+
+  ProgressControl.prototype.enable = function enable() {
+    this.children().forEach(function (child) {
+      return child.enable && child.enable();
+    });
+
+    if (this.enabled()) {
+      return;
+    }
+
+    this.on(['mousedown', 'touchstart'], this.handleMouseDown);
+    this.on(this.el_, 'mousemove', this.handleMouseMove);
+    this.removeClass('disabled');
+
+    this.enabled_ = true;
   };
 
   /**
@@ -49225,10 +49435,10 @@ var TextTrackSettings = function (_ModalDialog) {
     var config = selectConfigs[key];
     var id = config.id.replace('%s', this.id_);
 
-    return ['<' + type + ' id="' + id + '" class="' + (type === 'label' ? 'vjs-label' : '') + '">', this.localize(config.label), '</' + type + '>', '<select aria-labelledby="' + legendId + ' ' + id + '">'].concat(config.options.map(function (o) {
+    return ['<' + type + ' id="' + id + '" class="' + (type === 'label' ? 'vjs-label' : '') + '">', this.localize(config.label), '</' + type + '>', '<select aria-labelledby="' + (legendId !== '' ? legendId + ' ' : '') + id + '">'].concat(config.options.map(function (o) {
       var optionId = id + '-' + o[1];
 
-      return ['<option id="' + optionId + '" value="' + o[0] + '" ', 'aria-labelledby="' + legendId + ' ' + id + ' ' + optionId + '">', _this2.localize(o[1]), '</option>'].join('');
+      return ['<option id="' + optionId + '" value="' + o[0] + '" ', 'aria-labelledby="' + (legendId !== '' ? legendId + ' ' : '') + id + ' ' + optionId + '">', _this2.localize(o[1]), '</option>'].join('');
     })).concat('</select>').join('');
   };
 
@@ -51566,6 +51776,9 @@ var Player = function (_Component) {
 
     _this.isReady_ = false;
 
+    // Init state hasStarted_
+    _this.hasStarted_ = false;
+
     // if the global option object was accidentally blown away by
     // someone, bail early with an informative error
     if (!_this.options_ || !_this.options_.techOrder || !_this.options_.techOrder.length) {
@@ -51914,17 +52127,18 @@ var Player = function (_Component) {
     if (value === '') {
       // If an empty string is given, reset the dimension to be automatic
       this[privDimension] = undefined;
-    } else {
-      var parsedVal = parseFloat(value);
-
-      if (isNaN(parsedVal)) {
-        log$1.error('Improper value "' + value + '" supplied for for ' + _dimension);
-        return;
-      }
-
-      this[privDimension] = parsedVal;
+      this.updateStyleEl_();
+      return;
     }
 
+    var parsedVal = parseFloat(value);
+
+    if (isNaN(parsedVal)) {
+      log$1.error('Improper value "' + value + '" supplied for for ' + _dimension);
+      return;
+    }
+
+    this[privDimension] = parsedVal;
     this.updateStyleEl_();
   };
 
@@ -52393,31 +52607,33 @@ var Player = function (_Component) {
    *
    * @fires Player#firstplay
    *
-   * @param {boolean} hasStarted
+   * @param {boolean} request
    *        - true: adds the class
    *        - false: remove the class
    *
    * @return {boolean}
-   *         the boolean value of hasStarted
+   *         the boolean value of hasStarted_
    */
 
 
-  Player.prototype.hasStarted = function hasStarted(_hasStarted) {
-    if (_hasStarted !== undefined) {
-      // only update if this is a new value
-      if (this.hasStarted_ !== _hasStarted) {
-        this.hasStarted_ = _hasStarted;
-        if (_hasStarted) {
-          this.addClass('vjs-has-started');
-          // trigger the firstplay event if this newly has played
-          this.trigger('firstplay');
-        } else {
-          this.removeClass('vjs-has-started');
-        }
-      }
+  Player.prototype.hasStarted = function hasStarted(request) {
+    if (request === undefined) {
+      // act as getter, if we have no request to change
+      return this.hasStarted_;
+    }
+
+    if (request === this.hasStarted_) {
       return;
     }
-    return !!this.hasStarted_;
+
+    this.hasStarted_ = request;
+
+    if (this.hasStarted_) {
+      this.addClass('vjs-has-started');
+      this.trigger('firstplay');
+    } else {
+      this.removeClass('vjs-has-started');
+    }
   };
 
   /**
@@ -52905,34 +53121,38 @@ var Player = function (_Component) {
 
 
   Player.prototype.techGet_ = function techGet_(method) {
-    if (this.tech_ && this.tech_.isReady_) {
-
-      if (method in allowedGetters) {
-        return get$1(this.middleware_, this.tech_, method);
-      }
-
-      // Flash likes to die and reload when you hide or reposition it.
-      // In these cases the object methods go away and we get errors.
-      // When that happens we'll catch the errors and inform tech that it's not ready any more.
-      try {
-        return this.tech_[method]();
-      } catch (e) {
-        // When building additional tech libs, an expected method may not be defined yet
-        if (this.tech_[method] === undefined) {
-          log$1('Video.js: ' + method + ' method not defined for ' + this.techName_ + ' playback technology.', e);
-
-          // When a method isn't available on the object it throws a TypeError
-        } else if (e.name === 'TypeError') {
-          log$1('Video.js: ' + method + ' unavailable on ' + this.techName_ + ' playback technology element.', e);
-          this.tech_.isReady_ = false;
-        } else {
-          log$1(e);
-        }
-        throw e;
-      }
+    if (!this.tech_ || !this.tech_.isReady_) {
+      return;
     }
 
-    return;
+    if (method in allowedGetters) {
+      return get$1(this.middleware_, this.tech_, method);
+    }
+
+    // Flash likes to die and reload when you hide or reposition it.
+    // In these cases the object methods go away and we get errors.
+    // When that happens we'll catch the errors and inform tech that it's not ready any more.
+    try {
+      return this.tech_[method]();
+    } catch (e) {
+
+      // When building additional tech libs, an expected method may not be defined yet
+      if (this.tech_[method] === undefined) {
+        log$1('Video.js: ' + method + ' method not defined for ' + this.techName_ + ' playback technology.', e);
+        throw e;
+      }
+
+      // When a method isn't available on the object it throws a TypeError
+      if (e.name === 'TypeError') {
+        log$1('Video.js: ' + method + ' unavailable on ' + this.techName_ + ' playback technology element.', e);
+        this.tech_.isReady_ = false;
+        throw e;
+      }
+
+      // If error unknown, just log and throw
+      log$1(e);
+      throw e;
+    }
   };
 
   /**
@@ -53661,7 +53881,7 @@ var Player = function (_Component) {
 
     // getter usage
     if (typeof source === 'undefined') {
-      return this.cache_.src;
+      return this.cache_.src || '';
     }
     // filter out invalid sources and turn our source into
     // an array of source objects
@@ -55647,6 +55867,11 @@ function videojs(id, options, ready) {
     throw new TypeError('The element or ID supplied is not valid. (videojs)');
   }
 
+  // Check if element is included in the DOM
+  if (isEl(tag) && !document.body.contains(tag)) {
+    log$1.warn('The element supplied is not included in the DOM');
+  }
+
   // Element may have a player attr referring to an already created player instance.
   // If so return that otherwise set up a new player below
   if (tag.player || Player.players[tag.playerId]) {
@@ -55690,8 +55915,8 @@ videojs.hooks_ = {};
  * @param {string} type
  *        the lifecyle to get hooks from
  *
- * @param {Function} [fn]
- *        Optionally add a hook to the lifecycle that your are getting.
+ * @param {Function|Function[]} [fn]
+ *        Optionally add a hook (or hooks) to the lifecycle that your are getting.
  *
  * @return {Array}
  *         an array of hooks, or an empty array if there are none.
@@ -55715,6 +55940,26 @@ videojs.hooks = function (type, fn) {
  */
 videojs.hook = function (type, fn) {
   videojs.hooks(type, fn);
+};
+
+/**
+ * Add a function hook that will only run once to a specific videojs lifecycle.
+ *
+ * @param {string} type
+ *        the lifecycle to hook the function to.
+ *
+ * @param {Function|Function[]}
+ *        The function or array of functions to attach.
+ */
+videojs.hookOnce = function (type, fn) {
+  videojs.hooks(type, [].concat(fn).map(function (original) {
+    var wrapper = function wrapper() {
+      videojs.removeHook(type, wrapper);
+      original.apply(undefined, arguments);
+    };
+
+    return wrapper;
+  }));
 };
 
 /**

@@ -17,12 +17,14 @@
 						</div>
 						<div class="col-sm-8">
 							<template v-if="forAdmin">
-								<div class="col-sm-12">
-									<div class="form-group" :class="{ 'has-error': errors.has('manager') }">
-										<label for="infoManager">Record Manager</label>
-										<v-select @keydown.enter.prevent="" class="form-control" id="infoManager"
-										          name="manager" v-model="userObj" :options="usersArr"
-										          :on-search="getUsers" label="name" v-validate="'required'"></v-select>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="form-group" :class="{ 'has-error': errors.has('manager') }">
+											<label for="infoManager">Record Manager</label>
+											<v-select @keydown.enter.prevent="" class="form-control" id="infoManager"
+																name="manager" v-model="userObj" :options="usersArr"
+																:on-search="getUsers" label="name" v-validate="'required'"></v-select>
+										</div>
 									</div>
 								</div>
 							</template>
@@ -68,8 +70,8 @@
 											I do not have medical insurance
 										</label>
 										<span class="help-block">
-                                            Medical Insurance is not required for travel, but highly recommend.
-                                        </span>
+                      Medical Insurance is not required for travel, but highly recommend.
+                    </span>
 									</div>
 								</div>
 							</div>
@@ -296,10 +298,10 @@
 						</p>
 					</div>
 
-					<template v-if="hasConditionsOrAllergies">
+					<template v-if="hasConditionsOrAllergies || takesMedication">
 						<h3>Doctor's Note Required</h3>
 						<p class="help-block">
-							You have indicated that you have one or more medical conditions or allergies. In order to be cleared for travel, you must download the form below and have it complete by your doctor.  You will need to supply <strong>one form per condition or allergy</strong>
+							You have indicated that you have one or more medical conditions or allergies or that you take medication. In order to be cleared for travel, you must download the form below and have it completed by your doctor.  You will need to supply <strong>one form per condition or allergy</strong>
 							as certain conditions may be treated by different doctors.
 						</p>
 						<p>
@@ -816,7 +818,7 @@
 
           switch (this.currentStep) {
             case 2:
-              if (this.medicallyDiagnosed) {
+              if (this.medicallyDiagnosed || this.takesMedication) {
                 this.currentStep++;
               } else {
                 if (this.hasAllergies) {

@@ -341,15 +341,15 @@
 					</template>
 				</template>
 			</div>
-			<div class="panel-footer">
+			<div class="panel-footer" style="padding: 2em">
 				<div class="row">
-					<div class="col-xs-6">
+					<div class="col-sm-6 hidden-xs">
 						<hr class="divider sm inv">
 						<ol class="carousel-indicators">
 							<li v-for="i in 6" :key="i" :class="{'active': currentStep === i}"></li>
 						</ol>
 					</div>
-					<div class="col-xs-6 text-right">
+					<div class="col-sm-6 text-right">
 						<button :disabled="currentStep === 1" type="button" class="btn btn-primary-hollow" @click="backStep">Back</button>
 						<button v-if="currentStep !== 6" type="button" class="btn btn-primary" @click="nextStep">
 							Continue

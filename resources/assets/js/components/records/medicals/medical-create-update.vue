@@ -98,15 +98,15 @@
 							<div v-if="takesMedication === false" class="form-group">
 								<label>Do you have any medically diagnosed conditions?</label><br>
 								<div class="radio-inline">
-									<label><input type="radio" name="medicallyDiagnosed" v-model="medicallyDiagnosed"
+									<label><input type="radio" name="hasConditions" v-model="hasConditions"
 									              :value="true" v-validate="'required'">Yes</label>
 								</div>
 								<div class="radio-inline">
-									<label><input type="radio" name="medicallyDiagnosed" v-model="medicallyDiagnosed"
+									<label><input type="radio" name="hasConditions" v-model="hasConditions"
 									              :value="false">No</label>
 								</div>
 							</div>
-							<div v-if="medicallyDiagnosed === false" class="form-group">
+							<div v-if="hasConditions === false" class="form-group">
 								<label>Do you have any allergies?</label><br>
 								<div class="radio-inline">
 									<label><input type="radio" name="hasAllergies" v-model="hasAllergies" :value="true"
@@ -124,7 +124,7 @@
 					<div class="row">
 						<div class="col-sm-4"><h4>Medical Conditions</h4></div>
 						<div class="col-sm-8">
-							<div class="form-group">
+							<div class="form-group" v-if="!takesMedication">
 								<label>Are you taking medication for any existing conditions?</label><br>
 								<div class="radio-inline">
 									<label><input type="radio" name="takesMedication" v-model="takesConditionMedication"
@@ -139,7 +139,7 @@
 							<!-- List of Conditions-->
 							<label>Please select any conditions you are currently experiencing</label><br>
 							<div class="row">
-								<div class="col-xs-12 col-sm-6" v-for="condition in conditionsListOrdered">
+								<div class="col-xs-12 col-sm-6" v-for="condition in conditionsListOrdered" :key="condition.id">
 									<div class="checkbox">
 										<label>
 											<input type="checkbox" v-model="condition.selected"> {{condition.name}}
@@ -150,7 +150,7 @@
 
 							<!-- Additional Conditions List-->
 							<div class="row">
-								<div class="col-xs-12 col-sm-6" v-for="condition in additionalConditionsList">
+								<div class="col-xs-12 col-sm-6" v-for="condition in additionalConditionsList" :key="condition.id">
 									<div class="checkbox">
 										<label>
 											<input type="checkbox" v-model="condition.selected"> {{condition.name}}
@@ -181,7 +181,7 @@
 					<div class="row">
 						<div class="col-sm-4"><h4>Allergies</h4></div>
 						<div class="col-sm-8">
-							<div class="form-group">
+							<div class="form-group" v-if="!takesMedication">
 								<label>Are you taking medication for any specific allergies?</label><br>
 								<div class="radio-inline">
 									<label><input type="radio" name="takesMedication" v-model="takesAllergyMedication"
@@ -196,7 +196,7 @@
 							<!-- List of Allergies-->
 							<label>Please select any allergies you are currently experiencing</label><br>
 							<div class="row">
-								<div class="col-xs-12 col-sm-6" v-for="allergy in allergiesListOrdered">
+								<div class="col-xs-12 col-sm-6" v-for="allergy in allergiesListOrdered" :key="allergy.id">
 									<div class="checkbox">
 										<label>
 											<input type="checkbox" v-model="allergy.selected"> {{allergy.name}}
@@ -207,7 +207,7 @@
 
 							<!-- Additional Allergies List-->
 							<div class="row">
-								<div class="col-xs-12 col-sm-6" v-for="allergy in additionalAllergiesList">
+								<div class="col-xs-12 col-sm-6" v-for="allergy in additionalAllergiesList" :key="allergy.id">
 									<div class="checkbox">
 										<label>
 											<input type="checkbox" v-model="allergy.selected"> {{allergy.name}}
@@ -315,7 +315,7 @@
 						<p>
 							Once you have completed the form(s) please attach them to your medical release by uploading them here in PDF format.</p>
 						<ul class="list-group" v-if="uploads.length">
-							<li class="list-group-item" v-for="upload in uploads">
+							<li class="list-group-item" v-for="upload in uploads" :key="upload.id">
 								<i class="fa fa-file-pdf-o"></i> {{upload.name}}
 								<a class="badge" @click="confirmUploadRemoval(upload)"><i class="fa fa-close"></i></a>
 							</li>
@@ -333,7 +333,7 @@
 					<div class="col-xs-6">
 						<hr class="divider sm inv">
 						<ol class="carousel-indicators">
-							<li v-for="i in 6" :class="{'active': currentStep === i}"></li>
+							<li v-for="i in 6" :key="i" :class="{'active': currentStep === i}"></li>
 						</ol>
 					</div>
 					<div class="col-xs-6 text-right">
@@ -347,325 +347,6 @@
 				</div>
 			</div>
 		</div>
-		<!--<form id="CreateUpdateMedicalRelease" class="form-horizontal" novalidate>
-			<spinner ref="spinner" size="sm" text="Loading"></spinner>
-			&lt;!&ndash;<div class="panel panel-default">
-				<div class="panel-heading">
-					<div class="row">
-						<div class="col-xs-8">
-							<h5 class="panel-header">Basic Information</h5>
-						</div>
-					</div>
-				</div>
-				<div class="panel-body">
-
-					<template v-if="forAdmin">
-						<div class="col-sm-12">
-							<div class="form-group" :class="{ 'has-error': errors.has('manager') }">
-								<label for="infoManager">Record Manager</label>
-								<v-select @keydown.enter.prevent="" class="form-control" id="infoManager" name="manager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name" v-validate="'required'"></v-select>
-							</div>
-						</div>
-					</template>
-					<div class="row">
-						<div class="col-sm-6">
-							<div v-error-handler="{ value: name, handle: 'name', messages: { req: 'Please enter the release holder\'s name.'} }">
-								<label for="name" class="control-label">Name</label>
-								<input type="text" class="form-control" name="name" id="name" v-model="name"
-									   placeholder="Name" v-validate="'required|min:1'"
-									   minlength="1" required>
-
-							</div>
-						</div>
-					</div>
-					<div class="row" v-if="!noInsurance">
-						<div class="col-sm-6">
-							<div v-error-handler="{ value: ins_provider, client: 'provider', server: 'ins_provider', messages: { req: 'Please enter the insurance provider\'s name.'} }">
-								<label for="ins_provider" class="control-label">Insurance Provider</label>
-								<input type="text" class="form-control" name="provider" id="ins_provider" v-model="ins_provider"
-									   placeholder="Insurance Provider" v-validate="noInsurance?'':'required|min:1|max:100'"
-									   maxlength="100" minlength="1" required>
-							</div>
-						</div>
-						<div class="col-sm-6">
-							<div v-error-handler="{ value: ins_policy_no, client: 'policy', server: 'ins_policy_no', messages: { req: 'Please enter the policy number.'} }">
-								<label for="ins_policy_no" class="control-label">Insurance Policy Number</label>
-								<input type="text" class="form-control" name="policy" id="ins_policy_no" v-model="ins_policy_no"
-									   placeholder="Insurance Policy Number" v-validate="noInsurance?'':'required|min:1'"
-									   maxlength="100" minlength="1" required>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12">
-							<hr class="divider inv">
-							<div class="checkbox">
-								<label>
-									<input type="checkbox" v-model="noInsurance"> I do not have medical insurance
-								</label>
-								<span class="help-block">
-									Medical Insurance is not required for travel, but highly recommend.
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>&lt;!&ndash; end panel-body &ndash;&gt;
-			</div>&lt;!&ndash; end panel &ndash;&gt;&ndash;&gt;
-			<div class="row">
-				<div class="col-sm-6">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<div class="row">
-								<div class="col-xs-8">
-									<h5 class="panel-header">Conditions</h5>
-								</div>
-								<div class="col-xs-4 text-right">
-
-								</div>
-							</div>
-						</div>
-						<div class="list-group">
-							<div class="list-group-item" v-for="condition in conditionsListOrdered">
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" v-model="condition.selected"> {{condition.name}}
-									</label>
-								</div>
-								<div class="row" v-if="condition.selected">
-									<div class="col-sm-6">
-										<div class="checkbox">
-											<label>
-												<input type="checkbox" v-model="condition.medication"> Have Medication?
-											</label>
-										</div>
-									</div>
-									<div class="col-sm-6">
-										<div class="checkbox">
-											<label>
-												<input type="checkbox" v-model="condition.diagnosed"> Medically Diagnosed by Doctor?
-											</label>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="list-group-item" v-for="condition in additionalConditionsList">
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" v-model="condition.selected"> {{condition.name}}
-									</label>
-								</div>
-								<div class="row" v-if="condition.selected">
-									<div class="col-sm-6">
-										<div class="checkbox">
-											<label>
-												<input type="checkbox" v-model="condition.medication"> Have Medication?
-											</label>
-										</div>
-									</div>
-									<div class="col-sm-6">
-										<div class="checkbox">
-											<label>
-												<input type="checkbox" v-model="condition.diagnosed"> Medically Diagnosed by Doctor?
-											</label>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="list-group-item text-center">
-								<button class="btn btn-xs btn-default-hollow" type="button" data-toggle="collapse"
-										data-target="#newCondition" aria-expanded="false" aria-controls="newCondition">
-									<i class="icon-left fa fa-plus"></i> Add Unlisted Condition
-								</button>
-							</div>
-							<div class="collapse" id="newCondition">
-								<div class="list-group-item">
-
-									<form name="NewCondition">
-										<label>Name</label>
-										<input type="text" class="form-control" v-model="newCondition.name" required>
-										<hr class="divider inv sm">
-										<button class="btn btn-sm btn-success" type="button" @click="addCondition(newCondition)">Add Condition</button>
-									</form>
-
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<div class="row">
-								<div class="col-xs-8">
-									<h5 class="panel-header">Allergies</h5>
-								</div>
-								<div class="col-xs-4 text-right">
-
-								</div>
-							</div>
-						</div>
-						<div class="list-group">
-							<div class="list-group-item" v-for="allergy in allergiesListOrdered">
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" v-model="allergy.selected"> {{allergy.name}}
-									</label>
-								</div>
-								<div class="row" v-if="allergy.selected">
-									<div class="col-sm-6">
-										<div class="checkbox">
-											<label>
-												<input type="checkbox" v-model="allergy.medication"> Have Medication?
-											</label>
-										</div>
-									</div>
-									<div class="col-sm-6">
-										<div class="checkbox">
-											<label>
-												<input type="checkbox" v-model="allergy.diagnosed"> Medically Diagnosed by Doctor?
-											</label>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="list-group-item" v-for="allergy in additionalAllergiesList">
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" v-model="allergy.selected"> {{allergy.name}}
-									</label>
-								</div>
-								<div class="row" v-if="allergy.selected">
-									<div class="col-sm-6">
-										<div class="checkbox">
-											<label>
-												<input type="checkbox" v-model="allergy.medication"> Have Medication?
-											</label>
-										</div>
-									</div>
-									<div class="col-sm-6">
-										<div class="checkbox">
-											<label>
-												<input type="checkbox" v-model="allergy.diagnosed"> Medically Diagnosed by Doctor?
-											</label>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="list-group-item text-center">
-								<button class="btn btn-xs btn-default-hollow" type="button" data-toggle="collapse"
-										data-target="#newAllergy" aria-expanded="false" aria-controls="newAllergy">
-									<i class="icon-left fa fa-plus"></i> Add Unlisted Allergy
-								</button>
-							</div>
-							<div class="collapse" id="newAllergy">
-								<div class="list-group-item">
-
-									<form name="newAllergy">
-										<label>Name</label>
-										<input type="text" class="form-control" v-model="newAllergy.name">
-										<hr class="divider inv sm">
-										<button class="btn btn-sm btn-success" type="button" @click="addAllergy(newAllergy)">Add Allergy</button>
-									</form>
-
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="panel panel-default" v-if="hasConditionsOrAllergies">
-				<div class="panel-heading">
-					<h5 class="panel-header">Doctor's Permission</h5>
-				</div>
-				<div class="panel-body">
-					<div class="row">
-						<div class="col-sm-6">
-							<h5>Start Here</h5>
-							<p>You have indicated that you have one or more medical conditions or allergies. In order to be cleared for travel, you must download the form below and have it complete by your doctor.  You will need to supply <strong>one form per condition or allergy</strong> as certain conditions may be treated by different doctors.</p>
-							<p>
-								<a class="btn btn-primary btn-md" href="/downloads/medication_condition_form2017.pdf" target="_blank">
-									<i class="fa fa-file-pdf-o icon-left"></i> Download Permission Form
-								</a>
-							</p>
-						</div>
-						<div class="col-sm-6">
-							<h5>Completed Forms</h5>
-							<p>Once you have completed the form(s) please attach them to your medical release by uploading them here in PDF format.</p>
-							<ul class="list-group" v-if="uploads.length">
-								<li class="list-group-item" v-for="upload in uploads">
-									<i class="fa fa-file-pdf-o"></i> {{upload.name}}
-									<a class="badge" @click="confirmUploadRemoval(upload)"><i class="fa fa-close"></i></a>
-								</li>
-							</ul>
-							<upload-create-update type="file" lock-type :ui-selector="2" ui-locked is-child :tags="['User']" button-text="Attach" allow-name :name="'medical-release-'+ today + '-' + uploadCounter"  @uploads-complete="uploadsComplete"></upload-create-update>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-header">Emergency Contact</h5>
-				</div>
-				<div class="panel-body">
-					<form name="newContact">
-						<div class="row">
-							<div class="col-sm-6">
-								<div v-error-handler="{ value: emergency_contact.name, handle: 'emergencyname' }">
-									<label>Name</label>
-									<input type="text" class="form-control" v-model="emergency_contact.name"
-										   name="emergencyname" v-validate="'required|min:1'" minlength="1" required>
-								</div>
-							</div>
-							<div class="col-sm-6">
-								<div v-error-handler="{ value: emergency_contact.email, handle: 'emergencyemail', messages: { email: 'Please enter a valid email address.'} }">
-									<label>Email</label>
-									<input type="email" class="form-control" v-model="emergency_contact.email"
-										   name="emergencyemail" v-validate="'required|email'" minlength="1" required>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-6">
-								<div v-error-handler="{ value: emergency_contact.phone, handle: 'emergencyphone' }">
-									<label>Phone</label>
-									<phone-input v-model="emergency_contact.phone" name="emergencyphone" v-validate="'required'"></phone-input>
-								</div>
-							</div>
-							<div class="col-sm-6">
-								<div v-error-handler="{ value: emergency_contact.relationship, handle: 'emergencyrelationship' }">
-									<label>Relationship</label>
-									<select class="form-control" v-model="emergency_contact.relationship"
-											name="emergencyrelationship" v-validate="'required'" required>
-										<option value="friend">Friend</option>
-										<option value="spouse">Spouse</option>
-										<option value="family">Family</option>
-										<option value="guardian">Guardian</option>
-										<option value="other">Other</option>
-									</select>
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-
-			<div class="form-group text-center">
-				<div class="col-xs-12">
-					<a v-if="!isUpdate" :href="'/'+ firstUrlSegment +'/records/medical-releases'" class="btn btn-default">Cancel</a>
-					<a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
-					<a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
-					<a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
-				</div>
-			</div>
-		</form>-->
-
-		<!--<modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" :small="true">
-			<div slot="modal-body" class="modal-body text-center" v-if="selectedItem">Delete {{ selectedItem.name }}?</div>
-			<div slot="modal-footer" class="modal-footer">
-				<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
-				<button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Delete</button>
-			</div>
-		</modal>-->
 		<modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue"
 		       cancel-text="Cancel" :callback="forceBack">
 			<div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
@@ -758,7 +439,7 @@
         takesMedication: null,
         takesConditionMedication: null,
         takesAllergyMedication: null,
-        medicallyDiagnosed: null,
+        hasConditions: null,
         hasAllergies: null,
         agreement: false,
       }
@@ -787,17 +468,17 @@
       backStep() {
         switch (this.currentStep) {
           case 4:
-            if (this.medicallyDiagnosed || this.takesMedication) {
+            if (this.hasConditions || this.takesMedication) {
               this.currentStep--;
             } else {
               this.currentStep -= 2;
             }
             break;
           case 5:
-            if (this.hasAllergies || this.takesMedication) {
+            if (this.hasAllergies || this.takesMedication || this.hasConditions) {
               this.currentStep--;
             } else {
-              if (this.medicallyDiagnosed) {
+              if (this.hasConditions) {
                 this.currentStep -= 2;
               } else {
                 this.currentStep -= 3;
@@ -818,7 +499,7 @@
 
           switch (this.currentStep) {
             case 2:
-              if (this.medicallyDiagnosed || this.takesMedication) {
+              if (this.hasConditions || this.takesMedication) {
                 this.currentStep++;
               } else {
                 if (this.hasAllergies) {
@@ -829,7 +510,7 @@
               }
               break;
             case 3:
-              if (this.hasAllergies || this.takesMedication) {
+              if (this.hasAllergies || this.takesMedication || this.hasConditions) {
                 this.currentStep++;
               } else {
                 this.currentStep += 2;
@@ -908,7 +589,7 @@
             emergency_contact: this.emergency_contact,
             is_risk: this.is_risk,
             user_id: this.user_id,
-						takes_medication: this.takesMedication,
+						takes_medication: this.takesMedication ? true : (this.takesConditionMedication || this.takesAllergyMedication),
             upload_ids: _.uniq(this.upload_ids),
           }).then((resp) => {
             this.$root.$emit('showSuccess', 'Medical Release created.');
@@ -936,6 +617,7 @@
             conditions: this.conditions,
             allergies: this.allergies,
             emergency_contact: this.emergency_contact,
+						takes_medication: this.takesMedication ? true : (this.takesConditionMedication || this.takesAllergyMedication),
             is_risk: this.is_risk,
             user_id: this.user_id,
             upload_ids: _.uniq(this.upload_ids),
@@ -971,6 +653,9 @@
     mounted() {
       if (this.isUpdate) {
         this.$http.get(`medical/releases/${this.id}`, {params: {include: 'conditions,allergies,uploads,user'}}).then((response) => {
+					this.noInsurance = response.data.data.ins_provider ? false : true;
+					this.hasConditions = response.data.data.hasConditions;
+					this.hasAllergies = response.data.data.hasAllergies;
           this.user_id = response.data.data.id;
           let medical_release = response.data.data;
           medical_release.uploads = medical_release.uploads.data;

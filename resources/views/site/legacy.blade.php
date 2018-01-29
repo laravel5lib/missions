@@ -15,12 +15,12 @@
 			<div class="col-sm-8 col-sm-offset-2">
                 <h3 class="text-primary">Greetings Legacy Partners,</h3>
 
-                <p>As the summer comes to a close we wanted to take a moment and thank each and every one of you for your tremendous support this summer while sharing some of the exciting things happening this fall and next summer.</p>
+                <p>I wanted to reach out and thank you for such an extraordinary year at Missions.Me. We had the opportunity to be in Peru last week in preparation for 1Nation1Day 2019 and it was amazing. As many of you know, we were also able to be with the spiritual leaders of Nicaragua a couple of weeks ago and I wanted to take a moment and share both of those updates with you. All of this is possible because of you!</p>
 
-                <p>As always, if you need anything please feel free to reach out to us directly.</p>
+								<p>Thank you for your continued dedication support.</p>
 
                 <hr class="divider inv">
-                <p>Blessings!</p>
+                <p>Merry Christmas,</p>
                 <h5 class="text-primary"><em>Gabe</em></h5>
 			</div>
 		</div><!-- end row -->
@@ -36,7 +36,14 @@
 				<hr class="divider inv">
 				<div class="video-outer">
 					<div class="video-inner">
-						<iframe src="https://player.vimeo.com/video/234718889?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+						<iframe src="https://player.vimeo.com/video/248055644?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+					</div>
+				</div>
+
+				<hr class="divider inv">
+				<div class="video-outer">
+					<div class="video-inner">
+						<iframe src="https://player.vimeo.com/video/247859393?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 					</div>
 				</div>
 			</div><!-- end col -->

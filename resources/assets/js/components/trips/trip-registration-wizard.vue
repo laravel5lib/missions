@@ -1,52 +1,11 @@
 <template>
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h5>{{ trip.country_name }} Trip Registration</h5>
+			<h4>{{ currentStep.name }}</h4>
 		</div>
 		<div class="panel-body">
-			<div class="row visible-xs-block">
-				<div class="col-xs-12">
-					<div class="btn-group btn-group-justified btn-group-xs" style="display:block;" role="group" aria-label="...">
-						<a @click="backStep" class="btn btn-default" :class="{'disabled': currentStep.view === 'step2' }" role="button">
-							<i class="fa fa-chevron-left"></i>
-						</a>
-						<div class="btn-group" role="group">
-							<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button"
-							   aria-haspopup="true" aria-expanded="false">
-								{{ currentStep.name }} <span class="caret"></span>
-							</a>
-							<ul class="dropdown-menu dropdown-menu-right">
-								<li role="step" v-for="step in stepList" :class="{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view && !step.complete}">
-									<a @click="toStep(step)">
-										<span class="fa" :class="{'fa-chevron-right':!step.complete, 'fa-check': step.complete}"></span>
-										{{step.name}}
-									</a>
-								</li>
-							</ul>
-						</div>
-						<!--<a class="btn btn-default" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep()">
-							<i class="fa fa-chevron-right"></i>
-						</a>
-						<a class="btn btn-primary" v-if="wizardComplete" @click="finish()">
-							<i class="fa fa-check"></i>
-						</a>-->
-					</div>
-				</div>
-			</div>
-			<hr class="divider visible-xs">
 			<div class="row">
-				<div class="col-sm-5 col-md-4 hidden-xs">
-					<ul class="nav nav-pills nav-stacked">
-						<li role="step" v-for="step in stepList" :class="{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view && !step.complete}">
-							<a @click="toStep(step)">
-								<span class="fa" :class="{'fa-chevron-right':!step.complete, 'fa-check': step.complete}"></span>
-								{{step.name}}
-							</a>
-						</li>
-
-					</ul>
-				</div>
-				<div class="col-sm-7 col-md-8" :class="currentStep.view">
+				<div class="col-sm-12" :class="currentStep.view">
 					<spinner ref="validationSpinner" size="xl" :fixed="false" text="Validating"></spinner>
 					<spinner ref="reservationspinner" size="xl" :fixed="true" text="Creating Reservation"></spinner>
 					<keep-alive>
@@ -58,12 +17,15 @@
 			</div>
 		</div>
 		<div class="panel-footer text-right">
-			<div class="btn-group btn-group" role="group" aria-label="...">
-				<!--<a class="btn btn-link" data-dismiss="modal">Cancel</a>-->
-				<a class="btn btn-default" @click="backStep" :class="{'disabled': currentStep.view === 'step2' }">Back</a>
-				<a class="btn btn-primary" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep">Continue</a>
-				<a class="btn btn-primary" v-else @click="finish">Finish</a>
-			</div>
+				<hr class="divider inv">
+				<a class="btn btn-link pull-left" @click="backStep" :class="{'disabled': currentStep.view === 'step2' }">
+					<i class="fa fa-angle-double-left"></i> Back
+				</a>
+				<a class="btn btn-primary" v-if="this.currentStep.view === 'payment'" @click="finish">Make Payment and Finish</a>
+				<a class="btn btn-primary" v-else :class="{'disabled': !canContinue }" @click="nextStep">
+					Next <i class="fa fa-angle-double-right"></i>
+				</a>
+				<hr class="divider inv">
 		</div>
 	</div>
 </template>
@@ -81,7 +43,8 @@
 	import roca from './registration/roca.vue';
 	import basicInfo from './registration/basic-info.vue';
 	import additionalOptions from './registration/additional-trip-options.vue';
-	import paymentDetails from './registration/payment-details.vue';
+	import paymentAgreement from './registration/payment-agreement.vue';
+	import payment from './registration/payment.vue';
 	import deadlineAgreement from './registration/deadline-agreement.vue';
 	import review from './registration/review.vue';
 	export default{
@@ -92,21 +55,21 @@
             'step3': roca,
             'step4': basicInfo,
             'step5': additionalOptions,
-            'step6': paymentDetails,
-            'step7': deadlineAgreement,
-            'step8': review,
+            'requirements': deadlineAgreement,
+            'paymentAgreement': paymentAgreement,
+            'payment': payment,
         },
         data(){
 			return {
 				stepList:[
-					{name: 'Legal (Terms of Service)', view: 'step2', complete:false},
+					{name: 'Terms of Service Agreement', view: 'step2', complete:false},
 					{name: 'Rules of Conduct Agreement', view: 'step3', complete:false},
-					{name: 'Basic Traveler Information', view: 'step4', complete:false},
+					{name: 'Traveler Information', view: 'step4', complete:false},
 					{name: 'Rooming Options', view: 'step5', complete:false},
-					{name: 'Payment Details', view: 'step6', complete:false},
-					{name: 'Deadline Agreements', view: 'step7', complete:false},
-					{name: 'Review', view: 'step8', complete:false}
-				],
+					{name: 'Financial Agreement', view: 'paymentAgreement', complete:false},
+					{name: 'Travel Requirements', view: 'requirements', complete:false},
+                    {name: 'Review & Deposit', view: 'payment', complete:false},
+                ],
 				currentStep: null,
 				trip: {},
 				tripCosts: {},
@@ -130,8 +93,11 @@
 			canContinue(){
 				return this.currentStep.complete;
 			},
-            userData(){
-			    return this.$root.user;
+            userData:{
+			  get(val) {
+                return this.$root.user;
+			  },
+			  set(val) {}
             }
 		},
 		methods: {
@@ -143,15 +109,15 @@
 			fallbackStep(step){
 			    // negate last step completion
                 this.wizardComplete = false;
-                this.stepList[7].complete = false;
+                this.stepList[5].complete = false;
 
                 // negate second last step completion
-                this.stepList[6].complete = false;
+                this.stepList[4].complete = false;
                 this.rocaAgree = false;
 
                 // negate step completion
                 this.currentStep = step;
-                if (step.view === 'step6') {
+                if (step.view === 'payment') {
                     this.detailsConfirmed = false;
                     this.$nextTick(() =>  {
                         this.currentStep.complete = false;
@@ -163,6 +129,9 @@
             },
 			backStep(){
 				this.stepList.some(function(step, i, list) {
+                    if (this.currentStep.view === 'payment')
+                        this.wizardComplete = false;
+
 					if (this.currentStep.view === step.view){
 						return this.currentStep = list[i-1];
 					}
@@ -189,23 +158,6 @@
                         });
 
 						break;
-					case 'step6':
-						// find child
-						if (this.upfrontTotal > 0) {
-                            this.$children.forEach(function (child) {
-                                if (child.hasOwnProperty('handle') && child.handle === 'PaymentDetails')
-                                    thisChild = child;
-                            });
-                            // promise needed to wait for async response from stripe
-                            $.when(thisChild.createToken())
-	                                .done(success => {
-	                                    this.$refs.validationSpinner.hide();
-	                                    this.nextStepCallback();
-	                                });
-                        } else {
-                            this.nextStepCallback();
-                        }
-						break;
 					default:
 						this.nextStepCallback();
 				}
@@ -218,7 +170,25 @@
 					}
 				}, this);
 			},
-			finish(){
+            finish() {
+              let thisChild;
+              // find child
+              if (this.upfrontTotal > 0) {
+                this.$children.forEach(function (child) {
+                  if (child.hasOwnProperty('handle') && child.handle === 'PaymentDetails')
+                    thisChild = child;
+                });
+                // promise needed to wait for async response from stripe
+                $.when(thisChild.createToken())
+                  .done(success => {
+                    this.$refs.validationSpinner.hide();
+                    this.finishConfirmed();
+                  });
+              } else {
+                this.finishConfirmed();
+              }
+            },
+			finishConfirmed(){
                 let data = {
                     // reservation data
                     height_a: this.userInfo.heightA,
@@ -271,8 +241,8 @@
 					data.donor_id = this.donor_id;
 				} else {
 					data.donor = {
-						name: this.userInfo.firstName + ' ' + this.userInfo.lastName,
-						// company: null,
+						first_name: this.userInfo.firstName,
+						last_name: this.userInfo.lastName,
 						email: this.userInfo.email,
 						phone: this.userInfo.phone,
 						zip: this.userInfo.zipCode,
@@ -291,7 +261,7 @@
                     this.$refs.reservationspinner.hide();
                     console.log(error.response);
 					this.$root.$emit('showError', error.response.data.message);
-                    this.fallbackStep(this.stepList[4]); // return to payment details step
+                    //this.fallbackStep(this.stepList[4]); // return to payment details step
 					this.paymentErrors.push(error.response.data.message);
 				});
 
@@ -306,36 +276,14 @@
                 });
 			    return finalCosts;
 			},
-			detectCardType(number) {
-				// http://stackoverflow.com/questions/72768/how-do-you-detect-credit-card-type-based-on-number
-				let re = {
-					electron: /^(4026|417500|4405|4508|4844|4913|4917)\d+$/,
-					maestro: /^(5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)\d+$/,
-					dankort: /^(5019)\d+$/,
-					interpayment: /^(636)\d+$/,
-					unionpay: /^(62|88)\d+$/,
-					visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
-					mastercard: /^5[1-5][0-9]{14}$/,
-					amex: /^3[47][0-9]{13}$/,
-					diners: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
-					discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/,
-					jcb: /^(?:2131|1800|35\d{3})\d{11}$/
-				};
-
-				for(let key in re) {
-					if(re[key].test(number)) {
-						return key
-					}
-				}
-			},
 			stepCompleted(val) {
                 this.currentStep.complete = val;
-                if (this.currentStep.view === 'step8')
+                if (this.currentStep.view === 'payment')
                     this.wizardComplete = val;
 			},
 		},
 		created(){
-			// login component skipped for now
+			// set starting step
 			this.currentStep = this.stepList[0];
 		},
 		mounted(){
@@ -379,36 +327,5 @@
 				self.nextStep();
 			})
 		},
-		events: {
-			/*'userHasLoggedIn'(val){
-			    debugger;
-				// expecting userData object
-				this.userData = val;
-				this.currentStep.complete = !!val;
-				// force next step
-				this.nextStep();
-			},*/
-			'tos-agree'(val){
-				this.currentStep.complete = val;
-			},
-			'roca-agree'(val){
-				this.currentStep.complete = val;
-			},
-			'basic-info'(val){
-				this.currentStep.complete = val
-			},
-			'ato-complete'(val){
-				this.currentStep.complete = val;
-			},
-			'payment-complete'(val){
-				this.currentStep.complete = val;
-			},
-			'deadline-agree'(val){
-				this.currentStep.complete = val;
-			},
-			'review'(val){
-				this.currentStep.complete = this.wizardComplete = val;
-			}
-		}
 	}
 </script>

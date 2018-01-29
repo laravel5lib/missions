@@ -25,7 +25,7 @@ class NoteFilter extends Filter
      * @var array
      */
     public $searchable = [
-        'subject', 'content', 'user.name'
+        'subject', 'content'
     ];
 
     /**

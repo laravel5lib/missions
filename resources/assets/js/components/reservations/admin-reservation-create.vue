@@ -128,6 +128,7 @@
                                 thisChild.attemptedContinue = true;
                                 return false;
                             }
+                            if (!this.userData) thisChild.setLocalUserData();
                             this.userInfo = thisChild.userInfo;
                             this.nextStepCallback();
                         });
@@ -146,33 +147,32 @@
                 }, this);
             },
             finish(){
-                this.$refs.reservationspinner.show();
-
-                var data = {
-                    // reservation data
-                    given_names: this.userInfo.firstName,
-                    surname: this.userInfo.lastName,
-                    gender: this.userInfo.gender,
-                    height_a: this.userInfo.heightA,
-                    height_b: this.userInfo.heightB,
-                    weight: this.userInfo.weight,
-                    status: this.userInfo.relationshipStatus,
-                    shirt_size: this.userInfo.size,
-                    birthday: moment(this.userInfo.dobMonth + '-' + this.userInfo.dobDay + '-' + this.userInfo.dobYear, 'MM-DD-YYYY').format('YYYY-MM-DD'),
-                    address: this.userInfo.address,
-                    city: this.userInfo.city,
-                    state: this.userInfo.state,
-                    zip: this.userInfo.zipCode,
-                    country_code: this.userInfo.country,
-                    email: this.userInfo.email,
-                    phone_one: this.userInfo.phone,
-                    phone_two: this.userInfo.mobile,
-                    user_id: this.userData.id,
-					trip_id: this.tripId,
-                    companion_limit: this.companion_limit,
-                    costs: _.union(this.tripCosts.incremental, [this.selectedOptions], this.tripCosts.static),
-                    desired_role: this.userInfo.desired_role.value
-                };
+              let data = {
+                // reservation data
+                given_names: this.userInfo.firstName,
+                surname: this.userInfo.lastName,
+                gender: this.userInfo.gender,
+                height_a: this.userInfo.heightA,
+                height_b: this.userInfo.heightB,
+                weight: this.userInfo.weight,
+                status: this.userInfo.relationshipStatus,
+                shirt_size: this.userInfo.size,
+                birthday: moment(this.userInfo.dobMonth + '-' + this.userInfo.dobDay + '-' + this.userInfo.dobYear, 'MM-DD-YYYY').format('YYYY-MM-DD'),
+                address: this.userInfo.address,
+                city: this.userInfo.city,
+                state: this.userInfo.state,
+                zip: this.userInfo.zipCode,
+                country_code: this.userInfo.country,
+                email: this.userInfo.email,
+                phone_one: this.userInfo.phone,
+                phone_two: this.userInfo.mobile,
+                user_id: this.userData.id,
+                trip_id: this.tripId,
+                companion_limit: this.companion_limit,
+                costs: _.union(this.tripCosts.incremental, [this.selectedOptions], this.tripCosts.static),
+                desired_role: this.userInfo.desired_role.value
+              };
+              this.$refs.reservationspinner.show();
 
                 if (this.userData && this.userData.donor_id) {
                     data.donor_id = this.donor_id;
@@ -186,7 +186,6 @@
                         country_code: this.userInfo.country || 'us'
                     }
                 }
-
 
                 this.$http.post('reservations', data).then((response) => {
                     this.$root.$emit('AdminTrip:RefreshReservations');
@@ -222,7 +221,7 @@
             },
             stepCompleted(val) {
                 this.currentStep.complete = val;
-                if (this.currentStep.view === 'step8')
+                if (this.currentStep.view === 'step3')
                     this.wizardComplete = val;
             },
         },
@@ -244,14 +243,15 @@
         mounted(){
             //get trip costs
             this.$http.get('trips/' + this.tripId, { params: { include: 'costs:status(active),costs.payments,deadlines,requirements' }}).then((response) => {
-                this.trip = response.data.data;
+              let optionalArr = [], staticArr = [], incrementalArr = [];
+
+              this.trip = response.data.data;
                 // deadlines, requirements, and companion_limit
                 this.deadlines =  response.data.data.deadlines.data;
                 this.requirements =  response.data.data.requirements.data;
                 this.companion_limit = response.data.data.companion_limit;
 
                 // filter costs by type
-                var optionalArr = [], staticArr = [], incrementalArr = [];
                 response.data.data.costs.data.forEach(function (cost) {
                     switch (cost.type) {
                         case 'static':

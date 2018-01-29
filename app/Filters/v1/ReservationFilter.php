@@ -9,6 +9,11 @@ class ReservationFilter extends Filter
     use Manageable;
 
     /**
+     * Default column to search
+     */
+    public $column = 'given_names';
+
+    /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
     * As [relatedModel => [method1, method2]]
     *
@@ -529,7 +534,7 @@ class ReservationFilter extends Filter
         $first = $searchTerms->first();
         $last = $searchTerms->last();
 
-        $this->when(($searchTerms->count() > 1), function ($query) use ($searchTerms, $first, $last) {
+        return $this->when(($searchTerms->count() > 1), function ($query) use ($searchTerms, $first, $last) {
             return $query->where('surname', 'LIKE', "%$last%")->where('given_names', 'LIKE', "%$first%");
         })->when(($searchTerms->count() < 2), function ($query) use ($searchTerms, $first) {
             return $query->where('given_names', 'LIKE', "%$first%")
@@ -578,15 +583,25 @@ class ReservationFilter extends Filter
 
     public function checkedIn()
     {
-        $this->whereHas('todos', function ($query) {
+        return $this->whereHas('todos', function ($query) {
             $query->where('task', 'hq check in')->whereNotNull('completed_at');
         });
     }
 
     public function checkedOut()
     {
-        $this->whereDoesntHave('todos', function ($query) {
+        return $this->whereDoesntHave('todos', function ($query) {
             $query->where('task', 'hq check in')->whereNotNull('completed_at');
         });
+    }
+
+    public function searchBy($value)
+    {
+        $this->column = $value;
+    }
+
+    public function search($keywords)
+    {
+        return $this->where($this->column, 'LIKE', "%$keywords%");
     }
 }

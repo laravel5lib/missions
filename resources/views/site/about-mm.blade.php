@@ -178,13 +178,14 @@
                 <li class="text-primary-darker">‘16 Christmas in India</li>
                 <li class="text-primary-darker">‘17 India</li>
                 <li class="text-primary-darker">‘17 1Nation1Day Nicaragua</li>
+                <li class="text-primary-darker">‘17 Christmas in India</li>
               </ul>
           </div><!-- end col -->
         </div><!-- end row -->
       </div><!-- end content-section-->
       </div><!-- end container -->
     </div><!-- end red-bg -->
-    <img class="img-responsive" src="images/about-mm/all-staff-bg.jpg" alt="">
+    <img class="img-responsive" src="images/about-mm/staff/staff-bg.jpg" alt="">
     <div class="bg-primary">
       <div class="container">
       <div class="content-section">
@@ -280,7 +281,7 @@
                 <div class="panel">
                   <img class="img-responsive" src="images/about-mm/staff/bahlhorn.jpg">
                   <div class="panel-body">
-                    <h5>Gabe & Hannah Bahlhorn</h5>
+                    <h5>Gabe Bahlhorn</h5>
                     <p class="small">Chief Communications Officer</p>
                     <h6><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Read Bio</a></h6>
                   </div>
@@ -327,96 +328,4 @@
       </div><!-- end content-section -->
       </div><!-- end container -->
     </div><!-- end white-bg -->
-    <div class="gray-lighter-bg">
-      <div class="container">
-      <div class="content-section">
-        <div class="row">
-          <div class="col-xs-10 col-xs-offset-1">
-            <h1 class="text-center">Ministry Directors</h1>
-            <hr class="divider red-small">
-            <hr class="divider inv">
-            <div class="row">
-              <div class="col-md-4 col-sm-6">
-                <div class="panel">
-                  <img class="img-responsive" src="images/about-mm/staff/gonzales.jpg">
-                  <div class="panel-body">
-                    <h5>Libby Gonzales</h5>
-                    <p class="small">Director Of Team Relations</p>
-                    <h6 class="bold uppercaseit"><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix">Read Bio</a></h6>
-                  </div>
-                  <div id="collapseSix" class="panel-collapse collapse">
-                    <div class="panel-body">
-                      <p class="small">Libby has had a deep passion for the nations since the age of 14, when she went on her first missions trip. Since then, she has traveled to over 30 countries as a missionary, group leader, team leader, photographer and project director. She has been apart of Missions.Me for over 9 years, both volunteering and on staff. Some of her favs are Starbucks iced coffees, chap stick, chocolate, country music, and flowers. Libby resides with her husband and 2 kids, Ruby and Jax in Lake Orion, MI.</p>
-                    </div><!-- end panel-body -->
-                  </div><!-- end panel-collapse -->
-                </div><!-- end panel -->
-              </div><!-- end col -->
-              <div class="col-md-4 col-sm-6">
-                <div class="panel">
-                  <img class="img-responsive" src="images/about-mm/staff/keena.jpg">
-                  <div class="panel-body">
-                    <h5 class="bold uppercaseit">Neil Keena</h5>
-                    <p class="small">Director Of Web Development</p>
-                    <h6><a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">Read Bio</a></h6>
-                  </div>
-                  <div id="collapseSeven" class="panel-collapse collapse">
-                    <div class="panel-body">
-                      <p class="small">The only thing Neil loves more than turning caffeine into code is his passion for the church and it's global mission. Neil is the director of web development and actively volunteers at his local church. He loves to read, watch documentaries, and might be a bit of a Star Wars fan. Born and raised in sunny San Diego, CA he now resides in San Clemente, CA with his wife, Cat.</p>
-                    </div><!-- end panel-body -->
-                  </div><!-- end panel-collapse -->
-                </div><!-- end panel -->
-              </div><!-- end col -->
-              <div class="col-md-4 col-sm-6">
-                <div class="panel">
-                  <img class="img-responsive" src="images/about-mm/staff/barton.jpg">
-                  <div class="panel-body">
-                    <h5>Katie Mazur</h5>
-                    <p class="small">Angel House Administrator</p>
-                    <h6><a data-toggle="collapse" data-parent="#accordion" href="#collapseEight">Read Bio</a></h6>
-                  </div>
-                  <div id="collapseEight" class="panel-collapse collapse">
-                    <div class="panel-body">
-                      <p class="small">Since her first Missions.Me trip in 2011, Katie has been driven by missions and world outreach. She attended RHEMA Bible Training College in Tulsa, Oklahoma and is currently studying International Relations at Oakland University. Katie serves as the Angel House Account Coordinator and the Missions.Me Senior Administrative Coordinator. She is all about Chai tea and playing her cello. Katie currently resides in Sterling Heights, MI with her husband, Jim.</p>
-                    </div><!-- end panel-body -->
-                  </div><!-- end panel-collapse -->
-                </div><!-- end panel -->
-              </div><!-- end col -->
-            </div><!-- end row -->
-            <div class="row">
-              <div class="col-md-4 col-sm-6 col-md-offset-2">
-                <div class="panel">
-                  <img class="img-responsive" src="images/about-mm/staff/rossi.jpg">
-                  <div class="panel-body">
-                    <h5>Cathleen Keena</h5>
-                    <p class="small">Director Of Missions.Me College</p>
-                    <h6 class="bold uppercaseit"><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine">Read Bio</a></h6>
-                  </div>
-                  <div id="collapseNine" class="panel-collapse collapse">
-                    <div class="panel-body">
-                      <p class="small">Cat’s love for people and passion for restoring lives are at the core of all she does. Cat is the director of our Missions.Me College and actively volunteers at her local church. She studied at Central Michigan University earning a bachelor's degree in Family Studies and Psychology. Some of Cat’s favorite things are tacos, Honduran coffee, reading, and going on adventures. Cat currently resides in San Clemente, CA with her husband, Neil.</p>
-                    </div><!-- end panel-body -->
-                  </div><!-- end panel-collapse -->
-                </div><!-- end panel -->
-              </div><!-- end col -->
-              <div class="col-md-4 col-sm-6">
-                <div class="panel">
-                  <img class="img-responsive" src="images/about-mm/staff/lidman.jpg">
-                  <div class="panel-body">
-                    <h5>Daniel Lidman</h5>
-                    <p class="small">Video & Motion Graphics Editor</p>
-                    <h6 class="bold uppercaseit"><a data-toggle="collapse" data-parent="#accordion" href="#collapseTen">Read Bio</a></h6>
-                  </div>
-                  <div id="collapseTen" class="panel-collapse collapse">
-                    <div class="panel-body">
-                      <p class="small">Hailing from Northern Michigan, Daniel is the videographer and motion graphics editor at Missions.Me. He is passionate about using video to connect people with what God is doing around the world. An avid fan of the Michigan outdoors and the cold winters, you can usually find Daniel outside when he’s not pushing pixels. He currently resides in Rochester, MI.</p>
-                    </div><!-- end panel-body -->
-                  </div><!-- end panel-collapse -->
-                </div><!-- end panel -->
-              </div><!-- end col -->
-            </div><!-- end row -->
-          </div><!-- end col -->
-        </div><!-- end row -->
-      </div><!-- end content-section -->
-      </div><!-- end container -->
-    </div><!-- end gray-lighter-bg -->
 @endsection

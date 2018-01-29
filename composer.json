@@ -58,7 +58,10 @@
             "tests/DatabaseSetup.php",
             "tests/AuthenticatedUserSetup.php",
             "tests/BrowserKitTestCase.php"
-        ]
+        ],
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "scripts": {
         "post-root-package-install": [

@@ -13,7 +13,7 @@
 			<ul class="nav navmenu-nav">
 				<li class="navlabel">Account</li>
 				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding:10px 40px;" href="/login">Login</a></li>
-				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding: 10px 34px;border-left: 1px solid #242424;" href="/register">Sign Up</a></li>
+				<li style="display:inline;" v-if="!Fundraiser=='1'"><a style="display:inline-block;padding: 10px 34px;border-left: 1px solid #242424;" href="/donate">Donate</a></li>
 
 				<template v-if="auth">
 					<li class=""><a href="/dashboard/settings" id="menu-profile-link"><i class="fa fa-user-circle" style="margin-right:7px;"></i>My Account</a></li>
@@ -53,7 +53,7 @@
 
 				<!-- Causes -->
 				<li class="navlabel">Causes</li>
-				<li><a href="/projects">1Nation1Day</a></li>
+				<li><a href="/1nation1day">1Nation1Day</a></li>
 				<li><a href="/orphans">Rescue Orphans</a></li>
 				<li><a href="/water">Clean Water</a></li>
 				<li><a href="/medical">Medical Missions</a></li>
@@ -80,7 +80,10 @@
 				type: String,
 				default: '0',
 			},
-
+			'fundraiser': {
+				type: String,
+				default: '0'
+			}
 		},
 		data(){
 			return {

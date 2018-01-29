@@ -99,6 +99,9 @@ $this->get('/go/{slug?}', function ($slug = null) {
     }
     return redirect('/'.$slug);
 });
+$this->get('/1n1d19', function() {
+    return redirect('/travel-with-us/signup?trip_id=4f3705a8-fbae-45fe-927f-c3042a8d9127');
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -120,7 +123,7 @@ $this->get('/{slug}/signup', 'GroupsController@signup')
 $this->get('/{slug}/trips', 'CampaignsController@trips')
      ->where('sponsor_slug', '^(?!api).*$');
 $this->get('/{sponsor_slug}/{fundraiser_slug}', 'FundraisersController@show')
-     ->where('sponsor_slug', '^(?!api).*$');
+     ->where('sponsor_slug', '^(?!api).*$')->name('fundraiser');
 $this->get('/{slug}', 'PagesController@show')
      ->where('sponsor_slug', '^(?!api).*$')
      ->middleware(['lowercase']);

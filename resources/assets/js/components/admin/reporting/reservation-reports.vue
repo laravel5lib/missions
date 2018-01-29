@@ -1,7 +1,7 @@
 <template>
     <div class="btn-group btn-group-sm">
       <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
-        <i class="fa fa-line-chart"></i> Create Report <span class="caret"></span>
+        <i class="fa fa-line-chart"></i> Report <span class="caret"></span>
       </button>
       <ul class="dropdown-menu">
         <li><a @click="create('basic')"><i class="fa fa-file-excel-o"></i> Basic Info</a></li>

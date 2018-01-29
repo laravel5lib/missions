@@ -294,7 +294,7 @@
 				<td v-if="isActive('birthday')">{{user.birthday | moment('ll')}}</td>
 				<td v-if="isActive('phone_one')" v-text="user.phone_one"></td>
 				<td v-if="isActive('phone_two')" v-text="user.phone_two"></td>
-				<td v-if="isActive('street')" v-text="user.street"></td>
+				<td v-if="isActive('street')" v-text="user.address"></td>
 				<td v-if="isActive('city')" v-text="user.city"></td>
 				<td v-if="isActive('zip')" v-text="user.zip"></td>
 				<td v-if="isActive('state')" v-text="user.state"></td>

@@ -3,10 +3,10 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-6">
-                    <h5 v-if="edit">Details</h5>
+                    <h5 v-if="id">Details</h5>
                     <h5 v-else>Create a Cause</h5>
                 </div>
-                <div class="col-xs-6 text-right" v-if="!editMode">
+                <div class="col-xs-6 text-right" v-if="id && !editMode">
                     <button class="btn btn-xs btn-default-hollow" @click="editMode = true">
                             <i class="fa fa-pencil"></i> Edit
                     </button>
@@ -15,7 +15,7 @@
                     <button class="btn btn-xs btn-default" @click="cancel">
                         Cancel
                     </button>
-                    <button class="btn btn-xs btn-primary" @click="save" v-if="edit">
+                    <button class="btn btn-xs btn-primary" @click="save" v-if="editMode && id">
                         <i class="fa fa-save"></i> Save
                     </button>
                     <button class="btn btn-xs btn-primary" @click="create" v-else>
@@ -34,6 +34,7 @@
                       id="country"
                       :value="cause.countries"
                       :options="UTILITIES.countries"
+                      v-model="cause.countries"
                       label="name"
                       v-if="editMode">
             </v-select>
@@ -92,11 +93,6 @@
                 type: String,
                 required: false,
                 default: null
-            },
-            'edit': {
-                type: Boolean,
-                required: false,
-                default: false
             }
         },
         methods: {
@@ -126,7 +122,7 @@
                 });
             },
             cancel() {
-                if (this.edit) {
+                if (this.id) {
                     this.fetch();
                     this.editMode = false;
                 } else {
@@ -135,7 +131,11 @@
             }
         },
         mounted() {
-            this.fetch();
+            if (this.id) {
+                this.fetch();
+            } else {
+                this.editMode = true;
+            }
             this.getCountries();
         }
     }

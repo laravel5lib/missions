@@ -9,9 +9,9 @@ Vue.mixin({
             let list = _.sortBy(arr, prop);
             return direction === -1 ? list.reverse() : list
         },
-        currency(number, symbol = '$') {
+        currency(number, symbol = '$', currencyAbbreviation = '') {
             if (!isNaN(number)) {
-                return symbol + (Number(number).toFixed(2));
+                return `${symbol}${(Number(number).toFixed(2))} ${currencyAbbreviation}`;
             }
             return number
         },

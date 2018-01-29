@@ -6,10 +6,18 @@
 @import "node_modules/video.js/src/css/video-js.scss";
 @import "node_modules/tether-shepherd/dist/css/shepherd-theme-arrows";
 @import "node_modules/eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build";
+
+/**
+ * Custom partials
+ */
+@import "partials/home-campaign-layout"; /* Home Campaign Layout Import */
+@import "partials/donate-ye-layout"; /* Year End Donate Layout */
+@import "partials/interrupter-pop"; /* Interrupter Pop Up On Lower Right */
+@import "partials/storyof-layout"; /* The Story of 1Nation1Day Layout */
+
 /*
  * Variables...
  */
-
 $active-icon-color: #6CC94D;
 /*$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 $fa-font-path: "~font-awesome/fonts/";*/
@@ -1148,9 +1156,6 @@ h1.home-college-header {
     }
   }
 }
-
-/* Home Campaign Layout Import */
-@import "partials/home-campaign-layout";
 
 // -- Panel -- //
 .max-panel-height {

@@ -287,7 +287,7 @@
                     <td v-if="isActive('amount')">
                         <span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{currency(transaction.amount)}}</span>
                     </td>
-                    <td v-if="isActive('donor')" v-text="transaction.donor.data.name"></td>
+                    <td v-if="isActive('donor')">{{ transaction.donor ? transaction.donor.data.name : '' }}</td>
                     <td v-if="isActive('class')" v-text="transaction.fund.data.class"></td>
                     <td v-if="isActive('item')" v-text="transaction.fund.data.item"></td>
                     <td v-if="isActive('last_four')" v-text="transaction.details.last_four"></td>
@@ -541,7 +541,7 @@
                 this.searchTransactions();
             });
 
-            // load view state
+          // load view state
             if (localStorage[this.storageName]) {
                 this.filters.minDate = null;
                 this.filters.maxDate = null;

@@ -91,9 +91,9 @@
 					<div class="col-sm-6">
 						<div :class="{ 'has-error': errors.has('email', 'form-2') }">
 							<label for="infoEmailAddress">Billing Email</label>
-							<input type="text" class="form-control input input-sm" v-model="cardEmail" name="email="
+							<input type="text" class="form-control input input-sm" v-model="cardEmail" name="email"
 							       id="infoEmailAddress" data-vv-scope="form-2"
-							       v-validate="cardPhone !== ''?'email':'required|email'">
+							       v-validate="'required|email'">
 						</div>
 					</div>
 					<div class="col-sm-6">
@@ -101,7 +101,7 @@
 							<label for="infoPhone">Billing Phone</label>
 							<phone-input v-model="cardPhone" classes="form-control input input-sm" name="phone"
 							             id="infoPhone" data-vv-scope="form-2"
-							             v-validate="cardEmail !== ''?'':'required'"></phone-input>
+							             v-validate="'required'"></phone-input>
 						</div>
 					</div>
 

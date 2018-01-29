@@ -28,6 +28,7 @@ class TripInterestsController extends Controller
     public function __construct(TripInterest $interest)
     {
         $this->interest = $interest;
+        $this->middleware('api.auth')->except('store');
     }
 
     /**

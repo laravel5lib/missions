@@ -22,7 +22,9 @@
                         <h4>I'm Interested in a Trip!</h4>
                     </div>
                     <div class="panel-body">
-                        <group-interest-signup id="{{ $group->id }}"></group-interest-signup>
+                        <group-interest-signup id="{{ $group->id }}" 
+                                               preselected="{{ request()->get('trip_id')}}">
+                        </group-interest-signup>
                     </div>
                 </div>
             </div>

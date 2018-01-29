@@ -93,7 +93,7 @@ class UtilitiesController extends Controller
             'comments' => $request->get('comments'),
         ];
 
-        Mail::queue('emails.contact', ['data' => $data], function ($m) use ($data) {
+        Mail::send('emails.contact', ['data' => $data], function ($m) use ($data) {
             $m->to('go@missions.me', 'Missions.me')->subject('Contact from Missions.Me Visitor!');
         });
     }
@@ -113,7 +113,7 @@ class UtilitiesController extends Controller
             'comments' => $request->get('comments'),
         ];
 
-        Mail::queue('emails.speaker', ['data' => $data], function ($m) use ($data) {
+        Mail::send('emails.speaker', ['data' => $data], function ($m) use ($data) {
             $m->to('mail@missions.me', 'Missions.me')
               ->cc('dominicrusso@me.com', 'Dominic Russo')
               ->cc('cat@missions.me', 'Cat Keena')
@@ -136,7 +136,7 @@ class UtilitiesController extends Controller
             'total' => $request->get('total'),
         ];
 
-        Mail::queue('emails.sponsor-request', ['data' => $data], function ($m) use ($data) {
+        Mail::send('emails.sponsor-request', ['data' => $data], function ($m) use ($data) {
             $m->to('mail@missions.me', 'Missions.Me')
               ->cc('madeline@angelhouse.me', 'Madeline Osiwala')
               ->cc('gabe@missions.me', 'Gabe Bahlhorn')

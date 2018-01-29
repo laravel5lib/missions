@@ -10,7 +10,7 @@
           <li><a href="/privacy">Privacy Policy</a></li>
           <li><a href="/tos">Terms of Use</a></li>
           <hr class="divider inv sm visible-xs">
-          <li>Missions.Me is a 501(c)3 &copy; 2015</li>
+          <li>Missions.Me is a 501(c)3 &copy; {{ date('Y') }}</li>
           @prod
           <li>
             @include('_google_translate')

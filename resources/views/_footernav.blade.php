@@ -20,7 +20,6 @@
           <li><a href="/contact">Contact Us</a></li>
           <li><a href="tel:8773694532">(877) 369-4532</a></li>
           <li><a href="mailto:go@missions.me">go@missions.me</a></li>
-          <li><a href="https://goo.gl/maps/cEsKKBMA32B2" target="_blank">Our Offices</a></li>
         </ul>
         <ul class="list-inline">
           <li><a href="http://facebook.com/missionsme"><i class="fa fa-facebook"></i></a></li>
@@ -33,7 +32,7 @@
         <h6 class="text-uppercase">Mailing Address</h6>
         <ul class="list-unstyled">
           <address>
-            145 S. Livernois Rd.<br>Suite 308<br>Rochester Hills, MI 48307
+            34270 Pacific Coast Hwy. <br />Suite C <br />Dana Point, CA 92629
           </address>
         </ul>
       </div><!-- end col -->

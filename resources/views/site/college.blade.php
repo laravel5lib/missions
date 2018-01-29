@@ -87,7 +87,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 							<a class="launch-modal" data-toggle="modal" data-target="#westVid"><img class="img-responsive" src="/images/college/vid-thumbs/west-campaign.jpg" /></a>
 							<div class="panel-body text-center">
 								<h6 class="text-uppercase">New Campus Location!</h6>
-								<p class="small">We're expanding to Dana Point, CA</p>
+								<p class="small">We’ve expanded to Southern California</p>
 								<a href="/student-life" class="btn btn-primary btn-sm">Learn More <i style="margin-left:5px;" class="fa fa-angle-right"></i></a>
 							</div>
 						</div><!-- end panel -->
@@ -104,10 +104,10 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 					</div><!-- end col -->
 					<div class="col-sm-4">
 						<div class="panel panel-default">
-							<a class="launch-modal" data-toggle="modal" data-target="#expVid"><img class="img-responsive" src="/images/college/vid-thumbs/testimonials.jpg" /></a>
+							<a class="launch-modal" data-toggle="modal" data-target="#expVid"><img class="img-responsive" src="/images/college/vid-thumbs/stud-life-thumb.jpg" /></a>
 							<div class="panel-body text-center">
 								<h6 class="text-uppercase">The Experience</h6>
-								<p class="small">Hear what former students have to say.</p>
+								<p class="small">Hear what students have to say.</p>
 								<a href="/student-life" class="btn btn-primary btn-sm">Student Life <i style="margin-left:5px;" class="fa fa-angle-right"></i></a>
 							</div>
 						</div><!-- end panel -->
@@ -225,7 +225,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
                 <div class="modal-video">
                     <div class="video-outer">
                       <div class="video-inner">
-                        <iframe src="https://player.vimeo.com/video/130333477" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                        <iframe src="https://player.vimeo.com/video/251202310?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
                       </div>
                     </div>
                 </div>
@@ -236,12 +236,14 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 <div class="dark-bg-primary">
 	<div class="container" style="padding:20px 0;">
 			<div class="col-xs-12 col-xs-offset-0 col-sm-10 col-sm-offset-1 text-center">
-				<h3 class="hidden-xs">Apply today and learn about your next steps. <a style="margin-left:20px;" class="btn btn-white-hollow btn-md" target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></h3>
+				<h3 class="hidden-xs">Apply today and start living the impossible. <a style="margin-left:20px;" class="btn btn-white-hollow btn-md" target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></h3>
 				<div class="visible-xs">
-					<h3>Apply today and learn about your next steps.</h3>
+					<h3>Apply today and start living the impossible.</h3>
 					<a class="btn btn-white-hollow btn-md" target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a>
 				</div>
 			</div><!-- end col -->
 	</div><!-- end container -->
 </div><!-- end gray-light-bg -->
+<hr class="divider" style="margin:0;">
+@include('partials.college.questions')
 @endsection

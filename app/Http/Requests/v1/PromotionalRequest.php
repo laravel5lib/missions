@@ -26,11 +26,11 @@ class PromotionalRequest extends FormRequest
         $rules = [
             'name' => 'required|string',
             'reward' => 'required|numeric',
-            'expires_at' => 'date|after:now',
+            'expires_at' => 'nullable|date|after:now',
             'promoteable_id' => 'required|string',
             'promoteable_type' => 'required|in:campaigns,groups,trips',
-            'affiliates' => 'string|in:reservations',
-            'code' => 'string|unique:promocodes,code,NULL,id,deleted_at,NULL'
+            'affiliates' => 'nullable|string|in:reservations',
+            'code' => 'nullable|string|unique:promocodes,code,NULL,id,deleted_at,NULL'
         ];
 
         if ($this->isMethod('put')) {
@@ -38,7 +38,7 @@ class PromotionalRequest extends FormRequest
             $rules['reward'] = 'sometimes|required|numeric';
             $rules['promoteable_id'] = 'sometimes|required|string';
             $rules['promoteable_type'] = 'sometimes|required|in:campaigns,groups,trips';
-            $rules['expires_at'] = 'date';
+            $rules['expires_at'] = 'nullable|date';
         }
 
         return $rules;

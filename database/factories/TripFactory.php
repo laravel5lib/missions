@@ -31,7 +31,9 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker) {
             'adults', 'teens', 'men', 'women', 'medical professionals',
             'media professionals', 'business professionals', 'pastors',
             'families'], 4),
-        'rep_id'           => $faker->uuid,
+        'rep_id'           => function() {
+            return factory(App\Models\v1\Representative::class)->create()->uuid;
+        },
         'description'      => file_get_contents(resource_path('assets/sample_trip.md')),
         'public'           => $faker->boolean(95),
         'published_at'     => function (array $trip) {

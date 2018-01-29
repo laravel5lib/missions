@@ -197,4 +197,6 @@
 		</div><!-- end content-section -->
 	</div><!-- end container -->
 </div><!-- end white-bg -->
+<hr class="divider" style="margin:0;">
+@include('partials.college.questions')
 @endsection

@@ -42,7 +42,8 @@ class TripRegistrationRequest extends FormRequest
             'phone_one'          => 'required_without:phone_two',
             'phone_two'          => 'required_without:phone_one',
             'donor'              => 'required_without:donor_id|array',
-            'donor.name'         => 'required|string',
+            'donor.first_name'   => 'required|string',
+            'donor.last_name'    => 'required|string',
             'donor.company'      => 'string',
             'donor.email'        => 'required|email',
             'donor.phone'        => 'string',
@@ -56,10 +57,7 @@ class TripRegistrationRequest extends FormRequest
             'currency'           => 'required_unless:amount,0|string',
             'payment'            => 'required_unless:amount,0|array',
             'payment.type'       => 'required_unless:amount,0|in:cash,check,card',
-            'payment.number'     => 'required_if:payment.type,check|string',
-            'weight'             => 'required|numeric',
-            'height_a'           => 'required|numeric',
-            'height_b'           => 'required|numeric'
+            'payment.number'     => 'required_if:payment.type,check|string'
         ];
 
         return $rules;

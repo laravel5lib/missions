@@ -1,7 +1,7 @@
 <template>
     <div style="display: inline-block;" class="text-left">
         <button class="btn btn-default btn-sm" type="button" @click="showExportModal=true">
-            Export <span class="fa fa-download"></span>
+            {{ label }} <span class="fa fa-download"></span>
         </button>
 
         <modal title="Export List" :value="showExportModal" @closed="showExportModal=false" effect="zoom" width="400" ok-text="Export" :callback="exportList">
@@ -58,6 +58,10 @@
             'filters': {
                 type: Object,
                 required: true
+            },
+            'label': {
+                type: String,
+                default: 'Export'
             }
         },
         data(){

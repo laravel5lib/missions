@@ -10,21 +10,16 @@ class TransactionFilter extends Filter
     */
     public $relations = [];
 
-    /**
-     * Fields that can be searched.
-     *
-     * @var array
-     */
-    public $searchable = [
-        'details->last_four',
-        'details->brand', 'details->cardholder', 'details->number',
-        'details->charge_id', 'fund.name', 'donor.name',
-        'fund.class', 'fund.item', 'donor.phone', 'donor.email'
-    ];
-
     public $sortable = [
         'type', 'amount', 'created_at'
     ];
+
+    public function search($keywords)
+    {
+        return $this->whereHas('fund', function($query) use($keywords) {
+            $query->where('name', 'LIKE', "%$keywords%");
+        });
+    }
 
     public function anonymous()
     {
@@ -91,8 +86,8 @@ class TransactionFilter extends Filter
         if (! $amount) {
             return null;
         }
-
-        return $this->where('amount', '>=', $amount);
+        // Match DB values -> amount * 100
+        return $this->where('amount', '>=', $amount * 100);
     }
 
     /**
@@ -107,7 +102,8 @@ class TransactionFilter extends Filter
             return null;
         }
 
-        return $this->where('amount', '<=', $amount);
+        // Match DB values -> amount * 100
+        return $this->where('amount', '<=', $amount * 100);
     }
 
     /**

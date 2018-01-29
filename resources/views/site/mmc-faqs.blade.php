@@ -165,7 +165,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 						    </div>
 						    <div id="collapseOne" class="panel-collapse collapse">
 						      <div class="panel-body">
-						        <p class="small">As a part of MMC, you and your peers will live in beautiful Rochester, Michigan. We can promise that the year you spend at MMC will challenge you academically, spiritually, and relationally. You and your MMC peers will hit the ground running, attending at least one mission trip a year. You will live in an apartment with up to 3 other students who will quickly become your closest friends and be with you for the full 11-month term.</p>
+						        <p class="small">As a part of MMC, you and your peers will live in beautiful Dana Pointe, California. We can promise that the year you spend at MMC will challenge you academically, spiritually, and relationally. You and your MMC peers will hit the ground running, attending at least one mission trip a year. You will live in an apartment with up to 3 other students who will quickly become your closest friends and be with you for the full 11-month term.</p>
 						      </div>
 						    </div>
 						  </div>

@@ -207,26 +207,28 @@ Vue.component('reports-list', require('./components/reports/reports-list.vue'));
 /**
  * Vue Strap Components
  */
-Vue.component('modal', require('vue-strap/src/modal'));
-Vue.component('accordion', require('vue-strap/src/accordion'));
-Vue.component('alert', require('vue-strap/src/alert'));
-Vue.component('mm-aside', require('vue-strap/src/aside'));
-Vue.component('button-group', require('vue-strap/src/buttonGroup'));
-Vue.component('panel', require('vue-strap/src/panel'));
-Vue.component('radio', require('vue-strap/src/radio'));
-Vue.component('checkbox', require('vue-strap/src/checkbox'));
-Vue.component('progressbar', require('vue-strap/src/progressbar'));
-Vue.component('strap-select', require('vue-strap/src/select'));
-Vue.component('spinner', require('vue-strap/src/spinner'));
-Vue.component('popover', require('vue-strap/src/popover'));
-Vue.component('tabs', require('vue-strap/src/tabs'));
-Vue.component('tab', require('vue-strap/src/tab'));
-Vue.component('tooltip', require('vue-strap/src/tooltip'));
+let VueStrap = require('vue-strap');
+Vue.component('modal', VueStrap.modal);
+Vue.component('accordion', VueStrap.accordion);
+Vue.component('alert', VueStrap.alert);
+Vue.component('mm-aside', VueStrap.aside);
+Vue.component('button-group', VueStrap.buttonGroup);
+Vue.component('panel', VueStrap.panel);
+Vue.component('radio', VueStrap.radio);
+Vue.component('checkbox', VueStrap.checkbox);
+Vue.component('progressbar', VueStrap.progressbar);
+Vue.component('strap-select', VueStrap.select);
+Vue.component('spinner', VueStrap.spinner);
+Vue.component('popover', VueStrap.popover);
+Vue.component('tabs', VueStrap.tabs);
+Vue.component('tab', VueStrap.tab);
+Vue.component('tooltip', VueStrap.tooltip);
 
 /**
  * UI Components
  */
 Vue.component('vSelect', require('vue-select'));
+// Vue.component('dropdown', VueStrap.dropdown);
 Vue.component('dropdown', require('./components/dropdown.vue'));
 Vue.component('pagination', require('./components/pagination.vue'));
 Vue.component('top-nav', require('./components/top-nav.vue'));
@@ -252,7 +254,7 @@ Vue.component('phone-input', {
     },
     methods: {
         updateValue(value) {
-            if (value === '') {
+            if (value === '' || value === null) {
                 this.$refs.input.value = value;
             } else {
                 this.$refs.input.value = value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
@@ -260,7 +262,7 @@ Vue.component('phone-input', {
             this.$emit('input', this.$refs.input.value);
         },
         formatValue() {
-            if (this.value === '') {
+            if (this.value === '' || this.value === null) {
                 this.$refs.input.value = this.value;
             } else {
                 this.$refs.input.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');

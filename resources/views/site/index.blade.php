@@ -28,7 +28,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
           <h6 class="text-uppercase">2018 Campaign</h6>
           <h2 style="display:inline-block;border-bottom:6px solid #f6323e;line-height:0.6em;">Advance</h2>
           <h4>3 Nations 1 Generation</h4>
-          <p>1Nation1Day is the moment that creates the movement. It's a movement of young people following their dreams; teachers mentoring their students; the Body of Christ united across borders and denominations; pastors equiped; the church mobilized to lead; women empowered to stand for justice; millions encountering God!</p>
+          <p style="margin-right:20px;">1Nation1Day is the moment that creates the movement. It's a movement of young people following their dreams; teachers mentoring their students; the Body of Christ united across borders and denominations; pastors equiped; the church mobilized to lead; women empowered to stand for justice; millions encountering God!</p>
           <a href="{{ url('campaigns') }}" class="btn btn-primary hidden-xs">Go On A Trip</a>
           <div class="row visible-xs">
             <div class="col-xs-8">
@@ -71,7 +71,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
     </div>
   </div>
 </div>-->
-<div class="gray-lighter-bg">
+<div class="gray-lighter-bg" style="border-top:4px solid #f6323e;">
     <div class="content-section" style="padding:0;">
       <div class="row" style="margin-left:0;margin-right:0;">
         <div class="col-sm-8 col-sm-offset-0 col-xs-10 col-xs-offset-1 text-center home-vision">
@@ -118,7 +118,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
             <h1 class="dash-trailing" data-aos="fade-left">1Nation1Day</h1>
             <p class="large-line-height large-type" data-aos="fade-left">We are now living in a new missions era.  The vision of 1Nation1Day is to unite the global church for the salvation and transformation of nations.</p>
             <hr class="divider inv">
-            <a href="/1n1d17" class="btn btn-info" data-aos="fade-left">Learn More</a>
+            <a href="/1nation1day" class="btn btn-info" data-aos="fade-left">Learn More</a>
           </div><!-- end col -->
         </div><!-- end row -->
       </div><!-- end content-section -->

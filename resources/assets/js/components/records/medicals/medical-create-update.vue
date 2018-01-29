@@ -14,6 +14,7 @@
 					<div class="row">
 						<div class="col-sm-4">
 							<h4>Insurance Information</h4>
+							<p class="text-muted">We'll need to know your provider and policy number in the unlikey case of an emergency.</p> <p class="text-muted">Medical Insurance is not required for travel, but highly recommend.</p>
 						</div>
 						<div class="col-sm-8">
 							<template v-if="forAdmin">
@@ -82,6 +83,7 @@
 					<div class="row">
 						<div class="col-sm-4">
 							<h4>General Health</h4>
+							<p class="text-muted">Please answer the following question(s) truthfully. It is important not only for your safety but the safety of your team.</p>
 						</div>
 						<div class="col-sm-8">
 							<div class="form-group">
@@ -122,7 +124,11 @@
 				</template>
 				<template v-else-if="currentStep === 3">
 					<div class="row">
-						<div class="col-sm-4"><h4>Medical Conditions</h4></div>
+						<div class="col-sm-4">
+							<h4>Medical Conditions</h4>
+							<p class="text-muted">A conditon may not necessarily disqualify you for travel, but will require a doctor's note.</p>
+							<p class="text-muted">Disclosing any and all conditions is very important so your team can take any necessary precautions to ensure your safety.</p>
+						</div>
 						<div class="col-sm-8">
 							<div class="form-group" v-if="!takesMedication">
 								<label>Are you taking medication for any existing conditions?</label><br>
@@ -179,7 +185,11 @@
 				</template>
 				<template v-else-if="currentStep === 4">
 					<div class="row">
-						<div class="col-sm-4"><h4>Allergies</h4></div>
+						<div class="col-sm-4">
+							<h4>Allergies</h4>
+							<p class="text-muted">An allergy may not necessarily disqualify you for travel, but could require a doctor's note.</p>
+							<p class="text-muted">Disclosing any and all allergies is very important so your team can take any necessary precautions to ensure your safety.</p>
+						</div>
 						<div class="col-sm-8">
 							<div class="form-group" v-if="!takesMedication">
 								<label>Are you taking medication for any specific allergies?</label><br>
@@ -236,7 +246,10 @@
 				</template>
 				<template v-else-if="currentStep === 5">
 					<div class="row">
-						<div class="col-sm-4"><h4>Emergency Contact</h4></div>
+						<div class="col-sm-4">
+							<h4>Emergency Contact</h4>
+							<p class="text-muted">In the unlikely event of a medical emergency, this individual will be notified immedately.</p>
+						</div>
 						<div class="col-sm-8">
 							<form name="newContact">
 								<div class="row">

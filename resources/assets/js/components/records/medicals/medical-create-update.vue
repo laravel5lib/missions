@@ -350,9 +350,13 @@
 						</ol>
 					</div>
 					<div class="col-sm-6 text-right">
-						<button :disabled="currentStep === 1" type="button" class="btn btn-primary-hollow" @click="backStep">Back</button>
+						<a :href="`/${firstUrlSegment}/records/medical-releases/${id}`" class="btn btn-link" v-if="id">Cancel</a>
+						<a :href="`/${firstUrlSegment}/records/medical-releases`" class="btn btn-link" v-else>Cancel</a>
+						<button v-if="currentStep !== 1" type="button" class="btn btn-default" @click="backStep">
+							<i class="fa fa-chevron-left"></i> Previous
+						</button>
 						<button v-if="currentStep !== 6" type="button" class="btn btn-primary" @click="nextStep">
-							Continue
+							Next <i class="fa fa-chevron-right"></i>
 						</button>
 						<button v-else type="button" :disabled="!agreement" class="btn btn-primary" @click="isUpdate?update():submit()">Finish
 						</button>

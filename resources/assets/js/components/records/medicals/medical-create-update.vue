@@ -670,9 +670,6 @@
     mounted() {
       if (this.isUpdate) {
         this.$http.get(`medical/releases/${this.id}`, {params: {include: 'conditions,allergies,uploads,user'}}).then((response) => {
-					this.noInsurance = response.data.data.ins_provider ? false : true;
-					this.hasConditions = response.data.data.hasConditions;
-					this.hasAllergies = response.data.data.hasAllergies;
           this.user_id = response.data.data.id;
           let medical_release = response.data.data;
           medical_release.uploads = medical_release.uploads.data;
@@ -682,6 +679,11 @@
           this.usersArr.push(this.userObj);
           $.extend(this, medical_release);
 	          this.takesMedication = medical_release.takes_medication || false;
+						this.noInsurance = medical_release.ins_provider ? false : true;
+						this.hasConditions = medical_release.has_conditions;
+						this.hasAllergies = medical_release.has_allergies;
+						this.takesConditionMedication = medical_release.takes_medication;
+						this.takesAllergyMedication = medical_release.takes_medication;
 
           this.$http.get('medical/conditions').then((response) => {
             // prepare conditions for UI

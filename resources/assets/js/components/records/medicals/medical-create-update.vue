@@ -787,14 +787,14 @@
       backStep() {
         switch (this.currentStep) {
           case 4:
-            if (this.medicallyDiagnosed) {
+            if (this.medicallyDiagnosed || this.takesMedication) {
               this.currentStep--;
             } else {
               this.currentStep -= 2;
             }
             break;
           case 5:
-            if (this.hasAllergies) {
+            if (this.hasAllergies || this.takesMedication) {
               this.currentStep--;
             } else {
               if (this.medicallyDiagnosed) {
@@ -829,7 +829,7 @@
               }
               break;
             case 3:
-              if (this.hasAllergies) {
+              if (this.hasAllergies || this.takesMedication) {
                 this.currentStep++;
               } else {
                 this.currentStep += 2;
@@ -978,6 +978,7 @@
           this.userObj = medical_release.user.data;
           this.usersArr.push(this.userObj);
           $.extend(this, medical_release);
+	          this.takesMedication = medical_release.takes_medication || false;
 
           this.$http.get('medical/conditions').then((response) => {
             // prepare conditions for UI

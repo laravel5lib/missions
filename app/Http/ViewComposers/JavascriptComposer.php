@@ -3,10 +3,10 @@
 namespace App\Http\ViewComposers;
 
 use App\Models\v1\Cost;
-use App\Models\v1\Fund;
 use App\Models\v1\Note;
 use App\Models\v1\Todo;
 use App\Models\v1\Trip;
+use App\Models\v1\Fund;
 use App\Models\v1\Donor;
 use App\Models\v1\Report;
 use Illuminate\View\View;
@@ -14,6 +14,7 @@ use App\Models\v1\Requirement;
 use App\Models\v1\Transaction;
 use App\Models\v1\TripInterest;
 use App\Models\v1\Representative;
+use App\Models\v1\MedicalRelease;
 
 class JavascriptComposer
 {
@@ -56,7 +57,8 @@ class JavascriptComposer
             'create_donors' => $user->can('create', Donor::class),
             'create_representatives' => $user->can('create', Representative::class),
             'update_representatives' => $user->can('update', Representative::class),
-            'delete_representatives' => $user->can('delete', Representative::class)
+            'delete_representatives' => $user->can('delete', Representative::class),
+            'delete_medical_releases' => $user->can('delete', MedicalRelease::class)
         ];
 
         \JavaScript::put([

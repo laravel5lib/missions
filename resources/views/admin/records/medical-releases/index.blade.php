@@ -24,6 +24,10 @@
 @stop
 
 @section('tab')
-    <medicals-list></medicals-list>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <medicals-list></medicals-list>
+        </div>
+    </div>
     <hr class="divider inv lg">
 @stop

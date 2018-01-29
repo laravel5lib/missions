@@ -25,49 +25,55 @@
 			<p class="text-center text-muted" role="alert"><em>Add and manage your medical records here!</em></p>
 		</div>
 
-		<div class="col-xs-12 col-sm-6 col-md-4" v-for="medical_release in medical_releases">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<a role="button" :href="'/'+ firstUrlSegment +'/records/medical-releases/' + medical_release.id">
-						<h5 class="text-primary text-capitalize" style="margin-top:0px;margin-bottom:5px;">
-							{{medical_release.name}}
-						</h5>
-					</a>
-					<div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:25px;top:12px;">
-						<a @click="selectedMedicalRelease = medical_release,deleteModal = true"><i
-								class="fa fa-times"></i></a>
-					</div>
-					<hr class="divider">
-					<div class="row">
-						<div class="col-sm-6">
-							<label>Condition(s)</label>
-							<p class="small">{{medical_release.has_conditions ? 'Yes' : 'No'}}</p>
-						</div><!-- end col -->
-						<div class="col-sm-6">
-							<label>Allergy(s)</label>
-							<p class="small">{{medical_release.has_allergies ? 'Yes' : 'No'}}</p>
-						</div><!-- end col -->
-					</div><!-- end row -->
+		<div class="col-xs-12">
+            <div class="list-group">
+                <div class="list-group-item" 
+                    v-for="release in medical_releases" 
+                    :key="release.id">
+                    <h5 class="list-group-item-heading">
+                        <a role="button" :href="`/${firstUrlSegment}/records/medical-releases/${release.id}`">
+                            {{release.name}}
+                        </a>
+                        <span v-if="app.user.can.delete_medical_releases">
+                            <a role="button" 
+                            @click="selectedMedicalRelease = release,deleteModal = true"
+                            style="position:absolute;right:25px;top:12px;">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </span>
+                    </h5>
+
                     <div class="row">
-                        <div class="col-sm-6">
-                            <label>CREATED ON</label>
-                            <p class="small">{{medical_release.created_at|moment('lll')}}</p>
-                        </div><!-- end col -->
-                         <div class="col-sm-6">
-                            <label>UPDATED ON</label>
-                            <p class="small">{{medical_release.updated_at|moment('lll')}}</p>
-                        </div><!-- end col -->
-                    </div><!-- end row -->
-				</div><!-- end panel-body -->
-				<div class="panel-footer" style="padding: 0;" v-if="selector">
-					<div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
-						<a class="btn btn-danger" @click="setMedical(medical_release)">
-							Select
-						</a>
-					</div>
-				</div>
-			</div>
+                        <div class="col-sm-3">
+                            <label>MEDICATION</label>
+                            <p class="small">{{release.takes_medication ? 'Yes' : 'No'}}</p>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>CONDITIONS</label>
+                            <p class="small">{{release.has_conditions ? 'Yes' : 'No'}}</p>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>ALLERGIES</label>
+                            <p class="small">{{release.has_allergies ? 'Yes' : 'No'}}</p>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>UPDATED</label>
+                            <p class="small">{{release.updated_at | moment('ll')}}</p>
+                        </div>
+                    </div>
+
+                    <div class="row" v-if="selector">
+                        <div class="col-xs-12 text-right">
+                            <hr class="divider sm">
+                            <a class="btn btn-sm btn-primary" @click="setMedicalRelease(release)">
+                                Use this Medical Release
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 		</div>
+
 		<div class="col-xs-12 text-center">
 			<pagination :pagination="pagination" pagination-key="pagination" :callback="searchMedicals"></pagination>
 

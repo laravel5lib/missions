@@ -908,6 +908,7 @@
             emergency_contact: this.emergency_contact,
             is_risk: this.is_risk,
             user_id: this.user_id,
+						takes_medication: this.takesMedication,
             upload_ids: _.uniq(this.upload_ids),
           }).then((resp) => {
             this.$root.$emit('showSuccess', 'Medical Release created.');

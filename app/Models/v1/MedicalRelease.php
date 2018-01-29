@@ -25,7 +25,7 @@ class MedicalRelease extends Model
     protected $fillable = [
         'user_id', 'ins_provider', 'ins_policy_no',
         'is_risk', 'name', 'emergency_contact',
-        'created_at', 'updated_at'
+        'created_at', 'updated_at', 'takes_medication'
     ];
 
     /**
@@ -57,7 +57,8 @@ class MedicalRelease extends Model
      * @var array
      */
     protected $casts = [
-        'emergency_contact' => 'array'
+        'emergency_contact' => 'array',
+        'takes_medication' => 'boolean'
     ];
 
     /**

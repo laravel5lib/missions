@@ -9,9 +9,17 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div class="row">
-                                <div class="col-sm-12">
+                                <div class="col-sm-6">
                                     <label>Name</label>
                                     <p>{{ $release->name }}</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>Takes Medication</label>
+                                    @if($release->takes_medication)
+                                        <p class="text-primary"><strong>Yes</strong></p>
+                                    @else
+                                        <p>No</p>
+                                    @endif
                                 </div>
                             </div>
                             <hr class="divider">

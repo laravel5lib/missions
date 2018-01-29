@@ -31,6 +31,7 @@ class MedicalReleaseTransformer extends TransformerAbstract
             'ins_provider'      => $release->ins_provider,
             'ins_policy_no'     => $release->ins_policy_no,
             'is_risk'           => (bool) $release->is_risk,
+            'takes_medication'  => (bool) $release->takes_medication,
             'has_conditions'    => (bool) $release->conditions->count(),
             'has_allergies'     => (bool) $release->allergies->count(),
             'emergency_contact' => $release->emergency_contact,

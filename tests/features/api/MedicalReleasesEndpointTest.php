@@ -24,7 +24,7 @@ class MedicalReleasesEndpointTest extends BrowserKitTestCase
                 'data' => [
                     '*' => [
                         'id', 'user_id', 'name', 'ins_provider', 'ins_policy_no',
-                        'is_risk', 'has_conditions', 'has_allergies',
+                        'is_risk', 'takes_medication', 'has_conditions', 'has_allergies',
                         'emergency_contact', 'created_at', 'updated_at'
                     ]
                 ]

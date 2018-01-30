@@ -93,7 +93,7 @@
                 if (! val) return;
 
                 this.$http.get('utilities/team-roles').then((response) => {
-                    _.each(response.data.roles, function (name, key) {
+                    _.each(response.data.roles, (name, key) => {
                         if (_.contains(val.team_roles, key))
                             this.roles.push({ value: key, name: name});
                     });

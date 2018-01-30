@@ -78,7 +78,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <h6 class="text-uppercase text-center">A Trip For Everyone</h6>
-                        <h1 class="text-center">Choose A Role</h1>
+                        <h1 class="text-center">Team Roles</h1>
                         <hr class="divider red-small lg">
                         <hr class="divider inv lg">
                     </div><!-- end col -->

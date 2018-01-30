@@ -29,10 +29,10 @@ $('.video-modal').on('hide.bs.modal', function(e) {
           <h2 style="display:inline-block;border-bottom:6px solid #f6323e;line-height:0.6em;">Advance</h2>
           <h4>3 Nations 1 Generation</h4>
           <p style="margin-right:20px;">1Nation1Day is the moment that creates the movement. It's a movement of young people following their dreams; teachers mentoring their students; the Body of Christ united across borders and denominations; pastors equiped; the church mobilized to lead; women empowered to stand for justice; millions encountering God!</p>
-          <a href="{{ url('campaigns') }}" class="btn btn-primary hidden-xs">Go On A Trip</a>
+          <a href="{{ url('trips') }}" class="btn btn-primary hidden-xs">Go On A Trip</a>
           <div class="row visible-xs">
             <div class="col-xs-8">
-              <a href="{{ url('campaigns') }}" class="btn btn-primary btn-block">Go On A Trip</a>
+              <a href="{{ url('trips') }}" class="btn btn-primary btn-block">Go On A Trip</a>
             </div><!-- end col -->
           </div><!-- end row -->
       </div><!-- end col -->

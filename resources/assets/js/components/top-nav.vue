@@ -40,7 +40,7 @@
 				</template>
 				<!-- Get Started -->
 				<li class="navlabel">Get Started</li>
-				<li><a href="/campaigns">Trips</a></li>
+				<li><a href="/trips">Trips</a></li>
 				<li><a href="/fundraisers">Fundraisers</a></li>
 				<li><a href="/teams">Teams</a></li>
 

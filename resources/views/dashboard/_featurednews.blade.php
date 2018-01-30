@@ -9,7 +9,7 @@
                 <h3>Advance 2018</h3>
                 <h5>3 Nations 1 Generation</h5>
                 <hr class="divider inv">
-                <a class="btn btn-primary" href="/campaigns">Learn More</a>
+                <a class="btn btn-primary" href="/trips">Learn More</a>
             </div>
         </div>
     </div>

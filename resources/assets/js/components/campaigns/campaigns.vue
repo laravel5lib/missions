@@ -13,7 +13,7 @@
 	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;" v-if="campaigns.length > 0">
 		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="col-xs-12">
-			<h4>Current Campaigns</h4>
+			<h4>Current Trips</h4>
 			<hr class="divider">
 		</div>
 		<div class="col-xs-6 text-right">

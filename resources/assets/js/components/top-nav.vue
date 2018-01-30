@@ -42,7 +42,7 @@
 				<li class="navlabel">Get Started</li>
 				<li><a href="/campaigns">Trips</a></li>
 				<li><a href="/fundraisers">Fundraisers</a></li>
-				<li><a href="/groups">Groups</a></li>
+				<li><a href="/teams">Teams</a></li>
 				<li><a href="/support">Partnership</a></li>
 
 				<!-- 1N1D-->

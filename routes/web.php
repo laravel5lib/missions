@@ -116,7 +116,10 @@ $this->get('/referrals/{id}', 'ReferralsController@show');
 $this->get('/trips/{id}', 'TripsController@show');
 $this->get('/trips/{id}/register', 'TripsController@register')->middleware('auth');
 $this->get('/fundraisers', 'FundraisersController@index');
-$this->get('/groups', 'GroupsController@index');
+$this->get('/groups', function () {
+    return redirect('/teams');
+});
+$this->get('/teams', 'GroupsController@index');
 $this->get('/campaigns', 'CampaignsController@index');
 $this->get('/{slug}/signup', 'GroupsController@signup')
      ->where('sponsor_slug', '^(?!api).*$');

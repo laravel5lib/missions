@@ -3,7 +3,7 @@
         <div class="content-page-header">
             <img class="img-responsive" src="/images/groups/groups-header.jpg" alt="">
             <div class="c-page-header-text">
-                <h1 class="text-uppercase dash-trailing">Groups</h1>
+                <h1 class="text-uppercase dash-trailing">Teams</h1>
             </div><!-- end c-page-header-content -->
         </div><!-- end c-page-header -->
         <div class="white-bg">
@@ -11,10 +11,10 @@
                 <div class="content-section">
                     <div class="row">
                         <div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center">
-                            <h2 class="text-primary">Group trips is what we do!</h2>
-                            <p>Missions.Me specializes in taking groups around the world on life-changing missions experiences.  If you are interested in partnering with one of our missions campaigns or trips, please fill out the form.  Missions.Me can provide your group with its own profile, URL and custom missions trips created especially for your group.</p>
+                            <h2 class="text-primary">Team trips are what we do!</h2>
+                            <p>Missions.Me specializes in taking teams form around the world on life-changing missions experiences.  If you are interested in partnering with one of our missions trips, please fill out the form.  Missions.Me can provide your group with its own profile, URL and customized  trips created especially for your church or organization.</p>
                             <hr class="divider inv">
-                            <a class="btn btn-primary btn-lg" role="button" data-toggle="collapse" href="#collapseGroupForm" aria-expanded="false" aria-controls="collapseGroupForm">Take Your Group</a>
+                            <a class="btn btn-primary btn-lg" role="button" data-toggle="collapse" href="#collapseGroupForm" aria-expanded="false" aria-controls="collapseGroupForm">Take Your Church or Organization</a>
                         </div><!-- end col -->
                     </div><!-- end row -->
                     <hr class="divider inv xlg">
@@ -26,17 +26,15 @@
                                     <div class="col-sm-6" v-error-handler="{ value: name, handle: 'name' }">
                                         <label for="name">Name</label>
                                         <input type="text" class="form-control" name="name" id="name" v-model="name"
-                                               placeholder="Group Name" v-validate="'required|min:1|max:100'"
+                                               placeholder="Church/Organization Name" v-validate="'required|min:1|max:100'"
                                                maxlength="100" minlength="1">
-                                        <!--<p class="help-block" v-if="errors.name" v-text="errors.name"></p>-->
                                     </div>
                                     <div class="col-sm-6" v-error-handler="{ value: campaign, handle: 'campaign' }">
-                                        <label for="campaign">Which Campaign are you interested in?</label>
+                                        <label for="campaign">Which Trip are you interested in?</label>
                                         <select name="campaign" id="campaign" class="form-control" v-model="campaign" v-validate="'required'">
                                             <option value="">-- please select --</option>
                                             <option :value="campaign.id" v-for="campaign in campaigns">{{campaign.name}}</option>
                                         </select>
-                                        <!--<p class="help-block" v-if="errors.campaign" v-text="errors.campaign"></p>-->
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -54,17 +52,14 @@
                                     <div class="col-sm-4" v-error-handler="{ value: city, handle: 'city' }">
                                         <label for="infoCity">City</label>
                                         <input type="text" class="form-control" v-model="city" name="city" id="infoCity" placeholder="City">
-                                        <!--<p class="help-block" v-if="errors.has('city')" v-text="errors.city"></p>-->
                                     </div>
                                     <div class="col-sm-4" v-error-handler="{ value: state, handle: 'state' }">
                                         <label for="infoState">State/Prov.</label>
                                         <input type="text" class="form-control" v-model="state" name="state" id="infoState" placeholder="State/Province">
-                                        <!--<p class="help-block" v-if="errors.has('state')" v-text="errors.state"></p>-->
                                     </div>
                                     <div class="col-sm-4" v-error-handler="{ value: zip, handle: 'zip' }">
                                         <label for="infoZip">ZIP/Postal Code</label>
                                         <input type="text" class="form-control" v-model="zip" name="zip" id="infoZip" placeholder="12345">
-                                        <!--<p class="help-block" v-if="errors.has('zip')" v-text="errors.zip"></p>-->
                                     </div>
                                 </div>
 
@@ -93,13 +88,11 @@
                                     <div class="col-sm-4" v-error-handler="{ value: phone_one, client: 'phone', server: 'phone_one' }">
                                         <label for="infoPhone">Phone 1</label>
                                         <phone-input v-model="phone_one" name="phone" id="infoPhone"></phone-input>
-                                        <!--<input type="text" class="form-control" v-model="phone_one | phone" name="phone" id="infoPhone" placeholder="123-456-7890">-->
                                         <p class="help-block" v-if="errors.has('phone')" v-text="errors.phone"></p>
                                     </div>
                                     <div class="col-sm-4">
                                         <label for="infoMobile">Phone 2</label>
                                         <phone-input v-model="phone_two" name="phone" id="infoMobile"></phone-input>
-                                        <!--<input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">-->
                                     </div>
                                 </div>
 
@@ -109,17 +102,14 @@
                                         <input type="text" class="form-control" name="contact" id="contact" v-model="contact"
                                                placeholder="John Smith" v-validate="'required|min:1|max:100'"
                                                maxlength="100" minlength="1">
-                                        <!--<p class="help-block" v-if="errors.has('contact')" v-text="errors.contact"></p>-->
                                     </div>
                                     <div class="col-sm-4" v-error-handler="{ value: email, handle: 'email' }">
                                         <label for="email">Email</label>
                                         <input type="text" class="form-control" name="email" id="email" v-model="email" v-validate="'required|email'">
-                                        <!--<p class="help-block" v-if="errors.has('email')" v-text="errors.email"></p>-->
                                     </div>
                                     <div class="col-sm-4" v-error-handler="{ value: position, handle: 'position' }">
                                         <label for="position">Your Position</label>
                                         <input type="text" class="form-control" name="position" id="position" v-model="position" v-validate="'required|min:1'">
-                                        <!--<p class="help-block" v-if="errors.has('position')" v-text="errors.position"></p>-->
                                     </div>
                                 </div>
 
@@ -132,7 +122,6 @@
                                         <label class="radio-inline">
                                             <input type="radio" name="spoken" id="status2" value="no" v-model="spoke_to_rep" v-validate="''"> No
                                         </label>
-                                        <!--<p class="help-block" v-if="errors.spoke_to_rep" v-text="errors.spoke_to_rep"></p>-->
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -147,7 +136,7 @@
                     <alert v-model="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                         <span class="icon-ok-circled alert-icon-float-left"></span>
                         <strong>Done</strong>
-                        <p>Group request sent</p>
+                        <p>Request sent</p>
                     </alert>
 
                 </div><!-- end content-section -->
@@ -157,12 +146,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-8">
-                    <h4 class="hidden-xs">Groups Partnered With Us</h4>
-                    <h4 class="visible-xs text-center">Groups Partnered With Us</h4>
+                    <h4 class="hidden-xs">Organizations Partnered With Us</h4>
+                    <h4 class="visible-xs text-center">Organizations Partnered With Us</h4>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search a group name or category..." v-model="search" @keyup="debouncedSearch">
+                        <input type="text" class="form-control" placeholder="Search by name or type" v-model="search" @keyup="debouncedSearch">
                         <span class="input-group-addon" id="basic-addon2"><i class="fa fa-search"></i></span>
                     </div><!-- /input-group -->
                 </div>
@@ -178,25 +167,24 @@
                             <img :src="group.avatar" :alt="group.name" class="img-responsive">
                         </a>
                         <div class="panel-body text-center">
-                            <!--<h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;"><i class="fa fa-users"></i> {{group.type}} Group</h6>-->
                             <a :href="group.url" role="button">
                                 <h5 style="margin-bottom:0;" class="text-primary text-capitalize">{{group.name}}</h5>
                             </a>
-                            <label>{{group.type}} Group</label>
+                            <label>{{group.type}}</label>
                         </div><!-- end panel-body -->
                     </div><!-- end panel -->
                 </div><!-- end col -->
                 <div class="col-xs-12 text-center" v-if="groups.length">
-                    <pagination :pagination="pagination" pagination-key="pagination" :callback="searchGroups"></pagination>
+                    <pagination :pagination="pagination" pagination-key="pagination" :callback="searchGroups" :hide-total="true"></pagination>
                 </div>
             </template>
             <template v-else>
                 <div class="col-xs-12">
                     <hr class="divider inv">
                     <p class="text-muted text-center">
-                        <em>We didn't find groups matching your search.</em>
+                        <em>We didn't find any organizations matching your search.</em>
                         <br />
-                        Are you a group?
+                        Are you a church or organization?
                         <a class="text-primary small" href="/groups">
                             <i class="fa fa-arrow-circle-o-right"></i>  Partner with us.
                         </a>
@@ -217,7 +205,7 @@
                     <img class="img-responsive" src="/images/groups/groups-slide-1.jpg">
                     <div class="carousel-caption">
                         <h3 class="dash-trailing">You're In Control</h3>
-                        <p>Control who has administrator access to your group, assign facilitators to manage your trips, and customize your organization's public profile. Use the Stories feature to encourage and inform your supporters or make important announcements.</p>
+                        <p>Control who has administrator access to your team, assign facilitators to manage your trips, and customize your organization's public profile. Use the Stories feature to encourage and inform your supporters or make important announcements.</p>
                     </div>
                 </div><!-- end item -->
                 <div class="item">
@@ -232,13 +220,6 @@
                     <div class="carousel-caption">
                         <h3 class="dash-trailing">Trip Management Made Easy</h3>
                         <p>See who's coming and track his or her fundraising progress. Monitor or directly assist in completing a missionary's travel requirements - even contact them directly.</p>
-                    </div>
-                </div><!-- end item -->
-                <div class="item">
-                    <img class="img-responsive" src="/images/groups/groups-slide-4.jpg">
-                    <div class="carousel-caption">
-                        <h3 class="dash-trailing">Sponsor Projects</h3>
-                        <p>Raise funds for an Angel House or water well as an organization, then promote it with a customizable fundraising page. Receive donations toward your project directly online without the third party transaction fees.</p>
                     </div>
                 </div><!-- end item -->
             </div>
@@ -261,7 +242,7 @@
                         </div><!-- end col -->
                         <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
                             <h3 class="dash-trailing">You're In Control</h3>
-                            <p>Control who has administrator access to your group, assign facilitators to manage your trips, and customize your organization's public profile. Use the Stories feature to encourage and inform your supporters or make important announcements.</p>
+                            <p>Control who has administrator access to your team, assign facilitators to manage your trips, and customize your organization's public profile. Use the Stories feature to encourage and inform your supporters or make important announcements.</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
                 </div><!-- end content-section -->
@@ -294,22 +275,6 @@
                         <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
                             <h3 class="dash-trailing">Trip Management Made Easy</h3>
                             <p>See who's coming and track his or her fundraising progress. Monitor or directly assist in completing a missionary's travel requirements - even contact them directly.</p>
-                        </div><!-- end col -->
-                    </div><!-- end row -->
-                </div><!-- end content-section -->
-            </div><!-- end container -->
-            <hr class="divider" style="margin-top:0;margin-bottom:0;">
-        </div><!-- end gray-lighter-bg -->
-        <div class="gray-lighter-bg visible-sm visible-xs">
-            <div class="container">
-                <div class="content-section">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-6">
-                            <img class="img-responsive" src="/images/groups/mobile/groups-slide-4.png">
-                        </div><!-- end col -->
-                        <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
-                            <h3 class="dash-trailing">Sponsor Projects</h3>
-                            <p>Raise funds for an Angel House or water well as an organization, then promote it with a customizable fundraising page. Receive donations toward your project directly online without the third party transaction fees.</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
                 </div><!-- end content-section -->
@@ -370,7 +335,7 @@
                 <div class="content-section">
                     <div class="row">
                         <div class="col-xs-12 text-center">
-                            <h1>Group Leader Or Pastor</h1>
+                            <h1>Leader Or Pastor</h1>
                         </div><!-- end col -->
                     </div><!-- end row -->
                     <div class="row">
@@ -386,7 +351,7 @@
                                     </div>
                                     <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                                         <div class="panel-body">
-                                            <p>Missions.Me specializes in bringing youth groups, college groups, business groups, or any other types of groups you've created. We take care of all of your transportation, hotel, food and ministry schedule. As a leader, fund-raising and team building is all you'll need to focus on.</p>
+                                            <p>Missions.Me specializes in bringing churches, youth groups, college groups, business groups, or any other kind of team of all sizes. We take care of all of your transportation, hotel, food and ministry schedule. As a leader, fund-raising and team building is all you'll need to focus on.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -421,7 +386,7 @@
                                             <p>If you've ever been on a trip before, you know nothing gets done without organization and good leadership.From scheduling ministry sites, pick-ups, drop-offs, meals, translators and communicating with in-country contacts, our leaders handle everything and relay to you and your leadership the necessary information.</p>
                                             <a href="downloads/SampleSchedule.pdf" target="_blank" class="btn btn-primary btn-sm">Sample Weekly Schedule</a>
                                             <hr class="divider inv">
-                                            <p>Our leaders or "project directors" number one job is to take care of you (the team leader) so that you can properly take care of your group (team). Most importantly, we strive to create a culture of leadership on our trips that creates new leaders and takes your student leaders to the next level.</p>
+                                            <p>Our leaders or "project directors" number one job is to take care of you (the team leader) so that you can properly take care of your team. Most importantly, we strive to create a culture of leadership on our trips that creates new leaders and takes your student leaders to the next level.</p>
                                             <a href="downloads/SampleFlow.pdf" target="_blank" class="btn btn-primary btn-sm">Sample Leadership Flow Chart</a>
                                         </div>
                                     </div>
@@ -444,7 +409,7 @@
                                     <div class="panel-heading" role="tab" id="headingSix">
                                         <h5>
                                             <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                                                How will I train my group?
+                                                How will I train my team?
                                             </a>
                                         </h5>
                                     </div>

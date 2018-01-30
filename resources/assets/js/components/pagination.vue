@@ -23,7 +23,7 @@
                 </a>
             </li>
         </ul>
-        <label class="text-center" style="display:block;margin-bottom:10px;">{{ pagination.total }} total</label>
+        <label class="text-center" style="display:block;margin-bottom:10px;" v-if="!hideTotal">{{ pagination.total }} total</label>
     </nav>
 </template>
 <script type="text/javascript">
@@ -48,6 +48,10 @@
             size: {
                 type: String,
                 default: 'small'
+            },
+            hideTotal: {
+                type: Boolean,
+                default: false
             }
         },
         data(){

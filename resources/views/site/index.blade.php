@@ -175,7 +175,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
       <div class="row">
         <div class="col-sm-12 text-center">
           <h1 data-aos="zoom-in" data-aos-duration="500" data-aos-delay="100">Begin changing the world with us.</h1>
-          <a data-aos="zoom-in" data-aos-duration="500" data-aos-delay="200" href="{{ url('login?action=signup') }}" class="btn btn-default btn-lg" style="background-color:#3e3e3e;border-color:#3e3e3e;">Create Your Account</a>
+          <a data-aos="zoom-in" data-aos-duration="500" data-aos-delay="200" href="{{ url('register') }}" class="btn btn-default btn-lg" style="background-color:#3e3e3e;border-color:#3e3e3e;">Get Started</a>
           <a href="{{ url('donate') }}"><h6 data-aos="zoom-in" data-aos-duration="800" data-aos-delay="300" class="text-uppercase text-white">Or Donate</h6></a>
         </div><!-- end col -->
       </div><!-- end row -->

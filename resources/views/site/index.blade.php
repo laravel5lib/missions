@@ -99,7 +99,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
           <hr class="divider inv">
           <p class="large-line-height" data-aos="fade-up">Missions.Me produces the most exciting, highest impact team missions experiences in the world.  Let us provide your team a "once in a life-time” level outreach.</p>
           <hr class="divider inv">
-          <a data-aos="fade-up" href="{{ url('groups') }}" class="btn btn-info">Take Your Team</a>
+          <a data-aos="fade-up" href="{{ url('teams') }}" class="btn btn-info">Take Your Team</a>
         </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->

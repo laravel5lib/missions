@@ -97,9 +97,9 @@ $('.video-modal').on('hide.bs.modal', function(e) {
           <h1 data-aos="fade-up">Mobilize A Team</h1>
           <hr data-aos="fade-up" class="divider red-small">
           <hr class="divider inv">
-          <p class="large-line-height" data-aos="fade-up">Missions.Me produces the most exciting, highest impact group missions experiences in the world.  Let us provide your team a "once in a life-time” level outreach.</p>
+          <p class="large-line-height" data-aos="fade-up">Missions.Me produces the most exciting, highest impact team missions experiences in the world.  Let us provide your team a "once in a life-time” level outreach.</p>
           <hr class="divider inv">
-          <a data-aos="fade-up" href="{{ url('groups') }}" class="btn btn-info">Take Your Group</a>
+          <a data-aos="fade-up" href="{{ url('groups') }}" class="btn btn-info">Take Your Team</a>
         </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->

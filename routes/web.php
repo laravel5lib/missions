@@ -116,6 +116,9 @@ $this->get('/referrals/{id}', 'ReferralsController@show');
 $this->get('/trips/{id}', 'TripsController@show');
 $this->get('/trips/{id}/register', 'TripsController@register')->middleware('auth');
 $this->get('/fundraisers', 'FundraisersController@index');
+$this->get('/support', function () {
+    return redirect('/partnership');
+});
 $this->get('/groups', function () {
     return redirect('/teams');
 });

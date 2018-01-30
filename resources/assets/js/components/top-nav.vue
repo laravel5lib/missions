@@ -43,7 +43,6 @@
 				<li><a href="/campaigns">Trips</a></li>
 				<li><a href="/fundraisers">Fundraisers</a></li>
 				<li><a href="/teams">Teams</a></li>
-				<li><a href="/support">Partnership</a></li>
 
 				<!-- 1N1D-->
 				<li class="navlabel">1Nation1Day</li>
@@ -66,7 +65,7 @@
 				<!-- M.Me -->
 				<li class="navlabel">About</li>
 				<li><a href="/about-mm">Missions.Me</a></li>
-				<li><a href="/support">Give To Missions.Me</a></li>
+				<li><a href="/partnership">Partnership</a></li>
 				<li><a href="/contact">Contact Us</a></li>
 			</ul>
 		</mm-aside>

@@ -29,10 +29,10 @@ $('.video-modal').on('hide.bs.modal', function(e) {
           <h2 style="display:inline-block;border-bottom:6px solid #f6323e;line-height:0.6em;">Advance</h2>
           <h4>3 Nations 1 Generation</h4>
           <p style="margin-right:20px;">1Nation1Day is the moment that creates the movement. It's a movement of young people following their dreams; teachers mentoring their students; the Body of Christ united across borders and denominations; pastors equiped; the church mobilized to lead; women empowered to stand for justice; millions encountering God!</p>
-          <a href="{{ url('campaigns') }}" class="btn btn-primary hidden-xs">Go On A Trip</a>
+          <a href="{{ url('trips') }}" class="btn btn-primary hidden-xs">Go On A Trip</a>
           <div class="row visible-xs">
             <div class="col-xs-8">
-              <a href="{{ url('campaigns') }}" class="btn btn-primary btn-block">Go On A Trip</a>
+              <a href="{{ url('trips') }}" class="btn btn-primary btn-block">Go On A Trip</a>
             </div><!-- end col -->
           </div><!-- end row -->
       </div><!-- end col -->
@@ -97,9 +97,9 @@ $('.video-modal').on('hide.bs.modal', function(e) {
           <h1 data-aos="fade-up">Mobilize A Team</h1>
           <hr data-aos="fade-up" class="divider red-small">
           <hr class="divider inv">
-          <p class="large-line-height" data-aos="fade-up">Missions.Me produces the most exciting, highest impact group missions experiences in the world.  Let us provide your team a "once in a life-time” level outreach.</p>
+          <p class="large-line-height" data-aos="fade-up">Missions.Me produces the most exciting, highest impact team missions experiences in the world.  Let us provide your team a "once in a life-time” level outreach.</p>
           <hr class="divider inv">
-          <a data-aos="fade-up" href="{{ url('groups') }}" class="btn btn-info">Take Your Group</a>
+          <a data-aos="fade-up" href="{{ url('teams') }}" class="btn btn-info">Take Your Team</a>
         </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->
@@ -175,7 +175,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
       <div class="row">
         <div class="col-sm-12 text-center">
           <h1 data-aos="zoom-in" data-aos-duration="500" data-aos-delay="100">Begin changing the world with us.</h1>
-          <a data-aos="zoom-in" data-aos-duration="500" data-aos-delay="200" href="{{ url('login?action=signup') }}" class="btn btn-default btn-lg" style="background-color:#3e3e3e;border-color:#3e3e3e;">Create Your Account</a>
+          <a data-aos="zoom-in" data-aos-duration="500" data-aos-delay="200" href="{{ url('register') }}" class="btn btn-default btn-lg" style="background-color:#3e3e3e;border-color:#3e3e3e;">Get Started</a>
           <a href="{{ url('donate') }}"><h6 data-aos="zoom-in" data-aos-duration="800" data-aos-delay="300" class="text-uppercase text-white">Or Donate</h6></a>
         </div><!-- end col -->
       </div><!-- end row -->

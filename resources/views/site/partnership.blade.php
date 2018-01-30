@@ -6,7 +6,7 @@
 <div class="content-page-header">
     <img class="img-responsive" src="images/support/support-header.jpg" alt="Support">
     <div class="c-page-header-text">
-    	<h1 class="text-uppercase dash-trailing">Give To Missions.Me</h1>
+    	<h1 class="text-uppercase dash-trailing">Partner with Missions.Me</h1>
     </div><!-- end c-page-header-content -->
 </div><!-- end c-page-header -->
 

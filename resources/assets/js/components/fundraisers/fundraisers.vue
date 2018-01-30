@@ -22,7 +22,6 @@
             <template v-if="fundraisers.length">
                 <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in limitBy(fundraisers, fundraisersLimit)" style="display:flex; flex-direction:column;">
                     <div class="panel panel-default">
-                        <!--<img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">-->
                         <div class="panel-body">
                             <a :href="calcPath(fundraiser)"><h6>{{ fundraiser.name }}</h6></a>
                             <div class="row">
@@ -46,7 +45,7 @@
                     </div><!-- end panel -->
                 </div><!-- end col -->
                 <div class="col-xs-12 text-center">
-                    <pagination :pagination="pagination" pagination-key="pagination" :callback="searchFundraisers"></pagination>
+                    <pagination :pagination="pagination" pagination-key="pagination" :callback="searchFundraisers" :hide-total="true"></pagination>
                 </div>
             </template>
             <template v-else>

@@ -17,12 +17,12 @@
 					<div class="col-sm-4 text-right hidden-xs">
 						<hr class="divider inv">
                 		<hr class="divider inv sm">
-						<a v-show="currentView!='groupSelection'" @click="restartView"  class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Change Group</a>
+						<a v-show="currentView!='groupSelection'" @click="restartView"  class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Change Team Selection</a>
 						<hr class="divider inv">
 					</div><!-- end col -->
 					<div class="col-xs-12 text-center visible-xs">
 						<hr class="divider inv sm">
-						<a v-show="currentView!='groupSelection'" @click="restartView"  class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Change Group</a>
+						<a v-show="currentView!='groupSelection'" @click="restartView"  class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Change Team Selection</a>
 						<hr class="divider inv">
 					</div><!-- end col -->
 				</div>
@@ -33,7 +33,7 @@
 			<div class="row">
 				<div class="col-xs-12 text-center">
 					<h2>Choose A Trip Type</h2>
-					<p>If you don't see the trip type you desire, try choosing a different group to travel with.</p>
+					<p>If you don't see the trip type you desire, try choosing a different organization to travel with.</p>
 					<hr class="divider red-small lg">
 					<hr class="divider inv">
 				</div>

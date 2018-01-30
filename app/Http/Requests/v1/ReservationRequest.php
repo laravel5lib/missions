@@ -44,10 +44,7 @@ class ReservationRequest extends FormRequest
             'costs'              => 'array',
             'costs.*.id'         => 'required|exists:costs,id',
             'costs.*.locked'     => 'boolean',
-            'companion_limit'    => 'numeric',
-            'weight'             => 'required|numeric',
-            'height_a'           => 'required|numeric',
-            'height_b'           => 'required|numeric'
+            'companion_limit'    => 'numeric'
         ];
 
         if ($this->isMethod('put')) {
@@ -70,10 +67,7 @@ class ReservationRequest extends FormRequest
                 'costs'              => 'array',
                 'costs.*.id'         => 'required|exists:costs,id',
                 'costs.*.locked'     => 'boolean',
-                'companion_limit'    => 'numeric',
-                'weight'             => 'sometimes|required',
-                'height_a'           => 'sometimes|required',
-                'height_b'           => 'sometimes|required'
+                'companion_limit'    => 'numeric'
             ];
         }
 

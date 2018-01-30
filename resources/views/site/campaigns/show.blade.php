@@ -4,17 +4,17 @@
 	@component('top-banner', ['class' => 'dark-bg-primary'])
 		@if($campaign->ended_at->isFuture())
 			@slot('message')
-				<h4>Join The Campaign. Find a group to travel with and register for a trip.</h4>
+				<h4>Join The Team. Find a church to travel with and register for the trip.</h4>
 			@endslot
 			@slot('cta')
-				<a href="{{ url($campaign->slug->url . '/trips') }}" class="btn btn-white-hollow">Register For A Trip</a>
+				<a href="{{ url($campaign->slug->url . '/trips') }}" class="btn btn-white-hollow">Register for this Trip</a>
 			@endslot
 		@else
 			@slot('message')
-				<h4>This campaign has finished. Looking for more campaigns?</h4>
+				<h4>This trip has finished. Looking for more trips?</h4>
 			@endslot
 			@slot('cta')
-				<a href="{{ url('/campaigns') }}" class="btn btn-white-hollow">See Current Campaigns</a>
+				<a href="{{ url('/trips') }}" class="btn btn-white-hollow">See Current Trips</a>
 			@endslot
 		@endif
 	@endcomponent
@@ -29,15 +29,15 @@
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2 text-center">
 				@if($campaign->ended_at->isFuture())
-					<h5 class="text-uppercase">Join The Campaign</h5>
-					<h3>Find a group to travel with and register for a trip.</h3>
+					<h5 class="text-uppercase">Join The Team</h5>
+					<h3>Find a church to travel with and register for the trip.</h3>
 					<hr class="divider inv">
-					<a href="{{ url($campaign->slug->url . '/trips') }}" class="btn btn-white-hollow">Register For A Trip</a>
+					<a href="{{ url($campaign->slug->url . '/trips') }}" class="btn btn-white-hollow">Register for this Trip</a>
 				@else
-					<h5 class="text-uppercase">This Campaign has Finished.</h5>
-					<h3>Looking for more campaigns?</h3>
+					<h5 class="text-uppercase">This Trip has Finished.</h5>
+					<h3>Looking for more trips?</h3>
 					<hr class="divider inv">
-					<a href="{{ url('/campaigns') }}" class="btn btn-white-hollow">See Current Campaigns</a>
+					<a href="{{ url('/trips') }}" class="btn btn-white-hollow">See Current Trips</a>
 				@endif
 			</div>
 		</div>

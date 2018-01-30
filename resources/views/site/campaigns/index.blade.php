@@ -78,7 +78,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <h6 class="text-uppercase text-center">A Trip For Everyone</h6>
-                        <h1 class="text-center">Choose A Role</h1>
+                        <h1 class="text-center">Team Roles</h1>
                         <hr class="divider red-small lg">
                         <hr class="divider inv lg">
                     </div><!-- end col -->
@@ -200,7 +200,7 @@
                 <hr class="divider inv visible-xs visible-sm">
             </div><!-- end col -->
             <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-                <img class="img-responsive img-rounded" src="images/why-mm/staff.jpg"/>
+                <img class="img-responsive img-rounded" src="images/why-mm/reps.jpg"/>
             </div><!-- end col -->
         </div><!-- end row -->
     @endcomponent

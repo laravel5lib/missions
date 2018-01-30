@@ -200,7 +200,7 @@
                 <hr class="divider inv visible-xs visible-sm">
             </div><!-- end col -->
             <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-                <img class="img-responsive img-rounded" src="images/why-mm/staff.jpg"/>
+                <img class="img-responsive img-rounded" src="images/why-mm/reps.jpg"/>
             </div><!-- end col -->
         </div><!-- end row -->
     @endcomponent

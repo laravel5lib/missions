@@ -87,7 +87,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 							<a class="launch-modal" data-toggle="modal" data-target="#westVid"><img class="img-responsive" src="/images/college/vid-thumbs/west-campaign.jpg" /></a>
 							<div class="panel-body text-center">
 								<h6 class="text-uppercase">New Campus Location!</h6>
-								<p class="small">We're expanding to Dana Point, CA</p>
+								<p class="small">We’ve expanded to Southern California</p>
 								<a href="/student-life" class="btn btn-primary btn-sm">Learn More <i style="margin-left:5px;" class="fa fa-angle-right"></i></a>
 							</div>
 						</div><!-- end panel -->
@@ -107,7 +107,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 							<a class="launch-modal" data-toggle="modal" data-target="#expVid"><img class="img-responsive" src="/images/college/vid-thumbs/stud-life-thumb.jpg" /></a>
 							<div class="panel-body text-center">
 								<h6 class="text-uppercase">The Experience</h6>
-								<p class="small">Hear what former students have to say.</p>
+								<p class="small">Hear what students have to say.</p>
 								<a href="/student-life" class="btn btn-primary btn-sm">Student Life <i style="margin-left:5px;" class="fa fa-angle-right"></i></a>
 							</div>
 						</div><!-- end panel -->

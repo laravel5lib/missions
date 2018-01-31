@@ -72,7 +72,7 @@ class Filter extends ModelFilter
                         $keywords = explode(' ', $terms);
 
                         foreach ($keywords as $term) {
-                            $col->orWhere(strrev($field), 'LIKE', "%$term%");
+                            $col->where(strrev($field), 'LIKE', "%$term%");
                         }
                     });
                 } else {

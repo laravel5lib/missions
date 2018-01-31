@@ -111,6 +111,8 @@ $this->get('/1n1d19', function() {
 
 Auth::routes();
 
+Route::middleware('auth')->get('files/{path}', '\App\Http\Controllers\Api\UploadsController@display_file')->where('path', '.+');
+
 $this->get('/donate/{recipient?}', 'DonationsController@show');
 $this->get('/referrals/{id}', 'ReferralsController@show');
 $this->get('/campaigns', function () {

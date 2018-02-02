@@ -120,18 +120,18 @@ class MedicalRelease extends Model
         return $this->hasMany(MedicalAllergy::class);
     }
 
-    public function getHeightStandardAttribute($cm)
+    public function getHeightStandardAttribute()
     {
-        $inches = $cm/2.54;
+        $inches = $this->height/2.54;
         $feet = intval($inches/12);
         $inches = $inches%12;
         
         return sprintf('%d\' %d"', $feet, $inches);
     }
 
-    public function getWeightStandardAttribute($kg)
+    public function getWeightStandardAttribute()
     {
-        return round($kg * 2.20462);
+        return round($this->weight * 2.20462);
     }
 
     /**

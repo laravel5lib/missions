@@ -23,6 +23,23 @@
                                 </div>
                             </div>
                             <hr class="divider">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label>Height</label>
+                                    <p>
+                                        {{ $release->height_standard }} 
+                                        <small class="text-muted">({{ $release->height }} cm)</small>
+                                    </p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>Weight</label>
+                                    <p>
+                                        {{ $release->weight_standard }} 
+                                        <small class="text-muted">({{ $release->weight }} kg)</small>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr class="divider">
                             @if ($release->ins_provider)
                             <div class="row">
                                 <div class="col-sm-6">
@@ -63,6 +80,9 @@
                     <div class="row">
                         @foreach($release->conditions as $condition)
                             <div class="col-sm-6">
+                                @if($release->pregnant)
+                                    <p class="text-primary">Pregnant</p>
+                                @endif
                                 <p>
                                     {{  $condition->name }}
                                     <small class="text-info">

@@ -175,7 +175,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label>Are you pregnant?</label>
+								<label>Are you pregnant?</label><br>
 								<div class="radio-inline">
 									<label><input type="radio" name="pregnant" v-model="pregnant"
 									              :value="true" v-validate="'required'">Yes</label>
@@ -873,6 +873,9 @@
 						this.hasAllergies = medical_release.has_allergies;
 						this.takesConditionMedication = medical_release.takes_medication;
 						this.takesAllergyMedication = medical_release.takes_medication;
+						this.heightA = this.measurementSystem === 'standard' ? this.toMetric(medical_release.height) : medical_release.height,
+            this.weightA = this.measurementSystem === 'standard' ? this.toMetric(medical_release.weight, 'weight') : medical_release.weight,
+						this.pregnant = medical_release.pregnant
 
           this.$http.get('medical/conditions').then((response) => {
             // prepare conditions for UI

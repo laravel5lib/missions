@@ -1,0 +1,498 @@
+--- app/Listeners/ReservationEventListener.php
++++ PHP_CodeSniffer
+@@ -109,27 +109,27 @@
+     public function subscribe($events)
+     {
+         $events->listen(
+-            'App\Events\ReservationWasCreated',
++            \App\Events\ReservationWasCreated::class,
+             'App\Listeners\ReservationEventListener@setupFunding'
+         );
+ 
+         $events->listen(
+-            'App\Events\ReservationWasCreated',
++            \App\Events\ReservationWasCreated::class,
+             'App\Listeners\ReservationEventListener@process'
+         );
+ 
+         $events->listen(
+-            'App\Events\ReservationWasCreated',
++            \App\Events\ReservationWasCreated::class,
+             'App\Listeners\ReservationEventListener@promos'
+         );
+ 
+         $events->listen(
+-            'App\Events\ReservationWasCreated',
++            \App\Events\ReservationWasCreated::class,
+             'App\Listeners\ReservationEventListener@updateSpotsAvailable'
+         );
+ 
+         $events->listen(
+-            'App\Events\RegisteredForTrip',
++            \App\Events\RegisteredForTrip::class,
+             'App\Listeners\ReservationEventListener@register'
+         );
+     }
+
+--- app/Listeners/RequirementEventListener.php
++++ PHP_CodeSniffer
+@@ -25,7 +25,7 @@
+     public function subscribe($events)
+     {
+         $events->listen(
+-            'App\Events\RequirementWasUpdated',
++            \App\Events\RequirementWasUpdated::class,
+             'App\Listeners\RequirementEventListener@statusChange'
+         );
+     }
+
+--- app/Listeners/TransactionEventListener.php
++++ PHP_CodeSniffer
+@@ -51,12 +51,12 @@
+     public function subscribe($events)
+     {
+         $events->listen(
+-            'App\Events\TransactionWasCreated',
++            \App\Events\TransactionWasCreated::class,
+             'App\Listeners\TransactionEventListener@updateFundBalance'
+         );
+ 
+         $events->listen(
+-            'App\Events\TransactionWasCreated',
++            \App\Events\TransactionWasCreated::class,
+             'App\Listeners\TransactionEventListener@applyAsPayment'
+         );
+     }
+
+--- app/Providers/AuthServiceProvider.php
++++ PHP_CodeSniffer
+@@ -15,40 +15,40 @@
+      * @var array
+      */
+     protected $policies = [
+-        'App\Models\v1\Campaign' => 'App\Policies\CampaignPolicy',
+-        'App\Models\v1\Trip' => 'App\Policies\TripPolicy',
+-        'App\Models\v1\Reservation' => 'App\Policies\ReservationPolicy',
+-        'App\Models\v1\Group' => 'App\Policies\GroupPolicy',
+-        'App\Models\v1\ProjectCause' => 'App\Policies\ProjectCausePolicy',
+-        'App\Models\v1\ProjectInitiative' => 'App\Policies\ProjectInitiativePolicy',
+-        'App\Models\v1\Project' => 'App\Policies\ProjectPolicy',
+-        'App\CampaignTransport' => 'App\Policies\TransportPolicy',
+-        'App\Models\v1\Passenger' => 'App\Policies\PassengerPolicy',
+-        'App\Models\v1\Region' => 'App\Policies\RegionPolicy',
+-        'App\Models\v1\Accommodation' => 'App\Policies\AccommodationPolicy',
+-        'App\Models\v1\Team' => 'App\Policies\TeamPolicy',
+-        'App\Models\v1\TeamType' => 'App\Policies\TeamTypePolicy',
+-        'App\Models\v1\User' => 'App\Policies\UserPolicy',
+-        'App\Models\v1\Transaction' => 'App\Policies\TransactionPolicy',
+-        'App\Models\v1\Fund' => 'App\Policies\FundPolicy',
+-        'App\Models\v1\Donor' => 'App\Policies\DonorPolicy',
+-        'App\Models\v1\Report' => 'App\Policies\ReportPolicy',
+-        'App\Models\v1\Passport' => 'App\Policies\PassportPolicy',
+-        'App\Models\v1\Visa' => 'App\Policies\VisaPolicy',
+-        'App\Models\v1\Essay' => 'App\Policies\EssayPolicy',
+-        'App\Models\v1\MedicalRelease' => 'App\Policies\MedicalReleasePolicy',
+-        'App\Models\v1\Referral' => 'App\Policies\ReferralPolicy',
+-        'App\Models\v1\Credential' => 'App\Policies\CredentialPolicy',
+-        'App\Models\v1\Note' => 'App\Policies\NotePolicy',
+-        'App\Models\v1\Cost' => 'App\Policies\CostPolicy',
+-        'App\Models\v1\Todo' => 'App\Policies\TodoPolicy',
+-        'App\Models\v1\Requirement' => 'App\Policies\RequirementPolicy',
+-        'App\Models\v1\TripInterest' => 'App\Policies\TripInterestPolicy',
+-        'App\Models\v1\Promotional' => 'App\Policies\PromotionalPolicy',
+-        'App\Models\v1\Room' => 'App\Policies\RoomPolicy',
+-        'App\Models\v1\RoomType' => 'App\Policies\RoomTypePolicy',
+-        'App\Models\v1\Representative' => 'App\Policies\RepresentativePolicy',
+-        'App\Models\v1\Upload' => 'App\Policies\UploadPolicy'
++        \App\Models\v1\Campaign::class => \App\Policies\CampaignPolicy::class,
++        \App\Models\v1\Trip::class => \App\Policies\TripPolicy::class,
++        \App\Models\v1\Reservation::class => \App\Policies\ReservationPolicy::class,
++        \App\Models\v1\Group::class => \App\Policies\GroupPolicy::class,
++        \App\Models\v1\ProjectCause::class => \App\Policies\ProjectCausePolicy::class,
++        \App\Models\v1\ProjectInitiative::class => \App\Policies\ProjectInitiativePolicy::class,
++        \App\Models\v1\Project::class => \App\Policies\ProjectPolicy::class,
++        \App\CampaignTransport::class => \App\Policies\TransportPolicy::class,
++        \App\Models\v1\Passenger::class => \App\Policies\PassengerPolicy::class,
++        \App\Models\v1\Region::class => \App\Policies\RegionPolicy::class,
++        \App\Models\v1\Accommodation::class => \App\Policies\AccommodationPolicy::class,
++        \App\Models\v1\Team::class => \App\Policies\TeamPolicy::class,
++        \App\Models\v1\TeamType::class => \App\Policies\TeamTypePolicy::class,
++        \App\Models\v1\User::class => \App\Policies\UserPolicy::class,
++        \App\Models\v1\Transaction::class => \App\Policies\TransactionPolicy::class,
++        \App\Models\v1\Fund::class => \App\Policies\FundPolicy::class,
++        \App\Models\v1\Donor::class => \App\Policies\DonorPolicy::class,
++        \App\Models\v1\Report::class => \App\Policies\ReportPolicy::class,
++        \App\Models\v1\Passport::class => \App\Policies\PassportPolicy::class,
++        \App\Models\v1\Visa::class => \App\Policies\VisaPolicy::class,
++        \App\Models\v1\Essay::class => \App\Policies\EssayPolicy::class,
++        \App\Models\v1\MedicalRelease::class => \App\Policies\MedicalReleasePolicy::class,
++        \App\Models\v1\Referral::class => \App\Policies\ReferralPolicy::class,
++        \App\Models\v1\Credential::class => \App\Policies\CredentialPolicy::class,
++        \App\Models\v1\Note::class => \App\Policies\NotePolicy::class,
++        \App\Models\v1\Cost::class => \App\Policies\CostPolicy::class,
++        \App\Models\v1\Todo::class => \App\Policies\TodoPolicy::class,
++        \App\Models\v1\Requirement::class => \App\Policies\RequirementPolicy::class,
++        \App\Models\v1\TripInterest::class => \App\Policies\TripInterestPolicy::class,
++        \App\Models\v1\Promotional::class => \App\Policies\PromotionalPolicy::class,
++        \App\Models\v1\Room::class => \App\Policies\RoomPolicy::class,
++        \App\Models\v1\RoomType::class => \App\Policies\RoomTypePolicy::class,
++        \App\Models\v1\Representative::class => \App\Policies\RepresentativePolicy::class,
++        \App\Models\v1\Upload::class => \App\Policies\UploadPolicy::class
+     ];
+ 
+     /**
+
+--- app/Providers/AppServiceProvider.php
++++ PHP_CodeSniffer
+@@ -145,12 +145,12 @@
+         $this->app->alias('bugsnag.logger', \Psr\Log\LoggerInterface::class);
+ 
+         // register and configure the transaction handler.
+-        $this->app->singleton('App\TransactionHandler', function ($app) {
++        $this->app->singleton(\App\TransactionHandler::class, function ($app) {
+             return new TransactionHandler(
+-                $app->make('App\Models\v1\Transaction'),
+-                $app->make('App\Services\PaymentGateway'),
+-                $app->make('App\Models\v1\Donor'),
+-                $app->make('App\Models\v1\Fund')
++                $app->make(\App\Models\v1\Transaction::class),
++                $app->make(\App\Services\PaymentGateway::class),
++                $app->make(\App\Models\v1\Donor::class),
++                $app->make(\App\Models\v1\Fund::class)
+             );
+         });
+ 
+
+--- app/Providers/EventServiceProvider.php
++++ PHP_CodeSniffer
+@@ -26,17 +26,17 @@
+      * @var array
+      */
+     protected $listen = [
+-        'App\Events\DonationWasMade' => [
+-            'App\Listeners\EmailReceipt',
+-            'App\Listeners\NotifyRecipient'
++        \App\Events\DonationWasMade::class => [
++            \App\Listeners\EmailReceipt::class,
++            \App\Listeners\NotifyRecipient::class
+         ],
+-        'App\Events\ReservationWasProcessed' => [
+-            'App\Listeners\EmailReservationConfirmation',
+-            'App\Listeners\NotifyFacilitatorsOfNewReservation'
++        \App\Events\ReservationWasProcessed::class => [
++            \App\Listeners\EmailReservationConfirmation::class,
++            \App\Listeners\NotifyFacilitatorsOfNewReservation::class
+         ],
+-        'App\Events\TripInterestWasCreated' => [
+-            'App\Listeners\NotifyFacilitatorsOfNewTripInterest',
+-            'App\Listeners\NotifyTripRepOfNewTripInterest',
++        \App\Events\TripInterestWasCreated::class => [
++            \App\Listeners\NotifyFacilitatorsOfNewTripInterest::class,
++            \App\Listeners\NotifyTripRepOfNewTripInterest::class,
+             // 'App\Listeners\SendTripInterestConfirmationEmail'
+         ]
+     ];
+@@ -47,8 +47,8 @@
+      * @var array
+      */
+     protected $subscribe = [
+-        'App\Listeners\ReservationEventListener',
+-        'App\Listeners\TransactionEventListener',
++        \App\Listeners\ReservationEventListener::class,
++        \App\Listeners\TransactionEventListener::class,
+ //        'App\Listeners\RequirementEventListener'
+     ];
+ 
+
+--- app/Providers/ComposerServiceProvider.php
++++ PHP_CodeSniffer
+@@ -14,7 +14,7 @@
+      */
+     public function boot()
+     {
+-        View::composer(['admin.layouts.default', 'dashboard.layouts.default'], 'App\Http\ViewComposers\JavascriptComposer');
++        View::composer(['admin.layouts.default', 'dashboard.layouts.default'], \App\Http\ViewComposers\JavascriptComposer::class);
+     }
+ 
+     /**
+
+--- app/Providers/BackendServiceProvider.php
++++ PHP_CodeSniffer
+@@ -14,24 +14,24 @@
+     public function register()
+     {
+         $this->app->bind(
+-            'App\Repositories\Rooming\Interfaces\Type',
+-            'App\Repositories\Rooming\EloquentType'
++            \App\Repositories\Rooming\Interfaces\Type::class,
++            \App\Repositories\Rooming\EloquentType::class
+         );
+         $this->app->bind(
+-            'App\Repositories\Rooming\Interfaces\Plan',
+-            'App\Repositories\Rooming\EloquentPlan'
++            \App\Repositories\Rooming\Interfaces\Plan::class,
++            \App\Repositories\Rooming\EloquentPlan::class
+         );
+         $this->app->bind(
+-            'App\Repositories\Rooming\Interfaces\Accommodation',
+-            'App\Repositories\Rooming\EloquentAccommodation'
++            \App\Repositories\Rooming\Interfaces\Accommodation::class,
++            \App\Repositories\Rooming\EloquentAccommodation::class
+         );
+         $this->app->bind(
+-            'App\Repositories\Rooming\Interfaces\Room',
+-            'App\Repositories\Rooming\EloquentRoom'
++            \App\Repositories\Rooming\Interfaces\Room::class,
++            \App\Repositories\Rooming\EloquentRoom::class
+         );
+         $this->app->bind(
+-            'App\Repositories\Rooming\Interfaces\Occupant',
+-            'App\Repositories\Rooming\EloquentOccupant'
++            \App\Repositories\Rooming\Interfaces\Occupant::class,
++            \App\Repositories\Rooming\EloquentOccupant::class
+         );
+     }
+ }
+
+--- app/Services/Importers/ReferralListImportHandler.php
++++ PHP_CodeSniffer
+@@ -10,7 +10,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\Referral';
++    public $model = \App\Models\v1\Referral::class;
+ 
+     /**
+      * The database columns and document
+
+--- app/Services/Importers/TripListImportHandler.php
++++ PHP_CodeSniffer
+@@ -15,7 +15,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\Trip';
++    public $model = \App\Models\v1\Trip::class;
+ 
+     /**
+      * The database columns and document
+
+--- app/Services/Importers/MedicalReleaseListImportHandler.php
++++ PHP_CodeSniffer
+@@ -12,7 +12,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\MedicalRelease';
++    public $model = \App\Models\v1\MedicalRelease::class;
+ 
+     /**
+      * The database columns and document
+
+--- app/Services/Importers/CampaignListImportHandler.php
++++ PHP_CodeSniffer
+@@ -10,7 +10,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\Campaign';
++    public $model = \App\Models\v1\Campaign::class;
+ 
+     /**
+      * The database columns and document
+
+--- app/Services/Importers/UserListImportHandler.php
++++ PHP_CodeSniffer
+@@ -12,7 +12,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\User';
++    public $model = \App\Models\v1\User::class;
+ 
+     /**
+      * The database columns and document
+
+--- app/Services/Importers/GroupListImportHandler.php
++++ PHP_CodeSniffer
+@@ -12,7 +12,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\Group';
++    public $model = \App\Models\v1\Group::class;
+ 
+     /**
+      * The database columns and document
+
+--- app/Services/Importers/VisaListImportHandler.php
++++ PHP_CodeSniffer
+@@ -10,7 +10,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\Visa';
++    public $model = \App\Models\v1\Visa::class;
+ 
+     /**
+      * The database columns and document
+
+--- app/Services/Importers/PassportListImportHandler.php
++++ PHP_CodeSniffer
+@@ -10,7 +10,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\Passport';
++    public $model = \App\Models\v1\Passport::class;
+ 
+     /**
+      * The database columns and document
+
+--- app/Services/Importers/EssayListImportHandler.php
++++ PHP_CodeSniffer
+@@ -10,7 +10,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\Essay';
++    public $model = \App\Models\v1\Essay::class;
+ 
+     /**
+      * The database columns and document
+
+--- config/navigation.php
++++ PHP_CodeSniffer
+@@ -96,63 +96,63 @@
+                 'label' => 'Campaigns',
+                 'url' => 'admin/campaigns',
+                 'action' => 'view',
+-                'policy' => 'App\Models\v1\Campaign'
++                'policy' => App\Models\v1\Campaign::class
+             ],
+             [
+                 'icon' => 'ticket',
+                 'label' => 'Reservations',
+                 'url' => 'admin/reservations',
+                 'action' => 'view',
+-                'policy' => 'App\Models\v1\Reservation'
++                'policy' => App\Models\v1\Reservation::class
+             ],
+             [
+                 'icon' => 'users',
+                 'label' => 'Groups',
+                 'url' => 'admin/groups',
+                 'action' => 'view',
+-                'policy' => 'App\Models\v1\Group'
++                'policy' => App\Models\v1\Group::class
+             ],
+             [
+                 'icon' => 'user',
+                 'label' => 'Users',
+                 'url' => 'admin/users',
+                 'action' => 'view',
+-                'policy' => 'App\Models\v1\User'
++                'policy' => App\Models\v1\User::class
+             ],
+             [
+                 'icon' => 'user-circle-o',
+                 'label' => 'Trip&nbsp;Reps',
+                 'url' => 'admin/representatives',
+                 'action' => 'view',
+-                'policy' => 'App\Models\v1\Representative'
++                'policy' => App\Models\v1\Representative::class
+             ],
+             [
+                 'icon' => 'usd',
+                 'label' => 'Transactions',
+                 'url' => 'admin/transactions',
+                 'action' => 'view',
+-                'policy' => 'App\Models\v1\Transaction'
++                'policy' => App\Models\v1\Transaction::class
+             ],
+             [
+                 'icon' => 'tint',
+                 'label' => 'Projects',
+                 'url' => 'admin/causes',
+                 'action' => 'view',
+-                'policy' => 'App\Models\v1\Project'
++                'policy' => App\Models\v1\Project::class
+             ],
+             [
+                 'icon' => 'archive',
+                 'label' => 'Records',
+                 'url' => 'admin/records',
+                 'action' => 'view',
+-                'policy' => 'App\Models\v1\Reservation'
++                'policy' => App\Models\v1\Reservation::class
+             ],
+             [
+                 'icon' => 'line-chart',
+                 'label' => 'Reports',
+                 'url' => 'admin/reports',
+                 'action' => 'view',
+-                'policy' => 'App\Models\v1\Report'
++                'policy' => App\Models\v1\Report::class
+             ],
+         ],
+         'project' => [
+@@ -182,49 +182,49 @@
+                 'label' => 'Passports',
+                 'url' => 'passports',
+                 'action' => 'view',
+-                'policy' => 'App\Models\v1\Passport'
++                'policy' => App\Models\v1\Passport::class
+             ],
+             [
+                 'label' => 'Visas',
+                 'url' => 'visas',
+                 'action' => 'view',
+-                'policy' => 'App\Models\v1\Visa'
++                'policy' => App\Models\v1\Visa::class
+             ],
+             [
+                 'label' => 'Medical Releases',
+                 'url' => 'medical-releases',
+                 'action' => 'view',
+-                'policy' => 'App\Models\v1\MedicalRelease'
++                'policy' => App\Models\v1\MedicalRelease::class
+             ],
+             [
+                 'label' => 'Media Credentials',
+                 'url' => 'media-credentials',
+                 'action' => 'view',
+-                'policy' => 'App\Models\v1\Credential'
++                'policy' => App\Models\v1\Credential::class
+             ],
+             [
+                 'label' => 'Medical Credentials',
+                 'url' => 'medical-credentials',
+                 'action' => 'view',
+-                'policy' => 'App\Models\v1\Credential'
++                'policy' => App\Models\v1\Credential::class
+             ],
+             [
+                 'label' => 'Referrals',
+                 'url' => 'referrals',
+                 'action' => 'view',
+-                'policy' => 'App\Models\v1\Referral'
++                'policy' => App\Models\v1\Referral::class
+             ],
+             [
+                 'label' => 'Testimonies',
+                 'url' => 'essays',
+                 'action' => 'view',
+-                'policy' => 'App\Models\v1\Essay'
++                'policy' => App\Models\v1\Essay::class
+             ],
+             [
+                 'label' => 'Influencer Applications',
+                 'url' => 'influencers',
+                 'action' => 'view',
+-                'policy' => 'App\Models\v1\Essay'
++                'policy' => App\Models\v1\Essay::class
+             ]
+         ],
+         'reservation' => [
+

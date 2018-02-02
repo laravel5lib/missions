@@ -631,31 +631,38 @@
       }
     },
     methods: {
-      toMetric(value, type = 'height', fixed = 2) {
+      toMetric(value, type = 'height', round = true) {
         let thisVal;
         switch(type) {
           case 'height': // expects string ft. + in.
             if ( /&rdquo;/.test(value) ) {
               thisVal = value.replace('&rsquo;&nbsp;', '-').replace('&rdquo;', '').split('-');
-              return (parseInt(thisVal[0]) * 30.48) + (parseInt(thisVal[1]) * 2.54);
+              thisVal =  (parseInt(thisVal[0]) * 30.48) + (parseInt(thisVal[1]) * 2.54);
             } else {
               thisVal = parseInt(value.replace('&rsquo;', ''));
-              return thisVal * 30.48;
+              thisVal *= 30.48;
             }
+            if (round)
+              return Math.round(thisVal);
+            return thisVal;
           case 'weight':
+            if (round)
+              return Math.round(parseFloat(value) * 0.45359237);
             return parseFloat(value) * 0.45359237;
         }
       },
-      toStandard(value, type = 'height', fixed = 2) {
+      toStandard(value, type = 'height', round = true) {
         let thisVal;
         switch(type) {
           case 'height':
             thisVal = parseFloat(value) / 2.54; // convert to inches
             if ( (thisVal % 12) > 0 )
-              return `${parseInt(thisVal / 12)}&rsquo;&nbsp;${thisVal % 12}&rdquo;`;
+              return `${parseInt(thisVal / 12)}&rsquo;&nbsp;${Math.round(thisVal % 12)}&rdquo;`;
             else
               return `${parseInt(thisVal / 12)}&rsquo;`;
           case 'weight':
+            if (round)
+              return Math.round(parseFloat(value) / 0.45359237);
             return parseFloat(value) / 0.45359237;
         }
       },

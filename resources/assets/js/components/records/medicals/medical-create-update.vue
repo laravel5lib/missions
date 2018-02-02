@@ -71,8 +71,8 @@
 											I do not have medical insurance
 										</label>
 										<span class="help-block">
-                      Medical Insurance is not required for travel, but highly recommend.
-                    </span>
+					                      Medical Insurance is not required for travel, but highly recommend.
+					                    </span>
 									</div>
 								</div>
 							</div>
@@ -86,6 +86,105 @@
 							<p class="text-muted">Please answer the following question(s) truthfully. It is important not only for your safety but the safety of your team.</p>
 						</div>
 						<div class="col-sm-8">
+							<div class="form-group">
+								<div class="btn-group btn-group-sm">
+									<button class="btn" :class="[measurementSystem === 'standard' ? 'btn-primary' : 'btn-default-hollow']"
+									        @click="measurementSystem = 'standard'">Standard</button>
+									<button class="btn" :class="[measurementSystem === 'metric' ? 'btn-primary' : 'btn-default-hollow']"
+									        @click="measurementSystem = 'metric'">Metric</button>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-6">
+									<label for="weight">What is your Weight?</label><br>
+									<div class="input-group">
+										<input type="number" class="form-control" name="weight" id="weight"
+										       v-model="weightA" placeholder="Your Weight" v-validate="'required'" min="1"
+										       required>
+										<span class="input-group-addon" v-text="measurementSystem === 'standard' ? 'lbs.' : 'kg.'"></span>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<label for="height">What is your Height?</label><br>
+									<select v-if="measurementSystem === 'standard'" class="form-control" name="height" id="height" v-model="heightA">
+										<optgroup label="3'">
+											<option value="3&rsquo;">3&rsquo;</option>
+											<option value="3&rsquo;&nbsp;1&rdquo;">3&rsquo;&nbsp;1&rdquo;</option>
+											<option value="3&rsquo;&nbsp;2&rdquo;">3&rsquo;&nbsp;2&rdquo;</option>
+											<option value="3&rsquo;&nbsp;3&rdquo;">3&rsquo;&nbsp;3&rdquo;</option>
+											<option value="3&rsquo;&nbsp;4&rdquo;">3&rsquo;&nbsp;4&rdquo;</option>
+											<option value="3&rsquo;&nbsp;5&rdquo;">3&rsquo;&nbsp;5&rdquo;</option>
+											<option value="3&rsquo;&nbsp;6&rdquo;">3&rsquo;&nbsp;6&rdquo;</option>
+											<option value="3&rsquo;&nbsp;7&rdquo;">3&rsquo;&nbsp;7&rdquo;</option>
+											<option value="3&rsquo;&nbsp;8&rdquo;">3&rsquo;&nbsp;8&rdquo;</option>
+											<option value="3&rsquo;&nbsp;9&rdquo;">3&rsquo;&nbsp;9&rdquo;</option>
+											<option value="3&rsquo;&nbsp;10&rdquo;">3&rsquo;&nbsp;10&rdquo;</option>
+											<option value="3&rsquo;&nbsp;11&rdquo;">3&rsquo;&nbsp;11&rdquo;</option>
+										</optgroup>
+										<optgroup label="4'">
+											<option value="4&rsquo;">4&rsquo;</option>
+											<option value="4&rsquo;&nbsp;1&rdquo;">4&rsquo;&nbsp;1&rdquo;</option>
+											<option value="4&rsquo;&nbsp;2&rdquo;">4&rsquo;&nbsp;2&rdquo;</option>
+											<option value="4&rsquo;&nbsp;3&rdquo;">4&rsquo;&nbsp;3&rdquo;</option>
+											<option value="4&rsquo;&nbsp;4&rdquo;">4&rsquo;&nbsp;4&rdquo;</option>
+											<option value="4&rsquo;&nbsp;5&rdquo;">4&rsquo;&nbsp;5&rdquo;</option>
+											<option value="4&rsquo;&nbsp;6&rdquo;">4&rsquo;&nbsp;6&rdquo;</option>
+											<option value="4&rsquo;&nbsp;7&rdquo;">4&rsquo;&nbsp;7&rdquo;</option>
+											<option value="4&rsquo;&nbsp;8&rdquo;">4&rsquo;&nbsp;8&rdquo;</option>
+											<option value="4&rsquo;&nbsp;9&rdquo;">4&rsquo;&nbsp;9&rdquo;</option>
+											<option value="4&rsquo;&nbsp;10&rdquo;">4&rsquo;&nbsp;10&rdquo;</option>
+											<option value="4&rsquo;&nbsp;11&rdquo;">4&rsquo;&nbsp;11&rdquo;</option>
+										</optgroup>
+										<optgroup label="5'">
+											<option value="5&rsquo;">5&rsquo;</option>
+											<option value="5&rsquo;&nbsp;1&rdquo;">5&rsquo;&nbsp;1&rdquo;</option>
+											<option value="5&rsquo;&nbsp;2&rdquo;">5&rsquo;&nbsp;2&rdquo;</option>
+											<option value="5&rsquo;&nbsp;3&rdquo;">5&rsquo;&nbsp;3&rdquo;</option>
+											<option value="5&rsquo;&nbsp;4&rdquo;">5&rsquo;&nbsp;4&rdquo;</option>
+											<option value="5&rsquo;&nbsp;5&rdquo;">5&rsquo;&nbsp;5&rdquo;</option>
+											<option value="5&rsquo;&nbsp;6&rdquo;">5&rsquo;&nbsp;6&rdquo;</option>
+											<option value="5&rsquo;&nbsp;7&rdquo;">5&rsquo;&nbsp;7&rdquo;</option>
+											<option value="5&rsquo;&nbsp;8&rdquo;">5&rsquo;&nbsp;8&rdquo;</option>
+											<option value="5&rsquo;&nbsp;9&rdquo;">5&rsquo;&nbsp;9&rdquo;</option>
+											<option value="5&rsquo;&nbsp;10&rdquo;">5&rsquo;&nbsp;10&rdquo;</option>
+											<option value="5&rsquo;&nbsp;11&rdquo;">5&rsquo;&nbsp;11&rdquo;</option>
+										</optgroup>
+										<optgroup label="6'">
+											<option value="6&rsquo;">6&rsquo;</option>
+											<option value="6&rsquo;&nbsp;1&rdquo;">6&rsquo;&nbsp;1&rdquo;</option>
+											<option value="6&rsquo;&nbsp;2&rdquo;">6&rsquo;&nbsp;2&rdquo;</option>
+											<option value="6&rsquo;&nbsp;3&rdquo;">6&rsquo;&nbsp;3&rdquo;</option>
+											<option value="6&rsquo;&nbsp;4&rdquo;">6&rsquo;&nbsp;4&rdquo;</option>
+											<option value="6&rsquo;&nbsp;5&rdquo;">6&rsquo;&nbsp;5&rdquo;</option>
+											<option value="6&rsquo;&nbsp;6&rdquo;">6&rsquo;&nbsp;6&rdquo;</option>
+											<option value="6&rsquo;&nbsp;7&rdquo;">6&rsquo;&nbsp;7&rdquo;</option>
+											<option value="6&rsquo;&nbsp;8&rdquo;">6&rsquo;&nbsp;8&rdquo;</option>
+											<option value="6&rsquo;&nbsp;9&rdquo;">6&rsquo;&nbsp;9&rdquo;</option>
+											<option value="6&rsquo;&nbsp;10&rdquo;">6&rsquo;&nbsp;10&rdquo;</option>
+											<option value="6&rsquo;&nbsp;11&rdquo;">6&rsquo;&nbsp;11&rdquo;</option>
+										</optgroup>
+									</select>
+									<template v-else>
+										<div class="input-group">
+											<input type="number" class="form-control" name="height" id="height"
+											       v-model="heightA" placeholder="Your Height" v-validate="'required'" min="1"
+											       required>
+											<span class="input-group-addon">cm.</span>
+										</div>
+									</template>
+								</div>
+							</div>
+							<div class="form-group">
+								<label>Are you pregnant?</label>
+								<div class="radio-inline">
+									<label><input type="radio" name="pregnant" v-model="pregnant"
+									              :value="true" v-validate="'required'">Yes</label>
+								</div>
+								<div class="radio-inline">
+									<label><input type="radio" name="pregnant" v-model="pregnant"
+									              :value="false">No</label>
+								</div>
+							</div>
 							<div class="form-group">
 								<label>Are you currently taking any medication?</label><br>
 								<div class="radio-inline">
@@ -441,6 +540,8 @@
         },
 
         // logic vars
+        measurementSystem: this.$root.user.country_code === 'us' ? 'standard' : 'metric',
+        cmRange: _.range(90, 216),
         conditionsList: [],
         additionalConditionsList: [],
         allergiesList: [],
@@ -452,7 +553,10 @@
         tomorrow: moment().add(1, 'days').format('YYYY-MM-DD'),
         resource: this.$resource('medical/releases{/id}'),
 
-        currentStep: 1,
+        currentStep: 2,
+        weightA: 0,
+        heightA: 0,
+        pregnant: null,
         takesMedication: null,
         takesConditionMedication: null,
         takesAllergyMedication: null,
@@ -461,7 +565,52 @@
         agreement: false,
       }
     },
+    watch: {
+      measurementSystem(val, oldVal) {
+        // 1 ft === 30.48 cm
+        // 1 in === 2.54 cm
+        // 1 lb === 0.45359237 kg
+        if (val !== oldVal) {
+          if (val === 'standard') {
+            // convert to standard
+            if (this.weightA !== 0) {
+              this.weightA = this.toStandard(this.weightA, 'weight');
+            }
+            if (this.heightA) {
+              this.heightA = this.toStandard(this.heightA);
+            }
+          } else {
+            // convert to metric
+            if (this.weightA !== 0) {
+              this.weightA = this.toMetric(this.weightA, 'weight');
+            }
+            if (this.heightA !== 0) {
+              this.heightA = this.toMetric(this.heightA);
+            }
+          }
+        }
+      }
+    },
     computed: {
+      weight: {
+        get() {
+            return `${this.weightA} ${this.measurementSystem === 'standard' ? 'lbs.' : 'kg.'}`;
+        },
+        set(val) {},
+      },
+      height: {
+        get() {
+          if (this.measurementSystem === 'standard') {
+            if ( /&rdquo;/.test(this.heightA) )
+                return this.heightA.replace('&rsquo;&nbsp;', ' ft. ').replace('&rdquo;', ' in.');
+            else {
+              return this.heightA.replace('&rsquo;', ' ft.');
+            }
+          }
+          return this.heightA + ' cm.';
+        },
+        set(val) {},
+      },
       conditionsListOrdered() {
         return _.sortBy(this.conditionsList, 'name')
       },
@@ -482,6 +631,35 @@
       }
     },
     methods: {
+      toMetric(value, type = 'height', fixed = 2) {
+        let thisVal;
+        switch(type) {
+          case 'height': // expects string ft. + in.
+            if ( /&rdquo;/.test(value) ) {
+              thisVal = value.replace('&rsquo;&nbsp;', '-').replace('&rdquo;', '').split('-');
+              return (parseInt(thisVal[0]) * 30.48) + (parseInt(thisVal[1]) * 2.54);
+            } else {
+              thisVal = parseInt(value.replace('&rsquo;', ''));
+              return thisVal * 30.48;
+            }
+          case 'weight':
+            return parseFloat(value) * 0.45359237;
+        }
+      },
+      toStandard(value, type = 'height', fixed = 2) {
+        let thisVal;
+        switch(type) {
+          case 'height':
+            thisVal = parseFloat(value) / 2.54; // convert to inches
+            if ( (thisVal % 12) > 0 )
+              return `${parseInt(thisVal / 12)}&rsquo;&nbsp;${thisVal % 12}&rdquo;`;
+            else
+              return `${parseInt(thisVal / 12)}&rsquo;`;
+          case 'weight':
+            return parseFloat(value) / 0.45359237;
+        }
+      },
+
       backStep() {
         switch (this.currentStep) {
           case 4:
@@ -590,6 +768,7 @@
         this.allergies = _.where(_.union(this.allergiesList, this.additionalAllergiesList), {selected: true});
       },
       submit() {
+        let data;
         this.$validator.validateAll().then(result => {
           if (!result) {
             this.showError = true;
@@ -597,18 +776,23 @@
           }
 
           this.prepArrays();
-          this.resource.post({}, {
+          data = {
             name: this.name,
             ins_provider: this.ins_provider,
             ins_policy_no: this.ins_policy_no,
             conditions: this.conditions,
             allergies: this.allergies,
+            height: this.measurementSystem === 'standard' ? this.toMetric(this.heightA) : this.heightA,
+            weight: this.measurementSystem === 'standard' ? this.toMetric(this.weightA, 'weight') : this.weightA,
+            pregnant: this.pregnant,
             emergency_contact: this.emergency_contact,
             is_risk: this.is_risk,
             user_id: this.user_id,
-						takes_medication: this.takesMedication ? true : (this.takesConditionMedication || this.takesAllergyMedication),
+            takes_medication: this.takesMedication ? true : (this.takesConditionMedication || this.takesAllergyMedication),
             upload_ids: _.uniq(this.upload_ids),
-          }).then((resp) => {
+          };
+
+          this.resource.post({}, data).then((resp) => {
             this.$root.$emit('showSuccess', 'Medical Release created.');
             let that = this;
             setTimeout(() => {
@@ -621,24 +805,29 @@
         });
       },
       update() {
+        let data;
         this.$validator.validateAll().then(result => {
           if (!result) {
             return;
           }
 
           this.prepArrays();
-          this.resource.put({id: this.id, include: 'uploads'}, {
+          data = {
             name: this.name,
             ins_provider: this.ins_provider,
             ins_policy_no: this.ins_policy_no,
             conditions: this.conditions,
             allergies: this.allergies,
+            height: this.measurementSystem === 'standard' ? this.toMetric(this.heightA) : this.heightA,
+            weight: this.measurementSystem === 'standard' ? this.toMetric(this.weightA, 'weight') : this.weightA,
+            pregnant: this.pregnant,
             emergency_contact: this.emergency_contact,
-						takes_medication: this.takesMedication ? true : (this.takesConditionMedication || this.takesAllergyMedication),
+            takes_medication: this.takesMedication ? true : (this.takesConditionMedication || this.takesAllergyMedication),
             is_risk: this.is_risk,
             user_id: this.user_id,
             upload_ids: _.uniq(this.upload_ids),
-          }).then((resp) => {
+          };
+          this.resource.put({id: this.id, include: 'uploads'}, data).then((resp) => {
             this.$root.$emit('showSuccess', 'Changes saved.');
             let that = this;
             setTimeout(() => {

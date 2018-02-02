@@ -82,20 +82,22 @@
 				<template v-else-if="currentStep === 2">
 					<div class="row">
 						<div class="col-sm-4">
-							<h4>General Health</h4>
-							<p class="text-muted">Please answer the following question(s) truthfully. It is important not only for your safety but the safety of your team.</p>
+							<h4>Personal Info</h4>
+							<p class="text-muted">Your height and weight is required by some chartered airlines.</p>
+							<p class="text-muted">Your medical information is confidential.</p>
 						</div>
 						<div class="col-sm-8">
 							<div class="form-group">
-								<div class="btn-group btn-group-sm">
-									<button class="btn" :class="[measurementSystem === 'standard' ? 'btn-primary' : 'btn-default-hollow']"
+								<div class="btn-group btn-group-xs">
+									<button class="btn" :class="[measurementSystem === 'standard' ? 'btn-default' : 'btn-link']"
 									        @click="measurementSystem = 'standard'">Standard</button>
-									<button class="btn" :class="[measurementSystem === 'metric' ? 'btn-primary' : 'btn-default-hollow']"
+									<button class="btn" :class="[measurementSystem === 'metric' ? 'btn-default' : 'btn-link']"
 									        @click="measurementSystem = 'metric'">Metric</button>
 								</div>
 							</div>
+							<div class="form-group">
 							<div class="row">
-								<div class="col-sm-6">
+								<div class="col-md-4 col-sm-6">
 									<label for="weight">What is your Weight?</label><br>
 									<div class="input-group">
 										<input type="number" class="form-control" name="weight" id="weight"
@@ -104,7 +106,7 @@
 										<span class="input-group-addon" v-text="measurementSystem === 'standard' ? 'lbs.' : 'kg.'"></span>
 									</div>
 								</div>
-								<div class="col-sm-6">
+								<div class="col-md-4 col-sm-6">
 									<label for="height">What is your Height?</label><br>
 									<select v-if="measurementSystem === 'standard'" class="form-control" name="height" id="height" v-model="heightA">
 										<optgroup label="3'">
@@ -174,6 +176,17 @@
 									</template>
 								</div>
 							</div>
+							</div>
+						</div>
+					</div>
+					<hr class="divider">
+					<div class="row">
+						<div class="col-sm-4">
+							<h4>General Health</h4>
+							<p class="text-muted">Please answer the following question(s) truthfully. It is important not only for your safety but the safety of your team.</p>
+							<p class="text-muted">Your medical information is confidential.</p>
+						</div>
+						<div class="col-sm-8">
 							<div class="form-group">
 								<label>Are you pregnant?</label><br>
 								<div class="radio-inline">
@@ -227,6 +240,7 @@
 							<h4>Medical Conditions</h4>
 							<p class="text-muted">A conditon may not necessarily disqualify you for travel, but will require a doctor's note.</p>
 							<p class="text-muted">Disclosing any and all conditions is very important so your team can take any necessary precautions to ensure your safety.</p>
+							<p class="text-muted">Your medical information is confidential.</p>
 						</div>
 						<div class="col-sm-8">
 							<div class="form-group" v-if="!takesMedication">
@@ -540,7 +554,7 @@
         },
 
         // logic vars
-        measurementSystem: this.$root.user.country_code === 'us' ? 'standard' : 'metric',
+        measurementSystem: 'metric',
         cmRange: _.range(90, 216),
         conditionsList: [],
         additionalConditionsList: [],
@@ -880,8 +894,8 @@
 						this.hasAllergies = medical_release.has_allergies;
 						this.takesConditionMedication = medical_release.takes_medication;
 						this.takesAllergyMedication = medical_release.takes_medication;
-						this.heightA = this.measurementSystem === 'standard' ? this.toStandard(medical_release.height) : medical_release.height,
-            this.weightA = this.measurementSystem === 'standard' ? this.toStandard(medical_release.weight, 'weight') : medical_release.weight,
+						this.heightA = medical_release.height,
+            this.weightA = medical_release.weight,
 						this.pregnant = medical_release.pregnant
 
           this.$http.get('medical/conditions').then((response) => {

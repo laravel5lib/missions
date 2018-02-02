@@ -13,14 +13,50 @@
                 </div>
             </div>
             <div class="collapse" id="mediaCollapse">
-                <div class="panel panel-default"><div class="panel-body">
-                    <!-- TAB NAVIGATION -->
+                <div class="panel panel-default">
+	                <div class="panel-body">
+		                <div class="row">
+			                <div class="col-xs-12">
+				                <h3>Feature Picture</h3>
+				                <hr class="sm divider">
+				                <div class="btn-group">
+					                <button @click.prevent="toggleUploader('feature', 1)" class="btn btn-default-hollow btn-sm">Choose</button>
+					                <button @click.prevent="toggleUploader('feature', 2)" class="btn btn-default btn-sm">Upload</button>
+				                </div>
+				                <upload-create-update v-if="toggleUpload.feature.show" type="banner" :name="randName" lock-type ui-locked :ui-selector="toggleUpload.feature.UI" is-child :tags="['Fundraiser']" :width="1920" :height="1080"  @uploads-complete="uploadsComplete"></upload-create-update>
+			                </div>
+		                </div>
+		                <div class="row">
+			                <div class="col-xs-12">
+				                <h3>Secondary Picture</h3>
+				                <hr class="sm divider">
+				                <div class="btn-group">
+					                <button @click.prevent="toggleUploader('secondary', 1)" class="btn btn-default-hollow btn-sm">Choose</button>
+					                <button @click.prevent="toggleUploader('secondary', 2)" class="btn btn-default btn-sm">Upload</button>
+				                </div>
+				                <upload-create-update v-if="toggleUpload.secondary.show" type="banner" :name="randName" lock-type ui-locked :ui-selector="toggleUpload.secondary.UI" is-child :tags="['Fundraiser']" :width="1920" :height="1080"  @uploads-complete="uploadsComplete"></upload-create-update>
+			                </div>
+		                </div>
+		                <div class="row">
+			                <div class="col-xs-12">
+				                <h3>Video(optional)</h3>
+				                <hr class="sm divider">
+				                <div class="btn-group">
+					                <button @click.prevent="toggleUploader('video', 1)" class="btn btn-default-hollow btn-sm">Choose</button>
+					                <button @click.prevent="toggleUploader('video', 2)" class="btn btn-default btn-sm">Upload</button>
+				                </div>
+				                <upload-create-update v-if="toggleUpload.video.show" type="video" :name="randName" lock-type ui-locked :ui-selector="toggleUpload.video.UI" is-child :tags="['Fundraiser']"  @uploads-complete="uploadsComplete"></upload-create-update>
+			                </div>
+		                </div>
+	                </div>
+	                <!--<div class="panel-body">
+                    &lt;!&ndash; TAB NAVIGATION &ndash;&gt;
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="active"><a href="#tab1" role="tab" data-toggle="tab">All Media</a></li>
                         <li><a href="#tab2" role="tab" data-toggle="tab">Add Picture</a></li>
                         <li><a href="#tab3" role="tab" data-toggle="tab">Add Video</a></li>
                     </ul>
-                    <!-- TAB CONTENT -->
+                    &lt;!&ndash; TAB CONTENT &ndash;&gt;
                     <div class="tab-content">
                         <div class="active tab-pane fade in" id="tab1">
                             <div class="row" v-if="fundraiser.hasOwnProperty('uploads')">
@@ -36,8 +72,8 @@
                                                 <a @click="viewUpload(upload)" class="btn btn-xs btn-primary-hollow" role="button"><i class="fa fa-eye"></i></a>
                                                 <a @click="deleteUpload(upload)" class="btn btn-xs btn-default-hollow" role="button"><i class="fa fa-trash"></i></a>
                                             </div>
-                                        </div><!-- end panel-body -->
-                                    </div><!-- end panel -->
+                                        </div>&lt;!&ndash; end panel-body &ndash;&gt;
+                                    </div>&lt;!&ndash; end panel &ndash;&gt;
                                 </div>
                             </div>
 
@@ -72,7 +108,8 @@
                         </div>
                     </div>
 
-                </div></div>
+                </div>-->
+                </div>
             </div>
         </template>
 
@@ -153,7 +190,22 @@
                 showView: false,
                 showDelete: false,
                 selectedUpload: null,
-                selectedUploadPlayer: null
+                selectedUploadPlayer: null,
+
+                toggleUpload: {
+                    feature: {
+                        show: false,
+	                    UI: 2
+                    },
+	                secondary: {
+                        show: false,
+                        UI: 2
+                    },
+	                video: {
+                        show: false,
+                        UI: 2
+                    }
+                },
             }
         },
         computed:{
@@ -167,6 +219,11 @@
             },
         },
         methods:{
+            toggleUploader(type, UI) {
+                this.toggleUpload[type].UI = UI;
+                this.toggleUpload[type].show = true;
+
+            },
             uploadsComplete(data){
                 switch(data.type){
                     case 'video':

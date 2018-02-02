@@ -58,7 +58,7 @@ function image($source)
 
 function display_file($source)
 {
-    return url('api/files/'.$source);
+    return url('files/'.$source);
 }
 
 function download_file($source)

@@ -71,11 +71,15 @@ class MedicalReleasePolicy extends BasePolicy
      * @param  \App\Models\v1\MedicalRelease  $medicalRelease
      * @return mixed
      */
-    public function delete(User $user, MedicalRelease $medicalRelease)
+    public function delete(User $user, MedicalRelease $medicalRelease = null)
     {
         // has permission?
         if ($user->can('delete_medical_releases')) {
             return true;
+        }
+
+        if (! $medicalRelease) {
+            return false;
         }
 
         // is manager, facilitator, or owner?

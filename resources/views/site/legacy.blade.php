@@ -15,12 +15,12 @@
 			<div class="col-sm-8 col-sm-offset-2">
                 <h3 class="text-primary">Greetings Legacy Partners,</h3>
 
-                <p>I wanted to reach out and thank you for such an extraordinary year at Missions.Me. We had the opportunity to be in Peru last week in preparation for 1Nation1Day 2019 and it was amazing. As many of you know, we were also able to be with the spiritual leaders of Nicaragua a couple of weeks ago and I wanted to take a moment and share both of those updates with you. All of this is possible because of you!</p>
+                <p>Happy New Year! As we start running into 2018 we feel as a ministry that this year is a different type of year. In 2018 it's not simply whats “next” but whats “new”. We are believing for a newness in 2018 not only for us at Missions.Me but for you in your families, churches and organizations. Check out this months video update for more!</p>
 
-								<p>Thank you for your continued dedication support.</p>
+								<p>We are so thankful for each and every one of you!</p>
 
                 <hr class="divider inv">
-                <p>Merry Christmas,</p>
+                <p>Blessings,</p>
                 <h5 class="text-primary"><em>Gabe</em></h5>
 			</div>
 		</div><!-- end row -->
@@ -36,14 +36,7 @@
 				<hr class="divider inv">
 				<div class="video-outer">
 					<div class="video-inner">
-						<iframe src="https://player.vimeo.com/video/248055644?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-					</div>
-				</div>
-
-				<hr class="divider inv">
-				<div class="video-outer">
-					<div class="video-inner">
-						<iframe src="https://player.vimeo.com/video/247859393?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+						<iframe src="https://player.vimeo.com/video/253477229?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 					</div>
 				</div>
 			</div><!-- end col -->

@@ -873,8 +873,8 @@
 						this.hasAllergies = medical_release.has_allergies;
 						this.takesConditionMedication = medical_release.takes_medication;
 						this.takesAllergyMedication = medical_release.takes_medication;
-						this.heightA = this.measurementSystem === 'standard' ? this.toMetric(medical_release.height) : medical_release.height,
-            this.weightA = this.measurementSystem === 'standard' ? this.toMetric(medical_release.weight, 'weight') : medical_release.weight,
+						this.heightA = this.measurementSystem === 'standard' ? this.toStandard(medical_release.height) : medical_release.height,
+            this.weightA = this.measurementSystem === 'standard' ? this.toStandard(medical_release.weight, 'weight') : medical_release.weight,
 						this.pregnant = medical_release.pregnant
 
           this.$http.get('medical/conditions').then((response) => {

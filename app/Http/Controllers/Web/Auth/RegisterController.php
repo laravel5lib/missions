@@ -101,9 +101,11 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        if ( ! isset($data['birthday'])) {
+        if (! isset($data['birthday'])) {
             $data['birthday'] = make_date_string(
-                $data['dob_year'], $data['dob_month'], $data['dob_day']
+                $data['dob_year'],
+                $data['dob_month'],
+                $data['dob_day']
             );
         }
 
@@ -126,9 +128,11 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        if ( ! isset($data['birthday'])) {
+        if (! isset($data['birthday'])) {
             $data['birthday'] = make_date_string(
-                $data['dob_year'], $data['dob_month'], $data['dob_day']
+                $data['dob_year'],
+                $data['dob_month'],
+                $data['dob_day']
             );
         }
 

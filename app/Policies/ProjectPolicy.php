@@ -63,5 +63,4 @@ class ProjectPolicy extends BasePolicy
     {
         return $user->can('delete_projects');
     }
-
 }

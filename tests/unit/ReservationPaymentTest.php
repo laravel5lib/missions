@@ -19,7 +19,7 @@ class ReservationPaymentTest extends TestCase
     {
         $cost = factory(Cost::class)->create(['amount' => 1000]);
         $payment = factory(Payment::class)->create([
-            'cost_id' => $cost->id, 
+            'cost_id' => $cost->id,
             'due_at' => '2019-01-01',
             'amount_owed' => 500,
             'percent_owed' => 50
@@ -50,7 +50,7 @@ class ReservationPaymentTest extends TestCase
     {
         $cost = factory(Cost::class)->create(['amount' => 1000]);
         $payment = factory(Payment::class)->create([
-            'cost_id' => $cost->id, 
+            'cost_id' => $cost->id,
             'due_at' => null,
             'amount_owed' => 500,
             'percent_owed' => 50

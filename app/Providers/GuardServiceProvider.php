@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Providers;
+
 use Dingo\Api\Routing\Route;
 use Illuminate\Http\Request;
 use Illuminate\Auth\AuthManager;
@@ -44,7 +45,7 @@ class GuardServiceProvider extends Authorization
     public function authenticate(Request $request, Route $route)
     {
         $user = !is_null($this->auth->user()) ? $this->auth->user() :$request->user();
-        if (! $user ) {
+        if (! $user) {
             throw new UnauthorizedHttpException(
                 get_class($this),
                 'Unable to authenticate with invalid API key and token.'

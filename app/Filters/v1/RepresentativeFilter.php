@@ -27,5 +27,4 @@ class RepresentativeFilter extends Filter
     {
         return $this->where('name', 'LIKE', "$terms%");
     }
-
 }

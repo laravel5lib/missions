@@ -34,7 +34,7 @@ class ReservationsController extends Controller
 
         $locked = $reservation->trip->campaign->reservations_locked;
 
-        $title = $reservation->name.'\'s Reservation ' . title_case(str_replace("-"," ",$tab));
+        $title = $reservation->name.'\'s Reservation ' . title_case(str_replace("-", " ", $tab));
         $this->seo()->setTitle($title);
 
         return view('dashboard.reservations.' . $tab, compact('reservation', 'rep', 'tab', 'locked'));

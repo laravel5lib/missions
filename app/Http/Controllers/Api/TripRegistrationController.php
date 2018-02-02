@@ -36,7 +36,7 @@ class TripRegistrationController extends Controller
         }
 
         $reservation = $this->createReservation(
-            $request, 
+            $request,
             $this->trip->findOrFail($id)
         );
 

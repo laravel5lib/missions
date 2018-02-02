@@ -6,10 +6,10 @@
 $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker) {
     return [
         'id'              => $faker->unique()->uuid,
-        'group_id'        => function() {
+        'group_id'        => function () {
             return factory(App\Models\v1\Group::class)->create()->id;
         },
-        'campaign_id'     => function() {
+        'campaign_id'     => function () {
             return factory(App\Models\v1\Campaign::class)->create()->id;
         },
         'spots'           => random_int(10, 500),
@@ -31,7 +31,7 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker) {
             'adults', 'teens', 'men', 'women', 'medical professionals',
             'media professionals', 'business professionals', 'pastors',
             'families'], 4),
-        'rep_id'           => function() {
+        'rep_id'           => function () {
             return factory(App\Models\v1\Representative::class)->create()->uuid;
         },
         'description'      => file_get_contents(resource_path('assets/sample_trip.md')),

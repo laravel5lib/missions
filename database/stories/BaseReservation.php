@@ -7,7 +7,9 @@ use FactoryStories\FactoryStory;
 class BaseReservation extends FactoryStory
 {
 
-    public function build($params = []){}
+    public function build($params = [])
+    {
+    }
 
     protected function add_costs($res)
     {
@@ -124,7 +126,7 @@ class BaseReservation extends FactoryStory
         ], 3);
 
         // create donations from amounts
-        foreach($donations as $amount) {
+        foreach ($donations as $amount) {
             $donor = (new RandomDonor)->create();
 
             $transaction = factory(Transaction::class)->create([

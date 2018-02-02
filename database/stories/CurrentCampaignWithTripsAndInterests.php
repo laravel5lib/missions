@@ -44,12 +44,11 @@ class CurrentCampaignWithTripsAndInterests extends FactoryStory
                 factory(Story::class, 2)->make(['author_id' => $group->id, 'author_type' => 'groups'])
             );
 
-            $randomNumber = mt_rand(1,3);
+            $randomNumber = mt_rand(1, 3);
 
             $randomRep = Representative::all()->random() ?: factory(Representative::class)->create();
 
             foreach (range(1, $randomNumber) as $number) {
-
                 (new RandomTrip)->create([
                     'group_id' => $group->id,
                     'campaign_id' => $campaign->id,
@@ -59,16 +58,15 @@ class CurrentCampaignWithTripsAndInterests extends FactoryStory
 
             $group->trips->each(function ($trip) {
 
-                factory(TripInterest::class, mt_rand(0,5))
+                factory(TripInterest::class, mt_rand(0, 5))
                     ->create(['trip_id' => $trip->id]);
 
-                factory(TripInterest::class, 'converted', mt_rand(0,5))
+                factory(TripInterest::class, 'converted', mt_rand(0, 5))
                     ->create(['trip_id' => $trip->id]);
 
-                factory(TripInterest::class, 'declined', mt_rand(0,5))
+                factory(TripInterest::class, 'declined', mt_rand(0, 5))
                     ->create(['trip_id' => $trip->id]);
             });
-
         });
     }
 }

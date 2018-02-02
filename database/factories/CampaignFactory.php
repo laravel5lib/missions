@@ -14,7 +14,7 @@ $factory->define(App\Models\v1\Campaign::class, function (Faker\Generator $faker
         'ended_at'         => function (array $campaign) {
             return \Carbon\Carbon::parse($campaign['started_at'])->addDays(6);
         },
-        'published_at'     => function(array $campaign) {
+        'published_at'     => function (array $campaign) {
             return \Carbon\Carbon::parse($campaign['started_at'])->subYear();
         },
         'created_at' => \Carbon\Carbon::now(),

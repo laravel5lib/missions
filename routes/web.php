@@ -39,7 +39,7 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
 
     // Records Routes...
     $this->get('records/{tab?}', function ($tab = 'passports') {
-        $title = title_case(str_replace("-"," ",$tab));
+        $title = title_case(str_replace("-", " ", $tab));
         SEOMeta::setTitle($title);
 
         return view('dashboard.'.$tab.'.index', compact('tab'));
@@ -99,7 +99,7 @@ $this->get('/go/{slug?}', function ($slug = null) {
     }
     return redirect('/'.$slug);
 });
-$this->get('/1n1d19', function() {
+$this->get('/1n1d19', function () {
     return redirect('/travel-with-us/signup?trip_id=4f3705a8-fbae-45fe-927f-c3042a8d9127');
 });
 

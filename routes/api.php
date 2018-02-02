@@ -54,7 +54,7 @@ $api->version('v1', [
     })->where('path', '.+');
 
 
-    $api->group(['middleware' => ['api.auth']], function($api) {
+    $api->group(['middleware' => ['api.auth']], function ($api) {
 
         $api->resource('uploads', 'UploadsController');
         $api->get('images/{path}', 'UploadsController@display')->where('path', '.+');
@@ -290,7 +290,4 @@ $api->version('v1', [
     $api->get('campaigns', 'CampaignsController@index');
     $api->resource('funds', 'FundsController'); // TODO restrict to get for queries like `funds/(recipient||general)`
     $api->get('causes', 'ProjectCausesController@index');
-
-
-
 });

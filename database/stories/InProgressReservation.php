@@ -37,6 +37,5 @@ class InProgressReservation extends BaseReservation
 
         // add some funds to the reservation
         $this->add_funds($reservation, $percentStart = 10, $percentEnd = 90);
-
     }
 }

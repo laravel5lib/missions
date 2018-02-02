@@ -8,7 +8,9 @@ use FactoryStories\FactoryStory;
 
 class BaseTrip extends FactoryStory
 {
-    public function build($params = []){}
+    public function build($params = [])
+    {
+    }
 
     protected function add_facilitators($trip)
     {
@@ -35,7 +37,7 @@ class BaseTrip extends FactoryStory
             ])
         ]);
 
-        collect($incrementalCosts)->each(function($ic) {
+        collect($incrementalCosts)->each(function ($ic) {
             factory(Payment::class)->create([
                 'cost_id' => $ic->id,
                 'due_at' => $ic->active_at->addMonths(3),
@@ -104,7 +106,6 @@ class BaseTrip extends FactoryStory
             'percent_owed' => 100,
             'upfront' => false
         ]);
-
     }
 
     protected function add_trip_requirements($trip)

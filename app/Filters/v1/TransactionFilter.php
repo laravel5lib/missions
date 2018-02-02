@@ -16,7 +16,7 @@ class TransactionFilter extends Filter
 
     public function search($keywords)
     {
-        return $this->whereHas('fund', function($query) use($keywords) {
+        return $this->whereHas('fund', function ($query) use ($keywords) {
             $query->where('name', 'LIKE', "%$keywords%");
         });
     }

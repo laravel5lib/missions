@@ -250,7 +250,7 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
         ]));
 
         $admin = Role::create(['name' => 'admin']);
-        $admin->givePermissionTo(array_merge($staff->permissions->pluck('name')->toArray(),[
+        $admin->givePermissionTo(array_merge($staff->permissions->pluck('name')->toArray(), [
             'add_campaigns',
             'edit_campaigns',
             'delete_campaigns',

@@ -53,8 +53,7 @@ $factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator
 /**
  * New User
  */
-$factory->defineAs(App\Models\v1\User::class, 'new', function (Faker\Generator $faker)
-{
+$factory->defineAs(App\Models\v1\User::class, 'new', function (Faker\Generator $faker) {
     return [
         'id'               => $faker->unique()->uuid,
         'first_name'       => $faker->firstName,

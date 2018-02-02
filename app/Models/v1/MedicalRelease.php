@@ -25,7 +25,8 @@ class MedicalRelease extends Model
     protected $fillable = [
         'user_id', 'ins_provider', 'ins_policy_no',
         'is_risk', 'name', 'emergency_contact',
-        'created_at', 'updated_at', 'takes_medication'
+        'created_at', 'updated_at', 'takes_medication',
+        'height', 'weight', 'pregnant'
     ];
 
     /**
@@ -58,7 +59,8 @@ class MedicalRelease extends Model
      */
     protected $casts = [
         'emergency_contact' => 'array',
-        'takes_medication' => 'boolean'
+        'takes_medication' => 'boolean',
+        'pregnant' => 'boolean'
     ];
 
     /**
@@ -116,6 +118,20 @@ class MedicalRelease extends Model
     public function allergies()
     {
         return $this->hasMany(MedicalAllergy::class);
+    }
+
+    public function getHeightStandardAttribute($cm)
+    {
+        $inches = $cm/2.54;
+        $feet = intval($inches/12);
+        $inches = $inches%12;
+        
+        return sprintf('%d\' %d"', $feet, $inches);
+    }
+
+    public function getWeightStandardAttribute($kg)
+    {
+        return round($kg * 2.20462);
     }
 
     /**

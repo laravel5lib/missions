@@ -22,6 +22,10 @@
 @stop
 
 @section('tab')
-    <medicals-list user-id="{{ auth()->user()->id }}"></medicals-list>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <medicals-list user-id="{{ auth()->user()->id }}"></medicals-list>
+        </div>
+    </div>
     <hr class="divider inv xlg">
 @stop

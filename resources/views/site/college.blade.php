@@ -84,10 +84,10 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 							<div class="panel-featured" style="position:absolute;left:16px;top:-5px;z-index:999;">
 								<h6 class="btn btn-primary btn-xs" style="border-radius:50px;"><i class="fa fa-bolt icon-left"></i> Featured</h6>
 							</div>
-							<a class="launch-modal" data-toggle="modal" data-target="#westVid"><img class="img-responsive" src="/images/college/vid-thumbs/west-campaign.jpg" /></a>
+							<a class="launch-modal" data-toggle="modal" data-target="#westVid"><img class="img-responsive" src="/images/college/vid-thumbs/live-the-impossible-thumb.jpg" /></a>
 							<div class="panel-body text-center">
-								<h6 class="text-uppercase">New Campus Location!</h6>
-								<p class="small">We’ve expanded to Southern California</p>
+								<h6 class="text-uppercase">Live the Impossible!</h6>
+								<p class="small">Discover the leadership inside you.</p>
 								<a href="/student-life" class="btn btn-primary btn-sm">Learn More <i style="margin-left:5px;" class="fa fa-angle-right"></i></a>
 							</div>
 						</div><!-- end panel -->
@@ -183,7 +183,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
                 <div class="modal-video">
                     <div class="video-outer">
                       <div class="video-inner">
-                        <iframe src="https://player.vimeo.com/video/199504307?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                        <iframe src="https://player.vimeo.com/video/252810543?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
                       </div>
                     </div>
                 </div>

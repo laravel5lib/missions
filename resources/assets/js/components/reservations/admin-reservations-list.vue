@@ -661,6 +661,7 @@
 				return params;
 			},
 			searchReservations(){
+				this.$refs.spinner.show();
 				let params = this.getListSettings();
 				this.$http.get('reservations', {params: params, before: function(xhr) {
                     if (this.lastReservationRequest) {
@@ -672,6 +673,7 @@
 					this.pagination = response.data.meta.pagination;
 				}).then(() => {
 					this.updateConfig();
+					this.$refs.spinner.hide();
 				});
 			},
 

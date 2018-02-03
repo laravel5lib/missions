@@ -136,15 +136,12 @@ const app = new Vue({
                     switch (config.method.toUpperCase()) {
                         case 'GET':
                             this.$root.$emit('spinner::show', {text: 'Loading'});
-                            // this.$refs.spinner.show({text: 'Loading'});
                             break;
                         case 'POST':
                             this.$root.$emit('spinner::show', {text: 'Saving'});
-                            // this.$refs.spinner.show({text: 'Saving'});
                             break;
                         case 'PUT':
                             this.$root.$emit('spinner::show', {text: 'Updating'});
-                            // this.$refs.spinner.show({text: 'Updating'});
                             break;
                     }
                 }
@@ -160,7 +157,7 @@ const app = new Vue({
         this.$http.interceptors.response.use((response) => {
             // Hide Spinners in all components where they exist
             this.$root.$emit('spinner::hide');
-            
+          
           if (response.status) {
                 if (response.headers['Authorization']) {
                     $.cookie('api_token', response.headers['Authorization']);

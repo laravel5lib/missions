@@ -1,6 +1,6 @@
 <template>
     <div style="position: relative;">
-        <spinner ref="spinner" size="md" text="Loading"></spinner>
+        <spinner ref="spinner" global size="md" text="Loading"></spinner>
         <div class="panel-body" v-for="deadline in deadlines">
             <div class="row">
                 <div class="col-xs-12 text-right hidden-xs">

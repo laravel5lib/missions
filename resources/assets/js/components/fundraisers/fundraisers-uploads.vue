@@ -1,6 +1,6 @@
 <template>
     <div>
-        <spinner ref="spinner" size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" global size="sm" text="Loading"></spinner>
         <template v-if="isUser">
             <div class="row">
                 <div class="col-xs-12">

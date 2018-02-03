@@ -33,7 +33,7 @@
 		</div>
 
 		<div class="row" style="position:relative;">
-			<spinner ref="spinner" size="sm" text="Loading"></spinner>
+			<spinner ref="spinner" global size="sm" text="Loading"></spinner>
 			<mm-aside :show="showTeamsFilters" @open="showTeamsFilters=true" @close="showTeamsFilters=false" placement="left" header="Team Filters" :width="375">
 				<hr class="divider inv sm">
 				<form class="col-sm-12">

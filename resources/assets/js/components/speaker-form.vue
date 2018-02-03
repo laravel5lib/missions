@@ -1,7 +1,7 @@
 <template>
 
         <form class="form-horizontal" @submit.prevent="submit" novalidate style="position:relative;">
-            <spinner ref="spinner" size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" global size="sm" text="Loading"></spinner>
             <div class="form-group">
                 <div class="col-sm-6" v-error-handler="{ value: name, handle: 'name' }">
                     <label for="name">Name</label>

@@ -1,6 +1,6 @@
 <template>
 <div>
-    <spinner ref="spinner" size="sm" text="Loading"></spinner>
+    <spinner ref="spinner" global size="sm" text="Loading"></spinner>
     <div class="row">
         <div class="col-sm-6 col-sm-offset-3 col-xs-12 col-xs-offset-0">
             <hr class="divider inv">

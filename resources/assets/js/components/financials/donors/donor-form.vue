@@ -2,7 +2,7 @@
     <div class="panel panel-default">
 
             <spinner ref="donorspinner" size="xl" :fixed="false" text="Saving..."></spinner>
-            <spinner ref="spinner" size="xl" :fixed="false" text="Loading..."></spinner>
+            <spinner ref="spinner" global size="xl" :fixed="false" text="Loading..."></spinner>
             <div class="panel-heading">
                 <h5>Personal Details</h5>
             </div>

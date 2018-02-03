@@ -1,6 +1,6 @@
 <template>
     <div style="position: relative;">
-        <spinner ref="spinner" size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" global size="sm" text="Loading"></spinner>
         <div class="row">
             <div class="col-sm-12">
                 <form class="form-inline text-right" novalidate>

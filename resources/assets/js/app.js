@@ -130,20 +130,21 @@ const app = new Vue({
             }
 
             // Show Spinners in all components where they exist
+          
             if (_.contains(['GET', 'POST', 'PUT'], config.method.toUpperCase())) {
-                if (this.$refs.spinner && !config.params.hideLoader) {
+                if (!config.params.hideLoader) {
                     switch (config.method.toUpperCase()) {
                         case 'GET':
-                            // this.$root.$emit('show::spinner', {text: 'Loading'})
-                            this.$refs.spinner.show({text: 'Loading'});
+                            this.$root.$emit('spinner::show', {text: 'Loading'});
+                            // this.$refs.spinner.show({text: 'Loading'});
                             break;
                         case 'POST':
-                            // this.$root.$emit('show::spinner', {text: 'Saving'})
-                            this.$refs.spinner.show({text: 'Saving'});
+                            this.$root.$emit('spinner::show', {text: 'Saving'});
+                            // this.$refs.spinner.show({text: 'Saving'});
                             break;
                         case 'PUT':
-                            // this.$root.$emit('show::spinner', {text: 'Updating'})
-                            this.$refs.spinner.show({text: 'Updating'});
+                            this.$root.$emit('spinner::show', {text: 'Updating'});
+                            // this.$refs.spinner.show({text: 'Updating'});
                             break;
                     }
                 }
@@ -158,11 +159,9 @@ const app = new Vue({
         // Add a response interceptor
         this.$http.interceptors.response.use((response) => {
             // Hide Spinners in all components where they exist
-            if (self.$refs.spinner && !_.isUndefined(self.$refs.spinner._started)) {
-                self.$refs.spinner.hide();
-            }
-
-            if (response.status) {
+            this.$root.$emit('spinner::hide');
+            
+          if (response.status) {
                 if (response.headers['Authorization']) {
                     $.cookie('api_token', response.headers['Authorization']);
                 }

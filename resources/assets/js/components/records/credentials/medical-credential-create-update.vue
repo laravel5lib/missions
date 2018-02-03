@@ -1,6 +1,6 @@
 <template >
 	<div style="position:relative;">
-		<spinner ref="spinner" size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" global size="sm" text="Loading"></spinner>
 
 			<form id="CreateUpdateMedicalCredential" class="form-horizontal" novalidate>
 				<div class="panel panel-default">

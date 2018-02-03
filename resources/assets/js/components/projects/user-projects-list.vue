@@ -36,7 +36,7 @@
                 <hr class="divider sm inv">
             </div>
             <div class="col-xs-12" style="position:relative">
-                <!--<spinner ref="spinner" size="sm" text="Loading"></spinner>-->
+                <!--<spinner ref="spinner" global size="sm" text="Loading"></spinner>-->
                 <template v-if="projects.length > 0">
                 <div class="col-xs-12 col-sm-6 col-md-4" v-for="project in projects">
                     <div class="panel panel-default">

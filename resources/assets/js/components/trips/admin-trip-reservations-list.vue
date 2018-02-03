@@ -128,7 +128,7 @@
 
         <hr class="divider sm">
         <div style="position:relative;">
-            <spinner ref="spinner" size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" global size="sm" text="Loading"></spinner>
             <table class="table table-striped">
                 <thead>
                 <tr>

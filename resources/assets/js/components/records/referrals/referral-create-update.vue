@@ -1,7 +1,7 @@
 <template>
     <div>
         <form id="CreateUpdateReferral" class="form-horizontal" novalidate style="postition:relative;">
-            <spinner ref="spinner" size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" global size="sm" text="Loading"></spinner>
 
             <template v-if="forAdmin">
                 <div class="col-sm-12">

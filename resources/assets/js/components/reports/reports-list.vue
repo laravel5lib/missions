@@ -12,7 +12,7 @@
         </div>
         <div class="row">
             <div class="col-xs-12 text-center" v-if="!reports.length">
-                <spinner ref="spinner" size="sm" text="Loading"></spinner>
+                <spinner ref="spinner" global size="sm" text="Loading"></spinner>
                 <p class="lead">
                     No reports found. <br />
                     <small class="text-muted" v-if="search">
@@ -24,7 +24,7 @@
                 </p>
             </div>
             <div class="col-xs-12" v-else>
-                <spinner ref="spinner" size="sm" text="Loading"></spinner>
+                <spinner ref="spinner" global size="sm" text="Loading"></spinner>
                 <div class="list-group">
                     <div class="list-group-item hidden-xs">
                         <div class="row">

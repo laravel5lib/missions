@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<spinner ref="spinner" size="md" text="Loading"></spinner>
+		<spinner ref="spinner" global size="md" text="Loading"></spinner>
 		<alert v-model="showError"
 		       placement="top-right"
 		       :duration="6000"

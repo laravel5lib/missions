@@ -6,7 +6,7 @@
 
         <modal :title="title" :value="showImportModal" @closed="showImportModal=false" effect="zoom" width="400" ok-text="Import" :callback="importList">
             <div slot="modal-body" class="modal-body">
-                <spinner ref="spinner" size="sm" text="importing"></spinner>
+                <spinner ref="spinner" global size="sm" text="importing"></spinner>
                 
                 <div class="alert alert-info" v-if="totalRows > 0">
                     <p>{{ totalRows }} records are being processed. An email will be sent when importing is completed.</p>

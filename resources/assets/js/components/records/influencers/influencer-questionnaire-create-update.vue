@@ -2,7 +2,7 @@
     <div>
 
             <form id="CreateUpdateInfluencer" class="" novalidate>
-                <spinner ref="spinner" size="sm" text="Loading"></spinner>
+                <spinner ref="spinner" global size="sm" text="Loading"></spinner>
                 
                 <template v-if="forAdmin">
                 <div class="row">

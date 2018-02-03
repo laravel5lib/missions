@@ -9,7 +9,7 @@
 				</div>
 			</div>
 			<div class="panel-body">
-				<spinner ref="spinner" size="sm" text="Loading"></spinner>
+				<spinner ref="spinner" global size="sm" text="Loading"></spinner>
 				<template v-if="currentStep === 1">
 					<div class="row">
 						<div class="col-sm-4">

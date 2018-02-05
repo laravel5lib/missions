@@ -132,7 +132,7 @@ const app = new Vue({
             // Show Spinners in all components where they exist
           
             if (_.contains(['GET', 'POST', 'PUT'], config.method.toUpperCase())) {
-                if (!config.params.hideLoader) {
+                if (!config.params || !config.params.hideLoader) {
                     switch (config.method.toUpperCase()) {
                         case 'GET':
                             this.$root.$emit('spinner::show', {text: 'Loading'});

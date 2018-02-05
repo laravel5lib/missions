@@ -159,7 +159,7 @@
             <hr class="divider">
         </div>
         <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-            <spinner ref="spinner" size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" global size="sm" text="Loading"></spinner>
             <template v-if="groups.length">
                 <div class="col-xs-6 col-sm-3 col-md-2" v-for="group in limitBy(groups, groupsLimit)" style="display:flex">
                     <div class="panel panel-default">

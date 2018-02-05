@@ -1,6 +1,6 @@
 <template>
 <div>
-    <spinner ref="spinner" size="sm" text="Loading"></spinner>
+    <spinner ref="spinner" global size="sm" text="Loading"></spinner>
     <div class="row">
         <p v-if="trips.length < 1" class="text-center text-muted">
             This group does not have any trips yet. Please check back soon!

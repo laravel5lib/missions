@@ -57,7 +57,7 @@
                 <hr class="divider sm inv">
             </div>
             <div class="col-xs-12 tour-step-list" style="position:relative">
-                <spinner ref="spinner" size="sm" text="Loading"></spinner>
+                <spinner ref="spinner" global size="sm" text="Loading"></spinner>
                 <template v-if="reservations.length > 0">
                     <div class="row" v-if="layout == 'grid'">
                         <div class="col-xs-12 col-sm-6 col-md-4" v-for="reservation in reservations">

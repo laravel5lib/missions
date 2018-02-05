@@ -1,6 +1,6 @@
 <template>
     <div class="panel panel-default">
-        <spinner ref="spinner" size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" global size="sm" text="Loading"></spinner>
 
         <div class="panel-heading">
             <div class="row">

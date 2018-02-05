@@ -10,7 +10,7 @@
 
 
 			<form id="TravelItinerariesForm" novalidate>
-				<spinner ref="spinner" size="sm" text="Loading"></spinner>
+				<spinner ref="spinner" global size="sm" text="Loading"></spinner>
 
 				<div v-if="itinerary">
 					<p>Please provide details about each step of your trip below.</p>

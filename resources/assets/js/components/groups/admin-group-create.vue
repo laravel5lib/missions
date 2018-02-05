@@ -1,6 +1,6 @@
 <template >
     <div>
-        <spinner ref="spinner" size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" global size="sm" text="Loading"></spinner>
         <form id="CreateGroupForm" class="form-horizontal" novalidate>
             <div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
                 <div class="col-sm-12">

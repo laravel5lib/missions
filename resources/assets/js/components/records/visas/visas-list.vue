@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <spinner ref="spinner" size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" global size="sm" text="Loading"></spinner>
 
         <div class="col-xs-12 text-right">
             <form class="form-inline">

@@ -2,7 +2,7 @@
 	<div style="position:relative;">
 
 			<form id="TravelItinerariesForm" novalidate>
-				<spinner ref="spinner" size="sm" text="Loading"></spinner>
+				<spinner ref="spinner" global size="sm" text="Loading"></spinner>
 
 				<accordion :one-at-atime="true" type="info">
 					<panel is-open="false" :header="itinerary.name" v-for="itinerary in itineraries" ref="iList">

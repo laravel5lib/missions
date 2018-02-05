@@ -62,7 +62,7 @@
                 </div><!-- end panel -->
             </div><!-- end col -->
         </div><!-- end row -->
-		<spinner ref="spinner" size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" global size="sm" text="Loading"></spinner>
 		<keep-alive>
 			<component :is="currentView" :user-id="userId" :campaign-id="campaignId" :group-id="groupId" transition="fade" transition-mode="out-in" @plan-selected="planSelected" @plan-selection="planSelection"></component>
 		</keep-alive>

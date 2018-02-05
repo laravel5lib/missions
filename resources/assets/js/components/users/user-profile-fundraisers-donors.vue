@@ -1,6 +1,6 @@
 <template>
     <div style="position:relative">
-        <spinner ref="spinner" size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" global size="sm" text="Loading"></spinner>
         <div v-if="display && donors.length > 0">
 
             <ul class="nav nav-tabs">

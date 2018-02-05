@@ -1,6 +1,6 @@
 <template >
     <div style="position:relative;">
-        <spinner ref="spinner" size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" global size="sm" text="Loading"></spinner>
         <!--<button class="btn btn-primary btn-xs" @click="add"><span
 					   class="fa fa-plus"></span> Add Existing
 			   </button>-->

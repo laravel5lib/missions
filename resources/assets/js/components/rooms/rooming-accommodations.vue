@@ -1,6 +1,6 @@
 <template>
 	<div style="position: relative;">
-		<spinner ref="spinner" size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" global size="sm" text="Loading"></spinner>
 		<mm-aside :show="showRegionsFilters" @open="showRegionsFilters=true" @close="showRegionsFilters=false" placement="left" header="Region Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">

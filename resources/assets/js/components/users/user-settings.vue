@@ -1,7 +1,7 @@
 <template>
     <div>
         <form id="UserSettingsForm" class="" novalidate style="position:relative;">
-            <spinner ref="spinner" size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" global size="sm" text="Loading"></spinner>
             <div class="row">
                 <div class="col-sm-12">
                     <div class="panel panel-default">

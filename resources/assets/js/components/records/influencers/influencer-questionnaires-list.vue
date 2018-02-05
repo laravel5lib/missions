@@ -1,6 +1,6 @@
 <template>
     <div class="row" style="position:relative">
-        <spinner ref="spinner" size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" global size="sm" text="Loading"></spinner>
         <div class="col-xs-12 text-right">
             <form class="form-inline">
                 <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">

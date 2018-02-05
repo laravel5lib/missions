@@ -17,7 +17,7 @@
         </div>
         <hr class="divider inv lg">
         <div class="container" style="display:flex; flex-wrap: wrap;">
-            <spinner ref="spinner" size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" global size="sm" text="Loading"></spinner>
 
             <template v-if="fundraisers.length">
                 <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in limitBy(fundraisers, fundraisersLimit)" style="display:flex; flex-direction:column;">

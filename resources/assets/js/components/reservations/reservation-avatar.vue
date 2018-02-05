@@ -1,6 +1,6 @@
 <template>
     <div>
-        <spinner ref="spinner" size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" global size="sm" text="Loading"></spinner>
         <div class="media col-md-12 tour-step-avatar">
             <div class="media-left">
                 <a href="#">

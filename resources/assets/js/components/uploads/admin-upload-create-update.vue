@@ -1,6 +1,6 @@
 <template>
 	<div style="position:relative">
-		<spinner ref="spinner" size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" global size="sm" text="Loading"></spinner>
 		<form class="form-inline" v-if="isChild && !uiLocked" novalidate>
 			<div class="row">
 				<div class="col-sm-offset-2 col-sm-10">

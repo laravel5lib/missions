@@ -1,6 +1,6 @@
 <template>
 	<form name="CreateGroup" class="form-horizontal" novalidate style="position:relative;" @submit.prevent="submit">
-		<spinner ref="spinner" size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" global size="sm" text="Loading"></spinner>
 		<div class="form-group">
 			<div class="col-sm-6" :class="{ 'has-error': errors.has('name') }">
 				<label for="name">Name</label>

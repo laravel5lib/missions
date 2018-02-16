@@ -183,7 +183,7 @@
 
         },
         methods: {
-            setMedical(medical) {
+            setMedicalRelease(medical) {
                 this.$emit('set-document', medical);
             },
             debouncedSearch: _.debounce(function() {

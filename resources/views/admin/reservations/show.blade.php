@@ -66,6 +66,7 @@
         <div class="col-xs-12 col-sm-4">
             @include('admin.reservations.layouts.menu', [
                 'links' => config('navigation.admin.reservation'),
+                'reservation' => $reservation,
                 'rep' => $reservation->rep ? $reservation->rep : $reservation->trip->rep
                 ])
         </div>

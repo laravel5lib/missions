@@ -298,7 +298,7 @@
 						<div class="checkbox" v-error-handler="{ value: disclaimer, handle: 'disclaimer' }">
 							<label>
 								<input type="checkbox" :checked="disclaimer" v-model="disclaimer" name="disclaimer" v-validate="'required'">
-								I agree that, Missions.Me is not responsible for any lost, stolen or broken equipment brought my your missions trip.
+								I agree that Missions.Me is not responsible for any lost, stolen or broken items or equipment brought on my missions trip.
 							</label>
 						</div>
 					</div>

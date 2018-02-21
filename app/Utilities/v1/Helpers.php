@@ -41,11 +41,6 @@ function stripPhone($phone)
     return preg_replace('/\D+/', '', $phone);
 }
 
-function now()
-{
-    return Carbon::now();
-}
-
 function carbon($date)
 {
     return new Carbon($date);

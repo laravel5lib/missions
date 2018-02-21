@@ -410,19 +410,6 @@
 					</div>
 				</template>
 				<template v-else-if="currentStep === 6">
-					<h3>Agreement</h3>
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" v-model="agreement">
-							I have verified that the information provided is truthful and accurate to the very best of my knowledge.
-						</label>
-						<p class="help-block">
-							By clicking the above checkbox and submitting this medical release, I am agreeing to
-							Missions.Me's Terms of Service agreement and privacy policy. I understand that falsifying
-							medical information or withholding important medical informations is immediate grounds for
-							dismissal from a Missions.Me trip.
-						</p>
-					</div>
 
 					<template v-if="hasConditionsOrAllergies || takesMedication">
 						<h3>Doctor's Note Required</h3>
@@ -452,6 +439,31 @@
 						                      @uploads-complete="uploadsComplete"></upload-create-update>
 
 					</template>
+
+					<h3>Agreement</h3>
+
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" v-model="consent">
+							I agree to release this information.
+						</label>
+						<p class="help-block">
+							I herby release all medical information, prescription information, insurance information and physician information completed in this portion of my registration to Missions.Me and Rescue International. I understand that this information will also be shared with my Trip Representative, Project Director and/or my Squad Leader to ensure my safety during the duration of my trip.
+						</p>
+					</div>
+
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" v-model="agreement">
+							I have verified that the information provided is truthful and accurate to the very best of my knowledge.
+						</label>
+						<p class="help-block">
+							By clicking the above checkbox and submitting this medical release, I am agreeing to
+							Missions.Me's Terms of Service agreement and privacy policy. I understand that falsifying
+							medical information or withholding important medical informations is immediate grounds for
+							dismissal from a Missions.Me trip.
+						</p>
+					</div>
 				</template>
 			</div>
 			<div class="panel-footer" style="padding: 2em">
@@ -471,7 +483,7 @@
 						<button v-if="currentStep !== 6" type="button" class="btn btn-primary" @click="nextStep">
 							Next <i class="fa fa-chevron-right"></i>
 						</button>
-						<button v-else type="button" :disabled="!agreement" class="btn btn-primary" @click="isUpdate?update():submit()">Finish
+						<button v-else type="button" :disabled="!agreement || !consent" class="btn btn-primary" @click="isUpdate?update():submit()">Finish
 						</button>
 					</div>
 				</div>
@@ -577,6 +589,7 @@
         hasConditions: null,
         hasAllergies: null,
         agreement: false,
+				consent: false
       }
     },
     watch: {
@@ -712,6 +725,8 @@
             this.$root.$emit('showError', 'Please check form.');
             return false;
           }
+
+					$('html, body').animate({scrollTop : 0},300);
 
           switch (this.currentStep) {
             case 2:

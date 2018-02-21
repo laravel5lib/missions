@@ -100,7 +100,7 @@
 							<div class="col-sm-12 col-md-8 col-lg-6">
 								<label for="started_at">Start</label>
 								<date-picker v-model="started_at"
-											 :view-format="['MM-DD-YYYY HH:mm:ss']"
+											 :view-format="['YYYY-MM-DD HH:mm:ss']"
 											 v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }" name="start"
 											 v-validate="'required'">
 								</date-picker>
@@ -111,7 +111,7 @@
 							<div class="col-sm-12 col-md-8 col-lg-6">
 								<label for="started_at">End</label>
 								<date-picker v-model="ended_at"
-											 :view-format="['MM-DD-YYYY HH:mm:ss']"
+											 :view-format="['YYYY-MM-DD HH:mm:ss']"
 											 v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }"
 											 name="end"
 											 v-validate="'required'">
@@ -122,7 +122,7 @@
 						<div class="form-group">
 							<div class="col-sm-12 col-md-8 col-lg-6">
 								<label for="published_at">Published</label>
-								<date-picker v-model="published_at" :view-format="['MM-DD-YYYY HH:mm:ss']"></date-picker>
+								<date-picker v-model="published_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
 								<span class="help-block">Publish now, in the future, or leave blank to save it as a "draft".</span>
 							</div>
 						</div>
@@ -255,6 +255,7 @@
                         }).then((resp) => {
                             window.location.href = '/admin' + resp.data.data.links[0].uri;
                         }, (error) => {
+							this.$refs.spinner.hide();
                             this.errors = error.data.errors;
                             this.showError = true;
                         });

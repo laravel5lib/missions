@@ -14,11 +14,11 @@
                             <h2 class="text-primary">Team trips are what we do!</h2>
                             <p>Missions.Me specializes in taking teams form around the world on life-changing missions experiences.  If you are interested in partnering with one of our missions trips, please fill out the form.  Missions.Me can provide your group with its own profile, URL and customized  trips created especially for your church or organization.</p>
                             <hr class="divider inv">
-                            <a class="btn btn-primary btn-lg" href="/teams/request">Take Your Church or Organization</a>
+                            <a class="btn btn-primary btn-lg" role="button" data-toggle="collapse" href="#collapseGroupForm" aria-expanded="false" aria-controls="collapseGroupForm">Take Your Church or Organization</a>
                         </div><!-- end col -->
                     </div><!-- end row -->
-                    <!--<hr class="divider inv xlg">-->
-                    <!--<div class="row collapse" id="collapseGroupForm">
+                    <hr class="divider inv xlg">
+                    <div class="row collapse" id="collapseGroupForm">
                         <div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
 
                             <form id="CreateGroupForm" class="form-horizontal" novalidate>
@@ -32,7 +32,7 @@
                                     <div class="col-sm-6" v-error-handler="{ value: campaign, handle: 'campaign' }">
                                         <label for="campaign">Which Trip are you interested in?</label>
                                         <select name="campaign" id="campaign" class="form-control" v-model="campaign" v-validate="'required'">
-                                            <option value="">&#45;&#45; please select &#45;&#45;</option>
+                                            <option value="">-- please select --</option>
                                             <option :value="campaign.id" v-for="campaign in campaigns">{{campaign.name}}</option>
                                         </select>
                                     </div>
@@ -73,7 +73,7 @@
                                     <div class="col-sm-6" v-error-handler="{ value: type, handle: 'type' }">
                                         <label for="type">Type</label>
                                         <select name="type" id="type" class="form-control" v-model="type" v-validate="'required'">
-                                            <option value="">&#45;&#45; please select &#45;&#45;</option>
+                                            <option value="">-- please select --</option>
                                             <option :value="option" v-for="option in typeOptions">{{ option|capitalize }}</option>
                                         </select>
                                     </div>
@@ -131,13 +131,13 @@
                                 </div>
                             </form>
 
-                        </div>&lt;!&ndash; end col &ndash;&gt;
-                    </div>&lt;!&ndash; end row &ndash;&gt;
+                        </div><!-- end col -->
+                    </div><!-- end row -->
                     <alert v-model="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                         <span class="icon-ok-circled alert-icon-float-left"></span>
                         <strong>Done</strong>
                         <p>Request sent</p>
-                    </alert>-->
+                    </alert>
 
                 </div><!-- end content-section -->
             </div><!-- end container -->
@@ -571,6 +571,13 @@
         },
         mounted(){
             this.searchGroups();
+            this.getCountries();
+            this.getTimezones();
+
+            this.$http.get('campaigns').then((response) => {
+                this.campaigns = response.data.data;
+            });
+
         }
     }
 </script>

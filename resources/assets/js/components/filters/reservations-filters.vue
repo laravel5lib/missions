@@ -2,6 +2,9 @@
 	<div>
 		<hr class="divider inv sm">
 		<form class="col-sm-12">
+			<div class="form-group">
+				<button class="btn btn-success btn-sm btn-block" @click.prevent="applyFilters">Apply Filters</button>
+			</div>
 			<template v-if="propertyExists('groups')">
 				<template v-if="isAdminRoute">
 					<div class="form-group">
@@ -304,6 +307,7 @@
 			</template>
 
 			<hr class="divider inv sm">
+			<button class="btn btn-success btn-sm btn-block" @click.prevent="applyFilters">Apply Filters</button>
 			<button class="btn btn-default btn-sm btn-block" type="button" @click="resetCallback"><i class="fa fa-times"></i> Reset Filters</button>
 		</form>
 	</div>
@@ -384,7 +388,8 @@
         },
         data(){
             return {
-                groupsArr: [],
+              filtersChanged: false,
+              groupsArr: [],
                 usersArr: [],
                 shirtSizeArr: [],
                 campaignObj: null,
@@ -432,7 +437,8 @@
                     //if (val !== oldVal) {
                         this.filters = val;
                         this.pagination.current_page = 1;
-                        this.callback();
+                        this.filtersChanged = true;
+
                     //}
                 },
                 deep: true
@@ -603,6 +609,9 @@
                     this.regionOptions = response.data.data;
                 }).catch(this.$root.handleApiError);
             },
+            applyFilters() {
+              this.callback();
+            }
         },
 	    created(){
 
@@ -656,7 +665,7 @@
 
             Promise.all(promises).then(() => {
                 if (!self.starter)
-                    self.callback()
+                  self.filtersChanged = true;
             });
         }
     }

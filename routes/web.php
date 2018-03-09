@@ -129,6 +129,7 @@ $this->get('/groups', function () {
     return redirect('/teams');
 });
 $this->get('/teams', 'GroupsController@index');
+$this->get('/teams/request', 'GroupsController@request');
 $this->get('/{slug}/signup', 'GroupsController@signup')
      ->where('sponsor_slug', '^(?!api).*$');
 $this->get('/{slug}/trips', 'CampaignsController@trips')

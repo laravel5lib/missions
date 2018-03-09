@@ -49,4 +49,11 @@ class GroupsController extends Controller
 
         return view('site.groups.signup', compact('group'));
     }
+
+    public function request()
+    {
+        $this->seo()->setTitle('Custom Group Mission Trips');
+
+        return view('site.groups.request');
+    }
 }

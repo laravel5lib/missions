@@ -661,6 +661,7 @@
 				return params;
 			},
 			searchReservations(){
+        	  this.showFilters = false;
 				this.$refs.spinner.show();
 				let params = this.getListSettings();
 				this.$http.get('reservations', {params: params, before: function(xhr) {

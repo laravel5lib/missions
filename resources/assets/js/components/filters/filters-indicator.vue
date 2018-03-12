@@ -200,14 +200,14 @@
             },
 		    filters: {
                 handler(val) {
-                    this.$emit('input', val)
-                    this.$emit('update:filters', val)
+                    this.$emit('input', val);
+                    this.$emit('update:filters', val);
                 },
 			    deep: true
 		    },
             filterData: {
                 handler(val) {
-                    this.$emit('update:filters', val)
+                    this.$emit('update:filters', val);
                 },
 			    deep: true
 		    },

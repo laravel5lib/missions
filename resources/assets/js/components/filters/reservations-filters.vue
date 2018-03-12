@@ -3,7 +3,7 @@
 		<hr class="divider inv sm">
 		<form class="col-sm-12">
 			<div class="form-group">
-				<button class="btn btn-success btn-sm btn-block" @click.prevent="applyFilters">Apply Filters</button>
+				<button class="btn btn-success btn-sm btn-block" type="button" @click   ="applyFilters">Apply Filters</button>
 			</div>
 			<template v-if="propertyExists('groups')">
 				<template v-if="isAdminRoute">
@@ -307,7 +307,7 @@
 			</template>
 
 			<hr class="divider inv sm">
-			<button class="btn btn-success btn-sm btn-block" @click.prevent="applyFilters">Apply Filters</button>
+			<button class="btn btn-success btn-sm btn-block" type="button" @click="applyFilters">Apply Filters</button>
 			<button class="btn btn-default btn-sm btn-block" type="button" @click="resetCallback"><i class="fa fa-times"></i> Reset Filters</button>
 		</form>
 	</div>
@@ -465,6 +465,7 @@
                     this.filters.shirtSize = _.pluck(val, 'id') || [];
 		     },
 		    groupsArr(val) {
+              console.log(val);
                 if ( this.propertyExists('groups') )
                     this.filters.groups = _.pluck(val, 'id') || [];
 		     },
@@ -618,7 +619,7 @@
         },
         mounted(){
 	        this.filters = this.value;
-            let self = this;
+            let self = this, data;
             this.$root.$on('reservations-filters:reset', () =>  {
                 // the reset callback handles reset of the filters object
 	            // variables that influence the filters object need to be reset here
@@ -667,6 +668,22 @@
                 if (!self.starter)
                   self.filtersChanged = true;
             });
+
+            // Load extra filter data from localStorage if it exists
+            if (this.storage) {
+              data = window.localStorage[self.storage] ? JSON.parse(window.localStorage[self.storage]) : {};
+              if (data.hasOwnProperty('groupsArr')) {
+                this.groupsArr = data.groupsArr;
+              }
+              console.log(this.groupsArr);
+              if (data.hasOwnProperty('usersArr')) {
+                this.usersArr = data.usersArr;
+              }
+              if (data.hasOwnProperty('campaignObj')) {
+                this.campaignObj = data.campaignObj;
+              }
+
+            }
         }
     }
 </script>

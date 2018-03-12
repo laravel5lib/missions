@@ -158,7 +158,7 @@
                 </form>
             </div>
         </div>
-        <filters-indicator :filters="filters" :requirement="requirement" :due="due"></filters-indicator>
+        <filters-indicator :filters.sync="filters" :requirement="requirement" :due="due"></filters-indicator>
         <hr class="divider sm">
 		<div style="position:relative;">
 			<spinner ref="spinner" global size="sm" text="Loading"></spinner>
@@ -615,6 +615,7 @@
                     notTraveling: null,
 					region: ''
                 };
+				this.searchReservations();
 			},
 			country(code){
 				return code;

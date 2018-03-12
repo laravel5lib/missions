@@ -3,7 +3,7 @@
 		<hr class="divider inv sm">
 		<form class="col-sm-12">
 			<div class="form-group">
-				<button class="btn btn-success btn-sm btn-block" type="button" @click   ="applyFilters">Apply Filters</button>
+				<button class="btn btn-success btn-sm btn-block" type="button" @click="applyFilters">Apply Filters</button>
 			</div>
 			<template v-if="propertyExists('groups')">
 				<template v-if="isAdminRoute">
@@ -465,7 +465,6 @@
                     this.filters.shirtSize = _.pluck(val, 'id') || [];
 		     },
 		    groupsArr(val) {
-              console.log(val);
                 if ( this.propertyExists('groups') )
                     this.filters.groups = _.pluck(val, 'id') || [];
 		     },

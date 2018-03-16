@@ -824,7 +824,7 @@
             emergency_contact: this.emergency_contact,
             is_risk: this.is_risk,
             user_id: this.user_id,
-            takes_medication: this.takesMedication ? true : (this.takesConditionMedication || this.takesAllergyMedication),
+            takes_medication: !!(this.takesMedication ? true : (this.takesConditionMedication || this.takesAllergyMedication)),
             upload_ids: _.uniq(this.upload_ids),
           };
 
@@ -858,7 +858,7 @@
             weight: this.measurementSystem === 'standard' ? this.toMetric(this.weightA, 'weight') : this.weightA,
             pregnant: this.pregnant,
             emergency_contact: this.emergency_contact,
-            takes_medication: this.takesMedication ? true : (this.takesConditionMedication || this.takesAllergyMedication),
+            takes_medication: !!(this.takesMedication ? true : (this.takesConditionMedication || this.takesAllergyMedication)),
             is_risk: this.is_risk,
             user_id: this.user_id,
             upload_ids: _.uniq(this.upload_ids),

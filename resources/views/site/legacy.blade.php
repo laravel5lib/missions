@@ -15,9 +15,9 @@
 			<div class="col-sm-8 col-sm-offset-2">
                 <h3 class="text-primary">Greetings Legacy Partners,</h3>
 
-                <p>Happy New Year! As we start running into 2018 we feel as a ministry that this year is a different type of year. In 2018 it's not simply whats “next” but whats “new”. We are believing for a newness in 2018 not only for us at Missions.Me but for you in your families, churches and organizations. Check out this months video update for more!</p>
+                <p>This month we want to update you on whats happening as we approach the summer and the Angel House and our Advance campaigns. All of this wouldn’t be possible without you. Check out this video.</p>
 
-								<p>We are so thankful for each and every one of you!</p>
+				{{--<p>We are so thankful for each and every one of you!</p>--}}
 
                 <hr class="divider inv">
                 <p>Blessings,</p>
@@ -36,7 +36,7 @@
 				<hr class="divider inv">
 				<div class="video-outer">
 					<div class="video-inner">
-						<iframe src="https://player.vimeo.com/video/253477229?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+						<iframe src="https://player.vimeo.com/video/259248633?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 					</div>
 				</div>
 			</div><!-- end col -->

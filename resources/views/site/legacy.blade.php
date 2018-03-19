@@ -15,7 +15,7 @@
 			<div class="col-sm-8 col-sm-offset-2">
                 <h3 class="text-primary">Greetings Legacy Partners,</h3>
 
-                <p>This month we want to update you on whats happening as we approach the summer and the Angel House and our Advance campaigns. All of this wouldn’t be possible without you. Check out this video.</p>
+                <p>This month we want to update you on what's happening as we approach the summer, Angel House and our Advance campaigns. All of this wouldn’t be possible without you. Check out this video.</p>
 
 				{{--<p>We are so thankful for each and every one of you!</p>--}}
 

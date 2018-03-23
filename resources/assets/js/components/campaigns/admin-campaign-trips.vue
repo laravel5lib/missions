@@ -245,7 +245,7 @@
                 orderByField: 'group.data.name',
                 direction: 1,
                 page: 1,
-                per_page: 10,
+                per_page: 50,
                 perPageOptions: [5, 10, 25, 50, 100],
                 pagination: { current_page: 1 },
                 search: '',

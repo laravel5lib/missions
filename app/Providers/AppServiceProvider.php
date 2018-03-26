@@ -141,7 +141,7 @@ class AppServiceProvider extends ServiceProvider
         Passport::ignoreMigrations(); // using modified migrations
 
         // Bugsnag
-        $this->app->alias('bugsnag.logger', \Illuminate\Contracts\Logging\Log::class);
+        $this->app->alias('bugsnag.logger', \Psr\Log\LoggerInterface::class);
         $this->app->alias('bugsnag.logger', \Psr\Log\LoggerInterface::class);
 
         // register and configure the transaction handler.

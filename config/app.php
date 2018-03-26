@@ -109,23 +109,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Logging Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure the log settings for your application. Out of
-    | the box, Laravel uses the Monolog PHP logging library. This gives
-    | you a variety of powerful log handlers / formatters to utilize.
-    |
-    | Available Settings: "single", "daily", "syslog", "errorlog"
-    |
-    */
-
-    'log' => env('APP_LOG', 'single'),
-
-    'log_level' => env('APP_LOG_LEVEL', 'debug'),
-
-    /*
-    |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
     |
@@ -165,20 +148,7 @@ return [
         Laravel\Passport\PassportServiceProvider::class,
 
         /*
-         * Application Service Providers...
-         */
-        App\Providers\AppServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-        App\Providers\PromocodesServiceProvider::class,
-        App\Providers\BackendServiceProvider::class,
-        App\Providers\AccountingServiceProvider::class,
-        App\Providers\ComposerServiceProvider::class,
-
-        /*
-         * Third Party Providers...
+         * Package Service Providers...
          */
         Dingo\Api\Provider\LaravelServiceProvider::class,
         EloquentFilter\ServiceProvider::class,
@@ -193,7 +163,20 @@ return [
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Laracademy\Commands\MakeServiceProvider::class,
         Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
-        Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class
+        Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
+
+        /*
+         * Application Service Providers...
+         */
+        App\Providers\AppServiceProvider::class,
+        // App\Providers\BroadcastServiceProvider::class,
+        App\Providers\AuthServiceProvider::class,
+        App\Providers\EventServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
+        App\Providers\PromocodesServiceProvider::class,
+        App\Providers\BackendServiceProvider::class,
+        App\Providers\AccountingServiceProvider::class,
+        App\Providers\ComposerServiceProvider::class,
     ],
 
     /*

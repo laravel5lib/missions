@@ -1,6 +1,6 @@
 <template>
     <div class="panel-body" style="position:relative">
-        <spinner ref="spinner" size="md" text="Loading"></spinner>
+        <spinner ref="spinner" global size="md" text="Loading"></spinner>
         <template v-if="editMode">
 
                 <form>

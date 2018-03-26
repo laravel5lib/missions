@@ -1,6 +1,6 @@
 <template>
     <section>
-        <spinner ref="spinner" size="xl" :fixed="true" text="Loading..."></spinner>
+        <spinner ref="spinner" global size="xl" :fixed="true" text="Loading..."></spinner>
         <form class="panel-body form-inline" novalidate>
             <div class="form-group">
                 <select class="form-control input-sm" v-model="filters.type" style="width:100%;">

@@ -1,6 +1,6 @@
 <template>
     <section>
-        <spinner ref="spinner" size="xl" :fixed="false" text="Loading..."></spinner>
+        <spinner ref="spinner" global size="xl" :fixed="false" text="Loading..."></spinner>
 
         <div class="form-group" v-for="(item, index) in referral.response" :class="{ 'has-error' : errors.has('item')}">
             <label :for="'item_' + index">{{ item.q }}</label>

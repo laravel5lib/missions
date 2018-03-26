@@ -1,6 +1,6 @@
 <template>
 	<div style="position:relative;">
-		<spinner ref="spinner" size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" global size="sm" text="Loading"></spinner>
 		<div class="text-muted text-center" v-if="fundraisers.length < 1">
 			<template v-if="isUser">
 				<em><h4>Start Fundraising</h4>

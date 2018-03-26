@@ -50,7 +50,7 @@
 
         <hr class="divider inv sm">
         <div style="position:relative">
-            <spinner ref="spinner" size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" global size="sm" text="Loading"></spinner>
             <template v-if="activeView === 'donor'">
                 <div class="list-group">
                     <div class="list-group-item" role="tab" :id="'heading-' + donor.id" v-for="donor in donors">

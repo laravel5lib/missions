@@ -2,7 +2,7 @@
     <div>
 
         <form id="UpdateGroupForm" class="form-horizontal" novalidate style="position:relative;">
-            <spinner ref="spinner" size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" global size="sm" text="Loading"></spinner>
             <div class="row form-group">
                 <div class="col-sm-6">
                     <label>Profile Photo (max file size:2mb)</label>

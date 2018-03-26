@@ -2,6 +2,9 @@
 	<div>
 		<hr class="divider inv sm">
 		<form class="col-sm-12">
+			<div class="form-group">
+				<button class="btn btn-success btn-sm btn-block" type="button" @click="applyFilters">Apply Filters</button>
+			</div>
 			<template v-if="propertyExists('groups')">
 				<template v-if="isAdminRoute">
 					<div class="form-group">
@@ -304,6 +307,7 @@
 			</template>
 
 			<hr class="divider inv sm">
+			<button class="btn btn-success btn-sm btn-block" type="button" @click="applyFilters">Apply Filters</button>
 			<button class="btn btn-default btn-sm btn-block" type="button" @click="resetCallback"><i class="fa fa-times"></i> Reset Filters</button>
 		</form>
 	</div>
@@ -384,7 +388,8 @@
         },
         data(){
             return {
-                groupsArr: [],
+              filtersChanged: false,
+              groupsArr: [],
                 usersArr: [],
                 shirtSizeArr: [],
                 campaignObj: null,
@@ -432,7 +437,8 @@
                     //if (val !== oldVal) {
                         this.filters = val;
                         this.pagination.current_page = 1;
-                        this.callback();
+                        this.filtersChanged = true;
+
                     //}
                 },
                 deep: true
@@ -603,13 +609,16 @@
                     this.regionOptions = response.data.data;
                 }).catch(this.$root.handleApiError);
             },
+            applyFilters() {
+              this.callback();
+            }
         },
 	    created(){
 
         },
         mounted(){
 	        this.filters = this.value;
-            let self = this;
+            let self = this, data;
             this.$root.$on('reservations-filters:reset', () =>  {
                 // the reset callback handles reset of the filters object
 	            // variables that influence the filters object need to be reset here
@@ -656,8 +665,24 @@
 
             Promise.all(promises).then(() => {
                 if (!self.starter)
-                    self.callback()
+                  self.filtersChanged = true;
             });
+
+            // Load extra filter data from localStorage if it exists
+            if (this.storage) {
+              data = window.localStorage[self.storage] ? JSON.parse(window.localStorage[self.storage]) : {};
+              if (data.hasOwnProperty('groupsArr')) {
+                this.groupsArr = data.groupsArr;
+              }
+              console.log(this.groupsArr);
+              if (data.hasOwnProperty('usersArr')) {
+                this.usersArr = data.usersArr;
+              }
+              if (data.hasOwnProperty('campaignObj')) {
+                this.campaignObj = data.campaignObj;
+              }
+
+            }
         }
     }
 </script>

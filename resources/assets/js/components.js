@@ -46,6 +46,7 @@ Vue.component('group-profile-trips', require('./components/groups/group-profile-
 Vue.component('group-profile-stories', require('./components/groups/group-profile-stories.vue'));
 Vue.component('group-trip-wrapper', require('./components/campaigns/groups-trips-selection-wrapper.vue'));
 Vue.component('group-interest-signup', require('./components/groups/group-interest-signup.vue'));
+Vue.component('group-request-form', require('./components/groups/group-request-form.vue'));
 Vue.component('group-profile-fundraisers', require('./components/groups/group-profile-fundraisers.vue'));
 Vue.component('dashboard-group-trips', require('./components/groups/dashboard-group-trips.vue'));
 Vue.component('dashboard-group-reservations', require('./components/groups/dashboard-group-reservations.vue'));

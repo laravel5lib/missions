@@ -158,10 +158,10 @@
                 </form>
             </div>
         </div>
-        <filters-indicator :filters="filters" :requirement="requirement" :due="due"></filters-indicator>
+        <filters-indicator :filters.sync="filters" :requirement="requirement" :due="due"></filters-indicator>
         <hr class="divider sm">
 		<div style="position:relative;">
-			<spinner ref="spinner" size="sm" text="Loading"></spinner>
+			<spinner ref="spinner" global size="sm" text="Loading"></spinner>
 			<table class="table table-striped">
 				<thead>
 				<tr>
@@ -615,6 +615,7 @@
                     notTraveling: null,
 					region: ''
                 };
+				this.searchReservations();
 			},
 			country(code){
 				return code;
@@ -661,6 +662,7 @@
 				return params;
 			},
 			searchReservations(){
+        	  this.showFilters = false;
 				this.$refs.spinner.show();
 				let params = this.getListSettings();
 				this.$http.get('reservations', {params: params, before: function(xhr) {

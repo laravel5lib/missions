@@ -11,7 +11,7 @@
 	</div><!-- end container -->
 
 	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;" v-if="campaigns.length > 0">
-		<spinner ref="spinner" size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" global size="sm" text="Loading"></spinner>
 		<div class="col-xs-12">
 			<h4>Current Trips</h4>
 			<hr class="divider">
@@ -21,7 +21,7 @@
 		</div>
 	</div>
 	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-		<spinner ref="spinner" size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" global size="sm" text="Loading"></spinner>
 		<div class="col-xs-12 col-sm-6 col-md-4" v-for="campaign in limitBy(campaigns, campaignsLimit)" style="display:flex">
 			<div class="panel panel-default">
 				<a class="hidden-xs hidden-sm" :href="campaign.page_url" role="button">

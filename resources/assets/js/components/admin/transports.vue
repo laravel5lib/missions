@@ -2,7 +2,7 @@
     <div>
         <div class="row">
             <div class="col-sm-12">
-                <spinner ref="spinner" size="sm" text="Loading"></spinner>
+                <spinner ref="spinner" global size="sm" text="Loading"></spinner>
                 <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Transport Filters" :width="375">
                     <transports-filters :filters="filters" :reset-callback="resetFilters" :pagination="pagination" pagination-key="pagination" :callback="fetch"></transports-filters>
                 </mm-aside>

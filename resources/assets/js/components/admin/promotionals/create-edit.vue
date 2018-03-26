@@ -2,7 +2,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <spinner ref="spinner" size="sm" text="Loading"></spinner>
+                <spinner ref="spinner" global size="sm" text="Loading"></spinner>
                 <div class="col-sm-8">
                     <h5 v-if="id">Edit Promotional</h5>
                     <h5 v-else>Create New Promotional</h5>

@@ -21,24 +21,24 @@ class PagesController extends Controller
 
     public function show($slug)
     {
+        $resource = $this->lookup_resource_by_slug($slug);
+
+        if (! $resource) {
+            return $this->redirect_to_fundraiser($slug);
+        }
+
+        return $this->find_controller($resource);
+    }
+
+    private function redirect_to_fundraiser($slug)
+    {
         $fundraiser = $this->fundraiser->where('url', $slug)->first();
 
         if ($fundraiser) {
             return redirect($fundraiser->sponsor->slug->url.'/'.$slug);
         }
 
-        return $this->redirect_to_controller($slug);
-    }
-
-    private function redirect_to_controller($slug)
-    {
-        $resource = $this->lookup_resource_by_slug($slug);
-
-        if (! $resource) {
-            return $this->load_page($slug);
-        }
-
-        return $this->find_controller($resource);
+        return $this->load_page($slug);
     }
 
     private function lookup_resource_by_slug($slug)

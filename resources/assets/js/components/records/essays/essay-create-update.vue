@@ -1,7 +1,7 @@
 <template>
     <div>
         <form id="CreateUpdateEssay" class="form-horizontal" novalidate>
-            <spinner ref="spinner" size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" global size="sm" text="Loading"></spinner>
 
             <template v-if="forAdmin">
                 <div class="col-sm-12">

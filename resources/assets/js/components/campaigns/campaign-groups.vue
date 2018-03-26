@@ -23,7 +23,7 @@
 
 		<template v-if="groups.length > 0">
 			<div class="container flex-container">
-				<!--<spinner ref="spinner" size="sm" text="Loading"></spinner>-->
+				<!--<spinner ref="spinner" global size="sm" text="Loading"></spinner>-->
 					<div v-for="group in groups" class="flex-row">
 						<div class="flex-col">
 							<div class="panel panel-default flex-item">

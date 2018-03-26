@@ -1,6 +1,6 @@
 <template >
 	<div style="position:relative;">
-		<spinner ref="spinner" size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" global size="sm" text="Loading"></spinner>
 
 			<form id="CreateUpdateMedicalCredential" class="form-horizontal" novalidate>
 				<div class="panel panel-default">
@@ -421,7 +421,8 @@
                     {value: 'MDSP', name: 'Medical Student: Pre-Med', required: ['letter', ], optional: ['certification']},
                     {value: 'MDSD', name: 'Medical Student: Dental', required: ['letter', ], optional: ['certification']},
                     {value: 'RESP', name: 'Respitory Therapist', required: ['license', 'diploma', ], optional: []},
-                    {value: 'PHYA', name: 'Physican\'s Assistant', required: ['license', 'diploma', 'resume'], optional: []},
+                    {value: 'PHYS', name: 'Physician', required: ['license', 'diploma', 'resume'], optional: []},
+                    {value: 'PHYA', name: 'Physician\'s Assistant', required: ['license', 'diploma', 'resume'], optional: []},
                     {value: 'PHYT', name: 'Physical Therapist', required: ['license', 'diploma','resume' ], optional: []},
                     {value: 'PHAT', name: 'Pharmacy Tech', required: ['license', 'diploma', ], optional: []},
                     {value: 'PHAA', name: 'Pharmacy Assistant', required: ['license', 'diploma', ], optional: []},
@@ -455,7 +456,7 @@
                     {value: 'ANES', name: 'Anesthesiologist', required: ['license', 'diploma', 'resume'], optional: []},
                     {value: 'PRAY', name: 'Prayer Team', required: [], optional: []}
                 ],
-                certified: ['MDPF','RESP','PHYA','PHAT','PHAA','PHAR','OTEC','ODOC','OAST','DIET','NUTR','LACT','NAST',
+                certified: ['MDPF','RESP','PHYS','PHYA','PHAT','PHAA','PHAR','OTEC','ODOC','OAST','DIET','NUTR','LACT','NAST',
 	                'NTEC','NPRC','REGN','LPNN','MEDA','LVNN','HEDU','ETEC','MDFG','MDOC','DDOC','DENT','DENH','DENA',
 	                'CHRA','CHRO','RDIO','CRDO','ANES'],
                 student: ['HEDU', 'MDSG', 'MDSN', 'MDSP', 'MDSD'],

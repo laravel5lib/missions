@@ -1,7 +1,7 @@
 <template>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <spinner ref="spinner" size="md" text="Updating..."></spinner>
+            <spinner ref="spinner" global size="md" text="Updating..."></spinner>
             <div class="row">
                 <div class="col-xs-4">
                     <h5 class="panel-header">Details</h5>

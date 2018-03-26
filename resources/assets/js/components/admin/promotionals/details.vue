@@ -3,7 +3,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <spinner ref="spinner" size="sm" text="Loading"></spinner>
+                <spinner ref="spinner" global size="sm" text="Loading"></spinner>
                 <div class="col-sm-8">
                     <h5>{{ promo.name }}</h5>
                 </div>

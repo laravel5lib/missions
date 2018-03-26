@@ -1,7 +1,7 @@
 <template  xmlns:v-crop="http://www.w3.org/1999/xhtml">
 
         <form id="CreateUploadForm" class="form-horizontal" novalidate @submit="prevent" style="position:relative">
-            <spinner ref="spinner" size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" global size="sm" text="Loading"></spinner>
             <div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
                 <label for="name" class="col-sm-2 control-label">Name</label>
                 <div class="col-sm-10">

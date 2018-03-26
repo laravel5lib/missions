@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="panel-body">
-            <spinner ref="spinner" size="md" text="Loading..."></spinner>
+            <spinner ref="spinner" global size="md" text="Loading..."></spinner>
             <div class="row">
                 <div class="col-sm-6">
                     <label>Type</label>

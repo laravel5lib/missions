@@ -179,9 +179,9 @@
                                           v-model="repObj"
                                           :on-search="getReps"
                                           :options="reps"
-                                          label="name">
+                                          label="email">
                                 </v-select>
-                                <span class="help-block">Search for a trip rep by entering a name. Select the rep to assign them.</span>
+                                <span class="help-block">Search for a trip rep by entering an email. Select the rep to assign them.</span>
                             </div>
                         </div>
                     </div>

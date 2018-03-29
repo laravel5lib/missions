@@ -25,7 +25,7 @@ class RepresentativeFilter extends Filter
      */
     public function search($terms)
     {
-        return $this->where('name', 'LIKE', "$terms%");
+        return $this->where('email', 'LIKE', "%$terms%");
     }
 
 }

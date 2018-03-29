@@ -2,11 +2,22 @@
 	<form name="CreateGroup" class="form-horizontal" novalidate style="position:relative;" @submit.prevent="submit">
 		<spinner ref="spinner" global size="sm" text="Loading"></spinner>
 		<div class="form-group">
+			<div class="col-sm-12" :class="{ 'has-error': errors.has('reason') }">
+				<label for="name">Reason</label>
+				<select class="form-control" name="reason" id="reason" v-model="reason" v-validate="'required'" required>
+					<option value="">Select a reason for contacting us</option>
+					<option value="General/Trip Questions">General/Trip Questions</option>
+					<option value="Technical Issues">Technical Issues</option>
+					<option value="Fundraising Questions">Fundraising Questions</option>
+					<option value="Donation/Account Questions">Donation/Account Questions</option>
+					<option value="I want to bring a group on a trip!">I want to bring a group on a trip!</option>
+				</select>
+			</div>
 			<div class="col-sm-6" :class="{ 'has-error': errors.has('name') }">
 				<label for="name">Name</label>
 				<input type="text" class="form-control" id="name" v-model="name"
-				       placeholder="John Smith" name="name" v-validate="'required|alpha_spaces|min:1|max:100'"
-				       maxlength="100" minlength="1" required>
+				       placeholder="Your Name" name="name" v-validate="'required'"
+				       required>
 			</div>
 			<div class="col-sm-6">
 				<label for="name">Your Church/Organization</label>
@@ -52,6 +63,7 @@
         phone_one: '',
         email: '',
         comments: '',
+        reason:'',
       }
     },
     methods: {
@@ -72,6 +84,7 @@
           phone_one: this.phone_one,
           email: this.email,
           comments: this.comments,
+          reason: this.reason,
         };
 
         this.$validator.validateAll().then(result => {
@@ -89,7 +102,7 @@
           }, (error) => {
             console.log(error);
             this.$root.$emit('showError', 'Something went wrong...');
-            // this.$refs.spinner.hide();
+            this.$root.$emit('spinner::hide');
           });
         });
       }

@@ -91,10 +91,19 @@ class UtilitiesController extends Controller
             'organization' => $request->get('organization'),
             'phone_one' => $request->get('phone_one'),
             'comments' => $request->get('comments'),
+            'reason' => $request->get('reason'),
         ];
 
-        Mail::send('emails.contact', ['data' => $data], function ($m) use ($data) {
-            $m->to('go@missions.me', 'Missions.me')->subject('Contact from Missions.Me Visitor!');
+        $reasonToEmail = [
+            'General/Trip Questions' => 'go@missions.me',
+            'Technical Issues' => 'go@missions.me',
+            'Fundraising Questions' => 'accounts@missions.me',
+            'Donation/Account Questions' => 'accounts@missions.me',
+            'I want to bring a group on a trip!' => 'coordinators@missions.me',
+        ];
+
+        Mail::send('emails.contact', ['data' => $data], function ($m) use ($data, $reasonToEmail) {
+            $m->to($reasonToEmail[$data['reason']], 'Missions.me')->subject($data['reason']);
         });
     }
 

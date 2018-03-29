@@ -12,7 +12,9 @@ Vue.mixin({
           let props = prop.split('.');
           let p = obj;
           for (let i in props) {
-            p = p[props[i]];
+            if (p.hasOwnProperty(props[i]))
+              p = p[props[i]];
+            else break;
           }
           return p;
         })

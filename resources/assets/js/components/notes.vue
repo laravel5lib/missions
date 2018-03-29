@@ -220,7 +220,8 @@
                 }
             },
             create() {
-                event.preventDefault();
+                if (event)
+                    event.preventDefault();
                 $.extend(this.selectedNote, {'user_id' : this.userId});
 
                 this.$http.post('notes', this.selectedNote).then(() => {
@@ -232,7 +233,8 @@
                 });
             },
             edit() {
-                event.preventDefault();
+                if (event)
+                    event.preventDefault();
                 this.$http.put('notes/' + this.selectedNote.id, this.selectedNote).then(() => {
                     this.reset();
                     this.fetch();
@@ -242,7 +244,8 @@
                 });
             },
             reset() {
-                event.preventDefault();
+                if (event)
+                    event.preventDefault();
                 this.selectedNote.id = null;
                 this.selectedNote.subject = null;
                 this.selectedNote.content = null;

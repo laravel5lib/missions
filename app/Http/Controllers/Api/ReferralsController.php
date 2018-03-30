@@ -29,7 +29,7 @@ class ReferralsController extends Controller
     public function __construct(Referral $referral)
     {
         $this->referral = $referral;
-        $this->middleware('auth:api', ['except' => ['update']]);
+        $this->middleware('auth:api', ['only' => ['index', 'store', 'destroy']]);
     }
 
     /**

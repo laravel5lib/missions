@@ -53,6 +53,7 @@ $api->version('v1', [
         ]);
     })->where('path', '.+');
 
+    $api->resource('referrals', 'ReferralsController');
 
     $api->group(['middleware' => ['api.auth']], function($api) {
 
@@ -113,7 +114,6 @@ $api->version('v1', [
         $api->resource('visas', 'VisasController');
         $api->resource('visas/export', 'VisasController@export');
         $api->resource('visas/import', 'VisasController@import');
-        $api->resource('referrals', 'ReferralsController');
         $api->post('referrals/export', 'ReferralsController@export');
         $api->post('referrals/import', 'ReferralsController@import');
         $api->resource('campaigns.regions', 'RegionsController');

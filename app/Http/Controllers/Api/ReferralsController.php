@@ -29,6 +29,7 @@ class ReferralsController extends Controller
     public function __construct(Referral $referral)
     {
         $this->referral = $referral;
+        $this->middleware('auth:api', ['except' => ['update']]);
     }
 
     /**
@@ -99,7 +100,7 @@ class ReferralsController extends Controller
             'user_id' => $request->get('user_id', $referral->user_id),
             'applicant_name' => $request->get('applicant_name', $referral->applicant_name),
             'attention_to' => $request->get('attention_to', $referral->attention_to),
-            'recipient_email' => $request->get('recpient_email', $referral->recipient_email),
+            'recipient_email' => $request->get('recipient_email', $referral->recipient_email),
             'type' => $request->get('type', $referral->type),
             'referrer' => $request->get('referrer', $referral->referrer),
             'sent_at' => $request->get('sent_at', $referral->sent_at),

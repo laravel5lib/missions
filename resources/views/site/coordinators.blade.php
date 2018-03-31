@@ -14,8 +14,8 @@
         <div class="content-section">
           <div class="row">
             <div class="col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1 text-center">
-              <h6 class="text-uppercase">We’re here for you</h6>
-              <h2>Here To Serve You!</h2>
+              <h6 class="text-uppercase">We’re here</h6>
+              <h2>To Serve You!</h2>
               <hr class="divider red-small xlg">
             </div><!-- end col -->
           </div><!-- end row -->
@@ -128,10 +128,14 @@
             <div class="col-sm-6 col-sm-offset-0 col-xs-12 text-center">
               <h3>Questions Or Comments?</h3>
               <a class="btn btn-primary btn-md" href="mailto:coordinators@missions.me">Email Us</a>
+              <hr class="divider inv sm">
+              <p class="small"><a href="mailto:coordinators@missions.me">coordinators@missions.me</a></p>
             </div><!-- end col -->
             <div class="col-sm-6 col-sm-offset-0 col-xs-12 text-center">
               <h3>Questions about missionary accounts?</h3>
               <a class="btn btn-primary btn-md" href="mailto:accounts@missions.me">Email Us</a>
+              <hr class="divider inv sm">
+              <p class="small"><a href="mailto:accounts@missions.me">accounts@missions.me</a></p>
             </div><!-- end col -->
           </div><!-- end row -->
         </div><!-- end content-section -->

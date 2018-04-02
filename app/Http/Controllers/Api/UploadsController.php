@@ -192,7 +192,7 @@ class UploadsController extends Controller
                 $request->get('x_axis'),
                 $request->get('y_axis')
             );
-        } elseif ($request->has('height') and $request->has('width')) {
+        } elseif ($request->get('height') and $request->get('width')) {
             $img->resize($request->get('width'), $request->get('height'));
         }
 

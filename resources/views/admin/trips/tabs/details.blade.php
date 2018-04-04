@@ -1,130 +1,77 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h5 class="text-capitalize">Overview</h5>
-    </div>
-    <div class="panel-body">
+@component('panel')
+    @slot('title')
         <div class="row">
-            <div class="col-sm-12 col-md-8">
-                <div class="row">
-                    <div class="col-sm-3 text-center">
-                        <label>Status</label>
-                        <p>{{ ucfirst($trip->status) }}</p>
-                    </div>
-                    <div class="col-sm-3 text-center">
-                        <label>Visibility</label>
-                        <p>{{ $trip->public ? 'Public' : 'Private' }}</p>
-                    </div>
-                    <div class="col-sm-6 text-center">
-                        <label>Publish Date</label>
-                        <p>{{ $trip->published_at ? $trip->published_at->format('F d, Y h:i a') : 'Draft' }}</p>
-                    </div>
-                </div>
-                <hr class="divider">
-                <div class="row">
-                    <div class="col-sm-6 text-center">
-                        <label>Group</label>
-                        <p><a href="/admin/groups/{{ $trip->group->id }}">{{ $trip->group->name }}</a></p>
-                    </div>
-                    <div class="col-sm-6 text-center">
-                        <label>Country</label>
-                        <p>{{ country($trip->country_code) }}</p>
-                    </div>
-                </div>
-                <hr class="divider">
-                <div class="row">
-                    <div class="col-sm-6 text-center">
-                        <label>Start Date</label>
-                        <p>{{ $trip->started_at->format('F d, Y') }}</p>
-                    </div>
-                    <div class="col-sm-6 text-center">
-                        <label>End Date</label>
-                        <p>{{ $trip->ended_at->format('F d, Y') }}</p>
-                    </div>
-                </div>
-                <hr class="divider">
-                <div class="row">
-                    <div class="col-sm-6 text-center">
-                        <label>Updated</label>
-                        <p>{{ $trip->updated_at->format('F d, Y h:i a') }}</p>
-                    </div>
-                    <div class="col-sm-6 text-center">
-                        <label>Created</label>
-                        <p>{{ $trip->created_at->format('F d, Y h:i a') }}</p>
-                    </div>
-                </div>
-                <hr class="divider">
-                <label>Perfect For</label>
-                @if($trip->prospects)
-                <ul class="list-unstyled">
-                    @foreach($trip->prospects as $prospect)
-                        <li class="badge">{{ $prospect }}</li>
-                    @endforeach
-                </ul>
-                @else
-                <p>None listed</p>
-                @endif
-                <label>Team Roles</label>
-                 @if($trip->team_roles)
-                <ul class="list-unstyled">
-                    @foreach($trip->team_roles as $role)
-                        <li class="badge">{{ teamRole($role) }}</li>
-                    @endforeach
-                </ul>
-                @else
-                <p>None listed</p>
-                @endif
+            <div class="col-xs-8">
+                <h5>Registration Settings</h5>
             </div>
-            <div class="col-sm-12 col-md-4 text-center">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <label>Type</label>
-                        <p class="text-capitalize">{{ $trip->type }}</p>
-                        <hr class="divider">
-                        @if($trip->rep_id)
-                        <label>Trip Rep</label>
-                        <p>{{ $trip->rep->name or 'not assigned'}}</p>
-                        <hr class="divider">
-                        @endif
-                        <label>Tags</label>
-                        <ul class="list-unstyled">
-                            @forelse($trip->tags as $tag)
-                                <li class="badge">{{ $tag }}</li>
-                            @empty
-                                None
-                            @endforelse
-                        </ul>
-                        <hr class="divider">
-                        <label>Difficulty</label>
-                        <h4>{{ $trip->difficulty }}</h4>
-                        <hr class="divider">
-                        <label>Companion Limit</label>
-                        <h4>{{ $trip->companion_limit }}</h4>
-                    </div>
-                </div>
+            <div class="col-xs-4 text-right">
             </div>
         </div>
-        </dl>
-    </div>
-</div>
+    @endslot
+    @component('list-group', ['data' => [
+        'Current Status' => '<strong>'.ucfirst($trip->status).'</strong>',
+        'Starting Cost' => '$'.$trip->startingCostInDollars(),
+        'Visibility' => ($trip->public ? 'Public' : 'Private'),
+        'Spots Remaining' => $trip->spots,
+        'Total Reservations' => $trip->reservations()->count(),
+        'Registration Closes' => ($trip->closed_at ? $trip->closed_at->format('F d, Y h:i a') : null)
+    ]])
+    @endcomponent
+@endcomponent
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h5>Registration</h5>
-    </div>
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-4 text-center">
-                <label>Spots Available</label>
-                <h4>{{ $trip->spots }}</h4>
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-4 text-center">
-                <label>Registration Closes</label>
-                <h4>{{ $trip->closed_at->timezone('America/Detroit')->format('M j, Y h:i a') }} EST</h4>
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-4 text-center">
-                <label>Starting Cost</label>
-                <h4>${{ number_format($trip->startingCostInDollars(), 2, '.', ',') }}</h4>
-            </div>
+@component('panel')
+    @slot('title')
+        <h5>Details</h5>
+    @endslot
+    @component('list-group', ['data' => [
+        'Campaign' => '<a href="'.url('admin/campaigns/'.$trip->campaign->id).'">'.$trip->campaign->name.'</a>',
+        'Country' => country($trip->country_code),
+        'Organization' => '<a href="'.url('admin/groups/'.$trip->group->id).'">'.$trip->group->name.'</a>',
+        'Type' => '<strong>'.ucfirst($trip->type).'</strong>',
+        'Start Date' => $trip->started_at->format('F d, Y'),
+        'End Date' => $trip->ended_at->format('F d, Y'),
+        'Difficulty' => $trip->difficulty,
+        'Default Trip Rep' => '<a href="'.url('admin/representatives/'.$trip->rep->id).'">'.$trip->rep->name.'</a>',
+        'Default Companion Limit' => $trip->companion_limit,
+        'Created' => '<datetime-formatted value="'.$trip->created_at->toIso8601String().'" />',
+        'Last Updated' => '<datetime-formatted value="'.$trip->updated_at->toIso8601String().'" />'
+    ]])
+    @endcomponent
+@endcomponent
+
+<div class="row">
+    <div class="col-xs-12 text-right">
+        <div class="btn-group dropup">
+        <a type="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <strong class="text-primary"><i class="fa fa-cog"></i> Manage</strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right">
+            @can('update', $trip)
+            <li>
+                <a href="{{ url('/admin/trips/' . $trip->id . '/edit')}}">Edit</a>
+            </li>
+            @endcan
+            @can('create', \App\Models\v1\Reservation::class)
+            <li>
+                <a data-toggle="modal"
+                    data-target="#addReservationModal"
+                    data-backdrop="static">
+                    Create Reservation
+                </a>
+            </li>
+            @endcan
+            @can('create', $trip)
+            <li>
+                <a data-toggle="modal" data-target="#duplicationModal">Duplicate</a>
+            </li>
+            @endcan
+            @can('delete', $trip)
+            <li role="separator" class="divider"></li>
+            <li>
+                <a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a>
+            </li>
+            @endcan
+        </ul>
         </div>
     </div>
 </div>

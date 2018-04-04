@@ -25,7 +25,7 @@ class CampaignTransformer extends TransformerAbstract
      */
     public function transform(Campaign $campaign)
     {
-        $campaign->load('avatar', 'banner', 'groups');
+        $campaign->load('groups');
 
         $array = [
             'id'           => $campaign->id,
@@ -36,17 +36,15 @@ class CampaignTransformer extends TransformerAbstract
             'page_src'     => $campaign->page_src,
             'avatar'       => $campaign->avatar ? image($campaign->avatar->source) : url('/images/placeholders/campaign-placeholder.png'),
             'avatar_upload_id' => $campaign->avatar_upload_id,
-            'banner'       => $campaign->banner ? image($campaign->banner->source) : null,
-            'banner_upload_id' => $campaign->banner_upload_id,
-            'started_at'   => $campaign->started_at->toDateTimeString(),
-            'ended_at'     => $campaign->ended_at->toDateTimeString(),
+            'started_at'   => $campaign->started_at->toDateString(),
+            'ended_at'     => $campaign->ended_at->toDateString(),
             'status'       => $campaign->status,
             'groups_count' => $campaign->groups->count(),
-            'publish_squads' => (boolean) $campaign->publish_squads,
-            'publish_rooms' => (boolean) $campaign->publish_rooms,
-            'publish_regions' => (boolean) $campaign->publish_regions,
-            'publish_transports' => (boolean) $campaign->publish_transports,
-            'reservations_locked' => (boolean) $campaign->reservations_locked,
+            'publish_squads' => $campaign->publish_squads,
+            'publish_rooms' => $campaign->publish_rooms,
+            'publish_regions' => $campaign->publish_regions,
+            'publish_transports' => $campaign->publish_transports,
+            'reservations_locked' => $campaign->reservations_locked,
             'published_at' => $campaign->published_at ? $campaign->published_at->toDateTimeString() : null,
             'created_at'   => $campaign->created_at->toDateTimeString(),
             'updated_at'   => $campaign->updated_at->toDateTimeString(),

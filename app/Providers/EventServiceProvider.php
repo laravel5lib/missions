@@ -2,20 +2,21 @@
 
 namespace App\Providers;
 
-use App\Models\v1\Campaign;
-use App\Models\v1\Cost;
+use App\Models\v1\Due;
 use App\Models\v1\Todo;
 use App\Models\v1\Trip;
 use App\Models\v1\User;
-use App\Models\v1\Upload;
-use App\Models\v1\Payment;
+use App\Models\v1\Cost;
 use App\Models\v1\Group;
+use App\Models\v1\Upload;
 use App\Models\v1\Project;
+use App\Models\v1\Payment;
+use App\Models\v1\Campaign;
 use App\Models\v1\ProjectCause;
 use App\Models\v1\TripInterest;
+use Illuminate\Support\Facades\Event;
 use App\Jobs\SendReferralRequestEmail;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -130,11 +131,14 @@ class EventServiceProvider extends ServiceProvider
 
         Cost::created(function ($cost) {
             if ($cost->costAssignable instanceof Project) {
-                $cost->costAssignable
+
+                if ($cost->costAssignable->fund->fundraisers()->count()) {
+                    $cost->costAssignable
                      ->fund
                      ->fundraisers()
                      ->first()
                      ->update(['goal_amount' => $cost->costAssignable->goal/100]);
+                }
 
                 $cost->costAssignable->payments()->sync();
             }
@@ -142,13 +146,46 @@ class EventServiceProvider extends ServiceProvider
 
         Cost::updated(function ($cost) {
             if ($cost->costAssignable instanceof Project) {
-                $cost->costAssignable
-                     ->fund
-                     ->fundraisers()
-                     ->first()
-                     ->update(['goal_amount' => $cost->costAssignable->goal/100]);
+
+                if ($cost->costAssignable->fund->fundraisers()->count()) {
+
+                    $cost->costAssignable
+                        ->fund
+                        ->fundraisers()
+                        ->first()
+                        ->update([
+                            'goal_amount' => $cost->costAssignable->goal/100,
+                            'ended_at' => $cost->payments->last()->due_at->toDateTimeString()
+                        ]);
+                }
 
                 $cost->costAssignable->payments()->sync();
+            }
+        });
+
+        Payment::updated(function ($payment) {
+            if ($payment->cost->costAssignable instanceof Project) {
+                if ($payment->cost->costAssignable->fund->fundraisers()->count()) {
+                    $payment->cost->costAssignable
+                            ->fund
+                            ->fundraisers()
+                            ->first()
+                            ->update([
+                                'goal_amount' => $payment->cost->costAssignable->goal/100,
+                                'ended_at' => $payment->cost->payments->last()->due_at->toDateTimeString()
+                            ]);
+                }
+            }
+        });
+
+        Due::updated(function ($due) {
+            if ($due->payable->fund->fundraisers()->count()) {
+                $fundraiser = $due->payable->fund->fundraisers()->first();
+
+                if ($due->payable_type === 'reservations' && $due->payment->cost->type === 'incremental') {
+                    $fundraiser->ended_at = $due->due_at->toDateTimeSTring();
+                    $fundraiser->save();
+                }
             }
         });
     }

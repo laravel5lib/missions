@@ -6,6 +6,7 @@ use App\UuidForKey;
 use App\Models\v1\Project;
 use EloquentFilter\Filterable;
 use Laravel\Passport\HasApiTokens;
+use App\Notifications\ResetPassword;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Notifications\Notifiable;
@@ -36,7 +37,7 @@ class User extends Authenticatable
         'state', 'timezone', 'url', 'public', 'bio',
         'avatar_upload_id', 'banner_upload_id',
         'created_at', 'updated_at', 'shirt_size', 'height',
-        'weight'
+        'weight', 'email_token'
     ];
 
     /**
@@ -71,6 +72,18 @@ class User extends Authenticatable
      * @var bool
      */
     public $timestamps = true;
+
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPassword($token));
+    }
 
     /**
      * Set the user's first name

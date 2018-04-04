@@ -1,20 +1,20 @@
 @extends('dashboard.projects.show')
 
 @section('tab')
-    <ul class="nav nav-tabs">
-        <li role="presentation" class="active"><a href="#funds" data-toggle="tab">Funds</a></li>
-        <li role="presentation"><a href="#fundraiser" data-toggle="tab">Fundraiser</a>
-        </li>
-    </ul>
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="funds">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-xs-6">
+                        <div class="col-xs-4">
                             <h5>Funding</h5>
                         </div>
-                        <div class="col-xs-6 text-right">
+                        <div class="col-xs-8 text-right">
+                            @if($project->fund->fundraisers->count())
+                                <a class="btn btn-sm btn-default-hollow" href="/fundraisers/{{ $project->fund->fundraisers->first()->id }}/edit">Manage Fundraiser</a>
+                            @else
+                                @if($project->costs->count())
+                                    <a class="btn btn-sm btn-default-hollow" href="/funds/{{ $project->fund->id }}/fundraisers/create">Start a Fundraiser</a>
+                                @endif
+                            @endif
                             <a href="/donate/{{ $project->fund->slug }}" target="_blank" class="btn btn-sm btn-primary">
                                 Make Donation
                             </a>
@@ -41,16 +41,9 @@
                             <h2 class="text-info" style="margin-top:0;">${{ number_format($project->amountOutstandingInDollars(),2) }}</h2>
                         </div>
                     </div><!-- end row -->
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <funding fund-id="{{ $project->fund->id }}"></funding>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="fundraiser">
-            <fundraiser-collection fund-id="{{ $project->fund->id }}"></fundraiser-collection>
-        </div>
-    </div>
+
+            <funding fund-id="{{ $project->fund->id }}"></funding>
 @endsection

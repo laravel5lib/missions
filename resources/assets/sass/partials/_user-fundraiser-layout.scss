@@ -1,0 +1,124 @@
+.border-red {
+  border: 2px solid $brand-primary;
+}
+.btn-facebook-hollow, .btn-twitter-hollow {
+  border-width: 2px;
+}
+.share-row {
+	/* Small devices (tablets, 768px and up) */
+  	@media screen and (max-width:768px) {
+  		margin: 10px 0;
+  		.pad-r-5 {
+  			padding-right:5px !important;
+  		}
+  		.pad-l-5 {
+  			padding-left:5px !important;
+  		}
+  	}
+}
+.panel-share {
+  border: 2px solid $brand-facebook;
+  background-color: #f5f9ff;
+  h3 {
+    color: $brand-facebook;
+  }
+}
+.header-info {
+  .row {
+    margin-top:5rem;
+    margin-bottom:5rem;
+  }
+  @media screen and (max-width:768px) {
+    img {
+      width:30px;
+      display:inline-block !important;
+    }
+    .border-red {
+      border: 1px solid $brand-primary;
+    }
+    .row {
+      margin-top:2rem;
+      margin-bottom:2rem;
+    }
+    h2 {
+      font-weight:400;
+      font-size:18px;
+    }
+    h4 {
+      font-weight:400;
+      font-size:14px;
+    }
+    p {
+      color:#808080;
+      font-size:12px;
+    }
+  }
+}
+.details-panel {
+  .panel-body {
+    padding-top:4rem;
+    p.raised {
+      text-align:center;
+    }
+    p.ends-in {
+      text-align:center;
+    }
+    p.countdown {
+      text-align:center;
+    }
+  }
+  .remind{
+    text-align:center;
+  }
+  h2 {
+    text-align: center;
+    span.raised {
+      text-align: center;
+    }
+  }
+  .countdown {
+    color:#808080;
+  }
+  @media screen and (max-width:768px) {
+    .panel-body {
+      padding-top:15px;
+      p.raised {
+        text-align:left;
+      }
+      p.ends-in {
+        text-align:left;
+      }
+      p.countdown {
+        text-align:left;
+      }
+    }
+    h2 {
+      text-align: left;
+      font-weight:400;
+      font-size:24px;
+      span {
+        display:inline-block;
+      }
+      span.raised {
+          font-size:12px;
+      }
+    }
+    p {
+      font-size:12px;
+    }
+    .countdown {
+      color:#808080;
+    }
+    .remind{
+      text-align:center;
+      margin-bottom: 0;
+    }
+  }
+}
+@media screen and (max-width:768px) {
+  .tab-content {
+    p {
+      font-size: 12px;
+    }
+  }
+}

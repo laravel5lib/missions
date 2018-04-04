@@ -15,21 +15,6 @@ use App\Http\Transformers\v1\CampaignTransformer;
 
 class CampaignsController extends Controller
 {
-
-    /**
-     * @var Campaign
-     */
-    private $campaign;
-
-    /**
-     * Instantiate a new CampaignsController instance.
-     * @param Campaign $campaign
-     */
-    public function __construct(Campaign $campaign)
-    {
-        $this->campaign = $campaign;
-    }
-
     /**
      * Show all campaigns.
      *
@@ -38,8 +23,7 @@ class CampaignsController extends Controller
      */
     public function index(Request $request)
     {
-        $campaigns = $this->campaign
-                          ->filter($request->all())
+        $campaigns = Campaign::filter($request->all())
                           ->paginate($request->get('per_page', 25));
 
         return $this->response->paginator($campaigns, new CampaignTransformer);
@@ -53,7 +37,7 @@ class CampaignsController extends Controller
      */
     public function show($param)
     {
-        $campaign = $this->campaign->whereId($param)->orWhereHas('slug', function ($slug) use ($param) {
+        $campaign = Campaign::whereId($param)->orWhereHas('slug', function ($slug) use ($param) {
             return $slug->where('url', $param);
         })->first();
 
@@ -70,8 +54,6 @@ class CampaignsController extends Controller
     {
         $campaign = Campaign::create($request->all());
 
-        $campaign->slug()->create(['url' => $request->get('page_url')]);
-
         return $this->response->item($campaign, new CampaignTransformer);
     }
 
@@ -84,14 +66,16 @@ class CampaignsController extends Controller
      */
     public function update(CampaignRequest $request, $id)
     {
-        $campaign = $this->campaign->findOrFail($id);
+        $campaign = Campaign::findOrFail($id);
 
         $campaign->update($request->all());
-        $campaign->slug()->update([
-            'url' => $request->get('page_url', $campaign->slug->url)
-        ]);
 
-        $campaign->load(['slug']);
+        if($request->has('page_url')) {
+            $campaign->slug()->updateOrCreate([
+                'url' => $request->get('page_url', ($campaign->slug ? $campaign->slug->url : null))
+            ]);
+            $campaign->load(['slug']);
+        }
 
         return $this->response->item($campaign, new CampaignTransformer);
     }
@@ -104,7 +88,7 @@ class CampaignsController extends Controller
      */
     public function destroy($id)
     {
-        $campaign = $this->campaign->findOrFail($id);
+        $campaign = Campaign::findOrFail($id);
 
         $campaign->delete();
 

@@ -25,9 +25,11 @@ class FundraiserTransformer extends TransformerAbstract
     public function transform(Fundraiser $fundraiser)
     {
         $array = [
-            'id'             => $fundraiser->id,
+            'id'             => $fundraiser->uuid,
             'name'           => $fundraiser->name,
             'type'           => $fundraiser->type,
+            'short_desc'     => $fundraiser->short_desc,
+            'featured_image' => $fundraiser->featured_image,
             'fund_id'        => $fundraiser->fund_id,
             'goal_amount'    => $fundraiser->goalAmountAsDollars(),
             'raised_amount'  => $fundraiser->raisedAsDollars(),
@@ -48,15 +50,15 @@ class FundraiserTransformer extends TransformerAbstract
             'links'          => [
                 [
                     'rel' => 'self',
-                    'uri' => url('/api/fundraisers/' . $fundraiser->id),
+                    'uri' => url('/api/fundraisers/' . $fundraiser->uuid),
                 ],
                 [
                     'rel' => 'donors',
-                    'uri' => url('/api/fundraisers/' . $fundraiser->id . '/donors'),
+                    'uri' => url('/api/fundraisers/' . $fundraiser->uuid . '/donors'),
                 ],
                 [
                     'rel' => 'donations',
-                    'uri' => url('/api/fundraisers/' . $fundraiser->id . '/donations'),
+                    'uri' => url('/api/fundraisers/' . $fundraiser->uuid . '/donations'),
                 ]
             ]
         ];

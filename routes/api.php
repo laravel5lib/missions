@@ -53,6 +53,8 @@ $api->version('v1', [
         ]);
     })->where('path', '.+');
 
+    $api->post('fundraisers/{id}/remind', 'FundraiserReminderController@store');
+
     $api->resource('referrals', 'ReferralsController');
 
     $api->group(['middleware' => ['api.auth']], function($api) {
@@ -284,6 +286,8 @@ $api->version('v1', [
     $api->get('trips', 'TripsController@index');
     $api->get('trips/{trip}', 'TripsController@show');
     $api->resource('fundraisers', 'FundraisersController');
+    $api->post('fundraisers/{uuid}/media', 'FundraiserMediaController@store');
+    $api->post('fundraisers/media/delete', 'FundraiserMediaController@destroy');
     $api->resource('donations', 'DonationsController');
     $api->get('fundraisers/{id}/donors', 'FundraisersController@donors');
     $api->get('fundraisers/{id}/donations', 'FundraisersController@donations');

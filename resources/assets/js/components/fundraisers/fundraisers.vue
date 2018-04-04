@@ -9,7 +9,7 @@
         <hr class="divider inv lg">
         <div class="container">
             <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12 text-center">
-                <label>Current Fundraisers</label>
+                <label>Find a Fundraiser to Support</label>
                 <div class="form-group form-group-md">
                     <input type="text" class="form-control" placeholder="Start typing a fundraiser name..." v-model="search" @keyup="debouncedSearch">
                 </div><!-- /input-group -->
@@ -22,8 +22,9 @@
             <template v-if="fundraisers.length">
                 <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in limitBy(fundraisers, fundraisersLimit)" style="display:flex; flex-direction:column;">
                     <div class="panel panel-default">
+                        <img :src="fundraiser.featured_image ? fundraiser.featured_image : 'images/placeholders/fundraiser-placeholder.jpg'" :alt="fundraiser.name" class="img-responsive">
                         <div class="panel-body">
-                            <a :href="calcPath(fundraiser)"><h6>{{ fundraiser.name }}</h6></a>
+                            <a :href="'/' + fundraiser.url"><h6>{{ fundraiser.name }}</h6></a>
                             <div class="row">
                                 <div class="col-xs-6 col-sm-12 col-md-6">
                                     <label style="margin-bottom:0;">Raised</label>
@@ -40,7 +41,7 @@
                                     <span class="sr-only">{{ fundraiser.raised_percent.toFixed(2) }}% Complete (success)</span>
                                 </div>
                             </div>
-                            <p class="text-center" style="margin-bottom:0;"><a class="btn btn-primary-hollow btn-sm" :href="calcPath(fundraiser)">Details</a></p>
+                            <p class="text-center" style="margin-bottom:0;"><a class="btn btn-primary-hollow btn-sm" :href="'/' + fundraiser.url">Details</a></p>
                         </div><!-- end panel-body -->
                     </div><!-- end panel -->
                 </div><!-- end col -->

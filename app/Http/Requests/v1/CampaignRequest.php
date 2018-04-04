@@ -26,29 +26,24 @@ class CampaignRequest extends FormRequest
         $required = [
             'name'         => 'required|max:100',
             'country_code' => 'required|string',
-            'started_at'   => 'required|date',
-            'ended_at'     => 'required|date',
-            'page_src'     => 'required_with:published_at|string',
-            'page_url'     => 'required_with:published_at|string|unique:slugs,url'
+            'started_at'   => 'required|date|before:ended_at',
+            'ended_at'     => 'required|date|after:started_at'
         ];
 
         if ($this->isMethod('put')) {
             $required = [
                 'name'         => 'sometimes|required|max:100',
                 'country_code' => 'sometimes|required|string',
-                'started_at'   => 'sometimes|required|date',
-                'ended_at'     => 'sometimes|required|date',
-                'page_src'     => 'required_with:published_at|string',
-                'page_url'     => 'required_with:published_at|string|unique:slugs,url,'.$this->route('campaign').',slugable_id'
+                'started_at'   => 'sometimes|required|date|before:ended_at',
+                'ended_at'     => 'sometimes|required|date|after:started_at',
+                'page_src'     => 'nullable|required_with:published_at|string',
+                'page_url'     => 'nullable|required_with:published_at|string|unique:slugs,url,'.$this->route('campaign').',slugable_id'
             ];
         }
 
         $optional = [
-            'avatar_upload_id' => 'nullable|string|exists:uploads,id,type,avatar',
-            'banner_upload_id' => 'nullable|string|exists:uploads,id,type,banner',
             'description'      => 'nullable|string|max:120',
             'published_at'     => 'nullable|date',
-            'tags'             => 'nullable|array',
             'publish_squads'   => 'boolean',
             'publish_rooms'    => 'boolean',
             'publish_regions'  => 'boolean',
@@ -56,5 +51,21 @@ class CampaignRequest extends FormRequest
         ];
 
         return $rules = $required + $optional;
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required'          => 'Please enter a campaign name.',
+            'country_code.required'  => 'Please select a country.',
+            'started_at.required'    => 'Please enter a start date.',
+            'ended_at.required'      => 'Please enter an end date',
+            'date'                   => 'That is not a valid date.',
+            'started_at.before'      => 'The start date must be before the end date',
+            'ended_at.after'         => 'The end date must be after the start date',
+            'page_src.required_with' => 'A page source is required to publish.',
+            'page_url.required_with' => 'A page url is required to publish.',
+            'page_url.unique'        => 'This URL has already been taken.'
+        ];
     }
 }

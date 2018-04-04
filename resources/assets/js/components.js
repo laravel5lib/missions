@@ -14,6 +14,7 @@ Vue.component('sponsor-project-form', require('./components/sponsor-project-form
  * Donation, Funds, and Transaction Components
  */
 Vue.component('donate', require('./components/donate.vue'));
+Vue.component('collapse-donate', require('./components/collapse-donate.vue'));
 Vue.component('modal-donate', require('./components/modal-donate.vue'));
 Vue.component('donations-list', require('./components/reservations/donations-list.vue'));
 Vue.component('reconcile-fund', require('./components/reconcile-fund.vue'));
@@ -32,9 +33,26 @@ Vue.component('restore-fund', require('./components/financials/funds/restore-fun
 Vue.component('fundraisers', require('./components/fundraisers/fundraisers.vue'));
 Vue.component('fundraisers-manager', require('./components/fundraisers/fundraisers-manager.vue'));
 Vue.component('fundraisers-stories', require('./components/fundraisers/fundraisers-stories.vue'));
-Vue.component('fundraisers-uploads', require('./components/fundraisers/fundraisers-uploads.vue'));
+Vue.component('fundraiser-updates', require('./components/fundraisers/FundraiserUpdates.vue'));
 Vue.component('fundraiser-collection', require('./components/fundraisers/fundraiser-collection.vue'));
-
+Vue.component('fundraiser-sharing', require('./components/fundraisers/FundraiserSharing.vue'));
+Vue.component('fundraiser-countdown', require('./components/fundraisers/FundraiserCountdown.vue'));
+Vue.component('fundraiser-create', require('./components/fundraisers/FundraiserCreate.vue'));
+Vue.component('fundraisers-description', require('./components/fundraisers/fundraisers-description.vue'));
+Vue.component('anchored-heading', {
+  render(createElement) {
+    return createElement(
+      'h' + this.level,   // tag name
+      this.$slots.default // array of children
+    )
+  },
+  props: {
+    level: {
+      type: Number,
+      required: true
+    }
+  }
+});
 
 /**
  * Group components
@@ -69,7 +87,6 @@ Vue.component('trip-registration-wizard', require('./components/trips/trip-regis
 Vue.component('campaign-create', require('./components/campaigns/admin-campaign-create.vue'));
 Vue.component('campaign-edit', require('./components/campaigns/admin-campaign-edit.vue'));
 Vue.component('admin-campaigns-list', require('./components/campaigns/admin-campaigns-list.vue'));
-Vue.component('admin-campaign-details', require('./components/campaigns/admin-campaign-details.vue'));
 Vue.component('campaign-trip-create-wizard', require('./components/trips/admin-trip-create.vue'));
 Vue.component('campaign-trip-edit-wizard', require('./components/trips/admin-trip-edit.vue'));
 Vue.component('admin-campaign-trips', require('./components/campaigns/admin-campaign-trips.vue'));
@@ -78,7 +95,6 @@ Vue.component('admin-trip-facilitators', require('./components/trips/admin-trip-
 Vue.component('admin-trip-duplicate', require('./components/trips/admin-trip-duplicate.vue'));
 Vue.component('campaign-trip-form', require('./components/trips/CampaignTripForm.vue'));
 Vue.component('cost-manager', require('./components/admin/cost-manager.vue'));
-Vue.component('admin-trip-description', require('./components/trips/admin-trip-description.vue'));
 Vue.component('deadlines-manager', require('./components/admin/deadlines-manager.vue'));
 Vue.component('admin-trip-requirements', require('./components/trips/admin-trip-requirements.vue'));
 Vue.component('admin-trip-todos', require('./components/trips/admin-trip-todos.vue'));
@@ -204,6 +220,27 @@ Vue.component('notes', require('./components/notes.vue'));
 Vue.component('todos', require('./components/todos.vue'));
 Vue.component('send-email', require('./components/send-email.vue'));
 Vue.component('reports-list', require('./components/reports/reports-list.vue'));
+Vue.component('avatar-uploader', require('./components/avatar-uploader.vue'));
+
+Vue.component('ajax-form', require('./components/ajax-form.vue'));
+Vue.component('input-text', require('./components/input-text.vue'));
+Vue.component('input-textarea', require('./components/input-textarea.vue'));
+Vue.component('input-date', require('./components/input-date.vue'));
+Vue.component('input-datetime', require('./components/input-datetime.vue'));
+Vue.component('input-currency', require('./components/input-currency.vue'));
+Vue.component('input-phone', require('./components/input-phone.vue'));
+Vue.component('input-number', require('./components/input-number.vue'));
+Vue.component('input-select', require('./components/input-select.vue'));
+Vue.component('input-markdown', require('./components/input-markdown.vue'));
+Vue.component('input-checkbox', require('./components/input-checkbox.vue'));
+Vue.component('select-country', require('./components/select-country.vue'));
+Vue.component('select-prospects', require('./components/select-prospects.vue'));
+Vue.component('select-roles', require('./components/select-roles.vue'));
+Vue.component('select-group', require('./components/select-group.vue'));
+Vue.component('select-rep', require('./components/select-rep.vue'));
+Vue.component('alert-error', require('./components/alert-error.vue'));
+Vue.component('alert-success', require('./components/alert-success.vue'));
+Vue.component('datetime-formatted', require('./components/datetime-formatted.vue'));
 
 /**
  * Vue Strap Components
@@ -228,6 +265,7 @@ Vue.component('tooltip', VueStrap.tooltip);
 /**
  * UI Components
  */
+Vue.component('video-block', require('./components/fundraisers/content-components/video.vue'));
 Vue.component('vSelect', require('vue-select'));
 // Vue.component('dropdown', VueStrap.dropdown);
 Vue.component('dropdown', require('./components/dropdown.vue'));
@@ -241,40 +279,92 @@ Vue.component('actionDropdownSelect', require('./components/action-dropdown-sele
 Vue.component('admin-delete-modal', require('./components/admin-delete-modal.vue'));
 Vue.component('date-picker', require('./components/date-picker.vue'));
 Vue.component('bootstrap-alert-error', {
-    props: ['field', 'validator', 'message'],
-    template: '<div><div :class="\'alert alert-danger alert-dismissible error-\' + field + \'-\' + validator" role="alert" v-bind="message"></div></div>',
+  props: ['field', 'validator', 'message'],
+  template: '<div><div :class="\'alert alert-danger alert-dismissible error-\' + field + \'-\' + validator" role="alert" v-bind="message"></div></div>',
+});
+Vue.component('currency-input', {
+  template: '<div><label :for="elementId" v-if="label" v-text="label"></label><div class="input-group"><span class="input-group-addon" v-text="symbol"></span><input ref="input" type="text" :id="elementId" class="form-control" :class="classes" :value="value" @input="updateValue($event.target.value)" @focus="selectAll" @blur="formatValue" :placeholder="placeholder"><span class="input-group-addon">USD</span></div></div>',
+  props: {
+    value: {type: String, default: ''},
+    label: {type: String, default: ''},
+    symbol: {type: String, default: '$'},
+    //currency: {type: String, default: 'USD'},
+    classes: {type: String, default: ''},
+    placeholder: {type: String, default: ''},
+  },
+  data() { return {elementId: _.uniqueId('currency-input-')} },
+  methods: {
+    /*updateValue(value) {
+      let num;
+      if (value) {
+        if (value === '') {
+          this.$refs.input.value = value;
+        } else {
+          num = Number(value.replace(/\D/g, ''));
+          this.$refs.input.value = isNaN(num) ? '' : num.toLocaleString();
+        }
+      }
+      this.$emit('input', this.$refs.input.value);
+    },*/
+    updateValue(value) {
+      if (value === '' || value === null) {
+        this.$refs.input.value = value;
+      } else {
+        this.$refs.input.value = value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+      }
+      this.$emit('input', this.$refs.input.value);
+    },
+    formatValue() {
+      if (this.value === '' || this.value === null) {
+        this.$refs.input.value = this.value;
+      } else {
+        this.$refs.input.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+      }
+    },
+    selectAll(event) {
+      // Workaround for Safari bug
+      // http://stackoverflow.com/questions/1269722/selecting-text-on-focus-using-jquery-not-working-in-safari-and-chrome
+      setTimeout(function () {
+        event.target.select()
+      }, 0)
+    }
+  }
 });
 Vue.component('phone-input', {
-    template: '<div><label for="infoPhone" v-if="label" v-text="label"></label><input ref="input" :name="name" type="text" id="infoPhone" :class="classes" :value="value" @input="updateValue($event.target.value)" @focus="selectAll" @blur="formatValue" :placeholder="placeholder"></div>',
-    props: {
-        value: { type: String, default: '' },
-        label: { type: String, default: '' },
-        classes: { type: String, default: 'form-control'},
-        placeholder: { type: String, default: '(123) 456-7890' },
-        name: { type: String, default: 'phone' }
+  template: '<div><label for="infoPhone" v-if="label" v-text="label"></label><input ref="input" :name="name" type="text" id="infoPhone" :class="classes" :value="value" @input="updateValue($event.target.value)" @focus="selectAll" @blur="formatValue" :placeholder="placeholder"></div>',
+  props: {
+    value: {type: String, default: ''},
+    label: {type: String, default: ''},
+    classes: {type: String, default: 'form-control'},
+    placeholder: {type: String, default: '(123) 456-7890'},
+    name: {type: String, default: 'phone'}
+  },
+  methods: {
+    updateValue(value) {
+      if (value === '' || value === null) {
+        this.$refs.input.value = value;
+      } else {
+        this.$refs.input.value = value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+      }
+      this.$emit('input', this.$refs.input.value);
     },
-    methods: {
-        updateValue(value) {
-            if (value === '' || value === null) {
-                this.$refs.input.value = value;
-            } else {
-                this.$refs.input.value = value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-            }
-            this.$emit('input', this.$refs.input.value);
-        },
-        formatValue() {
-            if (this.value === '' || this.value === null) {
-                this.$refs.input.value = this.value;
-            } else {
-                this.$refs.input.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-            }
-        },
-        selectAll(event) {
-            // Workaround for Safari bug
-            // http://stackoverflow.com/questions/1269722/selecting-text-on-focus-using-jquery-not-working-in-safari-and-chrome
-            setTimeout(function () {
-                event.target.select()
-            }, 0)
-        }
+    formatValue() {
+      if (this.value === '' || this.value === null) {
+        this.$refs.input.value = this.value;
+      } else {
+        this.$refs.input.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+      }
+    },
+    selectAll(event) {
+      // Workaround for Safari bug
+      // http://stackoverflow.com/questions/1269722/selecting-text-on-focus-using-jquery-not-working-in-safari-and-chrome
+      setTimeout(function () {
+        event.target.select()
+      }, 0)
     }
+  },
+  mounted() {
+      if (this.value)
+        this.formatValue();
+  }
 });

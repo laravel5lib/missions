@@ -3,15 +3,34 @@
 namespace App\Models\v1;
 
 use Carbon\Carbon;
-use App\UuidForKey;
+use Ramsey\Uuid\Uuid;
+use App\Models\v1\Slug;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
+use Spatie\Image\Manipulations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Presenters\FundraiserPresenter;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
-class Fundraiser extends Model
+class Fundraiser extends Model implements HasMediaConversions
 {
-    use Filterable, UuidForKey, Taggable, SoftDeletes;
+    use Filterable, Taggable, SoftDeletes, FundraiserPresenter, HasMediaTrait;
+
+    /**
+     * Boot the Uuid trait for the model.
+     *
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->uuid = (string) Uuid::uuid4();
+        });
+    }
 
     /**
      * The table associated with the model.
@@ -28,7 +47,7 @@ class Fundraiser extends Model
     protected $fillable = [
         'name', 'started_at', 'ended_at', 'goal_amount', 'description',
         'sponsor_id', 'sponsor_type', 'url', 'type', 'public', 'show_donors',
-        'created_at', 'updated_at'
+        'created_at', 'updated_at', 'short_desc', 'featured_image_id', 'fund_id'
     ];
 
     /**
@@ -40,12 +59,24 @@ class Fundraiser extends Model
         'started_at', 'ended_at', 'created_at', 'updated_at', 'deleted_at'
     ];
 
+    protected $casts = ['public' => 'boolean'];
+
+    protected $appends = ['featured_image'];
+
     /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
      */
     public $timestamps = true;
+
+    public function registerMediaConversions()
+    {
+        $this->addMediaConversion('optimized')
+             ->optimize()
+             ->fit(Manipulations::FIT_MAX, 800, 600)
+             ->nonQueued();
+    }
 
     /**
      * Get the fundraiser's sponsor.
@@ -68,13 +99,23 @@ class Fundraiser extends Model
     }
 
     /**
+     * Get the fundraiser's slug.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function slug()
+    {
+        return $this->morphOne(Slug::class, 'slugable');
+    }
+
+    /**
      * Get all the fundraiser's stories.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
     public function stories()
     {
-        return $this->morphToMany(Story::class, 'publication', 'published_stories')
+        return $this->morphToMany(Story::class, 'publication', 'published_stories', 'published_id')
             ->withPivot('published_at')
             ->orderBy('created_at', 'desc');
     }
@@ -107,6 +148,16 @@ class Fundraiser extends Model
     public function donors()
     {
         return $this->fund->donors();
+    }
+
+    /**
+     * Get the scheduled reminders of the fundraiser.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function reminders()
+    {
+        return $this->morphMany(Reminder::class, 'remindable');
     }
 
     /**
@@ -151,6 +202,20 @@ class Fundraiser extends Model
         return number_format(($this->goal_amount / 100), 2, '.', '');
     }
 
+    public function getUrlAttribute($value)
+    {
+        return $this->slug ? $this->slug->url : ( $value ?: 'fundraisers/'.$this->uuid);
+    }
+
+    public function getFeaturedImageAttribute()
+    {
+        $featuredImage = $this->getMedia('featured');
+        
+        return isset($featuredImage[0]) 
+            ? $featuredImage[0]->getUrl('optimized') 
+            : null;
+    }
+
     /**
      * Get the fundraiser's percentage raised.
      *
@@ -180,7 +245,7 @@ class Fundraiser extends Model
 
         if ($this->getPercentRaised() >= 100) {
             $this->ended_at = Carbon::now();
-            
+
             return 'closed';
         }
 
@@ -216,16 +281,6 @@ class Fundraiser extends Model
     }
 
     /**
-     * Get the fundraiser's uploads.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function uploads()
-    {
-        return $this->morphToMany(Upload::class, 'uploadable');
-    }
-
-    /**
      * Get public fundraisers
      *
      * @param  Builder $query
@@ -250,5 +305,20 @@ class Fundraiser extends Model
     public function open()
     {
         $this->restore();
+    }
+
+    public function setDescriptionAttribute($value)
+    {
+        $this->attributes['description'] = json_encode($value);
+    }
+
+    public function getDescriptionAttribute($value)
+    {
+        return is_string($value) ? $value : json_decode($value);
+    }
+
+    public function getPublicAttribute()
+    {   
+        return !$this->description ? false : $this->attributes['public'];
     }
 }

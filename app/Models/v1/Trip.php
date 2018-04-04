@@ -2,11 +2,15 @@
 
 namespace App\Models\v1;
 
+use App\Deposit;
 use Carbon\Carbon;
 use App\UuidForKey;
+use App\Models\v1\Fund;
 use App\Traits\Promoteable;
+use App\ReservationFactory;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -366,17 +370,6 @@ class Trip extends Model
     }
 
     /**
-     * Return the trip's difficulty.
-     *
-     * @param $value
-     * @return mixed
-     */
-    public function getDifficultyAttribute($value)
-    {
-        return str_replace('_', ' ', $value);
-    }
-
-    /**
      * Get the status of the trip.
      *
      * @return string
@@ -387,7 +380,7 @@ class Trip extends Model
         $status = 'active';
 
         // no published date indicates a draft status
-        $status = is_null($this->published_at) ? 'draft' : $status;
+        $status = is_null($this->published_at) ? 'unpublished' : $status;
 
         // a future published date means it's scheduled
         $status = ! is_null($this->published_at) &&
@@ -397,7 +390,7 @@ class Trip extends Model
         $status = $this->spots == 0 ? 'closed' : $status;
 
         // close it if past closing date
-        $status = $this->closed_at->isPast() ? 'closed' : $status;
+        $status = ! is_null($this->closed_at) && $this->closed_at->isPast() ? 'closed' : $status;
 
         return $status;
     }
@@ -453,4 +446,27 @@ class Trip extends Model
     {
         return $query->where('public', false);
     }
+
+    public function register($request)
+    {
+        return DB::transaction(function () use($request) {
+            
+            $request['companion_limit'] = $this->companion_limit;
+
+            $reservation = $this->reservations()->create(
+                ReservationFactory::make($request)
+            );
+
+            $fund = Fund::make($reservation);
+
+            $reservation->process($request);
+            
+            if ($request->get('amount') > 0) {
+                Deposit::create($fund, $request);
+            }
+
+            return $reservation;
+        });
+    }
+
 }

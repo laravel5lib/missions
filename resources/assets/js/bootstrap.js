@@ -75,11 +75,20 @@ window.moment = require('moment');
 window.timezone = require('moment-timezone');
 
 /**
+ * moment-countdown is a tiny Moment.js plugin that integrates with Countdown.js.
+ */
+window.countdown = require('countdown');
+countdown.setLabels('|| min| hr| day','ms| sec| mins| hrs| days| wks|| yrs',', ');
+
+require('moment-countdown');
+
+/**
  * Video.js is an open source library for working with video on the web,
  * also known as an HTML video player.
  */
 window.videojs = require('video.js');
 require('videojs-youtube');
+require('videojs-vimeo');
 
 /**
  * A full-featured markdown parser and compiler, written in JavaScript.
@@ -125,8 +134,27 @@ window.Vue = require('vue');
 
 Vue.use(require('vue-cookie'));
 Vue.use(require('vee-validate'));
-Vue.use(require('vue-autosize'));
+Vue.use(require('vue-autosize/src/index'));
 Vue.use(require('vue-truncate'));
+
+/**
+ * Mask form inputs
+ */
+import VueTheMask from 'vue-the-mask'
+Vue.use(VueTheMask);
+
+/**
+ * Mast form inputs for currency
+ */
+import money from 'v-money'
+// register directive v-money and component <money>
+Vue.use(money, { precision: 4 })
+
+/**
+ * Custom form class to handle vue component forms and form errors.
+ */
+import Form from './utilities/Form';
+window.Form = Form;
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

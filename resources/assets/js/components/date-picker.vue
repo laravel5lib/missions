@@ -1,7 +1,7 @@
 <template>
 	<div class='input-group date' :class="{'input-group-sm': inputSm}">
 		<span class='input-group-addon' v-if="addon" v-text="addon"></span>
-		<input class="datepicker-input form-control" type="text" :placeholder="placeholder" :value="formattedValue"
+		<input class="datepicker-input form-control" type="text" :placeholder="placeholder"
 		       v-model="formattedValue" @keyup,change="emitValue">
 		<span class='input-group-addon' v-if="!inline">
 			<i class='fa fa-fw fa-calendar'></i>
@@ -249,7 +249,7 @@
           }
         }
         let date;
-        if (!val) return val;
+        if (!val || !val.isValid()) return null;
 
         if (noLocal) {
           return moment(val).startOf('minute').format(format); // do not convert to local
@@ -264,7 +264,8 @@
         return date;
       },
       emitValue(event) {
-        this.$emit('input', $(event.currentTarget).val());
+        let val = $(event.currentTarget).val();
+        this.$emit('input', val);
       },
     },
     created() {

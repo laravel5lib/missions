@@ -129,6 +129,14 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('endprod', function ($beta) {
             return "<?php endif; ?>";
         });
+
+        Blade::directive('stage', function ($beta) {
+            return "<?php if (app()->environment('staging')): ?>";
+        });
+
+        Blade::directive('endstage', function ($beta) {
+            return "<?php endif; ?>";
+        });
     }
 
     /**

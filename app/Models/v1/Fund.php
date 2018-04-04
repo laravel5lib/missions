@@ -5,6 +5,7 @@ namespace App\Models\v1;
 use App\UuidForKey;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -137,5 +138,20 @@ class Fund extends Model
         }
 
         $this->restore();
+    }
+
+    public static function make($fundable)
+    {
+        return DB::transaction(function () use($fundable) {
+            $name = generateFundName($fundable);
+
+            return $fundable->fund()->create([
+                'name' => $name,
+                'slug' => generate_fund_slug($name),
+                'balance' => 0,
+                'class_id' => getAccountingClass($fundable)->id,
+                'item_id'  => getAccountingItem($fundable)->id
+            ]);
+        });
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\v1\Fundraiser;
 use Artesaos\SEOTools\Facades\SEOMeta;
 
 /*
@@ -76,6 +77,18 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
     // Project Routes...
     $this->get('projects', 'Dashboard\ProjectsController@index');
     $this->get('projects/{id}/{tab?}', 'Dashboard\ProjectsController@show');
+
+    $this->get('/funds/{fund}/fundraisers/create', 'FundraisersController@create');
+    $this->get('/fundraisers/{fundraiser}/edit', 'FundraisersController@edit');
+    $this->get('/fundraisers/{fundraiser}/updates', function(Fundraiser $fundraiser) {
+        return view('site.fundraisers.updates', compact('fundraiser'));
+    });
+    $this->get('/fundraisers/{fundraiser}/donations', function(Fundraiser $fundraiser) {
+        return view('site.fundraisers.donations', compact('fundraiser'));
+    });
+    $this->get('/fundraisers/{fundraiser}/sharing', function(Fundraiser $fundraiser) {
+        return view('site.fundraisers.sharing', compact('fundraiser'));
+    });
 });
 
 /*
@@ -110,6 +123,10 @@ $this->get('/1n1d19', function() {
 */
 
 Auth::routes();
+Route::get('/verify/email', 'Auth\VerifyEmailController@verify')->name('verify.email');
+Route::post('/verify/email/resend', 'Auth\VerifyEmailController@sendEmail')->name('verify.email.resend');
+Route::get('/verify/continue/{userId}', 'Auth\VerifyEmailController@continue')->name('verify.email.continue');
+Route::get('/verify/email/{token}', 'Auth\VerifyEmailController@confirm')->name('verify.email.token');
 
 Route::middleware('auth')->get('files/{path}', '\App\Http\Controllers\Api\UploadsController@display_file')->where('path', '.+');
 
@@ -118,10 +135,10 @@ $this->get('/referrals/{id}', 'ReferralsController@show');
 $this->get('/campaigns', function () {
     return redirect('/trips');
 });
+$this->get('/fundraisers', 'FundraisersController@index');
 $this->get('/trips', 'CampaignsController@index');
 $this->get('/trips/{id}', 'TripsController@show');
-$this->get('/trips/{id}/register', 'TripsController@register')->middleware('auth');
-$this->get('/fundraisers', 'FundraisersController@index');
+$this->get('/trips/{id}/register', 'TripsController@register')->middleware('auth', 'verify');
 $this->get('/support', function () {
     return redirect('/partnership');
 });
@@ -130,15 +147,27 @@ $this->get('/groups', function () {
 });
 $this->get('/teams', 'GroupsController@index');
 $this->get('/teams/request', 'GroupsController@request');
+$this->get('/fundraisers/{id}', 'FundraisersController@show');
 $this->get('/{slug}/signup', 'GroupsController@signup')
      ->where('sponsor_slug', '^(?!api).*$');
 $this->get('/{slug}/trips', 'CampaignsController@trips')
      ->where('sponsor_slug', '^(?!api).*$');
-$this->get('/{sponsor_slug}/{fundraiser_slug}', 'FundraisersController@show')
-     ->where('sponsor_slug', '^(?!api).*$')->name('fundraiser');
-$this->get('/{slug}', 'PagesController@show')
-     ->where('sponsor_slug', '^(?!api).*$')
-     ->middleware(['lowercase']);
+
+$this->get('/dashboard/fundraisers/{fundraiser}', function($fundraiser) {
+    return redirect("/dashboard/fundraisers/$fundraiser->uuid/edit");
+});
+
+$this->get('/admin/fundraisers/{fundraiser}', function($fundraiser) {
+    return redirect("/admin/fundraisers/$fundraiser->uuid/edit");
+});
+
+$this->get('/{sponsor_slug}/{fundraiser_slug}', function($sponsor_slug, $fundraiser_slug) {
+    return redirect('/'.$fundraiser_slug);
+})->where('sponsor_slug', '^(?!api).*$')->name('fundraiser');
+
 $this->get('/', function () {
     return view('site.index');
 });
+$this->get('/{slug}', 'PagesController@show')
+     ->where('slug', '^(?!api).*$')
+     ->middleware(['lowercase']);

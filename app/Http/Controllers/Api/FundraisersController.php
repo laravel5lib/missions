@@ -50,9 +50,9 @@ class FundraisersController extends Controller
      * @param $id
      * @return \Dingo\Api\Http\Response
      */
-    public function show($id)
+    public function show($uuid)
     {
-        $fundraiser = $this->fundraiser->findOrFail($id);
+        $fundraiser = $this->fundraiser->whereUuid($uuid)->first();
 
         return $this->response->item($fundraiser, new FundraiserTransformer);
     }
@@ -69,7 +69,7 @@ class FundraisersController extends Controller
         $per_page = $request->get('per_page', 10);
         $page = $request->get('page', 1);
 
-        $fundraiser = $this->fundraiser->findOrFail($id);
+        $fundraiser = $this->fundraiser->whereUuid($id)->first();
 
         $amountGivenAnonymously = $fundraiser->donations()->where('anonymous', true)->sum('amount');
 
@@ -125,10 +125,11 @@ class FundraisersController extends Controller
      */
     public function donations($id, Request $request)
     {
-        $fundraiser = $this->fundraiser->findOrFail($id);
+        $fundraiser = $this->fundraiser->whereUuid($id)->first();
 
         $donations = $fundraiser->donations()
             ->filter($request->all())
+            ->latest()
             ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($donations, new DonationTransformer);
@@ -144,13 +145,7 @@ class FundraisersController extends Controller
     {
         $fundraiser = $this->fundraiser->create($request->all());
 
-        if ($request->has('tags')) {
-            $fundraiser->tag($request->get('tags'));
-        }
-
-        if ($request->has('upload_ids')) {
-            $fundraiser->uploads()->attach($request->get('upload_ids'));
-        }
+        $fundraiser->slug()->create(['url' => $request->get('url')]);
 
         return $this->response->item($fundraiser, new FundraiserTransformer);
     }
@@ -164,27 +159,23 @@ class FundraisersController extends Controller
      */
     public function update(FundraiserRequest $request, $id)
     {
-        $fundraiser = $this->fundraiser->findOrFail($id);
+        $fundraiser = $this->fundraiser->whereUuid($id)->first();
 
         $fundraiser->update([
             'name'             => $request->get('name', $fundraiser->name),
+            'short_desc'       => $request->get('short_desc', $fundraiser->short_desc),
+            'featured_image_id' => $request->get('featured_image_id', $fundraiser->featured_image_id),
             'type'             => $request->get('type', $fundraiser->type),
-            'url'              => $request->get('url', $fundraiser->url),
             'fund_id'          => $request->get('fund_id', $fundraiser->fund_id),
             'public'           => $request->get('public', $fundraiser->public),
-            'description'      => $request->get('description', $fundraiser->description),
+            'description'      => $request->get('contents', $fundraiser->description),
             'show_donors'      => $request->get('show_donors', $fundraiser->show_donors),
             'started_at'       => $request->get('started_at', $fundraiser->started_at),
             'ended_at'         => $request->get('ended_at', $fundraiser->ended_at)
         ]);
 
-        if ($request->has('tags')) {
-            $fundraiser->retag($request->get('tags'));
-        }
-
-        if ($request->has('upload_ids')) {
-            $fundraiser->uploads()->sync($request->get('upload_ids'));
-        }
+        $fundraiser->slug()->update(['url' => $request->get('url', $fundraiser->url)]);
+        $fundraiser->load(['slug']);
 
         return $this->response->item($fundraiser, new FundraiserTransformer);
     }
@@ -197,7 +188,7 @@ class FundraisersController extends Controller
      */
     public function destroy($id)
     {
-        $fundraiser = $this->fundraiser->findOrFail($id);
+        $fundraiser = $this->fundraiser->whereUuid($id)->first();
 
         $fundraiser->delete();
 

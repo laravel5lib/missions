@@ -2,9 +2,10 @@
 
 namespace App\Models\v1;
 
-use App\UuidForKey;
 use Carbon\Carbon;
+use App\UuidForKey;
 use Conner\Tagging\Taggable;
+use App\Models\v1\Fundraiser;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,7 +32,7 @@ class Story extends Model
 
     public function fundraisers()
     {
-        return $this->morphedByMany(Fundraiser::class, 'publication', 'published_stories');
+        return $this->morphedByMany(Fundraiser::class, 'publication', 'published_stories', null, 'published_id');
     }
 
     public function publish(array $publications)
@@ -45,6 +46,10 @@ class Story extends Model
 
     public function createPublication($method_name, $id)
     {
+        if ($method_name === 'fundraisers') {
+           $id = Fundraiser::whereUuid($id)->first()->id;
+        }
+        
         return $this->{$method_name}()->attach($id, ['published_at' => Carbon::now()]);
     }
 

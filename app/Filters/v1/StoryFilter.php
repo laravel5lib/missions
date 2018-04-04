@@ -1,5 +1,8 @@
 <?php namespace App\Filters\v1;
 
+use App\Models\v1\Fundraiser;
+use Illuminate\Support\Facades\DB;
+
 class StoryFilter extends Filter
 {
     /**
@@ -53,13 +56,23 @@ class StoryFilter extends Filter
     /**
      * By fundraiser.
      *
-     * @param $id
+     * @param $uuid
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function fundraiser($id)
+    public function fundraiser($uuid)
     {
+        $id = Fundraiser::whereUuid($uuid)->first()->id;
+
         return $this->whereHas('fundraisers', function ($fundraiser) use ($id) {
             $fundraiser->where('id', $id);
         });
+
+        // $storyIds = DB::table('stories')->join('published_stories', 'stories.id', '=', 'published_stories.story_id')
+        //             ->join('fundraisers', 'published_stories.publication_id', '=', 'fundraisers.uuid')
+        //             ->where('fundraisers.uuid', $id)
+        //             ->pluck('stories.id')
+        //             ->toArray();
+
+        // return $this->whereIn('stories.id', $storyIds);
     }
 }

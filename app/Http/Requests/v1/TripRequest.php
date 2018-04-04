@@ -29,22 +29,19 @@ class TripRequest extends FormRequest
             'country_code' => 'required',
             'type'         => 'required|string',
             'difficulty'   => 'required|in:level_1,level_2,level_3',
-            'started_at'   => 'required|date',
-            'ended_at'     => 'required|date',
-            'closed_at'    => 'required|date',
-            'public'       => 'required|boolean',
+            'started_at'   => 'required|date|before:ended_at',
+            'ended_at'     => 'required|date|after:started_at',
+            'team_roles'   => 'required|array',
         ];
 
         if ($this->isMethod('put')) {
             $required = [
-                'campaign_id'  => 'sometimes|required|exists:campaigns,id',
                 'group_id'     => 'sometimes|required|exists:groups,id',
-                'country_code' => 'sometimes|required',
                 'type'         => 'sometimes|required|string',
                 'difficulty'   => 'sometimes|required|in:level_1,level_2,level_3',
-                'started_at'   => 'sometimes|required|date',
-                'ended_at'     => 'sometimes|required|date',
-                'closed_at'    => 'sometimes|required|date',
+                'started_at'   => 'sometimes|required|date|before:ended_at',
+                'ended_at'     => 'sometimes|required|date|after:started_at',
+                'team_roles'   => 'sometimes|required|array',
             ];
         }
 
@@ -53,12 +50,11 @@ class TripRequest extends FormRequest
             'spots'           => 'nullable|numeric',
             'todos'           => 'nullable|array',
             'prospects'       => 'nullable|array',
-            'team_roles'      => 'nullable|array',
             'description'     => 'nullable|string',
             'published_at'    => 'nullable|date',
             'companion_limit' => 'nullable|numeric',
-            'facilitators'    => 'nullable|array',
-            'tags'            => 'nullable|array'
+            'closed_at'       => 'nullable|date|before:started_at',
+            'public'          => 'boolean'
         ];
 
         $rules = $required + $optional;

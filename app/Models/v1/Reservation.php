@@ -2,7 +2,6 @@
 
 namespace App\Models\v1;
 
-use App\Models\Presenters\ReservationPresenter;
 use Carbon\Carbon;
 use App\UuidForKey;
 use App\Traits\Rewardable;
@@ -10,11 +9,13 @@ use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Support\Facades\DB;
 use App\Models\v1\RequirementCondition;
+use App\Events\ReservationWasProcessed;
 use Illuminate\Database\Eloquent\Model;
 use App\Jobs\Reservations\SyncPaymentsDue;
 use Illuminate\Database\Eloquent\Collection;
 use App\Jobs\Reservations\ProcessReservation;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Presenters\ReservationPresenter;
 
 class Reservation extends Model
 {
@@ -510,8 +511,17 @@ class Reservation extends Model
 
         // update the related fudraiser goal amount
         if ($this->fundraisers->count()) {
+            
             $this->fundraisers()->first()->update([
-                'goal_amount' => $this->getTotalCost()/100
+                'goal_amount' => $this->getTotalCost()/100,
+                'ended_at' => $this->trip
+                    ->activeCosts()
+                    ->type('incremental')
+                    ->first()
+                    ->payments
+                    ->last()
+                    ->due_at
+                    ->toDateTimeString()
             ]);
         }
 
@@ -814,5 +824,30 @@ class Reservation extends Model
              });
 
         return $promos->count() ? $promos : false;
+    }
+
+    public function process($request)
+    {
+        $costs = $request->get('costs');
+
+        if ($costs) {
+            $this->syncCosts(array_filter($costs));
+        } else {
+            $active = $this->trip->activeCosts()->get();
+
+            $maxDate = $active->whereStrict('type', 'incremental')->max('active_at');
+
+            $costs = $active->reject(function ($value) use ($maxDate) {
+                return ($value->type == 'incremental' && $value->active_at < $maxDate) or $value->type == 'optional';
+            });
+
+            $this->syncCosts($costs);
+        }
+
+        $this->syncRequirements($this->trip->requirements);
+        $this->syncDeadlines($this->trip->deadlines);
+        $this->addTodos($this->trip->todos);
+
+        event(new ReservationWasProcessed($this));
     }
 }

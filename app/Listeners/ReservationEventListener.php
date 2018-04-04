@@ -86,8 +86,6 @@ class ReservationEventListener
             'item_id'  => getAccountingItem($event->reservation)->id
         ]);
 
-        dispatch(new SetupFunding($event->reservation));
-
         return $fund;
     }
 
@@ -108,15 +106,15 @@ class ReservationEventListener
      */
     public function subscribe($events)
     {
-        $events->listen(
-            'App\Events\ReservationWasCreated',
-            'App\Listeners\ReservationEventListener@setupFunding'
-        );
+        // $events->listen(
+        //     'App\Events\ReservationWasCreated',
+        //     'App\Listeners\ReservationEventListener@setupFunding'
+        // );
 
-        $events->listen(
-            'App\Events\ReservationWasCreated',
-            'App\Listeners\ReservationEventListener@process'
-        );
+        // $events->listen(
+        //     'App\Events\ReservationWasCreated',
+        //     'App\Listeners\ReservationEventListener@process'
+        // );
 
         $events->listen(
             'App\Events\ReservationWasCreated',

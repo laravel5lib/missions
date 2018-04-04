@@ -111,7 +111,7 @@
 	@endcomponent
 
 	@component('section', ['class' => 'gray-lighter-bg'])
-		<div class="row">
+		<div class="row" id="ideas">
 			<div class="col-sm-12 col-sm-offset-0 col-xs-10 col-xs-offset-1">
 				<h2 class="text-center">Fundraising made easy and fun!</h2>
 			</div><!-- end col -->

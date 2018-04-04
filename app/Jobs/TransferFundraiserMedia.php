@@ -42,7 +42,6 @@ class TransferFundraiserMedia implements ShouldQueue
             })
             ->where('uploads.type', '=', 'other')
             ->groupBy('uploadables.uploadable_id')
-            ->take(3)
             ->orderBy('uploads.source')
             ->select('uploadables.uploadable_id', 'uploads.source')
             ->get();

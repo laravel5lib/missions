@@ -25,7 +25,7 @@
         <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="userMenu">
           <li>
             <a href="{{ url('/dashboard/settings') }}" id="top-profile-link">
-              <i class="fa fa-user-circle"></i> My Account
+              <i class="fa fa-user-circle"></i> Profile Settings
             </a>
           </li>
           <li>

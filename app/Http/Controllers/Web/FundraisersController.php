@@ -46,6 +46,8 @@ class FundraisersController extends Controller
             $this->authorize('view', $fundraiser);
         }
 
+        if (! $fundraiser->fund->fundable) abort(404);
+
         $this->seo()->setTitle($fundraiser->name)
             ->opengraph()
             ->addImage($fundraiser->featured_image)

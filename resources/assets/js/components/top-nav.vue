@@ -15,7 +15,7 @@
 				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding:10px 40px;" href="/login">Login</a></li>
 				<li style="display:inline;" v-if="!fundraiser=='1' && !auth"><a style="display:inline-block;padding: 10px 34px;border-left: 1px solid #242424;" href="/donate">Donate</a></li>
 				<template v-if="auth">
-					<li class=""><a href="/dashboard/settings" id="menu-profile-link"><i class="fa fa-user-circle" style="margin-right:7px;"></i>My Account</a></li>
+					<li class=""><a href="/dashboard/settings" id="menu-profile-link"><i class="fa fa-user-circle" style="margin-right:7px;"></i>Profile Settings</a></li>
 					<li><a href="/dashboard"><i class="fa fa-tachometer" style="margin-right:7px;"></i> Dashboard</a></li>
 					<li><a href="/dashboard/reservations"><i class="fa fa-ticket" style="margin-right:7px;"></i> Reservations</a></li>
 					<li><a href="/dashboard/records"><i class="fa fa-archive" style="margin-right:7px;"></i> Records</a></li>

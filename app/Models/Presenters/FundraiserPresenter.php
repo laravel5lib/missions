@@ -12,6 +12,14 @@ trait FundraiserPresenter
         if ($this->fund->fundable_type === 'projects') {
             return country($this->fund->fundable->initiative->country_code);
         }
+
+        if ($this->fund->fundable_type === 'trips') {
+            return country($this->fund->fundable->country_code);
+        }
+
+        if ($this->fund->fundable_type === 'campaigns') {
+            return country($this->fund->fundable->country_code);
+        }
     }
 
     public function getTypeAttribute() : string

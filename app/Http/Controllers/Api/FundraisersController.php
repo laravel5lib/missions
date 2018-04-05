@@ -168,7 +168,7 @@ class FundraisersController extends Controller
             'type'             => $request->get('type', $fundraiser->type),
             'fund_id'          => $request->get('fund_id', $fundraiser->fund_id),
             'public'           => $request->get('public', $fundraiser->public),
-            'description'      => $request->get('contents', $fundraiser->description),
+            'description'      => $request->get('description', $fundraiser->description),
             'show_donors'      => $request->get('show_donors', $fundraiser->show_donors),
             'started_at'       => $request->get('started_at', $fundraiser->started_at),
             'ended_at'         => $request->get('ended_at', $fundraiser->ended_at)

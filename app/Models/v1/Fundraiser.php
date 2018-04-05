@@ -307,15 +307,15 @@ class Fundraiser extends Model implements HasMediaConversions
         $this->restore();
     }
 
-    public function setDescriptionAttribute($value)
-    {
-        $this->attributes['description'] = json_encode($value);
-    }
+    // public function setDescriptionAttribute($value)
+    // {
+    //     $this->attributes['description'] = json_encode($value);
+    // }
 
-    public function getDescriptionAttribute($value)
-    {
-        return is_string($value) ? $value : json_decode($value);
-    }
+    // public function getDescriptionAttribute($value)
+    // {
+    //     return is_string($value) ? $value : json_decode($value);
+    // }
 
     public function getPublicAttribute()
     {   

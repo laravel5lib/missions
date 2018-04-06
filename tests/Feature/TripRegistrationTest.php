@@ -1,19 +1,18 @@
 <?php
+
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\v1\Cost;
 use App\Models\v1\Trip;
 use App\Models\v1\User;
-use App\Models\v1\Cost;
 use App\Models\v1\Deadline;
 use Laravel\Passport\Passport;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TripRegistrationTest extends TestCase
 {
-    use DatabaseMigrations, DatabaseTransactions;
+    use RefreshDatabase;
 
     protected $user;
 

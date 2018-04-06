@@ -59,10 +59,7 @@
     },
     "autoload-dev": {
         "classmap": [
-            "tests/TestCase.php",
-            "tests/DatabaseSetup.php",
-            "tests/AuthenticatedUserSetup.php",
-            "tests/BrowserKitTestCase.php"
+            "tests/TestCase.php"
         ],
         "psr-4": {
             "Tests\\": "tests/"

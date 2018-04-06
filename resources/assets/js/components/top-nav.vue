@@ -13,7 +13,7 @@
 			<ul class="nav navmenu-nav">
 				<li class="navlabel">Account</li>
 				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding:10px 40px;" href="/login">Login</a></li>
-				<li style="display:inline;" v-if="!fundraiser=='1' && !auth"><a style="display:inline-block;padding: 10px 34px;border-left: 1px solid #242424;" href="/donate">Donate</a></li>
+				<li style="display:inline;" v-if="!fundraiser=='1' && !auth"><a style="display:inline-block;padding: 10px 34px;border-left: 1px solid #242424;" href="/give-a-donation">Donate</a></li>
 				<template v-if="auth">
 					<li class=""><a href="/dashboard/settings" id="menu-profile-link"><i class="fa fa-user-circle" style="margin-right:7px;"></i>Profile Settings</a></li>
 					<li><a href="/dashboard"><i class="fa fa-tachometer" style="margin-right:7px;"></i> Dashboard</a></li>

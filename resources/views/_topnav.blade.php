@@ -67,7 +67,7 @@
       @unless(isset($fundraiser) or isset($isProfile) or auth()->check())
       <li>
         <div class="hidden-xs" style="margin-right:20px;">
-          <a class="btn btn-default-hollow" href="{{ url('/donate') }}">Donate</a>
+          <a class="btn btn-default-hollow" href="{{ url('/give-a-donation') }}">Donate</a>
         </div>
       </li>
       @endunless

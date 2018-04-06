@@ -66,7 +66,9 @@ class FundraiserFilter extends Filter
      */
     public function url($slug)
     {
-        return $this->where('fundraisers.url', $slug);
+        return $this->whereHas('slug', function($q) use($slug) {
+            return $q->where('url', $slug);
+        });
     }
 
     /**

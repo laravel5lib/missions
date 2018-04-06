@@ -1,145 +1,131 @@
 <template>
-    <div v-if="display">
+<div>
+    <div class="panel panel-default">
         <div class="panel-heading">
-            <div class="row">
-                <div class="col-xs-12 col-sm-8">
-                    <h5 v-if="fund">
-                        <a :href="'/admin/funds/' + fund.id" v-if="firstUrlSegment === 'admin'">
-                            {{ fund.name }}
-                        </a>
-                        <span v-else>
-                            {{ fund.name }}
-                        </span>
-                    </h5>
-                </div>
-                <div class="col-xs-12 col-sm-4 visible-xs">
-                    <div class="btn-group btn-group-sm btn-group-justified" role="group" aria-label="...">
-                        <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donor'}" @click="toggleView('donor')">Donors</a>
-                        <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donation'}" @click="toggleView('donation')">Transactions</a>
-                    </div>
-                </div>
-                <div class="col-xs-12 visible-xs" v-if="activeView !== 'donor'">
-                    <form class="form-inline">
-                        <div class="form-group">
-                            <label>Transaction Type</label>
-                            <select class="form-control input-sm" v-model="type">
-                                <option value=''>All</option>
-                                <option value='donation'>Donation</option>
-                                <option value='credit'>Credit</option>
-                                <option value='refund'>Refund</option>
-                                <option value='transfer'>Transfer</option>
-                            </select>
-                        </div><!-- form-group -->
-                    </form><!-- form-inline -->
-                </div>
-            </div>
+            <h3>
+                Donations <br />
+                <small v-cloak>
+                    <span class="text-success">{{ '$' + fund.balance }}</span> 
+                    <template v-if="fundraiser"> of {{ '$' + goalAmount }} raised</template>
+                </small>
+            </h3>
         </div>
-
-        <ul class="nav nav-tabs nav-justified hidden-xs">
-            <li role="presentation" :class="{'active': activeView === 'donor'}"><a type="button" @click="toggleView('donor')">Donors</a></li>
-            <li role="presentation" :class="{'active': activeView === 'activity'}"><a type="button" @click="toggleView('activity')">Activity</a></li>
-        </ul>
-        <!--<div class="btn-group btn-group-sm btn-group-justified hidden-xs" role="group" aria-label="...">-->
-            <!--<a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donor'}" @click="toggleView('donor')">Donors</a>-->
-            <!--<a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'activity'}" @click="toggleView('activity')">Activity</a>-->
-            <!--<a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donation'}" @click="toggleView('donation')">Donations</a>-->
-            <!--<a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'credit'}" @click="toggleView('credit')">Credits</a>-->
-            <!--<a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'refund'}" @click="toggleView('refund')">Refunds</a>-->
-            <!--<a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'transfer'}" @click="toggleView('transfer')">Transfers</a>-->
-        <!--</div>-->
-
-        <hr class="divider inv sm">
-        <div style="position:relative">
-            <spinner ref="spinner" global size="sm" text="Loading"></spinner>
-            <template v-if="activeView === 'donor'">
-                <div class="list-group">
-                    <div class="list-group-item" role="tab" :id="'heading-' + donor.id" v-for="donor in donors">
-                        <h5>
-                            {{ donor.name }} <span class="small">donated <span class="text-success">{{currency(donor.total_donated)}}</span></span>
-                        </h5>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 text-center">
-                        <nav>
-                            <ul class="pagination pagination-sm">
-                                <li>
-                                    <a>{{ donorPagination.total }} {{ activeView|capitalize }}s</a>
-                                </li>
-                                <li :class="{ 'disabled': donorPagination.current_page == 1 }">
-                                    <a aria-label="Previous" @click="donorPaginateBack">
-                                        <span aria-hidden="true">&laquo; Back</span>
-                                    </a>
-                                </li>
-                                <!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
-                                <li :class="{ 'disabled': donorPagination.current_page === donorPagination.total_pages && donorPagination.total_pages > donorPagination.current_page+1 }">
-                                    <a aria-label="Next" @click="donorPaginateNext">
-                                        <span aria-hidden="true">Next &raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </template>
-            <template v-if="activeView !== 'donor'">
-                <div class="list-group">
-                    <div class="list-group-item text-center" v-if="pagination.total === 0">No transactions found.</div>
-                    <div class="list-group-item" role="tab" :id="'heading' + transaction.id" v-for="transaction in transactions">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <h5><span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{ currency(transaction.amount) }}</span><span class="small"> &middot; {{ transaction.type.toUpperCase() }}</span>
-                                <small v-if="contains(['donation'], transaction.type)" class="small">by
+        <div class="panel-body">
+            <ul class="nav nav-pills">
+                <li role="presentation" :class="{'active': activeView === 'donor'}">
+                    <a type="button" @click="toggleView('donor')">Donors</a>
+                </li>
+                <li role="presentation" :class="{'active': activeView === 'transaction'}">
+                    <a type="button" @click="toggleView('transaction')">Transactions</a>
+                </li>
+            </ul>
+        </div>
+        <template v-if="activeView === 'donor'">
+            <table class="table table-hover table-responsive" v-if="donors.length">
+                <thead>
+                    <tr>
+                        <th class="col-sm-4">Donor</th>
+                        <th class="col-sm-2 text-right">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="donor in donors">
+                        <td class="col-sm-4">{{ donor.name }}</td>
+                        <td class="col-sm-2 text-right text-success">${{ donor.total_donated }}.00</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="panel-body text-center" v-else>
+                <p>You haven't recieved any donations yet.</p>
+            </div>
+        </template>
+        <template v-if="activeView !== 'donor'">
+            <table class="table table-hover table-responsive" v-if="transactions.length">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th class="text-right">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="transaction in transactions">
+                        <td class="col-sm-3 col-xs-4">
+                            {{ transaction.created_at|moment('ll')}}
+                        </td>
+                        <td class="col-sm-6 col-xs-4">
+                            <h5 style="margin-top: 0">{{ transaction.type.toUpperCase() }}
+                            <small v-if="contains(['donation'], transaction.type)" class="small">
+                                from
                                 <span v-if="!transaction.anonymous">{{ transaction.donor.data.name }}</span>
                                 <span v-else>an anonymous donor</span>
-                                 <!--on {{ transaction.created_at|moment('ll')}}--></small>
-                                </h5>
-                            </div><!-- end col -->
-                            <div class="col-sm-6">
-                                <h5 class="pull-right"><i class="fa fa-clock-o icon-left"></i> {{ transaction.created_at|moment('ll')}}</h5>
-                            </div><!-- end col -->
-                        </div><!-- end row -->
-                        <small v-if="transaction.details">
-                            <span v-if="transaction.details.comment">{{ transaction.details.comment }} <br></span>
-                            <span v-if="transaction.details.reason">{{ transaction.details.reason }} <br></span>
-                        </small>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-12 text-center">
-                        <nav>
-                            <ul class="pagination pagination-sm">
-                                <li>
-                                    <a>{{ pagination.total }} {{ pagination.total > 1 ? 'Activities' : 'Activity' }}</a>
-                                </li>
-                                <li :class="{ 'disabled': pagination.current_page == 1 }">
-                                    <a aria-label="Previous" @click="paginateBack">
-                                        <span aria-hidden="true">&laquo; Back</span>
-                                    </a>
-                                </li>
-                                <!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
-                                <li :class="{ 'disabled': pagination.current_page === pagination.total_pages && pagination.total_pages > pagination.current_page+1 }">
-                                    <a aria-label="Next" @click="paginateNext">
-                                        <span aria-hidden="true">Next &raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </template>
+                            </small>
+                            </h5>
+                            <p class="small" v-if="transaction.details">
+                                <em>
+                                <span v-if="transaction.details.comment">{{ transaction.details.comment }}</span>
+                                <span v-if="transaction.details.reason">{{ transaction.details.reason }}</span>
+                                </em>
+                            </p>
+                        </td>
+                        <td class="col-sm-3 col-xs-4 text-right">
+                            <span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">
+                                {{ currency(transaction.amount) }}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="panel-body text-center" v-else>
+                <p>No transactions were found.</p>
+            </div>
+        </template>
+        <div class="panel-footer text-right" v-if="fund && firstUrlSegment === 'admin'">
+            <a :href="'/admin/funds/' + fund.id" class="btn btn-link">
+               Go to Fund
+            </a>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <nav>
+                <ul class="pagination pagination-sm">
+                    <li>
+                        <a>{{ donorPagination.total }} {{ activeView|capitalize }}s</a>
+                    </li>
+                    <li :class="{ 'disabled': donorPagination.current_page == 1 }">
+                        <a aria-label="Previous" @click="donorPaginateBack">
+                            <span aria-hidden="true">&laquo; Back</span>
+                        </a>
+                    </li>
+                    <li :class="{ 'disabled': donorPagination.current_page === donorPagination.total_pages && donorPagination.total_pages > donorPagination.current_page+1 }">
+                        <a aria-label="Next" @click="donorPaginateNext">
+                            <span aria-hidden="true">Next &raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
 </template>
 <script type="text/javascript">
     var marked = require('marked');
     export default{
         name: 'funding',
-        props: ['fundId'],
+        props: {
+            fundraiser: {
+                type: Object,
+                default: null
+            },
+            fundId: {
+                type: String,
+                default: null
+            }
+        },
         data(){
             return {
-                fund: null,
+                fund: {},
                 donors: [],
                 transactions: [],
                 type: '',
@@ -157,6 +143,14 @@
             marked: marked,
         },
         computed:{
+            id: function() {
+                return this.fundraiser ? this.fundraiser.fund_id : this.fundId;
+            },
+            goalAmount: function() {
+                if (this.fundraiser) {
+                    return (this.fundraiser.goal_amount/100).toFixed(2)
+                }
+            },
             action: () =>  {
                 switch (this.type) {
                     case 'donation':
@@ -191,19 +185,15 @@
                 }
             },
             searchDonors(){
-                // this.$refs.spinner.show();
-                this.$http.get('funds/'+ this.fundId +'/donors', { params: {page: this.donorPagination.current_page} }).then((response) => {
+                this.$http.get('funds/'+ this.id +'/donors', { params: {page: this.donorPagination.current_page} }).then((response) => {
                     this.donors = _.toArray(response.data.data);
                     this.donorPagination = response.data.meta.pagination;
-                    // this.$refs.spinner.hide();
                 });
             },
             searchTransactions(type){
-                // this.$refs.spinner.show();
-                this.$http.get('transactions', { params: {include: 'donor', fund: this.fundId, page: this.pagination.current_page, per_page: this.per_page} }).then((response) => {
+                this.$http.get('transactions', { params: {include: 'donor', fund: this.id, page: this.pagination.current_page, per_page: this.per_page} }).then((response) => {
                     this.transactions = response.data.data;
                     this.pagination = response.data.meta.pagination;
-                    // this.$refs.spinner.hide();
                 });
             },
             donorPaginateBack() {
@@ -228,7 +218,7 @@
             },
         },
         mounted(){
-            this.$http.get('funds/' + this.fundId).then((response) => {
+            this.$http.get('funds/' + this.id).then((response) => {
                 this.fund = response.data.data;
             });
 

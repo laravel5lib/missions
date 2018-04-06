@@ -123,6 +123,12 @@ a.btn {
 .btn-danger {
   @include button-variant($btn-danger-color, $btn-danger-bg, $btn-danger-border);
 }
+.btn-facebook {
+  @include button-variant($btn-facebook-color, $btn-facebook-bg, $btn-facebook-border);
+}
+.btn-twitter {
+  @include button-variant($btn-twitter-color, $btn-twitter-bg, $btn-twitter-border);
+}
 
 // Hollow buttons
 // -------------------------
@@ -202,7 +208,26 @@ a.btn {
     text-decoration: none;
   }
 }
-
+.btn-facebook-hollow {
+  @include button-variant($brand-facebook, transparent, $btn-facebook-border);
+  &:hover,
+  &:focus,
+  &.focus {
+    color: lighten($brand-facebook, 10%) !important;
+    border-color: lighten($btn-facebook-border, 10%) !important;
+    text-decoration: none;
+  }
+}
+.btn-twitter-hollow {
+  @include button-variant($brand-twitter, transparent, $btn-twitter-border);
+  &:hover,
+  &:focus,
+  &.focus {
+    color: lighten($brand-twitter, 10%) !important;
+    border-color: lighten($btn-twitter-border, 10%) !important;
+    text-decoration: none;
+  }
+}
 
 // Link buttons
 // -------------------------

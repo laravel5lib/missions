@@ -16,6 +16,7 @@
 		<div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers" style="min-height: 350px;">
 			<div class="panel panel-default" v-if="isVisible(fundraiser)">
 				<div class="panel-heading">
+					<img :src="fundraiser.featured_image" :alt="fundraiser.name" class="img-responsive">
 					<h6 class="text-center">{{ fundraiser.name }}</h6>
 				</div>
 				<div class="panel-body">

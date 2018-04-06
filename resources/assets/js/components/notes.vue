@@ -4,11 +4,11 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-6">
-                    <h3>Notes</h3>
+                    <h5>Notes</h5>
                 </div>
                 <div class="col-xs-6 text-right" v-if="app.user.can.create_notes">
                     <hr class="divider inv sm"
-                    <button class="btn btn-primary" @click="prepareNew">
+                    <button class="btn btn-primary btn-sm" @click="prepareNew">
                         <span v-if="! newMode">New <i class="fa fa-plus"></i></span>
                         <span v-if="newMode">List <i class="fa fa-list-ul"></i></span>
                     </button>
@@ -220,7 +220,8 @@
                 }
             },
             create() {
-                event.preventDefault();
+                if (event)
+                    event.preventDefault();
                 $.extend(this.selectedNote, {'user_id' : this.userId});
 
                 this.$http.post('notes', this.selectedNote).then(() => {
@@ -232,7 +233,8 @@
                 });
             },
             edit() {
-                event.preventDefault();
+                if (event)
+                    event.preventDefault();
                 this.$http.put('notes/' + this.selectedNote.id, this.selectedNote).then(() => {
                     this.reset();
                     this.fetch();
@@ -242,7 +244,8 @@
                 });
             },
             reset() {
-                event.preventDefault();
+                if (event)
+                    event.preventDefault();
                 this.selectedNote.id = null;
                 this.selectedNote.subject = null;
                 this.selectedNote.content = null;
@@ -263,7 +266,6 @@
         },
         mounted() {
             this.fetch()
-            console.log(MissionsMe.user.can.create_notes);
         }
     }
 </script>

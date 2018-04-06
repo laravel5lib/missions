@@ -25,7 +25,7 @@
         <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="userMenu">
           <li>
             <a href="{{ url('/dashboard/settings') }}" id="top-profile-link">
-              <i class="fa fa-user-circle"></i> My Account
+              <i class="fa fa-user-circle"></i> Profile Settings
             </a>
           </li>
           <li>
@@ -64,10 +64,10 @@
         </li>
       @endif
 
-      @unless(request()->route()->named('fundraiser') or isset($isProfile))
+      @unless(isset($fundraiser) or isset($isProfile) or auth()->check())
       <li>
         <div class="hidden-xs" style="margin-right:20px;">
-          <a class="btn btn-default-hollow" href="{{ url('/donate') }}">Donate</a>
+          <a class="btn btn-default-hollow" href="{{ url('/give-a-donation') }}">Donate</a>
         </div>
       </li>
       @endunless

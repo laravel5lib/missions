@@ -29,8 +29,8 @@ class Kernel extends ConsoleKernel
         Commands\Utilities\ExportReservationProfilePics::class,
         \Bugsnag\BugsnagLaravel\Commands\DeployCommand::class,
         Commands\RunScenario::class,
-        Commands\AssignRoleToUser::class,
-        Commands\RemoveRoleFromUser::class
+        Commands\SendReminders::class,
+        Commands\TransferFundraiserMedia::class
     ];
 
     /**
@@ -45,6 +45,8 @@ class Kernel extends ConsoleKernel
                   ->daily()
                   ->timezone('America/Detroit')
                   ->withoutOverlapping();
+
+        $schedule->command('reminders:send')->daily();
     }
     /**
      * Register the Closure based commands for the application.

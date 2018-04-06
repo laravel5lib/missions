@@ -24,7 +24,7 @@ class RepresentativeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|unique:representatives,name',
+            'name' => 'required|string',
             'email' => 'string|nullable',
             'phone' => 'string|nullable',
             'ext' => 'string|nullable'

@@ -1,7 +1,7 @@
 <template>
     <div>
-        <spinner ref="spinner" global size="sm" text="Loading"></spinner>
-        <template v-if="isUser">
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
+        <template>
         <div class="panel panel-default panel-body">
             <div class="row">
                 <div class="col-xs-8">
@@ -49,7 +49,7 @@
         </div>
         <div class="row" v-if="stories.length < 1">
             <div class="col-xs-12">
-                <p class="lead text-muted text-center">No stories yet.</p>
+                <p class="lead text-muted text-center">No updates yet.</p>
             </div>
         </div>
         <div class="panel panel-default" v-for="(story, index) in stories">
@@ -67,7 +67,7 @@
                         <h5 class="media-heading" style="margin:4px 0 10px;"><a href="#">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment('ll') }}.</small></h5>
                     </div>
                     <div class="col-sm-4 text-right hidden-xs">
-                        <div style="padding: 0;" v-if="isUser">
+                        <div style="padding: 0;">
                             <div role="group" aria-label="...">
                                 <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,editMode = story.id"><i class="fa fa-pencil"></i> Edit</a>
                                 <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,deleteModal = true"><i class="fa fa-trash"></i> Delete</a>
@@ -75,7 +75,7 @@
                         </div>
                     </div>
                     <div class="col-sm-4 text-center visible-xs">
-                        <div style="padding: 0;" v-if="isUser">
+                        <div style="padding: 0;">
                             <div role="group" aria-label="...">
                                 <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,editMode = story.id"><i class="fa fa-pencil"></i> Edit</a>
                                 <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,deleteModal = true"><i class="fa fa-trash"></i> Delete</a>
@@ -119,7 +119,7 @@
             <pagination :pagination="pagination" pagination-key="pagination" :callback="searchStories"></pagination>
         </div>
 
-        <modal v-if="isUser" :value="deleteModal" @closed="deleteModal=false" title="Remove Passport" :small="true">
+        <modal :value="deleteModal" @closed="deleteModal=false" title="Remove Passport" :small="true">
             <div slot="modal-body" class="modal-body">Delete this Story?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -165,7 +165,8 @@
             },
         },
         methods:{
-            marked: marked, removeStory(story){
+            marked: marked, 
+            removeStory(story){
                 if(story) {
                     this.$http.delete('stories/' + story.id).then((response) => {
                         this.stories = _.reject(this.stories, (item) => {

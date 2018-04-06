@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\v1\Fundraiser;
 use App\Models\v1\Representative;
 use Artesaos\SEOTools\Facades\SEOMeta;
 
@@ -35,6 +36,18 @@ Route::prefix('reservations')->group(function () {
     Route::get('create', 'ReservationsController@create');
     Route::get('{id}/edit', 'ReservationsController@edit');
     Route::get('{id}/{tab?}', 'ReservationsController@show');
+});
+
+Route::get('/funds/{fund}/fundraisers/create', '\App\Http\Controllers\Web\FundraisersController@create');
+Route::get('/fundraisers/{fundraiser}/edit', '\App\Http\Controllers\Web\FundraisersController@edit');
+Route::get('/fundraisers/{fundraiser}/updates', function(Fundraiser $fundraiser) {
+    return view('site.fundraisers.updates', compact('fundraiser'));
+});
+Route::get('/fundraisers/{fundraiser}/donations', function(Fundraiser $fundraiser) {
+    return view('site.fundraisers.donations', compact('fundraiser'));
+});
+Route::get('/fundraisers/{fundraiser}/sharing', function(Fundraiser $fundraiser) {
+    return view('site.fundraisers.sharing', compact('fundraiser'));
 });
 
 Route::get('causes/{cause_id}/projects/create', 'ProjectsController@create');

@@ -68,10 +68,6 @@ class TripsController extends Controller
     {
         $trip = $this->trip->create($request->all());
 
-        if ($request->has('tags')) {
-            $trip->tag($request->get('tags'));
-        }
-
         return $this->response->item($trip, new TripTransformer);
     }
 
@@ -88,10 +84,6 @@ class TripsController extends Controller
         $trip->syncDeadlines($request->get('deadlines'));
         $trip->syncRequirements($request->get('requirements'));
         // $trip->syncCosts($request->get('costs'));
-
-        if ($request->has('tags')) {
-            $trip->tag($request->get('tags'));
-        }
 
         return $this->response->item($trip, new TripTransformer);
     }
@@ -122,8 +114,9 @@ class TripsController extends Controller
             'prospects'       => $request->get('prospects', $trip->prospects),
             'team_roles'      => $request->get('team_roles', $trip->team_roles),
             'description'     => $request->get('description', $trip->description),
-            'published_at'    => $request->get('published_at', $trip->published_at),
-            'companion_limit' => $request->get('companion_limit', $trip->companion_limit)
+            'published_at'    => $request->has('published_at') ? trim($request->get('published_at')) : $trip->published_at,
+            'companion_limit' => $request->get('companion_limit', $trip->companion_limit),
+            'public'          => $request->get('public', $trip->public)
         ]);
 
         if ($request->has('tags')) {

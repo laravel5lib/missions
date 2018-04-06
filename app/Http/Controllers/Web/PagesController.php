@@ -35,7 +35,9 @@ class PagesController extends Controller
         $fundraiser = $this->fundraiser->where('url', $slug)->first();
 
         if ($fundraiser) {
-            return redirect($fundraiser->sponsor->slug->url.'/'.$slug);
+            $fundraiser->slug()->firstOrCreate(['url' => $slug]);
+
+            return redirect($slug);
         }
 
         return $this->load_page($slug);
@@ -60,7 +62,8 @@ class PagesController extends Controller
         $controllers = collect([
             'campaigns' => '\CampaignsController',
             'groups' => '\GroupsController',
-            'users' => '\UsersController'
+            'users' => '\UsersController',
+            'fundraisers' => '\FundraisersController'
         ]);
 
         return app($namespace.$controllers->get($resource->slugable_type))

@@ -56,7 +56,7 @@
                         console.log('validation errors');
                         self.$root.$emit('showError', 'Could not submit. Please check the form.');
                     } else {
-                        self.referral.responded_at = moment().format('YYYY-MM-DD HH:MM:SS');
+                        self.referral.responded_at = moment().format('YYYY-MM-DD HH:mm:ss');
                         self.$http.put('referrals/' + self.id, self.referral).then((response) => {
                             self.$root.$emit('showSuccess', 'Thank you for submitting your response.');
                         },() =>  {

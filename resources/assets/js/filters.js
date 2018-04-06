@@ -14,6 +14,27 @@ Vue.filter('percentage', (number, decimals) => {
 });
 
 /**
+ * Vue filter to convert the given value to whole dollars, no change.
+ * http://jsfiddle.net/bryan_k/2t6bqqfc/
+ *
+ * @param {String} value The value string.
+ */
+/*Vue.filter('currency', (value, symbol) => {
+  if(!value) {
+    value = 0;
+  }
+
+  if(!symbol) {
+    symbol = '$';
+  }
+
+  value = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',').split('.')[0];
+  if (symbol)
+    return value;
+  return symbol + value;
+});*/
+
+/**
  * MVC concept of handling dates.
  * Model/Server -> UTC | Vue Model/Controller -> UTC | View/Template -> Local
  * This filter should convert date assigned property from UTC to local

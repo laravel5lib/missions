@@ -1,5 +1,5 @@
 <template>
-    <a class="btn" :class="type + ' ' + size" @click="execute">{{text}} <i v-if="icon" :class="icon"></i></a>
+    <a class="btn" :class="[type,size]" @click="execute">{{text}} <i v-if="icon" :class="icon"></i></a>
 </template>
 <script type="text/javascript">
     export default{

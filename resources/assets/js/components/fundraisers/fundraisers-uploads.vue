@@ -23,7 +23,7 @@
 					                <button @click.prevent="toggleUploader('feature', 1)" class="btn btn-default-hollow btn-sm">Choose</button>
 					                <button @click.prevent="toggleUploader('feature', 2)" class="btn btn-default btn-sm">Upload</button>
 				                </div>
-				                <upload-create-update v-if="toggleUpload.feature.show" type="banner" :name="randName" lock-type ui-locked :ui-selector="toggleUpload.feature.UI" is-child :tags="['Fundraiser']" :width="1920" :height="1080"  @uploads-complete="uploadsComplete"></upload-create-update>
+				                <upload-create-update v-if="toggleUpload.feature.show" type="banner" :name="randName" lock-type ui-locked :ui-selector="toggleUpload.feature.UI" type-path="/images/fundraiser_photos" is-child :tags="['Fundraiser']" :width="1920" :height="1080"  @uploads-complete="uploadsComplete"></upload-create-update>
 			                </div>
 		                </div>
 		                <div class="row">
@@ -34,7 +34,7 @@
 					                <button @click.prevent="toggleUploader('secondary', 1)" class="btn btn-default-hollow btn-sm">Choose</button>
 					                <button @click.prevent="toggleUploader('secondary', 2)" class="btn btn-default btn-sm">Upload</button>
 				                </div>
-				                <upload-create-update v-if="toggleUpload.secondary.show" type="banner" :name="randName" lock-type ui-locked :ui-selector="toggleUpload.secondary.UI" is-child :tags="['Fundraiser']" :width="1920" :height="1080"  @uploads-complete="uploadsComplete"></upload-create-update>
+				                <upload-create-update v-if="toggleUpload.secondary.show" type="banner" :name="randName" lock-type ui-locked :ui-selector="toggleUpload.secondary.UI" type-path="/images/fundraiser_photos" is-child :tags="['Fundraiser']" :width="1920" :height="1080"  @uploads-complete="uploadsComplete"></upload-create-update>
 			                </div>
 		                </div>
 		                <div class="row">
@@ -346,7 +346,7 @@
                                 vjsOptions.sources = [{ type: 'video/vimeo', src: video.source}];
                                 break;
                         }
-                        videojs(vjsId, vjsOptions, function(){
+                        videojs(document.getElementById(vjsId), vjsOptions, function(){
                             // Player (this) is initialized and ready.
                         });
                     });

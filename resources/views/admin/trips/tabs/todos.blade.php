@@ -6,7 +6,7 @@
     <div class="panel-heading">
         <div class="row">
             <div class="col-xs-8">
-                <h3>Todos</h3>
+                <h5>Todos</h5>
             </div>
             <div class="col-xs-4 text-right">
                 <hr class="divider inv sm">

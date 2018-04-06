@@ -6,7 +6,9 @@ use App\Models\v1\User;
 use Illuminate\Http\Request;
 use App\Utilities\v1\Country;
 use App\Jobs\SendWelcomeEmail;
+use App\Jobs\SendVerificationEmail;
 use App\Http\Controllers\Controller;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -144,16 +146,54 @@ class RegisterController extends Controller
             'gender' => $data['gender'],
             'birthday' => $data['birthday'],
             'country' => $data['country'],
-            'timezone' => $data['timezone']
+            'timezone' => $data['timezone'],
+            'email_token' => base64_encode($data['email'])
         ]);
 
         $user->slug()->create([
             'url' => generate_slug($data['first_name'].$data['last_name'])
         ]);
 
-        dispatch(new SendWelcomeEmail($user));
-
         return $user;
+    }
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        dispatch(new SendVerificationEmail($user));
+
+        return view('auth.verify')->with('user', $user);
+    }
+
+    /**
+    * Handle a email verification request for the application.
+    *
+    * @param $token
+    * @return \Illuminate\Http\Response
+    */
+    public function confirm($token)
+    {
+        $user = User::where('email_token', $token)->firstOrFail();
+
+        $user->verified = 1;
+
+        if ($user->save()) {
+
+            dispatch(new SendWelcomeEmail($user));
+
+            $this->guard()->login($user);
+
+            return redirect()->intended($this->redirectPath());
+        }
     }
 
      /**

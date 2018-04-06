@@ -6,6 +6,7 @@
                 <div class="panel panel-default">
                     <!--<img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">-->
                     <div class="panel-body">
+                        <img :src="fundraiser.featured_image_url" :alt="fundraiser.name" class="img-responsive">
                         <h5>{{ fundraiser.name }}</h5>
                         <h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;">Expires: {{ fundraiser.ended_at | moment('ll')  }}</h6>
                         <h3><span class="text-success">{{ currency(fundraiser.raised_amount) }}</span> <small>Raised</small></h3>

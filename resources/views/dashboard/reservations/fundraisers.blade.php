@@ -48,7 +48,7 @@
                                 </div>
                             </div>
                             <div class="panel-footer">
-                                <a href="{{ url()->current() . '/' . $fundraiser->id . '/donations' }}" class="btn btn-sm btn-block btn-primary">View Donations</a>
+                                <a href="{{ url()->current() . '/' . $fundraiser->uuid . '/donations' }}" class="btn btn-sm btn-block btn-primary">View Donations</a>
 
                             </div>
                         </div>

@@ -7,14 +7,17 @@ use App\Models\v1\Team;
 use App\Models\v1\Region;
 use App\Traits\Rewardable;
 use App\Traits\Promoteable;
-use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
+use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\Models\Media;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
-class Campaign extends Model
+class Campaign extends Model implements HasMedia
 {
-    use SoftDeletes, Filterable, UuidForKey, Taggable, Promoteable;
+    use SoftDeletes, Filterable, UuidForKey, Promoteable, HasMediaTrait;
 
     /**
      * The table associated with the model.
@@ -47,6 +50,10 @@ class Campaign extends Model
     ];
 
     protected $casts = [
+        'publish_squads' => 'boolean',
+        'publish_regions' => 'boolean',
+        'publish_rooms' => 'boolean', 
+        'publish_transports' => 'boolean', 
         'reservations_locked' => 'boolean'
     ];
 
@@ -64,6 +71,14 @@ class Campaign extends Model
      * @var bool
      */
     public $timestamps = true;
+
+    public function registerMediaConversions(Media $media = null)
+    {
+        $this->addMediaConversion('optimized')
+             ->optimize()
+             ->fit(Manipulations::FIT_MAX, 400, 400)
+             ->nonQueued();
+    }
 
     /**
      * Set the campaign's countries.
@@ -118,10 +133,10 @@ class Campaign extends Model
         }
 
         if ($this->published_at and $this->published_at->isPast()) {
-            return 'Published';
+            return 'Public';
         }
 
-        return 'Draft';
+        return 'Private';
     }
 
     public function regions()
@@ -294,5 +309,10 @@ class Campaign extends Model
         }
 
         return $this->avatar;
+    }
+
+    public function isPublished()
+    {
+        return $this->published_at && ! $this->published_at->isFuture();
     }
 }

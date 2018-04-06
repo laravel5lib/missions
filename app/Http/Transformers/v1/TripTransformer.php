@@ -52,11 +52,10 @@ class TripTransformer extends TransformerAbstract
             'team_roles'      => $trip->team_roles ?: [],
             'description'     => $trip->description,
             'public'          => (boolean) $trip->public,
-            'published_at'    => $trip->published_at ? $trip->published_at->toDateTimeString() : null,
-            'closed_at'       => $trip->closed_at->toDateTimeString(),
-            'created_at'      => $trip->created_at->toDateTimeString(),
-            'updated_at'      => $trip->updated_at->toDateTimeString(),
-            'tags'            => $trip->tagNames(),
+            'published_at'    => $trip->published_at ? $trip->published_at->toIso8601String() : null,
+            'closed_at'       => $trip->closed_at ? $trip->closed_at->toIso8601String() : null,
+            'created_at'      => $trip->created_at->toIso8601String(),
+            'updated_at'      => $trip->updated_at->toIso8601String(),
             'links'           => [
                 [
                     'rel' => 'self',

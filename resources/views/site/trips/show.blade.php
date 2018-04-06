@@ -16,6 +16,7 @@
                     <hr class="divider inv">
                 </div>
             </div><!-- end col -->
+            @if($trip->campaign->slug)
             <div class="col-sm-4 text-right hidden-xs">
                 <hr class="divider inv">
                 <hr class="divider inv sm">
@@ -29,6 +30,7 @@
                 </a>
                 <hr class="divider inv">
             </div>
+            @endif
         </div>
     </div>
 </div>
@@ -60,8 +62,13 @@
 
                     @if($trip->status <> 'active')
                         <btn class="btn btn-default btn-lg btn-block" disabled>Registration Closed</btn>
+                    @elseIf(!$trip->public)
+                        <btn class="btn btn-default btn-lg btn-block" disabled>Private Registration</btn>
+                        <h5 class="text-center">
+                            <small>Please contact your team coordinator to learn how to register for this trip.</small>
+                        </h5>
                     @else
-                        <a href="/trips/{{ $trip->id }}/register" class="btn btn-info btn-lg btn-block">
+                        <a href="/trips/{{ $trip->id }}/register" class="btn btn-primary btn-lg btn-block">
                             @if(auth()->check())
                                 Register Now
                             @else
@@ -70,7 +77,7 @@
                         </a>
                     @endif
 
-                    @unless($trip->reservations->count() < 2)
+                    @unless($trip->reservations->count() < 20 || !$trip->public)
                         <h5 class="text-center">
                             <small>{{ $trip->reservations->count() }} people have registered for this trip.</small>
                         </h5>
@@ -95,7 +102,7 @@
 
                     <h6 class="text-uppercase text-center">
                         <img class="img-xs img-circle av-left"
-                             src="../images/why-mm/{{ strtolower(str_replace(' ', '', $trip->difficulty)) }}.png"
+                             src="../images/why-mm/{{ strtolower(str_replace('_', '', $trip->difficulty)) }}.png"
                              alt="{{ $trip->difficulty }}"
                         >
                         Difficulty

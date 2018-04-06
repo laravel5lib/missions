@@ -68,11 +68,13 @@ class CampaignsController extends Controller
      */
     public function edit($id)
     {
-        $this->authorize('update', $this->campaign);
+        $campaign = $this->campaign->findOrFail($id);
+
+        $this->authorize('update', $campaign);
 
         $this->seo()->setTitle('Edit Campaign');
 
-        return view('admin.campaigns.edit')->with('campaignId', $id);
+        return view('admin.campaigns.edit')->with(compact('campaign'));
     }
 
     /**

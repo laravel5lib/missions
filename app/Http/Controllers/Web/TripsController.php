@@ -22,8 +22,8 @@ class TripsController extends Controller
             return $response;
         }
 
-        if (! $trip->public) {
-            abort(403);
+        if (! $trip->isPublished()) {
+            abort(404);
         }
 
         $this->seo()->setTitle($trip->group->name.' - '.ucwords($trip->type).' Trip');
@@ -43,6 +43,10 @@ class TripsController extends Controller
         }
 
         $this->seo()->setTitle('Register for '.$trip->group->name.'\'s '.ucwords($trip->type).' Trip');
+
+        if (! $trip->public) {
+            abort(403);
+        }
 
         return view('site.trips.register')->with('trip', $trip);
     }

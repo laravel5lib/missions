@@ -13,6 +13,7 @@
     </div>
     <hr class="divider inv lg">
     <div class="container" v-tour-guide="">
+
         <div class="well well-default">
             <div class="row">
                 <div class="col-sm-4">

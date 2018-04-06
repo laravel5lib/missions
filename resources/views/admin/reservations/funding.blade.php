@@ -1,21 +1,18 @@
 @extends('admin.reservations.show')
 
 @section('tab')
-
-    <ul class="nav nav-tabs">
-        <li role="presentation" class="active"><a href="#funds" data-toggle="tab">Funds</a></li>
-        <li role="presentation"><a href="#fundraiser" data-toggle="tab">Fundraiser</a>
-        </li>
-    </ul>
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="funds">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-xs-6">
+                        <div class="col-xs-4">
                             <h5>Funding</h5>
                         </div>
-                        <div class="col-xs-6 text-right">
+                        <div class="col-xs-8 text-right">
+                            @if($reservation->fund->fundraisers->count())
+                                <a class="btn btn-sm btn-default-hollow" href="/admin/fundraisers/{{ $reservation->fund->fundraisers->first()->uuid }}/edit">Manage Fundraiser</a>
+                            @else
+                                <a class="btn btn-sm btn-default-hollow" href="/admin/funds/{{ $reservation->fund->id }}/fundraisers/create">Start a Fundraiser</a>
+                            @endif
                             <a href="/donate/{{ $reservation->fund->slug }}" target="_blank" class="btn btn-sm btn-primary">
                                 Make Donation
                             </a>
@@ -42,16 +39,8 @@
                             <h2 class="text-info" style="margin-top:0;">${{ number_format($reservation->totalOwedInDollars(),2) }}</h2>
                         </div>
                     </div><!-- end row -->
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <funding fund-id="{{ $reservation->fund->id }}"></funding>
-                        </div>
-                    </div>
                 </div><!-- end panel-body -->
             </div><!-- end panel -->
-        </div>
-        <div role="tabpanel" class="tab-pane" id="fundraiser">
-            <fundraiser-collection fund-id="{{ $reservation->fund->id }}"></fundraiser-collection>
-        </div>
-    </div>
+
+            <funding fund-id="{{ $reservation->fund->id }}"></funding>
 @endsection

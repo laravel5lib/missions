@@ -21,14 +21,6 @@
     @yield('styles')
 
     @prod
-        <!-- Google Optimize -->
-        <style>.async-hide { opacity: 0 !important} </style>
-        <script>(function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date;
-        h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
-        (a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c;
-        })(window,document.documentElement,'async-hide','dataLayer',4000,
-        {'GTM-P4Q7LGP':true});</script>
-
         <!-- Google Analytics -->
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -107,7 +99,7 @@
     <script src="{{ mix('js/app.js') }}"></script>
     @yield('scripts')
 
-    {{--  <script>
+    <!-- <script>
         // Popup control
 		$(document).ready(function(){
             if($.cookie('showpopup') == 'false'){
@@ -122,33 +114,6 @@
                 $.cookie('showpopup', false, { expires: date });
 			});
 		});
-	</script>  --}}
-
-    @prod
-    <!-- Hotjar Tracking Code for https://missions.me -->
-    <script>
-        (function(h,o,t,j,a,r){
-            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-            h._hjSettings={hjid:587057,hjsv:6};
-            a=o.getElementsByTagName('head')[0];
-            r=o.createElement('script');r.async=1;
-            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-            a.appendChild(r);
-        })(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
-    </script>
-    @endprod
-    @stage
-    <!-- Hotjar Tracking Code for https://missions.me -->
-    <script>
-        (function(h,o,t,j,a,r){
-            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-            h._hjSettings={hjid:677622,hjsv:6};
-            a=o.getElementsByTagName('head')[0];
-            r=o.createElement('script');r.async=1;
-            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-            a.appendChild(r);
-        })(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
-    </script>
-    @endstage
+	</script> -->
 </body>
 </html>

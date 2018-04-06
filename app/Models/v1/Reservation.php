@@ -513,15 +513,7 @@ class Reservation extends Model
         if ($this->fundraisers->count()) {
             
             $this->fundraisers()->first()->update([
-                'goal_amount' => $this->getTotalCost()/100,
-                'ended_at' => $this->trip
-                    ->activeCosts()
-                    ->type('incremental')
-                    ->first()
-                    ->payments
-                    ->last()
-                    ->due_at
-                    ->toDateTimeString()
+                'goal_amount' => $this->getTotalCost()/100
             ]);
         }
 

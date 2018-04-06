@@ -26,7 +26,6 @@
         "bugsnag/bugsnag-laravel": "^2.4",
         "pda/pheanstalk": "~3.0",
         "doctrine/dbal": "^2.5",
-        "jeffochoa/factory-stories": "^1.0",
         "laracademy/interactive-make": "^1.1",
         "laravel/tinker": "~1.0",
         "laravel/passport": "^5.0",

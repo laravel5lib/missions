@@ -14,10 +14,6 @@ class ProjectTablesSeeder extends Seeder
      */
     public function run()
     {
-        $cause = (new AngelHouseCauseWithInitiatives)->create();
-        (new ActiveProject)->times(20)->create(['cause_id' => $cause['id']]);
-
-        $cause = (new CleanWaterCauseWithInitiatives)->create();
-        (new ActiveProject)->times(10)->create(['cause_id' => $cause['id']]);
+        //
     }
 }

@@ -11,14 +11,6 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        (new AdminWithEverything)->create(['email' => 'admin@missions.me']);
-
-        (new InternWithEverything)->create([
-            'email' => 'intern@missions.me'
-        ]);
-
-        (new InternWithEverything)->times(10)->create();
-        (new UserWithEverything)->times(10)->create();
-        (new NewUser)->times(10)->create();
+        //
     }
 }

@@ -28,13 +28,6 @@ class TripTableSeeder extends Seeder
      */
     public function run()
     {
-        (new CurrentCampaignWithTripsAndInterests)->create(['name' => 'The New Honduras', 'country_code' => 'hn']);
-        (new CurrentCampaignWithTripsAndInterests)->create(['name' => 'The Best Dominican', 'country_code' => 'do']);
-        (new CurrentCampaignWithTripsAndInterests)->create(['name' => 'Nicaragua Shines', 'country_code' => 'ni']);
-        // (new ArchivedCampaignWithTripsAndReservations)->times(3)->create();
-
-        (new NewReservation)->times(20)->create();
-        (new InProgressReservation)->times(30)->create();
-        // (new TravelReadyReservation)->times(10)->create();
+        //
     }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b62e3071b79b32619ae9b67365204e12",
+    "content-hash": "0043b03960e8643127163f31be3f5b9d",
     "packages": [
         {
             "name": "artesaos/seotools",
@@ -2085,50 +2085,6 @@
                 }
             ],
             "time": "2015-04-20T18:58:01+00:00"
-        },
-        {
-            "name": "jeffochoa/factory-stories",
-            "version": "1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jeffochoa/factory-stories.git",
-                "reference": "b4508925bdcd7311b33947e6ebdf7ea820e96c66"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jeffochoa/factory-stories/zipball/b4508925bdcd7311b33947e6ebdf7ea820e96c66",
-                "reference": "b4508925bdcd7311b33947e6ebdf7ea820e96c66",
-                "shasum": ""
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "FactoryStories\\Providers\\ServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "FactoryStories\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jeff Ochoa"
-                }
-            ],
-            "description": "Create model factory stories inLaravel 5.*",
-            "homepage": "https://github.com/jeffochoa/factory-stories",
-            "keywords": [
-                "factory",
-                "laravel"
-            ],
-            "time": "2017-09-06T19:33:45+00:00"
         },
         {
             "name": "jeremeamia/SuperClosure",

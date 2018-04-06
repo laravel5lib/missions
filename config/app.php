@@ -159,7 +159,6 @@ return [
         Barryvdh\Cors\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
-        FactoryStories\Providers\ServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Laracademy\Commands\MakeServiceProvider::class,
         Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,

@@ -178,15 +178,15 @@ class EventServiceProvider extends ServiceProvider
             }
         });
 
-        Due::updated(function ($due) {
-            if ($due->payable->fund->fundraisers()->count()) {
-                $fundraiser = $due->payable->fund->fundraisers()->first();
+        // Due::updated(function ($due) {
+        //     if ($due->payable->fund->fundraisers()->count()) {
+        //         $fundraiser = $due->payable->fund->fundraisers()->first();
 
-                if ($due->payable_type === 'reservations' && $due->payment->cost->type === 'incremental') {
-                    $fundraiser->ended_at = $due->due_at->toDateTimeSTring();
-                    $fundraiser->save();
-                }
-            }
-        });
+        //         if ($due->payable_type === 'reservations' && $due->payment->cost->type === 'incremental') {
+        //             $fundraiser->ended_at = $due->due_at->toDateTimeSTring();
+        //             $fundraiser->save();
+        //         }
+        //     }
+        // });
     }
 }

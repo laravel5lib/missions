@@ -26,8 +26,10 @@ class ReservationFundraiserFactory
 
     private function getDeadline()
     {
-        $cost = $this->reservation->trip->activeCosts()->type('incremental')->first();
+        return $this->reservation->trip->started_at->toDateTimeString();
         
-        return $cost->payments->last()->due_at->toDateTimeString();
+        // $cost = $this->reservation->trip->activeCosts()->type('incremental')->first();
+        
+        // return $cost->payments->last()->due_at->toDateTimeString();
     }
 }

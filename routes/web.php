@@ -100,6 +100,9 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
 $this->get('/victoriaorozco/nicaragua-2018-50', function() {
     return redirect ('/send-victoria-to-nicaragua');
 });
+$this->get('/jessicawright3390/dominican-republic-2018-10', function() {
+    return redirect('/jessica-dominican-republic-2018-10');
+});
 $this->get('/signup/{slug}', function ($slug) {
     return redirect('/'.$slug.'/signup');
 });

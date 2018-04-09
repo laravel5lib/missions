@@ -43,7 +43,7 @@
                         <div class="col-sm-6">
                             <div class="input-group" :class="{ 'has-error': errors.has('password') }">
                                 <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password"
-                                       name="password="{ minlength:8 }" placeholder" v-validate="Enter password">
+                                       name="password" placeholder="Enter password" v-validate="'required|min:8'">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
                                         <i class="fa fa-eye" v-if="!showPassword"></i>
@@ -55,7 +55,7 @@
                         <div class="col-sm-6">
                             <div class="input-group" :class="{ 'has-error': errors.has('passwordconfirmation') }">
                                 <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password_confirmation"
-                                       name="passwordconfirmation="{ minlength:8 }" placeholder" v-validate="Enter password again">
+                                       name="passwordconfirmation" placeholder="Enter password again" v-validate="'required|min:8'">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
                                         <i class="fa fa-eye" v-if="!showPassword"></i>

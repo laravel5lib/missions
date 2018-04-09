@@ -6,10 +6,11 @@ use Carbon\Carbon;
 use App\UuidForKey;
 use App\Traits\Rewardable;
 use Conner\Tagging\Taggable;
+use App\Utilities\v1\TeamRole;
 use EloquentFilter\Filterable;
 use Illuminate\Support\Facades\DB;
-use App\Models\v1\RequirementCondition;
 use App\Events\ReservationWasProcessed;
+use App\Models\v1\RequirementCondition;
 use Illuminate\Database\Eloquent\Model;
 use App\Jobs\Reservations\SyncPaymentsDue;
 use Illuminate\Database\Eloquent\Collection;
@@ -556,28 +557,47 @@ class Reservation extends Model
             ];
         })->each(function ($requirement) {
 
-            // if conditions apply
-            if (RequirementCondition::where('requirement_id', $requirement['requirement_id'])->count()) {
-                    $matches = collect([]);
 
-                    RequirementCondition::where('requirement_id', $requirement['requirement_id'])->get()->each(function ($condition) use ($matches) {
-                        if ($condition->type === 'role') {
-                            $matches->push(in_array($this->desired_role, $condition->applies_to));
-                        } elseif ($condition->type === 'age') {
-                            $matches->push($this->age < (int) $condition->applies_to[0]);
-                        } else {
-                            $matches->push(false);
-                        }
-                    });
+            if ($requirement['document_type'] === 'minor_releases') {
 
-                    // if all conditions match
-                if (! in_array(false, $matches->all())) {
-                    $this->requirements()->create($requirement);
-                }
+                $this->age < 19 ? $this->requirements()->create($requirement) : null;
+            
+            } elseif ($requirement['document_type'] === 'media_credentials') {
+
+                $this->desired_role === 'MEDI' ? $this->requirements()->create($requirement) : null;
+
+            } elseif ($requirement['document_type'] === 'medical_credentials') {
+
+                in_array($this->desired_role, array_keys(TeamRole::medical())) 
+                ? $this->requirements()->create($requirement) 
+                : null;
+                
             } else {
-                // if not conditions apply
                 $this->requirements()->create($requirement);
             }
+
+            // if conditions apply
+            // if (RequirementCondition::where('requirement_id', $requirement['requirement_id'])->count()) {
+            //         $matches = collect([]);
+
+            //         RequirementCondition::where('requirement_id', $requirement['requirement_id'])->get()->each(function ($condition) use ($matches) {
+            //             if ($condition->type === 'role') {
+            //                 $matches->push(in_array($this->desired_role, $condition->applies_to));
+            //             } elseif ($condition->type === 'age') {
+            //                 $matches->push($this->age < (int) $condition->applies_to[0]);
+            //             } else {
+            //                 $matches->push(false);
+            //             }
+            //         });
+
+            //         // if all conditions match
+            //     if (! in_array(false, $matches->all())) {
+            //         $this->requirements()->create($requirement);
+            //     }
+            // } else {
+            //     // if not conditions apply
+            //     $this->requirements()->create($requirement);
+            // }
         });
     }
 

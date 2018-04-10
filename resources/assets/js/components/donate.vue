@@ -161,14 +161,14 @@
 									<label>Donor's Name</label>
 									<div class="row">
 										<div class="col-sm-6">
-											<input type="text" class="form-control" v-model="donor.first_name"
+											<input type="text" class="form-control" v-model="donor.first_name" maxlength="100"
 											       name="donorfirst"
 											       data-vv-scope="review"
 											       v-validate="'required|alpha_spaces|min:1'" placeholder="First Name">
 											<p class="help-block">First Name</p>
 										</div>
 										<div class="col-sm-6">
-											<input type="text" class="form-control" v-model="donor.last_name"
+											<input type="text" class="form-control" v-model="donor.last_name" maxlength="100"
 											       name="donorlast"
 											       data-vv-scope="review"
 											       v-validate="'required|alpha_spaces|min:1'" placeholder="Last Name">
@@ -182,14 +182,14 @@
 									<div class="col-sm-12">
 										<label>Company Name</label>
 										<input type="text" class="form-control" placeholder="optional"
-										       v-model="donor.company">
+										       v-model="donor.company" maxlength="120">
 									</div>
 									<hr class="divider sm inv">
 									<div class="col-sm-12">
 										<hr class="divider sm">
 										<label for="comment">Leave a Comment</label>
 										<textarea name="comment" id="comment" v-autosize="comment" class="form-control"
-										          v-model="comment" style="resize: vertical"></textarea>
+										          v-model="comment" style="resize: vertical" maxlength="120"></textarea>
 									</div>
 								</div><!-- end row -->
 							</div><!-- end col -->

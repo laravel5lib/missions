@@ -201,7 +201,7 @@
 
         methods: {
         getRepresentatives() {
-            this.$http.get('representatives').then((response) => {
+            this.$http.get('representatives?page=' + this.pagination.current_page).then((response) => {
                 this.representatives = response.data.data;
                 this.pagination = response.data.meta.pagination;
             });

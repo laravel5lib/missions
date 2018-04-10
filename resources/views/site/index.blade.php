@@ -133,7 +133,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
           <h1 class="dash-trailing" data-aos="fade-right">Angel House</h1>
           <p class="large-line-height large-type" data-aos="fade-right">Our mission is to bring abandoned children from the slum to safety and into the loving arms of caretakers that will educate, love and raise them to become future leaders in their generation.</p>
           <hr class="divider inv">
-          <a href="{{ url('orphans') }}" class="btn btn-info" data-aos="fade-right">Learn More</a>
+          <a href="https://angelhouse.me/" class="btn btn-info" data-aos="fade-right">Learn More</a>
         </div><!-- end col -->
         <hr class="divider inv lg visible-xs visible-sm">
         <div class="col-sm-6">

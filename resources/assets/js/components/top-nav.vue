@@ -20,7 +20,7 @@
 					<li><a href="/dashboard/reservations"><i class="fa fa-ticket" style="margin-right:7px;"></i> Reservations</a></li>
 					<li><a href="/dashboard/records"><i class="fa fa-archive" style="margin-right:7px;"></i> Records</a></li>
 					<li v-if="normalizedManaging"><a href="/dashboard/groups"><i class="fa fa-users" style="margin-right:7px;"></i> Groups</a></li>
-					<li><a href="/dashboard/projects"><i class="fa fa-tint" style="margin-left:3px;margin-right:10px;"></i> Projects</a></li>
+					<!-- <li><a href="/dashboard/projects"><i class="fa fa-tint" style="margin-left:3px;margin-right:10px;"></i> Projects</a></li> -->
 					<li v-if="admin" class=""><a href="/admin"><i class="fa fa-cogs" style="margin-right:7px;"></i> Admin</a></li>
 					<li class=""><a @click="logout"><i class="fa fa-sign-out"></i> Log Out</a></li>
 				</template>
@@ -52,7 +52,7 @@
 				<!-- Causes -->
 				<li class="navlabel">Causes</li>
 				<li><a href="/1nation1day">1Nation1Day</a></li>
-				<li><a href="/orphans">Rescue Orphans</a></li>
+				<li><a href="https://angelhouse.me/">Rescue Orphans</a></li>
 				<li><a href="/water">Clean Water</a></li>
 				<li><a href="/medical">Medical Missions</a></li>
 

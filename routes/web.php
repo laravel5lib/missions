@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\v1\Fundraiser;
+use Illuminate\Support\Facades\Route;
 use Artesaos\SEOTools\Facades\SEOMeta;
 
 /*
@@ -8,6 +9,8 @@ use Artesaos\SEOTools\Facades\SEOMeta;
 | Dashboard Routes
 |--------------------------------------------------------------------------
 */
+
+Route::angelHouseRoutes();
 
 $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
     $this->get('/', function () {
@@ -75,8 +78,8 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
     $this->get('reservations/{id}/{tab?}', 'Dashboard\ReservationsController@show');
 
     // Project Routes...
-    $this->get('projects', 'Dashboard\ProjectsController@index');
-    $this->get('projects/{id}/{tab?}', 'Dashboard\ProjectsController@show');
+    // $this->get('projects', 'Dashboard\ProjectsController@index');
+    // $this->get('projects/{id}/{tab?}', 'Dashboard\ProjectsController@show');
 
     $this->get('/funds/{fund}/fundraisers/create', 'FundraisersController@create');
     $this->get('/fundraisers/{fundraiser}/edit', 'FundraisersController@edit');
@@ -96,7 +99,12 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
 | Redirects
 |--------------------------------------------------------------------------
 */
-
+$this->get('/victoriaorozco/nicaragua-2018-50', function() {
+    return redirect ('/send-victoria-to-nicaragua');
+});
+$this->get('/jessicawright3390/dominican-republic-2018-10', function() {
+    return redirect('/jessica-dominican-republic-2018-10');
+});
 $this->get('/signup/{slug}', function ($slug) {
     return redirect('/'.$slug.'/signup');
 });

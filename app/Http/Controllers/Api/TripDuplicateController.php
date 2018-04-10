@@ -21,14 +21,22 @@ class TripDuplicateController extends Controller
         $trip->load('costs.payments','deadlines', 'requirements');
 
         $trip->costs->each(function($cost) use ($duplicate) {
-            $newCost = $duplicate->costs()->create(
-                array_except($cost->toArray(), ['cost_assignable_id', 'cost_assignable_type', 'payments'])
-            );
+            $newCost = $duplicate->costs()->create([
+                'name' => $cost->name,
+                'amount' => $cost->amount/100,
+                'description' => $cost->description,
+                'type' => $cost->type,
+                'active_at' => $cost->active_at
+            ]);
 
             $cost->payments->each(function($payment) use($newCost) {
-                $newCost->payments()->create(
-                    array_except($payment->toArray(), ['cost_id'])
-                );
+                $newCost->payments()->create([
+                    'amount_owed' => $payment->amount_owed/100,
+                    'percent_owed' => $payment->percent_owed,
+                    'due_at' => $payment->due_at,
+                    'upfront' => $payment->upfront,
+                    'grace_period' => $payment->grace_period
+                ]);
             });
         });
         $trip->requirements->each(function($requirement) use ($duplicate) {

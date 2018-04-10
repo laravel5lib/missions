@@ -79,13 +79,13 @@ class TripsController extends Controller
      */
     public function duplicate(TripRequest $request)
     {
-        $trip = $this->trip->create($request->all());
+        // $trip = $this->trip->create($request->all());
 
-        $trip->syncDeadlines($request->get('deadlines'));
-        $trip->syncRequirements($request->get('requirements'));
-        // $trip->syncCosts($request->get('costs'));
+        // $trip->syncDeadlines($request->get('deadlines'));
+        // $trip->syncRequirements($request->get('requirements'));
+        // // $trip->syncCosts($request->get('costs'));
 
-        return $this->response->item($trip, new TripTransformer);
+        // return $this->response->item($trip, new TripTransformer);
     }
 
     /**

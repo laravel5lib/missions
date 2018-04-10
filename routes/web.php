@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\v1\Fundraiser;
+use Illuminate\Support\Facades\Route;
 use Artesaos\SEOTools\Facades\SEOMeta;
 
 /*
@@ -8,6 +9,8 @@ use Artesaos\SEOTools\Facades\SEOMeta;
 | Dashboard Routes
 |--------------------------------------------------------------------------
 */
+
+Route::angelHouseRoutes();
 
 $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
     $this->get('/', function () {
@@ -96,7 +99,6 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
 | Redirects
 |--------------------------------------------------------------------------
 */
-
 $this->get('/victoriaorozco/nicaragua-2018-50', function() {
     return redirect ('/send-victoria-to-nicaragua');
 });

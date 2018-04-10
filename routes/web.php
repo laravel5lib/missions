@@ -78,8 +78,8 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
     $this->get('reservations/{id}/{tab?}', 'Dashboard\ReservationsController@show');
 
     // Project Routes...
-    $this->get('projects', 'Dashboard\ProjectsController@index');
-    $this->get('projects/{id}/{tab?}', 'Dashboard\ProjectsController@show');
+    // $this->get('projects', 'Dashboard\ProjectsController@index');
+    // $this->get('projects/{id}/{tab?}', 'Dashboard\ProjectsController@show');
 
     $this->get('/funds/{fund}/fundraisers/create', 'FundraisersController@create');
     $this->get('/fundraisers/{fundraiser}/edit', 'FundraisersController@edit');

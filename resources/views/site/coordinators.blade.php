@@ -2,45 +2,152 @@
 
 @section('title', 'Coordinators - Missions.Me')
 
+@section('scripts')
+<script>
+$('.launch-modal').on('click', function(e){
+    e.preventDefault();
+    $( '#' + $(this).data('gform-modal') ).modal();
+});
+</script>
+@endsection
+
 @section('content')
 <div class="content-page-header">
     <img class="img-responsive" src="images/coordinators/coordinators-header.jpg" alt="Coordinators">
     <div class="c-page-header-text">
-    	<h1 class="text-uppercase dash-trailing">Coordinators</h1>
+    	<h1 class="text-uppercase dash-trailing">1N1D 2019 Coordinators</h1>
     </div><!-- end c-page-header-content -->
 </div><!-- end c-page-header -->
-    <div class="gray-lighter-bg">
+    <div class="gray-bg-lighter" style="background:url('/images/college/map-bg.png') no-repeat bottom fixed;">
       <div class="container">
         <div class="content-section">
           <div class="row">
-            <div class="col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1 text-center">
-              <h6 class="text-uppercase">We’re here</h6>
-              <h2>To Serve You!</h2>
+            <div class="col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0 text-center">
+              <h6 class="text-uppercase">Welcome to the Team</h6>
+              <h2>We're Here To Help You!</h2>
               <hr class="divider red-small xlg">
-            </div><!-- end col -->
-          </div><!-- end row -->
-          <hr class="divider inv xlg">
-          <div class="row">
-            <div class="col-xs-12 text-center">
-              <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdQw1z2ZvpuIAW4Xm4gsU35s7tue8-cMbPANrvs-t6386syAA/viewform?embedded=true" width="1050" height="1000" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+              <div class="video-outer">
+                <div class="video-inner">
+                  <iframe src="https://player.vimeo.com/video/263068741?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                </div><!-- end video-inner -->
+              </div><!-- end video-outer -->
             </div><!-- end col -->
           </div><!-- end row -->
         </div><!-- end content-section -->
       </div><!-- end container -->
     </div><!-- end gray-lighter-bg -->
-    <!-- <div class="gray-light-bg">
+    <div class="dark-bg-primary" style="padding:30px 0 50px;">
+      <div class="container">
+          <div class="row">
+            <div class="col-xs-12 text-center">
+              <h5>Complete this Team Launch form</h5>
+              <a class="btn btn-white-hollow btn-lg" data-toggle="modal" data-target="#gform-modal">Team Launch Form</a>
+            </div><!-- end col -->
+          </div><!-- end row -->
+      </div><!-- end container -->
+    </div><!-- end gray-lighter-bg -->
+    <div class="gray-lighter-bg">
       <div class="container">
         <div class="content-section">
           <div class="row">
-            <div class="col-xs-10 col-xs-offset-1">
-              <h2 class="text-center">Launch Your Team</h2>
-              <h5 class="text-center">Everything you need for an incredible team launch!</h5>
-              <hr class="divider red-small xlg">
+            <div class="col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0 text-center">
+                <h2>Launch Your Team</h2>
+                <h5>Everything you need for an incredible team launch!</h5>
+                <hr class="divider red-small xlg">
+            </div><!-- end col -->
+          </div><!-- end row -->
+          <div class="row">
+            <div class="col-sm-6 col-sm-offset-3 col-xs-12 col-xs-offset-0">
+              <div class="video-outer">
+                <div class="video-inner">
+                  <iframe src="https://player.vimeo.com/video/263405694?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                </div><!-- end video-inner -->
+              </div><!-- end video-outer -->
             </div>
+          </div>
+          <hr class="divider inv xlg">
+          <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+              <div class="row">
+                <div class="col-sm-4 col-xs-12">
+                  <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
+                    <div class="panel-body text-center">
+                      <hr class="divider inv">
+                      <img src="/images/coordinators/docs-icon.png" width="50px" height="50px">
+                      <h6 class="text-uppercase">1N1D19 Launch Media</h6>
+                      <p class="small hidden-xs">Including logos, graphics, posters, signage and more</p>
+                      <a href="https://www.dropbox.com/sh/9n53q06ncr70ynw/AAC1wkufiUJwyttoq3bXNbO7a?dl=0&preview=1N1D19-Promo-Pack-4-18.zip" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <hr class="divider inv">
+                    </div>
+                  </div>
+                </div><!-- end col -->
+                <div class="col-sm-4 col-xs-12">
+                  <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
+                    <div class="panel-body text-center">
+                      <hr class="divider inv">
+                      <img src="/images/coordinators/vid-icon.png" width="50px" height="50px">
+                      <h6 class="text-uppercase">1N1D19 Promo Video</h6>
+                      <p class="small hidden-xs">Great for assisting in delivering the full vision on your Launch Day</p>
+                      <a href="https://www.dropbox.com/sh/9n53q06ncr70ynw/AAC1wkufiUJwyttoq3bXNbO7a?dl=0&preview=1N1D19-Full-Promo.zip" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <hr class="divider inv">
+                    </div>
+                  </div>
+                </div><!-- end col -->
+                <div class="col-sm-4 col-xs-12">
+                  <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
+                    <div class="panel-body text-center">
+                      <hr class="divider inv">
+                      <img src="/images/coordinators/vid-icon.png" width="50px" height="50px">
+                      <h6 class="text-uppercase">1N1D19 Teaser Video</h6>
+                      <p class="small hidden-xs">Great for announcements in the weeks prior to launch</p>
+                      <a href="https://www.dropbox.com/sh/9n53q06ncr70ynw/AAC1wkufiUJwyttoq3bXNbO7a?dl=0&preview=1N1D19-Teaser-16x9.zip" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <hr class="divider inv">
+                    </div>
+                  </div>
+                </div><!-- end col -->
+              </div><!-- end row -->
+              <div class="row">
+                <div class="col-sm-4 col-xs-12">
+                  <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
+                    <div class="panel-body text-center">
+                      <hr class="divider inv">
+                      <img src="/images/coordinators/vid-icon.png" width="50px" height="50px">
+                      <h6 class="text-uppercase">1N1D19 Short Trailer</h6>
+                      <p class="small hidden-xs">Great for announcements in the weeks following launch</p>
+                      <a href="https://www.dropbox.com/sh/9n53q06ncr70ynw/AAC1wkufiUJwyttoq3bXNbO7a?dl=0&preview=1N1D19-Short-Promo.zip" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <hr class="divider inv">
+                    </div>
+                  </div>
+                </div><!-- end col -->
+                <div class="col-sm-4 col-xs-12">
+                  <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
+                    <div class="panel-body text-center">
+                      <hr class="divider inv">
+                      <img src="/images/coordinators/cam-icon.png" width="50px" height="50px">
+                      <h6 class="text-uppercase">1N1D19 Launch Capture</h6>
+                      <p class="small hidden-xs">Instructions for your media team to capture your launch</p>
+                      <a href="https://www.dropbox.com/sh/9n53q06ncr70ynw/AAC1wkufiUJwyttoq3bXNbO7a?dl=0&preview=1N1D19-Launch-Media-Guide.pdf" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <hr class="divider inv">
+                    </div>
+                  </div>
+                </div><!-- end col -->
+                <div class="col-sm-4 col-xs-12">
+                  <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
+                    <div class="panel-body text-center">
+                      <hr class="divider inv">
+                      <img src="/images/coordinators/tools-icon.png" width="50px" height="50px">
+                      <h6 class="text-uppercase">More Coming Soon!</h6>
+                      <p style="margin-bottom:15px;" class="small hidden-xs">As the campaign progresses we'll be adding new print files, social media graphics, fundraising tutorials, and so much more. Our goal is to give you all the tools needed to succeed.</p>
+                      <hr class="divider inv">
+                    </div>
+                  </div>
+                </div><!-- end col -->
+              </div><!-- end row -->
+            </div><!-- end col -->
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
     <!-- <div class="gray-lighter-bg">
       <div class="container">
         <div class="content-section">
@@ -53,19 +160,64 @@
         </div>
       </div>
     </div> -->
-    <!-- <div class="gray-light-bg">
+    <div class="gray-light-bg">
       <div class="container">
         <div class="content-section">
           <div class="row">
             <div class="col-xs-10 col-xs-offset-1">
               <h2 class="text-center">Monthly Coordinator Calls</h2>
               <hr class="divider red-small xlg">
+              <div class="row">
+                <div class="col-xs-8 col-xs-offset-2">
+                  <p class="text-center">Each month 1Nation1Day Coordinators from around the world will join together as one global team.  Led by the Missions.Me team, you’ll get updates on the campaign, new media to share with your team, opportunities to answer questions live and exchange ideas with other coordinators.</p> 
+                </div><!-- end col -->
+              </div><!-- end row -->
+              <hr class="divider inv lg">
+              <div class="panel panel-default">
+                <div class="panel-heading text-center" style="background:#2073d9;padding:40px;">
+                  <h4 class="text-white" style="display:inline-block;margin-right:10px;">Connect to the Video Conference on meeting dates</h4> <a class="btn btn-white-hollow btn-md" href="https://zoom.us/j/582208588"><i class="fa fa-play icon-left"></i> Connect</a>
+                </div><!-- end panel-title -->
+                <div class="panel-body" style="padding:40px;">
+                  <h6 class="text-uppercase text-center">Video Conference Call Dates</h6>
+                    <hr class="divider lg" style="width:50px;">
+                <div class="row">
+                  <div class="col-md-4 col-md-offset-0 col-sm-12 col-sm-offset-0">
+                    <ul class="list-unstyled">
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">May 23 at 4pm EST</h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">June 20 at 4pm EST</h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 class="text-primary" style="display:inline-block;">No meeting in July</h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">August 15 at 4pm EST</h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">September 19 at 4pm EST</h6></li>
+                    </ul>
+                  </div>
+                  <div class="col-md-4 col-md-offset-0 col-sm-12 col-sm-offset-0">
+                    <ul class="list-unstyled">
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">October 17 at 4pm EST</h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">November 14 at 4pm EST <span style="vertical-align: top;font-size: 10px;" class="badge">SD</span></h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">December 12 at 4pm EST <span style="vertical-align: top;font-size: 10px;" class="badge">SD</span></h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">January 9 at 4pm EST <span style="vertical-align: top;font-size: 10px;" class="badge">SD</span></h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">February 20 at 4pm EST</h6></li>
+                    </ul>
+                  </div>
+                  <div class="col-md-4 col-md-offset-0 col-sm-12 col-sm-offset-0">
+                    <ul class="list-unstyled">
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">March 20 at 4pm EST</h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">April 17 at 4pm EST</h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">May 15 at 4pm EST</h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">June 5 at 4pm EST <span style="vertical-align: top;font-size: 10px;" class="badge">SD</span></h6></li>
+                    </ul>
+                  </div>
+                </div><!-- end row -->
+                <p class="small text-italic">* Note, you’ll need to download the FREE Zoom application on a computer or mobile device to connect to the meeting. Please have this installed before tuning into your first meeting.</p>
+                <h6 style="display:inline-block;"><span style="vertical-align: top;font-size: 10px;" class="badge">SD</span> = Special Meeting Date</h6>
+                </div><!-- end panel-body -->
+              </div><!-- end panel -->
             </div>
           </div>
         </div>
       </div>
-    </div> -->
-    <div class="gray-lighter-bg">
+    </div>
+    <div class="gray-lighter-bg" style="background:url('/images/college/map-bg.png') no-repeat bottom fixed;">
       <div class="container">
         <div class="content-section">
           <div class="row">
@@ -126,19 +278,46 @@
         <div class="content-section">
           <div class="row">
             <div class="col-sm-6 col-sm-offset-0 col-xs-12 text-center">
-              <h3>Questions Or Comments?</h3>
-              <a class="btn btn-primary btn-md" href="mailto:coordinators@missions.me">Email Us</a>
-              <hr class="divider inv sm">
-              <p class="small"><a href="mailto:coordinators@missions.me">coordinators@missions.me</a></p>
+              <div class="panel panel-default">
+                <div class="panel-body text-center" style="padding:40px;">
+                  <img src="images/coordinators/env-icon.png" width="50px" height="50px">
+                  <h5 class="text-uppercase">Questions Or Comments?</h5>
+                  <a class="btn btn-primary btn-md" href="mailto:coordinators@missions.me">Email Us</a>
+                  <hr class="divider inv sm">
+                  <p class="small"><a href="mailto:coordinators@missions.me">coordinators@missions.me</a></p>
+                </div><!-- end panel-body -->
+              </div><!-- end panel -->
             </div><!-- end col -->
             <div class="col-sm-6 col-sm-offset-0 col-xs-12 text-center">
-              <h3>Questions about missionary accounts?</h3>
-              <a class="btn btn-primary btn-md" href="mailto:accounts@missions.me">Email Us</a>
-              <hr class="divider inv sm">
-              <p class="small"><a href="mailto:accounts@missions.me">accounts@missions.me</a></p>
+              <div class="panel panel-default">
+                <div class="panel-body text-center" style="padding:40px;">
+                  <img src="images/coordinators/env-icon.png" width="50px" height="50px">
+                  <h5 class="text-uppercase">Questions about missionary accounts?</h5>
+                  <a class="btn btn-primary btn-md" href="mailto:accounts@missions.me">Email Us</a>
+                  <hr class="divider inv sm">
+                  <p class="small"><a href="mailto:accounts@missions.me">accounts@missions.me</a></p>
+                </div><!-- end panel-body -->
+              </div><!-- end panel -->
             </div><!-- end col -->
           </div><!-- end row -->
         </div><!-- end content-section -->
       </div><!-- end container -->
     </div><!-- end gray-lighter-bg -->
+
+<!-- MODAL -->
+<div class="modal fade" id="gform-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">1N1D 2019 Team Launch Form</h4>
+            </div>
+            <div class="modal-body text-center">
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdQw1z2ZvpuIAW4Xm4gsU35s7tue8-cMbPANrvs-t6386syAA/viewform?embedded=true" width="850" height="500" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

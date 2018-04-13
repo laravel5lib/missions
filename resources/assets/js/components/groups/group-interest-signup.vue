@@ -179,8 +179,6 @@
       this.$http.get('trips?groups[]=' + this.id, {
         params: {
           status: 'current',
-          onlyPublic: true,
-          onlyPublished: true,
           include: 'group,campaign'
         }
       }).then((response) => {

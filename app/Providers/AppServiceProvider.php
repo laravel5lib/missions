@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use League\Glide\Server;
 use App\TransactionHandler;
+use Laravel\Horizon\Horizon;
 use App\Models\v1\Reservation;
 use Laravel\Passport\Passport;
 use League\Glide\ServerFactory;
@@ -271,6 +272,10 @@ class AppServiceProvider extends ServiceProvider
                     return redirect('https://angelhouse.me/fundraisers/'. $url);
                 });
             }
+        });
+
+        Horizon::auth(function ($request) {
+            return optional($request->user())->email == 'nkeena1@gmail.com';
         });
     }
 

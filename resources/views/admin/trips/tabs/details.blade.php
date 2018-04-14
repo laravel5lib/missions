@@ -31,7 +31,7 @@
         'Start Date' => $trip->started_at->format('F d, Y'),
         'End Date' => $trip->ended_at->format('F d, Y'),
         'Difficulty' => $trip->difficulty,
-        'Default Trip Rep' => '<a href="'.url('admin/representatives/'.$trip->rep->id).'">'.$trip->rep->name.'</a>',
+        'Default Trip Rep' => '<a href="'.url('admin/representatives/'.optional($trip->rep)->id).'">'.optional($trip->rep)->name.'</a>',
         'Default Companion Limit' => $trip->companion_limit,
         'Created' => '<datetime-formatted value="'.$trip->created_at->toIso8601String().'" />',
         'Last Updated' => '<datetime-formatted value="'.$trip->updated_at->toIso8601String().'" />'

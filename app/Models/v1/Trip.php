@@ -46,7 +46,7 @@ class Trip extends Model
      */
     protected $dates = [
         'started_at', 'ended_at', 'created_at',
-        'updated_at', 'deleted_at', 'published_at',
+        'updated_at', 'deleted_at',
         'closed_at'
     ];
 
@@ -141,6 +141,20 @@ class Trip extends Model
     public function promotionals()
     {
         return $this->morphMany(Promotional::class, 'promoteable');
+    }
+
+    public function getPublishedAtAttribute($value)
+    {
+        if (! is_null($value)) {
+            return Carbon::parse($value);
+        }
+
+        return;
+    }
+
+    public function setPublishedAtAttribute($value)
+    {
+        $this->attributes['published_at'] = $value ? Carbon::parse($value) : null;
     }
 
     /**

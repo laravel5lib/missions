@@ -3,16 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\CreditTransaction;
-use App\DonationTransaction;
-use App\Http\Requests\v1\ExportRequest;
-use App\Jobs\ExportTransactions;
 use App\RefundTransaction;
+use App\DonationTransaction;
 use App\TransferTransaction;
 use App\Models\v1\Transaction;
+use App\Jobs\ExportTransactions;
 use App\Http\Controllers\Controller;
-use App\Http\Transformers\v1\TransactionTransformer;
 use Dingo\Api\Contract\Http\Request;
+use App\Http\Requests\v1\ExportRequest;
+use App\Http\Requests\TransactionRequest;
 use Illuminate\Database\Eloquent\Collection;
+use App\Http\Transformers\v1\TransactionTransformer;
 
 class TransactionsController extends Controller
 {
@@ -85,9 +86,9 @@ class TransactionsController extends Controller
      *
      * @return \Dingo\Api\Http\Response
      */
-    public function store()
+    public function store(TransactionRequest $request)
     {
-        $transaction = $this->getTransactionHandler()->create($this->request);
+        $transaction = $this->getTransactionHandler()->create($request);
 
         if ($transaction instanceof Collection) {
             return $this->response->collection($transaction, new TransactionTransformer);
@@ -102,9 +103,9 @@ class TransactionsController extends Controller
      * @param $id
      * @return \Dingo\Api\Http\Response
      */
-    public function update($id)
+    public function update(TransactionRequest $request, $id)
     {
-        $transaction = $this->getTransactionHandler()->update($id, $this->request);
+        $transaction = $this->getTransactionHandler()->update($id, $request);
 
         return $this->response->item($transaction, new TransactionTransformer);
     }

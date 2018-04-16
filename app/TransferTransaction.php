@@ -2,7 +2,6 @@
 namespace App;
 
 use App\Events\TransactionWasCreated;
-use App\Http\Requests\v1\Transactions\TransferRequest;
 use Dingo\Api\Contract\Http\Request;
 use Dingo\Api\Exception\ValidationHttpException;
 
@@ -15,10 +14,8 @@ class TransferTransaction extends TransactionHandler
      * @param Request $request
      * @return \Illuminate\Support\Collection
      */
-    public function create(Request $request)
+    public function create($request)
     {
-        $this->validate();
-
         // abstract to custom validation rule
         $from_fund = $this->fund->findOrFail($request->get('from_fund_id'));
         if ($from_fund->balance < $request->get('amount')) {
@@ -75,13 +72,5 @@ class TransferTransaction extends TransactionHandler
         $relatedFund = $relatedTransaction->fund;
         $relatedTransaction->delete();
         $relatedFund->reconcile();
-    }
-
-    /**
-     * Validate the incoming request.
-     */
-    private function validate()
-    {
-        app(TransferRequest::class)->validate();
     }
 }

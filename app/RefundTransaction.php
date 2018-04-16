@@ -2,7 +2,6 @@
 namespace App;
 
 use App\Events\TransactionWasCreated;
-use App\Http\Requests\v1\Transactions\RefundRequest;
 use Carbon\Carbon;
 use Dingo\Api\Contract\Http\Request;
 
@@ -15,10 +14,8 @@ class RefundTransaction extends TransactionHandler
      * @param Request $request
      * @return object
      */
-    public function create(Request $request)
+    public function create($request)
     {
-        $this->validate();
-
         $refundable = $this->transaction->findOrFail($request->get('transaction_id'));
 
         $refund_id = 'n/a';
@@ -79,13 +76,5 @@ class RefundTransaction extends TransactionHandler
         $refund->delete();
 
         $fund->reconcile();
-    }
-
-    /**
-     * Validate the incoming request.
-     */
-    private function validate()
-    {
-        app(RefundRequest::class)->validate();
     }
 }

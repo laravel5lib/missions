@@ -2,7 +2,6 @@
 namespace App;
 
 use App\Events\TransactionWasCreated;
-use App\Http\Requests\v1\Transactions\CreditRequest;
 use Dingo\Api\Contract\Http\Request;
 
 class CreditTransaction extends TransactionHandler
@@ -12,10 +11,8 @@ class CreditTransaction extends TransactionHandler
      * @param Request $request
      * @return object
      */
-    public function create(Request $request)
+    public function create($request)
     {
-        $this->validate();
-
         $transaction = $this->transaction->create([
             'type' => 'credit',
             'amount' => $request->get('amount'),
@@ -41,13 +38,5 @@ class CreditTransaction extends TransactionHandler
         $transaction->delete();
 
         $fund->reconcile();
-    }
-
-    /**
-     * Validate incoming request.
-     */
-    private function validate()
-    {
-        app(CreditRequest::class)->validate();
     }
 }

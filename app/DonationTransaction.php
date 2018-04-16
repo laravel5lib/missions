@@ -4,7 +4,6 @@ namespace App;
 use App\Models\v1\Fund;
 use Dingo\Api\Contract\Http\Request;
 use App\Events\TransactionWasCreated;
-use App\Http\Requests\v1\DonationRequest;
 
 class DonationTransaction extends TransactionHandler
 {
@@ -14,10 +13,8 @@ class DonationTransaction extends TransactionHandler
      *
      * @param Request $request
      */
-    public function create(Request $request)
+    public function create($request)
     {
-        $this->validate();
-
         if ($request->get('details')['type'] == 'card') {
             // has a credit card token already been created and provided?
             // if not, tokenize the card details.
@@ -86,13 +83,5 @@ class DonationTransaction extends TransactionHandler
         $transaction->delete();
 
         $fund->reconcile();
-    }
-
-    /**
-     * Validate incoming request.
-     */
-    private function validate()
-    {
-        app(DonationRequest::class)->validate();
     }
 }

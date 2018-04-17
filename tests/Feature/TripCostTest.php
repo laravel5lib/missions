@@ -61,6 +61,18 @@ class TripCostTest extends TestCase
         ]);
     }
 
+    /** @test */
+    public function get_specific_trip_cost()
+    {
+        $trip = $this->setupTripWithCosts();
+        $cost = $trip->costs()->first();
+
+        $response = $this->json('GET', "/api/trips/{$trip->id}/costs/{$cost->id}");
+
+        $response->assertStatus(200);
+        $response->assertJson(['data' => ['id' => $cost->id]]);
+    }
+
     private function setupTripWithCosts()
     {
         $campaign = $this->setupCampaignWithCosts();

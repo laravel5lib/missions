@@ -108,4 +108,38 @@ class CampaignCostTest extends TestCase
             ]
         ]);
     }
+
+    /** @test */
+    public function update_a_specific_cost_on_campaign()
+    {
+        // create campaign with cost
+        $campaign = factory(Campaign::class)->create();
+        $cost = factory(Cost::class)->create([
+            'cost_assignable_id' => $campaign->id, 
+            'cost_assignable_type' => 'campaigns',
+            'name' => 'General Registration',
+            'amount' => 2500.00,
+            'description' => 'Base registration cost.',
+            'type' => 'incremental',
+            'active_at' => '01/01/2018'
+        ]);
+
+        $response = $this->json('PUT', "/api/campaigns/{$campaign->id }/costs/{$cost->id}", [
+            'amount' => 2700.00,
+            'description' => 'Updated registration cost.',
+            'active_at' => '01/02/2018'
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'data' => [
+                'id' => $cost->id,
+                'name' => 'General Registration',
+                'amount' => 2700.00,
+                'description' => 'Updated registration cost.',
+                'type' => 'incremental',
+                'active_at' => Carbon::parse('01/02/2018')->toIso8601String()
+            ]
+        ]);
+    }
 }

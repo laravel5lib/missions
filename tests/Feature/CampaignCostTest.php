@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Carbon\Carbon;
 use Tests\TestCase;
 use App\Models\v1\Cost;
 use App\Models\v1\Trip;
@@ -76,5 +77,35 @@ class CampaignCostTest extends TestCase
         ]);
 
         $response->assertJsonValidationErrors(['name', 'amount', 'type', 'description', 'active_at']);
+    }
+
+    /** @test */
+    public function get_specific_cost_for_campaign()
+    {
+        // create campaign with cost
+        $campaign = factory(Campaign::class)->create();
+        $cost = factory(Cost::class)->create([
+            'cost_assignable_id' => $campaign->id, 
+            'cost_assignable_type' => 'campaigns',
+            'name' => 'General Registration',
+            'amount' => 2500.00,
+            'description' => 'Base registration cost.',
+            'type' => 'incremental',
+            'active_at' => '01/01/2018'
+        ]);
+
+        $response = $this->json('GET', "/api/campaigns/{$campaign->id }/costs/{$cost->id}");
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'data' => [
+                'id' => $cost->id,
+                'name' => 'General Registration',
+                'amount' => 2500.00,
+                'description' => 'Base registration cost.',
+                'type' => 'incremental',
+                'active_at' => Carbon::parse('01/01/2018')->toIso8601String()
+            ]
+        ]);
     }
 }

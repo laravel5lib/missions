@@ -46,11 +46,11 @@ class TripCostTest extends TestCase
         ]);
 
         $response->assertStatus(201);
-        $response->assertJsonStructure('message');
+        $response->assertJsonStructure(['message']);
         $this->assertDatabaseHas('costables', [
-            'cost_id' => $cost[0],
-            'costcable_id' => $campaign->id,
-            'costable_type' => 'campaigns'
+            'cost_id' => $costs[0],
+            'costable_id' => $trip->id,
+            'costable_type' => 'trips'
         ]);
     }
 
@@ -68,7 +68,7 @@ class TripCostTest extends TestCase
         ]);
 
         $response->assertStatus(201);
-        $response->assertJsonStructure('message');
+        $response->assertJsonStructure(['message']);
         $this->assertDatabaseHas('costs', [
             'name' => 'Custom Cost',
             'amount' => 150000,

@@ -309,6 +309,35 @@ class Trip extends Model
         }
     }
 
+    public function addPrice($request)
+    {
+        if ($request->input('cost_id')) {
+            return $this->attachCostToTrip($request->input('cost_id'));
+        }
+
+        return $this->createNewCostAndAttachToTrip($request);
+    }
+
+    private function createNewCostAndAttachToTrip($request)
+    {
+        return DB::transaction(function() use($request) {
+            $cost = $this->costs()->create([
+                'name' => $request->input('name'),
+                'amount' => $request->input('amount'),
+                'type' => $request->input('type'),
+                'description' => $request->input('description'),
+                'active_at' => $request->input('active_at')
+            ]);
+            
+            $this->attachCostToTrip($cost->id);
+        });
+    }
+
+    private function attachCostToTrip($costId)
+    {
+        return $this->prices()->attach($costId);
+    }
+
     /**
      * Syncronize all the trip's costs.
      *

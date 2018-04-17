@@ -55,6 +55,18 @@ class TripCostTest extends TestCase
     }
 
     /** @test */
+    public function validates_request_to_add_a_campaign_cost_to_a_trip()
+    {
+        $trip = factory(Trip::class)->create();
+
+        $response = $this->json('POST', "/api/trips/{$trip->id}/costs", [
+            'cost_id' => 'invalid',
+        ]);
+
+        $response->assertJsonValidationErrors(['cost_id']);
+    }
+
+    /** @test */
     public function add_custom_cost_to_a_trip()
     {
         $trip = factory(Trip::class)->create();

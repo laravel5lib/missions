@@ -35,6 +35,26 @@ class TripCostTest extends TestCase
     }
 
     /** @test */
+    public function add_campaign_cost_to_a_trip()
+    {
+        $campaign = $this->setupCampaignWithCosts();
+        $trip = factory(Trip::class)->create(['campaign_id' => $campaign->id]);
+        $costs = $campaign->costs->pluck('id')->toArray();
+
+        $response = $this->json('POST', "/api/trips/{$trip->id}/costs", [
+            'cost_id' => $costs[0]
+        ]);
+
+        $response->assertStatus(201);
+        $response->assertJsonStructure('message');
+        $this->assertDatabaseHas('costables', [
+            'cost_id' => $cost[0],
+            'costcable_id' => $campaign->id,
+            'costable_type' => 'campaigns'
+        ]);
+    }
+
+    /** @test */
     public function add_custom_costs_to_a_trip()
     {
         $trip = factory(Trip::class)->create();

@@ -61,6 +61,8 @@ class DonationTransaction extends TransactionHandler
         $donation = $donor->donations()->create($request->all());
 
         event(new TransactionWasCreated($donation));
+
+        return $donation;
     }
 
     /**

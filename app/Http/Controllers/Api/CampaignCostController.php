@@ -83,11 +83,16 @@ class CampaignCostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $campaignId
+     * @param  string  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($campaignId, $id)
     {
-        //
+        $cost = Campaign::findOrFail($campaignId)->costs()->findOrFail($id);
+
+        $cost->delete();
+
+        return response()->json([], 204);
     }
 }

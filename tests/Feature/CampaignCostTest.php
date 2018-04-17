@@ -147,7 +147,10 @@ class CampaignCostTest extends TestCase
     public function delete_a_cost_from_campaign()
     {
         $campaign = factory(Campaign::class)->create();
-        $cost = factory(Cost::class)->create();
+        $cost = factory(Cost::class)->create([
+            'cost_assignable_id' => $campaign->id, 
+            'cost_assignable_type' => 'campaigns',
+        ]);
 
         $response = $this->json('DELETE', "/api/campaigns/{$campaign->id }/costs/{$cost->id}");
 

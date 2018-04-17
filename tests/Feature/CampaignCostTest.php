@@ -25,7 +25,7 @@ class CampaignCostTest extends TestCase
         factory(Cost::class)->create(['cost_assignable_id' => $trip->id, 'cost_assignable_type' => 'trips']);
         
         // get only the campaign's costs
-        $response = $this->json('GET', "/api/campaigns/{{ $campaign->id }}/costs");
+        $response = $this->json('GET', "/api/campaigns/{$campaign->id }/costs");
 
         $response->assertStatus(200);
         $response->assertJsonStructure([

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CostResource;
 
 class CampaignCostController extends Controller
 {
@@ -13,9 +14,11 @@ class CampaignCostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Campaign $campaign)
-    {
-        return response(200);
+    public function index($campaignId)
+    {   
+        $costs = Campaign::findOrFail($campaignId)->costs()->paginate();
+
+        return CostResource::collection($costs);
     }
 
     /**

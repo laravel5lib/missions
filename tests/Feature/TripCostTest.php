@@ -34,6 +34,21 @@ class TripCostTest extends TestCase
         ]);
     }
 
+    public function order_trip_costs_by_active_date()
+    {
+        // TODO
+    }
+
+    public function search_trip_costs_by_name()
+    {
+        // TODO
+    }
+
+    public function filter_trip_costs_by_type()
+    {
+        // TODO
+    }
+
     /** @test */
     public function add_campaign_cost_to_a_trip()
     {
@@ -115,6 +130,16 @@ class TripCostTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJson(['data' => ['id' => $cost->id]]);
+    }
+
+    public function update_a_custom_trip_cost()
+    {
+        // TODO
+    }
+
+    public function validates_a_request_to_update_custom_trip_cost()
+    {
+        // TODO
     }
 
     /** @test */

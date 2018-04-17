@@ -78,8 +78,19 @@ class TripCostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($tripId, $id)
     {
-        //
+        $trip = Trip::findOrFail($tripId);
+        $cost = $trip->prices()->findOrFail($id);
+
+        DB::transaction(function() use($trip, $cost) {
+            $trip->prices()->detach($cost->id);
+
+            if ($cost->cost_assignable_id === $trip->id && $cost->cost_assignable_type === 'trips') {
+                $cost->delete();
+            }
+        });
+
+        return response()->json([], 204);
     }
 }

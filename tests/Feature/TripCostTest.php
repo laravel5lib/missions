@@ -48,6 +48,7 @@ class TripCostTest extends TestCase
         ]);
 
         $response->assertStatus(201);
+        $response->assertJsonStructure('message');
         $this->assertDatabaseHas('costs', [
             'name' => 'Custom Cost',
             'amount' => 150000,

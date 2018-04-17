@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\v1\Trip;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CostResource;
 
@@ -27,9 +28,23 @@ class TripCostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $tripId)
     {
-        //
+        $trip = Trip::findOrFail($tripId);
+
+        DB::transaction(function() use($trip, $request) {
+            $cost = $trip->costs()->create([
+                'name' => $request->input('name'),
+                'amount' => $request->input('amount'),
+                'type' => $request->input('type'),
+                'description' => $request->input('description'),
+                'active_at' => $request->input('active_at')
+            ]);
+            
+            $trip->prices()->attach($cost->id);
+        });
+        
+        return response()->json(['message' => 'New trip cost added.'], 201);
     }
 
     /**

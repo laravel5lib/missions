@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\v1\Trip;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CostResource;
 
 class TripCostController extends Controller
 {
@@ -12,9 +14,11 @@ class TripCostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($tripId)
     {
-        return response(200);
+        $costs = Trip::findOrFail($tripId)->prices()->paginate();
+
+        return CostResource::collection($costs);
     }
 
     /**

@@ -112,6 +112,16 @@ class Trip extends Model
     {
         return $this->morphMany(Cost::class, 'cost_assignable');
     }
+    
+    /**
+     * Get all costs assigned to the trip.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function prices()
+    {
+        return $this->morphToMany(Cost::class, 'costable');
+    }
 
     /**
      * Get all the trip's active costs.

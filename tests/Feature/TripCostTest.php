@@ -11,6 +11,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TripCostTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function get_all_trip_costs()
     {
@@ -37,9 +39,14 @@ class TripCostTest extends TestCase
         $campaign = $this->setupCampaignWithCosts();
 
         $trip = factory(Trip::class)->create(['campaign_id' => $campaign->id]);
-        factory(Cost::class)->create([
+        $cost = factory(Cost::class)->create([
             'cost_assignable_id' => $trip->id, 
             'cost_assignable_type' => 'trips'
+        ]);
+        
+        $campaignCosts = $campaign->costs->pluck('id')->toArray();
+        $trip->prices()->attach([
+            $cost->id, $campaignCosts[0], $campaignCosts[1]
         ]);
 
         return $trip;

@@ -33,11 +33,12 @@ class CostRequest extends FormRequest
     private function newCostRules()
     {
         return [
-            'name'                 => 'required|string|max:60',
+            'cost_id'              => 'required_without:name|string',
+            'name'                 => 'required_without:cost_id|string|max:60',
             'description'          => 'nullable|string|max:120',
             'active_at'            => 'nullable|date',
-            'amount'               => 'required|numeric',
-            'type'                 => 'required|string|in:incremental,static,optional,conditional',
+            'amount'               => 'required_without:cost_id|numeric',
+            'type'                 => 'required_without:cost_id|string|in:incremental,static,optional,conditional',
             'payments'             => 'sometimes|array'
         ];
     }
@@ -45,11 +46,12 @@ class CostRequest extends FormRequest
     private function updateCostRules()
     {
         return [
-            'name'                 => 'sometimes|required|string|max:60',
+            'cost_id'              => 'sometimes|required_without:name|string',
+            'name'                 => 'sometimes|required_without:cost_id|string|max:60',
             'description'          => 'nullable|string|max:120',
             'active_at'            => 'nullable|date',
-            'amount'               => 'sometimes|required|numeric',
-            'type'                 => 'sometimes|required|string|in:incremental,static,optional,conditional',
+            'amount'               => 'sometimes|required_without:cost_id|numeric',
+            'type'                 => 'sometimes|required_without:cost_id|string|in:incremental,static,optional,conditional',
             'payments'             => 'sometimes|array'
         ];
     }
@@ -57,15 +59,17 @@ class CostRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Please provide a cost name.',
+            'cost_id.required_without' => 'Please provide a cost ID.',
+            'cost_id.string' => 'Cost ID is not valid.',
+            'name.required_without' => 'Please provide a cost name.',
             'name.string' => 'Name is not a valid format.',
             'name.max' => 'Name can only be 60 characters or less.',
             'description.string' => 'Description is not a valid format.',
             'description.max' => 'Description can only be 120 characters or less.',
             'active_at.date' => 'Is not a valid date.',
-            'amount.required' => 'Please enter an amount.',
+            'amount.required_without' => 'Please enter an amount.',
             'amount.numeric' => 'Amount is not a valid format.',
-            'type.required' => 'Please provide a cost type.',
+            'type.required_without' => 'Please provide a cost type.',
             'type.string' => 'Cost type is not valid.',
             'type.in' => 'Cost type is not valid.',
             'payments.array' => 'Payments must be provided as an array.'

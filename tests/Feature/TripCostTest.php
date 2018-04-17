@@ -59,9 +59,7 @@ class TripCostTest extends TestCase
     {
         $trip = factory(Trip::class)->create();
 
-        $response = $this->json('POST', "/api/trips/{$trip->id}/costs", [
-            'cost_id' => 'invalid',
-        ]);
+        $response = $this->json('POST', "/api/trips/{$trip->id}/costs", []);
 
         $response->assertJsonValidationErrors(['cost_id']);
     }

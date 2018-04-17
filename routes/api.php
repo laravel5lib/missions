@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Storage;
 |
 */
 
+Route::apiResource('campaigns/{campaign}/costs', 'CampaignCostController');
+
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', [

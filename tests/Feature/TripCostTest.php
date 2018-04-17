@@ -34,6 +34,32 @@ class TripCostTest extends TestCase
         ]);
     }
 
+    /** @test */
+    public function add_custom_costs_to_a_trip()
+    {
+        $trip = factory(Trip::class)->create();
+
+        $response = $this->json('POST', "/api/trips/{$trip->id}/costs", [
+            'name' => 'Custom Cost',
+            'amount' => 1500.00,
+            'type' => 'static',
+            'description' => 'A custom cost added to the trip.',
+            'active_at' => '01/01/2018'
+        ]);
+
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('costs', [
+            'name' => 'Custom Cost',
+            'amount' => 150000,
+            'type' => 'static',
+            'description' => 'A custom cost added to the trip.',
+        ]);
+        $this->assertDatabaseHas('costables', [
+            'costable_id' => $trip->id,
+            'costable_type' => 'trips'
+        ]);
+    }
+
     private function setupTripWithCosts()
     {
         $campaign = $this->setupCampaignWithCosts();

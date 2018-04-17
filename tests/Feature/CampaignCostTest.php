@@ -38,4 +38,20 @@ class CampaignCostTest extends TestCase
         ]);
         $response->assertJson(['meta' => ['total' => 1]]);
     }
+
+    /** @test */
+    public function add_new_cost_to_campaign()
+    {
+        $campaign = factory(Campaign::class)->create();
+
+        $response = $this->json('POST', "/api/campaigns/{$campaign->id }/costs", [
+            'name' => 'General Registration',
+            'amount' => 2500.00,
+            'type' => 'incremental',
+            'description' => 'Base cost for general registration.',
+            'active_at' => '01/01/2018'
+        ]);
+
+        $response->assertStatus(201);
+    }
 }

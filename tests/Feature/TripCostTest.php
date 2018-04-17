@@ -55,7 +55,7 @@ class TripCostTest extends TestCase
     }
 
     /** @test */
-    public function add_custom_costs_to_a_trip()
+    public function add_custom_cost_to_a_trip()
     {
         $trip = factory(Trip::class)->create();
 
@@ -79,6 +79,20 @@ class TripCostTest extends TestCase
             'costable_id' => $trip->id,
             'costable_type' => 'trips'
         ]);
+    }
+
+    /** @test */
+    public function validates_request_to_add_custom_cost_to_trip()
+    {
+        $trip = factory(Trip::class)->create();
+
+        $response = $this->json('POST', "/api/trips/{$trip->id}/costs", [
+            'type' => 'invalid',
+            'description' => 'This is description is way way way too long for a cost description. This should be 120 characters or less but it is a whole lot more than that!!!!',
+            'active_at' => 'invalid'
+        ]);
+
+        $response->assertJsonValidationErrors(['name', 'amount', 'type', 'description', 'active_at']);
     }
 
     /** @test */

@@ -63,4 +63,18 @@ class CampaignCostTest extends TestCase
             'cost_assignable_type' => 'campaigns'
         ]);
     }
+
+    /** @test */
+    public function validates_request_to_add_new_cost_to_campaign()
+    {
+        $campaign = factory(Campaign::class)->create();
+
+        $response = $this->json('POST', "/api/campaigns/{$campaign->id }/costs", [
+            'type' => 'invalid',
+            'description' => 'This is description is way way way too long for a cost description. This should be 120 characters or less!!!!',
+            'active_at' => 'invalid'
+        ]);
+
+        $response->assertJsonValidationErrors(['name', 'amount', 'type', 'description', 'active_at']);
+    }
 }

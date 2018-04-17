@@ -46,12 +46,15 @@ class CampaignCostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $campaignId
+     * @param  string  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($campaignId, $id)
     {
-        //
+        $cost = Campaign::findOrFail($campaignId)->costs()->findOrFail($id);
+
+        return new CostResource($cost);
     }
 
     /**

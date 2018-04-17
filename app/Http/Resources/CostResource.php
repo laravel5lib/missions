@@ -17,7 +17,7 @@ class CostResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'amount' => $this->amount,
+            'amount' => (double) $this->amount/100,
             'type' => $this->type,
             'description' => $this->description,
             'active_at' => optional($this->active_at)->toIso8601String()

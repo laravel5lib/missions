@@ -23,20 +23,35 @@ class CostRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
+        if ($this->isMethod('put')) {
+            return $this->updateCostRules();
+        }
+
+        return $this->newCostRules();
+    }
+
+    private function newCostRules()
+    {
+        return [
             'name'                 => 'required|string|max:60',
             'description'          => 'nullable|string|max:120',
             'active_at'            => 'nullable|date',
             'amount'               => 'required|numeric',
             'type'                 => 'required|string|in:incremental,static,optional,conditional',
+            'payments'             => 'sometimes|array'
         ];
+    }
 
-        if ($this->isMethod('post')) {
-            $rules['payments'] = 'sometimes|array';
-        }
-
-
-        return $rules;
+    private function updateCostRules()
+    {
+        return [
+            'name'                 => 'sometimes|required|string|max:60',
+            'description'          => 'nullable|string|max:120',
+            'active_at'            => 'nullable|date',
+            'amount'               => 'sometimes|required|numeric',
+            'type'                 => 'sometimes|required|string|in:incremental,static,optional,conditional',
+            'payments'             => 'sometimes|array'
+        ];
     }
 
     public function messages()

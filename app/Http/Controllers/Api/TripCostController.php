@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CostResource;
+use App\Http\Requests\v1\CostRequest;
 
 class TripCostController extends Controller
 {
@@ -25,10 +26,10 @@ class TripCostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\v1\CostRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $tripId)
+    public function store(CostRequest $request, $tripId)
     {
         $trip = Trip::findOrFail($tripId)->addPrice($request);
         

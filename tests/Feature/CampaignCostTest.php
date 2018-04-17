@@ -53,5 +53,14 @@ class CampaignCostTest extends TestCase
         ]);
 
         $response->assertStatus(201);
+        $response->assertJsonStructure(['message']);
+        $this->assertDatabaseHas('costs', [
+            'name' => 'General Registration',
+            'amount' => 250000,
+            'type' => 'incremental',
+            'description' => 'Base cost for general registration.',
+            'cost_assignable_id' => $campaign->id,
+            'cost_assignable_type' => 'campaigns'
+        ]);
     }
 }

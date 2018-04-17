@@ -76,7 +76,11 @@ class Cost extends Model
      */
     public function setActiveAtAttribute($value)
     {
-        $this->attributes['active_at'] = $value ? Carbon::parse($value) : null;
+        if (is_string($value)) {
+            $value = $value ? Carbon::parse($value) : null;
+        }
+
+        $this->attributes['active_at'] = $value;
     }
 
     /**

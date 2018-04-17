@@ -142,4 +142,16 @@ class CampaignCostTest extends TestCase
             ]
         ]);
     }
+
+    /** @test */
+    public function delete_a_cost_from_campaign()
+    {
+        $campaign = factory(Campaign::class)->create();
+        $cost = factory(Cost::class)->create();
+
+        $response = $this->json('DELETE', "/api/campaigns/{$campaign->id }/costs/{$cost->id}");
+
+        $response->assertStatus(204);
+        $this->assertDatabaseMissing('costs', ['id' => $cost->id]);
+    }
 }

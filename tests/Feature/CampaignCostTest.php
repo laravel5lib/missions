@@ -71,7 +71,7 @@ class CampaignCostTest extends TestCase
 
         $response = $this->json('POST', "/api/campaigns/{$campaign->id }/costs", [
             'type' => 'invalid',
-            'description' => 'This is description is way way way too long for a cost description. This should be 120 characters or less!!!!',
+            'description' => 'This is description is way way way too long for a cost description. This should be 120 characters or less but it is a whole lot more than that!!!!',
             'active_at' => 'invalid'
         ]);
 

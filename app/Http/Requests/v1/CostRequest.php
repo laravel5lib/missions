@@ -24,25 +24,36 @@ class CostRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'cost_assignable_id'   => 'required|string',
-            'cost_assignable_type' => 'required|string|in:trips,reservations,projects,project_initiatives',
-            'name'                 => 'required|string',
-            'description'          => 'string',
-            'active_at'            => 'required|date',
+            'name'                 => 'required|string|max:60',
+            'description'          => 'nullable|string|max:120',
+            'active_at'            => 'nullable|date',
             'amount'               => 'required|numeric',
             'type'                 => 'required|string|in:incremental,static,optional,conditional',
         ];
-
-        if ($this->isMethod('put')) {
-            $rules['cost_assignable_id'] = 'sometimes|required|string';
-            $rules['cost_assignable_type'] = 'sometimes|required|string|in:trips,reservations,projects,project_initiatives';
-        }
 
         if ($this->isMethod('post')) {
             $rules['payments'] = 'sometimes|array';
         }
 
 
-            return $rules;
+        return $rules;
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Please provide a cost name.',
+            'name.string' => 'Name is not a valid format.',
+            'name.max' => 'Name can only be 60 characters or less.',
+            'description.string' => 'Description is not a valid format.',
+            'description.max' => 'Description can only be 120 characters or less.',
+            'active_at.date' => 'Is not a valid date.',
+            'amount.required' => 'Please enter an amount.',
+            'amount.numeric' => 'Amount is not a valid format.',
+            'type.required' => 'Please provide a cost type.',
+            'type.string' => 'Cost type is not valid.',
+            'type.in' => 'Cost type is not valid.',
+            'payments.array' => 'Payments must be provided as an array.'
+        ];
     }
 }

@@ -6,6 +6,7 @@ use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CostResource;
+use App\Http\Requests\v1\CostRequest;
 
 class CampaignCostController extends Controller
 {
@@ -27,7 +28,7 @@ class CampaignCostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($campaignId, Request $request)
+    public function store($campaignId, CostRequest $request)
     {
         $costs = Campaign::findOrFail($campaignId)
             ->costs()

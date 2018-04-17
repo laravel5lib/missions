@@ -27,9 +27,19 @@ class CampaignCostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($campaignId, Request $request)
     {
-        //
+        $costs = Campaign::findOrFail($campaignId)
+            ->costs()
+            ->create([
+                'name' => $request->input('name'),
+                'amount' => $request->input('amount'),
+                'type' => $request->input('type'),
+                'description' => $request->input('description'),
+                'active_at' => $request->input('active_at')
+            ]);
+
+        return response()->json(['message' => 'New cost added to campaign.'], 201);
     }
 
     /**

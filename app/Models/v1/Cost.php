@@ -70,6 +70,16 @@ class Cost extends Model
     }
 
     /**
+     * Set the active_at attribute
+     *
+     * @param integer $value
+     */
+    public function setActiveAtAttribute($value)
+    {
+        $this->attributes['active_at'] = $value ? Carbon::parse($value) : null;
+    }
+
+    /**
      * Get all of the owning cost assignable models.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo

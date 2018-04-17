@@ -65,6 +65,31 @@ class CampaignCostTest extends TestCase
         ]);
     }
 
+    public function campaign_costs_are_ordered_by_active_at_column()
+    {
+        // TODO
+    }
+
+    public function search_campaign_costs_by_name()
+    {
+        // TODO
+    }
+
+    public function filter_campaign_costs_by_type()
+    {
+        // TODO
+    }
+
+    public function unauthenticated_user_cannot_add_new_costs()
+    {
+        // TODO
+    }
+
+    public function user_without_permission_cannot_add_new_costs()
+    {
+        // TODO
+    }
+
     /** @test */
     public function validates_request_to_add_new_cost_to_campaign()
     {

@@ -19,6 +19,17 @@ class TripCostTest extends TestCase
         $response = $this->json('GET', "/api/trips/{$trip->id}/costs");
 
         $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [
+                [
+                    'id', 'name', 'amount', 'description', 'type', 'active_at'
+                ]
+            ],
+            'meta'
+        ]);
+        $response->assertJson([
+            'meta' => ['total' => 3]
+        ]);
     }
 
     private function setupTripWithCosts()

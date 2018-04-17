@@ -53,9 +53,11 @@ class TripCostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($tripId, $id)
     {
-        //
+        $cost = Trip::findOrFail($tripId)->prices()->findOrFail($id);
+
+        return new CostResource($cost);
     }
 
     /**

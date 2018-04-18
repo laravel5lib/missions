@@ -16,10 +16,15 @@ class TripCostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($tripId)
+    public function index(Request $request, $tripId)
     {
+        $search = $request->input('search');
+
         $costs = Trip::findOrFail($tripId)
             ->prices()
+            ->when($search, function ($query) use ($search) {
+                return $query->where('name', 'LIKE', "$search");
+            })
             ->orderBy('active_at')
             ->paginate();
 

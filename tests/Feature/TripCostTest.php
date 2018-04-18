@@ -62,9 +62,30 @@ class TripCostTest extends TestCase
         ]);
     }
 
+    /** @test */
     public function search_trip_costs_by_name()
     {
-        // TODO
+        $trip = factory(Trip::class)->create();
+        $generalCost = factory(Cost::class)->create([
+            'name' => 'General Reg.', 
+            'cost_assignable_id' => $trip->id, 
+            'cost_assignable_type' => 'trips'
+        ]);
+        $earlyCost = factory(Cost::class)->create([
+            'name' => 'Early Reg.', 
+            'cost_assignable_id' => $trip->id, 
+            'cost_assignable_type' => 'trips'
+        ]);
+        $trip->prices()->attach([$generalCost->id, $earlyCost->id]);
+
+        $response = $this->json('GET', "/api/trips/{$trip->id}/costs", ['search' => 'Early Reg.']);
+
+        $response->assertJson([
+            'data' => [
+                ['name' => 'Early Reg.'],
+            ],
+            'meta' => ['total' => 1]
+        ]);
     }
 
     public function filter_trip_costs_by_type()

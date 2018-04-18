@@ -158,15 +158,15 @@ class ReservationCostTest extends TestCase
     public function remove_a_trip_cost_from_reservation()
     {
         $reservation = $this->setupReservationWithCosts();
-        $cost = $reservation->prices()->first();
+        $cost = $reservation->prices()->where('cost_assignable_type', 'trips')->first();
 
         $response = $this->json('DELETE', "/api/reservations/{$reservation->id}/costs/{$cost->id}");
 
         $response->assertStatus(204);
-        $this->assertDatabaseHas('costs', ['id' => $cost->id]);
         $this->assertDatabaseMissing('costables', [
             'cost_id' => $cost->id, 'costable_id' => $reservation->id, 'costable_type' => 'reservations'
         ]);
+        $this->assertDatabaseHas('costs', ['id' => $cost->id]);
     }
 
     private function setupReservationWithCosts()

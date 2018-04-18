@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Models\v1\Reservation;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CostResource;
 use App\Http\Requests\v1\CostRequest;
@@ -76,8 +77,19 @@ class ReservationCostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($reservationId, $id)
     {
-        //
+        $reservation = Reservation::findOrFail($reservationId);
+        $cost = $reservation->prices()->findOrFail($id);
+
+        DB::transaction(function() use($reservation, $cost) {
+            $reservation->prices()->detach($cost->id);
+
+            if ($cost->cost_assignable_id === $reservation->id && $cost->cost_assignable_type === 'reservations') {
+                $cost->delete();
+            }
+        });
+
+        return response()->json([], 204);
     }
 }

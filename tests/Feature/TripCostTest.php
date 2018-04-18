@@ -88,9 +88,30 @@ class TripCostTest extends TestCase
         ]);
     }
 
+    /** @test */
     public function filter_trip_costs_by_type()
     {
-        // TODO
+        $trip = factory(Trip::class)->create();
+        $incremental = factory(Cost::class)->create([
+            'type' => 'incremental', 
+            'cost_assignable_id' => $trip->id, 
+            'cost_assignable_type' => 'trips'
+        ]);
+        $static = factory(Cost::class)->create([
+            'type' => 'Static', 
+            'cost_assignable_id' => $trip->id, 
+            'cost_assignable_type' => 'trips'
+        ]);
+        $trip->prices()->attach([$incremental->id, $static->id]);
+
+        $response = $this->json('GET', "/api/trips/{$trip->id}/costs", ['type' => 'incremental']);
+
+        $response->assertJson([
+            'data' => [
+                ['type' => 'incremental'],
+            ],
+            'meta' => ['total' => 1]
+        ]);
     }
 
     /** @test */

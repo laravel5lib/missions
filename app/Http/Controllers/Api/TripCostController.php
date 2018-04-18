@@ -19,11 +19,15 @@ class TripCostController extends Controller
     public function index(Request $request, $tripId)
     {
         $search = $request->input('search');
+        $type = $request->input('type');
 
         $costs = Trip::findOrFail($tripId)
             ->prices()
             ->when($search, function ($query) use ($search) {
                 return $query->where('name', 'LIKE', "$search");
+            })
+            ->when($type, function ($query) use ($type) {
+                return $query->where('type', $type);
             })
             ->orderBy('active_at')
             ->paginate();

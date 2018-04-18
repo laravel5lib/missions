@@ -36,6 +36,24 @@ class ReservationCostTest extends TestCase
     }
 
     /** @test */
+    public function add_trip_cost_to_reservation()
+    {
+        $trip = $this->setupTripWithCosts();
+        $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
+        
+        $response = $this->json('POST', "/api/reservations/{$reservation->id}/costs", [
+            'cost_id' => $trip->prices()->first()->id
+        ]);
+
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('costables', [
+            'cost_id' => $trip->prices()->first()->id,
+            'costable_id' => $reservation->id,
+            'costable_type' => 'reservations'
+        ]);
+    }
+
+    /** @test */
     public function add_custom_cost_to_reservation()
     {
         $reservation = factory(Reservation::class)->create();

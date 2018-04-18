@@ -114,7 +114,7 @@ class ReservationCostTest extends TestCase
             'description' => 'Round trip flights to and from destination country.',
         ]);
 
-        $response = $this->json('GET', "/api/reservations/{$reservation->id}/costs/{$cost->id}");
+        $response = $this->json('GET', "/api/reservations/{$reservation->id}/costs/{$reservation->costs()->first()->id}");
 
         $response->assertStatus(200)
                  ->assertJson([

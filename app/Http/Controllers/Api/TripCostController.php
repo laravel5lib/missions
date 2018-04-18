@@ -43,7 +43,7 @@ class TripCostController extends Controller
      */
     public function store(CostRequest $request, $tripId)
     {
-        $trip = Trip::findOrFail($tripId)->addPrice($request);
+        $trip = Trip::findOrFail($tripId)->addPrice($request->all());
         
         return response()->json(['message' => 'New trip cost added.'], 201);
     }

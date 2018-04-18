@@ -30,33 +30,33 @@ trait HasPricing
     /**
      * Add a new price to the model.
      *
-     * @param [type] $request
+     * @param array $cost
      * @return void
      */
-    public function addPrice($request)
+    public function addPrice(array $cost)
     {
-        if ($request->input('cost_id')) {
-            return $this->attachCostToModel($request->input('cost_id'));
+        if (isset($cost['cost_id'])) {
+            return $this->attachCostToModel($cost['cost_id']);
         }
 
-        return $this->createNewCostAndAttachToModel($request);
+        return $this->createNewCostAndAttachToModel($cost);
     }
 
     /**
      * Create new cost and attach it to the model
      *
-     * @param [type] $request
+     * @param array $cost
      * @return void
      */
-    private function createNewCostAndAttachToModel($request)
+    private function createNewCostAndAttachToModel(array $cost)
     {
-        return DB::transaction(function() use($request) {
+        return DB::transaction(function() use($cost) {
             $cost = $this->costs()->create([
-                'name' => $request->input('name'),
-                'amount' => $request->input('amount'),
-                'type' => $request->input('type'),
-                'description' => $request->input('description'),
-                'active_at' => $request->input('active_at')
+                'name' => isset($cost['name']) ? $cost['name'] : null,
+                'amount' => isset($cost['amount']) ? $cost['amount'] : null,
+                'type' => isset($cost['type']) ? $cost['type'] : null,
+                'description' => isset($cost['description']) ? $cost['description'] : null,
+                'active_at' => isset($cost['active_at']) ? $cost['active_at'] : null,
             ]);
             
             $this->attachCostToModel($cost->id);

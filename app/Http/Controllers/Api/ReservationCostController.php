@@ -30,7 +30,7 @@ class ReservationCostController extends Controller
      */
     public function store(CostRequest $request, $reservationId)
     {
-        Reservation::findOrFail($reservationId)->addPrice($request);
+        Reservation::findOrFail($reservationId)->addPrice($request->all());
 
         return response()->json(['message' => 'New cost added to reservation.'], 201);
     }

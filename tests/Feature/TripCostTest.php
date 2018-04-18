@@ -52,7 +52,14 @@ class TripCostTest extends TestCase
         ]);
         $trip->prices()->attach([$generalCost->id, $earlyCost->id]);
 
-        $this->assertEquals('Early Reg.', $trip->prices()->first()->name);
+        $response = $this->json('GET', "/api/trips/{$trip->id}/costs");
+
+        $response->assertJson([
+            'data' => [
+                ['name' => 'Early Reg.'],
+                ['name' => 'General Reg.']
+            ]
+        ]);
     }
 
     public function search_trip_costs_by_name()

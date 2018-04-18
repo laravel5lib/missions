@@ -18,7 +18,10 @@ class TripCostController extends Controller
      */
     public function index($tripId)
     {
-        $costs = Trip::findOrFail($tripId)->prices()->paginate();
+        $costs = Trip::findOrFail($tripId)
+            ->prices()
+            ->orderBy('active_at')
+            ->paginate();
 
         return CostResource::collection($costs);
     }

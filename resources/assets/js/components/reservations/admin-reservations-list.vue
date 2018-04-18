@@ -21,7 +21,7 @@
 								<option value="surname">Surname</option>
 								<option value="email">Email</option>
 								<option value="phone_one">Primary Phone</option>
-								<option vallue="phone_two">Secondary Phone</option>
+								<option value="phone_two">Secondary Phone</option>
 							</select>
 						</div>
                     </div>

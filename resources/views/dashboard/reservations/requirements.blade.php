@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-xs-12 tour-step-requirements">
             <reservation-requirements id="{{ $reservation->id }}"
-                                      user-id="{{ $reservation->user_id }}" 
+                                      user-id="{{ auth()->user()->id ?: $reservation->user_id }}" 
                                       :age="{{ $reservation->age }}"
                                       :locked="{{ $locked?'true':'false' }}">
             </reservation-requirements>

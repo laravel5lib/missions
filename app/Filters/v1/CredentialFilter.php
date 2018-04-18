@@ -1,9 +1,9 @@
 <?php namespace App\Filters\v1;
 
+use App\Models\v1\User;
+
 class CredentialFilter extends Filter
 {
-    use Manageable;
-
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
     * As [relatedModel => [input_key1, input_key2]].
@@ -78,5 +78,28 @@ class CredentialFilter extends Filter
         }
 
         return $this->{$status}();
+    }
+
+    public function manager($user_id)
+    {
+        $user = User::findOrFail($user_id);
+
+        $facilitated_users = $user->facilitating->flatMap(function ($trip) {
+            return $trip->reservations->pluck('user_id');
+        });
+
+        $managed_users = $user->managing->flatMap(function ($group) {
+            return $group->trips->flatMap(function ($trip) {
+                return $trip->reservations->pluck('user_id');
+            });
+        });
+
+        $users = $facilitated_users->merge($managed_users)->unique()->all();
+
+        if (key_exists('user', $this->input)) {
+            $users = array_prepend($users, $this->input['user']);
+        }
+
+        return $this->whereIn('holder_id', $users)->where('holder_type', 'users');
     }
 }

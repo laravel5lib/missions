@@ -147,9 +147,21 @@ class TripCostTest extends TestCase
         $response->assertJson(['data' => ['name' => 'Updated Trip Cost']]);
     }
 
+    /** @test */
     public function validates_a_request_to_update_custom_trip_cost()
     {
-        // TODO
+        $trip = $this->setupTripWithCosts();
+        $cost = $trip->costs()->first();
+
+        $response = $this->json('PUT', "/api/trips/{$trip->id}/costs/{$cost->id}", [
+            'name' => '',
+            'amount' => '',
+            'type' => 'invalid',
+            'description' => 'This is description is way way way too long for a cost description. This should be 120 characters or less but it is a whole lot more than that!!!!',
+            'active_at' => 'invalid'
+        ]);
+
+        $response->assertJsonValidationErrors(['name', 'amount', 'type', 'description', 'active_at']);
     }
 
     /** @test */

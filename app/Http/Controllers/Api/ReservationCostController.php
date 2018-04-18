@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use App\Models\v1\Reservation;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CostResource;
 
 class ReservationCostController extends Controller
 {
@@ -12,9 +14,11 @@ class ReservationCostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($reservationId)
     {
-        return response(200);
+        $costs = Reservation::findOrFail($reservationId)->prices()->paginate();
+        
+        return CostResource::collection($costs);
     }
 
     /**

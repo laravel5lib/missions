@@ -40,9 +40,14 @@ class ReservationCostTest extends TestCase
         $trip = $this->setupTripWithCosts();
 
         $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
+        $cost = factory(Cost::class)->create([
+            'cost_assignable_id' => $reservation->id, 
+            'cost_assignable_type' => 'reservations'
+        ]);
+
         $tripCosts = $trip->prices->pluck('id')->toArray();
         $reservation->prices()->attach([
-            $tripCosts[0], $tripCosts[1], $tripCosts[2]
+            $cost->id, $tripCosts[0], $tripCosts[1], $tripCosts[2]
         ]);
 
         return $reservation;

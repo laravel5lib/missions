@@ -132,9 +132,17 @@ class TripCostTest extends TestCase
         $response->assertJson(['data' => ['id' => $cost->id]]);
     }
 
+    /** @test */
     public function update_a_custom_trip_cost()
     {
-        // TODO
+        $trip = $this->setupTripWithCosts();
+        $cost = $trip->costs()->first();
+        $this->assertNotEquals('Updated Trip Cost.', $cost->name);
+
+        $response = $this->json('PUT', "/api/trips/{$trip->id}/costs/{$cost->id}");
+
+        $response->assertStatus(200);
+        $response->assertJson(['data' => ['name' => 'Updated Trip Cost']]);
     }
 
     public function validates_a_request_to_update_custom_trip_cost()

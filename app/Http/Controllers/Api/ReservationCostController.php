@@ -55,9 +55,19 @@ class ReservationCostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CostRequest $request, $reservationId, $id)
     {
-        //
+        $cost = Reservation::findOrFail($reservationId)->costs()->findOrFail($id);
+
+        $cost->update([
+            'name' => $request->input('name', $cost->name),
+            'amount' => $request->input('amount', $cost->amount),
+            'type' => $request->input('type', $cost->type),
+            'description' => $request->input('description', $cost->description),
+            'active_at' => $request->input('active_at', $cost->active_at)
+        ]);
+
+        return new CostResource($cost);
     }
 
     /**

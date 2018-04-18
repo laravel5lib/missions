@@ -127,6 +127,33 @@ class ReservationCostTest extends TestCase
                  ]);
     }
 
+    /** @test */
+    public function updates_a_reservation_cost()
+    {
+        $reservation = factory(Reservation::class)->create();
+        $reservation->addPrice([
+            'name' => 'International Flight',
+            'amount' => 2000.00,
+            'type' => 'static',
+            'description' => 'Round trip flights to and from destination country.',
+        ]);
+
+        $response = $this->json('PUT', "/api/reservations/{$reservation->id}/costs/{$reservation->costs()->first()->id}", [
+            'name' => 'Updated International Flight',
+            'amount' => 2500.00
+        ]);
+
+        $response->assertStatus(200)
+                 ->assertJson([
+                     'data' => [
+                        'name' => 'Updated International Flight',
+                        'amount' => 2500.00,
+                        'type' => 'static',
+                        'description' => 'Round trip flights to and from destination country.'
+                     ]
+                 ]);
+    }
+
     private function setupReservationWithCosts()
     {
         $trip = $this->setupTripWithCosts();

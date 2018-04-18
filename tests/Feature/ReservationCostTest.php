@@ -48,6 +48,16 @@ class ReservationCostTest extends TestCase
         ]);
 
         $response->assertStatus(201);
+        $this->assertDatabaseHas('costs', [
+            'name' => 'International Flight',
+            'amount' => 200000,
+            'type' => 'static',
+            'description' => 'Round trip flights to and from destination country.',
+        ]);
+        $this->assertDatabaseHas('costables', [
+            'costable_id' => $reservation->id,
+            'costable_type' => 'reservations'
+        ]);
     }
 
     /** @test */

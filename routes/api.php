@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
 
 Route::apiResource('campaigns/{campaignId}/costs', 'CampaignCostController');
 Route::apiResource('trips/{tripId}/costs', 'TripCostController');
+Route::apiResource('reservations/{reservationId}/costs', 'ReservationCostController');
 
 
 // Dingo API routes

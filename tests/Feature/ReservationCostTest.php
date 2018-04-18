@@ -35,6 +35,21 @@ class ReservationCostTest extends TestCase
         ]);
     }
 
+    /** @test */
+    public function add_custom_cost_to_reservation()
+    {
+        $reservation = $this->setupReservationWithCosts();
+
+        $response = $this->json('POST', "/api/reservations/{$reservation->id}/costs", [
+            'name' => 'International Flight',
+            'amount' => 2000.00,
+            'type' => 'static',
+            'description' => 'Round trip flights to and from destination country.'
+        ]);
+
+        $response->assertStatus(201);
+    }
+
     private function setupReservationWithCosts()
     {
         $trip = $this->setupTripWithCosts();

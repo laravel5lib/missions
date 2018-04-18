@@ -207,6 +207,16 @@ class Reservation extends Model
     }
 
     /**
+     * Get all costs assigned to the reservation.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function prices()
+    {
+        return $this->morphToMany(Cost::class, 'costable');
+    }
+
+    /**
      * Get all of the reservation's active costs.
      *
      * @return Illuminate\Database\Eloquent\Relations\BelongsToMany

@@ -235,6 +235,21 @@ class TripCostTest extends TestCase
     }
 
     /** @test */
+    public function remove_a_campaign_cost()
+    {
+        $trip = $this->setupTripWithCosts();
+        $cost = $trip->prices()->where('cost_assignable_type', 'campaigns')->first();
+
+        $response = $this->json('DELETE', "/api/trips/{$trip->id}/costs/{$cost->id}");
+
+        $response->assertStatus(204);
+        $this->assertDatabaseHas('costs', ['id' => $cost->id]);
+        $this->assertDatabaseMissing('costables', [
+            'cost_id' => $cost->id, 'costable_id' => $trip->id, 'costable_type' => 'trips'
+        ]);
+    }
+
+    /** @test */
     public function remove_a_custom_trip_cost()
     {
         $trip = $this->setupTripWithCosts();

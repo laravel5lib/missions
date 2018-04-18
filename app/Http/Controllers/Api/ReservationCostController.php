@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\v1\Reservation;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CostResource;
+use App\Http\Requests\v1\CostRequest;
 
 class ReservationCostController extends Controller
 {
@@ -27,9 +28,11 @@ class ReservationCostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CostRequest $request, $reservationId)
     {
-        //
+        Reservation::findOrFail($reservationId)->addPrice($request);
+
+        return response()->json(['message' => 'New cost added to reservation.'], 201);
     }
 
     /**

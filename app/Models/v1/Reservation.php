@@ -4,6 +4,7 @@ namespace App\Models\v1;
 
 use Carbon\Carbon;
 use App\UuidForKey;
+use App\Traits\HasPricing;
 use App\Traits\Rewardable;
 use Conner\Tagging\Taggable;
 use App\Utilities\v1\TeamRole;
@@ -20,7 +21,7 @@ use App\Models\Presenters\ReservationPresenter;
 
 class Reservation extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey, Taggable, Rewardable, ReservationPresenter;
+    use SoftDeletes, Filterable, UuidForKey, Taggable, Rewardable, ReservationPresenter, HasPricing;
 
     /**
      * The table associated with the model.
@@ -192,28 +193,6 @@ class Reservation extends Model
     public function companions()
     {
         return $this->hasMany(Companion::class, 'reservation_id');
-    }
-
-    /**
-     * Get all of the reservation's costs
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function costs()
-    {
-        return $this->belongsToMany(Cost::class, 'reservation_costs')
-                    ->withPivot('locked')
-                    ->withTimestamps();
-    }
-
-    /**
-     * Get all costs assigned to the reservation.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function prices()
-    {
-        return $this->morphToMany(Cost::class, 'costable');
     }
 
     /**

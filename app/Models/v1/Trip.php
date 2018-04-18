@@ -6,8 +6,9 @@ use App\Deposit;
 use Carbon\Carbon;
 use App\UuidForKey;
 use App\Models\v1\Fund;
-use App\Traits\Promoteable;
+use App\Traits\HasPricing;
 use App\ReservationFactory;
+use App\Traits\Promoteable;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Trip extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey, Taggable, Promoteable;
+    use SoftDeletes, Filterable, UuidForKey, Taggable, Promoteable, HasPricing;
 
     /**
      * The table associated with the model.
@@ -101,26 +102,6 @@ class Trip extends Model
     public function campaign()
     {
         return $this->belongsTo(Campaign::class);
-    }
-
-    /**
-     * Get all the trip's costs.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function costs()
-    {
-        return $this->morphMany(Cost::class, 'cost_assignable');
-    }
-    
-    /**
-     * Get all costs assigned to the trip.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function prices()
-    {
-        return $this->morphToMany(Cost::class, 'costable');
     }
 
     /**
@@ -307,35 +288,6 @@ class Trip extends Model
         if (! $ids->isEmpty()) {
             Deadline::destroy($ids);
         }
-    }
-
-    public function addPrice($request)
-    {
-        if ($request->input('cost_id')) {
-            return $this->attachCostToTrip($request->input('cost_id'));
-        }
-
-        return $this->createNewCostAndAttachToTrip($request);
-    }
-
-    private function createNewCostAndAttachToTrip($request)
-    {
-        return DB::transaction(function() use($request) {
-            $cost = $this->costs()->create([
-                'name' => $request->input('name'),
-                'amount' => $request->input('amount'),
-                'type' => $request->input('type'),
-                'description' => $request->input('description'),
-                'active_at' => $request->input('active_at')
-            ]);
-            
-            $this->attachCostToTrip($cost->id);
-        });
-    }
-
-    private function attachCostToTrip($costId)
-    {
-        return $this->prices()->attach($costId);
     }
 
     /**

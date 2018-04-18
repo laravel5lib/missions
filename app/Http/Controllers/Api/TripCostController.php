@@ -52,13 +52,24 @@ class TripCostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Http\Requests\v1\CostRequest  $request
+     * @param  string $tripId
+     * @param  string $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CostRequest $request, $tripId, $id)
     {
-        //
+        $cost = Trip::findOrFail($tripId)->costs()->findOrFail($id);
+
+        $cost->update([
+            'name' => $request->input('name', $cost->name),
+            'amount' => $request->input('amount', $cost->amount),
+            'type' => $request->input('type', $cost->type),
+            'description' => $request->input('description', $cost->description),
+            'active_at' => $request->input('active_at', $cost->active_at)
+        ]);
+
+        return new CostResource($cost);
     }
 
     /**

@@ -139,7 +139,9 @@ class TripCostTest extends TestCase
         $cost = $trip->costs()->first();
         $this->assertNotEquals('Updated Trip Cost.', $cost->name);
 
-        $response = $this->json('PUT', "/api/trips/{$trip->id}/costs/{$cost->id}");
+        $response = $this->json('PUT', "/api/trips/{$trip->id}/costs/{$cost->id}", [
+            'name' => 'Updated Trip Cost'
+        ]);
 
         $response->assertStatus(200);
         $response->assertJson(['data' => ['name' => 'Updated Trip Cost']]);

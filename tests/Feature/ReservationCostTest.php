@@ -103,6 +103,30 @@ class ReservationCostTest extends TestCase
         $response->assertJsonValidationErrors(['name', 'amount', 'type', 'description', 'active_at']);
     }
 
+    /** @test */
+    public function get_specific_cost_for_reservation()
+    {
+        $reservation = factory(Reservation::class)->create();
+        $reservation->addPrice([
+            'name' => 'International Flight',
+            'amount' => 2000.00,
+            'type' => 'static',
+            'description' => 'Round trip flights to and from destination country.',
+        ]);
+
+        $response = $this->json('GET', "/api/reservations/{$reservation->id}/costs/{$cost->id}");
+
+        $response->assertStatus(200)
+                 ->assertJson([
+                     'data' => [
+                        'name' => 'International Flight',
+                        'amount' => 2000.00,
+                        'type' => 'static',
+                        'description' => 'Round trip flights to and from destination country.'
+                     ]
+                 ]);
+    }
+
     private function setupReservationWithCosts()
     {
         $trip = $this->setupTripWithCosts();

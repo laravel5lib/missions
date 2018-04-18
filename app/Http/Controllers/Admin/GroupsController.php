@@ -63,7 +63,7 @@ class GroupsController extends Controller
      */
     public function edit($id)
     {
-        $this->authorize('edit', $this->group);
+        $this->authorize('update', $this->group);
 
         $this->seo()->setTitle('Edit Group');
 

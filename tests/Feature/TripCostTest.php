@@ -34,9 +34,25 @@ class TripCostTest extends TestCase
         ]);
     }
 
+    /** @test */
     public function order_trip_costs_by_active_date()
     {
-        // TODO
+        $trip = factory(Trip::class)->create();
+        $generalCost = factory(Cost::class)->create([
+            'name' => 'General Reg.', 
+            'active_at' => '04/01/2018',
+            'cost_assignable_id' => $trip->id, 
+            'cost_assignable_type' => 'trips'
+        ]);
+        $earlyCost = factory(Cost::class)->create([
+            'name' => 'Early Reg.', 
+            'active_at' => '01/01/2018',
+            'cost_assignable_id' => $trip->id, 
+            'cost_assignable_type' => 'trips'
+        ]);
+        $trip->prices()->attach([$generalCost->id, $earlyCost->id]);
+
+        $this->assertEquals('Early Reg.', $trip->prices()->first()->name);
     }
 
     public function search_trip_costs_by_name()

@@ -73,6 +73,8 @@ class ReservationCostTest extends TestCase
 
     private function setupCampaignWithCosts()
     {
+        $this->setupArbitraryCosts();
+
         $campaign = factory(Campaign::class)->create();
         factory(Cost::class, 2)->create([
             'cost_assignable_id' => $campaign->id, 
@@ -80,5 +82,10 @@ class ReservationCostTest extends TestCase
         ]);
 
         return $campaign;
+    }
+
+    private function setupArbitraryCosts()
+    {
+        factory(Cost::class, 2)->create();
     }
 }

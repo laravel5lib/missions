@@ -54,6 +54,17 @@ class ReservationCostTest extends TestCase
     }
 
     /** @test */
+    public function validates_request_to_add_trip_cost_to_reservation()
+    {
+        $trip = $this->setupTripWithCosts();
+        $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
+        
+        $response = $this->json('POST', "/api/reservations/{$reservation->id}/costs", []);
+
+        $response->assertJsonValidationErrors(['cost_id']);
+    }
+
+    /** @test */
     public function add_custom_cost_to_reservation()
     {
         $reservation = factory(Reservation::class)->create();

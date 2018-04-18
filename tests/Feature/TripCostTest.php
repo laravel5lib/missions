@@ -164,6 +164,11 @@ class TripCostTest extends TestCase
         $response->assertJsonValidationErrors(['name', 'amount', 'type', 'description', 'active_at']);
     }
 
+    public function throws_exception_when_updating_cost_not_owned_by_trip()
+    {
+        //
+    }
+
     /** @test */
     public function remove_a_custom_trip_cost()
     {

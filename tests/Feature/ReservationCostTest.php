@@ -38,7 +38,7 @@ class ReservationCostTest extends TestCase
     /** @test */
     public function add_custom_cost_to_reservation()
     {
-        $reservation = $this->setupReservationWithCosts();
+        $reservation = factory(Reservation::class)->create();
 
         $response = $this->json('POST', "/api/reservations/{$reservation->id}/costs", [
             'name' => 'International Flight',
@@ -48,6 +48,20 @@ class ReservationCostTest extends TestCase
         ]);
 
         $response->assertStatus(201);
+    }
+
+    /** @test */
+    public function validates_request_to_add_custom_cost_to_reservation()
+    {
+        $reservation = factory(Reservation::class)->create();
+
+        $response = $this->json('POST', "/api/reservations/{$reservation->id}/costs", [
+            'type' => 'invalid',
+            'description' => 'This is description is way way way too long for a cost description. This should be 120 characters or less but it is a whole lot more than that!!!!',
+            'active_at' => 'invalid'
+        ]);
+
+        $response->assertJsonValidationErrors(['name', 'amount', 'type', 'description', 'active_at']);
     }
 
     private function setupReservationWithCosts()

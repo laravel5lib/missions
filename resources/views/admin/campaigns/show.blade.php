@@ -21,12 +21,16 @@
             <ul class="nav nav-pills nav-stacked" role="tablist">
 
                 <li role="presentation" class="{{ $tab == 'details' ? 'active' : '' }}">
-                    <a href="{{ url('admin/campaigns/'.$campaign->id.'/details') }}">Details</a>
+                    <a href="{{ url('admin/campaigns/'.$campaign->id.'/details') }}">Overview</a>
+                </li>
+
+                <li role="presentation" class="{{ $tab == 'prices' ? 'active' : '' }}">
+                    <a href="{{ url('admin/campaigns/'.$campaign->id.'/prices') }}">Pricing</a>
                 </li>
 
                 @can('view', \App\Models\v1\Trip::class)
                 <li role="presentation" class="{{ $tab == 'trips' ? 'active' : '' }}">
-                    <a href="{{ url('admin/campaigns/'.$campaign->id.'/trips') }}">Travel Groups</a>
+                    <a href="{{ url('admin/campaigns/'.$campaign->id.'/trips') }}">Trips</a>
                 </li>
                 @endcan
 

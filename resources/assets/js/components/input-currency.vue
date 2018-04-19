@@ -1,15 +1,17 @@
 <template>
     <div class="form-group" :class="{'has-error' : $parent.form.errors.has(name)}"> 
-        <slot name="label"></slot>
-        <money v-model.lazy="amount" 
-               v-bind="money" 
-               class="form-control">
-        </money>
-        <span class="help-block" 
-                v-text="$parent.form.errors.get(name)" 
-                v-if="$parent.form.errors.has(name)">
-        </span>
-        <slot name="help-text" v-if="!$parent.form.errors.has(name)"></slot>
+         <div class="col-xs-12">
+            <slot name="label"></slot>
+            <money v-model.lazy="amount" 
+                v-bind="money" 
+                class="form-control">
+            </money>
+            <span class="help-block" 
+                    v-text="$parent.form.errors.get(name)" 
+                    v-if="$parent.form.errors.has(name)">
+            </span>
+            <slot name="help-text" v-if="!$parent.form.errors.has(name)"></slot>
+        </div>
     </div>
 </template>
 <script>

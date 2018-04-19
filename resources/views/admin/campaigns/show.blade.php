@@ -17,8 +17,8 @@
 <hr class="divider inv lg">
 <div class="container">
     <div class="row">
-        <div class="col-sm-12">
-            <ul class="nav nav-tabs" role="tablist">
+        <div class="col-sm-3">
+            <ul class="nav nav-pills nav-stacked" role="tablist">
 
                 <li role="presentation" class="{{ $tab == 'details' ? 'active' : '' }}">
                     <a href="{{ url('admin/campaigns/'.$campaign->id.'/details') }}">Details</a>
@@ -46,7 +46,7 @@
                 </li>
                 @endcan
 
-                @can('view', \App\Models\v1\Room::class)
+                <!-- @can('view', \App\Models\v1\Room::class)
                  <li role="presentation" class="{{ $tab == 'accommodations' || $tab == 'rooming-manager' || $tab == 'room-types' ? 'active' : '' }} dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Rooming <span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -67,7 +67,7 @@
                         @endcan
                     </ul>
                 </li>
-                @endcan
+                @endcan -->
 
                 @can('view', \App\Models\v1\Region::class)
                 <li role="presentation" class="{{ $tab == 'regions' || $tab == 'region-accommodations' ? 'active' : '' }} dropdown">
@@ -91,7 +91,7 @@
                 </li>
                 @endcan
 
-                @can('view', \App\CampaignTransport::class)
+                <!-- @can('view', \App\CampaignTransport::class)
                 <li role="presentation" class="{{ $tab == 'transports' ? 'active' : '' }} dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Transportation <span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -104,13 +104,12 @@
                 <li role="presentation" class="{{ $tab == 'promotionals' ? 'active' : '' }}">
                     <a href="{{ url('admin/campaigns/'.$campaign->id.'/promotionals') }}">Promos</a>
                 </li>
-                @endcan
+                @endcan -->
 
             </ul>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
+
+        <div class="col-sm-9">
             @yield('tab')
         </div>
     </div>

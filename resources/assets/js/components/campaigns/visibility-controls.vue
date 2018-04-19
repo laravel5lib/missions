@@ -1,52 +1,50 @@
 <template>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h5>Assignment(s) Visibility</h5>
+            <h5>Settings</h5>
         </div>
         <div class="panel-body">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" v-model="publish_squads"> Publish Squad Assignments
-                </label>
-                <span class="help-block">
-                    Display a reservation's squad and group assignment in the user's dashboard.
-                </span>
-                <label>
-                    <input type="checkbox" v-model="publish_regions"> Publish Region Assignments
-                </label>
-                <span class="help-block">
-                    Display a reservation's region assignment in the user's dashboard.
-                </span>
-                <label>
-                    <input type="checkbox" v-model="publish_transports"> Publish Trip Transportation
-                </label>
-                <span class="help-block">
-                    Display a reservation's transportation arrangements in the user's dashboard.
-                </span>
-                <label>
-                    <input type="checkbox" v-model="publish_rooms"> Publish Room Assignments
-                </label>
-                <span class="help-block">
-                    Display a reservation's rooms and accommodations in the user's dashboard.
-                </span>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" v-model="publish_squads" @change="save"> Publish Squad Assignments
+                        </label>
+                        <span class="help-block">
+                            Display a reservation's squad and group assignment in the user's dashboard.
+                        </span>
+                        <label>
+                            <input type="checkbox" v-model="publish_regions" @change="save"> Publish Region Assignments
+                        </label>
+                        <span class="help-block">
+                            Display a reservation's region assignment in the user's dashboard.
+                        </span>
+                        <label>
+                            <input type="checkbox" v-model="publish_transports" @change="save"> Publish Trip Transportation
+                        </label>
+                        <span class="help-block">
+                            Display a reservation's transportation arrangements in the user's dashboard.
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" v-model="publish_rooms" @change="save"> Publish Room Assignments
+                        </label>
+                        <span class="help-block">
+                            Display a reservation's rooms and accommodations in the user's dashboard.
+                        </span>
+                        <label>
+                            <input type="checkbox" v-model="reservations_locked" @change="save"> Lock Reservation Requirements
+                        </label>
+                        <span class="help-block">
+                            Prevent user from making changes to their reservation travel requirements in the dashboard.
+                            <strong>Admins can still modify travel requirements.</strong>
+                        </span>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="panel-heading">
-            <h5>Restrictions</h5>
-        </div>
-        <div class="panel-body">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" v-model="reservations_locked"> Lock Reservation Requirements
-                </label>
-                <span class="help-block">
-                    Prevent user from making changes to their reservation travel requirements in the dashboard.
-                    <strong>Admins can still modify travel requirements.</strong>
-                </span>
-            </div>
-        </div>
-        <div class="panel-footer text-center">
-            <button class="btn btn-primary" @click="save">Save</button>
         </div>
     </div>
 </template>

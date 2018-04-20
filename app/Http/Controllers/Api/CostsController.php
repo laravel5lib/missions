@@ -30,4 +30,13 @@ class CostsController extends Controller
 
         return new CostResource($cost);
     }
+
+    public function update(CostRequest $request, $id)
+    {
+        $cost = Cost::findOrFail($id);
+
+        $cost->update($request->all());
+
+        return new CostResource($cost);
+    }
 }

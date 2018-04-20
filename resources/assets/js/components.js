@@ -217,6 +217,7 @@ Vue.component('initiative-editor', require('./components/admin/initiative-editor
  */
 Vue.component('campaign-price-list', require('./components/campaign-price-list.vue'));
 Vue.component('trip-price-list', require('./components/trip-price-list.vue'));
+Vue.component('reservation-price-list', require('./components/reservation-price-list.vue'));
 
 /**
  * Misc. Components

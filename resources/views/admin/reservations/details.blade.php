@@ -1,112 +1,72 @@
 @extends('admin.reservations.show')
 
 @section('tab')
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h5>Details</h5>
-    </div>
-    <div class="panel-body">
-        <div class="col-md-7">
-            <div class="row">
-                <div class="col-md-6">
-                    <label>Surname</label>
-                    <p>{{ $reservation->surname }}</p>
-                </div>
-                <div class="col-md-6">
-                    <label>Given Names</label>
-                    <p>{{ $reservation->given_names }}</p>
-                </div>
+
+@component('panel')
+    @slot('title')
+        <div class="row">
+            <div class="col-xs-8">
+                <h5>Traveler Info</h5>
             </div>
-            <hr class="divider">
-            <div class="row">
-                <div class="col-md-6">
-                    <label>Campaign</label>
-                    <p>{{ $reservation->trip->campaign->name }}</p>
-                </div>
-                <div class="col-md-6">
-                    <label>Country</label>
-                    <p>{{ country($reservation->trip->country_code) }}</p>
-                </div>
+            <div class="col-xs-4 text-right">
             </div>
-            <hr class="divider">
-            <div class="row">
-                <div class="col-md-6">
-                    <label>Group</label>
-                    <p><a href="{{ url('/admin/groups/' . $reservation->trip->group->id) }}">{{ $reservation->trip->group->name }}</a> <sup class="text-muted"><i class="fa fa-external-link"></i></p>
-                </div>
-                <div class="col-md-6">
-                    <label>Trip Type</label>
-                    <p><a href="{{ url('/admin/trips/' . $reservation->trip->id) }}">{{ ucwords($reservation->trip->type) }} Trip</a> <sup class="text-muted"><i class="fa fa-external-link"></i></sup></p>
-                </div>
-            </div>
-            <hr class="divider">
-            <div class="row">
-                <div class="col-md-6">
-                    <label>Gender</label>
-                    <p>{{ ucwords($reservation->gender) }}</p>
-                </div>
-                <div class="col-md-6">
-                    <label>Marital Status</label>
-                    <p>{{ ucwords($reservation->status) }}</p>
-                </div>
-            </div>
-            <hr class="divider">
-            <div class="row">
-                <div class="col-md-6">
-                    <label>Birthday</label>
-                    <p>{{ $reservation->birthday->format('F j, Y') }}</p>
-                </div>
-                <div class="col-md-6">
-                    <label>Age</label>
-                    <p>{{ $reservation->birthday->age }}</p>
-                </div>
-            </div>
-            <hr class="divider">
-            <div class="row">
-                <div class="col-md-6">
-                    <label>Desired Role</label>
-                    <p>{{ teamRole($reservation->desired_role) }}</p>
-                </div>
-                <div class="col-md-6">
-                    <label>Shirt Size</label>
-                    <p>{{ shirtSize($reservation->shirt_size) }}</p>
-                </div>
-            </div>
-            <hr class="divider">
-            <div class="row">
-                <div class="col-md-6">
-                    <label>End Date</label>
-                    <p>{{ $reservation->trip->ended_at->toFormattedDateString() }}</p>
-                </div>
-                <div class="col-md-6">
-                    <label>Start Date</label>
-                    <p>{{ $reservation->trip->started_at->toFormattedDateString() }}</p>
-                </div>
-            </div>
-            <hr class="divider">
-            <label>Reservation ID</label>
-            <p>{{ $reservation->id }}</p>
         </div>
-        <div class="col-md-5 panel panel-default panel-body text-center">
-            <label>Email</label>
-            <p>{{ $reservation->email }}</p>
-            <label>Home Phone</label>
-            <p>{{ $reservation->phone_one }}</p>
-            <label>Mobile Phone</label>
-            <p>{{ $reservation->phone_two }}</p>
-            <label>Address</label>
-            <p>{{ $reservation->address }}</p>
-            <label>City</label>
-            <p>{{ $reservation->city }}</p>
-            <label>State/Providence</label>
-            <p>{{ $reservation->state }}</p>
-            <label>Zip/Postal Code</label>
-            <p>{{ $reservation->zip }}</p>
-            <label>Country</label>
-            <p>{{ country($reservation->country_code) }}</p>
+    @endslot
+    @component('list-group', ['data' => [
+        'Name' => $reservation->name,
+        'Gender' => ucwords($reservation->gender),
+        'Marital Status' => ucwords($reservation->status),
+        'Birthday' => $reservation->birthday->format('F j, Y'),
+        'Age' => $reservation->birthday->age,
+        'Team Role' => teamRole($reservation->desired_role),
+        'Shirt Size' => shirtSize($reservation->shirt_size),
+        'Email' => $reservation->email,
+        'Home Phone' => $reservation->phone_one,
+        'Mobile Phone' => $reservation->phone_two,
+        'Address' => $reservation->address.'<br />'.$reservation->city.', '.$reservation->state.' '.$reservation->zip.'<br />'.country($reservation->country_code)
+    ]])
+    @endcomponent
+@endcomponent
+
+@component('panel')
+    @slot('title')
+        <div class="row">
+            <div class="col-xs-8">
+                <h5>Trip Details</h5>
+            </div>
+            <div class="col-xs-4 text-right">
+            </div>
         </div>
-    </div>
-    <div class="panel-footer text-center">
+    @endslot
+    @component('list-group', ['data' => [
+        'Campaign' => $reservation->trip->campaign->name,
+        'Country' => country($reservation->trip->campaign->country_code),
+        'Group' => '<a href="'.url('/admin/groups/'. $reservation->trip->group->id).'">'.$reservation->trip->group->name.'</a>',
+        'Trip Type' => $reservation->trip->type,
+        'Start Date' => $reservation->trip->started_at->format('F j, Y'),
+        'End Date' => $reservation->trip->ended_at->format('F j, Y')
+    ]])
+    @endcomponent
+@endcomponent
+
+@component('panel')
+    @slot('title')
+        <div class="row">
+            <div class="col-xs-8">
+                <h5>Registration Details</h5>
+            </div>
+            <div class="col-xs-4 text-right">
+            </div>
+        </div>
+    @endslot
+    @component('list-group', ['data' => [
+        'Managing Account' => $reservation->user->name,
+        'Date Registered' => $reservation->created_at->format('F j, Y h:i a'),
+        'Reservation ID' => $reservation->id
+    ]])
+    @endcomponent
+    @slot('footer')
+    <div class="text-right">
         <hr class="divider inv sm">
         <send-email label="Resend confirmation email"
                  icon="fa fa-envelope icon-left"
@@ -115,7 +75,11 @@
                  :parameters="{id: '{{ $reservation->id }}', email: '{{ $reservation->user->email }}'}">
         </send-email>
     </div>
-</div><!-- end panel -->
+    @endslot
+@endcomponent
+
+<companion-manager reservation-id="{{ $reservation->id }}"></companion-manager>
+
 
 <div class="panel panel-default">
     <div class="panel-heading">

@@ -229,11 +229,11 @@ return [
         ],
         'reservation' => [
             [
-                'label' => 'Details',
+                'label' => 'Overview',
                 'url' => 'details'
             ],
             [
-                'label' => 'Costs / Payments',
+                'label' => 'Pricing',
                 'url' => 'costs'
             ],
             [
@@ -241,23 +241,15 @@ return [
                 'url' => 'requirements'
             ],
             [
-                'label' => 'Funding',
+                'label' => 'Fundraising',
                 'url' => 'funding'
-            ],
-            [
-                'label' => 'Deadlines',
-                'url' => 'deadlines'
-            ],
-            [
-                'label' => 'Companions',
-                'url' => 'companions'
             ],
             [
                 'label' => 'Legal',
                 'url' => 'legal'
             ],
             [
-                'label' => 'Todos',
+                'label' => 'Tasks',
                 'url' => 'todos'
             ],
             [

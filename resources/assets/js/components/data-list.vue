@@ -68,6 +68,7 @@ export default {
         
         this.$nextTick(function () {
             this.$root.$on('form:success', this.getItems);
+            this.$root.$on('list:refresh', this.getItems);
         }.bind(this));
     }
 }

@@ -213,6 +213,12 @@ Vue.component('initiatives-list', require('./components/admin/initiatives-list.v
 Vue.component('initiative-editor', require('./components/admin/initiative-editor.vue'));
 
 /**
+ * Single Use Components
+ */
+Vue.component('campaign-price-list', require('./components/campaign-price-list.vue'));
+Vue.component('trip-price-list', require('./components/trip-price-list.vue'));
+
+/**
  * Misc. Components
  */
 Vue.component('funding', require('./components/funding.vue'));

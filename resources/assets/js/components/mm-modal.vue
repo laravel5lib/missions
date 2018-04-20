@@ -1,6 +1,6 @@
 <template>
     <transition name="fade">
-        <div class="modal fade in" tabindex="-1" role="dialog" style="display: block" v-if="showModal">
+        <div class="modal fade in" tabindex="-1" role="dialog" style="display: block; overflow: auto;" v-if="showModal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -9,12 +9,7 @@
                             <span>&times;</span>
                         </button></h5>
                     </div>
-                    <div class="modal-body">
-                        <slot></slot>
-                    </div>
-                    <div class="modal-footer">
-                        <slot name="footer"></slot>
-                    </div>
+                    <slot></slot>
                 </div>
             </div>
         </div>

@@ -43,11 +43,11 @@ export default {
         }
     },
 
-    // watch: {
-    //     'amount'(value) {
-    //         this.$parent.form[this.name] = value;
-    //     }
-    // },
+    watch: {
+        'amount'(value) {
+            this.$parent.form[this.name] = value;
+        }
+    },
 
     mounted() {
         this.$parent.form[this.name] = this.value;

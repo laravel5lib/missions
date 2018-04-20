@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 |
 */
 
-Route::apiResource('costs', 'CostsController');
+Route::apiResource('costs', 'CostsController')->middleware('api.auth');
 Route::apiResource('campaigns/{campaignId}/costs', 'CampaignCostController');
 Route::apiResource('trips/{tripId}/costs', 'TripCostController');
 Route::apiResource('reservations/{reservationId}/costs', 'ReservationCostController');

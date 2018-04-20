@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CostResource;
+use App\Http\Resources\RateResource;
 use App\Http\Requests\v1\RateRequest;
 
 class CampaignCostController extends Controller
@@ -19,7 +19,7 @@ class CampaignCostController extends Controller
     {   
         $costs = Campaign::findOrFail($campaignId)->costs()->paginate();
 
-        return CostResource::collection($costs);
+        return RateResource::collection($costs);
     }
 
     /**
@@ -54,7 +54,7 @@ class CampaignCostController extends Controller
     {
         $cost = Campaign::findOrFail($campaignId)->costs()->findOrFail($id);
 
-        return new CostResource($cost);
+        return new RateResource($cost);
     }
 
     /**
@@ -77,7 +77,7 @@ class CampaignCostController extends Controller
             'active_at' => $request->input('active_at', $cost->active_at)
         ]);
 
-        return new CostResource($cost);
+        return new RateResource($cost);
     }
 
     /**

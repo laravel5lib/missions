@@ -6,7 +6,7 @@ use App\Models\v1\Trip;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CostResource;
+use App\Http\Resources\RateResource;
 use App\Http\Requests\v1\RateRequest;
 
 class TripCostController extends Controller
@@ -32,7 +32,7 @@ class TripCostController extends Controller
             ->orderBy('active_at')
             ->paginate();
 
-        return CostResource::collection($costs);
+        return RateResource::collection($costs);
     }
 
     /**
@@ -58,7 +58,7 @@ class TripCostController extends Controller
     {
         $cost = Trip::findOrFail($tripId)->prices()->findOrFail($id);
 
-        return new CostResource($cost);
+        return new RateResource($cost);
     }
 
     /**
@@ -81,7 +81,7 @@ class TripCostController extends Controller
             'active_at' => $request->input('active_at', $cost->active_at)
         ]);
 
-        return new CostResource($cost);
+        return new RateResource($cost);
     }
 
     /**

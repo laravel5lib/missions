@@ -23,4 +23,11 @@ class CostsController extends Controller
 
         return response()->json(['message' => 'New cost created.'], 201);
     }
+
+    public function show($id)
+    {
+        $cost = Cost::findOrFail($id);
+
+        return new CostResource($cost);
+    }
 }

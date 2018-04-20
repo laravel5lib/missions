@@ -56,8 +56,9 @@ class CostTest extends TestCase
         $response = $this->json('get', "/api/costs/{$cost->id}");
 
         $response->assertStatus(200);
-        $response->assertJsonExact([
+        $response->assertExactJson([
             'data' => [
+                'id' => $cost->id,
                 'name' => 'Test cost',
                 'description' => 'Test description',
                 'type' => 'incremental'

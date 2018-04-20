@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\v1\Reservation;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CostResource;
+use App\Http\Resources\RateResource;
 use App\Http\Requests\v1\RateRequest;
 
 class ReservationCostController extends Controller
@@ -20,7 +20,7 @@ class ReservationCostController extends Controller
     {
         $costs = Reservation::findOrFail($reservationId)->prices()->paginate();
         
-        return CostResource::collection($costs);
+        return RateResource::collection($costs);
     }
 
     /**
@@ -46,7 +46,7 @@ class ReservationCostController extends Controller
     {
         $cost = Reservation::findOrFail($reservationId)->prices()->findOrFail($id);
 
-        return new CostResource($cost);
+        return new RateResource($cost);
     }
 
     /**
@@ -68,7 +68,7 @@ class ReservationCostController extends Controller
             'active_at' => $request->input('active_at', $cost->active_at)
         ]);
 
-        return new CostResource($cost);
+        return new RateResource($cost);
     }
 
     /**

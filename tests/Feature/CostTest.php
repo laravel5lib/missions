@@ -91,4 +91,17 @@ class CostTest extends TestCase
             ]
         ]);
     }
+
+    /** @test */
+    public function deletes_cost_by_id()
+    {
+        Passport::actingAs(factory(User::class)->create());
+        
+        $cost = factory(Cost::class)->create();
+
+        $response = $this->json('delete', "/api/costs/{$cost->id}");
+
+        $response->assertStatus(204);
+        $this->assertDatabaseMissing('costs', ['id' => $cost->id]);
+    }
 }

@@ -7,7 +7,7 @@ use App\Models\v1\Reservation;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CostResource;
-use App\Http\Requests\v1\CostRequest;
+use App\Http\Requests\v1\RateRequest;
 
 class ReservationCostController extends Controller
 {
@@ -29,7 +29,7 @@ class ReservationCostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CostRequest $request, $reservationId)
+    public function store(RateRequest $request, $reservationId)
     {
         Reservation::findOrFail($reservationId)->addPrice($request->all());
 
@@ -56,7 +56,7 @@ class ReservationCostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CostRequest $request, $reservationId, $id)
+    public function update(RateRequest $request, $reservationId, $id)
     {
         $cost = Reservation::findOrFail($reservationId)->costs()->findOrFail($id);
 

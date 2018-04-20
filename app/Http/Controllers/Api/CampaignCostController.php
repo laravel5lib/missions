@@ -6,7 +6,7 @@ use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CostResource;
-use App\Http\Requests\v1\CostRequest;
+use App\Http\Requests\v1\RateRequest;
 
 class CampaignCostController extends Controller
 {
@@ -28,7 +28,7 @@ class CampaignCostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($campaignId, CostRequest $request)
+    public function store($campaignId, RateRequest $request)
     {
         $costs = Campaign::findOrFail($campaignId)
             ->costs()
@@ -60,12 +60,12 @@ class CampaignCostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\v1\CostRequest  $request
+     * @param  \App\Http\Requests\v1\RateRequest  $request
      * @param  string $campaignId
      * @param  string $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CostRequest $request, $campaignId, $id)
+    public function update(RateRequest $request, $campaignId, $id)
     {
         $cost = Campaign::findOrFail($campaignId)->costs()->findOrFail($id);
 

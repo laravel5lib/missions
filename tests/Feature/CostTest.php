@@ -23,4 +23,19 @@ class CostTest extends TestCase
 
         $response->assertStatus(201);
     }
+
+    /** @test */
+    public function gets_all_costs()
+    {
+        Passport::actingAs(factory(User::class)->create());
+
+        $response = $this->json('get', '/api/costs');
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [
+                ['name', 'description', 'type']
+            ]
+        ]);
+    }
 }

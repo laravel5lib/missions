@@ -39,4 +39,13 @@ class CostsController extends Controller
 
         return new CostResource($cost);
     }
+
+    public function destroy($id)
+    {
+        $cost = Cost::findOrFail($id);
+
+        $cost->delete();
+
+        return response()->json([], 204);
+    }
 }

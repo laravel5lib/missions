@@ -104,4 +104,52 @@ class CostTest extends TestCase
         $response->assertStatus(204);
         $this->assertDatabaseMissing('costs', ['id' => $cost->id]);
     }
+
+    /** @test */
+    public function only_authenticated_user_can_get_costs()
+    {
+        factory(Cost::class, 2)->create();
+
+        $response = $this->json('get', '/api/costs');
+        $response->assertStatus(401);
+
+        $cost = factory(Cost::class)->create();
+
+        $response = $this->json('get', "/api/costs/{$cost->id}");
+        $response->assertStatus(401);
+    }
+
+    /** @test */
+    public function only_authenticated_user_can_create_costs()
+    {
+        $response = $this->json('post', "/api/costs/", [
+            'name' => 'Test cost',
+            'description' => 'Test description',
+            'type' => 'incremental'
+        ]);
+
+        $response->assertStatus(401);
+    }
+
+    /** @test */
+    public function only_authenticated_user_can_update_costs()
+    {
+        $cost = factory(Cost::class)->create();
+
+        $response = $this->json('put', "/api/costs/{$cost->id}", [
+            'name' => 'Update cost'
+        ]);
+
+        $response->assertStatus(401);
+    }
+
+    /** @test */
+    public function only_authenticated_user_can_delete_costs()
+    {
+        $cost = factory(Cost::class)->create();
+
+        $response = $this->json('delete', "/api/costs/{$cost->id}");
+
+        $response->assertStatus(401);
+    }
 }

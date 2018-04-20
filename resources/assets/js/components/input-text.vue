@@ -8,7 +8,7 @@
                     :name="name"
                     :value="value"
                     :placeholder="placeholder"
-                    @input="updateInput($event.target.value)">
+                    v-model="text">
                 <slot name="suffix"></slot>
             </div>
             <span class="help-block" 
@@ -38,8 +38,14 @@ export default {
         }
     },
 
-    methods: {
-        updateInput(value) {
+    data() {
+        return {
+            text: ''
+        }
+    },
+
+    watch: {
+        'text'(value) {
             this.$parent.form[this.name] = value;
         }
     },
@@ -47,6 +53,11 @@ export default {
     mounted() {
         this.$parent.form[this.name] = this.value;
         this.$parent.form.set(this.name, this.value);
+        this.text = this.value;
+
+        this.$root.$on('form:reset', () => {
+            this.text = null;
+        });
     }
 }
 </script>

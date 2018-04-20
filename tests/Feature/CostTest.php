@@ -65,4 +65,30 @@ class CostTest extends TestCase
             ]
         ]);
     }
+
+    /** @test */
+    public function updates_a_cost_by_id()
+    {
+        Passport::actingAs(factory(User::class)->create());
+        
+        $cost = factory(Cost::class)->create([
+            'name' => 'Test cost',
+            'description' => 'Test description',
+            'type' => 'incremental'
+        ]);
+
+        $response = $this->json('put', "/api/costs/{$cost->id}", [
+            'name' => 'Updated cost'
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertExactJson([
+            'data' => [
+                'id' => $cost->id,
+                'name' => 'Updated cost',
+                'description' => 'Test description',
+                'type' => 'incremental'
+            ]
+        ]);
+    }
 }

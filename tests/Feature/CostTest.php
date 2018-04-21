@@ -152,4 +152,32 @@ class CostTest extends TestCase
 
         $response->assertStatus(401);
     }
+
+    /** @test */
+    public function validates_request_to_create_cost()
+    {
+        Passport::actingAs(factory(User::class)->create());
+
+        $response = $this->json('post', '/api/costs', [
+            'type' => 'invalid'
+        ]);
+
+        $response->assertJsonValidationErrors(['name', 'type', 'description']);
+    }
+
+    /** @test */
+    public function validates_request_to_update_cost()
+    {
+        Passport::actingAs(factory(User::class)->create());
+
+        $cost = factory(Cost::class)->create();
+
+        $response = $this->json('put', "/api/costs/{$cost->id}", [
+            'name' => 123,
+            'type' => 'invalid',
+            'description' => 'This is description is way way way too long for a cost description. This should be 120 characters or less but it is a whole lot more than that!!!!'
+        ]);
+
+        $response->assertJsonValidationErrors(['name', 'type', 'description']);
+    }
 }

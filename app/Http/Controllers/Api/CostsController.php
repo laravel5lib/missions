@@ -10,6 +10,11 @@ use App\Http\Requests\v1\CostRequest;
 
 class CostsController extends Controller
 {
+    /**
+     * Get all costs
+     *
+     * @return App\Http\Resources\CostResource
+     */
     public function index()
     {
         $costs = Cost::paginate();
@@ -17,6 +22,12 @@ class CostsController extends Controller
         return CostResource::collection($costs);
     }
     
+    /**
+     * Create a new cost in storage
+     *
+     * @param CostRequest $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(CostRequest $request)
     {
         Cost::create($request->all());
@@ -24,6 +35,12 @@ class CostsController extends Controller
         return response()->json(['message' => 'New cost created.'], 201);
     }
 
+    /**
+     * Get a specific cost
+     *
+     * @param string $id
+     * @return App\Http\Resources\CostResource
+     */
     public function show($id)
     {
         $cost = Cost::findOrFail($id);
@@ -31,6 +48,13 @@ class CostsController extends Controller
         return new CostResource($cost);
     }
 
+    /**
+     * Update a specific cost in storage
+     *
+     * @param CostRequest $request
+     * @param string $id
+     * @return App\Http\Resources\CostResource
+     */
     public function update(CostRequest $request, $id)
     {
         $cost = Cost::findOrFail($id);
@@ -40,6 +64,12 @@ class CostsController extends Controller
         return new CostResource($cost);
     }
 
+    /**
+     * Delete a cost and remove from storage
+     *
+     * @param string $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy($id)
     {
         $cost = Cost::findOrFail($id);

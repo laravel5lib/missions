@@ -10,7 +10,7 @@ use App\Models\v1\Reservation;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ReservationCostTest extends TestCase
+class ReservationPriceTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -19,7 +19,7 @@ class ReservationCostTest extends TestCase
     {
         $reservation = $this->setupReservationWithCosts();
 
-        $response = $this->json('GET', "/api/reservations/{$reservation->id}/costs");
+        $response = $this->json('GET', "/api/reservations/{$reservation->id}/prices");
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -41,7 +41,7 @@ class ReservationCostTest extends TestCase
         $trip = $this->setupTripWithCosts();
         $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
         
-        $response = $this->json('POST', "/api/reservations/{$reservation->id}/costs", [
+        $response = $this->json('POST', "/api/reservations/{$reservation->id}/prices", [
             'cost_id' => $trip->prices()->first()->id
         ]);
 
@@ -59,7 +59,7 @@ class ReservationCostTest extends TestCase
         $trip = $this->setupTripWithCosts();
         $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
         
-        $response = $this->json('POST', "/api/reservations/{$reservation->id}/costs", []);
+        $response = $this->json('POST', "/api/reservations/{$reservation->id}/prices", []);
 
         $response->assertJsonValidationErrors(['cost_id']);
     }
@@ -69,7 +69,7 @@ class ReservationCostTest extends TestCase
     {
         $reservation = factory(Reservation::class)->create();
 
-        $response = $this->json('POST', "/api/reservations/{$reservation->id}/costs", [
+        $response = $this->json('POST', "/api/reservations/{$reservation->id}/prices", [
             'name' => 'International Flight',
             'amount' => 2000.00,
             'type' => 'static',
@@ -94,7 +94,7 @@ class ReservationCostTest extends TestCase
     {
         $reservation = factory(Reservation::class)->create();
 
-        $response = $this->json('POST', "/api/reservations/{$reservation->id}/costs", [
+        $response = $this->json('POST', "/api/reservations/{$reservation->id}/prices", [
             'type' => 'invalid',
             'description' => 'This is description is way way way too long for a cost description. This should be 120 characters or less but it is a whole lot more than that!!!!',
             'active_at' => 'invalid'
@@ -114,7 +114,7 @@ class ReservationCostTest extends TestCase
             'description' => 'Round trip flights to and from destination country.',
         ]);
 
-        $response = $this->json('GET', "/api/reservations/{$reservation->id}/costs/{$reservation->costs()->first()->id}");
+        $response = $this->json('GET', "/api/reservations/{$reservation->id}/prices/{$reservation->costs()->first()->id}");
 
         $response->assertStatus(200)
                  ->assertJson([
@@ -138,7 +138,7 @@ class ReservationCostTest extends TestCase
             'description' => 'Round trip flights to and from destination country.',
         ]);
 
-        $response = $this->json('PUT', "/api/reservations/{$reservation->id}/costs/{$reservation->costs()->first()->id}", [
+        $response = $this->json('PUT', "/api/reservations/{$reservation->id}/prices/{$reservation->costs()->first()->id}", [
             'name' => 'Updated International Flight',
             'amount' => 2500.00
         ]);
@@ -160,7 +160,7 @@ class ReservationCostTest extends TestCase
         $reservation = $this->setupReservationWithCosts();
         $cost = $reservation->prices()->where('cost_assignable_type', 'trips')->first();
 
-        $response = $this->json('DELETE', "/api/reservations/{$reservation->id}/costs/{$cost->id}");
+        $response = $this->json('DELETE', "/api/reservations/{$reservation->id}/prices/{$cost->id}");
 
         $response->assertStatus(204);
         $this->assertDatabaseMissing('costables', [
@@ -175,7 +175,7 @@ class ReservationCostTest extends TestCase
         $reservation = $this->setupReservationWithCosts();
         $cost = $reservation->costs()->first();
 
-        $response = $this->json('DELETE', "/api/reservations/{$reservation->id}/costs/{$cost->id}");
+        $response = $this->json('DELETE', "/api/reservations/{$reservation->id}/prices/{$cost->id}");
 
         $response->assertStatus(204);
         $this->assertDatabaseMissing('costables', [

@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\Storage;
 */
 
 Route::apiResource('costs', 'CostsController')->middleware('api.auth');
-Route::apiResource('campaigns/{campaignId}/costs', 'CampaignCostController');
-Route::apiResource('trips/{tripId}/costs', 'TripCostController');
-Route::apiResource('reservations/{reservationId}/costs', 'ReservationCostController');
+Route::apiResource('campaigns/{campaignId}/prices', 'CampaignPriceController');
+Route::apiResource('trips/{tripId}/prices', 'TripPriceController');
+Route::apiResource('reservations/{reservationId}/prices', 'ReservationPriceController');
 
 
 // Dingo API routes

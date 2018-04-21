@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\RateResource;
 use App\Http\Requests\v1\RateRequest;
 
-class CampaignCostController extends Controller
+class CampaignPriceController extends Controller
 {
     /**
      * Display a listing of the resource.

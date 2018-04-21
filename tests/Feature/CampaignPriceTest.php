@@ -10,7 +10,7 @@ use App\Models\v1\Campaign;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class CampaignCostTest extends TestCase
+class CampaignPriceTest extends TestCase
 {
     use RefreshDatabase;
     
@@ -26,7 +26,7 @@ class CampaignCostTest extends TestCase
         factory(Cost::class)->create(['cost_assignable_id' => $trip->id, 'cost_assignable_type' => 'trips']);
         
         // get only the campaign's costs
-        $response = $this->json('GET', "/api/campaigns/{$campaign->id }/costs");
+        $response = $this->json('GET', "/api/campaigns/{$campaign->id }/prices");
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -45,7 +45,7 @@ class CampaignCostTest extends TestCase
     {
         $campaign = factory(Campaign::class)->create();
 
-        $response = $this->json('POST', "/api/campaigns/{$campaign->id }/costs", [
+        $response = $this->json('POST', "/api/campaigns/{$campaign->id }/prices", [
             'name' => 'General Registration',
             'amount' => 2500.00,
             'type' => 'incremental',
@@ -95,7 +95,7 @@ class CampaignCostTest extends TestCase
     {
         $campaign = factory(Campaign::class)->create();
 
-        $response = $this->json('POST', "/api/campaigns/{$campaign->id }/costs", [
+        $response = $this->json('POST', "/api/campaigns/{$campaign->id }/prices", [
             'type' => 'invalid',
             'description' => 'This is description is way way way too long for a cost description. This should be 120 characters or less but it is a whole lot more than that!!!!',
             'active_at' => 'invalid'
@@ -119,7 +119,7 @@ class CampaignCostTest extends TestCase
             'active_at' => '01/01/2018'
         ]);
 
-        $response = $this->json('GET', "/api/campaigns/{$campaign->id }/costs/{$cost->id}");
+        $response = $this->json('GET', "/api/campaigns/{$campaign->id }/prices/{$cost->id}");
 
         $response->assertStatus(200);
         $response->assertJson([
@@ -149,7 +149,7 @@ class CampaignCostTest extends TestCase
             'active_at' => '01/01/2018'
         ]);
 
-        $response = $this->json('PUT', "/api/campaigns/{$campaign->id }/costs/{$cost->id}", [
+        $response = $this->json('PUT', "/api/campaigns/{$campaign->id }/prices/{$cost->id}", [
             'amount' => 2700.00,
             'description' => 'Updated registration cost.',
             'active_at' => '01/02/2018'
@@ -177,7 +177,7 @@ class CampaignCostTest extends TestCase
             'cost_assignable_type' => 'campaigns',
         ]);
 
-        $response = $this->json('DELETE', "/api/campaigns/{$campaign->id }/costs/{$cost->id}");
+        $response = $this->json('DELETE', "/api/campaigns/{$campaign->id }/prices/{$cost->id}");
 
         $response->assertStatus(204);
         $this->assertDatabaseMissing('costs', ['id' => $cost->id]);

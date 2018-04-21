@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\RateResource;
 use App\Http\Requests\v1\RateRequest;
 
-class TripCostController extends Controller
+class TripPriceController extends Controller
 {
     /**
      * Display a listing of the resource.

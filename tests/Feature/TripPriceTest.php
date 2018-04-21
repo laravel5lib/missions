@@ -9,7 +9,7 @@ use App\Models\v1\Campaign;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class TripCostTest extends TestCase
+class TripPriceTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -18,7 +18,7 @@ class TripCostTest extends TestCase
     {
         $trip = $this->setupTripWithCosts();
 
-        $response = $this->json('GET', "/api/trips/{$trip->id}/costs");
+        $response = $this->json('GET', "/api/trips/{$trip->id}/prices");
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -52,7 +52,7 @@ class TripCostTest extends TestCase
         ]);
         $trip->prices()->attach([$generalCost->id, $earlyCost->id]);
 
-        $response = $this->json('GET', "/api/trips/{$trip->id}/costs");
+        $response = $this->json('GET', "/api/trips/{$trip->id}/prices");
 
         $response->assertJson([
             'data' => [
@@ -78,7 +78,7 @@ class TripCostTest extends TestCase
         ]);
         $trip->prices()->attach([$generalCost->id, $earlyCost->id]);
 
-        $response = $this->json('GET', "/api/trips/{$trip->id}/costs", ['search' => 'Early Reg.']);
+        $response = $this->json('GET', "/api/trips/{$trip->id}/prices", ['search' => 'Early Reg.']);
 
         $response->assertJson([
             'data' => [
@@ -104,7 +104,7 @@ class TripCostTest extends TestCase
         ]);
         $trip->prices()->attach([$incremental->id, $static->id]);
 
-        $response = $this->json('GET', "/api/trips/{$trip->id}/costs", ['type' => 'incremental']);
+        $response = $this->json('GET', "/api/trips/{$trip->id}/prices", ['type' => 'incremental']);
 
         $response->assertJson([
             'data' => [
@@ -121,7 +121,7 @@ class TripCostTest extends TestCase
         $trip = factory(Trip::class)->create(['campaign_id' => $campaign->id]);
         $costs = $campaign->costs->pluck('id')->toArray();
 
-        $response = $this->json('POST', "/api/trips/{$trip->id}/costs", [
+        $response = $this->json('POST', "/api/trips/{$trip->id}/prices", [
             'cost_id' => $costs[0]
         ]);
 
@@ -139,7 +139,7 @@ class TripCostTest extends TestCase
     {
         $trip = factory(Trip::class)->create();
 
-        $response = $this->json('POST', "/api/trips/{$trip->id}/costs", []);
+        $response = $this->json('POST', "/api/trips/{$trip->id}/prices", []);
 
         $response->assertJsonValidationErrors(['cost_id']);
     }
@@ -149,7 +149,7 @@ class TripCostTest extends TestCase
     {
         $trip = factory(Trip::class)->create();
 
-        $response = $this->json('POST', "/api/trips/{$trip->id}/costs", [
+        $response = $this->json('POST', "/api/trips/{$trip->id}/prices", [
             'name' => 'Custom Cost',
             'amount' => 1500.00,
             'type' => 'static',
@@ -176,7 +176,7 @@ class TripCostTest extends TestCase
     {
         $trip = factory(Trip::class)->create();
 
-        $response = $this->json('POST', "/api/trips/{$trip->id}/costs", [
+        $response = $this->json('POST', "/api/trips/{$trip->id}/prices", [
             'type' => 'invalid',
             'description' => 'This is description is way way way too long for a cost description. This should be 120 characters or less but it is a whole lot more than that!!!!',
             'active_at' => 'invalid'
@@ -191,7 +191,7 @@ class TripCostTest extends TestCase
         $trip = $this->setupTripWithCosts();
         $cost = $trip->costs()->first();
 
-        $response = $this->json('GET', "/api/trips/{$trip->id}/costs/{$cost->id}");
+        $response = $this->json('GET', "/api/trips/{$trip->id}/prices/{$cost->id}");
 
         $response->assertStatus(200);
         $response->assertJson(['data' => ['id' => $cost->id]]);
@@ -204,7 +204,7 @@ class TripCostTest extends TestCase
         $cost = $trip->costs()->first();
         $this->assertNotEquals('Updated Trip Cost.', $cost->name);
 
-        $response = $this->json('PUT', "/api/trips/{$trip->id}/costs/{$cost->id}", [
+        $response = $this->json('PUT', "/api/trips/{$trip->id}/prices/{$cost->id}", [
             'name' => 'Updated Trip Cost'
         ]);
 
@@ -218,7 +218,7 @@ class TripCostTest extends TestCase
         $trip = $this->setupTripWithCosts();
         $cost = $trip->costs()->first();
 
-        $response = $this->json('PUT', "/api/trips/{$trip->id}/costs/{$cost->id}", [
+        $response = $this->json('PUT', "/api/trips/{$trip->id}/prices/{$cost->id}", [
             'name' => '',
             'amount' => '',
             'type' => 'invalid',
@@ -240,7 +240,7 @@ class TripCostTest extends TestCase
         $trip = $this->setupTripWithCosts();
         $cost = $trip->prices()->where('cost_assignable_type', 'campaigns')->first();
 
-        $response = $this->json('DELETE', "/api/trips/{$trip->id}/costs/{$cost->id}");
+        $response = $this->json('DELETE', "/api/trips/{$trip->id}/prices/{$cost->id}");
 
         $response->assertStatus(204);
         $this->assertDatabaseHas('costs', ['id' => $cost->id]);
@@ -255,7 +255,7 @@ class TripCostTest extends TestCase
         $trip = $this->setupTripWithCosts();
         $cost = $trip->costs()->first();
 
-        $response = $this->json('DELETE', "/api/trips/{$trip->id}/costs/{$cost->id}");
+        $response = $this->json('DELETE', "/api/trips/{$trip->id}/prices/{$cost->id}");
 
         $response->assertStatus(204);
         $this->assertDatabaseMissing('costs', ['id' => $cost->id]);

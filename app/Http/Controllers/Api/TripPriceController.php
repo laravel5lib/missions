@@ -6,8 +6,8 @@ use App\Models\v1\Trip;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\RateResource;
-use App\Http\Requests\v1\RateRequest;
+use App\Http\Resources\PriceResource;
+use App\Http\Requests\v1\PriceRequest;
 
 class TripPriceController extends Controller
 {
@@ -21,31 +21,35 @@ class TripPriceController extends Controller
         $search = $request->input('search');
         $type = $request->input('type');
 
-        $costs = Trip::findOrFail($tripId)
-            ->prices()
+        $prices = Trip::findOrFail($tripId)
+            ->priceables()
             ->when($search, function ($query) use ($search) {
-                return $query->where('name', 'LIKE', "$search");
+                return $query->whereHas('cost', function ($subQuery) use ($search) {
+                    return $subQuery->where('name', 'LIKE', "$search");
+                });
             })
             ->when($type, function ($query) use ($type) {
-                return $query->where('type', $type);
+                return $query->whereHas('cost', function ($subQuery) use ($type) {
+                    return $subQuery->where('type', $type);
+                });
             })
             ->orderBy('active_at')
             ->paginate();
 
-        return RateResource::collection($costs);
+        return PriceResource::collection($prices);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\v1\RateRequest  $request
+     * @param  \App\Http\Requests\v1\PriceRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(RateRequest $request, $tripId)
+    public function store(PriceRequest $request, $tripId)
     {
         $trip = Trip::findOrFail($tripId)->addPrice($request->all());
         
-        return response()->json(['message' => 'New trip cost added.'], 201);
+        return response()->json(['message' => 'New trip price added.'], 201);
     }
 
     /**
@@ -54,34 +58,37 @@ class TripPriceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($tripId, $id)
+    public function show($tripId, $uuid)
     {
-        $cost = Trip::findOrFail($tripId)->prices()->findOrFail($id);
+        $price = Trip::findOrFail($tripId)
+            ->priceables()
+            ->whereUuid($uuid)
+            ->firstOrFail();
 
-        return new RateResource($cost);
+        return new PriceResource($price);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\v1\RateRequest  $request
+     * @param  \App\Http\Requests\v1\PriceRequest  $request
      * @param  string $tripId
      * @param  string $id
      * @return \Illuminate\Http\Response
      */
-    public function update(RateRequest $request, $tripId, $id)
+    public function update(PriceRequest $request, $tripId, $uuid)
     {
-        $cost = Trip::findOrFail($tripId)->costs()->findOrFail($id);
+        $price = Trip::findOrFail($tripId)
+            ->prices()
+            ->whereUuid($uuid)
+            ->firstOrFail();
 
-        $cost->update([
-            'name' => $request->input('name', $cost->name),
-            'amount' => $request->input('amount', $cost->amount),
-            'type' => $request->input('type', $cost->type),
-            'description' => $request->input('description', $cost->description),
-            'active_at' => $request->input('active_at', $cost->active_at)
+        $price->update([
+            'amount' => $request->input('amount', $price->amount),
+            'active_at' => $request->input('active_at', $price->active_at)
         ]);
 
-        return new RateResource($cost);
+        return new PriceResource($price);
     }
 
     /**
@@ -90,16 +97,16 @@ class TripPriceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($tripId, $id)
+    public function destroy($tripId, $uuid)
     {
         $trip = Trip::findOrFail($tripId);
-        $cost = $trip->prices()->findOrFail($id);
+        $price = $trip->priceables()->whereUuid($uuid)->firstOrFail();
 
-        DB::transaction(function() use($trip, $cost) {
-            $trip->prices()->detach($cost->id);
+        DB::transaction(function() use($trip, $price) {
+            $trip->priceables()->detach($price->id);
 
-            if ($cost->cost_assignable_id === $trip->id && $cost->cost_assignable_type === 'trips') {
-                $cost->delete();
+            if ($price->model_id === $trip->id && $price->model_type === 'trips') {
+                $price->delete();
             }
         });
 

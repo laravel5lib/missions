@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use Carbon\Carbon;
 use Tests\TestCase;
 use App\Models\v1\Cost;
 use App\Models\v1\Trip;
+use App\Models\v1\Price;
 use App\Models\v1\Campaign;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,9 +16,9 @@ class TripPriceTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function get_all_trip_costs()
+    public function get_all_trip_prices()
     {
-        $trip = $this->setupTripWithCosts();
+        $trip = $this->setupTripWithPrices();
 
         $response = $this->json('GET', "/api/trips/{$trip->id}/prices");
 
@@ -24,7 +26,7 @@ class TripPriceTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 [
-                    'id', 'name', 'amount', 'description', 'type', 'active_at'
+                    'uuid', 'amount', 'active_at'
                 ]
             ],
             'meta'
@@ -35,198 +37,199 @@ class TripPriceTest extends TestCase
     }
 
     /** @test */
-    public function order_trip_costs_by_active_date()
+    public function order_trip_prices_by_active_date()
     {
         $trip = factory(Trip::class)->create();
-        $generalCost = factory(Cost::class)->create([
-            'name' => 'General Reg.', 
+        $firstPrice = factory(Price::class)->create([
             'active_at' => '04/01/2018',
-            'cost_assignable_id' => $trip->id, 
-            'cost_assignable_type' => 'trips'
+            'model_id' => $trip->id, 
+            'model_type' => 'trips'
         ]);
-        $earlyCost = factory(Cost::class)->create([
-            'name' => 'Early Reg.', 
+        $secondPrice = factory(Price::class)->create([
             'active_at' => '01/01/2018',
-            'cost_assignable_id' => $trip->id, 
-            'cost_assignable_type' => 'trips'
+            'model_id' => $trip->id, 
+            'model_type' => 'trips'
         ]);
-        $trip->prices()->attach([$generalCost->id, $earlyCost->id]);
+        $trip->priceables()->attach([$secondPrice->id, $firstPrice->id]);
 
         $response = $this->json('GET', "/api/trips/{$trip->id}/prices");
 
         $response->assertJson([
             'data' => [
-                ['name' => 'Early Reg.'],
-                ['name' => 'General Reg.']
+                ['active_at' => Carbon::parse('01/01/2018')->toIso8601String()],
+                ['active_at' => Carbon::parse('04/01/2018')->toIso8601String()]
             ]
         ]);
     }
 
     /** @test */
-    public function search_trip_costs_by_name()
+    public function search_trip_prices_by_name()
     {
         $trip = factory(Trip::class)->create();
-        $generalCost = factory(Cost::class)->create([
-            'name' => 'General Reg.', 
-            'cost_assignable_id' => $trip->id, 
-            'cost_assignable_type' => 'trips'
+        $generalCost = factory(Cost::class)->create(['name' => 'General Reg.']);
+        $generalPrice = factory(Price::class)->create([
+            'cost_id' => $generalCost->id, 
+            'model_id' => $trip->id, 
+            'model_type' => 'trips'
         ]);
-        $earlyCost = factory(Cost::class)->create([
-            'name' => 'Early Reg.', 
-            'cost_assignable_id' => $trip->id, 
-            'cost_assignable_type' => 'trips'
+        $earlyCost = factory(Cost::class)->create(['name' => 'Early Reg.']);
+        $earlyPrice = factory(Price::class)->create([
+            'cost_id' => $earlyCost->id, 
+            'model_id' => $trip->id, 
+            'model_type' => 'trips'
         ]);
-        $trip->prices()->attach([$generalCost->id, $earlyCost->id]);
+        $trip->priceables()->attach([$generalPrice->id, $earlyPrice->id]);
 
         $response = $this->json('GET', "/api/trips/{$trip->id}/prices", ['search' => 'Early Reg.']);
 
         $response->assertJson([
             'data' => [
-                ['name' => 'Early Reg.'],
+                ['cost' => ['name' => 'Early Reg.']],
             ],
             'meta' => ['total' => 1]
         ]);
     }
 
     /** @test */
-    public function filter_trip_costs_by_type()
+    public function filter_trip_prices_by_type()
     {
         $trip = factory(Trip::class)->create();
-        $incremental = factory(Cost::class)->create([
-            'type' => 'incremental', 
-            'cost_assignable_id' => $trip->id, 
-            'cost_assignable_type' => 'trips'
+        $incremental = factory(Cost::class)->create(['type' => 'incremental']);
+        $incrementalPrice = factory(Price::class)->create([
+            'cost_id' => $incremental->id,
+            'model_id' => $trip->id, 
+            'model_type' => 'trips'
         ]);
-        $static = factory(Cost::class)->create([
-            'type' => 'Static', 
-            'cost_assignable_id' => $trip->id, 
-            'cost_assignable_type' => 'trips'
+        $static = factory(Cost::class)->create(['type' => 'static']);
+        $staticPrice = factory(Price::class)->create([
+            'cost_id' => $static->id,
+            'model_id' => $trip->id, 
+            'model_type' => 'trips'
         ]);
-        $trip->prices()->attach([$incremental->id, $static->id]);
+        $trip->priceables()->attach([$incrementalPrice->id, $staticPrice->id]);
 
         $response = $this->json('GET', "/api/trips/{$trip->id}/prices", ['type' => 'incremental']);
 
         $response->assertJson([
             'data' => [
-                ['type' => 'incremental'],
+                ['cost' => ['type' => 'incremental']],
             ],
             'meta' => ['total' => 1]
         ]);
     }
 
     /** @test */
-    public function add_campaign_cost_to_a_trip()
+    public function add_campaign_price_to_a_trip()
     {
-        $campaign = $this->setupCampaignWithCosts();
+        $campaign = $this->setupCampaignWithPrices();
         $trip = factory(Trip::class)->create(['campaign_id' => $campaign->id]);
-        $costs = $campaign->costs->pluck('id')->toArray();
+        $prices = $campaign->prices->toArray();
 
         $response = $this->json('POST', "/api/trips/{$trip->id}/prices", [
-            'cost_id' => $costs[0]
+            'price_id' => $prices[0]['uuid']
         ]);
 
         $response->assertStatus(201);
         $response->assertJsonStructure(['message']);
-        $this->assertDatabaseHas('costables', [
-            'cost_id' => $costs[0],
-            'costable_id' => $trip->id,
-            'costable_type' => 'trips'
+        $this->assertDatabaseHas('priceables', [
+            'price_id' => $prices[0]['id'],
+            'priceable_id' => $trip->id,
+            'priceable_type' => 'trips'
         ]);
     }
 
     /** @test */
-    public function validates_request_to_add_a_campaign_cost_to_a_trip()
+    public function validates_request_to_add_a_campaign_price_to_a_trip()
     {
         $trip = factory(Trip::class)->create();
 
         $response = $this->json('POST', "/api/trips/{$trip->id}/prices", []);
 
-        $response->assertJsonValidationErrors(['cost_id']);
+        $response->assertJsonValidationErrors(['price_id']);
     }
 
     /** @test */
-    public function add_custom_cost_to_a_trip()
+    public function add_custom_price_to_a_trip()
     {
         $trip = factory(Trip::class)->create();
+        $cost = factory(Cost::class)->create();
 
         $response = $this->json('POST', "/api/trips/{$trip->id}/prices", [
-            'name' => 'Custom Cost',
+            'cost_id' => $cost->id,
             'amount' => 1500.00,
-            'type' => 'static',
-            'description' => 'A custom cost added to the trip.',
             'active_at' => '01/01/2018'
         ]);
 
         $response->assertStatus(201);
         $response->assertJsonStructure(['message']);
-        $this->assertDatabaseHas('costs', [
-            'name' => 'Custom Cost',
+        $this->assertDatabaseHas('prices', [
+            'cost_id' => $cost->id,
             'amount' => 150000,
-            'type' => 'static',
-            'description' => 'A custom cost added to the trip.',
+            'active_at' => '2018-01-01 00:00:00'
         ]);
-        $this->assertDatabaseHas('costables', [
-            'costable_id' => $trip->id,
-            'costable_type' => 'trips'
+        $this->assertDatabaseHas('priceables', [
+            'priceable_id' => $trip->id,
+            'priceable_type' => 'trips'
         ]);
     }
 
     /** @test */
-    public function validates_request_to_add_custom_cost_to_trip()
+    public function validates_request_to_add_custom_price_to_trip()
     {
         $trip = factory(Trip::class)->create();
 
         $response = $this->json('POST', "/api/trips/{$trip->id}/prices", [
-            'type' => 'invalid',
-            'description' => 'This is description is way way way too long for a cost description. This should be 120 characters or less but it is a whole lot more than that!!!!',
+            'cost_id' => 'invalid',
+            'amount' => 'invalid',
             'active_at' => 'invalid'
         ]);
 
-        $response->assertJsonValidationErrors(['name', 'amount', 'type', 'description', 'active_at']);
+        $response->assertJsonValidationErrors(['cost_id', 'amount', 'active_at']);
+
+        $response = $this->json('POST', "/api/trips/{$trip->id}/prices", []);
+
+        $response->assertJsonValidationErrors(['cost_id', 'amount']);
     }
 
     /** @test */
-    public function get_specific_trip_cost()
+    public function get_specific_trip_price()
     {
-        $trip = $this->setupTripWithCosts();
-        $cost = $trip->costs()->first();
+        $trip = $this->setupTripWithPrices();
+        $price = $trip->prices()->first();
 
-        $response = $this->json('GET', "/api/trips/{$trip->id}/prices/{$cost->id}");
+        $response = $this->json('GET', "/api/trips/{$trip->id}/prices/{$price->uuid}");
 
         $response->assertStatus(200);
-        $response->assertJson(['data' => ['id' => $cost->id]]);
+        $response->assertJson(['data' => ['uuid' => $price->uuid]]);
     }
 
     /** @test */
-    public function update_a_custom_trip_cost()
+    public function update_a_custom_trip_price()
     {
-        $trip = $this->setupTripWithCosts();
-        $cost = $trip->costs()->first();
-        $this->assertNotEquals('Updated Trip Cost.', $cost->name);
+        $trip = $this->setupTripWithPrices();
+        $price = $trip->prices()->first();
+        $this->assertNotEquals(2000.00, $price->amount);
 
-        $response = $this->json('PUT', "/api/trips/{$trip->id}/prices/{$cost->id}", [
-            'name' => 'Updated Trip Cost'
+        $response = $this->json('PUT', "/api/trips/{$trip->id}/prices/{$price->uuid}", [
+            'amount' => 2000.00
         ]);
 
         $response->assertStatus(200);
-        $response->assertJson(['data' => ['name' => 'Updated Trip Cost']]);
+        $response->assertJson(['data' => ['amount' => 2000.00]]);
     }
 
     /** @test */
-    public function validates_a_request_to_update_custom_trip_cost()
+    public function validates_a_request_to_update_custom_trip_price()
     {
-        $trip = $this->setupTripWithCosts();
-        $cost = $trip->costs()->first();
+        $trip = $this->setupTripWithPrices();
+        $price = $trip->prices()->first();
 
-        $response = $this->json('PUT', "/api/trips/{$trip->id}/prices/{$cost->id}", [
-            'name' => '',
-            'amount' => '',
-            'type' => 'invalid',
-            'description' => 'This is description is way way way too long for a cost description. This should be 120 characters or less but it is a whole lot more than that!!!!',
+        $response = $this->json('PUT', "/api/trips/{$trip->id}/prices/{$price->uuid}", [
+            'amount' => 'invalid',
             'active_at' => 'invalid'
         ]);
 
-        $response->assertJsonValidationErrors(['name', 'amount', 'type', 'description', 'active_at']);
+        $response->assertJsonValidationErrors(['amount', 'active_at']);
     }
 
     public function throws_exception_when_updating_cost_not_owned_by_trip()
@@ -235,59 +238,59 @@ class TripPriceTest extends TestCase
     }
 
     /** @test */
-    public function remove_a_campaign_cost()
+    public function remove_a_campaign_price()
     {
-        $trip = $this->setupTripWithCosts();
-        $cost = $trip->prices()->where('cost_assignable_type', 'campaigns')->first();
+        $trip = $this->setupTripWithPrices();
+        $price = $trip->priceables()->where('model_type', 'campaigns')->first();
 
-        $response = $this->json('DELETE', "/api/trips/{$trip->id}/prices/{$cost->id}");
+        $response = $this->json('DELETE', "/api/trips/{$trip->id}/prices/{$price->uuid}");
 
         $response->assertStatus(204);
-        $this->assertDatabaseHas('costs', ['id' => $cost->id]);
-        $this->assertDatabaseMissing('costables', [
-            'cost_id' => $cost->id, 'costable_id' => $trip->id, 'costable_type' => 'trips'
+        $this->assertDatabaseHas('prices', ['id' => $price->id]);
+        $this->assertDatabaseMissing('priceables', [
+            'price_id' => $price->id, 'priceable_id' => $trip->id, 'priceable_type' => 'trips'
         ]);
     }
 
     /** @test */
-    public function remove_a_custom_trip_cost()
+    public function remove_a_custom_trip_price()
     {
-        $trip = $this->setupTripWithCosts();
-        $cost = $trip->costs()->first();
+        $trip = $this->setupTripWithPrices();
+        $price = $trip->prices()->first();
 
-        $response = $this->json('DELETE', "/api/trips/{$trip->id}/prices/{$cost->id}");
+        $response = $this->json('DELETE', "/api/trips/{$trip->id}/prices/{$price->uuid}");
 
         $response->assertStatus(204);
-        $this->assertDatabaseMissing('costs', ['id' => $cost->id]);
-        $this->assertDatabaseMissing('costables', [
-            'cost_id' => $cost->id, 'costable_id' => $trip->id, 'costable_type' => 'trips'
+        $this->assertDatabaseMissing('prices', ['id' => $price->id]);
+        $this->assertDatabaseMissing('priceables', [
+            'price_id' => $price->id, 'priceable_id' => $trip->id, 'priceable_type' => 'trips'
         ]);
     }
 
-    private function setupTripWithCosts()
+    private function setupTripWithPrices()
     {
-        $campaign = $this->setupCampaignWithCosts();
+        $campaign = $this->setupCampaignWithPrices();
 
         $trip = factory(Trip::class)->create(['campaign_id' => $campaign->id]);
-        $cost = factory(Cost::class)->create([
-            'cost_assignable_id' => $trip->id, 
-            'cost_assignable_type' => 'trips'
+        $price = factory(Price::class)->create([
+            'model_id' => $trip->id, 
+            'model_type' => 'trips'
         ]);
         
-        $campaignCosts = $campaign->costs->pluck('id')->toArray();
-        $trip->prices()->attach([
-            $cost->id, $campaignCosts[0], $campaignCosts[1]
+        $campaignPrices = $campaign->prices->pluck('id')->toArray();
+        $trip->priceables()->attach([
+            $price->id, $campaignPrices[0], $campaignPrices[1]
         ]);
 
         return $trip;
     }
 
-    private function setupCampaignWithCosts()
+    private function setupCampaignWithPrices()
     {
         $campaign = factory(Campaign::class)->create();
-        factory(Cost::class, 2)->create([
-            'cost_assignable_id' => $campaign->id, 
-            'cost_assignable_type' => 'campaigns'
+        factory(Price::class, 2)->create([
+            'model_id' => $campaign->id, 
+            'model_type' => 'campaigns'
         ]);
 
         return $campaign;

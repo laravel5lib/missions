@@ -2,75 +2,76 @@
 
 namespace App\Traits;
 
-use App\Models\v1\Cost;
+use App\Models\v1\Price;
 use Illuminate\Support\Facades\DB;
 
 trait HasPricing 
 {
     /**
-     * Get all the model's costs.
+     * Get all the model's prices.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function costs()
+    public function prices()
     {
-        return $this->morphMany(Cost::class, 'cost_assignable');
+        return $this->morphMany(Price::class, 'model');
     }
     
     /**
-     * Get all costs assigned to the model.
+     * Get all prices assigned to the model.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    public function prices()
+    public function priceables()
     {
-        return $this->morphToMany(Cost::class, 'costable');
+        return $this->morphToMany(Price::class, 'priceable');
     }
 
     /**
      * Add a new price to the model.
      *
-     * @param array $cost
+     * @param array $price
      * @return void
      */
-    public function addPrice(array $cost)
+    public function addPrice(array $price)
     {
-        if (isset($cost['cost_id'])) {
-            return $this->attachCostToModel($cost['cost_id']);
+        if (isset($price['price_id'])) {
+
+            $price = Price::whereUuid($price['price_id'])->firstOrFail();
+
+            return $this->attachPriceToModel($price->id);
         }
 
-        return $this->createNewCostAndAttachToModel($cost);
+        return $this->createNewPriceAndAttachToModel($price);
     }
 
     /**
-     * Create new cost and attach it to the model
+     * Create new price and attach it to the model
      *
-     * @param array $cost
+     * @param array $price
      * @return void
      */
-    private function createNewCostAndAttachToModel(array $cost)
+    private function createNewPriceAndAttachToModel(array $price)
     {
-        return DB::transaction(function() use($cost) {
-            $cost = $this->costs()->create([
-                'name' => isset($cost['name']) ? $cost['name'] : null,
-                'amount' => isset($cost['amount']) ? $cost['amount'] : null,
-                'type' => isset($cost['type']) ? $cost['type'] : null,
-                'description' => isset($cost['description']) ? $cost['description'] : null,
-                'active_at' => isset($cost['active_at']) ? $cost['active_at'] : null,
+        return DB::transaction(function() use($price) {
+            $price = $this->prices()->create([
+                'cost_id' => isset($price['cost_id']) ? $price['cost_id'] : null,
+                'amount' => isset($price['amount']) ? $price['amount'] : null,
+                'active_at' => isset($price['active_at']) ? $price['active_at'] : null,
             ]);
             
-            $this->attachCostToModel($cost->id);
+            $this->attachPriceToModel($price->id);
         });
     }
 
     /**
-     * Attach cost to the model.
+     * Attach price to the model.
      *
-     * @param [type] $costId
+     * @param [type] $priceId
      * @return void
      */
-    private function attachCostToModel($costId)
+    private function attachPriceToModel($priceId)
     {
-        return $this->prices()->attach($costId);
+        return $this->priceables()->attach($priceId);
     }
 }

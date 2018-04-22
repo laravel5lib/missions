@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\RateResource;
-use App\Http\Requests\v1\RateRequest;
+use App\Http\Resources\PriceResource;
+use App\Http\Requests\v1\PriceRequest;
 
 class CampaignPriceController extends Controller
 {
@@ -17,9 +17,9 @@ class CampaignPriceController extends Controller
      */
     public function index($campaignId)
     {   
-        $costs = Campaign::findOrFail($campaignId)->costs()->paginate();
+        $prices = Campaign::findOrFail($campaignId)->prices()->paginate();
 
-        return RateResource::collection($costs);
+        return PriceResource::collection($prices);
     }
 
     /**
@@ -28,19 +28,17 @@ class CampaignPriceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($campaignId, RateRequest $request)
+    public function store($campaignId, PriceRequest $request)
     {
-        $costs = Campaign::findOrFail($campaignId)
-            ->costs()
+        Campaign::findOrFail($campaignId)
+            ->prices()
             ->create([
-                'name' => $request->input('name'),
+                'cost_id' => $request->input('cost_id'),
                 'amount' => $request->input('amount'),
-                'type' => $request->input('type'),
-                'description' => $request->input('description'),
                 'active_at' => $request->input('active_at')
             ]);
 
-        return response()->json(['message' => 'New cost added to campaign.'], 201);
+        return response()->json(['message' => 'New price added to campaign.'], 201);
     }
 
     /**
@@ -52,32 +50,30 @@ class CampaignPriceController extends Controller
      */
     public function show($campaignId, $id)
     {
-        $cost = Campaign::findOrFail($campaignId)->costs()->findOrFail($id);
+        $price = Campaign::findOrFail($campaignId)->prices()->findOrFail($id);
 
-        return new RateResource($cost);
+        return new PriceResource($price);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\v1\RateRequest  $request
+     * @param  \App\Http\Requests\v1\PriceRequest  $request
      * @param  string $campaignId
      * @param  string $id
      * @return \Illuminate\Http\Response
      */
-    public function update(RateRequest $request, $campaignId, $id)
+    public function update(PriceRequest $request, $campaignId, $id)
     {
-        $cost = Campaign::findOrFail($campaignId)->costs()->findOrFail($id);
+        $price = Campaign::findOrFail($campaignId)->prices()->findOrFail($id);
 
-        $cost->update([
-            'name' => $request->input('name', $cost->name),
-            'amount' => $request->input('amount', $cost->amount),
-            'type' => $request->input('type', $cost->type),
-            'description' => $request->input('description', $cost->description),
-            'active_at' => $request->input('active_at', $cost->active_at)
+        $price->update([
+            'cost_id' => $request->input('cost_id', $price->cost_id),
+            'amount' => $request->input('amount', $price->amount),
+            'active_at' => $request->input('active_at', $price->active_at)
         ]);
 
-        return new RateResource($cost);
+        return new PriceResource($price);
     }
 
     /**
@@ -89,9 +85,9 @@ class CampaignPriceController extends Controller
      */
     public function destroy($campaignId, $id)
     {
-        $cost = Campaign::findOrFail($campaignId)->costs()->findOrFail($id);
+        $price = Campaign::findOrFail($campaignId)->prices()->findOrFail($id);
 
-        $cost->delete();
+        $price->delete();
 
         return response()->json([], 204);
     }

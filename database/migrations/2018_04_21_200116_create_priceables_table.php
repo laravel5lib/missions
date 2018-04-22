@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCostablesTable extends Migration
+class CreatePriceablesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateCostablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('costables', function (Blueprint $table) {
-            $table->uuid('cost_id');
-            $table->uuid('costable_id');
-            $table->string('costable_type', 60);
+        Schema::create('priceables', function (Blueprint $table) {
+            $table->uuid('price_id');
+            $table->uuid('priceable_id');
+            $table->string('priceable_type', 60);
         });
     }
 
@@ -27,6 +27,6 @@ class CreateCostablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('costables');
+        Schema::dropIfExists('priceables');
     }
 }

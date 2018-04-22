@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\v1\Cost;
 use App\Models\v1\Trip;
+use App\Models\v1\Price;
 use App\Models\v1\Campaign;
 use App\Models\v1\Reservation;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -15,9 +16,9 @@ class ReservationPriceTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function get_all_costs_for_a_reservation()
+    public function get_all_prices_for_a_reservation()
     {
-        $reservation = $this->setupReservationWithCosts();
+        $reservation = $this->setupReservationWithPrices();
 
         $response = $this->json('GET', "/api/reservations/{$reservation->id}/prices");
 
@@ -25,7 +26,7 @@ class ReservationPriceTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 [
-                    'id', 'name', 'amount', 'description', 'type', 'active_at'
+                    'uuid', 'amount', 'active_at', 'cost'
                 ]
             ],
             'meta'
@@ -36,205 +37,197 @@ class ReservationPriceTest extends TestCase
     }
 
     /** @test */
-    public function add_trip_cost_to_reservation()
+    public function add_trip_price_to_reservation()
     {
-        $trip = $this->setupTripWithCosts();
+        $trip = $this->setupTripWithPrices();
         $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
         
         $response = $this->json('POST', "/api/reservations/{$reservation->id}/prices", [
-            'cost_id' => $trip->prices()->first()->id
+            'price_id' => $trip->priceables()->first()->uuid
         ]);
 
         $response->assertStatus(201);
-        $this->assertDatabaseHas('costables', [
-            'cost_id' => $trip->prices()->first()->id,
-            'costable_id' => $reservation->id,
-            'costable_type' => 'reservations'
+        $this->assertDatabaseHas('priceables', [
+            'price_id' => $trip->priceables()->first()->id,
+            'priceable_id' => $reservation->id,
+            'priceable_type' => 'reservations'
         ]);
     }
 
     /** @test */
-    public function validates_request_to_add_trip_cost_to_reservation()
+    public function validates_request_to_add_trip_price_to_reservation()
     {
-        $trip = $this->setupTripWithCosts();
+        $trip = $this->setupTripWithPrices();
         $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
         
         $response = $this->json('POST', "/api/reservations/{$reservation->id}/prices", []);
 
-        $response->assertJsonValidationErrors(['cost_id']);
+        $response->assertJsonValidationErrors(['price_id']);
     }
 
     /** @test */
-    public function add_custom_cost_to_reservation()
+    public function add_custom_price_to_reservation()
     {
         $reservation = factory(Reservation::class)->create();
+        $cost = factory(Cost::class)->create();
 
         $response = $this->json('POST', "/api/reservations/{$reservation->id}/prices", [
-            'name' => 'International Flight',
-            'amount' => 2000.00,
-            'type' => 'static',
-            'description' => 'Round trip flights to and from destination country.'
+            'cost_id' => $cost->id,
+            'amount' => 2000.00
         ]);
 
         $response->assertStatus(201);
-        $this->assertDatabaseHas('costs', [
-            'name' => 'International Flight',
-            'amount' => 200000,
-            'type' => 'static',
-            'description' => 'Round trip flights to and from destination country.',
+        $this->assertDatabaseHas('prices', [
+            'cost_id' => $cost->id,
+            'amount' => 200000
         ]);
-        $this->assertDatabaseHas('costables', [
-            'costable_id' => $reservation->id,
-            'costable_type' => 'reservations'
+        $this->assertDatabaseHas('priceables', [
+            'priceable_id' => $reservation->id,
+            'priceable_type' => 'reservations'
         ]);
     }
 
     /** @test */
-    public function validates_request_to_add_custom_cost_to_reservation()
+    public function validates_request_to_add_custom_price_to_reservation()
     {
         $reservation = factory(Reservation::class)->create();
 
         $response = $this->json('POST', "/api/reservations/{$reservation->id}/prices", [
-            'type' => 'invalid',
-            'description' => 'This is description is way way way too long for a cost description. This should be 120 characters or less but it is a whole lot more than that!!!!',
+            'cost_id' => 'invalid',
+            'amount' => 'invalid',
             'active_at' => 'invalid'
         ]);
 
-        $response->assertJsonValidationErrors(['name', 'amount', 'type', 'description', 'active_at']);
+        $response->assertJsonValidationErrors(['cost_id', 'amount', 'active_at']);
+
+        $response = $this->json('POST', "/api/reservations/{$reservation->id}/prices", []);
+
+        $response->assertJsonValidationErrors(['cost_id', 'amount']);
     }
 
     /** @test */
-    public function get_specific_cost_for_reservation()
+    public function get_specific_price_for_reservation()
     {
         $reservation = factory(Reservation::class)->create();
+        $cost = factory(Cost::class)->create();
         $reservation->addPrice([
-            'name' => 'International Flight',
-            'amount' => 2000.00,
-            'type' => 'static',
-            'description' => 'Round trip flights to and from destination country.',
+            'cost_id' => $cost->id,
+            'amount' => 2000.00
         ]);
 
-        $response = $this->json('GET', "/api/reservations/{$reservation->id}/prices/{$reservation->costs()->first()->id}");
+        $response = $this->json('GET', "/api/reservations/{$reservation->id}/prices/{$reservation->prices()->first()->uuid}");
 
         $response->assertStatus(200)
                  ->assertJson([
                      'data' => [
-                        'name' => 'International Flight',
-                        'amount' => 2000.00,
-                        'type' => 'static',
-                        'description' => 'Round trip flights to and from destination country.'
+                        'amount' => 2000.00
                      ]
                  ]);
     }
 
     /** @test */
-    public function updates_a_reservation_cost()
+    public function updates_a_reservation_price()
     {
         $reservation = factory(Reservation::class)->create();
+        $cost = factory(Cost::class)->create();
         $reservation->addPrice([
-            'name' => 'International Flight',
-            'amount' => 2000.00,
-            'type' => 'static',
-            'description' => 'Round trip flights to and from destination country.',
+            'cost_id' => $cost->id,
+            'amount' => 2000.00
         ]);
 
-        $response = $this->json('PUT', "/api/reservations/{$reservation->id}/prices/{$reservation->costs()->first()->id}", [
-            'name' => 'Updated International Flight',
+        $response = $this->json('PUT', "/api/reservations/{$reservation->id}/prices/{$reservation->prices()->first()->uuid}", [
             'amount' => 2500.00
         ]);
 
         $response->assertStatus(200)
                  ->assertJson([
                      'data' => [
-                        'name' => 'Updated International Flight',
-                        'amount' => 2500.00,
-                        'type' => 'static',
-                        'description' => 'Round trip flights to and from destination country.'
+                        'amount' => 2500.00
                      ]
                  ]);
     }
 
     /** @test */
-    public function remove_a_trip_cost_from_reservation()
+    public function remove_a_trip_price_from_reservation()
     {
-        $reservation = $this->setupReservationWithCosts();
-        $cost = $reservation->prices()->where('cost_assignable_type', 'trips')->first();
+        $reservation = $this->setupReservationWithPrices();
+        $price = $reservation->priceables()->where('model_type', 'trips')->first();
 
-        $response = $this->json('DELETE', "/api/reservations/{$reservation->id}/prices/{$cost->id}");
+        $response = $this->json('DELETE', "/api/reservations/{$reservation->id}/prices/{$price->uuid}");
 
         $response->assertStatus(204);
-        $this->assertDatabaseMissing('costables', [
-            'cost_id' => $cost->id, 'costable_id' => $reservation->id, 'costable_type' => 'reservations'
+        $this->assertDatabaseMissing('priceables', [
+            'price_id' => $price->id, 'priceable_id' => $reservation->id, 'priceable_type' => 'reservations'
         ]);
-        $this->assertDatabaseHas('costs', ['id' => $cost->id]);
+        $this->assertDatabaseHas('prices', ['id' => $price->id]);
     }
 
     /** @test */
-    public function remove_a_custom_cost_from_reservation()
+    public function remove_a_custom_price_from_reservation()
     {
-        $reservation = $this->setupReservationWithCosts();
-        $cost = $reservation->costs()->first();
+        $reservation = $this->setupReservationWithPrices();
+        $price = $reservation->prices()->first();
 
-        $response = $this->json('DELETE', "/api/reservations/{$reservation->id}/prices/{$cost->id}");
+        $response = $this->json('DELETE', "/api/reservations/{$reservation->id}/prices/{$price->uuid}");
 
         $response->assertStatus(204);
-        $this->assertDatabaseMissing('costables', [
-            'cost_id' => $cost->id, 'costable_id' => $reservation->id, 'costable_type' => 'reservations'
+        $this->assertDatabaseMissing('priceables', [
+            'price_id' => $price->id, 'priceable_id' => $reservation->id, 'priceable_type' => 'reservations'
         ]);
-        $this->assertDatabaseMissing('costs', ['id' => $cost->id]);
+        $this->assertDatabaseMissing('prices', ['id' => $price->id]);
     }
 
-    private function setupReservationWithCosts()
+    private function setupReservationWithPrices()
     {
-        $trip = $this->setupTripWithCosts();
+        $trip = $this->setupTripWithPrices();
 
         $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
-        $cost = factory(Cost::class)->create([
-            'cost_assignable_id' => $reservation->id, 
-            'cost_assignable_type' => 'reservations'
+        $price = factory(Price::class)->create([
+            'model_id' => $reservation->id, 
+            'model_type' => 'reservations'
         ]);
 
-        $tripCosts = $trip->prices->pluck('id')->toArray();
-        $reservation->prices()->attach([
-            $cost->id, $tripCosts[0], $tripCosts[1], $tripCosts[2]
+        $tripPrices = $trip->priceables->pluck('id')->toArray();
+        $reservation->priceables()->attach([
+            $price->id, $tripPrices[0], $tripPrices[1], $tripPrices[2]
         ]);
 
         return $reservation;
     }
 
-    private function setupTripWithCosts()
+    private function setupTripWithPrices()
     {
-        $campaign = $this->setupCampaignWithCosts();
+        $campaign = $this->setupCampaignWithPrices();
 
         $trip = factory(Trip::class)->create(['campaign_id' => $campaign->id]);
-        $cost = factory(Cost::class)->create([
-            'cost_assignable_id' => $trip->id, 
-            'cost_assignable_type' => 'trips'
+        $price = factory(Price::class)->create([
+            'model_id' => $trip->id, 
+            'model_type' => 'trips'
         ]);
         
-        $campaignCosts = $campaign->costs->pluck('id')->toArray();
-        $trip->prices()->attach([
-            $cost->id, $campaignCosts[0], $campaignCosts[1]
+        $campaignPrices = $campaign->prices->pluck('id')->toArray();
+        $trip->priceables()->attach([
+            $price->id, $campaignPrices[0], $campaignPrices[1]
         ]);
 
         return $trip;
     }
 
-    private function setupCampaignWithCosts()
+    private function setupCampaignWithPrices()
     {
-        $this->setupArbitraryCosts();
+        $this->setupArbitraryPrices();
 
         $campaign = factory(Campaign::class)->create();
-        factory(Cost::class, 2)->create([
-            'cost_assignable_id' => $campaign->id, 
-            'cost_assignable_type' => 'campaigns'
+        factory(Price::class, 2)->create([
+            'model_id' => $campaign->id, 
+            'model_type' => 'campaigns'
         ]);
 
         return $campaign;
     }
 
-    private function setupArbitraryCosts()
+    private function setupArbitraryPrices()
     {
-        factory(Cost::class, 2)->create();
+        factory(Price::class, 2)->create();
     }
 }

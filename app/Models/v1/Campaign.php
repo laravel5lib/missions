@@ -3,7 +3,7 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
-use App\Models\v1\Cost;
+use App\Models\v1\Price;
 use App\Models\v1\Team;
 use App\Models\v1\Region;
 use App\Traits\Rewardable;
@@ -141,13 +141,13 @@ class Campaign extends Model implements HasMedia
     }
 
     /**
-     * Get a campaign's costs
+     * Get a campaign's prices
      *
      * @return Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function costs()
+    public function prices()
     {
-        return $this->morphMany(Cost::class, 'cost_assignable');
+        return $this->morphMany(Price::class, 'model');
     }
 
     public function regions()

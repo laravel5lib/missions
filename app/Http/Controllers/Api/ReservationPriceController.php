@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\v1\Reservation;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\RateResource;
-use App\Http\Requests\v1\RateRequest;
+use App\Http\Resources\PriceResource;
+use App\Http\Requests\v1\PriceRequest;
 
 class ReservationPriceController extends Controller
 {
@@ -18,9 +18,11 @@ class ReservationPriceController extends Controller
      */
     public function index($reservationId)
     {
-        $costs = Reservation::findOrFail($reservationId)->prices()->paginate();
+        $prices = Reservation::findOrFail($reservationId)
+            ->priceables()
+            ->paginate();
         
-        return RateResource::collection($costs);
+        return PriceResource::collection($prices);
     }
 
     /**
@@ -29,11 +31,11 @@ class ReservationPriceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(RateRequest $request, $reservationId)
+    public function store(PriceRequest $request, $reservationId)
     {
         Reservation::findOrFail($reservationId)->addPrice($request->all());
 
-        return response()->json(['message' => 'New cost added to reservation.'], 201);
+        return response()->json(['message' => 'New price added to reservation.'], 201);
     }
 
     /**
@@ -42,11 +44,14 @@ class ReservationPriceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($reservationId, $id)
+    public function show($reservationId, $uuid)
     {
-        $cost = Reservation::findOrFail($reservationId)->prices()->findOrFail($id);
+        $price = Reservation::findOrFail($reservationId)
+            ->priceables()
+            ->whereUuid($uuid)
+            ->firstOrFail();
 
-        return new RateResource($cost);
+        return new PriceResource($price);
     }
 
     /**
@@ -56,19 +61,20 @@ class ReservationPriceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(RateRequest $request, $reservationId, $id)
+    public function update(PriceRequest $request, $reservationId, $uuid)
     {
-        $cost = Reservation::findOrFail($reservationId)->costs()->findOrFail($id);
+        $price = Reservation::findOrFail($reservationId)
+            ->prices()
+            ->whereUuid($uuid)
+            ->firstOrFail();
 
-        $cost->update([
-            'name' => $request->input('name', $cost->name),
-            'amount' => $request->input('amount', $cost->amount),
-            'type' => $request->input('type', $cost->type),
-            'description' => $request->input('description', $cost->description),
-            'active_at' => $request->input('active_at', $cost->active_at)
+        $price->update([
+            'cost_id' => $request->input('cost_id', $price->cost_id),
+            'amount' => $request->input('amount', $price->amount),
+            'active_at' => $request->input('active_at', $price->active_at)
         ]);
 
-        return new RateResource($cost);
+        return new PriceResource($price);
     }
 
     /**
@@ -77,16 +83,16 @@ class ReservationPriceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($reservationId, $id)
+    public function destroy($reservationId, $uuid)
     {
         $reservation = Reservation::findOrFail($reservationId);
-        $cost = $reservation->prices()->findOrFail($id);
+        $price = $reservation->priceables()->whereUuid($uuid)->firstOrFail();
 
-        DB::transaction(function() use($reservation, $cost) {
-            $reservation->prices()->detach($cost->id);
+        DB::transaction(function() use($reservation, $price) {
+            $reservation->priceables()->detach($price->id);
 
-            if ($cost->cost_assignable_id === $reservation->id && $cost->cost_assignable_type === 'reservations') {
-                $cost->delete();
+            if ($price->model_id === $reservation->id && $price->model_type === 'reservations') {
+                $price->delete();
             }
         });
 

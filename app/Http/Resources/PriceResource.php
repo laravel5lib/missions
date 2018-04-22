@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\CostResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RateResource extends JsonResource
+class PriceResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +16,10 @@ class RateResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
+            'uuid' => $this->uuid,
             'amount' => (double) $this->amount/100,
-            'type' => $this->type,
-            'description' => $this->description,
-            'active_at' => optional($this->active_at)->toIso8601String()
+            'active_at' => optional($this->active_at)->toIso8601String(),
+            'cost' => new CostResource($this->cost)
         ];
     }
 }

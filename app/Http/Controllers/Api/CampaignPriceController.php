@@ -48,9 +48,9 @@ class CampaignPriceController extends Controller
      * @param  string  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($campaignId, $id)
+    public function show($campaignId, $uuid)
     {
-        $price = Campaign::findOrFail($campaignId)->prices()->findOrFail($id);
+        $price = Campaign::findOrFail($campaignId)->prices()->whereUuid($uuid)->firstOrFail();
 
         return new PriceResource($price);
     }
@@ -63,9 +63,9 @@ class CampaignPriceController extends Controller
      * @param  string $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PriceRequest $request, $campaignId, $id)
+    public function update(PriceRequest $request, $campaignId, $uuid)
     {
-        $price = Campaign::findOrFail($campaignId)->prices()->findOrFail($id);
+        $price = Campaign::findOrFail($campaignId)->prices()->whereUuid($uuid)->firstOrFail();
 
         $price->update([
             'cost_id' => $request->input('cost_id', $price->cost_id),
@@ -83,9 +83,9 @@ class CampaignPriceController extends Controller
      * @param  string  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($campaignId, $id)
+    public function destroy($campaignId, $uuid)
     {
-        $price = Campaign::findOrFail($campaignId)->prices()->findOrFail($id);
+        $price = Campaign::findOrFail($campaignId)->prices()->whereUuid($uuid)->firstOrFail();
 
         $price->delete();
 

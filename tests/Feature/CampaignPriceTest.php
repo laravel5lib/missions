@@ -20,11 +20,11 @@ class CampaignPriceTest extends TestCase
     {
         // create campaign with price
         $campaign = factory(Campaign::class)->create();
-        factory(Price::class)->create(['priceable_id' => $campaign->id, 'priceable_type' => 'campaigns']);
+        factory(Price::class)->create(['model_id' => $campaign->id, 'model_type' => 'campaigns']);
         
         // create trip with price
         $trip = factory(Trip::class)->create(['campaign_id' => $campaign->id]);
-        factory(Price::class)->create(['priceable_id' => $trip->id, 'priceable_type' => 'trips']);
+        factory(Price::class)->create(['model_id' => $trip->id, 'model_type' => 'trips']);
         
         // get only the campaign's prices
         $response = $this->json('GET', "/api/campaigns/{$campaign->id }/prices");
@@ -33,7 +33,7 @@ class CampaignPriceTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 [
-                    'uuid', 'amount', 'active_at'
+                    'id', 'amount', 'active_at'
                 ]
             ],
             'meta'
@@ -59,8 +59,8 @@ class CampaignPriceTest extends TestCase
             'cost_id' => $cost->id,
             'amount' => 250000,
             'active_at' => '2018-01-01 00:00:00',
-            'priceable_id' => $campaign->id,
-            'priceable_type' => 'campaigns'
+            'model_id' => $campaign->id,
+            'model_type' => 'campaigns'
         ]);
     }
 
@@ -113,13 +113,13 @@ class CampaignPriceTest extends TestCase
         // create campaign with cost
         $campaign = factory(Campaign::class)->create();
         $price = factory(Price::class)->create([
-            'priceable_id' => $campaign->id, 
-            'priceable_type' => 'campaigns',
+            'model_id' => $campaign->id, 
+            'model_type' => 'campaigns',
             'amount' => 2500.00,
             'active_at' => '01/01/2018'
         ]);
 
-        $response = $this->json('GET', "/api/campaigns/{$campaign->id }/prices/{$price->id}");
+        $response = $this->json('GET', "/api/campaigns/{$campaign->id }/prices/{$price->uuid}");
 
         $response->assertStatus(200);
         $response->assertJson([
@@ -136,13 +136,13 @@ class CampaignPriceTest extends TestCase
         // create campaign with cost
         $campaign = factory(Campaign::class)->create();
         $price = factory(Price::class)->create([
-            'priceable_id' => $campaign->id, 
-            'priceable_type' => 'campaigns',
+            'model_id' => $campaign->id, 
+            'model_type' => 'campaigns',
             'amount' => 2500.00,
             'active_at' => '01/01/2018'
         ]);
 
-        $response = $this->json('PUT', "/api/campaigns/{$campaign->id }/prices/{$price->id}", [
+        $response = $this->json('PUT', "/api/campaigns/{$campaign->id }/prices/{$price->uuid}", [
             'amount' => 2700.00,
             'active_at' => '01/02/2018'
         ]);
@@ -161,11 +161,11 @@ class CampaignPriceTest extends TestCase
     {
         $campaign = factory(Campaign::class)->create();
         $price = factory(Price::class)->create([
-            'priceable_id' => $campaign->id, 
-            'priceable_type' => 'campaigns',
+            'model_id' => $campaign->id, 
+            'model_type' => 'campaigns',
         ]);
 
-        $response = $this->json('DELETE', "/api/campaigns/{$campaign->id }/prices/{$price->id}");
+        $response = $this->json('DELETE', "/api/campaigns/{$campaign->id }/prices/{$price->uuid}");
 
         $response->assertStatus(204);
         $this->assertDatabaseMissing('prices', ['id' => $price->id]);

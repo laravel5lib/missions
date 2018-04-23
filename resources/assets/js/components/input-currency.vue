@@ -55,7 +55,7 @@ export default {
         this.amount = this.value;
 
         this.$root.$on('form:reset', () => {
-            this.amount = null;
+            this.amount = 0;
         });
     }
 }

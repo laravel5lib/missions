@@ -1,5 +1,5 @@
 <template>
-<fetch-json :url="'/campaigns/' + campaignId+ '/prices'">
+<fetch-json :url="'/campaigns/' + campaignId+ '/prices'" ref="priceList">
     <div class="list-group" slot-scope="{ json: prices, loading }">
         <div class="list-group-item" v-if="loading">Loading...</div>
         <div class="list-group-item" v-for="price in prices" :key="price.id" v-else>
@@ -52,7 +52,7 @@ export default {
         isActive(date) {
             return moment(date).isAfter(moment()) ? false : true;
         },
-        destroy(costId) {
+        destroy(priceId) {
             swal('WARNING!', 'This action will remove this cost from any trips and reservations using it. This action cannot be undone!', 'warning', {
                 closeOnClickOutside: true,
                 buttons: {
@@ -72,14 +72,19 @@ export default {
                 dangerMode: true
             }).then((value) => {
                 if (value) {
-                    this.$http.delete('/campaigns/' + this.campaignId + '/costs/' + costId)
+                    this.$http.delete('/campaigns/' + this.campaignId + '/prices/' + priceId)
                         .then((response) => {
-                            console.log('deleted');
-                            this.$root.$emit('list:refresh');
+                            this.$refs.priceList.fetch();
                         });
                 }
             })
         }
+    },
+
+    mounted() {
+        this.$root.$on('form:success', () => {
+            this.$refs.priceList.fetch();
+        })
     }
 }
 </script>

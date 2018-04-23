@@ -11,11 +11,18 @@ export default {
         }
     },
 
+    methods: {
+        fetch() {
+            this.loading = true;
+            this.$http.get(this.url).then((response) => {
+                this.json = response.data.data;
+                this.loading = false;
+            });
+        }
+    },
+
     created() {
-        this.$http.get(this.url).then((response) => {
-            this.json = response.data.data;
-            this.loading = false;
-        });
+        this.fetch();
     },
 
     render() {

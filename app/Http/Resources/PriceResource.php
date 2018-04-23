@@ -16,7 +16,7 @@ class PriceResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'uuid' => $this->uuid,
+            'id' => $this->uuid,
             'amount' => (double) $this->amount/100,
             'active_at' => optional($this->active_at)->toIso8601String(),
             'cost' => new CostResource($this->cost)

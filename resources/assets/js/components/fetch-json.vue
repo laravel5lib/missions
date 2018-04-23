@@ -7,15 +7,17 @@ export default {
     data() {
         return {
             json: null,
-            loading: true
+            loading: true,
+            pagination: {}
         }
     },
 
     methods: {
-        fetch() {
+        fetch(params) {
             this.loading = true;
-            this.$http.get(this.url).then((response) => {
+            this.$http.get(this.url, {params}).then((response) => {
                 this.json = response.data.data;
+                this.pagination = response.data.meta;
                 this.loading = false;
             });
         }
@@ -28,7 +30,8 @@ export default {
     render() {
         return this.$scopedSlots.default({
             json: this.json,
-            loading: this.loading
+            loading: this.loading,
+            pagination: this.pagination
         })
     }
 }

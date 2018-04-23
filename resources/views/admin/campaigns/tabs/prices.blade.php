@@ -40,11 +40,6 @@
     @endslot
 @endcomponent
 
-@component('panel')
-    @slot('title')
-        <h5>Current Pricing</h5>
-    @endslot
-    <campaign-price-list campaign-id="{{ $campaign->id }}"></campaign-price-list>
-@endcomponent
+<campaign-price-list campaign-id="{{ $campaign->id }}"></campaign-price-list>
 
 @endsection

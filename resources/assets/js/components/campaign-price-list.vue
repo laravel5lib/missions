@@ -1,6 +1,10 @@
 <template>
 <fetch-json :url="'/campaigns/' + campaignId+ '/prices'" ref="priceList">
-    <div class="list-group" slot-scope="{ json: prices, loading }">
+<div class="panel panel-default" slot-scope="{ json: prices, loading, pagination }">
+     <div class="panel-heading">
+        <h5>Current Pricing</h5>
+    </div>
+    <div class="list-group">
         <div class="list-group-item" v-if="loading">Loading...</div>
         <div class="list-group-item" v-for="price in prices" :key="price.id" v-else>
             <div class="row">
@@ -40,6 +44,10 @@
             </div>
         </div>
     </div>
+    <div class="panel-footer" v-if="pagination.total > pagination.per_page">
+        <pager :pagination="pagination"></pager>
+    </div>
+</div>
 </fetch-json>
 </template>
 <script>
@@ -53,7 +61,7 @@ export default {
             return moment(date).isAfter(moment()) ? false : true;
         },
         destroy(priceId) {
-            swal('WARNING!', 'This action will remove this cost from any trips and reservations using it. This action cannot be undone!', 'warning', {
+            swal('WARNING!', 'This action will remove this pirce from any trips and reservations using it. This action cannot be undone!', 'warning', {
                 closeOnClickOutside: true,
                 buttons: {
                     cancel: {
@@ -84,7 +92,10 @@ export default {
     mounted() {
         this.$root.$on('form:success', () => {
             this.$refs.priceList.fetch();
-        })
+        });
+        this.$root.$on('page:change', (pageNumber) => {
+            this.$refs.priceList.fetch({page: pageNumber});
+        });
     }
 }
 </script>

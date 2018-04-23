@@ -37,15 +37,20 @@
                 <hr class="divider">
                 <label>Payments</label>
                 <div class="row">
-                    <div class="col-xs-4 col-md-2">
+                    <div class="col-xs-3 col-md-2">
                         <input-number name="payments.percent" :placeholder="50">
                             <span class="help-block" slot="help-text">Percentage due</span>
                         </input-number>
                     </div>
-                    <div class="col-xs-8 col-md-4">
+                    <div class="col-xs-6 col-md-4">
                         <input-date name="due_at">
                             <span class="help-block" slot="help-text">Due Date</span>
                         </input-date>
+                    </div>
+                    <div class="col-xs-3 col-md-2">
+                        <input-number name="payments.grace" :placeholder="3">
+                            <span class="help-block" slot="help-text">Days Grace</span>
+                        </input-number>
                     </div>
                 </div>
             </div>

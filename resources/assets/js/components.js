@@ -231,6 +231,7 @@ Vue.component('reports-list', require('./components/reports/reports-list.vue'));
 Vue.component('avatar-uploader', require('./components/avatar-uploader.vue'));
 
 Vue.component('mm-modal', require('./components/mm-modal.vue'));
+Vue.component('fetch-json', require('./components/fetch-json.vue'));
 Vue.component('data-list', require('./components/data-list.vue'));
 Vue.component('ajax-form', require('./components/ajax-form.vue'));
 Vue.component('input-text', require('./components/input-text.vue'));

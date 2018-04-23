@@ -26,7 +26,7 @@ class TripPriceTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 [
-                    'uuid', 'amount', 'active_at'
+                    'id', 'amount', 'active_at'
                 ]
             ],
             'meta'
@@ -200,7 +200,7 @@ class TripPriceTest extends TestCase
         $response = $this->json('GET', "/api/trips/{$trip->id}/prices/{$price->uuid}");
 
         $response->assertStatus(200);
-        $response->assertJson(['data' => ['uuid' => $price->uuid]]);
+        $response->assertJson(['data' => ['id' => $price->uuid]]);
     }
 
     /** @test */

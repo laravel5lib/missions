@@ -218,6 +218,7 @@ Vue.component('initiative-editor', require('./components/admin/initiative-editor
 Vue.component('campaign-price-list', require('./components/campaign-price-list.vue'));
 Vue.component('trip-price-list', require('./components/trip-price-list.vue'));
 Vue.component('reservation-price-list', require('./components/reservation-price-list.vue'));
+Vue.component('price-add-new', require('./components/price-add-new.vue'));
 
 /**
  * Misc. Components
@@ -247,6 +248,7 @@ Vue.component('select-prospects', require('./components/select-prospects.vue'));
 Vue.component('select-roles', require('./components/select-roles.vue'));
 Vue.component('select-group', require('./components/select-group.vue'));
 Vue.component('select-rep', require('./components/select-rep.vue'));
+Vue.component('select-cost', require('./components/select-cost.vue'));
 Vue.component('alert-error', require('./components/alert-error.vue'));
 Vue.component('alert-success', require('./components/alert-success.vue'));
 Vue.component('datetime-formatted', require('./components/datetime-formatted.vue'));

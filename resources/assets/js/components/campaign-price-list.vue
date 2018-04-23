@@ -1,11 +1,11 @@
 <template>
     <div class="list-group">
-        <data-list :url="'campaigns/' + campaignId + '/costs'">
+        <data-list :url="'campaigns/' + campaignId + '/prices'">
             <template slot="empty">
                 <hr class="divider inv">
-                <p class="text-center text-muted lead">No costs found.</p>
+                <p class="text-center text-muted lead">No prices found.</p>
                 <p class="text-center">
-                    <button class="btn btn-default-hollow btn-sm" @click="$emit('open:add-cost-modal')">Add Cost</button>
+                    <button class="btn btn-default-hollow btn-sm" @click="$emit('open:add-cost-modal')">Add Price</button>
                 </p>
             </template>
             <template slot-scope="props" slot="item">
@@ -15,7 +15,7 @@
                             <h4 class="text-primary">{{ currency(props.item.amount) }}</h4>
                         </div>
                         <div class="col-sm-6 col-xs-6">
-                            <h5>{{ props.item.name|capitalize }}</h5>
+                            <h5>{{ props.item.cost.name|capitalize }}</h5>
                         </div>
                         <div class="col-sm-4 col-xs-6 text-right">
                             <div style="padding: 0;">
@@ -24,7 +24,7 @@
                                         <i class="fa fa-ellipsis-h"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right">
-                                        <template v-if="props.item.type == 'incremental'">
+                                        <template v-if="props.item.cost.type == 'incremental'">
                                             <li><a>Add New Payment</a></li>
                                             <li class="divider"></li>
                                         </template>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-2">
-                            <p class="text-muted small">{{ props.item.type|capitalize }}</p>
+                            <p class="text-muted small">{{ props.item.cost.type|capitalize }}</p>
                         </div>
                         <div class="col-sm-10">
                             <p class="small" v-if="isActive(props.item.active_at)"><i class="fa fa-check-circle text-success"></i> Active</p>
@@ -67,7 +67,7 @@
 
                     <div class="row">
                         <div class="col-sm-12">
-                            <p class="small">{{ props.item.description }}</p>
+                            <p class="small">{{ props.item.cost.description }}</p>
                         </div>
                     </div>
 

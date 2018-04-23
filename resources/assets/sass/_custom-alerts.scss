@@ -67,7 +67,10 @@
 }
 
 .alert-warning {
-  @include alert-variant($alert-warning-bg, $alert-warning-border, $alert-warning-text);
+  // @include alert-variant($alert-warning-bg, $alert-warning-border, $alert-warning-text);
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+  color: #8a6d3b;
 }
 
 .alert-danger {

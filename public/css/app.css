@@ -13013,17 +13013,9 @@ a.thumbnail.active {
 }
 
 .alert-warning {
-  background-color: #ffe000;
-  border-color: #e6a300;
-  color: #cc9100;
-}
-
-.alert-warning hr {
-  border-top-color: #cc9100;
-}
-
-.alert-warning .alert-link {
-  color: #996d00;
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+  color: #8a6d3b;
 }
 
 .alert-danger {

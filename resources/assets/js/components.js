@@ -219,6 +219,8 @@ Vue.component('campaign-price-list', require('./components/campaign-price-list.v
 Vue.component('trip-price-list', require('./components/trip-price-list.vue'));
 Vue.component('reservation-price-list', require('./components/reservation-price-list.vue'));
 Vue.component('price-add-new', require('./components/price-add-new.vue'));
+Vue.component('price-edit', require('./components/price-edit.vue'));
+Vue.component('price-delete', require('./components/price-delete.vue'));
 
 /**
  * Misc. Components

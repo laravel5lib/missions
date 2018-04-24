@@ -41,14 +41,27 @@ export default {
         }
     },
 
+    methods: {
+        getCosts() {
+            return this.$http.get('costs').then(response => {
+                this.costs = response.data.data;
+            }).catch(error => {
+                console.log('error');
+            });
+        }
+    },
+
     mounted() {
         this.$parent.form[this.name] = this.value;
         this.$parent.form.set(this.name, this.value);
 
-        this.$http.get('costs').then(response => {
-            this.costs = response.data.data;
-        }).catch(error => {
-            console.log('error');
+        let promise = this.getCosts();
+
+        promise.then((values) => {
+            if (this.value) {
+                this.cost = _.findWhere(this.costs, { id: this.value });
+                this.$root.$emit('cost-change', this.cost)
+            }
         });
 
         this.$root.$on('form:reset', () => {

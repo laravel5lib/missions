@@ -17,7 +17,7 @@ class PriceResource extends JsonResource
     {
         return [
             'id' => $this->uuid,
-            'amount' => (double) $this->amount/100,
+            'amount' => $this->amount,
             'active_at' => optional($this->active_at)->toIso8601String(),
             'cost' => new CostResource($this->cost)
         ];

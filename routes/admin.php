@@ -21,7 +21,7 @@ Route::prefix('campaigns')->group(function () {
     Route::get('{id}/edit', 'CampaignsController@edit');
     Route::get('{id}/trips/create', 'TripsController@create');
     Route::get('{id}/{tab?}', 'CampaignsController@show');
-    Route::get('{id}/{tab?}/{tabId}', 'CampaignsController@show');
+    Route::get('{id}/prices/{price}', 'CampaignPriceController@show');
 });
 
 Route::get('trips/{id}/{tab?}', 'TripsController@show');

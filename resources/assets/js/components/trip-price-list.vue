@@ -1,81 +1,54 @@
 <template>
-    <div class="list-group">
-        <data-list :url="'trips/' + tripId + '/costs'">
-            <template slot="empty">
-                <hr class="divider inv">
-                <p class="text-center text-muted lead">No costs found.</p>
-                <p class="text-center">
-                    <button class="btn btn-default-hollow btn-sm" @click="$emit('open:add-cost-modal')">Add Cost</button>
-                </p>
-            </template>
-            <template slot-scope="props" slot="item">
-                <div class="list-group-item">
-                    <div class="row">
-                        <div class="col-sm-2 col-xs-12">
-                            <h4 class="text-primary">{{ currency(props.item.amount) }}</h4>
-                        </div>
-                        <div class="col-sm-6 col-xs-6">
-                            <h5>{{ props.item.name|capitalize }}</h5>
-                        </div>
-                        <div class="col-sm-4 col-xs-6 text-right">
-                            <div style="padding: 0;">
-                                <div class="btn-group btn-group-sm">
-                                    <button type="button" class="btn btn-sm btn-link dropdown-toggle" data-toggle="dropdown">
-                                        <i class="fa fa-ellipsis-h"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-right">
-                                        <template v-if="props.item.type == 'incremental'">
-                                            <li><a>Add New Payment</a></li>
-                                            <li class="divider"></li>
-                                        </template>
-                                        <li><a>Edit</a></li>
-                                        <li><a @click="destroy(props.item.id)">Delete</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-2">
-                            <p class="text-muted small">{{ props.item.type|capitalize }}</p>
-                        </div>
-                        <div class="col-sm-10">
-                            <p class="small" v-if="isActive(props.item.active_at)"><i class="fa fa-check-circle text-success"></i> Active</p>
-                            <p class="small" v-else><i class="fa fa-calendar-o"></i> Effective Date: <em class="text-primary">{{ props.item.active_at|mFormat('ll') }}</em></p>
-                        </div>
-                    </div>
-
-                    <div class="list-group small" v-if="props.item.type == 'incremental'">
-                        <div class="list-group-item" v-for="payment in props.item.payments" :key="payment.id">
-                            <div class="row">
-                                <div class="col-xs-2">
-                                    <strong>{{ payment.percent_owed.toFixed(2) }}%</strong> Due
-                                </div>
-                                <div class="col-xs-4">
-                                    {{ payment.due_at|mFormat('ll') }}
-                                </div>
-                                <div class="col-xs-4">
-                                    <strong>{{ payment.grace_period }} day</strong> grace period
-                                </div>
-                                <div class="col-xs-2 text-right">
-                                    <a href="#"><i class="fa fa-pencil"></i></a>
-                                    <a href="#"><i class="fa fa-trash"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <p class="small">{{ props.item.description }}</p>
-                        </div>
-                    </div>
-
-                </div>
-            </template>
-        </data-list>
-
+<fetch-json :url="'/trips/' + tripId+ '/prices'" ref="priceList">
+<div class="panel panel-default" slot-scope="{ json: prices, loading, pagination }">
+     <div class="panel-heading">
+        <h5>Current Pricing</h5>
     </div>
+    <div class="list-group">
+        <div class="list-group-item" v-if="loading">Loading...</div>
+        <div class="list-group-item" v-for="price in prices" :key="price.id" v-else>
+            <div class="row">
+                <div class="col-sm-2 col-xs-12">
+                    <h4 class="text-primary">{{ currency(price.amount) }}</h4>
+                </div>
+                <div class="col-sm-6 col-xs-6">
+                    <h5>{{ price.cost.name|capitalize }}</h5>
+                </div>
+                <div class="col-sm-4 col-xs-6 text-right">
+                    <div style="padding: 0;">
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-sm btn-link dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-ellipsis-h"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a>Edit</a></li>
+                                <li><a @click="destroy(price.id)">Delete</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <p class="text-muted small">{{ price.cost.type|capitalize }}</p>
+                </div>
+                <div class="col-sm-10">
+                    <p class="small" v-if="isActive(price.active_at)"><i class="fa fa-check-circle text-success"></i> Active</p>
+                    <p class="small" v-else><i class="fa fa-calendar-o"></i> Effective Date: <em class="text-primary">{{ price.active_at|mFormat('ll') }}</em></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <p class="small">{{ price.cost.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer" v-if="pagination.total > pagination.per_page">
+        <pager :pagination="pagination"></pager>
+    </div>
+</div>
+</fetch-json>
 </template>
 <script>
 export default {
@@ -87,8 +60,8 @@ export default {
         isActive(date) {
             return moment(date).isAfter(moment()) ? false : true;
         },
-        destroy(costId) {
-            swal('WARNING!', 'This action will remove this cost from any reservations using it. This action cannot be undone!', 'warning', {
+        destroy(priceId) {
+            swal('WARNING!', 'This action will remove this price from any reservations using it. This action cannot be undone!', 'warning', {
                 closeOnClickOutside: true,
                 buttons: {
                     cancel: {
@@ -101,20 +74,28 @@ export default {
                         text: "Delete",
                         value: true,
                         visible: true,
-                        closeModal: false
+                        closeModal: true
                     }
                 },
                 dangerMode: true
             }).then((value) => {
                 if (value) {
-                    this.$http.delete('/trips/' + this.tripId + '/costs/' + costId)
+                    this.$http.delete('/trips/' + this.tripId + '/prices/' + priceId)
                         .then((response) => {
-                            console.log('deleted');
-                            this.$root.$emit('list:refresh');
+                            this.$refs.priceList.fetch();
                         });
                 }
             })
         }
+    },
+
+    mounted() {
+        this.$root.$on('form:success', () => {
+            this.$refs.priceList.fetch();
+        });
+        this.$root.$on('page:change', (pageNumber) => {
+            this.$refs.priceList.fetch({page: pageNumber});
+        });
     }
 }
 </script>

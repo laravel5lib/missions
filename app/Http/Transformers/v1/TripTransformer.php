@@ -17,7 +17,7 @@ class TripTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'campaign', 'group', 'costs', 'deadlines', 'requirements', 'facilitators', 'rep'
+        'campaign', 'group', 'deadlines', 'requirements', 'facilitators', 'rep'
     ];
 
     /**
@@ -28,8 +28,6 @@ class TripTransformer extends TransformerAbstract
      */
     public function transform(Trip $trip)
     {
-        $trip->load('costs');
-
         return [
             'id'              => $trip->id,
             'group_id'        => $trip->group_id,
@@ -38,7 +36,7 @@ class TripTransformer extends TransformerAbstract
             'rep'             => $trip->rep ? $trip->rep->name : null,
             'spots'           => (int) $trip->spots,
             'status'          => $trip->status,
-            'starting_cost'   => $trip->startingCostInDollars(),
+            // 'starting_cost'   => $trip->startingCostInDollars(),
             'companion_limit' => (int) $trip->companion_limit,
             'reservations'    => (int) $trip->reservations_count,
             'country_code'    => $trip->country_code,
@@ -114,38 +112,6 @@ class TripTransformer extends TransformerAbstract
         }
 
         return null;
-    }
-
-    /**
-     * Include Costs
-     *
-     * @param Trip $trip
-     * @param ParamBag $params
-     * @return \League\Fractal\Resource\Collection
-     */
-    public function includeCosts(Trip $trip, ParamBag $params = null)
-    {
-
-        // Optional params validation
-        if (! is_null($params)) {
-            $this->validateParams($params);
-
-            $costs = [];
-            
-            if (in_array('active', $params->get('status'))) {
-                $active = $trip->activeCosts;
-
-                $maxDate = $active->whereStrict('type', 'incremental')->max('active_at');
-
-                $costs = $active->reject(function ($value, $key) use ($maxDate) {
-                    return $value->type == 'incremental' && $value->active_at < $maxDate;
-                });
-            }
-        } else {
-            $costs = $trip->costs;
-        }
-
-        return $this->collection($costs, new CostTransformer);
     }
 
     /**

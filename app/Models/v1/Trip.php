@@ -111,7 +111,7 @@ class Trip extends Model
      */
     public function activeCosts()
     {
-        return $this->costs()->active();
+        return $this->priceables()->whereDate('active_at', '<=', Carbon::now());
     }
 
     /**
@@ -287,34 +287,6 @@ class Trip extends Model
 
         if (! $ids->isEmpty()) {
             Deadline::destroy($ids);
-        }
-    }
-
-    /**
-     * Syncronize all the trip's costs.
-     *
-     * @param $costs
-     */
-    public function syncCosts($costs)
-    {
-        if (! $costs) {
-            return;
-        }
-
-        $ids = $this->costs()->pluck('id', 'id');
-
-        foreach ($costs as $cost) {
-            if (! isset($cost['id'])) {
-                $cost['id'] = null;
-            }
-
-            array_forget($ids, $cost['id']);
-
-            $this->costs()->updateOrCreate(['id' => $cost['id']], $cost);
-        }
-
-        if (! $ids->isEmpty()) {
-            Cost::destroy($ids);
         }
     }
 

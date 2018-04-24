@@ -7,7 +7,7 @@
         <li class="{{ $tab === 'pricing' ? 'active' : '' }}">
             <a href="{{ url('admin/trips/' . $trip->id) . '/pricing' }}">
                 Pricing
-                @if (! $trip->costs()->count())
+                @if (! $trip->priceables()->count())
                 <sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup>
             @endif
             </a>

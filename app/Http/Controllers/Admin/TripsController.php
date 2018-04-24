@@ -28,7 +28,7 @@ class TripsController extends Controller
             return $this->edit($id);
         }
 
-        $trip = $this->api->get('trips/'.$id, ['include' => 'campaign,costs.payments,requirements,notes,deadlines']);
+        $trip = $this->api->get('trips/'.$id, ['include' => 'campaign,requirements,notes,deadlines']);
 
         $this->authorize('view', $trip);
 

@@ -16,17 +16,6 @@
                 </div>
                 <div class="col-sm-4 col-xs-6 text-right">
                     <a class="btn btn-xs btn-default-hollow" :href="`/admin/trips/${tripId}/pricing/${price.id}`">Manage</a>
-                    <!-- <div style="padding: 0;">
-                        <div class="btn-group btn-group-sm">
-                            <button type="button" class="btn btn-sm btn-link dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-ellipsis-h"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a>Edit</a></li>
-                                <li><a @click="destroy(price.id)">Delete</a></li>
-                            </ul>
-                        </div>
-                    </div> -->
                 </div>
             </div>
             <div class="row">
@@ -60,33 +49,6 @@ export default {
     methods: {
         isActive(date) {
             return moment(date).isAfter(moment()) ? false : true;
-        },
-        destroy(priceId) {
-            swal('WARNING!', 'This action will remove this price from any reservations using it. This action cannot be undone!', 'warning', {
-                closeOnClickOutside: true,
-                buttons: {
-                    cancel: {
-                        text: "Keep",
-                        value: null,
-                        visible: true,
-                        closeModal: true,
-                    },
-                    confirm: {
-                        text: "Delete",
-                        value: true,
-                        visible: true,
-                        closeModal: true
-                    }
-                },
-                dangerMode: true
-            }).then((value) => {
-                if (value) {
-                    this.$http.delete('/trips/' + this.tripId + '/prices/' + priceId)
-                        .then((response) => {
-                            this.$refs.priceList.fetch();
-                        });
-                }
-            })
         }
     },
 

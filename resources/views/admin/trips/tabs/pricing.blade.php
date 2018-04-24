@@ -32,10 +32,17 @@
         <h5>Add New Cost</h5>
     @endslot
     @slot('body')
+    
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#campaign" aria-controls="home" role="tab" data-toggle="tab">Campaign Pricing</a></li>
             <li role="presentation"><a href="#custom" aria-controls="profile" role="tab" data-toggle="tab">Custom Pricing</a></li>
         </ul>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="alert alert-warning"><i class="fa fa-info-circle"></i> Trip prices will be applied to it's reservations automatically at registration.</div>
+            </div>
+        </div>
 
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="campaign">
@@ -48,6 +55,7 @@
                             </select-price>
                         </div>
                         <div class="col-md-6">
+                            <hr class="divider inv sm">
                             <hr class="divider inv">
                             <button type="submit" class="btn btn-md btn-primary">Add</button>
                         </div>

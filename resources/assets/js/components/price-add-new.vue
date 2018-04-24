@@ -3,11 +3,6 @@
 
     <template slot-scope="props">
         <div class="row">
-            <div class="col-xs-12">
-                <div class="alert alert-warning"><i class="fa fa-info-circle"></i> Campaign prices will be set as the default pricing for it's trips.</div>
-            </div>
-        </div>
-        <div class="row">
             <div class="col-md-6">
 
                 <select-cost name="cost_id">

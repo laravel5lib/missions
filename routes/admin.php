@@ -25,6 +25,7 @@ Route::prefix('campaigns')->group(function () {
 });
 
 Route::get('trips/{id}/{tab?}', 'TripsController@show');
+Route::get('trips/{id}/pricing/{price}', 'TripPriceController@show');
 Route::resource('trips', 'TripsController');
 
 Route::resource('groups', 'GroupsController');

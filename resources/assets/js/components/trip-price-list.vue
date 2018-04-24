@@ -15,7 +15,8 @@
                     <h5>{{ price.cost.name|capitalize }}</h5>
                 </div>
                 <div class="col-sm-4 col-xs-6 text-right">
-                    <div style="padding: 0;">
+                    <a class="btn btn-xs btn-default-hollow" :href="`/admin/trips/${tripId}/pricing/${price.id}`">Manage</a>
+                    <!-- <div style="padding: 0;">
                         <div class="btn-group btn-group-sm">
                             <button type="button" class="btn btn-sm btn-link dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-ellipsis-h"></i>
@@ -25,7 +26,7 @@
                                 <li><a @click="destroy(price.id)">Delete</a></li>
                             </ul>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="row">

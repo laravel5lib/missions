@@ -626,7 +626,7 @@
 			getListSettings(){
 				let params = {
 					trip_id: this.tripId ? new Array(this.tripId) : undefined,
-					include: 'trip.campaign,trip.group,costs.payments,user,requirements,rep,fund,squads.team',
+					include: 'trip.campaign,trip.group,user,requirements,rep,fund,squads.team',
 					searchBy: this.searchBy,
 					search: this.search ? this.search.trim() : this.search,
 					per_page: this.per_page,

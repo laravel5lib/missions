@@ -20,7 +20,7 @@ class ReservationTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'user', 'trip', 'rep', 'costs', 'deadlines',
+        'user', 'trip', 'rep', 'deadlines', 'priceables',
         'requirements', 'notes', 'todos', 'companions',
         'fundraisers', 'dues', 'fund', 'transports', 'squads'
     ];
@@ -175,7 +175,7 @@ class ReservationTransformer extends TransformerAbstract
      * @param ParamBag $params
      * @return \League\Fractal\Resource\Collection
      */
-    public function includeCosts(Reservation $reservation, ParamBag $params = null)
+    public function includePriceables(Reservation $reservation, ParamBag $params = null)
     {
         // Optional params validation
         if (! is_null($params)) {

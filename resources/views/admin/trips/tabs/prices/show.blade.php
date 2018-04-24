@@ -75,6 +75,7 @@
     </div>
 </div>
 
+@if($price->model_type === 'trips' && $price->model_id === $trip->id)
 <hr class="divider inv">
 
 <div class="container">
@@ -92,6 +93,7 @@
         </div>
     </div>
 </div>
+@endif
 
 <hr class="divider inv">
 

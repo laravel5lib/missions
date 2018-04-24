@@ -196,19 +196,6 @@ class Reservation extends Model
     }
 
     /**
-     * Get all of the reservation's active costs.
-     *
-     * @return Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function activeCosts()
-    {
-        return $this->belongsToMany(Cost::class, 'reservation_costs')
-                    ->active()
-                    ->withPivot('locked')
-                    ->withTimestamps();
-    }
-
-    /**
      * Get all the reservation's payments due.
      *
      * @return Illuminate\Database\Eloquent\Reservations\MorphMany
@@ -352,7 +339,7 @@ class Reservation extends Model
      */
     public function getTotalCost()
     {
-        return $this->costs ? (int) $this->costs()->sum('amount') : 0;
+        return $this->priceables ? (int) $this->priceables()->sum('amount') : 0;
     }
 
     /**
@@ -409,116 +396,6 @@ class Reservation extends Model
     public function totalOwedInDollars()
     {
         return number_format($this->getTotalOwed()/100, 2, '.', '');
-    }
-
-    /**
-     * Update the reservation's costs
-     */
-    public function updateCosts()
-    {
-        // first, we get all of a trip's active costs
-        $active = $this->trip
-                       ->activeCosts()
-                       ->get()
-                       ->transform(function ($cost) {
-                            // set a "locked" attribute for
-                            // merge with reservation costs
-                            return $cost->setAttribute('locked', 0);
-                       });
-
-        // we find the 'incremental' cost with the latest activation date
-        $maxDate = $active->whereStrict('type', 'incremental')->max('active_at');
-
-        // we remove optional costs so they don't
-        // get added to the reservation
-        $tripCosts = $active->reject(function ($value) {
-            return $value->type == 'optional';
-            // we remove any incremental costs that are not the most
-            // recently activated cost to make sure they don't
-            // get added to the reservation
-        })->reject(function ($value) use ($maxDate) {
-            return $value->type == 'incremental' && $value->active_at < $maxDate;
-        });
-
-        // 1) remove any reservation "incremental" costs that are "overdue" and not locked
-        // 2) merge new trip costs with existing reservation costs
-        // 3) remove duplicates
-        $costs = $this->costs
-                    ->transform(function ($cost) {
-                        // set a "locked" attribute to make sure any previously
-                        // locked costs remain locked after update
-                        return $cost->setAttribute('locked', $cost->pivot->locked);
-                    })
-                    ->reject(function ($cost) {
-                        return in_array(
-                            $cost->id,
-                            $this->payments()
-                                 ->late()
-                                 ->pluck('payment.cost_id')
-                                 ->toArray()
-                        ) and ! $cost->pivot->locked and $cost->type == 'incremental';
-                    })
-                    ->merge($tripCosts)
-                    ->unique();
-
-        // find the 'incremental' cost that has the earliest activation date
-        $minDate = $costs->whereStrict('type', 'incremental')->min('active_at');
-
-        // to make sure only one incremental cost is being applied,
-        // we choose the 'incremental' cost that
-        // has the earliest activation date
-        $costs = $costs->reject(function ($value) use ($minDate) {
-            return $value->type == 'incremental' && $value->active_at > $minDate;
-        });
-
-        // send the final filtered costs to be synced
-        $this->syncCosts($costs);
-    }
-
-    /**
-     * Synchronize all the reservation's costs.
-     *
-     * @param $costs
-     */
-    public function syncCosts($costs)
-    {
-        if (! $costs) {
-            return;
-        }
-
-        if (! $costs instanceof Collection) {
-            $costs = collect($costs);
-        }
-
-        // build the data array
-        $data = $costs->keyBy('id')->map(function ($item) {
-            return [
-                'locked' => isset($item['locked']) and $item['locked'] ? true : false,
-            ];
-        })->toArray();
-
-        $this->costs()->sync($data);
-
-        // update the related fudraiser goal amount
-        if ($this->fundraisers->count()) {
-            
-            $this->fundraisers()->first()->update([
-                'goal_amount' => $this->getTotalCost()/100
-            ]);
-        }
-
-        // go update the payments due
-        dispatch(new SyncPaymentsDue($this));
-    }
-
-    /**
-     * Manage a Reservation's Payments.
-     *
-     * @return ReservationPayment
-     */
-    public function payments()
-    {
-        return new ReservationPayment($this);
     }
 
     /**

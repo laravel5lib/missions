@@ -10,7 +10,6 @@
     @endslot
     @component('list-group', ['data' => [
         'Current Status' => '<strong>'.ucfirst($trip->status).'</strong>',
-        'Starting Cost' => '$'.$trip->startingCostInDollars(),
         'Visibility' => ($trip->public ? 'Public' : 'Private'),
         'Spots Remaining' => $trip->spots,
         'Total Reservations' => $trip->reservations()->count(),

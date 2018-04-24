@@ -105,16 +105,6 @@ class Trip extends Model
     }
 
     /**
-     * Get all the trip's active costs.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function activeCosts()
-    {
-        return $this->priceables()->whereDate('active_at', '<=', Carbon::now());
-    }
-
-    /**
      * Get the trip's rep.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -146,25 +136,6 @@ class Trip extends Model
     public function setPublishedAtAttribute($value)
     {
         $this->attributes['published_at'] = $value ? Carbon::parse($value) : null;
-    }
-
-    /**
-     * Get the current starting cost for the trip.
-     *
-     * @return int
-     */
-    public function getStartingCostAttribute()
-    {
-        $incremental = $this->activeCosts()->type('incremental')->first();
-
-        $amount = $incremental ? $incremental->amount : 0;
-
-        return $amount + $this->activeCosts()->type('static')->sum('amount'); // convert to dollars
-    }
-
-    public function startingCostInDollars()
-    {
-        return number_format($this->starting_cost/100, 2, '.', '');
     }
 
     /**

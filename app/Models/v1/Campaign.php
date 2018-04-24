@@ -150,6 +150,25 @@ class Campaign extends Model implements HasMedia
         return $this->morphMany(Price::class, 'model');
     }
 
+    public function getCurrentRate()
+    {
+        return $this->prices()->whereHas('cost', function ($cost) {
+            return $cost->whereType('incremental');
+        })->first();
+    }
+
+    public function getUpfrontCosts()
+    {
+        return $this->prices()->whereHas('cost', function ($cost) {
+            return $cost->whereType('upfront');
+        });
+    }
+
+    public function getCurrentStartingCostAttribute()
+    {
+        return $this->getCurrentRate()->amount + $this->getUpfrontCosts()->sum('amount');
+    }
+
     public function regions()
     {
         return $this->hasMany(Region::class);

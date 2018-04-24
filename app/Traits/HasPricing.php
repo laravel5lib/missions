@@ -26,6 +26,49 @@ trait HasPricing
     {
         return $this->morphToMany(Price::class, 'priceable');
     }
+    
+    /**
+     * Get the current rate for the model.
+     *
+     * @return void
+     */
+    public function getCurrentRate()
+    {
+        return $this->priceables()->whereHas('cost', function ($q) {
+
+            return $q->whereType('incremental');
+
+        })->first();
+
+        // return $this->priceables()->whereHas('cost', function ($q) {
+
+        //     return $q->type('incremental');
+
+        // })->whereHas('payments', function ($q) {
+
+        //     return $q->whereDate('due_at', '>=', now());
+
+        // })->orderBy('payments.due_at')->first();
+    }
+
+    /**
+     * Get all upfront costs for the model.
+     *
+     * @return void
+     */
+    public function getUpfrontCosts()
+    {
+        return $this->priceables()->whereHas('cost', function ($q) {
+            
+            return $q->whereType('upfront');
+
+        })->get();
+    }
+
+    public function getStartingCostAttribute()
+    {
+        return optional($this->getCurrentRate())->amount + $this->getUpfrontCosts()->sum('amount');
+    }
 
     /**
      * Add a new price to the model.

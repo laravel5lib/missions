@@ -16,15 +16,15 @@
     @slot('body')
     <div class="row">
         <div class="col-sm-3">
-            <h4 class="text-primary">$0.00</h4>
+            <h4 class="text-primary">${{ number_format($campaign->current_starting_cost, 2, '.', ',') }}</h4>
             <p class="small text-muted">Current Starting Cost</p>
         </div>
         <div class="col-sm-4">
-            <h4>General Registration</h4>
+            <h4>{{ $campaign->getCurrentRate()->cost->name }}</h4>
             <p class="small text-muted">Current Rate</p>
         </div>
         <div class="col-sm-5">
-            <h4>50% June 1, 2018 11:59 pm</h4>
+            <h4>{{ optional($campaign->getCurrentRate()->cost->payments()->first())->due_at->format('F j, Y h:i a') }}</h4>
             <p class="small text-muted">Upcoming Deadline</p>
         </div>
     </div>

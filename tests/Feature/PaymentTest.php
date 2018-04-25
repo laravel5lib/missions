@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\v1\Cost;
 use App\Models\v1\Price;
 use App\Models\v1\Payment;
 use App\Models\v1\Campaign;
@@ -29,5 +30,44 @@ class PaymentTest extends TestCase
                     ]
                  ]
              ]);
+    }
+
+    /** @test */
+    public function adds_payments_to_campaign_price()
+    {
+        $campaign = factory(Campaign::class)->create();
+        $cost = factory(Cost::class)->create(['type' => 'incremental']);
+        $price = factory(Price::class)->create([
+            'model_id' => $campaign->id, 'model_type' => 'campaigns', 'cost_id' => $cost->id
+        ]);
+        
+        $this->json('put', "/api/campaigns/{$campaign->id}/prices/{$price->uuid}", [
+            'payments' => [
+                [
+                    'percentage_due' => 50,
+                    'due_at' => '01/01/2019',
+                    'grace_days' => 3
+                ],
+                [
+                    'percentage_due' => 100,
+                    'due_at' => '07/01/2019',
+                    'grace_days' => 3
+                ]
+            ]
+        ])->assertStatus(200);
+
+        $this->assertDatabaseHas('price_payments', [
+            'price_id' => $price->id,
+            'percentage_due' => 50,
+            'due_at' => '2019-01-01 23:59:59', // end of day
+            'grace_days' => 3
+        ]);
+
+        $this->assertDatabaseHas('price_payments', [
+            'price_id' => $price->id,
+            'percentage_due' => 100,
+            'due_at' => '2019-07-01 23:59:59', // end of day
+            'grace_days' => 3
+        ]);
     }
 }

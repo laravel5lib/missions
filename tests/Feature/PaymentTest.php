@@ -33,7 +33,7 @@ class PaymentTest extends TestCase
     }
 
     /** @test */
-    public function adds_payments_to_campaign_price()
+    public function updates_payments_for_campaign_price()
     {
         $campaign = factory(Campaign::class)->create();
         $cost = factory(Cost::class)->create(['type' => 'incremental']);

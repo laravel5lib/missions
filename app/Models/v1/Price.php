@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
 use App\Models\v1\Cost;
 use App\Models\v1\Trip;
+use App\Models\v1\Payment;
 use App\Models\v1\Reservation;
 use Illuminate\Database\Eloquent\Model;
 
@@ -47,6 +48,11 @@ class Price extends Model
     public function reservations()
     {
         return $this->morphedByMany(Reservation::class, 'priceable');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'price_id');
     }
 
     /**

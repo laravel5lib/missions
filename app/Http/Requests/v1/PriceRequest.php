@@ -68,6 +68,11 @@ class PriceRequest extends FormRequest
         return $this->assertOnlyOnePaymentHasPercentageValue(100) ? false : true;
     }
 
+    /**
+     * Assert payment dates are invalid.
+     *
+     * @return boolean
+     */
     private function assertPaymentDatesAreInvalid()
     {
         // this rule only applies if the request has payments
@@ -75,11 +80,13 @@ class PriceRequest extends FormRequest
 
         $payments = $this->input('payments');
 
+        // first we create a collection of payments sorted by their percentages
         $paymentsByPercentage = collect($payments)->sortBy('percentage_due')->pluck('percentage_due');
+        // second we create a collection of payments sorted by their due dates
         $paymentsByDate = collect($payments)->sortBy('due_at')->pluck('percentage_due');
-
+        // next we compare the collections and look for mismatches
         $diff = $paymentsByPercentage->diffAssoc($paymentsByDate);
-
+        // if the collections don't match then the dates are invalid
         return ! empty($diff->all());
     }
 

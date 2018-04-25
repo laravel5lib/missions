@@ -46,9 +46,15 @@ class PricePaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($priceId, $paymentId)
     {
-        //
+        $payment = Price::whereUuid($priceId)
+            ->firstOrFail()
+            ->payments()
+            ->whereUuid($paymentId)
+            ->firstOrFail();
+
+        return new PaymentResource($payment);
     }
 
     /**

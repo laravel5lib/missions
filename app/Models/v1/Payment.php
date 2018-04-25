@@ -34,6 +34,6 @@ class Payment extends Model
 
     public function setDueAtAttribute($value)
     {
-        $this->attributes['due_at'] = $value ? Carbon::parse($value) : null;
+        $this->attributes['due_at'] = is_string($value) ? Carbon::parse($value) : $value;
     }
 }

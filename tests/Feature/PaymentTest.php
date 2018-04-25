@@ -45,4 +45,19 @@ class PaymentTest extends TestCase
             'grace_days' => 3
         ]);
     }
+
+    /** @test */
+    public function gets_a_payment_by_id()
+    {
+        $price = factory(Price::class)->create();
+        $payment = factory(Payment::class)->create(['price_id' => $price->id]);
+
+        $this->json('get', "/api/prices/{$price->uuid}/payments/{$payment->uuid}")
+             ->assertStatus(200)
+             ->assertJson([
+                 'data' => [
+                     'id' => $payment->uuid
+                 ]
+             ]);
+    }
 }

@@ -32,19 +32,43 @@ class PriceRequest extends FormRequest
      */
     private function assertRequiredPayments()
     {
-        if ($this->filled('payments') and $this->input('payments') != []) return false;
+        if ($this->requestHasPayments()) return false;
 
-        if ($this->filled('cost_id')) {
-            $cost = Cost::findOrFail($this->input('cost_id'));     
-        }
+        return $this->isForIncrementalCost();
+    }
 
-        $priceId = $this->filled('price_id') ? $this->input('price_id') : $this->route('price');
+    /**
+     * Check if the request already has payments
+     *
+     * @return boolean
+     */
+    private function requestHasPayments()
+    {
+        return ($this->filled('payments') && $this->input('payments') != []);
+    }
 
-        if ($priceId) {
-            $cost = Price::whereUuid($priceId)->firstOrFail()->cost;     
-        }
+    /**
+     * Check if the request is for an incremental cost
+     *
+     * @return boolean
+     */
+    private function isForIncrementalCost()
+    {
+        $cost = $this->filled('cost_id') ? $this->getCostById() : $this->getCostFromPrice();
 
         return ($cost && $cost->type === 'incremental');
+    }
+
+    private function getCostById()
+    {
+        return Cost::findOrFail($this->input('cost_id'));
+    }
+
+    private function getCostFromPrice()
+    {
+        $priceId = $this->filled('price_id') ? $this->input('price_id') : $this->route('price');
+
+        return Price::whereUuid($priceId)->firstOrFail()->cost;
     }
 
     /**

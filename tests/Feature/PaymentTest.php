@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\v1\Price;
 use App\Models\v1\Payment;
+use App\Models\v1\Campaign;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -13,50 +14,19 @@ class PaymentTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function gets_all_payments_for_a_price()
+    public function gets_campaign_price_with_payments()
     {
-        $price = factory(Price::class)->create();
+        $campaign = factory(Campaign::class)->create();
+        $price = factory(Price::class)->create(['model_id' => $campaign->id, 'model_type' => 'campaigns']);
         factory(Payment::class, 2)->create(['price_id' => $price->id]);
         
-        $this->json('get', "/api/prices/{$price->uuid}/payments")
+        $this->json('get', "/api/campaigns/{$campaign->id}/prices/{$price->uuid}")
              ->assertStatus(200)
              ->assertJsonStructure([
                  'data' => [
-                    ['id', 'percentage_due', 'due_at', 'grace_days']
-                 ]
-             ]);
-    }
-
-    /** @test */
-    public function creates_new_payment_for_price()
-    {
-        $price = factory(Price::class)->create();
-
-        $this->json('post', "/api/prices/{$price->uuid}/payments", [
-            'percentage_due' => 50,
-            'due_at' => '01/01/2019 11:00 am',
-            'grace_days' => 3
-        ])->assertStatus(201);
-
-        $this->assertDatabaseHas('price_payments', [
-            'price_id' => $price->id,
-            'percentage_due' => 50,
-            'due_at' => '2019-01-01 11:00:00',
-            'grace_days' => 3
-        ]);
-    }
-
-    /** @test */
-    public function gets_a_payment_by_id()
-    {
-        $price = factory(Price::class)->create();
-        $payment = factory(Payment::class)->create(['price_id' => $price->id]);
-
-        $this->json('get', "/api/prices/{$price->uuid}/payments/{$payment->uuid}")
-             ->assertStatus(200)
-             ->assertJson([
-                 'data' => [
-                     'id' => $payment->uuid
+                    'payments' => [
+                        ['id', 'percentage_due', 'due_at', 'grace_days']
+                    ]
                  ]
              ]);
     }

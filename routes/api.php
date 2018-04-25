@@ -19,7 +19,6 @@ Route::apiResource('costs', 'CostsController')->middleware('api.auth');
 Route::apiResource('campaigns/{campaignId}/prices', 'CampaignPriceController');
 Route::apiResource('trips/{tripId}/prices', 'TripPriceController');
 Route::apiResource('reservations/{reservationId}/prices', 'ReservationPriceController');
-Route::apiResource('prices/{priceId}/payments', 'PricePaymentController');
 
 // Dingo API routes
 $api = app('Dingo\Api\Routing\Router');

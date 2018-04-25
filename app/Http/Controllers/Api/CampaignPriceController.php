@@ -50,7 +50,11 @@ class CampaignPriceController extends Controller
      */
     public function show($campaignId, $uuid)
     {
-        $price = Campaign::findOrFail($campaignId)->prices()->whereUuid($uuid)->firstOrFail();
+        $price = Campaign::findOrFail($campaignId)
+            ->prices()
+            ->whereUuid($uuid)
+            ->with('payments')
+            ->firstOrFail();
 
         return new PriceResource($price);
     }

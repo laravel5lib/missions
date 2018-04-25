@@ -2,6 +2,7 @@
 
 namespace App\Models\v1;
 
+use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,4 +31,9 @@ class Payment extends Model
     protected $dates = ['due_at'];
 
     public $timestamps = false;
+
+    public function setDueAtAttribute($value)
+    {
+        $this->attributes['due_at'] = $value ? Carbon::parse($value) : null;
+    }
 }

@@ -30,9 +30,14 @@ class PricePaymentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $priceId)
     {
-        //
+        Price::whereUuid($priceId)
+            ->firstOrFail()
+            ->payments()
+            ->create($request->all());
+
+        return response()->json(['message' => 'New payment added.'], 201);
     }
 
     /**

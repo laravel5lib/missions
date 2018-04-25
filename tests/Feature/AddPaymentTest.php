@@ -101,4 +101,20 @@ class AddPaymentTest extends TestCase
             'active_at' => '01/01/2018'
         ])->assertJsonValidationErrors(['payments']);
     }
+
+    /** @test */
+    public function price_with_incremental_cost_must_have_at_least_one_payment()
+    {
+        $campaign = factory(Campaign::class)->create();
+        $cost = factory(Cost::class)->create(['type' => 'incremental']);
+        $price = factory(Price::class)->create([
+            'model_id' => $campaign->id, 'model_type' => 'campaigns', 'cost_id' => $cost->id
+        ]);
+        
+        $this->json('put', "/api/campaigns/{$campaign->id}/prices/{$price->uuid}", ['payments' => null])
+             ->assertJsonValidationErrors(['payments']);
+
+        $this->json('put', "/api/campaigns/{$campaign->id}/prices/{$price->uuid}", ['payments' => []])
+             ->assertJsonValidationErrors(['payments']);
+    }
 }

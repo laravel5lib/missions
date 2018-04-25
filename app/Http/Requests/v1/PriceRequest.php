@@ -21,7 +21,7 @@ class PriceRequest extends FormRequest
             if ($this->assertRequiredPayments()) {
                 $validator->errors()->add('payments', 'At least one payment is required.');
             }
-            
+
         });
     }
 
@@ -32,14 +32,16 @@ class PriceRequest extends FormRequest
      */
     private function assertRequiredPayments()
     {
-        if ($this->filled('payments')) return false;
+        if ($this->filled('payments') and $this->input('payments') != []) return false;
 
         if ($this->filled('cost_id')) {
             $cost = Cost::findOrFail($this->input('cost_id'));     
         }
 
-        if ($this->filled('price_id')) {
-            $cost = Price::whereUuid($this->input('price_id'))->firstOrFail()->cost;     
+        $priceId = $this->filled('price_id') ? $this->input('price_id') : $this->route('price');
+
+        if ($priceId) {
+            $cost = Price::whereUuid($priceId)->firstOrFail()->cost;     
         }
 
         return ($cost && $cost->type === 'incremental');
@@ -77,10 +79,14 @@ class PriceRequest extends FormRequest
     private function newPriceRules()
     {
         return [
-            'price_id'             => 'required_without:cost_id|exists:prices,uuid',
-            'cost_id'              => 'required_without:price_id|exists:costs,id',
-            'active_at'            => 'nullable|date',
-            'amount'               => 'required_without:price_id|numeric'
+            'price_id'  => 'required_without:cost_id|exists:prices,uuid',
+            'cost_id'   => 'required_without:price_id|exists:costs,id',
+            'active_at' => 'nullable|date',
+            'amount'    => 'required_without:price_id|numeric',
+            'payments'  => 'nullable|array',
+            'payments.*.percentage_due' => 'required|numeric|min:1|max:100',
+            'payments.*.due_at'         => 'required|date',
+            'payments.*.grace_days'     => 'numeric|min:0'
         ];
     }
 
@@ -92,10 +98,14 @@ class PriceRequest extends FormRequest
     private function updatePriceRules()
     {
         return [
-            'price_id'             => 'sometimes|required_without:cost_id|exists:prices,uuid',
-            'cost_id'              => 'sometimes|required_without:price_id|exists:costs,id',
-            'active_at'            => 'nullable|date',
-            'amount'               => 'sometimes|required_without:price_id|numeric'
+            'price_id'  => 'sometimes|required_without:cost_id|exists:prices,uuid',
+            'cost_id'   => 'sometimes|required_without:price_id|exists:costs,id',
+            'active_at' => 'nullable|date',
+            'amount'    => 'sometimes|required_without:price_id|numeric',
+            'payments'  => 'nullable|array',
+            'payments.*.percentage_due' => 'required|numeric|min:1|max:100',
+            'payments.*.due_at'         => 'required|date',
+            'payments.*.grace_days'     => 'numeric|min:0'
         ];
     }
 

@@ -31,13 +31,17 @@ class CampaignPriceController extends Controller
      */
     public function store($campaignId, PriceRequest $request)
     {
-        Campaign::findOrFail($campaignId)
+        $price = Campaign::findOrFail($campaignId)
             ->prices()
             ->create([
                 'cost_id' => $request->input('cost_id'),
                 'amount' => $request->input('amount'),
                 'active_at' => $request->input('active_at')
             ]);
+        
+        if ($request->filled('payments')) {
+            $price->syncPayments($request->input('payments'));
+        }
 
         return response()->json(['message' => 'New price added to campaign.'], 201);
     }
@@ -78,7 +82,7 @@ class CampaignPriceController extends Controller
             'active_at' => $request->input('active_at', $price->active_at)
         ]);
 
-        if($request->filled('payments')) {
+        if ($request->filled('payments')) {
             $price->syncPayments($request->input('payments'));
         }
 

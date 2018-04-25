@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PriceResource;
 use App\Http\Requests\v1\PriceRequest;
@@ -76,6 +77,13 @@ class CampaignPriceController extends Controller
             'amount' => $request->input('amount', $price->amount),
             'active_at' => $request->input('active_at', $price->active_at)
         ]);
+
+        if($request->filled('payments')) {
+            DB::transaction(function() use($price, $request) {
+                $price->payments()->delete(); // remove old payments
+                $price->payments()->createMany($request->input('payments')); // add new payments
+            });
+        }
 
         return new PriceResource($price);
     }

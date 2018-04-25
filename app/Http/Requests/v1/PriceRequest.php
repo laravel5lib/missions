@@ -17,21 +17,32 @@ class PriceRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            if (!$this->filled('payments')) {
 
-                if ($this->filled('cost_id')) {
-                    $cost = Cost::findOrFail($this->input('cost_id'));     
-                }
-
-                if ($this->filled('price_id')) {
-                    $cost = Price::whereUuid($this->input('price_id'))->firstOrFail()->cost;     
-                }
-
-                if ($cost && $cost->type === 'incremental') {
-                    $validator->errors()->add('payments', 'At least one payment is required.');
-                }
+            if ($this->assertRequiredPayments()) {
+                $validator->errors()->add('payments', 'At least one payment is required.');
             }
+            
         });
+    }
+
+    /**
+     * Assert if payments are required.
+     *
+     * @return boolean
+     */
+    private function assertRequiredPayments()
+    {
+        if ($this->filled('payments')) return false;
+
+        if ($this->filled('cost_id')) {
+            $cost = Cost::findOrFail($this->input('cost_id'));     
+        }
+
+        if ($this->filled('price_id')) {
+            $cost = Price::whereUuid($this->input('price_id'))->firstOrFail()->cost;     
+        }
+
+        return ($cost && $cost->type === 'incremental');
     }
 
     /**
@@ -58,6 +69,11 @@ class PriceRequest extends FormRequest
         return $this->newPriceRules();
     }
 
+    /**
+     * Get rules for adding a new price
+     *
+     * @return array
+     */
     private function newPriceRules()
     {
         return [
@@ -68,6 +84,11 @@ class PriceRequest extends FormRequest
         ];
     }
 
+    /**
+     * Get rules for updating a price.
+     *
+     * @return array
+     */
     private function updatePriceRules()
     {
         return [
@@ -78,6 +99,11 @@ class PriceRequest extends FormRequest
         ];
     }
 
+    /**
+     * The error messages that apply to the request.
+     *
+     * @return array
+     */
     public function messages()
     {
         return [

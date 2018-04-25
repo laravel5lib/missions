@@ -9,6 +9,16 @@ use Dingo\Api\Http\FormRequest;
 class PriceRequest extends FormRequest
 {
     /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+    
+    /**
      * Configure the validator instance.
      *
      * @param  \Illuminate\Validation\Validator  $validator
@@ -20,6 +30,10 @@ class PriceRequest extends FormRequest
 
             if ($this->assertRequiredPayments()) {
                 $validator->errors()->add('payments', 'At least one payment is required.');
+            }
+
+            if ($this->assertMissingPaymentForFullAmount()) {
+                $validator->errors()->add('payments', 'Missing payment for 100% due.');
             }
 
         });
@@ -35,6 +49,29 @@ class PriceRequest extends FormRequest
         if ($this->requestHasPayments()) return false;
 
         return $this->isForIncrementalCost();
+    }
+
+    /**
+     * Assert that only one payment covers the full amount.
+     *
+     * @return boolean
+     */
+    private function assertMissingPaymentForFullAmount()
+    {
+        // this rule only applies if the request has payments
+        if ( ! $this->requestHasPayments()) return false;
+
+        return $this->assertOnlyOnePaymentHasPercentageValue(100) ? false : true;
+    }
+
+    /**
+     * Assert that only one payment has a percentage_due value of 100%
+     *
+     * @return boolean
+     */
+    private function assertOnlyOnePaymentHasPercentageValue($value)
+    {
+        return collect($this->input('payments'))->where('percentage_due', $value)->count() === 1;
     }
 
     /**
@@ -59,26 +96,26 @@ class PriceRequest extends FormRequest
         return ($cost && $cost->type === 'incremental');
     }
 
+    /**
+     * Get cost by ID
+     *
+     * @return \App\Models\v1\Cost
+     */
     private function getCostById()
     {
         return Cost::findOrFail($this->input('cost_id'));
     }
 
+    /**
+     * Get cost using a price ID
+     *
+     * @return \App\Models\v1\Cost
+     */
     private function getCostFromPrice()
     {
         $priceId = $this->filled('price_id') ? $this->input('price_id') : $this->route('price');
 
         return Price::whereUuid($priceId)->firstOrFail()->cost;
-    }
-
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
     }
 
     /**

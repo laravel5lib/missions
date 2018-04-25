@@ -117,4 +117,39 @@ class AddPaymentTest extends TestCase
         $this->json('put', "/api/campaigns/{$campaign->id}/prices/{$price->uuid}", ['payments' => []])
              ->assertJsonValidationErrors(['payments']);
     }
+
+    /** @test */
+    public function validates_that_one_payment_covers_the_full_amount()
+    {
+        $campaign = factory(Campaign::class)->create();
+        $cost = factory(Cost::class)->create(['type' => 'incremental']);
+        $price = factory(Price::class)->create([
+            'model_id' => $campaign->id, 'model_type' => 'campaigns', 'cost_id' => $cost->id
+        ]);
+        
+        $this->json('put', "/api/campaigns/{$campaign->id}/prices/{$price->uuid}", [
+            'payments' => [
+                [
+                    'percentage_due' => 50,
+                    'due_at' => '01/01/2019',
+                    'grace_days' => 3
+                ]
+            ]
+        ])->assertJsonValidationErrors(['payments']);
+
+        $this->json('put', "/api/campaigns/{$campaign->id}/prices/{$price->uuid}", [
+            'payments' => [
+                [
+                    'percentage_due' => 100,
+                    'due_at' => '01/01/2019',
+                    'grace_days' => 3
+                ],
+                [
+                    'percentage_due' => 100,
+                    'due_at' => '01/07/2019',
+                    'grace_days' => 3
+                ]
+            ]
+        ])->assertJsonValidationErrors(['payments']);
+    }
 }

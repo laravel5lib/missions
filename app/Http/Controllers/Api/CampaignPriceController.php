@@ -79,10 +79,7 @@ class CampaignPriceController extends Controller
         ]);
 
         if($request->filled('payments')) {
-            DB::transaction(function() use($price, $request) {
-                $price->payments()->delete(); // remove old payments
-                $price->payments()->createMany($request->input('payments')); // add new payments
-            });
+            $price->syncPayments($request->input('payments'));
         }
 
         return new PriceResource($price);

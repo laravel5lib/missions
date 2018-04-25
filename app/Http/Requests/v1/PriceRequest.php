@@ -2,10 +2,38 @@
 
 namespace App\Http\Requests\v1;
 
+use App\Models\v1\Cost;
+use App\Models\v1\Price;
 use Dingo\Api\Http\FormRequest;
 
 class PriceRequest extends FormRequest
 {
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if (!$this->filled('payments')) {
+
+                if ($this->filled('cost_id')) {
+                    $cost = Cost::findOrFail($this->input('cost_id'));     
+                }
+
+                if ($this->filled('price_id')) {
+                    $cost = Price::whereUuid($this->input('price_id'))->firstOrFail()->cost;     
+                }
+
+                if ($cost && $cost->type === 'incremental') {
+                    $validator->errors()->add('payments', 'At least one payment is required.');
+                }
+            }
+        });
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -62,4 +90,5 @@ class PriceRequest extends FormRequest
             'amount.numeric' => 'Amount is not a valid format.'
         ];
     }
+
 }

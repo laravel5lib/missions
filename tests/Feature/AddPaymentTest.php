@@ -88,4 +88,17 @@ class AddPaymentTest extends TestCase
             'grace_days' => 3
         ]);
     }
+
+    /** @test */
+    public function payments_are_required_to_create_price_if_cost_is_incremental()
+    {
+        $campaign = factory(Campaign::class)->create();
+        $cost = factory(Cost::class)->create(['type' => 'incremental']);
+
+        $this->json('post', "/api/campaigns/{$campaign->id}/prices", [
+            'amount' => 1200.00,
+            'cost_id' => $cost->id,
+            'active_at' => '01/01/2018'
+        ])->assertJsonValidationErrors(['payments']);
+    }
 }

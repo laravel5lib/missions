@@ -24,7 +24,7 @@
             <p class="small text-muted">Current Rate</p>
         </div>
         <div class="col-sm-5">
-            <h4>{{ optional($campaign->getCurrentRate()->cost->payments()->first())->due_at->format('F j, Y h:i a') }}</h4>
+            <h4>N/A</h4>
             <p class="small text-muted">Upcoming Deadline</p>
         </div>
     </div>

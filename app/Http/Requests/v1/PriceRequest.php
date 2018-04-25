@@ -33,7 +33,11 @@ class PriceRequest extends FormRequest
             }
 
             if ($this->assertMissingPaymentForFullAmount()) {
-                $validator->errors()->add('payments', 'Missing payment for 100% due.');
+                $validator->errors()->add('payments', 'A single payment for 100% due is required.');
+            }
+
+            if ($this->assertPaymentDatesAreInvalid()) {
+                $validator->errors()->add('payments', 'Payment dates are invalid.');
             }
 
         });
@@ -62,6 +66,21 @@ class PriceRequest extends FormRequest
         if ( ! $this->requestHasPayments()) return false;
 
         return $this->assertOnlyOnePaymentHasPercentageValue(100) ? false : true;
+    }
+
+    private function assertPaymentDatesAreInvalid()
+    {
+        // this rule only applies if the request has payments
+        if ( ! $this->requestHasPayments()) return false;
+
+        $payments = $this->input('payments');
+
+        $paymentsByPercentage = collect($payments)->sortBy('percentage_due')->pluck('percentage_due');
+        $paymentsByDate = collect($payments)->sortBy('due_at')->pluck('percentage_due');
+
+        $diff = $paymentsByPercentage->diffAssoc($paymentsByDate);
+
+        return ! empty($diff->all());
     }
 
     /**

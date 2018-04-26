@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="white-header-bg">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-xs-12">
                 <ul class="breadcrumb">
@@ -17,7 +17,7 @@
 
 @if($reservation->deleted_at)
 <div class="darker-bg-primary">
-    <div class="container">
+    <div class="container-fluid">
         <div class="col-sm-8 text-center">
             <hr class="divider inv sm">
             <h5>This reservation was dropped and is no longer active.</h5>
@@ -32,17 +32,50 @@
 </div><!-- end dark-bg-primary -->
 @endif
 <hr class="divider inv lg">
-<div class="container">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-xs-12 col-sm-4 col-md-3">
+        <div class="col-xs-12 col-md-2">
             @include('admin.reservations.layouts.menu', [
                 'links' => config('navigation.admin.reservation'),
                 'reservation' => $reservation,
                 'rep' => $reservation->rep ? $reservation->rep : $reservation->trip->rep
                 ])
         </div>
-        <div class="col-xs-12 col-sm-8 col-md-9">
+        <div class="col-xs-12 col-md-7">
             @yield('tab')
+        </div>
+        <div class="col-md-3 small">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#notes" aria-controls="notes" role="tab" data-toggle="tab">Notes</a>
+                </li>
+                <li role="presentation">
+                    <a href="#tasks" aria-controls="tasks" role="tab" data-toggle="tab">Tasks</a>
+                </li>
+                <li role="presentation">
+                    <a href="#activity" aria-controls="activity" role="tab" data-toggle="tab">Activity</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="notes">
+                    <notes type="reservations"
+                        id="{{ $reservation->id }}"
+                        user_id="{{ auth()->user()->id }}"
+                        :per_page="10"
+                        :can-modify="{{ auth()->user()->can('modify-notes')?1:0 }}">
+                    </notes>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="tasks">
+                    <todos type="reservations"
+                        id="{{ $reservation->id }}"
+                        user_id="{{ auth()->user()->id }}"
+                        :can-modify="{{ auth()->user()->can('modify-todos')?1:0 }}">
+                    </todos>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="activity">Coming Soon...</div>
+            </div>
+
         </div>
     </div>
 </div>

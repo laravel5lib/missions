@@ -48,11 +48,8 @@ export default {
     methods: {
         updateValue(value) {
             this.$emit('input', parseInt(value));
+            this.$emit('update:form', [this.name, parseInt(value)]);
         }
-    },
-
-    mounted() {
-        this.$emit('input', this.value);
     }
 }
 </script>

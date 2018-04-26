@@ -45,14 +45,14 @@ export default {
 
     watch: {
         'amount'(value) {
-            this.$parent.form[this.name] = value;
+            this.$emit('input', value);
         }
     },
 
     mounted() {
-        this.$parent.form[this.name] = this.value;
-        this.$parent.form.set(this.name, this.value);
-        this.amount = this.value;
+        this.$nextTick(() =>  {
+            this.amount = this.value
+        })
 
         this.$root.$on('form:reset', () => {
             this.amount = 0;

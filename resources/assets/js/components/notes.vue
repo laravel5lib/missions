@@ -1,21 +1,17 @@
 <template>
-    <div class="panel panel-default">
-
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-xs-6">
-                    <h5>Notes</h5>
-                </div>
-                <div class="col-xs-6 text-right" v-if="app.user.can.create_notes">
-                    <hr class="divider inv sm"
-                    <button class="btn btn-primary btn-sm" @click="prepareNew">
-                        <span v-if="! newMode">New <i class="fa fa-plus"></i></span>
-                        <span v-if="newMode">List <i class="fa fa-list-ul"></i></span>
-                    </button>
-                </div>
-            </div>
+<div>
+    <div class="row">
+        <div class="col-xs-12" v-if="app.user.can.create_notes">
+            <a role="button" @click="prepareNew">
+                <strong v-if="! newMode"><i class="fa fa-plus"></i> New Note</strong>
+                <strong v-if="newMode"><i class="fa fa-list-ul"></i> View All Notes</strong>
+            </a>
         </div>
-        <div class="panel-body" v-if="newMode || editMode">
+    </div>
+    <hr class="divider">
+
+    <div class="row" v-if="newMode || editMode">
+        <div class="well">
             <form>
                 <div class="form-group">
                     <label>Subject</label>
@@ -28,7 +24,7 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-offset-4 col-sm-4 col-xs-6">
-                            <button class="btn btn-sm btn-default btn-block" @click="reset">Cancel</button>
+                            <button class="btn btn-sm btn-link btn-block" @click="reset">Cancel</button>
                         </div>
                         <div class="col-sm-4 col-xs-6">
                             <button class="btn btn-sm btn-primary btn-block" @click="save">Save</button>
@@ -37,76 +33,72 @@
                 </div>
             </form>
         </div>
-        <div class="list-group" v-if="! newMode && ! editMode">
-            <div class="list-group-item">
-                <div class="input-group input-group-md">
+    </div>
+    <div v-if="! newMode && ! editMode">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="input-group input-group-sm">
                     <input type="text"
-                           class="form-control"
-                           v-model="search"
-                           @keyup="debouncedSearch"
-                           placeholder="Search notes by subject, author or content...">
-
+                            class="form-control"
+                            v-model="search"
+                            @keyup="debouncedSearch"
+                            placeholder="Search notes by subject, author or content...">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
             </div>
-            <div class="list-group-item" v-for="note in notes">
-                <div class="row" v-if="notes.length > 0">
-                    <div class="col-xs-8">
-                        <h5 class="list-group-item-heading">{{ note.subject }}
-                            <br> <small>
-                                By {{ note.user.data.name }} &middot; {{ note.created_at | moment('llll') }}
-                                <span v-if="note.created_at != note.updated_at">(modified)</span>
-                            </small>
-                        </h5>
-                    </div>
-                    <div class="col-xs-4 text-right">
-                        <button class="btn btn-xs btn-link"
-                                @click="prepareEdit(note)"
-                                v-if="note.user.data.id === user_id">
-                            <i class="fa fa-pencil"></i>
-                        </button>
-                        <button class="btn btn-xs btn-link"
-                                @click="selectedNote.id = note.id,deleteModal = true"
-                                v-if="note.user.data.id === user_id || app.user.can.delete_notes">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-                <hr>
-                <p class="list-group-item-text">{{ note.content }}</p>
-                <hr class="divider inv">
-            </div>
-            <div class="list-group-item text-center text-muted" v-if="notes.length < 1">
-                <p class="lead">No notes available.</p>
-            </div>
-            <div class="list-group-item text-center" v-if="pagination.per_page < pagination.total">
-                <nav>
-                    <ul class="pager">
-                        <li :class="{ 'disabled': pagination.current_page === 1 }" class="previous">
-                            <a aria-label="Previous" @click="page=pagination.current_page-1">
-                                <span aria-hidden="true">&laquo; Newer</span>
-                            </a>
-                        </li>
-                        <li>Viewing {{ pagination.count }} of {{ pagination.total }} Notes</li>
-                        <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }" class="next">
-                            <a aria-label="Next" @click="page=pagination.current_page+1">
-                                <span aria-hidden="true">Older &raquo; </span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
         </div>
-
-        <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Note" :small="true">
-            <div slot="modal-body" class="modal-body text-center">Delete this Note?</div>
-            <div slot="modal-footer" class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
-                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedNote)'>Delete</button>
-            </div>
-        </modal>
-
+        <hr class="divider inv">
+        <div class="well" v-for="note in notes">
+            <h6 class="list-group-item-heading">{{ note.subject }}</h6>
+            <p class="text-muted">{{ note.user.data.name }} &middot; {{ note.created_at | moment('lll') }} <span v-if="note.created_at != note.updated_at">(modified)</span></p>
+            <p class="list-group-item-text">{{ note.content }}</p>
+            <hr class="divider sm">
+            <p class="text-right" style="margin-bottom: 0; padding-bottom: 0;">
+                <strong>
+                <a role="button"
+                        @click="prepareEdit(note)"
+                        v-if="note.user.data.id === user_id">
+                    Edit
+                </a> &middot;
+                <a role="button"
+                        @click="selectedNote.id = note.id,deleteModal = true"
+                        v-if="note.user.data.id === user_id || app.user.can.delete_notes">
+                    Delete
+                </a>
+                </strong>
+            </p>
+        </div>
+        <div class="list-group-item text-center text-muted" v-if="notes.length < 1">
+            <p class="lead">No notes available.</p>
+        </div>
+        <div class="list-group-item text-center" v-if="pagination.per_page < pagination.total">
+            <nav>
+                <ul class="pager">
+                    <li :class="{ 'disabled': pagination.current_page === 1 }" class="previous">
+                        <a aria-label="Previous" @click="page=pagination.current_page-1">
+                            <span aria-hidden="true">&laquo; Newer</span>
+                        </a>
+                    </li>
+                    <li>Viewing {{ pagination.count }} of {{ pagination.total }} Notes</li>
+                    <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }" class="next">
+                        <a aria-label="Next" @click="page=pagination.current_page+1">
+                            <span aria-hidden="true">Older &raquo; </span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
+
+    <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Note" :small="true">
+        <div slot="modal-body" class="modal-body text-center">Delete this Note?</div>
+        <div slot="modal-footer" class="modal-footer">
+            <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
+            <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedNote)'>Delete</button>
+        </div>
+    </modal>
+
+</div>
 </template>
 <script>
     import $ from 'jquery';

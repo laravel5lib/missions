@@ -1,34 +1,33 @@
 <template>
-<!-- <form @submit.prevent="onSubmit()" @keydown="form.errors.clear($event.target.name)" class="form-horizontal"> -->
-<ajax-form method="post" :action="'/' + priceableType + '/' + priceableId + '/prices/'" :data.sync="form" ref="ajax">
+<ajax-form method="post" :action="'/' + priceableType + '/' + priceableId + '/prices'" :initial.sync="initialize" ref="ajax">
 
-    <template slot-scope="props">
+    <template slot-scope="{ form }">
         <div class="row">
             <div class="col-md-6">
 
-                <select-cost name="cost_id">
+                <select-cost name="cost_id" v-model="form.cost_id">
                     <label slot="label">Select a Cost</label>
                     <span class="help-block" slot="help-text"><a href="">Manage these options &raquo;</a></span>
                 </select-cost>
 
             </div>
             <div class="col-md-6">
-                <input-number name="amount" v-model="props.form.amount">
+                <input-currency name="amount" v-model="form.amount">
                     <label slot="label">Amount</label>
-                </input-number>
+                </input-currency>
             </div>
         </div>
         <div class="row" v-if="ui.showActiveDate">
             <div class="col-md-6">
 
-                <input-date name="active_at">
+                <input-date name="active_at" v-model="form.active_at">
                     <label slot="label">Start Date</label>
                     <span class="help-block" slot="help-text">When does this cost go into effect?</span>
                 </input-date>
 
             </div>
         </div>
-        <div class="row" v-if="ui.showPayments" :class="{'has-error' : props.form.errors.has('payments')}">
+        <div class="row" v-if="ui.showPayments" :class="{'has-error' : form.errors.has('payments')}">
             <div class="col-md-12">
                 <hr class="divider">
                 
@@ -45,18 +44,18 @@
 
                 <label>Payments</label>
                 <span class="help-block" 
-                    v-text="props.form.errors.get('payments')" 
-                    v-if="props.form.errors.has('payments')">
+                    v-text="form.errors.get('payments')" 
+                    v-if="form.errors.has('payments')">
                 </span>
 
-                <div class="row" v-for="(payment, index) in props.form.payments" :key="index">
+                <div class="row" v-for="(payment, index) in form.payments" :key="index">
                     <div class="col-xs-3 col-md-2">
                         <input-number name="percentage_due" v-model="payment.percentage_due" :placeholder="50">
                             <span class="help-block" slot="help-text">Percentage due</span>
                         </input-number>
                     </div>
                     <div class="col-xs-6 col-md-4">
-                        <input-date name="due_at" v-model="payment.due_date">
+                        <input-date name="due_at" v-model="payment.due_at">
                             <span class="help-block" slot="help-text">Due Date</span>
                         </input-date>
                     </div>
@@ -85,7 +84,6 @@
         </div>
     </template>
 </ajax-form>
-<!-- </form> -->
 </template>
 <script>
 export default {
@@ -95,7 +93,10 @@ export default {
 
     data() {
         return {
-            form: {
+            initialize: {
+                amount: 0,
+                cost_id: null,
+                active_at: null,
                 payments: [
                     {
                         percentage_due: 0,
@@ -118,32 +119,12 @@ export default {
                 due_at: null,
                 grace_days: 0
             });
-
             this.$forceUpdate()
         },
         removePayment(index) {
-            this.form.payments.splice(index, 1);
-
+            this.$refs.ajax.form.payments.splice(index, 1);
             this.$forceUpdate()
-        },
-        // onSubmit(){
-        //     this.form.submit('post', '/' + this.priceableType + '/' + this.priceableId + '/prices')
-        //         .then(data => {
-
-        //             if (this.method == 'post') {
-        //                 this.form.reset();
-        //                 this.$root.$emit('form:reset');
-        //             }
-                    
-        //             this.$root.$emit('form:success', data);
-
-        //         })
-        //         .catch(error => {
-                    
-        //             this.$root.$emit('form:error', error);
-
-        //         });
-        // }
+        }
     },
 
     mounted() {

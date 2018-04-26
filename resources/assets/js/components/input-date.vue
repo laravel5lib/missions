@@ -5,6 +5,7 @@
             <input class="form-control" 
                 v-model="date"
                 v-mask="format" 
+                :name="name"
                 :placeholder="placeholder">
             <span class="help-block" 
                     v-text="$parent.form.errors.get(name)" 
@@ -45,17 +46,19 @@ export default {
 
     watch: {
         'date'(value) {
-            this.$parent.form[this.name] = moment(value).format('YYYY-MM-DD');
+            this.$emit('input', moment(value).format('YYYY-MM-DD'));
         }
     },
 
     mounted() {
-        this.$parent.form[this.name] = this.value;
-        this.$parent.form.set(this.name, this.value);
+        // this.$parent.form[this.name] = this.value;
+        // this.$parent.form.set(this.name, this.value);
 
-        if (this.value) {
-            this.date = moment(this.value).format('MM/DD/YYYY');
-        }
+        this.$nextTick(() =>  {
+            if (this.value) {
+                this.date = moment(this.value).format('MM/DD/YYYY');
+            }
+        });
 
         this.$root.$on('form:reset', () => {
             this.date = null;

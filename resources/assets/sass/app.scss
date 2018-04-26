@@ -25,6 +25,21 @@ $active-icon-color: #6CC94D;
 /*$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 $fa-font-path: "~font-awesome/fonts/";*/
 
+.well {
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  border: none;
+  border-radius: 4px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.list-group-item-text {
+  line-height: 1.5;
+}
+
 /* Vue Elements */
 .v-select {
   &.form-control {

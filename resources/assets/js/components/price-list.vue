@@ -1,5 +1,5 @@
 <template>
-<fetch-json :url="'/campaigns/' + campaignId+ '/prices'" ref="priceList">
+<fetch-json :url="'/' + priceableType + '/' + priceableId+ '/prices'" ref="priceList">
 <div class="panel panel-default" slot-scope="{ json: prices, loading, pagination }">
      <div class="panel-heading">
         <h5>Current Pricing</h5>
@@ -15,7 +15,7 @@
                     <h5>{{ price.cost.name|capitalize }}</h5>
                 </div>
                 <div class="col-sm-4 col-xs-6 text-right">
-                    <a class="btn btn-xs btn-default-hollow" :href="'/admin/campaigns/' + campaignId + '/prices/' + price.id">Manage</a>
+                    <a class="small text-primary" :href="'/admin/' + priceableType + '/' + priceableId + '/prices/' + price.id"><i class="fa fa-cog"></i> Manage</a>
                 </div>
             </div>
             <div class="row">
@@ -32,6 +32,24 @@
                     <p class="small">{{ price.cost.description }}</p>
                 </div>
             </div>
+            <div class="row small" v-if="price.payments.length > 0">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th class="col-xs-4">Percent</th>
+                            <th class="col-xs-4">Due</th>
+                            <th class="col-xs-4">Grace</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="payment in price.payments" :key="payment.id">
+                            <td class="col-xs-4">{{ payment.percentage_due.toFixed(2) }}%</td>
+                            <td class="col-xs-4">{{ payment.due_at|mFormat('ll') }}</td>
+                            <td class="col-xs-4">{{ payment.grace_days}} days</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <div class="panel-footer" v-if="pagination.total > pagination.per_page">
@@ -42,9 +60,9 @@
 </template>
 <script>
 export default {
-    name: 'campaign-price-list',
+    name: 'price-list',
 
-    props: ['campaignId'],
+    props: ['priceableType', 'priceableId'],
 
     methods: {
         isActive(date) {

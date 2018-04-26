@@ -18,7 +18,10 @@ class CampaignPriceController extends Controller
      */
     public function index($campaignId)
     {   
-        $prices = Campaign::findOrFail($campaignId)->prices()->paginate();
+        $prices = Campaign::findOrFail($campaignId)
+            ->prices()
+            ->with('payments')
+            ->paginate();
 
         return PriceResource::collection($prices);
     }

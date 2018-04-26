@@ -2,7 +2,7 @@
     <div class="form-group" :class="{'has-error' : $parent.form.errors.has(name)}"> 
         <div class="col-xs-12">
             <slot name="label"><label>Price</label></slot>
-            <select class="form-control" v-model="price" :value="value" @change="$root.$emit('price-change', price)">
+            <select class="form-control" v-model="price" :value="value" @change="updateValue($event.target.value)">
                 <option v-for="price in prices" :value="price" :key="price.id">{{ price.cost.name }}</option>
             </select>
             <span class="help-block" 
@@ -42,6 +42,13 @@ export default {
     watch: {
         'price'(value) {
             this.$parent.form[this.name] = value.id;
+        }
+    },
+
+    method: {
+        updateValue(value) {
+            this.$emit('input', parseInt(value));
+            this.$root.$emit('price-change', price);
         }
     },
 

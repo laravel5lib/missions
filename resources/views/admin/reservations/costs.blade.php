@@ -73,5 +73,5 @@
     @endslot
 @endcomponent
 
-<reservation-price-list reservation-id="{{ $reservation->id }}"></reservation-price-list>
+<price-list priceable-type="reservations" priceable-id="{{ $reservation->id }}"></price-list>
 @endsection

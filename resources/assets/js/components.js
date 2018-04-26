@@ -213,16 +213,6 @@ Vue.component('initiatives-list', require('./components/admin/initiatives-list.v
 Vue.component('initiative-editor', require('./components/admin/initiative-editor.vue'));
 
 /**
- * Single Use Components
- */
-Vue.component('campaign-price-list', require('./components/campaign-price-list.vue'));
-Vue.component('trip-price-list', require('./components/trip-price-list.vue'));
-Vue.component('reservation-price-list', require('./components/reservation-price-list.vue'));
-Vue.component('price-add-new', require('./components/price-add-new.vue'));
-Vue.component('price-edit', require('./components/price-edit.vue'));
-Vue.component('price-delete', require('./components/price-delete.vue'));
-
-/**
  * Misc. Components
  */
 Vue.component('funding', require('./components/funding.vue'));
@@ -232,7 +222,17 @@ Vue.component('send-email', require('./components/send-email.vue'));
 Vue.component('reports-list', require('./components/reports/reports-list.vue'));
 Vue.component('avatar-uploader', require('./components/avatar-uploader.vue'));
 
-Vue.component('mm-modal', require('./components/mm-modal.vue'));
+/**
+ * Wrapper Components
+ */
+Vue.component('price-list', require('./components/price-list.vue'));
+Vue.component('price-add-new', require('./components/price-add-new.vue'));
+Vue.component('price-edit', require('./components/price-edit.vue'));
+Vue.component('price-delete', require('./components/price-delete.vue'));
+
+/**
+ * Utility Components
+ */
 Vue.component('fetch-json', require('./components/fetch-json.vue'));
 Vue.component('pager', require('./components/pager.vue'));
 Vue.component('data-list', require('./components/data-list.vue'));

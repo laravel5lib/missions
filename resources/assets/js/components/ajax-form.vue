@@ -8,7 +8,7 @@ export default {
     name: 'ajax-form',
 
     props: {
-        data: {
+        initial: {
             type: Object,
             default: null
         },
@@ -65,6 +65,7 @@ export default {
                     if (this.method == 'post') {
                         this.form.reset();
                         this.$root.$emit('form:reset');
+                        this.$forceUpdate();
                     }
                     
                     this.$root.$emit('form:success', data);
@@ -88,13 +89,14 @@ export default {
             });
         }
 
-        if (this.data) {
+        if (this.initial) {
             // set any predefined values
             let that = this;
-            _.each(this.data, function(value, key) {
+            _.each(this.initial, function(value, key) {
                 that.form[key] = value;
                 that.form.set(key, value);
             });
+            this.$forceUpdate();
         }
     }
 }

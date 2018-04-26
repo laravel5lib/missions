@@ -48,9 +48,9 @@
             <div role="tabpanel" class="tab-pane active" id="campaign">
 
                 <ajax-form method="post" action="trips/{{ $trip->id }}/prices">
-                    <template slot-scope="props">
+                    <template slot-scope="{ form }">
                         <div class="col-md-6">
-                            <select-price name="price_id" url="campaigns/{{ $trip->campaign_id }}/prices">
+                            <select-price name="price_id" url="campaigns/{{ $trip->campaign_id }}/prices" v-model="form.cost_id">
                                 <label slot="label">Select a Cost</label>
                             </select-price>
                         </div>
@@ -70,4 +70,4 @@
     @endslot
 @endcomponent
 
-<trip-price-list trip-id="{{ $trip->id }}"></trip-price-list>
+<price-list priceable-type="trips" priceable-id="{{ $trip->id }}"></price-list>

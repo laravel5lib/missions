@@ -2,7 +2,7 @@
     <div class="form-group" :class="{'has-error' : $parent.form.errors.has(name)}"> 
         <div class="col-xs-12">
             <slot name="label"><label>Cost</label></slot>
-            <select class="form-control" v-model="cost" :value="value" @change="$root.$emit('cost-change', cost)">
+            <select class="form-control" v-model="cost" :value="value" @change="updateValue($event.target.value)">
                 <option v-for="cost in costs" :value="cost" :key="cost.id">{{ cost.name }}</option>
             </select>
             <span class="help-block" 
@@ -48,13 +48,14 @@ export default {
             }).catch(error => {
                 console.log('error');
             });
+        },
+        updateValue(value) {
+            this.$emit('input', value);
+            this.$root.$emit('cost-change', this.cost);
         }
     },
 
     mounted() {
-        this.$parent.form[this.name] = this.value;
-        this.$parent.form.set(this.name, this.value);
-
         let promise = this.getCosts();
 
         promise.then((values) => {

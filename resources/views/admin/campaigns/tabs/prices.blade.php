@@ -20,7 +20,7 @@
             <p class="small text-muted">Current Starting Cost</p>
         </div>
         <div class="col-sm-4">
-            <h4>{{ $campaign->getCurrentRate()->cost->name }}</h4>
+            <h4>{{ optional(optional($campaign->getCurrentRate())->cost)->name }}</h4>
             <p class="small text-muted">Current Rate</p>
         </div>
         <div class="col-sm-5">
@@ -50,6 +50,6 @@
     @endslot
 @endcomponent
 
-<campaign-price-list campaign-id="{{ $campaign->id }}"></campaign-price-list>
+<price-list priceable-type="campaigns" priceable-id="{{ $campaign->id }}"></price-list>
 
 @endsection

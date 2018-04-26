@@ -166,7 +166,7 @@ class Campaign extends Model implements HasMedia
 
     public function getCurrentStartingCostAttribute()
     {
-        return $this->getCurrentRate()->amount + $this->getUpfrontCosts()->sum('amount');
+        return optional($this->getCurrentRate())->amount + $this->getUpfrontCosts()->sum('amount');
     }
 
     public function regions()

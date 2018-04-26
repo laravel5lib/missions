@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="white-header-bg">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-xs-12">
                 <ul class="breadcrumb">
@@ -15,9 +15,9 @@
     </div>
 </div>
 <hr class="divider inv lg">
-<div class="container">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-sm-3">
+        <div class="col-md-2">
             <ul class="nav nav-pills nav-stacked" role="tablist">
 
                 <li role="presentation" class="{{ $tab == 'details' ? 'active' : '' }}">
@@ -113,8 +113,22 @@
             </ul>
         </div>
 
-        <div class="col-sm-9">
+        <div class="col-md-7">
             @yield('tab')
+        </div>
+
+        <div class="col-md-3 small">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#home" aria-controls="home" role="tab" data-toggle="tab">Notes</a>
+                </li>
+                <li role="presentation">
+                    <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Tasks</a>
+                </li>
+                <li role="presentation">
+                    <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Activity</a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

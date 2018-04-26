@@ -52,9 +52,6 @@
                 <li role="presentation">
                     <a href="#tasks" aria-controls="tasks" role="tab" data-toggle="tab">Tasks</a>
                 </li>
-                <li role="presentation">
-                    <a href="#activity" aria-controls="activity" role="tab" data-toggle="tab">Activity</a>
-                </li>
             </ul>
 
             <div class="tab-content">
@@ -73,7 +70,6 @@
                         :can-modify="{{ auth()->user()->can('modify-todos')?1:0 }}">
                     </todos>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="activity">Coming Soon...</div>
             </div>
 
         </div>

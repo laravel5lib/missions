@@ -22,25 +22,30 @@
         <p>{{ message }}</p>
     </alert>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3>Tasks</h3>
-        </div>
-        <div class="list-group">
-            <div class="list-group-item" v-if="app.user.can.create_todos">
-                <div class="row">
-                    <div class="col-xs-2 col-sm-1 text-muted">
-                        <i class="fa fa-lg fa-plus-square-o" style="margin-right: 10px"></i>
-                    </div>
-                    <div class="col-xs-10 col-sm-11">
-                        <input type="text"
-                               class="form-control"
-                               v-model="newTodo.task"
-                               placeholder="What needs to be done?"
-                               @keyup.enter="createTodo">
-                    </div>
-                </div>
+    <div>
+        Filter: 
+        <a role="button" :class="{ 'text-primary' : filterBy == 'all'}" @click="changeFilter('all')">
+            All
+        </a> |
+        <a role="button" :class="{ 'text-primary' : filterBy == 'active'}" @click="changeFilter('active')">
+            Active
+        </a> |
+        <a role="button" :class="{ 'text-primary' : filterBy == 'completed'}" @click="changeFilter('completed')">
+            Completed
+        </a>
+        <hr class="divider">
+        <div v-if="app.user.can.create_todos">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon"><i class="fa fa-plus-square-o"></i></span>
+                <input type="text"
+                        class="form-control input-sm"
+                        v-model="newTodo.task"
+                        placeholder="New task"
+                        @keyup.enter="createTodo">
             </div>
+        </div>
+        <hr class="divider inv">
+        <div class="list-group">
             <div class="list-group-item" v-if="todos.length < 1">
                 <p class="text-center text-muted lead">No tasks found.</p>
             </div>
@@ -61,7 +66,7 @@
                         <div class="col-xs-9 col-sm-10" @dblclick="editTodo(todo)" v-else>
                             <span :class="{ 'text-strike' : todo.completed_at }">{{ todo.task }}</span>
                             <small class="text-muted" v-if="todo.completed_at"><br />
-                                Completed on {{ todo.completed_at | moment('llll') }} by {{ todo.user.data.name }}
+                                {{ todo.user.data.name }} &middot; {{ todo.completed_at | moment('lll') }}
                             </small>
                         </div>
                         <div class="col-xs-1 col-sm-1 text-right" v-if="app.user.can.delete_todos">
@@ -72,39 +77,26 @@
                     </div>
             </div>
         </div>
-        <div class="panel-body text-center">
+        <div class="text-center">
             <nav>
                 <ul class="pager">
                     <li :class="{ 'disabled': pagination.current_page == 1 }" class="previous">
                         <a aria-label="Previous" @click="page=pagination.current_page-1">
-                            <span aria-hidden="true">&laquo; <span class="hidden-xs">Previous</span></span>
+                            <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <button class="btn btn-default-hollow btn-xs"
-                            :class="{ 'btn-primary-hollow' : filterBy == 'all'}"
-                            @click="changeFilter('all')">
-                        All
-                    </button>
-                    <button class="btn btn-default-hollow btn-xs"
-                            :class="{ 'btn-primary-hollow' : filterBy == 'active'}"
-                            @click="changeFilter('active')">
-                        Active
-                    </button>
-                    <button class="btn btn-default-hollow btn-xs"
-                            :class="{ 'btn-primary-hollow' : filterBy == 'completed'}"
-                            @click="changeFilter('completed')">
-                        Completed
-                    </button>
+                    <li>
+                        <small class="text-muted">Double-click to edit a task.</small>
+                    </li>
                     <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }" class="next">
                         <a aria-label="Next" @click="page=pagination.current_page+1">
-                            <span aria-hidden="true"><span class="hidden-xs">Next</span> &raquo; </span>
+                            <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
                 </ul>
             </nav>
         </div>
     </div>
-    <p class="text-center"><small class="text-muted">Double-click to edit a todo.</small></p>
 
     <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Todo" :small="true">
         <div slot="modal-body" class="modal-body text-center">Delete this Todo?</div>

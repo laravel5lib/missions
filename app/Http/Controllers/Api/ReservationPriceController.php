@@ -20,6 +20,7 @@ class ReservationPriceController extends Controller
     {
         $prices = Reservation::findOrFail($reservationId)
             ->priceables()
+            ->with('payments')
             ->paginate();
         
         return PriceResource::collection($prices);

@@ -33,6 +33,7 @@ class TripPriceController extends Controller
                     return $subQuery->where('type', $type);
                 });
             })
+            ->with('payments')
             ->orderBy('active_at')
             ->paginate();
 

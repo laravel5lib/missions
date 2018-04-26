@@ -249,14 +249,6 @@ return [
                 'url' => 'legal'
             ],
             [
-                'label' => 'Tasks',
-                'url' => 'todos'
-            ],
-            [
-                'label' => 'Notes',
-                'url' => 'notes'
-            ],
-            [
                 'label' => 'Trip Resources',
                 'url' => 'resources'
             ]

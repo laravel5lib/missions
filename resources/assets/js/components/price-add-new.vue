@@ -1,5 +1,6 @@
 <template>
-<ajax-form method="post" :action="'/' + priceableType + '/' + priceableId + '/prices'">
+<!-- <form @submit.prevent="onSubmit()" @keydown="form.errors.clear($event.target.name)" class="form-horizontal"> -->
+<ajax-form method="post" :action="'/' + priceableType + '/' + priceableId + '/prices/'" :data.sync="form" ref="ajax">
 
     <template slot-scope="props">
         <div class="row">
@@ -12,9 +13,9 @@
 
             </div>
             <div class="col-md-6">
-                <input-currency name="amount" :value="0">
+                <input-number name="amount" v-model="props.form.amount">
                     <label slot="label">Amount</label>
-                </input-currency>
+                </input-number>
             </div>
         </div>
         <div class="row" v-if="ui.showActiveDate">
@@ -27,37 +28,64 @@
 
             </div>
         </div>
-        <div class="row" v-if="ui.showPayments">
+        <div class="row" v-if="ui.showPayments" :class="{'has-error' : props.form.errors.has('payments')}">
             <div class="col-md-12">
                 <hr class="divider">
-                <label>Payments</label>
+                
                 <div class="row">
+                    <div class="col-xs-12">
+                        <div class="alert alert-warning">
+                            <div class="row">
+                                <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
+                                <div class="col-xs-11">The percentages due are for the cumulative total of all costs that apply, not this price alone (i.e. registration + room + flight, etc.).</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <label>Payments</label>
+                <span class="help-block" 
+                    v-text="props.form.errors.get('payments')" 
+                    v-if="props.form.errors.has('payments')">
+                </span>
+
+                <div class="row" v-for="(payment, index) in props.form.payments" :key="index">
                     <div class="col-xs-3 col-md-2">
-                        <input-number name="payments.percent" :placeholder="50">
+                        <input-number name="percentage_due" v-model="payment.percentage_due" :placeholder="50">
                             <span class="help-block" slot="help-text">Percentage due</span>
                         </input-number>
                     </div>
                     <div class="col-xs-6 col-md-4">
-                        <input-date name="due_at">
+                        <input-date name="due_at" v-model="payment.due_date">
                             <span class="help-block" slot="help-text">Due Date</span>
                         </input-date>
                     </div>
-                    <div class="col-xs-3 col-md-2">
-                        <input-number name="payments.grace" :placeholder="3">
+                    <div class="col-xs-2 col-md-2">
+                        <input-number name="days_grace" :placeholder="3" v-model="payment.days_grace">
                             <span class="help-block" slot="help-text">Days Grace</span>
                         </input-number>
                     </div>
+                    <div class="col-xs-1 col-md-2">
+                        <p class="form-control-static">
+                            <a class="small" role="button" @click.prevent="removePayment(index)">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </p>
+                    </div>
                 </div>
+
+                <a role="button" class="small" @click.prevent="addPayment"><i class="fa fa-plus-circle"></i> Add another payment</a>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12 text-right">
+                <hr class="divider">
                 <button type="submit" class="btn btn-md btn-primary">Add</button>
             </div>
         </div>
     </template>
-
 </ajax-form>
+<!-- </form> -->
 </template>
 <script>
 export default {
@@ -67,11 +95,55 @@ export default {
 
     data() {
         return {
+            form: {
+                payments: [
+                    {
+                        percentage_due: 0,
+                        due_at: null,
+                        days_grace: 0
+                    }
+                ]
+            },
             ui: {
                 showActiveDate: false,
                 showPayments: false
             }
         }
+    },
+
+    methods: {
+        addPayment() {
+            this.$refs.ajax.form.payments.push({
+                percentage_due: 0,
+                due_at: null,
+                grace_days: 0
+            });
+
+            this.$forceUpdate()
+        },
+        removePayment(index) {
+            this.form.payments.splice(index, 1);
+
+            this.$forceUpdate()
+        },
+        // onSubmit(){
+        //     this.form.submit('post', '/' + this.priceableType + '/' + this.priceableId + '/prices')
+        //         .then(data => {
+
+        //             if (this.method == 'post') {
+        //                 this.form.reset();
+        //                 this.$root.$emit('form:reset');
+        //             }
+                    
+        //             this.$root.$emit('form:success', data);
+
+        //         })
+        //         .catch(error => {
+                    
+        //             this.$root.$emit('form:error', error);
+
+        //         });
+        // }
     },
 
     mounted() {

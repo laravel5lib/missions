@@ -38,7 +38,12 @@
     @slot('body')
         <div class="row">
             <div class="col-xs-12">
-                <div class="alert alert-warning"><i class="fa fa-info-circle"></i> Campaign prices will be set as the default pricing for it's trips.</div>
+                <div class="alert alert-warning">
+                    <div class="row">
+                        <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
+                        <div class="col-xs-11">Campaign prices will be set as the default pricing for it's trips.</div>
+                    </div>
+                </div>
             </div>
         </div>
         <price-add-new priceable-type="campaigns" priceable-id="{{ $campaign->id }}"></price-add-new>

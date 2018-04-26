@@ -8,7 +8,7 @@
                     :name="name"
                     :value="value" 
                     :placeholder="placeholder"
-                    @input="updateInput($event.target.value)"
+                    @input="updateValue($event.target.value)"
                     type="number">
                 <slot name="suffix"></slot>
             </div>
@@ -39,15 +39,20 @@ export default {
         }
     },
 
+    data() {
+        return {
+            number: 0
+        }
+    },
+
     methods: {
-        updateInput(value) {
-            this.$parent.form[this.name] = value;
+        updateValue(value) {
+            this.$emit('input', parseInt(value));
         }
     },
 
     mounted() {
-        this.$parent.form[this.name] = this.value;
-        this.$parent.form.set(this.name, this.value);
+        this.$emit('input', this.value);
     }
 }
 </script>

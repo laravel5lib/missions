@@ -8,6 +8,10 @@ export default {
     name: 'ajax-form',
 
     props: {
+        data: {
+            type: Object,
+            default: null
+        },
         hiddenValues: {
             type: Object,
             default: null
@@ -79,6 +83,15 @@ export default {
             // set any hidden values
             let that = this;
             _.each(this.hiddenValues, function(value, key) {
+                that.form[key] = value;
+                that.form.set(key, value);
+            });
+        }
+
+        if (this.data) {
+            // set any predefined values
+            let that = this;
+            _.each(this.data, function(value, key) {
                 that.form[key] = value;
                 that.form.set(key, value);
             });

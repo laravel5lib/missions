@@ -2,33 +2,30 @@
 
 @section('content')
 <div class="white-header-bg">
-    <div class="container">
-        <div class="row hidden-xs">
-            <div class="col-sm-8">
-                <h3>Users</h3>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul class="breadcrumb">
+                    <li><a href="{{ url('/admin') }}">Dashboard</a></li>
+                    <li class="active">Users</li>
+                </ul>
             </div>
-            @can('create', \App\Models\v1\User::class)
-            <div class="col-sm-4 text-right">
-                <hr class="divider inv sm">
-                <a class="btn btn-primary" href="users/create"><i class="fa fa-plus icon-left"></i> New</a>
-            </div>
-            @endcan
-        </div>
-        <div class="row visible-xs">
-            <div class="col-sm-8 text-center">
-                <h3>Users</h3>
-            </div>
-            @can('create', \App\Models\v1\User::class)
-            <div class="col-sm-4 text-center">
-                <a href="users/create" class="btn btn-primary"><i class="fa fa-plus icon-left"></i> New</a>
-                <hr class="divider inv sm">
-            </div>
-            @endcan
         </div>
     </div>
 </div>
 <hr class="divider inv lg">
-    <div class="container">
+<div class="container-fluid">
+    <div class="col-xs-12 col-md-2">
+        @include('admin.partials._toolbar')
+    </div>
+    <div class="col-xs-12 col-md-10">
+        @can('create', \App\Models\v1\User::class)
+        <div class="text-right">
+            <hr class="divider inv sm">
+            <a class="btn btn-primary btn-sm" href="users/create"><i class="fa fa-plus icon-left"></i> New</a>
+            <hr class="divider inv">
+        </div>
+        @endcan
         <div class="row">
             <div class="col-sm-12">
                 <div class="panel panel-default">
@@ -39,4 +36,5 @@
             </div>
         </div>
     </div>
+</div>
 @endsection

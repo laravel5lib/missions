@@ -18,25 +18,24 @@
 
 @section('content')
 <div class="white-header-bg">
-    <div class="container">
-        <div class="row hidden-xs">
+    <div class="container-fluid">
+        <div class="row">
             <div class="col-xs-12">
-                <h3>Reservations</h3>
-            </div>
-        </div>
-        <div class="row visible-xs">
-            <div class="col-sm-8 text-center">
-                <h3>Reservations</h3>
-            </div>
-            <div class="col-sm-4 text-center">
-                <a href="/admin/trips" class="btn btn-primary">New <i class="fa fa-plus"></i></a>
-                <hr class="divider inv sm">
+                <ul class="breadcrumb">
+                    <li><a href="{{ url('/admin') }}">Dashboard</a></li>
+                    <li class="active">Reservations</li>
+                </ul>
             </div>
         </div>
     </div>
 </div>
 <hr class="divider inv lg">
-	<div class="container">
+<div class="container-fluid">
+    <div class="col-xs-12 col-md-2">
+        @include('admin.partials._toolbar')
+    </div>
+    <div class="col-xs-12 col-md-10">
+
         <div class="row">
             <div class="col-sm-12">
                 <!-- TAB NAVIGATION -->
@@ -54,7 +53,7 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <admin-reservations-list type="current"
-                                                         storage-name="AdminReservationsCurrentStorage">
+                                                        storage-name="AdminReservationsCurrentStorage">
                                 </admin-reservations-list>
                             </div>
                         </div>
@@ -63,7 +62,7 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <admin-reservations-list type="archived"
-                                                         storage-name="AdminReservationsArchivedStorage">
+                                                        storage-name="AdminReservationsArchivedStorage">
                                 </admin-reservations-list>
                             </div>
                         </div>
@@ -72,7 +71,7 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <admin-reservations-list type="dropped"
-                                                         storage-name="AdminReservationsDroppedStorage">
+                                                        storage-name="AdminReservationsDroppedStorage">
                                 </admin-reservations-list>
                             </div>
                         </div>
@@ -89,4 +88,5 @@
             </div>
         </div>
     </div>
+</div>
 @endsection

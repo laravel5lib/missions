@@ -121,7 +121,7 @@ return [
             ],
             [
                 'icon' => 'user-circle-o',
-                'label' => 'Trip&nbsp;Reps',
+                'label' => 'Trip Reps',
                 'url' => 'admin/representatives',
                 'action' => 'view',
                 'policy' => 'App\Models\v1\Representative'

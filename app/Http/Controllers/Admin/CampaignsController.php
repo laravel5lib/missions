@@ -62,7 +62,7 @@ class CampaignsController extends Controller
     private function getPageLinks($campaign)
     {
         $links = [
-            'admin/campaigns/'.$campaign->id.'/details' => 'Overview',
+            'admin/campaigns/'.$campaign->id => 'Overview',
             'admin/campaigns/'.$campaign->id.'/prices' => 'Pricing',
         ];
 

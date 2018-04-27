@@ -1,47 +1,51 @@
-@extends('admin.layouts.default')
+@extends('layouts.admin')
+
+@section('header')
+    @breadcrumbs(['links' => [
+        'admin' => 'Dashboard',
+        'admin/campaigns' => 'Campaigns',
+        '/admin/campaigns/'.$trip->campaign->id.'/trips' => $trip->campaign->name.' - '.country($trip->country_code),
+        'active' => $trip->group->name.' - '.ucfirst($trip->type).' Trip'
+    ]])
+    @endbreadcrumbs
+@endsection
 
 @section('content')
-    <div class="white-header-bg">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-12">
-                    <ul class="breadcrumb">
-                        <li><a href="{{ url('/admin') }}">Dashboard</a></li>
-                        <li><a href="{{ url('/admin/campaigns') }}">Campaigns</a></li>
-                        <li>
-                            <a href="{{ url('/admin/campaigns/'.$trip->campaign->id.'/trips') }}">
-                                {{ $trip->campaign->name }} - {{ country($trip->country_code) }}
-                            </a>
-                        </li>
-                        <li class="active">{{ $trip->group->name }} - {{ ucfirst($trip->type) }} Trip</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
     <hr class="divider inv lg">
     <div class="container-fluid">
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane fade in active" id="details">
-                <div class="row">
-                    <div class="col-xs-12 col-md-2">
-                        @include('admin.trips.tabs.nav')
+        <div class="row">          
+            <div class="col-xs-12 col-md-2">
+                @sidenav(['links' => $pageLinks])
+                @endsidenav
+            </div>
+            
+            <div class="col-xs-12 col-md-7">
+                @include('admin.trips.tabs.'.($tab === 'reservations' ? 'details' : $tab))
+            </div>
+
+            <div class="col-md-3 small">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#notes" aria-controls="notes" role="tab" data-toggle="tab">Notes</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#tasks" aria-controls="tasks" role="tab" data-toggle="tab">Tasks</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="notes">
+                        <notes type="trips"
+                            id="{{ $trip->id }}"
+                            user_id="{{ auth()->user()->id }}"
+                            :per_page="10">
+                        </notes>
                     </div>
-                    <div class="col-xs-12 col-md-7">
-                        @include('admin.trips.tabs.'.($tab === 'reservations' ? 'details' : $tab))
-                    </div>
-                    <div class="col-md-3 small">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active">
-                                <a href="#home" aria-controls="home" role="tab" data-toggle="tab">Notes</a>
-                            </li>
-                            <li role="presentation">
-                                <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Tasks</a>
-                            </li>
-                            <li role="presentation">
-                                <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Activity</a>
-                            </li>
-                        </ul>
+                    <div role="tabpanel" class="tab-pane" id="tasks">
+                        <todos type="trips"
+                            id="{{ $trip->id }}"
+                            user_id="{{ auth()->user()->id }}">
+                        </todos>
                     </div>
                 </div>
             </div>

@@ -14,7 +14,7 @@ class ComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer(['admin.layouts.default', 'dashboard.layouts.default'], 'App\Http\ViewComposers\JavascriptComposer');
+        View::composer(['admin.layouts.default', 'dashboard.layouts.default', 'layouts.admin'], 'App\Http\ViewComposers\JavascriptComposer');
     }
 
     /**

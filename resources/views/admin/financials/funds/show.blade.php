@@ -1,4 +1,4 @@
-@extends('admin.layouts.default')
+@extends('layouts.admin')
 @section('scripts')
     <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
 @endsection

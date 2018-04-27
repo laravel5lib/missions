@@ -1,19 +1,15 @@
-@extends('admin.layouts.default')
+@extends('layouts.admin')
+
+@section('header')
+    @breadcrumbs(['links' => [
+        'admin' => 'Dashboard',
+        'admin/reservations' => 'Reservations',
+        'active' => $reservation->name
+    ]])
+    @endbreadcrumbs
+@endsection
 
 @section('content')
-<div class="white-header-bg">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-12">
-                <ul class="breadcrumb">
-                    <li><a href="{{ url('/admin') }}">Dashboard</a></li>
-                    <li><a href="{{ url('/admin/reservations') }}">Reservations</a></li>
-                    <li class="active">{{ $reservation->name }}</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
 
 @if($reservation->deleted_at)
 <div class="darker-bg-primary">
@@ -31,15 +27,13 @@
     </div><!-- end container -->
 </div><!-- end dark-bg-primary -->
 @endif
+
 <hr class="divider inv lg">
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-12 col-md-2">
-            @include('admin.reservations.layouts.menu', [
-                'links' => config('navigation.admin.reservation'),
-                'reservation' => $reservation,
-                'rep' => $reservation->rep ? $reservation->rep : $reservation->trip->rep
-                ])
+            @sidenav(['links' => $pageLinks])
+            @endsidenav
         </div>
         <div class="col-xs-12 col-md-7">
             @yield('tab')

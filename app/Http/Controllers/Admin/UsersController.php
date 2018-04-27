@@ -31,7 +31,7 @@ class UsersController extends Controller
         return view('admin.users.index');
     }
 
-    public function show($id)
+    public function show($id, $tab="details")
     {
         $this->authorize('view', $this->user);
 
@@ -39,7 +39,15 @@ class UsersController extends Controller
 
         $this->seo()->setTitle($user->name);
 
-        return view('admin.users.show')->with('user', $user);
+        $pageLinks = [
+            'admin/users/'.$user->id => 'Overview',
+        ];
+
+        if (auth()->user()->hasAnyRole(['super_admin', 'admin'])) {
+            $pageLinks['admin/users/'.$user->id.'/permissions'] = 'Permissions';
+        }
+
+        return view('admin.users.tabs.'.$tab, compact('user', 'pageLinks'));
     }
 
     public function edit($id)

@@ -47,7 +47,6 @@ class ReservationsController extends Controller
      */
     public function show($id, $tab = "details")
     {
-
         $reservation = $this->api->get('reservations/'.$id, ['include' => 'trip.campaign,fundraisers,costs.payments,squads.team,rooms.type, rooms.accommodations']);
 
         $this->authorize('view', $reservation);
@@ -59,7 +58,16 @@ class ReservationsController extends Controller
         $title = $reservation->name . '\'s Reservation ' . title_case(str_replace("-", " ", $tab));
         $this->seo()->setTitle($title);
 
-        return view('admin.reservations.' . $tab, compact('reservation', 'rep', 'tab', 'locked'));
+        $pageLinks = [
+            'admin/reservations/'.$reservation->id => 'Overview',
+            'admin/reservations/'.$reservation->id.'/costs' => 'Pricing',
+            'admin/reservations/'.$reservation->id.'/requirements' => 'Requirements',
+            'admin/reservations/'.$reservation->id.'/funding' => 'Fundraiser',
+            'admin/reservations/'.$reservation->id.'/legal' => 'Legal',
+            'admin/reservations/'.$reservation->id.'/resources' => 'Resources'
+        ];
+
+        return view('admin.reservations.' . $tab, compact('reservation', 'rep', 'tab', 'locked', 'pageLinks'));
     }
 
     /**

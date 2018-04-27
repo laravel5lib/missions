@@ -226,32 +226,6 @@ return [
                 'action' => 'view',
                 'policy' => 'App\Models\v1\Essay'
             ]
-        ],
-        'reservation' => [
-            [
-                'label' => 'Overview',
-                'url' => 'details'
-            ],
-            [
-                'label' => 'Pricing',
-                'url' => 'costs'
-            ],
-            [
-                'label' => 'Travel Requirements',
-                'url' => 'requirements'
-            ],
-            [
-                'label' => 'Fundraising',
-                'url' => 'funding'
-            ],
-            [
-                'label' => 'Legal',
-                'url' => 'legal'
-            ],
-            [
-                'label' => 'Trip Resources',
-                'url' => 'resources'
-            ]
-        ],
+        ]
     ]
 ];

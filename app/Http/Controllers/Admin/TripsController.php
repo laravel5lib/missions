@@ -34,7 +34,28 @@ class TripsController extends Controller
 
         $this->seo()->setTitle(title_case($trip->group->name.'\'s ' . $trip->type . ' Trip - ' . $tab));
 
-        return view('admin.trips.show', compact('trip', 'tab'));
+        $pageLinks = $this->getPageLinks($trip);
+
+        return view('admin.trips.show', compact('trip', 'tab', 'pageLinks'));
+    }
+
+    private function getPageLinks($trip)
+    {
+        $links = [
+            'admin/trips/'.$trip->id => 'Overview'
+        ];
+        
+        if (auth()->user()->can('view', \App\Models\v1\Cost::class)) {
+            $links['admin/trips/'.$trip->id.'/pricing'] = 'Pricing';
+        }
+
+        $links['admin/trips/'.$trip->id.'/description'] = 'Public Page';
+
+        if (auth()->user()->can('view', \App\Models\v1\Requirement::class)) {
+            $links['admin/trips/'.$trip->id.'/requirements'] = 'Requirements';
+        }
+
+        return $links;
     }
 
     public function edit($tripId)

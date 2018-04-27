@@ -59,6 +59,7 @@ Route::resource('causes', 'ProjectCausesController');
 Route::get('initiatives/{id}', 'ProjectInitiativesController@show');
 Route::get('projects/{id}/{tab?}', 'ProjectsController@show');
 
+Route::get('users/{id}/{tab?}', 'UsersController@show')->where('tab', 'details|permissions');
 Route::resource('users', 'UsersController');
 
 // Representatives

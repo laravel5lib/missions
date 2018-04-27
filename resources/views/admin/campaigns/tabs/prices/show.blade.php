@@ -1,4 +1,4 @@
-@extends('admin.layouts.default')
+@extends('layouts.admin')
 
 @section('content')
 <div class="white-header-bg">

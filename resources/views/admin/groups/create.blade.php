@@ -1,4 +1,4 @@
-@extends('admin.layouts.default')
+@extends('layouts.admin')
 
 @section('styles')
     <link rel="stylesheet" href="/css/slim.css" type="text/css">

@@ -46,8 +46,8 @@
         </div>
         <hr class="divider inv">
         <div class="list-group">
-            <div class="list-group-item" v-if="todos.length < 1">
-                <p class="text-center text-muted lead">No tasks found.</p>
+            <div v-if="todos.length < 1">
+                <p class="text-center text-muted">No tasks found.</p>
             </div>
             <div class="list-group-item todo-item" v-for="todo in todos">
                     <div class="row">

@@ -68,8 +68,8 @@
                 </strong>
             </p>
         </div>
-        <div class="list-group-item text-center text-muted" v-if="notes.length < 1">
-            <p class="lead">No notes available.</p>
+        <div class="text-center text-muted" v-if="notes.length < 1">
+            <p>No notes available.</p>
         </div>
         <div class="list-group-item text-center" v-if="pagination.per_page < pagination.total">
             <nav>

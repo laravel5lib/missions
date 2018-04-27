@@ -1,20 +1,15 @@
-@extends('admin.layouts.default')
+@extends('layouts.admin')
+
+@section('header')
+    @breadcrumbs([ 'links' => [
+        'admin' => 'Dashboard', 'admin/groups' => 'Groups', 'active' => $group->name
+    ]])
+    @endbreadcrumbs
+@endsection
 
 @section('content')
-<div class="white-header-bg">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-12">
-                <ul class="breadcrumb">
-                    <li><a href="{{ url('/admin') }}">Dashboard</a></li>
-                    <li><a href="{{ url('/admin/groups') }}">Groups</a></li>
-                    <li class="active">{{ $group->name }}</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
 <hr class="divider inv lg">
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-12 col-md-2">

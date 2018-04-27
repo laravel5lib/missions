@@ -44,20 +44,49 @@ class CampaignsController extends Controller
      * @param $id
      * @return $this
      */
-    public function show($id, $tab = 'trips', $tabId = null)
+    public function show($id, $tab = 'details', $tabId = null)
     {
         $campaign = $this->campaign->findOrFail($id);
 
         $this->authorize('view', $campaign);
 
-        if (!is_null($tabId)) {
-            return view('admin.campaigns.tabs.'.$tab.'.details', compact('campaign', 'tab', 'tabId'));
+        $this->seo()->setTitle(
+            title_case(str_replace("-", " ", $tab)) . ' - ' . $campaign->name
+        );
+
+        $pageLinks = $this->getPageLinks($campaign);
+
+        return view('admin.campaigns.tabs.'.$tab, compact('campaign', 'tab', 'pageLinks'));
+    }
+
+    private function getPageLinks($campaign)
+    {
+        $links = [
+            'admin/campaigns/'.$campaign->id.'/details' => 'Overview',
+            'admin/campaigns/'.$campaign->id.'/prices' => 'Pricing',
+        ];
+
+        if (auth()->user()->can('view', \App\Models\v1\Trip::class)) {
+            $links['admin/campaigns/'.$campaign->id.'/trips'] = 'Trips';
         }
 
-        $title = title_case(str_replace("-", " ", $tab)) . ' - ' . $campaign->name;
-        $this->seo()->setTitle($title);
+        if (auth()->user()->can('view', \App\Models\v1\Team::class)) {
+            $links['admin/campaigns/'.$campaign->id.'/squads'] = 'Squads';
+        }
 
-        return view('admin.campaigns.tabs.'.$tab, compact('campaign', 'tab'));
+        if (auth()->user()->can('view', \App\Models\v1\TeamType::class)) {
+            $links['admin/campaigns/'.$campaign->id.'/squad-types'] = 'Squad Types';
+        }
+
+        if (auth()->user()->can('view', \App\Models\v1\Region::class)) {
+            $links['admin/campaigns/'.$campaign->id.'/regions'] = 'Squad Assignments';
+        }
+
+        if (auth()->user()->can('view', \App\Models\v1\Accommodation::class)) {
+            $links['admin/campaigns/'.$campaign->id.'/region-accommodations'] = 'Accommodations';
+        }
+
+        return $links;
     }
 
     /**

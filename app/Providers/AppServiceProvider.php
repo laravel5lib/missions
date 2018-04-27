@@ -124,6 +124,9 @@ class AppServiceProvider extends ServiceProvider
             return false;
         });
 
+        Blade::component('components.breadcrumbs', 'breadcrumbs');
+        Blade::component('components.sidenav', 'sidenav');
+
         Blade::directive('prod', function ($beta) {
             return "<?php if (app()->environment('production')): ?>";
         });

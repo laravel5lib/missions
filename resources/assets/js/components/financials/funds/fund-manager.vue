@@ -1,12 +1,11 @@
 <template>
     <section>
-        <div class="col-md-4">
-            <fund-editor :id="id"></fund-editor>
-        </div>
-        <div class="col-md-8" v-if="app.user.can.view_transactions">
-            <div class="collapse" id="createTransaction">
-                <transaction-form :fund-id="id" @transactionCreated="transactionCreated"></transaction-form>
-            </div>
+        <fund-editor :id="id"></fund-editor>
+
+        <div v-if="app.user.can.view_transactions">
+            
+            <transaction-form :fund-id="id" @transactionCreated="transactionCreated"></transaction-form>
+
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h5>Transactions</h5>
@@ -15,12 +14,10 @@
                     <admin-transactions-list :fund="id"
                                              storage-name="AdminFundTransactionsConfig">
                     </admin-transactions-list>
-                </div><!-- end panel-body -->
+                </div>
             </div>
-            <template v-if="app.user.can.view_notes">
-                <slot></slot>
-            </template>
         </div>
+
     </section>
 </template>
 <script type="text/javascript">

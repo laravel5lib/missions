@@ -147,8 +147,7 @@ class UtilitiesController extends Controller
 
         Mail::send('emails.sponsor-request', ['data' => $data], function ($m) use ($data) {
             $m->to('mail@missions.me', 'Missions.Me')
-              ->cc('madeline@angelhouse.me', 'Madeline Osiwala')
-              ->cc('gabe@missions.me', 'Gabe Bahlhorn')
+              ->cc('libby@missions.me', 'Libby Gonzalez')
               ->subject('New Project Request!');
         });
     }

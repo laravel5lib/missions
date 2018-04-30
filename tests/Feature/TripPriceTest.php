@@ -192,6 +192,17 @@ class TripPriceTest extends TestCase
     }
 
     /** @test */
+    public function validates_that_price_is_unique()
+    {
+        $trip = $this->setupTripWithPrices();
+        $price = $trip->prices()->first();
+
+        $this->json('POST', "/api/trips/{$trip->id}/prices", [
+            'price_id' => $price->uuid
+        ])->assertJsonValidationErrors(['price_id']);
+    }
+
+    /** @test */
     public function get_specific_trip_price()
     {
         $trip = $this->setupTripWithPrices();

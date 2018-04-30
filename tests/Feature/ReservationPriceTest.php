@@ -66,6 +66,17 @@ class ReservationPriceTest extends TestCase
     }
 
     /** @test */
+    public function validates_that_price_is_unique()
+    {
+        $reservation = $this->setupReservationWithPrices();
+        $price = $reservation->prices()->first();
+
+        $this->json('POST', "/api/reservations/{$reservation->id}/prices", [
+            'price_id' => $price->uuid
+        ])->assertJsonValidationErrors(['price_id']);
+    }
+
+    /** @test */
     public function add_custom_price_to_reservation()
     {
         $reservation = factory(Reservation::class)->create();

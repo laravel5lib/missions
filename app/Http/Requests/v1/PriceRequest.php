@@ -6,6 +6,7 @@ use App\Models\v1\Cost;
 use App\Models\v1\Price;
 use Dingo\Api\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class PriceRequest extends FormRequest
 {
@@ -42,6 +43,12 @@ class PriceRequest extends FormRequest
                 if ($this->assertPaymentDatesAreInvalid()) {
                     $validator->errors()->add('payments', 'Payment dates are invalid.');
                 }
+            } else {
+
+                if ( ! $this->assertUniquePrice()) {
+                    $validator->errors()->add('price_id', 'This price has already been added.');
+                }
+
             }
 
         });
@@ -158,6 +165,20 @@ class PriceRequest extends FormRequest
         return Price::whereUuid($priceId)->firstOrFail()->cost;
     }
 
+    private function assertUniquePrice()
+    {
+        $price = DB::table('prices')
+            ->join('priceables', function ($join) {
+                $join->on('prices.id', '=', 'priceables.price_id')
+                     ->where('priceable_type', $this->segment(2))
+                     ->where('priceable_id', $this->segment(3));
+            })
+            ->where('uuid', $this->input('price_id'))
+            ->first();
+
+        return is_null($price) ?: false;
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -180,14 +201,7 @@ class PriceRequest extends FormRequest
     private function newPriceRules()
     {
         return [
-            'price_id'  => [
-                'required_without:cost_id',
-                'exists:prices,uuid',
-                Rule::unique('priceables')->where(function ($query) {
-                    return $query->where('priceable_type', $this->segment(2))
-                        ->where('priceable_id', $this->segment(3));
-                })
-            ],
+            'price_id'  => 'required_without:cost_id|exists:prices,uuid',
             'cost_id'   => 'required_without:price_id|exists:costs,id',
             'active_at' => 'nullable|date',
             'amount'    => 'required_without:price_id|numeric',
@@ -206,15 +220,7 @@ class PriceRequest extends FormRequest
     private function updatePriceRules()
     {
         return [
-            'price_id'  => [
-                'sometimes',
-                'required_without:cost_id',
-                'exists:prices,uuid',
-                Rule::unique('priceables')->where(function ($query) {
-                    return $query->where('priceable_type', $this->segment(2))
-                        ->where('priceable_id', $this->segment(3));
-                })->ignore($this->segment(5))
-            ],
+            'price_id'  => 'sometimes|required_without:cost_id|exists:prices,uuid',
             'cost_id'   => 'sometimes|required_without:price_id|exists:costs,id',
             'active_at' => 'nullable|date',
             'amount'    => 'sometimes|required_without:price_id|numeric',

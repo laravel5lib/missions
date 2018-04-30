@@ -94,14 +94,18 @@ trait HasPricing
      * @param array $price
      * @return void
      */
-    private function createNewPriceAndAttachToModel(array $price)
+    private function createNewPriceAndAttachToModel(array $data)
     {
-        return DB::transaction(function() use($price) {
+        return DB::transaction(function() use($data) {
             $price = $this->prices()->create([
-                'cost_id' => isset($price['cost_id']) ? $price['cost_id'] : null,
-                'amount' => isset($price['amount']) ? $price['amount'] : null,
-                'active_at' => isset($price['active_at']) ? $price['active_at'] : null,
+                'cost_id' => isset($data['cost_id']) ? $data['cost_id'] : null,
+                'amount' => isset($data['amount']) ? $data['amount'] : null,
+                'active_at' => isset($data['active_at']) ? $data['active_at'] : null,
             ]);
+
+            if (isset($data['payments']) && ! empty($data['payments'])) {
+                $price->syncPayments($data['payments']);
+            }
             
             $this->attachPriceToModel($price->id);
         });

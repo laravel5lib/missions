@@ -76,6 +76,14 @@ export default {
                     this.$root.$emit('form:error', error);
 
                 });
+        },
+        loadData(data) {
+            let that = this;
+            _.each(data, function(value, key) {
+                that.form[key] = value;
+                that.form.set(key, value);
+            });
+            this.$forceUpdate();
         }
     },
 
@@ -88,15 +96,10 @@ export default {
                 that.form.set(key, value);
             });
         }
-
+        
         if (this.initial) {
             // set any predefined values
-            let that = this;
-            _.each(this.initial, function(value, key) {
-                that.form[key] = value;
-                that.form.set(key, value);
-            });
-            this.$forceUpdate();
+            this.loadData(this.initial);
         }
     }
 }

@@ -60,7 +60,7 @@
                         </input-date>
                     </div>
                     <div class="col-xs-2 col-md-2">
-                        <input-number name="days_grace" :placeholder="3" v-model="payment.days_grace">
+                        <input-number name="grace_days" :placeholder="3" v-model="payment.grace_days">
                             <span class="help-block" slot="help-text">Days Grace</span>
                         </input-number>
                     </div>

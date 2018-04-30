@@ -1,18 +1,18 @@
 <template>
-<ajax-form method="put" :action="'/' + priceableType + '/' + priceableId + '/prices/' + id">
+<ajax-form method="put" :action="'/' + priceableType + '/' + priceableId + '/prices/' + id" ref="ajax">
 
-    <template slot-scope="props">
+    <template slot-scope="{ form }">
         <div class="row">
             <div class="col-md-6">
 
-                <select-cost name="cost_id" :value="price.cost.id">
+                <select-cost name="cost_id" v-model="form.cost.id">
                     <label slot="label">Select a Cost</label>
                     <span class="help-block" slot="help-text"><a href="">Manage these options &raquo;</a></span>
                 </select-cost>
 
             </div>
             <div class="col-md-6">
-                <input-currency name="amount" :value="price.amount">
+                <input-currency name="amount" v-model="form.amount">
                     <label slot="label">Amount</label>
                 </input-currency>
             </div>
@@ -20,34 +20,60 @@
         <div class="row" v-if="ui.showActiveDate">
             <div class="col-md-6">
 
-                <input-date name="active_at" :value="price.active_at">
+                <input-date name="active_at" v-model="form.active_at">
                     <label slot="label">Start Date</label>
                     <span class="help-block" slot="help-text">When does this cost go into effect?</span>
                 </input-date>
 
             </div>
         </div>
-        <div class="row" v-if="ui.showPayments">
+        <div class="row" v-if="ui.showPayments" :class="{'has-error' : form.errors.has('payments')}">
             <div class="col-md-12">
                 <hr class="divider">
-                <label>Payments</label>
+                
                 <div class="row">
+                    <div class="col-xs-12">
+                        <div class="alert alert-warning">
+                            <div class="row">
+                                <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
+                                <div class="col-xs-11">The percentages due are for the cumulative total of all costs that apply, not this price alone (i.e. registration + room + flight, etc.).</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <label>Payments</label>
+                <span class="help-block" 
+                    v-text="form.errors.get('payments')" 
+                    v-if="form.errors.has('payments')">
+                </span>
+
+                <div class="row" v-for="(payment, index) in form.payments" :key="index">
                     <div class="col-xs-3 col-md-2">
-                        <input-number name="payments.percent" :placeholder="50">
+                        <input-number name="percentage_due" v-model="payment.percentage_due" :placeholder="50">
                             <span class="help-block" slot="help-text">Percentage due</span>
                         </input-number>
                     </div>
                     <div class="col-xs-6 col-md-4">
-                        <input-date name="due_at">
+                        <input-date name="due_at" v-model="payment.due_at">
                             <span class="help-block" slot="help-text">Due Date</span>
                         </input-date>
                     </div>
-                    <div class="col-xs-3 col-md-2">
-                        <input-number name="payments.grace" :placeholder="3">
+                    <div class="col-xs-2 col-md-2">
+                        <input-number name="grace_days" :placeholder="3" v-model="payment.grace_days">
                             <span class="help-block" slot="help-text">Days Grace</span>
                         </input-number>
                     </div>
+                    <div class="col-xs-1 col-md-2">
+                        <p class="form-control-static">
+                            <a class="small" role="button" @click.prevent="removePayment(index)">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </p>
+                    </div>
                 </div>
+
+                <a role="button" class="small" @click.prevent="addPayment"><i class="fa fa-plus-circle"></i> Add another payment</a>
             </div>
         </div>
         <div class="row">
@@ -67,11 +93,25 @@ export default {
 
     data() {
         return {
-            price: null,
             ui: {
                 showActiveDate: false,
                 showPayments: false
             }
+        }
+    },
+
+    methods: {
+        addPayment() {
+            this.$refs.ajax.form.payments.push({
+                percentage_due: 0,
+                due_at: null,
+                grace_days: 0
+            });
+            this.$forceUpdate()
+        },
+        removePayment(index) {
+            this.$refs.ajax.form.payments.splice(index, 1);
+            this.$forceUpdate()
         }
     },
 
@@ -80,7 +120,8 @@ export default {
         this.$http
             .get('/' + this.priceableType + '/' + this.priceableId + '/prices/' + this.id)
             .then(response => {
-                this.price = response.data.data;
+                this.$refs.ajax.loadData(response.data.data);
+                this.$forceUpdate();
             })
             .catch(error => {
                 console.log(error);

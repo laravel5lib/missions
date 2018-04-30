@@ -21,7 +21,7 @@
     <template slot="message">Please check the form for errors and try again.</template>
 </alert-error>
 
-<alert-success redirect="/admin/campaigns/">
+<alert-success redirect="/admin/campaigns/{{ $campaign->id }}/prices/">
     <template slot="title">Saved</template>
     <template slot="message">The price was updated.</template>
     <template slot="cancel">Keep Working</template>

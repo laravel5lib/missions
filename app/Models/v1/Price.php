@@ -32,7 +32,7 @@ class Price extends Model
      *
      * @var array
      */
-    protected $fillable = ['cost_id', 'price_id', 'amount', 'active_at'];
+    protected $fillable = ['cost_id', 'price_id', 'amount', 'active_at', 'grace_days'];
 
     /**
      * Attributes that should be cast to dateTime instances.

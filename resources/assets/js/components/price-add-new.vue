@@ -50,17 +50,17 @@
 
                 <div class="row" v-for="(payment, index) in form.payments" :key="index">
                     <div class="col-xs-3 col-md-2">
-                        <input-number name="percentage_due" v-model="payment.percentage_due" :placeholder="50">
+                        <input-number :name="'payments.'+index+'.percentage_due'" v-model="payment.percentage_due" :placeholder="50">
                             <span class="help-block" slot="help-text">Percentage due</span>
                         </input-number>
                     </div>
                     <div class="col-xs-6 col-md-4">
-                        <input-date name="due_at" v-model="payment.due_at">
+                        <input-date :name="'payments.'+index+'.due_at'" v-model="payment.due_at">
                             <span class="help-block" slot="help-text">Due Date</span>
                         </input-date>
                     </div>
                     <div class="col-xs-2 col-md-2">
-                        <input-number name="grace_days" :placeholder="3" v-model="payment.grace_days">
+                        <input-number :name="'payments.'+index+'.grace_days'" :placeholder="3" v-model="payment.grace_days">
                             <span class="help-block" slot="help-text">Days Grace</span>
                         </input-number>
                     </div>

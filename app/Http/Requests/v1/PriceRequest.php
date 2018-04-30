@@ -43,11 +43,25 @@ class PriceRequest extends FormRequest
                 if ($this->assertPaymentDatesAreInvalid()) {
                     $validator->errors()->add('payments', 'Payment dates are invalid.');
                 }
+
+                if ( ! $this->assertUniqueCost()) {
+                    $validator->errors()->add('cost_id', 'This cost has already been used.');
+                }
+
+                // if ($this->assertActivationDateRequired()) {
+                //     $validator->errors()->add('active_at', 'An effective date is required.');
+                // }
+
             } else {
 
+                // TEST THIS!!
                 if ( ! $this->assertUniquePrice()) {
                     $validator->errors()->add('price_id', 'This price has already been added.');
                 }
+
+                // if ( ! $this->assertHasOneIncrementalCost()) {
+                //     $validator->errors()->add('price_id', 'Only one incrementing cost can be added.');
+                // }
 
             }
 
@@ -165,6 +179,11 @@ class PriceRequest extends FormRequest
         return Price::whereUuid($priceId)->firstOrFail()->cost;
     }
 
+    /**
+     * Assert that the price being added is unique
+     *
+     * @return boolean
+     */
     private function assertUniquePrice()
     {
         $price = DB::table('prices')
@@ -245,7 +264,15 @@ class PriceRequest extends FormRequest
             'cost_id.exists' => 'Cost ID is not valid.',
             'active_at.date' => 'Is not a valid date.',
             'amount.required_without' => 'Please enter an amount.',
-            'amount.numeric' => 'Amount is not a valid format.'
+            'amount.numeric' => 'Amount is not a valid format.',
+            'payments.*.percentage_due.required' => 'Please enter a percentage due.',
+            'payments.*.percentage_due.numeric' => 'Percentage due is invalid.',
+            'payments.*.percentage_due.min' => 'Percentage due must be at least 1%.',
+            'payments.*.percentage_due.max' => 'Percentage due cannot be more than 100%.',
+            'payments.*.due_at.required' => 'Please provide a due date.',
+            'payments.*.due_at.date' => 'Due date is invalid.',
+            'payments.*.grace_days.numeric' => 'Grace days value is invalid.',
+            'payments.*.grace_days.min' => 'Grace days must be a positive number.'
         ];
     }
 

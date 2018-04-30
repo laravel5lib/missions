@@ -46,7 +46,7 @@ class TripsController extends Controller
         ];
         
         if (auth()->user()->can('view', \App\Models\v1\Cost::class)) {
-            $links['admin/trips/'.$trip->id.'/pricing'] = 'Pricing';
+            $links['admin/trips/'.$trip->id.'/prices'] = 'Pricing';
         }
 
         $links['admin/trips/'.$trip->id.'/description'] = 'Public Page';

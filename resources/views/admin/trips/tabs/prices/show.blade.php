@@ -1,39 +1,24 @@
 @extends('admin.layouts.default')
 
+@section('header')
+    @breadcrumbs(['links' => [
+        'admin' => 'Dashboard', 
+        'admin/campaigns/'.$trip->campaign->id.'/trips' => 'Trips', 
+        'admin/trips/'.$trip->id =>  $trip->group->name.' - '.ucfirst($trip->type).' Trip',
+        'admin/trips/'.$trip->id.'/prices' =>  'Pricing',
+        'active' => $price->cost->name
+    ]])
+    @endbreadcrumbs
+@endsection
+
 @section('content')
-<div class="white-header-bg">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12">
-                <ul class="breadcrumb">
-                    <li>
-                        <a href="{{ url('/admin/campaigns/'.$trip->campaign->id.'/trips') }}">
-                            Trips
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url('/admin/trips/'.$trip->id) }}">
-                            {{ $trip->group->name }} - {{ ucfirst($trip->type) }} Trip
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url('/admin/trips/'.$trip->id.'/pricing') }}">
-                            Pricing
-                        </a>
-                    </li>
-                    <li class="active">{{ $price->cost->name }}</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
 <hr class="divider inv lg">
 <alert-error>
     <template slot="title">Oops!</template>
     <template slot="message">Please check the form for errors and try again.</template>
 </alert-error>
 
-<alert-success redirect="/admin/campaigns/">
+<alert-success redirect="/admin/trips/{{ $trip->id }}/pricing">
     <template slot="title">Saved</template>
     <template slot="message">The price was updated.</template>
     <template slot="cancel">Keep Working</template>
@@ -82,7 +67,7 @@
     <div class="row">
         <div class="col-md-4">
             <h5>Edit Price</h5>
-            <p class="text-muted">USE CAUTION! Making changes will effect trips and reservations including fundraising goals and deadlines.</p>
+            <p class="text-muted">USE CAUTION! Making changes will affect the trip and reservations including fundraising goals and deadlines.</p>
         </div>
         <div class="col-md-8">
             @component('panel')
@@ -101,7 +86,7 @@
     <div class="row">
         <div class="col-md-4">
             <h5>Delete</h5>
-			<p class="text-muted">USE CAUTION! Removing this cost will also remove it from any trips or reservations. This will affect fundraising goals and deadlines.</p>
+			<p class="text-muted">USE CAUTION! Removing this cost will also remove it from the trip and it's reservations. This will affect fundraising goals and deadlines.</p>
         </div>
         <div class="col-md-8">
             @component('panel')

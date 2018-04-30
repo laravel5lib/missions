@@ -1,21 +1,18 @@
 @extends('layouts.admin')
 
+@section('header')
+    @breadcrumbs(['links' => [
+        'admin' => 'Dashboard', 
+        'admin/campaigns' => 'Campaigns', 
+        'admin/campaigns/'.$campaign->id.'/prices' => 'Pricing',
+        'active' => $price->cost->name
+    ]])
+    @endbreadcrumbs
+@endsection
+
 @section('content')
-<div class="white-header-bg">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12">
-                <ul class="breadcrumb">
-                    <li><a href="{{ url('/admin') }}">Dashboard</a></li>
-                    <li><a href="{{ url('/admin/campaigns') }}">Campaigns</a></li>
-                    <li><a href="{{ url('/admin/campaigns/'.$campaign->id.'/prices') }}">Pricing</a></li>
-                    <li class="active">{{ $price->cost->name }}</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
 <hr class="divider inv lg">
+
 <alert-error>
     <template slot="title">Oops!</template>
     <template slot="message">Please check the form for errors and try again.</template>

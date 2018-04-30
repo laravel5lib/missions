@@ -46,7 +46,7 @@ export default {
                 if (value) {
                     this.$http.delete('/' + this.priceableType + '/' + this.priceableId + '/prices/' + this.id)
                         .then((response) => {
-                            window.location.href = '/admin/' + this.priceableType + '/' + this.priceableId;
+                            window.location.href = '/admin/' + this.priceableType + '/' + this.priceableId + '/prices';
                         });
                 }
             })

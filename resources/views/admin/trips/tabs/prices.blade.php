@@ -50,7 +50,7 @@
                 <ajax-form method="post" action="trips/{{ $trip->id }}/prices">
                     <template slot-scope="{ form }">
                         <div class="col-md-6">
-                            <select-price name="price_id" url="campaigns/{{ $trip->campaign_id }}/prices" v-model="form.cost_id">
+                            <select-price name="price_id" url="campaigns/{{ $trip->campaign_id }}/prices" v-model="form.price_id">
                                 <label slot="label">Select a Cost</label>
                             </select-price>
                         </div>

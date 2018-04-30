@@ -44,9 +44,9 @@ class PriceRequest extends FormRequest
                     $validator->errors()->add('payments', 'Payment dates are invalid.');
                 }
 
-                if ( ! $this->assertUniqueCost()) {
-                    $validator->errors()->add('cost_id', 'This cost has already been used.');
-                }
+                // if ( ! $this->assertUniqueCost()) {
+                //     $validator->errors()->add('cost_id', 'This cost has already been used.');
+                // }
 
                 // if ($this->assertActivationDateRequired()) {
                 //     $validator->errors()->add('active_at', 'An effective date is required.');
@@ -54,7 +54,6 @@ class PriceRequest extends FormRequest
 
             } else {
 
-                // TEST THIS!!
                 if ( ! $this->assertUniquePrice()) {
                     $validator->errors()->add('price_id', 'This price has already been added.');
                 }
@@ -221,7 +220,13 @@ class PriceRequest extends FormRequest
     {
         return [
             'price_id'  => 'required_without:cost_id|exists:prices,uuid',
-            'cost_id'   => 'required_without:price_id|exists:costs,id',
+            'cost_id'   => [
+                'required_without:price_id',
+                'exists:costs,id',
+                Rule::unique('prices')
+                    ->where('model_type', $this->segment(2))
+                    ->where('model_id', $this->segment(3))
+            ],
             'active_at' => 'nullable|date',
             'amount'    => 'required_without:price_id|numeric',
             'payments'  => 'nullable|array',
@@ -240,7 +245,14 @@ class PriceRequest extends FormRequest
     {
         return [
             'price_id'  => 'sometimes|required_without:cost_id|exists:prices,uuid',
-            'cost_id'   => 'sometimes|required_without:price_id|exists:costs,id',
+            'cost_id'   => [
+                'sometimes',
+                'required_without:price_id',
+                'exists:costs,id',
+                Rule::unique('prices')
+                    ->where('model_type', $this->segment(2))
+                    ->where('model_id', $this->segment(3))
+            ],
             'active_at' => 'nullable|date',
             'amount'    => 'sometimes|required_without:price_id|numeric',
             'payments'  => 'nullable|array',
@@ -262,6 +274,7 @@ class PriceRequest extends FormRequest
             'price_id.exists' => 'Price ID is not valid.',
             'cost_id.required_without' => 'Please provide a cost ID.',
             'cost_id.exists' => 'Cost ID is not valid.',
+            'cost_id.unique' => 'Cost has already been used.',
             'active_at.date' => 'Is not a valid date.',
             'amount.required_without' => 'Please enter an amount.',
             'amount.numeric' => 'Amount is not a valid format.',

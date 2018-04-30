@@ -149,6 +149,17 @@ class TripPriceTest extends TestCase
     }
 
     /** @test */
+    public function validates_that_campaign_price_is_unique()
+    {
+        $trip = $this->setupTripWithPrices();
+        $price = $trip->prices()->first();
+
+        $this->json('POST', "/api/trips/{$trip->id}/prices", [
+            'price_id' => $price->uuid
+        ])->assertJsonValidationErrors(['price_id']);
+    }
+
+    /** @test */
     public function add_custom_price_to_a_trip()
     {
         $trip = factory(Trip::class)->create();
@@ -192,14 +203,21 @@ class TripPriceTest extends TestCase
     }
 
     /** @test */
-    public function validates_that_price_is_unique()
+    public function validates_that_cost_is_unique_when_adding_a_custom_price_to_trip()
     {
-        $trip = $this->setupTripWithPrices();
-        $price = $trip->prices()->first();
+        $trip = factory(Trip::class)->create();
+        $cost = factory(Cost::class)->create();
+        $price = factory(Price::class)->create([
+            'cost_id' => $cost->id,
+            'model_id' => $trip->id, 
+            'model_type' => 'trips'
+        ]);
 
         $this->json('POST', "/api/trips/{$trip->id}/prices", [
-            'price_id' => $price->uuid
-        ])->assertJsonValidationErrors(['price_id']);
+            'cost_id' => $cost->id,
+            'amount' => 1500.00,
+            'active_at' => '01/01/2018'
+        ])->assertJsonValidationErrors(['cost_id']);
     }
 
     /** @test */

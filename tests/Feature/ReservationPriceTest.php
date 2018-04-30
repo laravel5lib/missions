@@ -117,6 +117,24 @@ class ReservationPriceTest extends TestCase
     }
 
     /** @test */
+    public function validates_that_cost_is_unique_when_adding_a_custom_price_to_reservation()
+    {
+        $reservation = factory(Reservation::class)->create();
+        $cost = factory(Cost::class)->create();
+        $price = factory(Price::class)->create([
+            'cost_id' => $cost->id,
+            'model_id' => $reservation->id, 
+            'model_type' => 'reservations'
+        ]);
+
+        $this->json('POST', "/api/reservations/{$reservation->id}/prices", [
+            'cost_id' => $cost->id,
+            'amount' => 1500.00,
+            'active_at' => '01/01/2018'
+        ])->assertJsonValidationErrors(['cost_id']);
+    }
+
+    /** @test */
     public function get_specific_price_for_reservation()
     {
         $reservation = factory(Reservation::class)->create();

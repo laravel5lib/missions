@@ -11,50 +11,56 @@
 <hr class="divider inv lg">
 
     <div class="container-fluid">
-        <div class="col-xs-12 col-md-2">
-            @include('admin.partials._toolbar')
+        <div class="col-xs-12 col-md-9">
+            <div class="row">
+                <fetch-json url="/campaigns?current=true">
+                <div class="col-sm-12" slot-scope="{ json: campaigns, loading, pagination }">
+                    @component('panel')
+                        @slot('title')
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h5>Current Campaigns</h5>
+                                </div>
+                                <div class="col-sm-6">
+                                    
+                                </div>
+                            </div>
+                        @endslot
+                        <table class="table">
+                            <tr class="active">
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Country</th>
+                                <th>Groups</th>
+                                <th>Status</th>
+                            </tr>
+                            <tr v-if="loading"><td>Loading...</td></tr>
+                            <tr v-for="(campaign, index) in campaigns" :key="campaign.id" v-else>
+                                <td>@{{ index+1 }}</td>
+                                <td class="col-sm-5">
+                                    <strong><a :href="'/admin/campaigns/' + campaign.id">@{{ campaign.name }}</a></strong>
+                                </td>
+                                <td>
+                                    @{{ campaign.country }}
+                                </td>
+                                <td class="col-sm-1 text-right">
+                                    <strong>@{{ campaign.groups_count}}</strong>
+                                </td>
+                                <td>
+                                    @{{ campaign.status}}
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="panel-footer" v-if="pagination.total > pagination.per_page">
+                            <pager :pagination="pagination"></pager>
+                        </div>
+                    @endcomponent
+                </div>
+                </fetch-json>
+            </div>
         </div>
-        <div class="col-xs-12 col-md-10">
-
-            <div class="row">
-                <div class="col-xs-8">
-                    <ul class="nav nav-tabs">
-                        <li role="presentation" class="active"><a href="#active" data-toggle="tab"><i
-                                        class="fa fa-bolt"></i> Active</a></li>
-                        <li role="presentation"><a href="#archive" data-toggle="tab"><i class="fa fa-archive"></i> Archived</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-xs-4 text-right">
-                    @can('create', \App\Models\v1\Campaign::class)
-                    <hr class="divider inv sm">
-                    <a href="/admin/campaigns/create" class="btn btn-primary btn-sm">
-                        <i class="fa fa-plus icon-left"></i> New
-                    </a>
-                    @endcan
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="active">
-                            <div class="panel panel-default">
-                                <div class="panel-body">
-                                    <admin-campaigns-list type="current"></admin-campaigns-list>
-                                </div><!-- end panel-body -->
-                            </div><!-- end panel -->
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="archive">
-                            <div class="panel panel-default">
-                                <div class="panel-body">
-                                    <admin-campaigns-list type="archived"></admin-campaigns-list>
-                                </div><!-- end panel-body -->
-                            </div><!-- end panel -->
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="col-xs-12 col-md-3">
+            filters
         </div>
     </div>
 </div>

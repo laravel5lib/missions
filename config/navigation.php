@@ -107,7 +107,7 @@ return [
             ],
             [
                 'icon' => 'users',
-                'label' => 'Groups',
+                'label' => 'Organizations',
                 'url' => 'admin/groups',
                 'action' => 'view',
                 'policy' => 'App\Models\v1\Group'

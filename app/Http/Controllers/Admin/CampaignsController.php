@@ -64,6 +64,7 @@ class CampaignsController extends Controller
         $links = [
             'admin/campaigns/'.$campaign->id => 'Overview',
             'admin/campaigns/'.$campaign->id.'/prices' => 'Pricing',
+            'admin/campaigns/'.$campaign->id.'/groups' => 'Groups',
         ];
 
         if (auth()->user()->can('view', \App\Models\v1\Trip::class)) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\GroupResource;
 
 class CampaignGroupController extends Controller
 {
@@ -17,7 +18,7 @@ class CampaignGroupController extends Controller
     {
         $groups = Campaign::findOrFail($campaignId)->groups()->paginate(20);
 
-        return response()->json([], 200);
+        return GroupResource::collection($groups);
     }
 
     /**

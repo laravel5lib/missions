@@ -24,7 +24,7 @@ class CampaignGroupsTest extends TestCase
              ->assertStatus(200)
              ->assertJsonStructure([
                  'data' => [
-                     ['id', 'status', 'group']
+                     ['id', 'name', 'status', 'meta']
                  ]
              ]);
     }

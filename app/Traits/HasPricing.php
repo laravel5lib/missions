@@ -36,19 +36,18 @@ trait HasPricing
     {
         return $this->priceables()->whereHas('cost', function ($q) {
 
-            return $q->whereType('incremental');
+            return $q->type('incremental');
+
+        })->whereHas('payments', function ($q) {
+
+            return $q->whereDate('due_at', '>=', now());
 
         })->first();
+    }
 
-        // return $this->priceables()->whereHas('cost', function ($q) {
-
-        //     return $q->type('incremental');
-
-        // })->whereHas('payments', function ($q) {
-
-        //     return $q->whereDate('due_at', '>=', now());
-
-        // })->orderBy('payments.due_at')->first();
+    public function getUpcomingDeadline()
+    {
+        return optional($this->getCurrentRate())->payments->first()->due_at;
     }
 
     /**

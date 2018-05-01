@@ -12,6 +12,8 @@ use Artesaos\SEOTools\Facades\SEOMeta;
 
 Route::get('/', 'AdminController@index')->middleware(['can:access_backend']);
 
+Route::view('costs', 'admin.costs.index');
+
 Route::get('users/stop', 'UsersController@stopImpersonate');
 Route::get('users/{id}/impersonate', 'UsersController@impersonate');
 

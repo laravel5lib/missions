@@ -89,7 +89,7 @@
           	<h5>Not quite ready to join the team? Schedule a call to speak with one of our team members.</h5>
         </div><!-- end col -->
         <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1 text-center home-social">
-          	<a href="{{ url('teams') }}" class="btn btn-primary btn-sm">Schedule A Call</a>
+          	<a href="{{ url('1n1d19-interest') }}" class="btn btn-primary btn-sm">Schedule A Call</a>
         </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->

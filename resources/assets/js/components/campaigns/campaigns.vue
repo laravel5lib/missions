@@ -16,9 +16,6 @@
 			<h4>Current Trips</h4>
 			<hr class="divider">
 		</div>
-		<div class="col-xs-6 text-right">
-			<a v-if="campaigns.length > 3" @click="seeAll" class="btn btn-primary btn-sm">See All</a>
-		</div>
 	</div>
 	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
 		<spinner ref="spinner" global size="sm" text="Loading"></spinner>
@@ -42,6 +39,9 @@
 				</div><!-- end panel-body -->
 			</div><!-- end panel -->
 		</div><!-- end col -->
+		<div class="col-xs-12 text-center">
+			<a v-if="campaigns.length > 8" @click="seeAll" class="btn btn-primary btn-sm">See All</a>
+		</div>
 	</div>
 </div>
 </template>
@@ -52,7 +52,7 @@
 		data(){
 			return {
 				campaigns: [],
-				campaignsLimit: 3,
+				campaignsLimit: 8,
 				resource: this.$resource('campaigns', { published: true, current: true})
 			}
 		},

@@ -3,11 +3,11 @@
 @section('content')
     @component('carousel', ['id' => 'carousel-example-generic', 'class' => 'campaign-carousel' ])
         <div class="item active">
-            <img src="../images/advance/adv-2018-header.jpg" alt="Advance 2018">
+            <img src="../images/1n1d19/1n1d19-campaign-banner.jpg" alt="1Nation1Day 2019">
             <div class="carousel-caption">
-                <h6 class="text-uppercase">Advance 2018</h6>
-                <h3>3 Nations 1 Generation</h3>
-                <p>On July 21-29, 2018 we will take the next step in discipling nations by returning to all 3 1Nation1Day nations.</p>
+                <h6 class="text-uppercase">Peru</h6>
+                <h3>1Nation1Day 2019</h3>
+                <p>On June 20-July 2, 2019, 5,000 missionaries will ascend on Peru, marking the largest missions movement in History.</p>
             </div><!-- end carousel -->
         </div><!-- end item -->
     @endcomponent

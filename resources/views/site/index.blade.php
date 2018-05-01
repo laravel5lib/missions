@@ -22,14 +22,47 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 </script>
 @endsection
 @section('content')
+<div class="onenation-header">
+    <div class="container">
+        <div class="row">
+          <div class="col-sm-8 col-sm-offset-2 text-center">
+            <img width="120px" src="../images/1n1d19/1n1d19-logo-light.png" alt="1Nation1Day Peru">
+            <hr class="divider inv lg">
+            <img class="img-responsive" src="../images/1n1d19/acw-type.png" alt="All Creation Waits">
+            <hr class="divider inv lg">
+              <h4 class="text-uppercase">June 20-July 2, 2019</h4>
+              <hr class="divider inv xlg">
+          </div><!-- end col -->
+        </div><!-- end row -->
+        <div class="row">
+          <div class="col-sm-8 col-sm-offset-2 text-center">
+              <div class="video-outer">
+                <div class="video-inner">
+                  <div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/260853749?title=0&byline=0&portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+                </div>
+              </div>
+          </div><!-- end col -->
+        </div><!-- end row -->
+        <div class="row">
+          <hr class="divider inv xlg">
+          <div class="col-xs-12 col-sm-8 col-md-3 col-xs-offset-0 col-sm-offset-2 col-md-offset-3 text-center">
+              <a href="{{ url('1n1d19') }}" class="btn btn-primary btn-lg btn-block" style="margin-bottom:10px;background-color:#44f0a7;border-color:#44f0a7;">Learn More</a>
+          </div><!-- end col -->
+          <div class="col-xs-12 col-sm-8 col-md-3 col-sm-offset-2 col-md-offset-0 text-center">
+              <a href="{{ url('teams') }}" class="btn btn-primary btn-lg btn-block" style="margin-bottom:10px;background-color:#44f0a7;border-color:#44f0a7;">Bring My Group</a>
+          </div><!-- end col -->
+        </div><!-- end row -->
+    </div><!-- end container -->
+</div><!-- end onenation-header -->
 <div class="home-campaign-header">
   <div class="container">
       <div class="col-xs-12 col-sm-10 col-md-6 col-xs-offset-0 col-sm-offset-1 col-md-offset-0">
           <h6 class="text-uppercase">2018 Campaign</h6>
           <h2 style="display:inline-block;border-bottom:6px solid #f6323e;line-height:0.6em;">Advance</h2>
           <h4>3 Nations 1 Generation</h4>
-          <p style="margin-right:20px;">1Nation1Day is the moment that creates the movement. It's a movement of young people following their dreams; teachers mentoring their students; the Body of Christ united across borders and denominations; pastors equiped; the church mobilized to lead; women empowered to stand for justice; millions encountering God!</p>
-          <a href="{{ url('trips') }}" class="btn btn-primary hidden-xs">Go On A Trip</a>
+          <p style="font-size:12px;margin-right:20px;">1Nation1Day was never the end, it's just the beginning. It's a movement of young people following their dreams; teachers mentoring their students; the Body of Christ united across borders and denominations; pastors equiped; the church mobilized to lead; women empowered to stand for justice; millions encountering God!</p>
+          <hr class="divider inv">
+          <a href="{{ url('trips') }}" class="btn btn-default btn-sm hidden-xs">Go On Advance</a>
           <div class="row visible-xs">
             <div class="col-xs-8">
               <a href="{{ url('trips') }}" class="btn btn-primary btn-block">Go On A Trip</a>

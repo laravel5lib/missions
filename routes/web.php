@@ -4,6 +4,16 @@ use App\Models\v1\Fundraiser;
 use Illuminate\Support\Facades\Route;
 use Artesaos\SEOTools\Facades\SEOMeta;
 
+Route::get('/test', function() {
+    $campaign = \App\Models\v1\Campaign::where('name', 'test')->first();
+        
+    if (!$campaign) {
+        $campaign = factory('App\Models\v1\Campaign')->create(['name' => 'test']);
+        $campaign->slug()->create(['url' => time()]);
+    }
+    
+    return view('site/campaigns/show', compact('campaign'));
+});
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes

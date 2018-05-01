@@ -22,7 +22,7 @@
 	@if($campaign->page_src)
 		@include('site/campaigns/partials/' . $campaign->page_src)
 	@else
-		@include('site/campaigns/partials/_generic')
+		@include('site/campaigns/partials/_1n1d2019')
 	@endif
 
 	@component('section', ['class' => 'dark-bg-primary'])

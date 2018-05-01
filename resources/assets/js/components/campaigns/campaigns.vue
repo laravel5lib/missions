@@ -22,7 +22,7 @@
 	</div>
 	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
 		<spinner ref="spinner" global size="sm" text="Loading"></spinner>
-		<div class="col-xs-12 col-sm-6 col-md-4" v-for="campaign in limitBy(campaigns, campaignsLimit)" style="display:flex">
+		<div class="col-xs-12 col-sm-6 col-md-3" v-for="campaign in limitBy(campaigns, campaignsLimit)" style="display:flex">
 			<div class="panel panel-default">
 				<a class="hidden-xs hidden-sm" :href="campaign.page_url" role="button">
 					<img :src="campaign.avatar+'?w=400&h=400&fit=stretch'" :alt="campaign.name" class="img-responsive">

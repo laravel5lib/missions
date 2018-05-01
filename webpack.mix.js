@@ -38,5 +38,5 @@ mix.copyDirectory('node_modules/font-awesome/fonts', 'public/fonts');
 mix.version();
 
 mix.browserSync({
-    proxy: 'missions.dev'
+    proxy: 'missions.test'
 });

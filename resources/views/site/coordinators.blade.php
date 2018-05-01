@@ -76,7 +76,7 @@ $('.launch-modal').on('click', function(e){
                       <img src="/images/coordinators/docs-icon.png" width="50px" height="50px">
                       <h6 class="text-uppercase">1N1D19 Launch Media</h6>
                       <p class="small hidden-xs">Including logos, graphics, posters, signage and more</p>
-                      <a href="https://www.dropbox.com/sh/9n53q06ncr70ynw/AAC1wkufiUJwyttoq3bXNbO7a?dl=0&preview=1N1D19-Promo-Pack-4-18.zip" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <a href="https://www.dropbox.com/s/f9ughy785agop7j/1N1D19-promo-pack.zip?dl=1" class="btn btn-sm btn-primary-hollow">Download</a>
                       <hr class="divider inv">
                     </div>
                   </div>
@@ -88,7 +88,7 @@ $('.launch-modal').on('click', function(e){
                       <img src="/images/coordinators/vid-icon.png" width="50px" height="50px">
                       <h6 class="text-uppercase">1N1D19 Promo Video</h6>
                       <p class="small hidden-xs">Great for assisting in delivering the full vision on your Launch Day</p>
-                      <a href="https://www.dropbox.com/sh/9n53q06ncr70ynw/AAC1wkufiUJwyttoq3bXNbO7a?dl=0&preview=1N1D19-Full-Promo.zip" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <a href="https://www.dropbox.com/s/hasb44papw6kz3l/1N1D19-Full-Promo.zip?dl=1" class="btn btn-sm btn-primary-hollow">Download</a>
                       <hr class="divider inv">
                     </div>
                   </div>
@@ -100,7 +100,7 @@ $('.launch-modal').on('click', function(e){
                       <img src="/images/coordinators/vid-icon.png" width="50px" height="50px">
                       <h6 class="text-uppercase">1N1D19 Teaser Video</h6>
                       <p class="small hidden-xs">Great for announcements in the weeks prior to launch</p>
-                      <a href="https://www.dropbox.com/sh/9n53q06ncr70ynw/AAC1wkufiUJwyttoq3bXNbO7a?dl=0&preview=1N1D19-Teaser-16x9.zip" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <a href="https://www.dropbox.com/s/pgetlm50v4kiw56/1N1D19-Teaser.zip?dl=1" class="btn btn-sm btn-primary-hollow">Download</a>
                       <hr class="divider inv">
                     </div>
                   </div>
@@ -114,7 +114,7 @@ $('.launch-modal').on('click', function(e){
                       <img src="/images/coordinators/vid-icon.png" width="50px" height="50px">
                       <h6 class="text-uppercase">1N1D19 Short Trailer</h6>
                       <p class="small hidden-xs">Great for announcements in the weeks following launch</p>
-                      <a href="https://www.dropbox.com/sh/9n53q06ncr70ynw/AAC1wkufiUJwyttoq3bXNbO7a?dl=0&preview=1N1D19-Short-Promo.zip" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <a href="https://www.dropbox.com/s/0ayszte3zexos9i/1N1D19-Short-Trailer.zip?dl=1" class="btn btn-sm btn-primary-hollow">Download</a>
                       <hr class="divider inv">
                     </div>
                   </div>
@@ -126,7 +126,7 @@ $('.launch-modal').on('click', function(e){
                       <img src="/images/coordinators/cam-icon.png" width="50px" height="50px">
                       <h6 class="text-uppercase">1N1D19 Launch Capture</h6>
                       <p class="small hidden-xs">Instructions for your media team to capture your launch</p>
-                      <a href="https://www.dropbox.com/sh/9n53q06ncr70ynw/AAC1wkufiUJwyttoq3bXNbO7a?dl=0&preview=1N1D19-Launch-Media-Guide.pdf" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <a href="https://www.dropbox.com/s/swt4hp5ib409dg4/1N1D19-Launch-Media-Guide.pdf?dl=1" class="btn btn-sm btn-primary-hollow">Download</a>
                       <hr class="divider inv">
                     </div>
                   </div>

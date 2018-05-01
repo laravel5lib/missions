@@ -38,7 +38,10 @@ $('.video-modal').on('hide.bs.modal', function(e) {
           <div class="col-sm-8 col-sm-offset-2 text-center">
               <div class="video-outer">
                 <div class="video-inner">
-                  <div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/260853749?title=0&byline=0&portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+                  <!-- <div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/260853749?title=0&byline=0&portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script> -->
+                  
+                  <div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fmissions.me%2Fvideos%2F1876825155671380%2F&show_text=0&width=700" width="700" height="394" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allowFullScreen="true"></iframe></div>
+
                 </div>
               </div>
           </div><!-- end col -->

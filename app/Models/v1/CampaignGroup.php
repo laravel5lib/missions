@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class CampaignGroup extends Pivot
 {
+
+    protected $casts = ['meta' => 'array'];
+    
     /**
      * Boot the Uuid trait for the model.
      *
@@ -36,7 +39,7 @@ class CampaignGroup extends Pivot
 
     public function prices()
     {
-        return $this->morphMany(Price::class, 'model', 'uuid');
+        return $this->morphMany(Price::class, 'model', 'model_type', 'model_id', 'uuid');
     }
 
     public function getCurrentRate()

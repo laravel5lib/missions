@@ -31,7 +31,7 @@ class PriceRequest extends FormRequest
         $validator->after(function ($validator) {
 
             if($this->assertCustomPrice()) {
-
+            
                 if ($this->assertRequiredPayments()) {
                     $validator->errors()->add('payments', 'At least one payment is required.');
                 }

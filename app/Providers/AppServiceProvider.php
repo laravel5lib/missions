@@ -26,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Relation::morphMap([
             'fundraisers' => \App\Models\v1\Fundraiser::class,
+            'campaign-groups' => \App\Models\v1\CampaignGroup::class,
             'groups' => \App\Models\v1\Group::class,
             'trips' => \App\Models\v1\Trip::class,
             'users' => \App\Models\v1\User::class,

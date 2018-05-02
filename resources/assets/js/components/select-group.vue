@@ -1,13 +1,14 @@
 <template>
     <div class="form-group" :class="{'has-error' : $parent.form.errors.has(name)}"> 
         <div class="col-xs-12">
-            <slot name="label"><label>Group</label></slot>
+            <slot name="label"></slot>
             <v-select @keydown.enter.prevent="null"
                         class="form-control"
                         :id="name"
                         v-model="groupObj"
                         :options="groups"
                         :on-search="getGroups"
+                        :placeholder="placeholder"
                         label="name"
                         :name="name">
             </v-select>
@@ -41,6 +42,10 @@ export default {
             required: true
         },
         'value': {
+            type: String,
+            default: null
+        },
+        'placeholder': {
             type: String,
             default: null
         }

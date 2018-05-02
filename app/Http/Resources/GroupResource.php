@@ -17,8 +17,14 @@ class GroupResource extends JsonResource
         return [
             'id'            => $this->id,
             'name'          => $this->name,
+            'group_id'      => $this->whenPivotLoaded('campaign_group', function () {
+                                    return $this->pivot->uuid;
+                                }),
+            'campaign_id'   => $this->whenPivotLoaded('campaign_group', function () {
+                                    return $this->pivot->campaign_id;
+                                }),
             'status'        => $this->whenPivotLoaded('campaign_group', function () {
-                                    return $this->pivot->status_id;
+                                    return groupStatus($this->pivot->status_id);
                                 }),
             'meta'         => $this->whenPivotLoaded('campaign_group', function () {
                                     return $this->pivot->meta;

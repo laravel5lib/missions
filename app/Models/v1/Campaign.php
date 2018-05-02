@@ -203,7 +203,10 @@ class Campaign extends Model implements HasMedia
      */
     public function groups()
     {
-        return $this->belongsToMany(Group::class, 'campaign_group')->withTimestamps();
+        return $this->belongsToMany(Group::class, 'campaign_group')
+                    ->withPivot(['status_id', 'meta', 'uuid'])
+                    ->withTimestamps()
+                    ->using(CampaignGroup::class);
     }
 
     /**

@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
+use App\Models\v1\CampaignGroup;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\GroupResource;
+use App\Http\Requests\CampaignGroupRequest;
 
 class CampaignGroupController extends Controller
 {
@@ -16,7 +18,7 @@ class CampaignGroupController extends Controller
      */
     public function index($campaignId)
     {
-        $groups = Campaign::findOrFail($campaignId)->groups()->paginate(20);
+        $groups = Campaign::findOrFail($campaignId)->groups()->orderBy('name')->paginate(20);
 
         return GroupResource::collection($groups);
     }
@@ -27,15 +29,13 @@ class CampaignGroupController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $campaignId)
+    public function store(CampaignGroupRequest $request, $campaignId)
     {
-        $validatedData = $request->validate([
-            'group_id' => 'required|exists:groups,id'
+        CampaignGroup::create([
+            'campaign_id' => $campaignId,
+            'group_id' => $request->group_id,
+            'status_id' => $request->status_id
         ]);
-
-        Campaign::findOrFail($campaignId)
-            ->groups()
-            ->attach($validatedData);
         
         return response()->json(['message' => 'Group added to campaign.'], 201);
     }

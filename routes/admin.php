@@ -25,12 +25,13 @@ Route::prefix('campaigns')->group(function () {
     Route::get('{id}/{tab?}', 'CampaignsController@show');
     Route::get('{id}/prices/{price}', 'CampaignPriceController@show');
 });
+Route::get('groups/{group}/{tab?}', 'CampaignGroupController@show');
 
 Route::get('trips/{id}/{tab?}', 'TripsController@show');
 Route::get('trips/{id}/prices/{price}', 'TripPriceController@show');
 Route::resource('trips', 'TripsController');
 
-Route::resource('groups', 'GroupsController');
+Route::resource('organizations', 'GroupsController');
 Route::resource('interests', 'TripInterestsController');
 
 Route::prefix('reservations')->group(function () {

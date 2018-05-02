@@ -2,7 +2,7 @@
     <div class="form-group" :class="{'has-error' : $parent.form.errors.has(name)}"> 
         <div class="col-xs-12">
             <slot name="label"></slot>
-            <select class="form-control" v-model="selection" :value="value">
+            <select class="form-control" :value="value" @change="updateValue($event.target.value)">
                 <option v-for="(value, key) in options" :value="key" :key="key">{{ value }}</option>
             </select>
             <span class="help-block" 
@@ -22,10 +22,7 @@ export default {
             type: String,
             required: true
         },
-        'value': {
-            type: String,
-            default: null
-        },
+        'value': {},
         'placeholder': {
             type: String,
             default: null
@@ -42,17 +39,13 @@ export default {
         }
     },
 
-    watch: {
-        'selection'(value) {
-            this.$parent.form[this.name] = value;
+    methods: {
+        updateValue(value) {
+            this.$emit('input', value);
         }
     },
 
     mounted() {
-        this.$parent.form[this.name] = this.value;
-        this.$parent.form.set(this.name, this.value);
-        this.selection = this.value
-
         this.$root.$on('form:reset', () => {
             this.selection = null;
         });

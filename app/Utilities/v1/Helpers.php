@@ -321,3 +321,15 @@ function getFirstName($givenNames)
 
     return $array[0];
 }
+
+function groupStatus($statusId)
+{
+    $statuses = [
+        1 => 'Pending',
+        2 => 'Committed',
+        3 => 'Ready to Launch',
+        4 => 'Launched'
+    ];
+
+    return $statuses[$statusId];
+}

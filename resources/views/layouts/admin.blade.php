@@ -23,6 +23,12 @@
 
   @yield('content')
 
+  <div class="text-center">
+    <hr class="divider">
+    <p class="text-muted">Copyright &copy; {{ date('Y') }} Missions.Me. All Rights Reserved.</p>
+    <hr class="divider lg inv">
+  </div>
+
 @endsection
 
 @section('scripts')

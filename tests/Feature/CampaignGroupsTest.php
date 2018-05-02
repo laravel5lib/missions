@@ -28,4 +28,16 @@ class CampaignGroupsTest extends TestCase
                  ]
              ]);
     }
+
+    /** @test */
+    public function adds_a_group_to_a_campaign()
+    {
+        $campaign = factory(Campaign::class)->create();
+        $org = factory(Group::class)->create();
+
+        $this->json('POST', "/api/campaigns/{$campaign->id}/groups", ['group_id' => $org->id])
+             ->assertStatus(201);
+
+        $this->assertDatabaseHas('campaign_group', ['group_id' => $org->id, 'campaign_id' => $campaign->id]);
+    }
 }

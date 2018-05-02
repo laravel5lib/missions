@@ -6,6 +6,8 @@ use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CostResource;
+use App\Http\Requests\v1\CostRequest;
 use App\Http\Resources\PriceResource;
 use App\Http\Requests\v1\PriceRequest;
 
@@ -18,12 +20,9 @@ class CampaignPriceController extends Controller
      */
     public function index($campaignId)
     {   
-        $prices = Campaign::findOrFail($campaignId)
-            ->prices()
-            ->with('payments')
-            ->paginate();
+        $costs = Campaign::findOrFail($campaignId)->costs()->paginate();
 
-        return PriceResource::collection($prices);
+        return CostResource::collection($costs);
     }
 
     /**
@@ -32,21 +31,17 @@ class CampaignPriceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($campaignId, PriceRequest $request)
+    public function store($campaignId, CostRequest $request)
     {
         $price = Campaign::findOrFail($campaignId)
-            ->prices()
+            ->costs()
             ->create([
-                'cost_id' => $request->input('cost_id'),
-                'amount' => $request->input('amount'),
-                'active_at' => $request->input('active_at')
+                'name' => $request->input('name'),
+                'type' => $request->input('type'),
+                'description' => $request->input('description')
             ]);
-        
-        if ($request->filled('payments')) {
-            $price->syncPayments($request->input('payments'));
-        }
 
-        return response()->json(['message' => 'New price added to campaign.'], 201);
+        return response()->json(['message' => 'New cost added to campaign.'], 201);
     }
 
     /**
@@ -56,15 +51,13 @@ class CampaignPriceController extends Controller
      * @param  string  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($campaignId, $uuid)
+    public function show($campaignId, $costId)
     {
-        $price = Campaign::findOrFail($campaignId)
-            ->prices()
-            ->whereUuid($uuid)
-            ->with('payments')
-            ->firstOrFail();
+        $cost = Campaign::findOrFail($campaignId)
+            ->costs()
+            ->findOrFail($costId);
 
-        return new PriceResource($price);
+        return new CostResource($cost);
     }
 
     /**
@@ -75,21 +68,16 @@ class CampaignPriceController extends Controller
      * @param  string $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PriceRequest $request, $campaignId, $uuid)
+    public function update(CostRequest $request, $campaignId, $costId)
     {
-        $price = Campaign::findOrFail($campaignId)->prices()->whereUuid($uuid)->firstOrFail();
+        $cost = Campaign::findOrFail($campaignId)->costs()->findOrFail($costId);
 
-        $price->update([
-            'cost_id' => $request->input('cost_id', $price->cost_id),
-            'amount' => $request->input('amount', $price->amount),
-            'active_at' => $request->input('active_at', $price->active_at)
+        $cost->update([
+            'name' => $request->input('name', $cost->name),
+            'description' => $request->input('description', $cost->description)
         ]);
 
-        if ($request->filled('payments')) {
-            $price->syncPayments($request->input('payments'));
-        }
-
-        return new PriceResource($price);
+        return new CostResource($cost);
     }
 
     /**
@@ -99,11 +87,11 @@ class CampaignPriceController extends Controller
      * @param  string  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($campaignId, $uuid)
+    public function destroy($campaignId, $costId)
     {
-        $price = Campaign::findOrFail($campaignId)->prices()->whereUuid($uuid)->firstOrFail();
+        $cost = Campaign::findOrFail($campaignId)->costs()->findOrFail($costId);
 
-        $price->delete();
+        $cost->delete();
 
         return response()->json([], 204);
     }

@@ -32,6 +32,10 @@ export default {
         'value': {
             type: String,
             default: null
+        },
+        'url': {
+            type: String,
+            default: 'costs'
         }
     },
 
@@ -43,7 +47,7 @@ export default {
 
     methods: {
         getCosts() {
-            return this.$http.get('costs').then(response => {
+            return this.$http.get(this.url).then(response => {
                 this.costs = response.data.data;
             }).catch(error => {
                 console.log('error');

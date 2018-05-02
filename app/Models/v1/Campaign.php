@@ -141,32 +141,13 @@ class Campaign extends Model implements HasMedia
     }
 
     /**
-     * Get a campaign's prices
+     * Get a campaign's costs
      *
      * @return Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function prices()
+    public function costs()
     {
-        return $this->morphMany(Price::class, 'model');
-    }
-
-    public function getCurrentRate()
-    {
-        return $this->prices()->whereHas('cost', function ($cost) {
-            return $cost->whereType('incremental');
-        })->first();
-    }
-
-    public function getUpfrontCosts()
-    {
-        return $this->prices()->whereHas('cost', function ($cost) {
-            return $cost->whereType('upfront');
-        });
-    }
-
-    public function getCurrentStartingCostAttribute()
-    {
-        return optional($this->getCurrentRate())->amount + $this->getUpfrontCosts()->sum('amount');
+        return $this->morphMany(Cost::class, 'cost_assignable');
     }
 
     public function regions()

@@ -45,7 +45,10 @@
                 </div>
             </div>
         </div>
-        <price-add-new priceable-type="campaign-groups" priceable-id="{{ $group->uuid }}"></price-add-new>
+        <price-add-new priceable-type="campaign-groups" 
+                       priceable-id="{{ $group->uuid }}" 
+                       campaign-id="{{ $group->campaign_id}}">
+        </price-add-new>
     @endslot
 @endcomponent
 

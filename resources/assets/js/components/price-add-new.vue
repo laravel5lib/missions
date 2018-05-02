@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-6">
 
-                <select-cost name="cost_id" v-model="form.cost_id">
+                <select-cost name="cost_id" v-model="form.cost_id" :url="'/campaigns/' + campaignId + '/costs'">
                     <label slot="label">Select a Cost</label>
                     <span class="help-block" slot="help-text"><a href="">Manage these options &raquo;</a></span>
                 </select-cost>
@@ -89,7 +89,7 @@
 export default {
     name: 'price-add-new',
 
-    props: ['priceableType', 'priceableId'],
+    props: ['priceableType', 'priceableId', 'campaignId'],
 
     data() {
         return {

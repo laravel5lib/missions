@@ -8,7 +8,8 @@ export default {
         return {
             json: null,
             loading: true,
-            pagination: {}
+            pagination: {},
+            filters: {}
         }
     },
 
@@ -20,6 +21,13 @@ export default {
                 this.pagination = response.data.meta;
                 this.loading = false;
             });
+        },
+        addFilter(key, value) {
+            this.filters[key] = value;
+            this.$forceUpdate();
+        },
+        removeFilter(key) {
+            // this.filters = value
         }
     },
 
@@ -31,7 +39,10 @@ export default {
         return this.$scopedSlots.default({
             json: this.json,
             loading: this.loading,
-            pagination: this.pagination
+            pagination: this.pagination,
+            filters: this.filters,
+            addFilter: this.addFilter,
+            removeFilter: this.removeFilter
         })
     }
 }

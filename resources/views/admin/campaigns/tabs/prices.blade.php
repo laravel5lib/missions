@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <ajax-form method="post" action="/costs">
+        <ajax-form method="post" action="/campaigns/{{ $campaign->id }}/costs">
             <template slot-scope="{ form }">
                 <div class="row">
                     <div class="col-md-6">

@@ -3,9 +3,33 @@
 namespace App\Http\Requests;
 
 use Dingo\Api\Http\FormRequest;
+use Illuminate\Support\Facades\DB;
 
 class CampaignGroupRequest extends FormRequest
 {
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ($this->assertNotUniqueGroup()) {
+                $validator->errors()->add('group_id', 'Group has already been added.');
+            }
+        });
+    }
+
+    private function assertNotUniqueGroup()
+    {
+        return DB::table('campaign_group')
+            ->whereCampaignId($this->route('campaignId'))
+            ->whereGroupId($this->input('group_id'))
+            ->first();
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *

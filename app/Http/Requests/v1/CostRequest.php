@@ -35,7 +35,7 @@ class CostRequest extends FormRequest
         return [
             'name'                 => 'required|string|max:60',
             'description'          => 'required|string|max:120',
-            'type'                 => 'required|in:incremental,static,optional,conditional',
+            'type'                 => 'required|in:incremental,static,optional,upfront',
         ];
     }
 

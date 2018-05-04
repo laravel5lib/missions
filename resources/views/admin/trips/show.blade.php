@@ -4,7 +4,8 @@
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
         'admin/campaigns' => 'Campaigns',
-        '/admin/campaigns/'.$trip->campaign->id.'/trips' => $trip->campaign->name.' - '.country($trip->country_code),
+        '/admin/campaigns/'.$trip->campaign->id => $trip->campaign->name.' - '.country($trip->country_code),
+        '/admin/campaigns/'.$trip->campaign->id.'/groups' => 'Groups',
         'active' => $trip->group->name.' - '.ucfirst($trip->type).' Trip'
     ]])
     @endbreadcrumbs

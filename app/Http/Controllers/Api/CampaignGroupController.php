@@ -18,7 +18,7 @@ class CampaignGroupController extends Controller
      */
     public function index($campaignId)
     {
-        $groups = Campaign::findOrFail($campaignId)->groups()->orderBy('name')->paginate(20);
+        $groups = Campaign::findOrFail($campaignId)->groups()->orderBy('name')->paginate(10);
 
         return GroupResource::collection($groups);
     }

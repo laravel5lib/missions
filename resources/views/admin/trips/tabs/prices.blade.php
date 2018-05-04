@@ -34,7 +34,7 @@
     @slot('body')
     
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#campaign" aria-controls="home" role="tab" data-toggle="tab">Campaign Pricing</a></li>
+            <li role="presentation" class="active"><a href="#group" aria-controls="home" role="tab" data-toggle="tab">Group Pricing</a></li>
             <li role="presentation"><a href="#custom" aria-controls="profile" role="tab" data-toggle="tab">Custom Pricing</a></li>
         </ul>
 
@@ -45,12 +45,12 @@
         </div>
 
         <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="campaign">
+            <div role="tabpanel" class="tab-pane active" id="group">
 
                 <ajax-form method="post" action="trips/{{ $trip->id }}/prices">
                     <template slot-scope="{ form }">
                         <div class="col-md-6">
-                            <select-price name="price_id" url="campaigns/{{ $trip->campaign_id }}/prices" v-model="form.price_id">
+                            <select-price name="price_id" url="campaigns/{{ $trip->campaign_id }}/groups/{{ $trip->group_id }}/prices" v-model="form.price_id">
                                 <label slot="label">Select a Cost</label>
                             </select-price>
                         </div>
@@ -64,7 +64,10 @@
             </div>
             
             <div role="tabpanel" class="tab-pane" id="custom">
-                <price-add-new priceable-type="trips" priceable-id="{{ $trip->id }}"></price-add-new>
+                <price-add-new priceable-type="trips" 
+                               priceable-id="{{ $trip->id }}" 
+                               campaign-id="{{ $trip->campaign_id}}">
+                </price-add-new>
             </div>
         </div>
     @endslot

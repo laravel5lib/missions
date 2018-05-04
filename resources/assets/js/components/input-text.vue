@@ -38,12 +38,6 @@ export default {
         }
     },
 
-    data() {
-        return {
-            text: ''
-        }
-    },
-
     methods: {
         updateValue(value) {
             this.$emit('input', value);
@@ -51,9 +45,12 @@ export default {
     },
 
     mounted() {
-        this.$root.$on('form:reset', () => {
-            this.text = null;
-        });
+        // this.$parent.form[this.name] = this.value;
+        // this.$parent.form.set(this.name, this.value);
+        
+        // this.$root.$on('form:reset', () => {
+        //     this.text = null;
+        // });
     }
 }
 </script>

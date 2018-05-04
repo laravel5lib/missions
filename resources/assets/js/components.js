@@ -230,6 +230,8 @@ Vue.component('price-add-new', require('./components/price-add-new.vue'));
 Vue.component('price-edit', require('./components/price-edit.vue'));
 Vue.component('price-delete', require('./components/price-delete.vue'));
 
+Vue.component('group-manager', require('./components/GroupManager.vue'));
+
 /**
  * Utility Components
  */

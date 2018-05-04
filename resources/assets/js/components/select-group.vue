@@ -1,23 +1,49 @@
 <template>
-    <div class="form-group" :class="{'has-error' : $parent.form.errors.has(name)}"> 
-        <div class="col-xs-12">
-            <slot name="label"></slot>
+    <div class="form-group" :class="{'has-error' : ($parent.form ? $parent.form.errors.has(name) : false)}"> 
+        
+        <template v-if="horizontal">
+            <slot name="label">
+                <label class="col-sm-4 control-label">Select a Group</label>
+            </slot>
+            <div :class="classes">
+                <v-select @keydown.enter.prevent="null"
+                          class="form-control"
+                          :id="name"
+                          v-model="groupObj"
+                          :options="groups"
+                          :on-search="getGroups"
+                          :placeholder="placeholder"
+                          label="name"
+                          :name="name">
+                </v-select>
+                <span class="help-block" 
+                        v-text="$parent.form.errors.get(name)" 
+                        v-if="($parent.form ? $parent.form.errors.has(name) : false)">
+                </span>
+                <slot name="help-text" v-else></slot>
+            </div>
+        </template>
+        <template v-else>
+            <slot name="label">
+                <label class="control-label">Select a Group</label>
+            </slot>
             <v-select @keydown.enter.prevent="null"
-                        class="form-control"
-                        :id="name"
-                        v-model="groupObj"
-                        :options="groups"
-                        :on-search="getGroups"
-                        :placeholder="placeholder"
-                        label="name"
-                        :name="name">
+                      class="form-control"
+                      :id="name"
+                      v-model="groupObj"
+                      :options="groups"
+                      :on-search="getGroups"
+                      :placeholder="placeholder"
+                      label="name"
+                      :name="name">
             </v-select>
             <span class="help-block" 
                     v-text="$parent.form.errors.get(name)" 
-                    v-if="$parent.form.errors.has(name)">
+                    v-if="($parent.form ? $parent.form.errors.has(name) : false)">
             </span>
-            <slot name="help-text" v-if="!$parent.form.errors.has(name)"></slot>
-        </div>
+            <slot name="help-text" v-else></slot>
+        </template>
+
     </div>
 </template>
 <script>
@@ -48,6 +74,14 @@ export default {
         'placeholder': {
             type: String,
             default: null
+        },
+        'horizontal': {
+            type: Boolean,
+            default: false
+        },
+        'classes': {
+            type: String,
+            default: 'col-sm-8'
         }
     },
 
@@ -74,8 +108,8 @@ export default {
     },
 
     mounted() {
-        this.$parent.form[this.name] = this.value;
-        this.$parent.form.set(this.name, this.value);
+        this.$parent.form[this.name] = this.group_id;
+        this.$parent.form.set(this.name, this.group_id);
 
         if (this.value) {
             this.$http.get('groups/' + this.value).then((response) => {

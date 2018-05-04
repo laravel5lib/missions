@@ -1,5 +1,8 @@
 <template>
-    <form @submit.prevent="onSubmit()" @keydown="form.errors.clear($event.target.name)" class="form-horizontal">
+    <form @submit.prevent="onSubmit()" 
+          @keydown="form.errors.clear($event.target.name)" 
+          :class="{'form-horizontal' : horizontal}"
+    >
         <slot :form="form"></slot>
     </form>
 </template>
@@ -8,6 +11,10 @@ export default {
     name: 'ajax-form',
 
     props: {
+        horizontal: {
+            type: Boolean,
+            default: false,
+        },
         initial: {
             type: Object,
             default: null
@@ -53,7 +60,7 @@ export default {
 
     data() {
         return {
-            form: new Form({})
+            form: new Form(this.initial ? this.initial : {})
         }
     },
 
@@ -69,6 +76,7 @@ export default {
                     }
                     
                     this.$root.$emit('form:success', data);
+                    this.$emit('form:success', data);
 
                 })
                 .catch(error => {
@@ -76,30 +84,6 @@ export default {
                     this.$root.$emit('form:error', error);
 
                 });
-        },
-        loadData(data) {
-            let that = this;
-            _.each(data, function(value, key) {
-                that.form[key] = value;
-                that.form.set(key, value);
-            });
-            this.$forceUpdate();
-        }
-    },
-
-    mounted() {
-        if (this.hiddenValues) {
-            // set any hidden values
-            let that = this;
-            _.each(this.hiddenValues, function(value, key) {
-                that.form[key] = value;
-                that.form.set(key, value);
-            });
-        }
-        
-        if (this.initial) {
-            // set any predefined values
-            this.loadData(this.initial);
         }
     }
 }

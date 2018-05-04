@@ -19,6 +19,10 @@ Route::apiResource('costs', 'CostsController')->middleware('api.auth');
 Route::apiResource('campaigns/{campaignId}/groups', 'CampaignGroupController');
 Route::apiResource('campaigns/{campaignId}/costs', 'CampaignPriceController');
 Route::apiResource('campaign-groups/{groupId}/prices', 'CampaignGroupPriceController');
+Route::get('campaigns/{campaignId}/groups/{groupId}/prices', function($campaignId, $groupId) {
+    $group = \App\Models\v1\CampaignGroup::whereCampaignId($campaignId)->whereGroupId($groupId)->firstOrFail();
+    return redirect('/api/campaign-groups/'.$group->uuid.'/prices');
+});
 Route::apiResource('trips/{tripId}/prices', 'TripPriceController');
 Route::apiResource('reservations/{reservationId}/prices', 'ReservationPriceController');
 

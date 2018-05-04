@@ -1,44 +1,24 @@
 @extends('admin.layouts.default')
 
+@section('header')
+    @breadcrumbs(['links' => [
+        'admin' => 'Dashboard',
+        'admin/reservations' => 'Reservations',
+        'admin/reservations/'.$reservation->id => $reservation->name,
+        'admin/reservations/'.$reservation->id.'/costs' => 'Pricing',
+        'active' => $price->cost->name
+    ]])
+    @endbreadcrumbs
+@endsection
+
 @section('content')
-<div class="white-header-bg">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12">
-                <ul class="breadcrumb">
-                    <li>
-                        <a href="{{ url('/admin') }}">
-                            Dashboard
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url('/admin/reservations') }}">
-                            Reservations
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url('/admin/reservations/'.$reservation->id) }}">
-                            {{ $reservation->name }}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url('/admin/reservations/'.$reservation->id.'/costs') }}">
-                            Pricing
-                        </a>
-                    </li>
-                    <li class="active">{{ $price->cost->name }}</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
 <hr class="divider inv lg">
 <alert-error>
     <template slot="title">Oops!</template>
     <template slot="message">Please check the form for errors and try again.</template>
 </alert-error>
 
-<alert-success redirect="/admin/campaigns/">
+<alert-success redirect="/admin/reservations/{{ $reservation->id }}">
     <template slot="title">Saved</template>
     <template slot="message">The price was updated.</template>
     <template slot="cancel">Keep Working</template>
@@ -48,7 +28,7 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
-            <h3 class="text-primary">Price Details</h3>
+            <h3 class="text-primary">{{ $price->cost->name }} Price</h3>
         </div>
     </div>
 </div>

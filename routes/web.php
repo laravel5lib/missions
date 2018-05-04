@@ -121,7 +121,7 @@ $this->get('/go/{slug?}', function ($slug = null) {
     return redirect('/'.$slug);
 });
 $this->get('/1n1d19-interest', function () {
-    return redirect('/travel-with-us/signup?trip_id=4f3705a8-fbae-45fe-927f-c3042a8d9127');
+    return redirect('/travel-with-us/signup?trip_id=07b41b3b-7150-44fc-a69f-2843f7d1a513');
 });
 
 /*

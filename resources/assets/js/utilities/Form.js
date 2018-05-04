@@ -33,6 +33,10 @@ class Form {
         this.originalData[field] = value;
     }
 
+    unset(field) {
+        delete this.originalData[field];
+    }
+
     get(url) {
         return this.submit('get', url);
     }

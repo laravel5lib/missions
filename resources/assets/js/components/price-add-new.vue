@@ -1,5 +1,5 @@
 <template>
-<ajax-form method="post" :action="'/' + priceableType + '/' + priceableId + '/prices'" :initial.sync="initialize" ref="ajax">
+<ajax-form method="post" :action="'/' + priceableType + '/' + priceableId + '/prices'" :initial="initialize" ref="ajax">
 
     <template slot-scope="{ form }">
         <div class="row">
@@ -7,7 +7,6 @@
 
                 <select-cost name="cost_id" v-model="form.cost_id" :url="'/campaigns/' + campaignId + '/costs'">
                     <label slot="label">Select a Cost</label>
-                    <span class="help-block" slot="help-text"><a href="">Manage these options &raquo;</a></span>
                 </select-cost>
 
             </div>
@@ -42,24 +41,31 @@
                     </div>
                 </div>
 
-                <label>Payments</label>
-                <span class="help-block" 
-                    v-text="form.errors.get('payments')" 
-                    v-if="form.errors.has('payments')">
-                </span>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label>Payments</label>
+                            <span class="help-block" 
+                                v-text="form.errors.get('payments')" 
+                                v-if="form.errors.has('payments')">
+                            </span>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="row" v-for="(payment, index) in form.payments" :key="index">
-                    <div class="col-xs-3 col-md-2">
+                    <div class="col-xs-4 col-md-3">
                         <input-number :name="'payments.'+index+'.percentage_due'" v-model="payment.percentage_due" :placeholder="50">
                             <span class="help-block" slot="help-text">Percentage due</span>
+                            <span class="input-group-addon" slot="suffix">%</span>
                         </input-number>
                     </div>
-                    <div class="col-xs-6 col-md-4">
+                    <div class="col-xs-4 col-md-4">
                         <input-date :name="'payments.'+index+'.due_at'" v-model="payment.due_at">
                             <span class="help-block" slot="help-text">Due Date</span>
                         </input-date>
                     </div>
-                    <div class="col-xs-2 col-md-2">
+                    <div class="col-xs-3 col-md-3">
                         <input-number :name="'payments.'+index+'.grace_days'" :placeholder="3" v-model="payment.grace_days">
                             <span class="help-block" slot="help-text">Days Grace</span>
                         </input-number>
@@ -96,14 +102,7 @@ export default {
             initialize: {
                 amount: 0,
                 cost_id: null,
-                active_at: null,
-                payments: [
-                    {
-                        percentage_due: 0,
-                        due_at: null,
-                        days_grace: 0
-                    }
-                ]
+                active_at: null
             },
             ui: {
                 showActiveDate: false,
@@ -124,6 +123,27 @@ export default {
         removePayment(index) {
             this.$refs.ajax.form.payments.splice(index, 1);
             this.$forceUpdate()
+        }
+    },
+    
+    watch: {
+        'ui.showPayments'(value) {
+
+            if (value == true) {
+
+                let paymentArray = [{
+                    percentage_due: 0,
+                    due_at: null,
+                    grace_days: 0
+                }]
+                
+                this.$refs.ajax.form['payments'] = paymentArray;
+                this.$refs.ajax.form.set('payments', paymentArray);
+
+            } else {
+                delete this.$refs.ajax.form.payments;
+                this.$refs.ajax.form.unset('payments');
+            }
         }
     },
 

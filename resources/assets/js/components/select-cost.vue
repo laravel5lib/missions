@@ -1,16 +1,14 @@
 <template>
     <div class="form-group" :class="{'has-error' : $parent.form.errors.has(name)}"> 
-        <div class="col-xs-12">
-            <slot name="label"><label>Cost</label></slot>
-            <select class="form-control" v-model="cost" :value="value" @change="updateValue($event.target.value)">
-                <option v-for="cost in costs" :value="cost" :key="cost.id">{{ cost.name }}</option>
-            </select>
-            <span class="help-block" 
-                    v-text="$parent.form.errors.get(name)" 
-                    v-if="$parent.form.errors.has(name)">
-            </span>
-            <slot name="help-text" v-if="!$parent.form.errors.has(name)"></slot>
-        </div>
+        <slot name="label"><label>Cost</label></slot>
+        <select class="form-control" v-model="cost" :value="value" @change="updateValue($event.target.value)">
+            <option v-for="cost in costs" :value="cost" :key="cost.id">{{ cost.name }}</option>
+        </select>
+        <span class="help-block" 
+                v-text="$parent.form.errors.get(name)" 
+                v-if="$parent.form.errors.has(name)">
+        </span>
+        <slot name="help-text" v-if="!$parent.form.errors.has(name)"></slot>
     </div>
 </template>
 <script>

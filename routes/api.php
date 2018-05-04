@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Storage;
 
 Route::apiResource('costs', 'CostsController')->middleware('api.auth');
 Route::apiResource('campaigns/{campaignId}/groups', 'CampaignGroupController');
-Route::apiResource('campaigns/{campaignId}/costs', 'CampaignPriceController');
+Route::apiResource('campaigns/{campaignId}/costs', 'CampaignCostController');
 Route::apiResource('campaign-groups/{groupId}/prices', 'CampaignGroupPriceController');
 Route::get('campaigns/{campaignId}/groups/{groupId}/prices', function($campaignId, $groupId) {
     $group = \App\Models\v1\CampaignGroup::whereCampaignId($campaignId)->whereGroupId($groupId)->firstOrFail();

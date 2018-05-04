@@ -23,7 +23,7 @@ Route::prefix('campaigns')->group(function () {
     Route::get('{id}/edit', 'CampaignsController@edit');
     Route::get('{id}/trips/create', 'TripsController@create');
     Route::get('{id}/{tab?}', 'CampaignsController@show');
-    Route::get('{id}/prices/{price}', 'CampaignPriceController@show');
+    Route::get('{id}/costs/{cost}', 'CampaignCostController@show');
 });
 Route::get('groups/{group}/{tab?}', 'CampaignGroupController@show');
 

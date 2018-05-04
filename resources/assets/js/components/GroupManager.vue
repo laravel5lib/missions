@@ -1,6 +1,6 @@
 <template>
 <div>
-<div class="panel panel-default">
+<div class="panel panel-default" style="border-top: 5px solid #f6323e">
     <div class="panel-heading">
         <h5>Add Group</h5>
     </div>

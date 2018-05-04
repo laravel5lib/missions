@@ -1,22 +1,49 @@
 <template>
-    <div class="form-group" :class="{'has-error' : $parent.form.errors.has(name)}"> 
-        <div class="col-xs-12">
+    <div class="form-group" :class="{'has-error' : ($parent.form ? $parent.form.errors.has(name) : false)}">
+
+        <template v-if="horizontal">
+
             <slot name="label"></slot>
-            <div :class="{'input-group' : $slots.prefix || $slots.suffix}">
-                <slot name="prefix"></slot>
-                <input class="form-control"
-                    :name="name"
-                    :value="value"
-                    :placeholder="placeholder"
-                    @input="updateValue($event.target.value)">
-                <slot name="suffix"></slot>
+
+            <div :class="classes">
+                <div :class="{'input-group' : $slots.prefix || $slots.suffix}">
+                    <slot name="prefix"></slot>
+                    <input class="form-control"
+                        :name="name"
+                        :value="value"
+                        :placeholder="placeholder"
+                        @input="updateValue($event.target.value)">
+                    <slot name="suffix"></slot>
+                </div>     
+                <span class="help-block" 
+                        v-text="$parent.form.errors.get(name)" 
+                        v-if="($parent.form ? $parent.form.errors.has(name) : false)">
+                </span>
+                <slot name="help-text" v-else></slot>
             </div>
-            <span class="help-block" 
-                    v-text="$parent.form.errors.get(name)" 
-                    v-if="$parent.form.errors.has(name)">
-            </span>
-            <slot name="help-text" v-if="!$parent.form.errors.has(name)"></slot>
+
+        </template>
+        <template v-else>
+        
+        <slot name="label"></slot>
+
+        <div :class="{'input-group' : $slots.prefix || $slots.suffix}">
+            <slot name="prefix"></slot>
+            <input class="form-control"
+                :name="name"
+                :value="value"
+                :placeholder="placeholder"
+                @input="updateValue($event.target.value)">
+            <slot name="suffix"></slot>
         </div>
+        <span class="help-block" 
+              v-text="$parent.form.errors.get(name)" 
+              v-if="($parent.form ? $parent.form.errors.has(name) : false)">
+        </span>
+        <slot name="help-text" v-else></slot>
+
+        </template>
+
     </div>
 </template>
 <script>
@@ -35,22 +62,22 @@ export default {
         'placeholder': {
             type: String,
             default: null
+        },
+        'horizontal': {
+            type: Boolean,
+            default: false
+        },
+        'classes': {
+            type: String,
+            default: 'col-sm-9'
         }
     },
 
     methods: {
         updateValue(value) {
             this.$emit('input', value);
+            this.$parent.form ? this.$parent.form.errors.clear(this.name) : null;
         }
-    },
-
-    mounted() {
-        // this.$parent.form[this.name] = this.value;
-        // this.$parent.form.set(this.name, this.value);
-        
-        // this.$root.$on('form:reset', () => {
-        //     this.text = null;
-        // });
     }
 }
 </script>

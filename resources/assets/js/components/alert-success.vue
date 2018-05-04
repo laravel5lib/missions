@@ -47,7 +47,9 @@ export default {
                 buttons: buttons,
                 timer: timer
             }).then((value) => {
-                this.$emit('form:redirect', data)
+                if (value) {
+                    this.$emit('form:redirect', data)
+                }
             })
 
         });
@@ -58,7 +60,12 @@ export default {
             }
 
             if (this.redirect) {
-                window.location.href = this.redirect + data.data.id
+                
+                if (this.redirect.endsWith('/')) {
+                    window.location.href = this.redirect + data.data.id
+                }
+
+                window.location.href = this.redirect
             }
         });
     }

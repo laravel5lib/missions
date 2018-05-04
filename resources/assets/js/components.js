@@ -231,6 +231,7 @@ Vue.component('price-edit', require('./components/price-edit.vue'));
 Vue.component('price-delete', require('./components/price-delete.vue'));
 
 Vue.component('group-manager', require('./components/GroupManager.vue'));
+Vue.component('campaign-cost-manager', require('./components/CampaignCostManager.vue'));
 
 /**
  * Utility Components

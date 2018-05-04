@@ -63,7 +63,7 @@ class CampaignsController extends Controller
     {
         $links = [
             'admin/campaigns/'.$campaign->id => 'Overview',
-            'admin/campaigns/'.$campaign->id.'/prices' => 'Costs',
+            'admin/campaigns/'.$campaign->id.'/costs' => 'Costs',
             'admin/campaigns/'.$campaign->id.'/groups' => 'Groups',
         ];
 

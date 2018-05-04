@@ -1,14 +1,5 @@
 @extends('dashboard.reservations.show')
 
-@section('styles')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.0/css/Jcrop.min.css" type="text/css">
-@endsection
-
-@section('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.0/js/Jcrop.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.14.2/TweenMax.min.js"></script>
-@endsection
-
 @section('tab')
     @if( $reservation->assignmentsArePublished() )
     <div class="panel panel-default">
@@ -73,134 +64,56 @@
         </div>
     @endif
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h5>Details</h5>
-        </div>
-        <div class="panel-body">
-            <div class="col-xs-12">
-                <reservation-avatar id="{{ $reservation->id }}"></reservation-avatar>
-            </div>
-            <div class="col-xs-12 col-lg-7">
-                <hr class="divider">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>Surname</label>
-                        <p>{{ $reservation->surname }}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <label>Given Names</label>
-                        <p>{{ $reservation->given_names }}</p>
-                    </div>
-                </div>
-                <hr class="divider">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>Gender</label>
-                        <p>{{ ucwords($reservation->gender) }}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <label>Marital Status</label>
-                        <p>{{ ucwords($reservation->status) }}</p>
-                    </div>
-                </div>
-                <hr class="divider">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>Shirt Size</label>
-                        <p>{{ shirtSize($reservation->shirt_size) }}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <label>Age</label>
-                        <p>{{ $reservation->birthday->age }}</p>
-                    </div>
-                </div>
-                <hr class="divider">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>Birthday</label>
-                        <p>{{ $reservation->birthday->format('M j, Y') }}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <label>Group</label>
-                        <p>{{ $reservation->trip->group->name }}</p>
-                    </div>
-                </div>
-                <hr class="divider">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>Trip Type</label>
-                        <p class="text-capitalize">{{ $reservation->trip->type }}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <label>Start Date</label>
-                        <p>{{ $reservation->trip->started_at->toFormattedDateString() }}</p>
-                    </div>
-                </div>
-                <hr class="divider">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>End Date</label>
-                        <p>{{ $reservation->trip->ended_at->toFormattedDateString() }}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <label>Trip Starts In</label>
-                        <p>{{ $reservation->trip->started_at->diffInDays() }} days</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-lg-5 panel panel-default panel-body text-center">
-                <label>Email</label>
-                <p>{{ $reservation->email }}</p>
-                <label>Home Phone</label>
-                <p>{{ $reservation->phone_one }}</p>
-                <label>Mobile Phone</label>
-                <p>{{ $reservation->phone_two }}</p>
-                <label>Address</label>
-                <p>{{ $reservation->address }}</p>
-                <label>City</label>
-                <p>{{ $reservation->city }}</p>
-                <label>State/Providence</label>
-                <p>{{ $reservation->state }}</p>
-                <label>Zip/Postal Code</label>
-                <p>{{ $reservation->zip }}</p>
-                <label>Country</label>
-                <p>{{ country($reservation->country_code) }}</p>
+    @component('panel')
+        @slot('body')
+        <div class="row">
+            <div class="col-sm-3">
+                <h4 class="text-primary">${{ $reservation->totalCostInDollars() }}</h4>
+                <p class="small text-muted">Fundraising Goal</p>
             </div>
         </div>
-    </div><!-- end panel -->
-@endsection
+        @endslot
+    @endcomponent
 
-@section('tour')
-    <script>
-        window.pageSteps = [
-            {
-                id: 'rep',
-                title: 'Trip Rep',
-                text: 'A Mission.Me trip representative is assigned to each reservation. Find your rep\'s contact information here if you need help.',
-                attachTo: {
-                    element: '.tour-step-rep',
-                    on: 'top'
-                },
-            },
-            {
-                id: 'navigation',
-                title: 'Additional Details',
-                text: 'More details about your reservation can be found here. Details are seperated by category.',
-                attachTo: {
-                    element: '.tour-step-rep',
-                    on: 'top'
-                },
-            },
-            {
-                id: 'avatar',
-                title: 'Attach a Picture',
-                text: 'Put a face to a name by uploading a picture of yourself.',
-                attachTo: {
-                    element: '.tour-step-avatar',
-                    on: 'top'
-                },
-            },
-        ];
-    </script>
+    @component('panel')
+        @slot('title')
+            <h5>Trip Details</h5>
+        @endslot
+        @component('list-group', ['data' => [
+            'Campaign' => $reservation->trip->campaign->name,
+            'Country' => country($reservation->trip->campaign->country_code),
+            'Team' => $reservation->trip->group->name,
+            'Trip Type' => $reservation->trip->type,
+            'Start Date' => $reservation->trip->started_at->format('F j, Y'),
+            'End Date' => $reservation->trip->ended_at->format('F j, Y')
+        ]])
+        @endcomponent
+    @endcomponent
+
+    @component('panel')
+        @slot('title')
+            <div class="row">
+                <div class="col-xs-8">
+                    <h5>Traveler Info</h5>
+                </div>
+                <div class="col-xs-4 text-right">
+                </div>
+            </div>
+        @endslot
+        @component('list-group', ['data' => [
+            'Name' => $reservation->name,
+            'Gender' => ucwords($reservation->gender),
+            'Marital Status' => ucwords($reservation->status),
+            'Birthday' => $reservation->birthday->format('F j, Y'),
+            'Age' => $reservation->birthday->age,
+            'Team Role' => teamRole($reservation->desired_role),
+            'Shirt Size' => shirtSize($reservation->shirt_size),
+            'Email' => $reservation->email,
+            'Home Phone' => $reservation->phone_one,
+            'Mobile Phone' => $reservation->phone_two,
+            'Address' => $reservation->address.'<br />'.$reservation->city.', '.$reservation->state.' '.$reservation->zip.'<br />'.country($reservation->country_code)
+        ]])
+        @endcomponent
+    @endcomponent
+
 @endsection

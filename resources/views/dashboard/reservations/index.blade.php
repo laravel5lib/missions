@@ -1,68 +1,80 @@
 @extends('dashboard.layouts.default')
 
 @section('content')
-<div class="white-header-bg">
+<hr class="divider inv lg">
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h3 class="hidden-xs">My Reservations</h3>
-                <h3 class="text-center visible-xs">My Reservations</h3>
-            </div>
-        </div>
-    </div>
-</div>
-<hr class="divider inv lg">
-    <div class="container" v-tour-guide="">
-        <div class="row">
-            <div class="col-sm-12">
-                <ul class="nav nav-tabs">
-                    <li role="presentation" class="active">
-                        <a href="#active" data-toggle="pill"><i class="fa fa-bolt"></i> Active</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#archive" data-toggle="pill"><i class="fa fa-archive"></i> Archived</a>
-                    </li>
-                </ul>
 
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="active">
-                        <reservations-list user-id="{{ Auth::user()->id }}" type="active"></reservations-list>
+                <div class="panel panel-default panel-body">
+                    <div class="alert alert-warning" style="margin-bottom: 0">
+                        <div class="row">
+                            <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
+                            <div class="col-xs-11">Select a reservation below to get started.</div>
+                        </div>
                     </div>
-
-                    <div role="tabpanel" class="tab-pane" id="archive">
-                        <reservations-list user-id="{{ Auth::user()->id }}" type="archive"></reservations-list>
-                    </div>
-
                 </div>
+                            
+                <fetch-json url="reservations?user[]={{ auth()->user()->id }}&current=true&include=trip.campaign,trip.group">
+                    <div class="panel panel-default" style="border-top: 5px solid #f6323e" slot-scope="{ json:reservations, loading, pagination, filters, addFilter }">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <h4>Reservations <span class="badge badge-default">@{{ pagination.total }}</span></h4>
+                                </div>
+                                <div class="col-xs-6 text-right text-muted">
+                                    <h5 v-if="loading"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="nav nav-pills nav-justified">
+                                <li role="presentation" class="active">
+                                    <a href="#active"><i class="fa fa-ticket"></i> Current Trips</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#archive"><i class="fa fa-archive"></i> Past Trips</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <table class="table" v-if="reservations && reservations.length">
+                            <thead>
+                            <tr class="active">
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Trip</th>
+                                <th>Team</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(reservation, index) in reservations" :key="reservation.id">
+                                <td>@{{ index+1 }}</td>
+                                <td>
+                                    <strong><a :href="'/dashboard/reservations/' + reservation.id">@{{ reservation.given_names }}</a></strong>
+                                    <br><em>@{{ reservation.desired_role.name }}</em>
+                                </td>
+                                <td>
+                                    @{{ reservation.trip.data.campaign.data.name | capitalize }}
+                                    <br><em>@{{ reservation.trip.data.type | capitalize }}</em>
+                                </td>
+                                <td>
+                                    @{{ reservation.trip.data.group.data.name }}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="panel-body text-center" v-else>
+                            <span class="lead">No Reservations</span>
+                            <p>You have no reservations yet. Sign up for a trip to get started.</p>
+                        </div>
+                        <div class="panel-footer" v-if="pagination.total > pagination.per_page">
+                            <pager :pagination="pagination"></pager>
+                        </div>
+                    </div>
+                </fetch-json>
             </div>
         </div>
         <hr class="divider inv lg">
     </div>
 
-@endsection
-
-@section('tour')
-    <script>
-        window.pageSteps = [
-            {
-                id: 'find',
-                title: 'Find Reservations',
-                text: 'Search, filter and sort to find what you need. Export the list or change the view from list to grid.',
-                attachTo: {
-                    element: '.tour-step-find',
-                    on: 'top'
-                },
-            },
-            {
-                id: 'list',
-                title: 'At a Glance',
-                text: 'This list only gives a quick overview of reservations. Select a reservation to see more details.',
-                attachTo: {
-                    element: '.tour-step-list',
-                    on: 'top'
-                },
-            }
-        ];
-    </script>
 @endsection

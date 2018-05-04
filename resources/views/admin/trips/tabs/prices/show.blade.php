@@ -18,7 +18,7 @@
     <template slot="message">Please check the form for errors and try again.</template>
 </alert-error>
 
-<alert-success redirect="/admin/trips/{{ $trip->id }}/pricing">
+<alert-success redirect="/admin/trips/{{ $trip->id }}/prices">
     <template slot="title">Saved</template>
     <template slot="message">The price was updated.</template>
     <template slot="cancel">Keep Working</template>
@@ -28,7 +28,7 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
-            <h3 class="text-primary">Price Details</h3>
+            <h3 class="text-primary">{{ $price->cost->name }} Price</h3>
         </div>
     </div>
 </div>
@@ -72,7 +72,10 @@
         <div class="col-md-8">
             @component('panel')
                 @slot('body')
-                <price-edit priceable-type="trips" priceable-id="{{ $trip->id }}" id="{{ $price->uuid }}"></price-edit>
+                <price-edit priceable-type="trips" 
+                            priceable-id="{{ $trip->id }}" 
+                            :price="{{ $price }}">
+                </price-edit>
                 @endslot
             @endcomponent
         </div>

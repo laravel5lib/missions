@@ -24,7 +24,7 @@
             <p class="small text-muted">Current Rate</p>
         </div>
         <div class="col-sm-5">
-            <h4>{{ $reservation->getUpcomingDeadline() ? $reservation->getUpcomingDeadline()->format('M d, Y h:i a') : 'N/A' }}</h4>
+            <h4>{{ $reservation->getUpcomingDeadline() ? $reservation->getUpcomingDeadline()->format('M j, h:i a') : 'N/A' }}</h4>
             <p class="small text-muted">Upcoming Deadline</p>
         </div>
     </div>
@@ -50,17 +50,29 @@
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="trip">
 
-                <ajax-form method="post" action="reservations/{{ $reservation->id }}/prices">
-                    <template slot-scope="props">
-                        <div class="col-md-6">
-                            <select-price name="price_id" url="trips/{{ $reservation->trip_id }}/prices">
-                                <label slot="label">Select a Cost</label>
-                            </select-price>
-                        </div>
-                        <div class="col-md-6">
-                            <hr class="divider inv sm">
-                            <hr class="divider inv">
-                            <button type="submit" class="btn btn-md btn-primary">Add</button>
+                <ajax-form method="post" 
+                           action="reservations/{{ $reservation->id }}/prices"
+                           :initial="{price_id: null}" 
+                           :horizontal="true"
+                >
+                    <template slot-scope="{ form }">
+                        <div class="row">
+                            <div class="col-sm-9">
+
+                                <select-price name="price_id" 
+                                            url="trips/{{ $reservation->trip_id }}/prices" 
+                                            v-model="form.price_id"
+                                            classes="col-sm-8"
+                                            :horizontal="true">
+                                    <label slot="label" class="control-label col-sm-4">Select a Price</label>
+                                </select-price>
+
+                            </div>
+                            <div class="col-sm-3">
+                                
+                                <button type="submit" class="btn btn-md btn-primary">Add</button>
+
+                            </div>
                         </div>
                     </template>
                 </ajax-form>

@@ -5,11 +5,13 @@ namespace App\Models\v1;
 use Ramsey\Uuid\Uuid;
 use App\Models\v1\Group;
 use App\Models\v1\Price;
+use App\Traits\HasPricing;
 use App\Models\v1\Campaign;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class CampaignGroup extends Pivot
 {
+    use HasPricing;
 
     protected $casts = ['meta' => 'array'];
     

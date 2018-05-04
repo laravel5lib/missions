@@ -1,30 +1,18 @@
 <template>
-<ajax-form method="put" :action="'/' + priceableType + '/' + priceableId + '/prices/' + id" ref="ajax">
+<ajax-form method="put" :action="'/' + priceableType + '/' + priceableId + '/prices/' + price.uuid" :initial="initialize" ref="ajax">
 
     <template slot-scope="{ form }">
         <div class="row">
-            <div class="col-md-6">
-
-                <select-cost name="cost_id" v-model="form.cost.id">
-                    <label slot="label">Select a Cost</label>
-                    <span class="help-block" slot="help-text"><a href="">Manage these options &raquo;</a></span>
-                </select-cost>
-
-            </div>
             <div class="col-md-6">
                 <input-currency name="amount" v-model="form.amount">
                     <label slot="label">Amount</label>
                 </input-currency>
             </div>
-        </div>
-        <div class="row" v-if="ui.showActiveDate">
-            <div class="col-md-6">
-
+            <div class="col-md-6" v-if="ui.showActiveDate">
                 <input-date name="active_at" v-model="form.active_at">
                     <label slot="label">Start Date</label>
                     <span class="help-block" slot="help-text">When does this cost go into effect?</span>
                 </input-date>
-
             </div>
         </div>
         <div class="row" v-if="ui.showPayments" :class="{'has-error' : form.errors.has('payments')}">
@@ -42,25 +30,32 @@
                     </div>
                 </div>
 
-                <label>Payments</label>
-                <span class="help-block" 
-                    v-text="form.errors.get('payments')" 
-                    v-if="form.errors.has('payments')">
-                </span>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label>Payments</label>
+                            <span class="help-block" 
+                                v-text="form.errors.get('payments')" 
+                                v-if="form.errors.has('payments')">
+                            </span>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="row" v-for="(payment, index) in form.payments" :key="index">
-                    <div class="col-xs-3 col-md-2">
-                        <input-number name="percentage_due" v-model="payment.percentage_due" :placeholder="50">
+                    <div class="col-xs-4 col-md-3">
+                        <input-number :name="'payments.'+index+'.percentage_due'" v-model="payment.percentage_due" :placeholder="50">
                             <span class="help-block" slot="help-text">Percentage due</span>
+                            <span class="input-group-addon" slot="suffix">%</span>
                         </input-number>
                     </div>
-                    <div class="col-xs-6 col-md-4">
-                        <input-date name="due_at" v-model="payment.due_at">
+                    <div class="col-xs-4 col-md-4">
+                        <input-date :name="'payments.'+index+'.due_at'" v-model="payment.due_at">
                             <span class="help-block" slot="help-text">Due Date</span>
                         </input-date>
                     </div>
-                    <div class="col-xs-2 col-md-2">
-                        <input-number name="grace_days" :placeholder="3" v-model="payment.grace_days">
+                    <div class="col-xs-3 col-md-3">
+                        <input-number :name="'payments.'+index+'.grace_days'" :placeholder="3" v-model="payment.grace_days">
                             <span class="help-block" slot="help-text">Days Grace</span>
                         </input-number>
                     </div>
@@ -78,21 +73,24 @@
         </div>
         <div class="row">
             <div class="col-md-12 text-right">
+                <hr class="divider">
                 <button type="submit" class="btn btn-md btn-primary">Save Changes</button>
             </div>
         </div>
     </template>
-
 </ajax-form>
 </template>
 <script>
 export default {
     name: 'price-edit',
 
-    props: ['priceableType', 'priceableId', 'id'],
+    props: ['priceableType', 'priceableId', 'price'],
 
     data() {
         return {
+            initialize: {
+                amount: this.price.amount,
+            },
             ui: {
                 showActiveDate: false,
                 showPayments: false
@@ -116,26 +114,17 @@ export default {
     },
 
     mounted() {
+        if (this.price.payments) {
 
-        this.$http
-            .get('/' + this.priceableType + '/' + this.priceableId + '/prices/' + this.id)
-            .then(response => {
-                this.$refs.ajax.loadData(response.data.data);
-                this.$forceUpdate();
-            })
-            .catch(error => {
-                console.log(error);
-            });
+            this.$refs.ajax.form['active_at'] = this.price.active_at;
+            this.$refs.ajax.form.set('active_at', this.price.active_at);
 
-        this.$root.$on('cost-change', (cost) => {
-            if (cost.type == 'incremental') {
-                this.ui.showActiveDate = true;
-                this.ui.showPayments = true;
-            } else {
-                this.ui.showActiveDate = false;
-                this.ui.showPayments = false;
-            }
-        });
+            this.$refs.ajax.form['payments'] = this.price.payments;
+            this.$refs.ajax.form.set('payments', this.price.payments);
+
+            this.ui.showPayments = true;
+            this.ui.showActiveDate = true;
+        }
     }
 }
 </script>

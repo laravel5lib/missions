@@ -100,7 +100,10 @@
         <div class="col-md-8">
             @component('panel')
                 @slot('body')
-                <price-edit priceable-type="reservations" priceable-id="{{ $reservation->id }}" id="{{ $price->uuid }}"></price-edit>
+                <price-edit priceable-type="reservations" 
+                            priceable-id="{{ $reservation->id }}" 
+                            :price="{{ $price }}">
+                </price-edit>
                 @endslot
             @endcomponent
         </div>

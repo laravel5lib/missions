@@ -55,7 +55,14 @@
     <fetch-json :url="'campaigns/'+campaignId+'/costs'" ref="costList">
         <div class="panel panel-default" slot-scope="{ json: costs, loading, pagination }" style="border-top: 5px solid #f6323e">
             <div class="panel-heading">
-                <h5>All Costs</h5>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <h5>Costs <span class="badge badge-default">{{ pagination.total }}</span></h5>
+                    </div>
+                    <div class="col-xs-6 text-muted text-right">
+                        <h5 v-if="loading"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</h5>
+                    </div>
+                </div>
             </div>
                 <table class="table" v-if="costs && costs.length">
                 <thead>
@@ -66,8 +73,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-if="loading"><td>Loading...</td></tr>
-                    <tr v-for="(cost, index) in costs" :key="cost.id" v-else>
+                    <tr v-for="(cost, index) in costs" :key="cost.id">
                         <td>{{ index+1 }}</td>
                         <td>
                             <strong><a :href="'/admin/campaigns/'+campaignId+'/costs/' + cost.id">{{ cost.name }}</a></strong>
@@ -109,9 +115,15 @@ export default {
     props: ['campaignId'],
 
     methods: {
-        updateList() {
-            this.$refs.costList.fetch();
+        updateList(params) {
+            this.$refs.costList.fetch(params);
         }
+    },
+
+    mounted() {
+        this.$root.$on('page:change', (pageNumber) => {
+            this.updateList({page: pageNumber});
+        });
     }
 }
 </script>

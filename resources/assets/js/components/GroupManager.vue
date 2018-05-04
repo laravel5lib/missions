@@ -44,14 +44,14 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-6">
-                    <h5>Participating Groups</h5>
+                    <h5>Groups <span class="badge badge-default">{{ pagination.total }}</span></h5>
                 </div>
-                <div class="col-xs-6 text-right">
-                    
+                <div class="col-xs-6 text-right text-muted">
+                    <h5 v-if="loading"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</h5>
                 </div>
             </div>
         </div>
-        <div class="panel-body">
+        <!-- <div class="panel-body">
             <span class="label label-default" v-for="(filter, key) in filters" :key="key" style="padding: 0.5em; margin-right: 1em">
                 {{ key | capitalize }}: "{{ filter }}"
                 <a role="button" style="color: white; margin-left: 0.5em;" @click="removeFilter({name: 'Neil'})">
@@ -67,7 +67,7 @@
                     <li><a role="button" @click="addFilter('status')">Status</a></li>
                 </ul>
             </div>
-        </div>
+        </div> -->
         <table class="table" v-if="groups && groups.length">
             <thead>
             <tr class="active">
@@ -78,8 +78,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-if="loading"><td>Loading...</td></tr>
-            <tr v-for="(group, index) in groups" :key="group.id" v-else>
+            <tr v-for="(group, index) in groups" :key="group.id">
                 <td>{{ index+1 }}</td>
                 <td>
                     <strong><a :href="'/admin/groups/' + group.group_id">{{ group.name }}</a></strong>
@@ -88,7 +87,7 @@
                     <strong>0</strong>
                 </td>
                 <td>
-                    {{ group.status }}
+                    <em>{{ group.status }}</em>
                 </td>
             </tr>
             </tbody>
@@ -117,23 +116,28 @@
 </template>
 <script>
 export default {
-  props: ['campaignId'],
+    props: ['campaignId'],
 
-  data() {
-      return {
-          defaultData: {
-              'status_id': '1',
-              'group_id': null
-          },
-          statusOptions: {1:'Pending', 2:'Committed', 3:'Ready to Launch', 4:'Launched'}
-      }
-  },
+    data() {
+        return {
+            defaultData: {
+                'status_id': '1',
+                'group_id': null
+            },
+            statusOptions: {1:'Pending', 2:'Committed', 3:'Ready to Launch', 4:'Launched'}
+        }
+    },
 
-  methods: {
-      updateList() {
-          console.log('form success!');
-          this.$refs.groupList.fetch();
-      }
-  }
+    methods: {
+        updateList(params) {
+            this.$refs.groupList.fetch(params);
+        }
+    },
+
+    mounted() {
+        this.$root.$on('page:change', (pageNumber) => {
+            this.updateList({page: pageNumber});
+        });
+    }
 }
 </script>

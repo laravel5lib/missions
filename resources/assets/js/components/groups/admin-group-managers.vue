@@ -1,31 +1,41 @@
 <template >
+<div>
 	<div class="panel panel-default">
 		<spinner ref="spinner" global size="sm" text="Loading"></spinner>
 		<div class="panel-heading">
 			<div class="row">
 				<div class="col-xs-6">
-					<h5>Managers</h5>
+					<h5>Team Coordinators</h5>
 				</div>
 				<div class="col-xs-6 text-right">
 					<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AddManagerModal"><span
-							class="fa fa-plus"></span> New
+							class="fa fa-plus"></span> Add Coordinator
 					</button>
 				</div>
 			</div>
 		</div>
-		<div class="panel-body">
-			<div class="col-xs-12 panel panel-default" v-for="manager in managers" :key="manager.id">
-				<h5>
-					<img :src="manager.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" :alt=" manager.name ">
-					{{ manager.name }}
-				</h5>
-				<div style="position:absolute;right:25px;top:22px;">
-					<a @click="removeManager(manager)">
-						<i class="fa fa-times"></i>
-					</a>
-				</div>
-			</div>
-		</div>
+		<table class="table">
+			<thead>
+				<tr class="active">
+					<th>#</th>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Phone</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="(manager, index) in managers" :key="manager.id">
+					<td>{{ index+1 }}</td>
+					<td>{{ manager.name }}</td>
+					<td>{{ manager.email }}</td>
+					<td>{{ manager.phone_one }}</td>
+					<td><a @click="removeManager(manager)"><i class="fa fa-times"></i></a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
 		<div class="modal fade" id="AddManagerModal">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -52,7 +62,7 @@
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
-	</div>
+</div>
 </template>
 <script type="text/javascript">
 	import vSelect from "vue-select";

@@ -4,35 +4,23 @@ return [
     'dashboard' => [
         'reservation' => [
             [
-                'label' => 'Details',
+                'label' => 'Overview',
                 'url' => 'details'
-            ],
-            [
-                'label' => 'My Squad',
-                'url' => 'squads'
-            ],
-            [
-                'label' => 'Costs / Payments',
-                'url' => 'dues'
-            ],
-            [
-                'label' => 'Travel Requirements',
-                'url' => 'requirements'
             ],
             [
                 'label' => 'Funding',
                 'url' => 'funding'
             ],
             [
-                'label' => 'Important Dates',
-                'url' => 'deadlines'
+                'label' => 'Requirements',
+                'url' => 'requirements'
             ],
             [
-                'label' => 'Companions',
-                'url' => 'companions'
+                'label' => 'Travel',
+                'url' => 'squads'
             ],
             [
-                'label' => 'Trip Resources',
+                'label' => 'Resources',
                 'url' => 'resources'
             ],
             [

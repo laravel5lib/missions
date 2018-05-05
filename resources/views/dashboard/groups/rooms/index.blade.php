@@ -1,8 +1,32 @@
 @extends('dashboard.layouts.default')
 
 @section('content')
-    <div class="white-header-bg">
-        <div class="container">
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-sm-12">
+            @breadcrumbs(['links' => [
+                'dashboard/groups' => 'Organizations',
+                'active' => $group->name
+            ]])
+            @endbreadcrumbs
+            <hr class="divider">
+            <hr class="divider inv">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-2">
+            @sidenav(['links' => [
+                'dashboard/groups/'.$group->id => 'Overview',
+                'dashboard/groups/'.$group->id.'/teams' => 'Squads',
+                'dashboard/groups/'.$group->id.'/rooms' => 'Rooming'
+            ]])
+            @endsidenav
+        </div>
+        <div class="col-sm-10">
+            
             <div class="row">
                 <div class="col-sm-12">
                     <div class="col-sm-8">
@@ -16,41 +40,11 @@
                     </div>
                 </div>
             </div>
+
+            <rooming-wizard user-id="{{ Auth::user()->id }}" group-id="{{ $groupId }}"></rooming-wizard>
+            <hr class="divider inv xlg">
+
         </div>
     </div>
-    {{--<div class="dark-bg-primary">
-        <div class="container">
-            <div class="col-sm-8 col-md-7">
-                <hr class="divider inv sm hidden-xs">
-                <hr class="divider inv sm">
-                <h5 style="margin-top:13px;" class="hidden-xs text-uppercase">Select a rooming plan or create a new one.</h5>
-                <h5 style="margin-top:13px;" class="visible-xs text-center text-uppercase">Select a rooming plan or create a new one.</h5>
-                <hr class="divider inv sm">
-                <hr class="divider inv sm hidden-xs">
-            </div>
-            <div class="col-sm-4 col-md-5 hidden-xs text-right">
-                <hr class="divider inv sm">
-                <action-dropdown-select api search-route="rooming/plans" text="Rooming Plan" event="plan-scope" :options="[]"></action-dropdown-select>
-                <action-trigger text="Create Plan" event="create-plan" type="btn-white-hollow"></action-trigger>
-                <hr class="divider inv sm">
-            </div>
-            <div class="col-sm-4 visible-xs text-center">
-                <hr class="divider inv sm">
-                <action-dropdown-select api search-route="rooming/plans" text="Rooming Plan" event="plan-scope" :options="[]"></action-dropdown-select>
-                <hr class="divider inv sm">
-                <action-trigger text="Create Plan" event="create-plan" type="btn-white-hollow"></action-trigger>
-                <hr class="divider inv sm">
-            </div>
-        </div><!-- end container -->
-    </div>--}}
-    <hr class="divider inv lg">
-@include('dashboard.groups.tabs', ['active' => 'rooming'])
-    <div class="container">
-        <rooming-wizard user-id="{{ Auth::user()->id }}" group-id="{{ $groupId }}"></rooming-wizard>
-        <hr class="divider inv xlg">
-    </div><!-- end container -->
-@endsection
-
-@section('tour')
-
+</div>
 @endsection

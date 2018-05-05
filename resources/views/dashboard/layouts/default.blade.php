@@ -7,13 +7,12 @@
 @section('layout')
   @include('_adminnav')
 
-
-  <ul class="nav nav-tabs hidden-xs" style="background: white">
-    <li role="presentation"><a href="#"><i class="fa fa-home"></i></a></li>
-    <li role="presentation" class="active"><a href="/dashboard/reservations">My Trip</a></li>
-    <li role="presentation"><a href="#">My Team</a></li>
-    <li role="presentation"><a href="#">My Donations</a></li>
-    <li role="presentation"><a href="/dashboard/records/passports">My Travel Documents</a></li>
+  <ul class="nav nav-tabs hidden-xs" style="background: white; margin-bottom: 0">
+    <li class="{{ request()->segment(2) == 'settings' ? 'active' : '' }}"><a href="/dashboard/settings"><i class="fa fa-user"></i></a></li>
+    <li class="{{ request()->segment(2) == 'reservations' ? 'active' : '' }}"><a href="/dashboard/reservations">My Trip</a></li>
+    <li class="{{ request()->segment(2) == 'groups' ? 'active' : '' }}"><a href="/dashboard/groups">My Team</a></li>
+    <li class="{{ request()->segment(2) == 'donations' ? 'active' : '' }}"><a href="/dashboard/donations">My Donations</a></li>
+    <li class="{{ request()->segment(2) == 'records' ? 'active' : '' }}"><a href="/dashboard/records/passports">My Travel Documents</a></li>
   </ul>
 
 

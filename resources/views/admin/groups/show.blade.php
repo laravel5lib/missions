@@ -57,7 +57,7 @@
                                     'Primary Phone' => $group->phone_one,
                                     'Secondary Phone' => $group->phone_two,
                                     'Timezone' => $group->timezone,
-                                    'Address' => $group->address.'<br />'.$group->address_two.'<br />'.$group->city.', '.$group->state.' '.$group->zip.'<br />'.country($group->country_code),
+                                    'Address' => $group->address_one.'<br />'.$group->address_two.'<br />'.$group->city.', '.$group->state.' '.$group->zip.'<br />'.country($group->country_code),
                                     'Description' => $group->description,
                                     'Created' => '<datetime-formatted value="'.$group->created_at->toIso8601String().'" />',
                                     'Last Updated' => '<datetime-formatted value="'.$group->updated_at->toIso8601String().'" />'

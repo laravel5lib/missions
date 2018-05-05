@@ -1,144 +1,117 @@
 @extends('dashboard.layouts.default')
 
 @section('content')
-<div class="white-header-bg">
-    <div class="container" v-tour-guide="">
-        <div class="row">
-            <div class="col-sm-8">
-                <h3 class="hidden-xs">
-                    <img class="av-left img-sm img-circle" style="width:100px; height:100px" src="{{ image($group->getAvatar()->source) }}"> {{ $group->name }} <small>&middot; Group</small>
-                </h3>
-                <div class="visible-xs text-center">
-                    <hr class="divider inv">
-                    <img class="av-left img-sm img-circle" style="width:100px; height:100px" src="{{ image($group->getAvatar()->source) }}">
-                    <h4 style="margin-bottom:0;">{{ $group->name }}</h4>
-                    <label>Group</label>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-sm-12">
+            @breadcrumbs(['links' => [
+                'dashboard/groups' => 'Organizations',
+                'active' => $group->name
+            ]])
+            @endbreadcrumbs
+            <hr class="divider">
+            <hr class="divider inv">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-2">
+            @sidenav(['links' => [
+                'dashboard/groups/'.$group->id => 'Overview',
+                'dashboard/groups/'.$group->id.'/teams' => 'Squads',
+                'dashboard/groups/'.$group->id.'/rooms' => 'Rooming'
+            ]])
+            @endsidenav
+        </div>
+        <div class="col-sm-7">
+            <fetch-json url="/trips?&status=current&onlyPublished=true&groups[]={{ $group->id }}" ref="tripList">
+                <div class="panel panel-default" 
+                        style="border-top: 5px solid #f6323e" 
+                        slot-scope="{ json: trips, loading, pagination }"
+                >
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h5>Current Trips <span class="badge badge-default">@{{ pagination.pagination.total }}</span></h5>
+                            </div>
+                            <div class="col-xs-6 text-right text-muted">
+                                <h5 v-if="loading"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                    <table class="table" v-if="trips && trips.length">
+                        <thead>
+                            <tr class="active">
+                                <th>#</th>
+                                <th>Type</th>
+                                <th>Country</th>
+                                <th>Dates</th>
+                                <th>Reservations</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(trip, index) in trips" :key="trip.id">
+                                <td>@{{ index+1 }}</td>
+                                <td>
+                                    <strong><a :href="'/dashboard/groups/' + trip.group_id +'/trips/' + trip.id">@{{ trip.type | capitalize }}</a></strong>
+                                </td>
+                                <td class="col-sm-3">@{{ trip.country_name }}</td>
+                                <td class="col-sm-5">
+                                    @{{ trip.started_at | moment('MMM d') }} - @{{ trip.ended_at | moment('MMM d') }}
+                                </td>
+                                <td class="col-sm-1 text-right">
+                                    <strong>@{{ trip.reservations}}</strong> / @{{ trip.spots }}
+                                </td>
+                                <td>
+                                    @{{ trip.status | capitalize }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                    <div class="panel-body text-center" v-else>
+                        <span class="lead">No Trips</span>
+                        <p>Create a trip for this group to get started.</p>
+                    </div>
+                    <div class="panel-footer" v-if="pagination.pagination.total > pagination.pagination.per_page">
+                        <pager :pagination="pagination.pagination"></pager>
+                    </div>
                 </div>
-            </div>
-            <div class="col-sm-4 hidden-xs tour-step-settings">
-                <hr class="divider inv">
-                <hr class="divider inv sm">
-                <a href="{{ $group->id }}/edit" class="btn btn-primary pull-right">
-                    Group Settings
-                </a>
-            </div>
-            <div class="col-sm-4 visible-xs text-center tour-step-settings">
-                <hr class="divider inv sm">
-                <a href="{{ $group->id }}/edit" class="btn btn-primary">
-                    Group Settings
-                </a>
-                <hr class="divider inv">
-            </div>
+            </fetch-json>
+
+            <admin-group-managers group-id="{{ $group->id }}"></admin-group-managers>
+
+            @component('panel')
+                @slot('title')
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <h5>{{ $group->name }}</h5>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <a href="{{ $group->id }}/edit" class="text-muted">
+                                <strong><i class="fa fa-cog"></i> Settings</strong>
+                            </a>
+                        </div>
+                    </div>
+                @endslot
+                @component('list-group', ['data' => [
+                    'Organization Type' => $group->type,
+                    'Description' => $group->description,
+                    'Visibility' => ($group->public ? 'Public' : 'Private'),
+                    'Email' => $group->email,
+                    'Primary Phone' => $group->phone_one,
+                    'Secondary Phone' => $group->phone_two,
+                    'Timezone' => $group->timezone,
+                    'Address' => $group->address_one.'<br />'.($group->address_two ? $group->address_two.'<br />' : '').$group->city.', '.$group->state.' '.$group->zip.'<br />'.country($group->country_code),
+                ]])
+                @endcomponent
+            @endcomponent
+
         </div>
     </div>
 </div>
-<hr class="divider inv lg">
-
-@include('dashboard.groups.tabs', ['active' => 'details'])
-
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-9">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h5>{{ $group->name }} <small>&middot; Details</small></h5>
-                    </div>
-                    <div class="panel-body">
-                        <div class="col-sm-8">
-                            <label>Description</label>
-                            <p>{{ $group->description }}</p>
-                            <hr class="divider">
-                            <div class="row">
-                                <div class="col-sm-6 text-center">
-                                    <label>Type</label>
-                                    <p>{{ $group->type }}</p>
-                                </div>
-                                <div class="col-sm-6 text-center">
-                                    <label>Status</label>
-                                    <p>{{ $group->public ? 'Public': 'Private' }}</p>
-                                </div>
-                            </div>
-                            <hr class="divider">
-                            <div class="row">
-                                <div class="col-sm-12 text-center">
-                                    <div class="well">
-                                        <label>Url slug</label>
-                                        @if($group->public)
-                                            <h4 class="hidden-xs"><a href="/{{ $group->slug->url }}">http://missions.me/{{ $group->slug->url }}</a></h4>
-                                            <p class="visible-xs"><a href="/{{ $group->slug->url }}">http://missions.me/{{ $group->slug->url }}</a></p>
-                                        @else
-                                            <h4 class="text-strike text-muted hidden-xs">http://missions.me/{{ $group->slug->url }}</h4>
-                                            <p class="text-strike text-muted visible-xs">http://missions.me/{{ $group->slug->url }}</p>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4 panel panel-default">
-                            <div class="panel-body">
-                                <label>Phone 1</label>
-                                <p>{{ $group->phone_one }}</p>
-                                <label>Phone 2</label>
-                                <p>{{ $group->phone_two or 'Not Available' }}</p>
-                                <label>Email Address</label>
-                                <p>{{ $group->email or 'Not Available' }}</p>
-                                <label>Address</label>
-                                <p>
-                                    {{ $group->address_one or 'Not Available' }}@if($group->address_one)<br>@endif
-                                    {{ $group->address_two }}@if($group->address_two)<br>@endif
-                                    {{ $group->city }}{{ ($group->city && $group->state) ? ',' : '' }} {{ $group->state }} {{ $group->zip }}
-                                </p>
-                                <label>Country</label>
-                                <p>{{ country($group->country_code) }}</p>
-                                <label>Timezone</label>
-                                <p>{{ $group->timezone }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3 tour-step-managers">
-                <admin-group-managers group-id="{{ $group->id }}"></admin-group-managers>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12 tour-step-trips">
-                <dashboard-group-trips id="{{ $group->id }}"></dashboard-group-trips>
-            </div>
-        </div>
-    </div>
-@endsection
-
-@section('tour')
-    <script>
-        window.pageSteps = [
-            {
-                id: 'settings',
-                title: 'Group Settings',
-                text: 'Change group settings and update the group profile page.',
-                attachTo: {
-                    element: '.tour-step-settings',
-                    on: 'top'
-                },
-            },
-            {
-                id: 'managers',
-                title: 'Managers',
-                text: 'Add or remove group managers. Only a manager can edit group settings and add or remove other managers and team facilitators.',
-                attachTo: {
-                    element: '.tour-step-managers',
-                    on: 'top'
-                },
-            },
-            {
-                id: 'trips',
-                title: 'Trips',
-                text: 'Any active trips the group is sponsoring will be listed here. Select a trip to see more details.',
-                attachTo: {
-                    element: '.tour-step-trips',
-                    on: 'top'
-                },
-            }
-        ];
-    </script>
 @endsection

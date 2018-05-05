@@ -1,14 +1,8 @@
 <template>
 <div>
-    <div class="panel panel-default">
+    <div class="panel panel-default" style="border-top: 5px solid #f6323e">
         <div class="panel-heading">
-            <h3>
-                Donations <br />
-                <small v-cloak>
-                    <span class="text-success">{{ '$' + fund.balance }}</span> 
-                    <template v-if="fundraiser"> of {{ '$' + goalAmount }} raised</template>
-                </small>
-            </h3>
+            <h5>Donations</h5>
         </div>
         <div class="panel-body">
             <ul class="nav nav-pills">
@@ -23,14 +17,16 @@
         <template v-if="activeView === 'donor'">
             <table class="table table-hover table-responsive" v-if="donors.length">
                 <thead>
-                    <tr>
-                        <th class="col-sm-4">Donor</th>
+                    <tr class="active">
+                        <th class="col-sm-1">#</th>
+                        <th>Donor</th>
                         <th class="col-sm-2 text-right">Amount</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="donor in donors">
-                        <td class="col-sm-4">{{ donor.name }}</td>
+                    <tr v-for="(donor, index) in donors" :key="donor.id">
+                        <td class="col-sm-1">{{ index+1}}</td>
+                        <td>{{ donor.name }}</td>
                         <td class="col-sm-2 text-right text-success">${{ donor.total_donated }}.00</td>
                     </tr>
                 </tbody>
@@ -42,19 +38,21 @@
         <template v-if="activeView !== 'donor'">
             <table class="table table-hover table-responsive" v-if="transactions.length">
                 <thead>
-                    <tr>
+                    <tr class="active">
+                        <th>#</th>
                         <th>Date</th>
                         <th>Description</th>
                         <th class="text-right">Amount</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="transaction in transactions">
+                    <tr v-for="(transaction, index) in transactions" :key="transaction.id">
+                        <td class="col-sm-1">{{ index+1}}</td>
                         <td class="col-sm-3 col-xs-4">
                             {{ transaction.created_at|moment('ll')}}
                         </td>
                         <td class="col-sm-6 col-xs-4">
-                            <h5 style="margin-top: 0">{{ transaction.type.toUpperCase() }}
+                            <h5 style="margin-top: 0">{{ transaction.type | capitalize }}
                             <small v-if="contains(['donation'], transaction.type)" class="small">
                                 from
                                 <span v-if="!transaction.anonymous">{{ transaction.donor.data.name }}</span>

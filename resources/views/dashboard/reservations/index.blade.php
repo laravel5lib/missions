@@ -5,15 +5,6 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-
-                <div class="panel panel-default panel-body">
-                    <div class="alert alert-warning" style="margin-bottom: 0">
-                        <div class="row">
-                            <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
-                            <div class="col-xs-11">Select a reservation below to get started.</div>
-                        </div>
-                    </div>
-                </div>
                             
                 <fetch-json url="reservations?user[]={{ auth()->user()->id }}&current=true&include=trip.campaign,trip.group">
                     <div class="panel panel-default" style="border-top: 5px solid #f6323e" slot-scope="{ json:reservations, loading, pagination, filters, addFilter }">
@@ -28,6 +19,12 @@
                             </div>
                         </div>
                         <div class="panel-body">
+                            <div class="alert alert-warning">
+                                <div class="row">
+                                    <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
+                                    <div class="col-xs-11">Select a reservation below to get started.</div>
+                                </div>
+                            </div>
                             <ul class="nav nav-pills nav-justified">
                                 <li role="presentation" class="active">
                                     <a href="#active"><i class="fa fa-ticket"></i> Current Trips</a>

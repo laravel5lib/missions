@@ -61,53 +61,6 @@
             </template>
         </tbody>
     </table>
-    <!-- <div class="list-group">
-        <div class="list-group-item" v-for="price in prices" :key="price.id">
-            <div class="row">
-                <div class="col-sm-2 col-xs-12">
-                    <h4 class="text-primary">{{ currency(price.amount) }}</h4>
-                </div>
-                <div class="col-sm-6 col-xs-6">
-                    <h5>{{ price.cost.name|capitalize }}</h5>
-                </div>
-                <div class="col-sm-4 col-xs-6 text-right">
-                    <a class="small text-primary" :href="'/admin/' + priceableType + '/' + priceableId + '/prices/' + price.id"><i class="fa fa-cog"></i> Manage</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-2">
-                    <p class="text-muted small">{{ price.cost.type|capitalize }}</p>
-                </div>
-                <div class="col-sm-10">
-                    <p class="small" v-if="isActive(price.active_at)"><i class="fa fa-check-circle text-success"></i> Active</p>
-                    <p class="small" v-else><i class="fa fa-calendar-o"></i> Effective Date: <em class="text-primary">{{ price.active_at|mFormat('ll') }}</em></p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <p class="small">{{ price.cost.description }}</p>
-                </div>
-            </div>
-            <div class="row small" v-if="price.payments.length > 0">
-                <table class="table table-condensed">
-                    <thead>
-                        <tr>
-                            <th class="col-xs-4">Percent</th>
-                            <th class="col-xs-4">Due</th>
-                            <th class="col-xs-4">Grace</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="payment in price.payments" :key="payment.id">
-                            <td class="col-xs-4">{{ payment.percentage_due.toFixed(2) }}%</td>
-                            <td class="col-xs-4">{{ payment.due_at|mFormat('ll') }}</td>
-                            <td class="col-xs-4">{{ payment.grace_days}} days</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div> -->
     <div class="panel-footer" v-if="pagination.total > pagination.per_page">
         <pager :pagination="pagination"></pager>
     </div>

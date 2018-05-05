@@ -233,6 +233,7 @@ Vue.component('price-delete', require('./components/price-delete.vue'));
 Vue.component('group-manager', require('./components/GroupManager.vue'));
 Vue.component('trip-manager', require('./components/TripManager.vue'));
 Vue.component('campaign-cost-manager', require('./components/CampaignCostManager.vue'));
+Vue.component('group-reservation-list', require('./components/group-reservation-list.vue'));
 
 /**
  * Utility Components

@@ -6,6 +6,7 @@
 
     <div class="row">
         <div class="col-sm-12">
+            <hr class="divider inv">
             @breadcrumbs(['links' => [
                 'dashboard/groups' => 'Organizations',
                 'active' => $group->name

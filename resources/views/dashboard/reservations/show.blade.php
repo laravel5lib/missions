@@ -19,7 +19,7 @@
                         <img class="img-circle img-sm" src="{{ $rep->avatar_url }}" width="50" height="50">
                     </div>
                     <div style="display:inline-block;vertical-align:middle;margin:0 0 0 10px;">
-                        <label style="margin-bottom:0px;font-size:10px;">Your Trip Rep</label>
+                        <label style="margin-bottom:0px;font-size:10px;">Missions.Me Trip Rep</label>
                         <h5 style="margin:3px 0 6px;">{{ $rep->name }}</h5>
                         <p style="font-size:10px;margin-top:3px;"><i class="fa fa-phone"></i> <a href="tel:{{ $rep->phone }}">{{ $rep->phone }}</a> / <i class="fa fa-envelope"></i> <a href="mailto:{{ $rep->email }}">{{ $rep->email }}</a></p>
                     </div>

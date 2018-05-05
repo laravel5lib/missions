@@ -6,6 +6,7 @@
 
     <div class="row">
         <div class="col-sm-12">
+            <hr class="divider inv">
             @breadcrumbs(['links' => [
                 'dashboard/groups' => 'Organizations',
                 'active' => $group->name
@@ -72,10 +73,10 @@
                             </tr>
                         </tbody>
                     </table>
-                    </div>
                     <div class="panel-body text-center" v-else>
                         <span class="lead">No Trips</span>
-                        <p>Create a trip for this group to get started.</p>
+                        <p>Please contact Missions.Me staff to setup a trip.</p>
+                    </div>
                     </div>
                     <div class="panel-footer" v-if="pagination.pagination.total > pagination.pagination.per_page">
                         <pager :pagination="pagination.pagination"></pager>

@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-sm-12">
 
-            <fetch-json url="groups">
+            <fetch-json url="groups?manager={{ auth()->user()->id }}">
                 <div class="panel panel-default" style="border-top: 5px solid #f6323e" slot-scope="{ json:groups, loading, pagination, filters, addFilter }">
                     <div class="panel-heading">
                         <div class="row">

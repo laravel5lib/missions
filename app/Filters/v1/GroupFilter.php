@@ -135,4 +135,17 @@ class GroupFilter extends Filter
     {
         return $this->orWhere('status', 'pending');
     }
+
+    /**
+     * Find by manager.
+     *
+     * @param String $id
+     * @return void
+     */
+    public function manager($id)
+    {
+        return $this->whereHas('managers', function($query) use ($id) {
+            return $query->where('user_id', $id);
+        });
+    }
 }

@@ -47,7 +47,7 @@
                             <tr v-for="(reservation, index) in reservations" :key="reservation.id">
                                 <td>@{{ index+1 }}</td>
                                 <td>
-                                    <strong><a :href="'/dashboard/reservations/' + reservation.id">@{{ reservation.given_names }}</a></strong>
+                                    <strong><a :href="'/dashboard/reservations/' + reservation.id">@{{ reservation.given_names }} @{{ reservation.surname }}</a></strong>
                                     <br><em>@{{ reservation.desired_role.name }}</em>
                                 </td>
                                 <td>

@@ -19,9 +19,9 @@
 
             <div class="col-md-2">
                 @sidenav(['links' => [
-                    'admin/groups/'.$group->uuid => 'Overview',
-                    'admin/groups/'.$group->uuid.'/prices' => 'Pricing',
-                    'admin/groups/'.$group->uuid.'/trips' => 'Trips'
+                    'admin/campaign-groups/'.$group->uuid => 'Overview',
+                    'admin/campaign-groups/'.$group->uuid.'/prices' => 'Pricing',
+                    'admin/campaign-groups/'.$group->uuid.'/trips' => 'Trips'
                 ]])
                 @endsidenav
             </div>

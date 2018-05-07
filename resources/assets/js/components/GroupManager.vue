@@ -81,7 +81,7 @@
             <tr v-for="(group, index) in groups" :key="group.id">
                 <td>{{ index+1 }}</td>
                 <td>
-                    <strong><a :href="'/admin/groups/' + group.group_id">{{ group.name }}</a></strong>
+                    <strong><a :href="'/admin/campaign-groups/' + group.group_id">{{ group.name }}</a></strong>
                 </td>
                 <td class="col-sm-1 text-right">
                     <strong>0</strong>

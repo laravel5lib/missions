@@ -6,7 +6,7 @@
         'admin/campaigns' => 'Campaigns', 
         'admin/campaigns/'.$group->campaign_id => $group->campaign->name.' - '.country($group->campaign->country_code),
         'admin/campaigns/'.$group->campaign_id.'/groups' => 'Groups',
-        'admin/groups/'.$group->uuid => $group->organization->name,
+        'admin/campaign-groups/'.$group->uuid => $group->organization->name,
         'active' => $price->cost->name
     ]])
     @endbreadcrumbs
@@ -31,7 +31,7 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
-            <h3 class="text-primary">Price Details</h3>
+            <h3 class="text-primary">{{ $price->cost->name }} Price</h3>
         </div>
     </div>
 </div>

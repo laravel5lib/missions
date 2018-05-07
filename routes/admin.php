@@ -25,7 +25,7 @@ Route::prefix('campaigns')->group(function () {
     Route::get('{id}/{tab?}', 'CampaignsController@show');
     Route::get('{id}/costs/{cost}', 'CampaignCostController@show');
 });
-Route::get('groups/{group}/{tab?}', 'CampaignGroupController@show');
+Route::get('campaign-groups/{group}/{tab?}', 'CampaignGroupController@show');
 Route::get('campaign-groups/{group}/prices/{price}', 'CampaignGroupPriceController@show');
 
 Route::get('trips/{id}/{tab?}', 'TripsController@show');

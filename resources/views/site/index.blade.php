@@ -30,7 +30,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
             <hr class="divider inv lg">
             <img class="img-responsive" src="../images/1n1d19/acw-type.png" alt="All Creation Waits">
             <hr class="divider inv lg">
-              <h4 class="text-uppercase">June 20-July 2, 2019</h4>
+              <h4 class="text-uppercase">June 20-June 30, 2019</h4>
               <hr class="divider inv xlg">
           </div><!-- end col -->
         </div><!-- end row -->

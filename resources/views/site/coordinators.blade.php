@@ -193,9 +193,9 @@ $('.launch-modal').on('click', function(e){
                   <div class="col-md-4 col-md-offset-0 col-sm-12 col-sm-offset-0">
                     <ul class="list-unstyled">
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">October 17 at 4pm EST</h6></li>
-                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">November 14 at 4pm EST <span style="vertical-align: top;font-size: 10px;" class="badge">SD</span></h6></li>
-                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">December 12 at 4pm EST <span style="vertical-align: top;font-size: 10px;" class="badge">SD</span></h6></li>
-                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">January 9 at 4pm EST <span style="vertical-align: top;font-size: 10px;" class="badge">SD</span></h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">November 14 at 4pm EST</h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">December 12 at 4pm EST</h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">January 9 at 4pm EST</h6></li>
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">February 20 at 4pm EST</h6></li>
                     </ul>
                   </div>
@@ -204,12 +204,11 @@ $('.launch-modal').on('click', function(e){
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">March 20 at 4pm EST</h6></li>
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">April 17 at 4pm EST</h6></li>
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">May 15 at 4pm EST</h6></li>
-                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">June 5 at 4pm EST <span style="vertical-align: top;font-size: 10px;" class="badge">SD</span></h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">June 5 at 4pm EST</h6></li>
                     </ul>
                   </div>
                 </div><!-- end row -->
                 <p class="small text-italic">* Note, you’ll need to download the FREE Zoom application on a computer or mobile device to connect to the meeting. Please have this installed before tuning into your first meeting.</p>
-                <h6 style="display:inline-block;"><span style="vertical-align: top;font-size: 10px;" class="badge">SD</span> = Special Meeting Date</h6>
                 </div><!-- end panel-body -->
               </div><!-- end panel -->
             </div>

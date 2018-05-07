@@ -10,7 +10,7 @@
         		<hr class="divider inv xlg">
         		<img class="img-responsive" src="../images/1n1d19/acw-type.png" alt="All Creation Waits">
         		<hr class="divider inv xlg">
-            	<h4 class="text-uppercase">June 20-July 2</h4>
+            	<h4 class="text-uppercase">June 20-June 30</h4>
             	<hr class="divider inv xlg">
 			</div><!-- end col -->
 		</div><!-- end row -->

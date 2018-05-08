@@ -114,7 +114,7 @@ export default {
     },
 
     mounted() {
-        if (this.price.payments) {
+        if (this.price.payments.length) {
 
             this.$refs.ajax.form['active_at'] = this.price.active_at;
             this.$refs.ajax.form.set('active_at', this.price.active_at);

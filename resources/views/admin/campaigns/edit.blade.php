@@ -1,8 +1,4 @@
-@extends('admin.layouts.default')
-
-@section('styles')
-    <link rel="stylesheet" href="/css/slim.css" type="text/css">
-@endsection
+@extends('layouts.admin')
 
 @section('content')
 <hr class="divider inv lg">
@@ -19,8 +15,8 @@
     <template slot="confirm">Done</template>
 </alert-success>
 
-<ajax-form method="put" action="/campaigns/{{ $campaign->id }}">
-<template slot-scope="props">
+<ajax-form method="put" action="/campaigns/{{ $campaign->id }}" :initial="{{ $campaign }}">
+<template slot-scope="{ form }">
 
 <div class="container">
     <div class="row">
@@ -42,14 +38,19 @@
                 @slot('body')
                 <div class="row">
                     <div class="col-sm-6">
-                        <input-text name="name" value="{{ $campaign->name }}">
+                        <input-text name="name" v-model="form.name">
                             <label slot="label">Campaign Name</label>
                         </input-text>
                     </div>
                     <div class="col-sm-6">
-                        <select-country name="country_code" value="{{ $campaign->country_code }}"></select-country>
+                        <select-country name="country_code" v-model="form.country_code"></select-country>
                     </div>
                 </div>
+
+                <input-textarea name="short_desc" v-model="form.short_desc">
+                        <label slot="label">Short Description</label>
+                </input-textarea>
+
                 @endslot
             @endcomponent
         </div>
@@ -69,12 +70,12 @@
                 @slot('body')
                 <div class="row">
                     <div class="col-sm-6">
-                        <input-date name="started_at" value="{{ $campaign->started_at->toDateString() }}">
+                        <input-date name="started_at" v-model="form.started_at">
                             <label slot="label">Start Date</label>
                         </input-date>
                     </div>
                     <div class="col-sm-6">
-                        <input-date name="ended_at" value="{{ $campaign->ended_at->toDateString() }}">
+                        <input-date name="ended_at" v-model="form.ended_at">
                             <label slot="label">End Date</label>
                         </input-date>
                     </div>
@@ -96,14 +97,14 @@
         <div class="col-md-8">
             @component('panel')
                 @slot('body')
-                    <input-text name="page_url" value="{{ $campaign->slug->url }}">
+                    <input-text name="page_url" v-model="form.url">
                         <label slot="label">Page Url</label>
                         <span class="input-group-addon" slot="prefix">{{ url('/') }}/</span>
                     </input-text>
 
                     <div class="row">
                         <div class="col-md-6">
-                            <input-text name="page_src" value="{{ $campaign->page_src }}">
+                            <input-text name="page_src" v-model="form.page_src">
                                 <label slot="label">Page Source File</label>
                                 <span class="help-block" slot="help-text">Source files are stored at <code>/views/site/campaigns/partials/</code></span>
                                 <span class="input-group-addon" slot="suffix">.blade.php</span>
@@ -111,14 +112,9 @@
                         </div>
                     </div>
 
-                    <input-textarea name="short_desc" value="{{ $campaign->short_desc }}">
-                        <label slot="label">Short Description</label>
-                        <span class="help-block" slot="help-text">This short description will appear on the trips page.</span>
-                    </input-textarea>
-
                     <div class="row">
                         <div class="col-md-6">
-                            <input-datetime name="published_at" value="{{ $campaign->published_at }}">
+                            <input-datetime name="published_at" v-model="form.published_at">
                                 <label slot="label">Publish Page</label>
                                 <span class="help-block" slot="help-text">Set a date and time to make the page public or leave blank to keep hidden.</span>
                             </input-datetime>
@@ -133,7 +129,7 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12 text-right">
-            <a href="{{ url('campaigns/' . $campaign->id) }}" class="btn btn-link">Cancel</a>
+            <a href="{{ url('admin/campaigns/' . $campaign->id) }}" class="btn btn-link">Cancel</a>
             <button type="submit" class="btn btn-primary">Save Changes</button>
         </div>
     </div>

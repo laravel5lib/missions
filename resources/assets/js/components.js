@@ -229,7 +229,7 @@ Vue.component('price-list', require('./components/price-list.vue'));
 Vue.component('price-add-new', require('./components/price-add-new.vue'));
 Vue.component('price-edit', require('./components/price-edit.vue'));
 Vue.component('price-delete', require('./components/price-delete.vue'));
-
+Vue.component('meta-form', require('./components/MetaForm.vue'));
 Vue.component('group-manager', require('./components/GroupManager.vue'));
 Vue.component('trip-manager', require('./components/TripManager.vue'));
 Vue.component('campaign-cost-manager', require('./components/CampaignCostManager.vue'));
@@ -238,6 +238,7 @@ Vue.component('group-reservation-list', require('./components/group-reservation-
 /**
  * Utility Components
  */
+Vue.component('delete-form', require('./components/DeleteForm.vue'));
 Vue.component('fetch-json', require('./components/fetch-json.vue'));
 Vue.component('pager', require('./components/pager.vue'));
 Vue.component('data-list', require('./components/data-list.vue'));

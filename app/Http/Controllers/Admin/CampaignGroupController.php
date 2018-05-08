@@ -14,4 +14,11 @@ class CampaignGroupController extends Controller
 
         return view('admin.campaigns.groups.tabs.'.$tab, compact('group'));
     }
+
+    public function edit($group)
+    {
+        $group = CampaignGroup::whereUuid($group)->firstOrFail();
+
+        return view('admin.campaigns.groups.edit', compact('group'));   
+    }
 }

@@ -53,7 +53,7 @@
     </div>
 
     <fetch-json :url="'campaigns/'+campaignId+'/costs'" ref="costList">
-        <div class="panel panel-default" slot-scope="{ json: costs, loading, pagination }" style="border-top: 5px solid #f6323e">
+        <div class="panel panel-default" slot-scope="{ json: costs, loading, pagination, changePage }" style="border-top: 5px solid #f6323e">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-6">
@@ -90,7 +90,7 @@
                 <p>Create a cost for this campaign to get started.</p>
             </div>
             <div class="panel-footer" v-if="pagination.total > pagination.per_page">
-                <pager :pagination="pagination"></pager>
+                <pager :pagination="pagination" :callback="changePage"></pager>
             </div>
         </div>
     </fetch-json>
@@ -118,12 +118,6 @@ export default {
         updateList(params) {
             this.$refs.costList.fetch(params);
         }
-    },
-
-    mounted() {
-        this.$root.$on('page:change', (pageNumber) => {
-            this.updateList({page: pageNumber});
-        });
     }
 }
 </script>

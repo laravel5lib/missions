@@ -63,9 +63,9 @@ export default {
                 
                 if (this.redirect.endsWith('/')) {
                     window.location.href = this.redirect + data.data.id
+                } else {
+                    window.location.href = this.redirect
                 }
-
-                window.location.href = this.redirect
             }
         });
     }

@@ -14,7 +14,7 @@
     <template slot="message">Please check the form for errors and try again.</template>
 </alert-error>
 
-<alert-success :timer="3000">
+<alert-success redirect="/admin/campaigns/">
     <template slot="title">Nice Work!</template>
     <template slot="message">A new campaign was started.</template>
     <template slot="cancel">Start Another</template>
@@ -96,19 +96,30 @@
 
 
             <div class="row">
-                <fetch-json url="/campaigns?current=true">
-                <div class="col-sm-12" slot-scope="{ json: campaigns, loading, pagination }">
+                <fetch-json url="/campaigns" :parameters="{current: true}" v-cloak>
+                <div class="col-sm-12" 
+                     slot-scope="{ json: campaigns, loading, pagination, filters, addFilter, removeFilter, changePage }">
                     @component('panel')
                         @slot('title')
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <h5>Current Campaigns</h5>
+                                    <h5>Campaigns <span class="badge badge-default">@{{ pagination.pagination.total }}</span></h5>
                                 </div>
                                 <div class="col-sm-6 text-muted text-right">
                                     <h5 v-if="loading"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</h5>
                                 </div>
                             </div>
                         @endslot
+                        <div class="panel-body">
+                            <ul class="nav nav-pills nav-justified">
+                                <li role="presentation" :class="{'active' : filters.current}">
+                                    <a role="button" @click="addFilter('current', true); removeFilter('archived')"><i class="fa fa-fire"></i> Current</a>
+                                </li>
+                                <li role="presentation" :class="{'active' : filters.archived}">
+                                    <a role="button" @click="addFilter('archived', true); removeFilter('current')"><i class="fa fa-archive"></i> Past</a>
+                                </li>
+                            </ul>
+                        </div>
                         <table class="table" v-if="campaigns && campaigns.length">
                             <thead>
                                 <tr class="active">
@@ -141,8 +152,8 @@
                             <span class="lead">No Campaigns</span>
                             <p>Create a campaign to get started.</p>
                         </div>
-                        <div class="panel-footer" v-if="pagination.total > pagination.per_page">
-                            <pager :pagination="pagination"></pager>
+                        <div class="panel-footer" v-if="pagination.pagination.total > pagination.pagination.per_page">
+                            <pager :pagination="pagination.pagination" :callback="changePage"></pager>
                         </div>
                     @endcomponent
                 </div>

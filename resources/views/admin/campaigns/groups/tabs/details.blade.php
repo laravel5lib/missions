@@ -5,15 +5,15 @@
 @component('panel')
     @slot('body')
     <div class="row">
-        <div class="col-sm-3">
+        <div class="col-sm-6">
             <h4 class="text-primary">{{ $group->status }}</h4>
             <p class="small text-muted">Status</p>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <h4>0</h4>
             <p class="small text-muted">Trips</p>
         </div>
-        <div class="col-sm-5">
+        <div class="col-sm-3">
             <h4>0</h4>
             <p class="small text-muted">Reservations</p>
         </div>
@@ -28,7 +28,7 @@
                 <h5>Group Details</h5>
             </div>
             <div class="col-xs-6 text-right">
-                <a href="#" class="btn btn-default btn-sm">Edit</a>
+                <a href="{{ url('admin/campaign-groups/'.$group->uuid.'/edit') }}" class="btn btn-default btn-sm">Edit</a>
             </div>
         </div>
     @endslot
@@ -56,6 +56,25 @@
         'Last Updated' => '<datetime-formatted value="'.$group->organization->updated_at->toIso8601String().'" />'
     ]])
     @endcomponent
+@endcomponent
+
+@component('panel')
+    @slot('title')
+        <h5>Remove Group</h5>
+    @endslot
+    @slot('body')
+        <div class="alert alert-warning">
+            <div class="row">
+                <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
+                <div class="col-xs-11">USE CAUTION! This is a destructive action that cannot be undone. This will disassociate the group from the campaign but also delete trips and drop reservations.</div>
+            </div>
+        </div>
+        <delete-form url="campaigns/{{ $group->campaign_id }}/groups/{{ $group->uuid }}" 
+                        redirect="/admin/campaigns/{{ $group->campaign_id }}/groups"
+                        match-key="group name"
+                        match-value="{{ $group->organization->name }}">
+        </delete-form>
+    @endslot
 @endcomponent
 
 @endsection

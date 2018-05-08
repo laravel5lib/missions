@@ -40,7 +40,7 @@
 </div>
 
 <fetch-json :url="'/campaigns/'+campaignId+'/groups'" ref="groupList">
-    <div class="panel panel-default" style="border-top: 5px solid #f6323e" slot-scope="{ json:groups, loading, pagination, filters, addFilter }">
+    <div class="panel panel-default" style="border-top: 5px solid #f6323e" slot-scope="{ json:groups, loading, pagination, filters, addFilter, changePage }">
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-6">
@@ -97,7 +97,7 @@
             <p>Add a group to this campaign to get started.</p>
         </div>
         <div class="panel-footer" v-if="pagination.total > pagination.per_page">
-            <pager :pagination="pagination"></pager>
+            <pager :pagination="pagination" :callback="changePage"></pager>
         </div>
     </div>
 </fetch-json>
@@ -132,12 +132,6 @@ export default {
         updateList(params) {
             this.$refs.groupList.fetch(params);
         }
-    },
-
-    mounted() {
-        this.$root.$on('page:change', (pageNumber) => {
-            this.updateList({page: pageNumber});
-        });
     }
 }
 </script>

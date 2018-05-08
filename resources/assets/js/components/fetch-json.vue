@@ -25,12 +25,22 @@ export default {
         addFilter(key, value) {
             this.filters[key] = value;
             this.$forceUpdate();
-            this.fetch();
+
+            let params = $.extend(this.filters, {page: 1});
+            this.fetch(params);
         },
         removeFilter(key) {
             delete this.filters[key];
             this.$forceUpdate();
-            this.fetch();
+
+            let params = $.extend(this.filters, {page: 1});
+            this.fetch(params);
+
+            this.fetch(params);
+        },
+        changePage(page) {
+            let params = $.extend(this.filters, {page: page});
+            this.fetch(params);
         }
     },
 
@@ -47,6 +57,7 @@ export default {
             addFilter: this.addFilter,
             removeFilter: this.removeFilter,
             fetch: this.fetch,
+            changePage: this.changePage
         })
     }
 }

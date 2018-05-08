@@ -3,6 +3,29 @@
 @section('tab')
 <div>
     @component('panel')
+        @slot('body')
+            <div class="row">
+                <div class="col-sm-3">
+                    <h4 class="text-primary">{{ $campaign->groups()->count() }}</h4>
+                    <p class="small text-muted">Groups</p>
+                </div>
+                <div class="col-sm-3">
+                    <h4>{{ $campaign->trips()->count() }}</h4>
+                    <p class="small text-muted">Trips</p>
+                </div>
+                <div class="col-sm-3">
+                    <h4 class="text-primary">{{ $campaign->reservations()->count() }}</h4>
+                    <p class="small text-muted">Reservations</p>
+                </div>
+                <div class="col-sm-3">
+                    <h4>{{ $campaign->interests()->count() }}</h4>
+                    <p class="small text-muted">Interests</p>
+                </div>
+            </div>
+        @endslot
+    @endcomponent
+
+    @component('panel')
         @slot('title')
             <div class="row">
                 <div class="col-xs-8">
@@ -45,5 +68,24 @@
     @endcomponent
         
     <visibility-controls campaign-id="{{ $campaign->id }}"></visibility-controls>
+
+    @component('panel')
+        @slot('title')
+            <h5>Delete Campaign</h5>
+        @endslot
+        @slot('body')
+            <div class="alert alert-warning">
+                <div class="row">
+                    <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
+                    <div class="col-xs-11">USE CAUTION! This is a destructive action that cannot be undone. All associated groups will be removed, all trips deleted and reservations dropped.</div>
+                </div>
+            </div>
+            <delete-form url="campaigns/{{ $campaign->id }}" 
+                         redirect="/admin/campaigns"
+                         match-key="campaign name"
+                         match-value="{{ $campaign->name }}">
+            </delete-form>
+        @endslot
+    @endcomponent
 </div>
 @endsection

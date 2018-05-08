@@ -24,15 +24,23 @@ export default {
         pagination: {
             type: Object,
             required: true
+        },
+        callback: {
+            type: Function,
+            required: true
         }
     },
 
     methods: {
         nextPage() {
-            this.$root.$emit('page:change', this.pagination.current_page + 1);
+            this.callback(this.pagination.current_page + 1);
+
+            // this.$root.$emit('page:change', this.pagination.current_page + 1);
         },
         previousPage() {
-            this.$root.$emit('page:change', this.pagination.current_page - 1);
+            this.callback(this.pagination.current_page - 1);
+
+            // this.$root.$emit('page:change', this.pagination.current_page - 1);
         }
     }
 }

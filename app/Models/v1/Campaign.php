@@ -3,12 +3,13 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
-use App\Models\v1\Price;
 use App\Models\v1\Team;
+use App\Models\v1\Price;
 use App\Models\v1\Region;
 use App\Traits\Rewardable;
 use App\Traits\Promoteable;
 use EloquentFilter\Filterable;
+use App\Models\v1\TripInterest;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\Models\Media;
 use Illuminate\Database\Eloquent\Model;
@@ -270,6 +271,16 @@ class Campaign extends Model implements HasMedia
     public function reservations()
     {
         return $this->hasManyThrough(Reservation::class, Trip::class);
+    }
+
+    /**
+     * Get all the campaign's trip reservations.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function interests()
+    {
+        return $this->hasManyThrough(TripInterest::class, Trip::class);
     }
 
     /**

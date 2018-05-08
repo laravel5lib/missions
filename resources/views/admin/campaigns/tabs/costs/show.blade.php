@@ -28,7 +28,7 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
-            <h3 class="text-primary">Cost Details</h3>
+            <h3 class="text-primary">{{ $cost->name }} Cost</h3>
         </div>
     </div>
 </div>
@@ -85,17 +85,23 @@
 <div class="container">
     <div class="row">
         <div class="col-md-4">
-            <h5>Delete</h5>
-			<p class="text-muted">USE CAUTION! Deleting this cost will also remove it from any groups, trips or reservations. This will affect fundraising goals and deadlines.</p>
+            <h5>Delete Cost</h5>
+			<p class="text-muted">Delete the cost and remove it from all groups, trips, and reservations where in use.</p>
         </div>
         <div class="col-md-8">
             @component('panel')
                 @slot('body')
-                <price-delete priceable-type="campaigns" 
-                              priceable-id="{{ $campaign->id }}" 
-                              id="{{ $cost->id }}"
-                              cost-name="{{ $cost->name}}">
-                </price-delete>
+                    <div class="alert alert-warning">
+                        <div class="row">
+                            <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
+                            <div class="col-xs-11">USE CAUTION! Deleting this cost will also remove it from any groups, trips or reservations. This will affect fundraising goals and deadlines.</div>
+                        </div>
+                    </div>
+                    <delete-form url="campaigns/{{ $campaign->id }}/costs/{{ $cost->id }}" 
+                                redirect="/admin/campaigns/{{ $campaign->id}}/costs"
+                                match-key="cost name"
+                                match-value="{{ $cost->name }}">
+                    </delete-form>
                 @endslot
             @endcomponent
         </div>

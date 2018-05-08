@@ -5,14 +5,11 @@ namespace App\Models\v1;
 use Ramsey\Uuid\Uuid;
 use App\Models\v1\Group;
 use App\Models\v1\Price;
-use App\Traits\HasPricing;
 use App\Models\v1\Campaign;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class CampaignGroup extends Pivot
 {
-    use HasPricing;
-
     protected $casts = ['meta' => 'array'];
     
     /**
@@ -55,12 +52,19 @@ class CampaignGroup extends Pivot
     {
         return $this->prices()->whereHas('cost', function ($cost) {
             return $cost->whereType('upfront');
-        });
+        })->get();
     }
 
     public function getCurrentStartingCostAttribute()
     {
-        return optional($this->getCurrentRate())->amount + $this->getUpfrontCosts()->sum('amount');
+        return (int) optional($this->getCurrentRate())->amount + $this->getUpfrontCosts()->sum('amount');
+    }
+
+    public function getUpcomingDeadline()
+    {
+        $payments = optional($this->getCurrentRate())->payments;
+        
+        return $payments ? $payments->first()->due_at : null;
     }
 
     public function getStatusAttribute()

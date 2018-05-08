@@ -30,6 +30,10 @@ class PriceRequest extends FormRequest
     {
         $validator->after(function ($validator) {
 
+            if (!$this->input('cost_id') and !$this->input('price_id')) {
+                return;
+            }
+
             if($this->assertCustomPrice()) {
             
                 if ($this->assertRequiredPayments()) {

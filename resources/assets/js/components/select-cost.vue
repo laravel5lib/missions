@@ -54,6 +54,7 @@ export default {
         updateValue(value) {
             this.$emit('input', value);
             this.$root.$emit('cost-change', this.cost);
+            this.$parent.form ? this.$parent.form.errors.clear(this.name) : null;
         }
     },
 

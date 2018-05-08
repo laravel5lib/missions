@@ -46,14 +46,20 @@
         <div class="col-md-8">
             @component('panel')
                 @slot('body')
-                <ajax-form method="put" action="/campaign-groups/{{ $group->uuid }}" :horizontal="true">
-                    <input-select name="status" :horizontal="true" classes="col-sm-8">
-                        <label slot="label" class="control-label col-sm-4">Status</label>
-                    </input-select>
-                    <hr class="divider">
-                    <div class="from-group text-right">
-                        <button type="submit" class="btn btn-primary">Update</button>
-                    </div>
+                <ajax-form method="put" action="/campaign-groups/{{ $group->uuid }}" :horizontal="true" :initial="{{ $group }}">
+                    <template slot-scope="{ form }">
+                        <input-select name="status" 
+                                      :horizontal="true" 
+                                      classes="col-sm-8" 
+                                      :options="{1:'Pending', 2:'Committed', 3:'Ready to Launch', 4:'Launched'}" v-model="form.status_id"
+                        >
+                            <label slot="label" class="control-label col-sm-4">Status</label>
+                        </input-select>
+                        <hr class="divider">
+                        <div class="from-group text-right">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </template>
                 </ajax-form>
                 @endslot
             @endcomponent

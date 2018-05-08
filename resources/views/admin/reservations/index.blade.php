@@ -27,10 +27,7 @@
 @section('content')
 <hr class="divider inv lg">
 <div class="container-fluid">
-    <div class="col-xs-12 col-md-2">
-        @include('admin.partials._toolbar')
-    </div>
-    <div class="col-xs-12 col-md-10">
+    <div class="col-xs-12">
 
         <div class="row">
             <div class="col-sm-12">

@@ -45,11 +45,16 @@ trait HasPricing
         })->first();
     }
 
-    public function getUpcomingDeadline()
+    public function getUpcomingPayment()
     {
         $payments = optional($this->getCurrentRate())->payments;
         
-        return $payments ? $payments->first()->due_at : null;
+        return $payments ? $payments->first() : null;
+    }
+
+    public function getUpcomingDeadline()
+    {
+        return optional($this->getUpcomingPayment())->due_at;
     }
 
     /**

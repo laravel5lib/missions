@@ -60,9 +60,9 @@ class ReservationsController extends Controller
 
         $pageLinks = [
             'admin/reservations/'.$reservation->id => 'Overview',
-            'admin/reservations/'.$reservation->id.'/costs' => 'Pricing',
+            'admin/reservations/'.$reservation->id.'/funding' => 'Funding',
             'admin/reservations/'.$reservation->id.'/requirements' => 'Requirements',
-            'admin/reservations/'.$reservation->id.'/funding' => 'Fundraiser',
+            'admin/reservations/'.$reservation->id.'/costs' => 'Pricing',
             'admin/reservations/'.$reservation->id.'/legal' => 'Legal',
             'admin/reservations/'.$reservation->id.'/resources' => 'Resources'
         ];

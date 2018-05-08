@@ -2,12 +2,12 @@
     <fetch-json :url="url" ref="tripList">
         <div class="panel panel-default" 
                 style="border-top: 5px solid #f6323e" 
-                slot-scope="{ json: trips, loading, pagination }"
+                slot-scope="{ json: trips, loading, pagination, changePage }"
         >
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h5>Current Trips <span class="badge badge-default">{{ pagination.pagination.total }}</span></h5>
+                        <h5>Trips <span class="badge badge-default">{{ pagination.pagination.total }}</span></h5>
                     </div>
                     <div class="col-xs-6 text-right text-muted">
                         <h5 v-if="loading"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</h5>
@@ -31,7 +31,7 @@
                             <strong><a :href="'/admin/trips/' + trip.id">{{ trip.type | capitalize }}</a></strong>
                         </td>
                         <td class="col-sm-5">
-                            {{ trip.started_at | moment('MMM d') }} - {{ trip.ended_at | moment('MMM d') }}
+                            {{ trip.started_at | moment('MMM D') }} - {{ trip.ended_at | moment('MMM D') }}
                         </td>
                         <td class="col-sm-1 text-right">
                             <strong>{{ trip.reservations}}</strong> / {{ trip.spots }}
@@ -47,7 +47,7 @@
                 <p>Create a trip for this group to get started.</p>
             </div>
             <div class="panel-footer" v-if="pagination.pagination.total > pagination.pagination.per_page">
-                <pager :pagination="pagination.pagination"></pager>
+                <pager :pagination="pagination.pagination" :callback="changePage"></pager>
             </div>
         </div>
     </fetch-json>
@@ -61,12 +61,6 @@ export default {
         updateList(params) {
             this.$refs.tripList.fetch(params);
         }
-    },
-
-    mounted() {
-        this.$root.$on('page:change', (pageNumber) => {
-            this.updateList({page: pageNumber});
-        });
     }
 }
 </script>

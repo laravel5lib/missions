@@ -23837,7 +23837,7 @@ li.av-nav > a {
 
 @media (min-width: 991px) {
   .aside.left {
-    left: 55px !important;
+    left: 0px !important;
   }
 }
 

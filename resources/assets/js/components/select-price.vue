@@ -78,6 +78,7 @@ export default {
         updateValue(value) {
             this.$emit('input', parseInt(value));
             this.$root.$emit('price-change', price);
+            this.$parent.form ? this.$parent.form.errors.clear(this.name) : null;
         }
     },
 

@@ -79,7 +79,10 @@
             </div>
             
             <div role="tabpanel" class="tab-pane" id="custom">
-                <price-add-new priceable-type="reservations" priceable-id="{{ $reservation->id }}"></price-add-new>
+                <price-add-new priceable-type="reservations" 
+                               priceable-id="{{ $reservation->id }}" 
+                               campaign-id="{{ $reservation->trip->campaign_id }}">
+                </price-add-new>
             </div>
         </div>
     @endslot

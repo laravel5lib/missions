@@ -18,6 +18,9 @@
                               classes="col-sm-9"
                               :horizontal="true">
                     <label slot="label" class="control-label col-sm-3">Organization</label>
+                    <span slot="help-text" class="help-block">
+                        <a href="/admin/organizations/create">+ add new organization</a>
+                    </span>
                 </select-group>
 
                 <input-select name="status_id" 

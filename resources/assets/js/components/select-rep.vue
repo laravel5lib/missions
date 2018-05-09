@@ -8,8 +8,11 @@
                       v-model="repObj"
                       :on-search="getReps"
                       :options="reps"
-                      label="name"
+                      label="email"
                       :name="name">
+                       <template slot="option" slot-scope="option">
+                            {{ option.email }} ({{ option.name }})
+                       </template>
             </v-select>
             <span class="help-block" 
                     v-text="$parent.form.errors.get(name)" 

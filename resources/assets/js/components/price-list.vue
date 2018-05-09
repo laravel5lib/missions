@@ -11,7 +11,7 @@
             </div>
         </div>
     </div>
-    <table class="table">
+    <table class="table" v-if="prices && prices.length">
         <thead>
             <tr class="active">
                 <th>#</th>
@@ -65,6 +65,10 @@
             </template>
         </tbody>
     </table>
+    <div class="panel-body text-center" v-else>
+        <span class="lead">No Prices</span>
+        <p>Add a price to get started.</p>
+    </div>
     <div class="panel-footer" v-if="pagination.total > pagination.per_page">
         <pager :pagination="pagination"></pager>
     </div>

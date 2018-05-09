@@ -1,5 +1,5 @@
 <template>
-    <fetch-json :url="url" ref="tripList">
+    <fetch-json :url="url" ref="tripList" v-cloak>
         <div class="panel panel-default" 
                 style="border-top: 5px solid #f6323e" 
                 slot-scope="{ json: trips, loading, pagination, changePage }"
@@ -9,8 +9,9 @@
                     <div class="col-sm-6">
                         <h5>Trips <span class="badge badge-default">{{ pagination.pagination.total }}</span></h5>
                     </div>
-                    <div class="col-xs-6 text-right text-muted">
-                        <h5 v-if="loading"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</h5>
+                    <div class="col-xs-6 text-right">
+                        <h5 v-if="loading" class="text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</h5>
+                        <a href=""
                     </div>
                 </div>
             </div>

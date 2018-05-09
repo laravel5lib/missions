@@ -19,6 +19,7 @@ class CampaignCostController extends Controller
     {   
         $costs = Campaign::findOrFail($campaignId)
             ->costs()
+            ->orderBy('name')
             ->paginate();
 
         return CostResource::collection($costs);

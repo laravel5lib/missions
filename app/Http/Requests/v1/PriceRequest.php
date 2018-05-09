@@ -48,13 +48,13 @@ class PriceRequest extends FormRequest
                     $validator->errors()->add('payments', 'Payment dates are invalid.');
                 }
 
-                // if ( ! $this->assertUniqueCost()) {
-                //     $validator->errors()->add('cost_id', 'This cost has already been used.');
-                // }
+                if ( ! $this->assertUniqueCost()) {
+                    $validator->errors()->add('cost_id', 'This cost has already been used.');
+                }
 
-                // if ($this->assertActivationDateRequired()) {
-                //     $validator->errors()->add('active_at', 'An effective date is required.');
-                // }
+                if ($this->assertActivationDateRequired()) {
+                    $validator->errors()->add('active_at', 'An effective date is required.');
+                }
 
             } else {
 
@@ -126,6 +126,39 @@ class PriceRequest extends FormRequest
         $diff = $paymentsByPercentage->diffAssoc($paymentsByDate);
         // if the collections don't match then the dates are invalid
         return ! empty($diff->all());
+    }
+
+    /**
+     * Assert unique cost.
+     *
+     * @return boolean
+     */
+    private function assertUniqueCost()
+    {
+        $price = DB::table('prices')
+            ->join('priceables', function ($join) {
+                $join->on('prices.id', '=', 'priceables.price_id')
+                     ->where('priceable_type', $this->segment(2))
+                     ->where('priceable_id', $this->segment(3));
+            })
+            ->where('cost_id', $this->input('cost_id'))
+            ->first();
+
+        return is_null($price) ?: false;
+    }
+
+    /**
+     * Assert that an activation date is required.
+     *
+     * @return boolean
+     */
+    private function assertActivationDateRequired()
+    {
+        if ($this->input('active_at')) return false;
+
+        $cost = Cost::findOrFail($this->input('cost_id'));
+
+        if ($cost->type === 'incremental') return true;
     }
 
     /**

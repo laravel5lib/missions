@@ -204,7 +204,7 @@ class TripPriceTest extends TestCase
     }
 
     /** @test */
-    public function validates_that_cost_is_unique_when_adding_a_custom_price_to_trip()
+    public function validates_that_cost_is_unique_when_adding_a_duplicate_custom_price_to_trip()
     {
         $trip = factory(Trip::class)->create();
         $cost = factory(Cost::class)->create();
@@ -219,6 +219,43 @@ class TripPriceTest extends TestCase
             'amount' => 1500.00,
             'active_at' => '01/01/2018'
         ])->assertJsonValidationErrors(['cost_id']);
+    }
+
+    /** @test */
+    public function validates_that_cost_is_unique_when_adding_a_custom_price_to_trip()
+    {
+        $group = factory(CampaignGroup::class)->create();
+        $trip = factory(Trip::class)->create(['campaign_id' => $group->campaign_id, 'group_id' => $group->group_id]);
+        $cost = factory(Cost::class)->create();
+        $price = factory(Price::class)->create([
+            'cost_id' => $cost->id,
+            'model_id' => $group->uuid, 
+            'model_type' => 'campaign-groups'
+        ]);
+        $trip->attachPriceToModel($price->id);
+
+        $this->json('POST', "/api/trips/{$trip->id}/prices", [
+            'cost_id' => $cost->id,
+            'amount' => 1500.00,
+            'active_at' => '01/01/2018'
+        ])->assertJsonValidationErrors(['cost_id']);
+    }
+
+    /** @test */
+    public function validates_that_active_at_date_is_required_when_cost_is_incremental()
+    {
+        $trip = factory(Trip::class)->create();
+        $cost = factory(Cost::class)->create(['type' => 'incremental']);
+        $price = factory(Price::class)->create([
+            'cost_id' => $cost->id,
+            'model_id' => $trip->id, 
+            'model_type' => 'trips'
+        ]);
+
+        $this->json('POST', "/api/trips/{$trip->id}/prices", [
+            'cost_id' => $cost->id,
+            'amount' => 1500.00
+        ])->assertJsonValidationErrors(['active_at']);
     }
 
     /** @test */

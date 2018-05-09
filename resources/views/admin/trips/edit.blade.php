@@ -56,6 +56,7 @@
                             'medical': 'Medical',
                             'leader': 'Leader',
                             'sports': 'Sports',
+                            'water': 'Water'
                         }">
                             <label slot="label">Trip Type</label>
                         </input-select>

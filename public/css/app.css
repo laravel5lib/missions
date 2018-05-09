@@ -23121,6 +23121,11 @@ p.large-line-height {
   color: #fff !important;
 }
 
+.panel-water {
+  background-color: #3291C6 !important;
+  color: #fff !important;
+}
+
 .panel-hero {
   border-top: 5px solid #f6323e;
 }

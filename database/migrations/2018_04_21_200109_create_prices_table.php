@@ -14,7 +14,7 @@ class CreatePricesTable extends Migration
     public function up()
     {
         Schema::create('prices', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->uuid('uuid')->index();
             $table->uuid('cost_id')->index();
             $table->integer('amount')->default(0);

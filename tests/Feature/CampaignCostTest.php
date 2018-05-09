@@ -8,6 +8,7 @@ use App\Models\v1\Cost;
 use App\Models\v1\Trip;
 use App\Models\v1\User;
 use App\Models\v1\Price;
+use App\Models\v1\Payment;
 use App\Models\v1\Campaign;
 use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -219,11 +220,17 @@ class CampaignCostTest extends TestCase
             'cost_assignable_id' => $campaign->id, 
             'cost_assignable_type' => 'campaigns',
         ]);
+        $price = factory(Price::class)->create(['cost_id' => $cost->id]);
+        factory(Payment::class, 2)->create(['price_id' => $price->id]);
+        $trip = factory(Trip::class)->create(['campaign_id' => $campaign->id]);
+        $trip->addPrice(['price_id' => $price->uuid]);
 
-        $response = $this->json('DELETE', "/api/campaigns/{$campaign->id }/costs/{$cost->id}");
-
-        $response->assertStatus(204);
+        $this->json('DELETE', "/api/campaigns/{$campaign->id }/costs/{$cost->id}")
+             ->assertStatus(204);
         $this->assertDatabaseMissing('costs', ['id' => $cost->id]);
+        $this->assertDatabaseMissing('prices', ['cost_id' => $cost->id]);
+        $this->assertDatabaseMissing('price_payments', ['price_id' => $price->id]);
+        $this->assertDatabaseMissing('priceables', ['price_id' => $price->id]);
     }
 
     private function setupAdminUser()

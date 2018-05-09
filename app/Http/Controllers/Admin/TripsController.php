@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Models\v1\Cost;
 use App\Models\v1\Trip;
+use App\Models\v1\CampaignGroup;
 use App\Http\Controllers\Controller;
 use Artesaos\SEOTools\Traits\SEOTools;
 
@@ -28,7 +29,10 @@ class TripsController extends Controller
             return $this->edit($id);
         }
 
-        $trip = $this->api->get('trips/'.$id, ['include' => 'campaign,requirements,notes,deadlines']);
+        $trip = Trip::findOrFail($id);
+        $group = CampaignGroup::whereCampaignId($trip->campaign_id)
+            ->whereGroupId($trip->group_id)
+            ->firstOrFail();
 
         $this->authorize('view', $trip);
 
@@ -36,7 +40,7 @@ class TripsController extends Controller
 
         $pageLinks = $this->getPageLinks($trip);
 
-        return view('admin.trips.show', compact('trip', 'tab', 'pageLinks'));
+        return view('admin.trips.show', compact('trip', 'tab', 'pageLinks', 'group'));
     }
 
     private function getPageLinks($trip)

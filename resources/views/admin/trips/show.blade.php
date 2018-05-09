@@ -4,9 +4,9 @@
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
         'admin/campaigns' => 'Campaigns',
-        '/admin/campaigns/'.$trip->campaign->id => $trip->campaign->name.' - '.country($trip->country_code),
-        '/admin/campaigns/'.$trip->campaign->id.'/groups' => 'Groups',
-        'active' => $trip->group->name.' - '.ucfirst($trip->type).' Trip'
+        '/admin/campaigns/'.$trip->campaign->id.'/groups' => $trip->campaign->name.' - '.country($trip->country_code),
+        '/admin/campaign-groups/'.$group->uuid.'/trips' => $trip->group->name,
+        'active' => ucfirst($trip->type).' Trip'
     ]])
     @endbreadcrumbs
 @endsection

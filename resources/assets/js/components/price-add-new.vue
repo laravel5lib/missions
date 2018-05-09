@@ -143,6 +143,9 @@ export default {
             } else {
                 delete this.$refs.ajax.form.payments;
                 this.$refs.ajax.form.unset('payments');
+                
+                this.$refs.ajax.form['active_at'] = null;
+                this.$refs.ajax.form.set('active_at', null);
             }
         }
     },

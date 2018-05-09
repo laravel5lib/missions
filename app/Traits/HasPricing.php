@@ -42,7 +42,7 @@ trait HasPricing
 
             return $q->whereDate('due_at', '>=', now());
 
-        })->first();
+        })->orderBy('active_at')->first();
     }
 
     public function getUpcomingPayment()

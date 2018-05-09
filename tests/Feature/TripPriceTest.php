@@ -8,6 +8,7 @@ use App\Models\v1\Cost;
 use App\Models\v1\Trip;
 use App\Models\v1\Price;
 use App\Models\v1\Campaign;
+use App\Models\v1\CampaignGroup;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -121,7 +122,7 @@ class TripPriceTest extends TestCase
     /** @test */
     public function add_campaign_price_to_a_trip()
     {
-        $campaign = $this->setupCampaignWithPrices();
+        $campaign = $this->setupCampaignWithCosts();
         $trip = factory(Trip::class)->create(['campaign_id' => $campaign->id]);
         $prices = $campaign->prices->toArray();
 
@@ -267,10 +268,10 @@ class TripPriceTest extends TestCase
     }
 
     /** @test */
-    public function remove_a_campaign_price()
+    public function remove_a_group_price()
     {
         $trip = $this->setupTripWithPrices();
-        $price = $trip->priceables()->where('model_type', 'campaigns')->first();
+        $price = $trip->priceables()->where('model_type', 'campaign-groups')->first();
 
         $response = $this->json('DELETE', "/api/trips/{$trip->id}/prices/{$price->uuid}");
 
@@ -285,7 +286,7 @@ class TripPriceTest extends TestCase
     public function remove_a_custom_trip_price()
     {
         $trip = $this->setupTripWithPrices();
-        $price = $trip->prices()->first();
+        $price = $trip->prices()->where('model_type', 'trips')->first();
 
         $response = $this->json('DELETE', "/api/trips/{$trip->id}/prices/{$price->uuid}");
 
@@ -298,28 +299,30 @@ class TripPriceTest extends TestCase
 
     private function setupTripWithPrices()
     {
-        $campaign = $this->setupCampaignWithPrices();
+        $campaign = $this->setupCampaignWithCosts();
 
         $trip = factory(Trip::class)->create(['campaign_id' => $campaign->id]);
-        $price = factory(Price::class)->create([
+        $group = factory(CampaignGroup::class)->create(['campaign_id' => $campaign->id]);
+        $groupPrice = factory(Price::class)->create([
+            'model_id' => $group->id, 
+            'model_type' => 'campaign-groups'
+        ]);
+        $tripPrice = factory(Price::class)->create([
             'model_id' => $trip->id, 
             'model_type' => 'trips'
         ]);
         
-        $campaignPrices = $campaign->prices->pluck('id')->toArray();
-        $trip->priceables()->attach([
-            $price->id, $campaignPrices[0], $campaignPrices[1]
-        ]);
+        $trip->priceables()->attach([$groupPrice->id, $tripPrice->id]);
 
         return $trip;
     }
 
-    private function setupCampaignWithPrices()
+    private function setupCampaignWithCosts()
     {
         $campaign = factory(Campaign::class)->create();
-        factory(Price::class, 2)->create([
-            'model_id' => $campaign->id, 
-            'model_type' => 'campaigns'
+        factory(Cost::class, 2)->create([
+            'cost_assignable_id' => $campaign->id, 
+            'cost_assignable_type' => 'campaigns'
         ]);
 
         return $campaign;

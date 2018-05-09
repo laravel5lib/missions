@@ -7,6 +7,7 @@ use Tests\TestCase;
 use App\Models\v1\Cost;
 use App\Models\v1\Trip;
 use App\Models\v1\Price;
+use App\Models\v1\Payment;
 use App\Models\v1\Campaign;
 use App\Models\v1\CampaignGroup;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -154,17 +155,19 @@ class CampaignGroupPriceTest extends TestCase
     }
 
     /** @test */
-    public function delete_a_price_from_campaign_group()
+    public function delete_a_price_with_payments_from_campaign_group()
     {
         $group = factory(CampaignGroup::class)->create();
         $price = factory(Price::class)->create([
             'model_id' => $group->uuid, 
             'model_type' => 'campaign-groups',
         ]);
+        factory(Payment::class, 2)->create(['price_id' => $price->id]);
 
         $response = $this->json('DELETE', "/api/campaign-groups/{$group->uuid}/prices/{$price->uuid}");
 
         $response->assertStatus(204);
         $this->assertDatabaseMissing('prices', ['id' => $price->id]);
+        $this->assertDatabaseMissing('price_payments', ['price_id' => $price->id]);
     }
 }

@@ -211,7 +211,7 @@ class CampaignCostTest extends TestCase
     }
 
     /** @test */
-    public function delete_a_cost_from_campaign()
+    public function delete_a_cost_from_campaign_and_all_usage()
     {
         $this->setupAdminUser();
         

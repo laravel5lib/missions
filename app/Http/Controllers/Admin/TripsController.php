@@ -59,6 +59,10 @@ class TripsController extends Controller
             $links['admin/trips/'.$trip->id.'/requirements'] = 'Requirements';
         }
 
+        if (auth()->user()->can('view', \App\Models\v1\Reservation::class)) {
+            $links['admin/trips/'.$trip->id.'/reservations'] = 'Reservations <span class="badge">'.$trip->reservations->count().'</span>';
+        }
+
         return $links;
     }
 

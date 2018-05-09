@@ -21,7 +21,7 @@
             </div>
             
             <div class="col-xs-12 col-md-7">
-                @include('admin.trips.tabs.'.($tab === 'reservations' ? 'details' : $tab))
+                @include('admin.trips.tabs.'.$tab)
             </div>
 
             <div class="col-md-3 small">

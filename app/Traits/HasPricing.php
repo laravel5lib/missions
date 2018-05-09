@@ -100,7 +100,7 @@ trait HasPricing
      * @param array $price
      * @return void
      */
-    private function createNewPriceAndAttachToModel(array $data)
+    public function createNewPriceAndAttachToModel(array $data)
     {
         return DB::transaction(function() use($data) {
             $price = $this->prices()->create([
@@ -123,7 +123,7 @@ trait HasPricing
      * @param [type] $priceId
      * @return void
      */
-    private function attachPriceToModel($priceId)
+    public function attachPriceToModel($priceId)
     {
         return $this->priceables()->attach($priceId);
     }

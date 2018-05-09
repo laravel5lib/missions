@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\v1\Trip;
 use App\Jobs\ExportTrips;
+use App\Jobs\ApplyGroupPricing;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\TripRequest;
@@ -68,24 +69,11 @@ class TripsController extends Controller
     {
         $trip = $this->trip->create($request->all());
 
-        return $this->response->item($trip, new TripTransformer);
-    }
+        if ($request->input('default_prices')) {
+            ApplyGroupPricing::dispatch($trip);
+        }
 
-    /**
-     * Duplicate a trip
-     *
-     * @param  TripRequest $request
-     * @return \Dingo\Api\Http\Response
-     */
-    public function duplicate(TripRequest $request)
-    {
-        // $trip = $this->trip->create($request->all());
-
-        // $trip->syncDeadlines($request->get('deadlines'));
-        // $trip->syncRequirements($request->get('requirements'));
-        // // $trip->syncCosts($request->get('costs'));
-
-        // return $this->response->item($trip, new TripTransformer);
+        return response()->json(['message' => 'New trip created.'], 201);
     }
 
     /**

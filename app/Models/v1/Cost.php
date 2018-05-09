@@ -33,14 +33,6 @@ class Cost extends Model
     protected $dates = ['active_at'];
 
     /**
-     * All of the relationships to be touched.
-     * Update the parent's timestamp.
-     *
-     * @var array
-     */
-    protected $touches = ['reservations'];
-
-    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool

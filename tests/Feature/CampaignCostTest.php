@@ -95,6 +95,27 @@ class CampaignCostTest extends TestCase
     }
 
     /** @test */
+    public function cost_name_must_be_unique()
+    {
+        $campaign = factory(Campaign::class)->create();
+        $cost = factory(Cost::class)->create([
+            'name' => 'Deposit',
+            'cost_assignable_id' => $campaign->id, 
+            'cost_assignable_type' => 'campaigns',
+        ]);
+
+        $this->json('POST', "/api/campaigns/{$campaign->id }/costs", [
+            'name' => 'Deposit',
+            'type' => 'incremental',
+            'description' => 'test'
+        ])->assertJsonValidationErrors(['name']);
+
+        $this->json('PUT', "/api/campaigns/{$campaign->id }/costs/{$cost->id}", [
+            'name' => 'Deposit'
+        ])->assertStatus(200);
+    }
+
+    /** @test */
     public function get_specific_cost_for_campaign()
     {
         // create campaign with cost

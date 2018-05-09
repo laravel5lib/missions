@@ -3,6 +3,7 @@
 namespace App\Http\Requests\v1;
 
 use Dingo\Api\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CostRequest extends FormRequest
 {
@@ -33,18 +34,39 @@ class CostRequest extends FormRequest
     private function newCostRules()
     {
         return [
-            'name'                 => 'required|string|max:60',
-            'description'          => 'required|string|max:120',
-            'type'                 => 'required|in:incremental,static,optional,upfront',
+            'name' => [
+                'required', 'string', 'max:60',
+                Rule::unique('costs')
+                    ->where('cost_assignable_type', $this->getCostAssignableType())
+                    ->where('cost_assignable_id', $this->getCostAssignableId())
+            ],
+            'description' => 'required|string|max:120',
+            'type' => 'required|in:incremental,static,optional,upfront',
         ];
     }
 
     private function updateCostRules()
     {
         return [
-            'name'                 => 'sometimes|required|string|max:60',
-            'description'          => 'sometimes|required|string|max:120'
+            'name' => [
+                'sometimes', 'required', 'string', 'max:60',
+                Rule::unique('costs')
+                    ->where('cost_assignable_type', $this->getCostAssignableType())
+                    ->where('cost_assignable_id', $this->getCostAssignableId())
+                    ->ignore($this->route('cost'))
+            ],
+            'description' => 'sometimes|required|string|max:120'
         ];
+    }
+
+    private function getCostAssignableType()
+    {
+        return $this->input('cost_assignable_type', $this->segment(2));
+    }
+
+    private function getCostAssignableId()
+    {
+        return $this->input('cost_assignable_id', $this->segment(3));
     }
 
     public function messages()

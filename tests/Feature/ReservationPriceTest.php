@@ -8,6 +8,7 @@ use App\Models\v1\Trip;
 use App\Models\v1\Price;
 use App\Models\v1\Campaign;
 use App\Models\v1\Reservation;
+use App\Models\v1\CampaignGroup;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -218,7 +219,7 @@ class ReservationPriceTest extends TestCase
 
         $tripPrices = $trip->priceables->pluck('id')->toArray();
         $reservation->priceables()->attach([
-            $price->id, $tripPrices[0], $tripPrices[1], $tripPrices[2]
+            $price->id, $tripPrices[0], $tripPrices[1]
         ]);
 
         return $reservation;
@@ -226,37 +227,32 @@ class ReservationPriceTest extends TestCase
 
     private function setupTripWithPrices()
     {
-        $campaign = $this->setupCampaignWithPrices();
+        $campaign = $this->setupCampaignWithCosts();
 
         $trip = factory(Trip::class)->create(['campaign_id' => $campaign->id]);
-        $price = factory(Price::class)->create([
+        $group = factory(CampaignGroup::class)->create(['campaign_id' => $campaign->id]);
+        $groupPrice = factory(Price::class)->create([
+            'model_id' => $group->id, 
+            'model_type' => 'campaign-groups'
+        ]);
+        $tripPrice = factory(Price::class)->create([
             'model_id' => $trip->id, 
             'model_type' => 'trips'
         ]);
         
-        $campaignPrices = $campaign->prices->pluck('id')->toArray();
-        $trip->priceables()->attach([
-            $price->id, $campaignPrices[0], $campaignPrices[1]
-        ]);
+        $trip->priceables()->attach([$groupPrice->id, $tripPrice->id]);
 
         return $trip;
     }
 
-    private function setupCampaignWithPrices()
+    private function setupCampaignWithCosts()
     {
-        $this->setupArbitraryPrices();
-
         $campaign = factory(Campaign::class)->create();
-        factory(Price::class, 2)->create([
-            'model_id' => $campaign->id, 
-            'model_type' => 'campaigns'
+        factory(Cost::class, 2)->create([
+            'cost_assignable_id' => $campaign->id, 
+            'cost_assignable_type' => 'campaigns'
         ]);
 
         return $campaign;
-    }
-
-    private function setupArbitraryPrices()
-    {
-        factory(Price::class, 2)->create();
     }
 }

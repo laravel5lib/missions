@@ -29,6 +29,12 @@ class GroupResource extends JsonResource
             'meta'         => $this->whenPivotLoaded('campaign_group', function () {
                                     return $this->pivot->meta;
                                 }),
+            'trips'        => $this->whenPivotLoaded('campaign_group', function () {
+                                    return $this->pivot->tripsCount();
+                                }),
+            'reservations'  => $this->whenPivotLoaded('campaign_group', function () {
+                                    return $this->pivot->reservationsCount();
+                                }),
             'type'         => $this->type,
             'timezone'     => $this->timezone,
             'description'  => $this->description,

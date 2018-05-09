@@ -10,11 +10,11 @@
             <p class="small text-muted">Status</p>
         </div>
         <div class="col-sm-3">
-            <h4>0</h4>
+            <h4>{{ $group->tripsCount() }}</h4>
             <p class="small text-muted">Trips</p>
         </div>
         <div class="col-sm-3">
-            <h4>0</h4>
+            <h4>{{ $group->reservationsCount() }}</h4>
             <p class="small text-muted">Reservations</p>
         </div>
     </div>
@@ -33,7 +33,7 @@
         </div>
     @endslot
     @component('list-group', [
-        'data' => array_merge(['Status' => $group->status], ($group->meta ?: []))
+        'data' => array_merge(['Status' => $group->status], ($meta ?: []))
     ])
     @endcomponent
 @endcomponent

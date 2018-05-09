@@ -6,6 +6,7 @@ use Ramsey\Uuid\Uuid;
 use App\Models\v1\Group;
 use App\Models\v1\Price;
 use App\Models\v1\Campaign;
+use App\Models\v1\Reservation;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class CampaignGroup extends Pivot
@@ -70,5 +71,21 @@ class CampaignGroup extends Pivot
     public function getStatusAttribute()
     {
         return groupStatus($this->status_id);
+    }
+
+    public function tripsCount()
+    {
+        return $this->organization->trips()->where('campaign_id', $this->campaign_id)->count();
+    }
+
+    public function reservationsCount()
+    {
+        $tripIds = $this->organization
+            ->trips()
+            ->where('campaign_id', $this->campaign_id)
+            ->pluck('id')
+            ->all();
+
+        return Reservation::whereIn('trip_id', $tripIds)->count();
     }
 }

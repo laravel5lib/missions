@@ -22,6 +22,7 @@ class PriceResource extends JsonResource
             'active_at' => optional($this->active_at)->toIso8601String(),
             'cost' => new CostResource($this->cost),
             'payments' => PaymentResource::collection($this->whenLoaded('payments')),
+            'reservations_count' => $this->reservations()->count()
         ];
     }
 }

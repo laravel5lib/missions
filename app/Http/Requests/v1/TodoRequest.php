@@ -25,7 +25,7 @@ class TodoRequest extends FormRequest
     {
         $rules = [
             'task' => 'required|string|max:120',
-            'todoable_type' => 'required|string|in:reservations,trip_interests,projects',
+            'todoable_type' => 'required|string',
             'todoable_id' => 'required|string',
             'complete' => 'boolean',
             'completed_at' => 'nullable|date',
@@ -34,7 +34,7 @@ class TodoRequest extends FormRequest
 
         if ($this->isMethod('put')) {
             $rules['task'] = 'sometimes|required|string|max:120';
-            $rules['todoable_type'] = 'sometimes|required|string|in:reservations,trip_interests,projects';
+            $rules['todoable_type'] = 'sometimes|required|string';
             $rules['todoable_id'] = 'sometimes|required|string';
         }
 

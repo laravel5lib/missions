@@ -18,7 +18,8 @@ class CostResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'type' => $this->type,
-            'description' => $this->description
+            'description' => $this->description,
+            'reservations_count' => $this->reservationsCount()
         ];
     }
 }

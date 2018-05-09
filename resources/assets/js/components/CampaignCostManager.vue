@@ -69,6 +69,7 @@
                     <tr class="active">
                         <th>#</th>
                         <th>Name</th>
+                        <th>Reservations</th>
                         <th>Type</th>
                     </tr>
                 </thead>
@@ -78,6 +79,9 @@
                         <td>
                             <strong><a :href="'/admin/campaigns/'+campaignId+'/costs/' + cost.id">{{ cost.name }}</a></strong>
                             <br><span class="small text-muted">{{ cost.description }}</span>
+                        </td>
+                        <td class="col-sm-1 text-right">
+                            <strong>{{ cost.reservations_count }}</strong>
                         </td>
                         <td>
                             <em>{{ cost.type | capitalize }}</em>

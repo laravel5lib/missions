@@ -93,16 +93,18 @@ class Cost extends Model
         return $this->morphTo('cost_assignable');
     }
 
-    /**
-     * Get all the reservations with the cost.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function reservations()
+    public function prices()
     {
-        return $this->belongsToMany(Reservation::class, 'reservation_costs')
-                    ->withPivot('locked')
-                    ->withTimestamps();
+        return $this->hasMany(Price::class);
+    }
+
+    public function reservationsCount()
+    {
+        return $this->prices()
+                    ->with('reservations')
+                    ->get()
+                    ->pluck('reservations')
+                    ->count();
     }
 
     /**

@@ -25,7 +25,7 @@
                     </div>
                     <div class="col-sm-8">
                         <h4>{{ $reservation->getCurrentRate() ? $reservation->getCurrentRate()->cost->name : 'N/A' }}</h4>
-                        <p class="small text-muted">Current Rate</p>
+                        <p class="small text-muted">Current Registration</p>
                     </div>
                 </div>
                 <hr class="divider">

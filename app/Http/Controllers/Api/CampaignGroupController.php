@@ -58,9 +58,17 @@ class CampaignGroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CampaignGroupRequest $request, $campaignId, $groupId)
     {
-        //
+        $campaign = Campaign::findOrFail($campaignId);
+        $group = $campaign->groups()->findOrFail($groupId);
+
+        $campaign->groups()->updateExistingPivot($groupId, [
+            'status_id' => $request->input('status_id', $group->pivot->status_id),
+            'meta' => $request->input('meta', $group->pivot->meta)
+        ]);
+
+        return new GroupResource($group);
     }
 
     /**

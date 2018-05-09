@@ -17,6 +17,7 @@
                 <th>#</th>
                 <th>Cost</th>
                 <th>Amount</th>
+                <th>Reservations</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -33,13 +34,16 @@
                 <td class="col-sm-1 text-right">
                     <strong class="text-primary">{{ currency(price.amount) }}</strong>
                 </td>
+                <td class="col-sm-1 text-right">
+                    <strong>{{ price.reservations_count }}</strong>
+                </td>
                 <td>
                     <span v-if="isActive(price.active_at)"><i class="fa fa-check-circle text-success"></i> Active</span>
                     <span v-else><i class="fa fa-calendar-o"></i> Effective Date: <em class="text-primary">{{ price.active_at|mFormat('ll') }}</em></span>
                 </td>
             </tr>
             <tr :key="price.id" v-if="price.payments.length > 0">
-                <td colspan="4">
+                <td colspan="5">
                     <table class="table table-condensed">
                         <thead>
                             <tr>

@@ -13,7 +13,7 @@ $factory->define(CampaignGroup::class, function (Faker $faker) {
         },
         'status_id' => $faker->numberBetween(1, 4),
         'meta' => [
-            'Key' => 'Value'
+            ['label' => 'Label', 'value' => 'Value']
         ]
     ];
 });

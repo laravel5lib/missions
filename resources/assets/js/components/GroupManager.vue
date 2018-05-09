@@ -40,7 +40,7 @@
 </div>
 
 <fetch-json :url="'/campaigns/'+campaignId+'/groups'" ref="groupList">
-    <div class="panel panel-default" style="border-top: 5px solid #f6323e" slot-scope="{ json:groups, loading, pagination, filters, addFilter, changePage }">
+    <div class="panel panel-default" style="border-top: 5px solid #f6323e" slot-scope="{ json:groups, loading, pagination, filters, addFilter, removeFilter, changePage }">
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-6">
@@ -51,10 +51,10 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="panel-body">
+        <div class="panel-body">
             <span class="label label-default" v-for="(filter, key) in filters" :key="key" style="padding: 0.5em; margin-right: 1em">
                 {{ key | capitalize }}: "{{ filter }}"
-                <a role="button" style="color: white; margin-left: 0.5em;" @click="removeFilter({name: 'Neil'})">
+                <a role="button" style="color: white; margin-left: 0.5em;" @click="removeFilter(key)">
                     <i class="fa fa-times"></i>
                 </a>
             </span>
@@ -63,16 +63,17 @@
                     <i class="fa fa-plus"></i> Add a Filter
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a role="button" @click="addFilter('name')">Name</a></li>
-                    <li><a role="button" @click="addFilter('status')">Status</a></li>
+                    <li><a role="button" @click="addFilter('status_id', 1)">Pending</a></li>
+                    <li><a role="button" @click="addFilter('status_id', 2)">Committed</a></li>
                 </ul>
             </div>
-        </div> -->
+        </div>
         <table class="table" v-if="groups && groups.length">
             <thead>
             <tr class="active">
                 <th>#</th>
                 <th>Name</th>
+                <th>Reservations</th>
                 <th>Trips</th>
                 <th>Status</th>
             </tr>
@@ -84,7 +85,10 @@
                     <strong><a :href="'/admin/campaign-groups/' + group.group_id">{{ group.name }}</a></strong>
                 </td>
                 <td class="col-sm-1 text-right">
-                    <strong>0</strong>
+                    <strong>{{ group.reservations }}</strong>
+                </td>
+                <td class="col-sm-1 text-right">
+                    <strong>{{ group.trips }}</strong>
                 </td>
                 <td>
                     <em>{{ group.status }}</em>

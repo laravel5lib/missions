@@ -12,7 +12,11 @@ class CampaignGroupController extends Controller
     {
         $group = CampaignGroup::whereUuid($group)->firstOrFail();
 
-        return view('admin.campaigns.groups.tabs.'.$tab, compact('group'));
+        $meta = collect($group->meta)->keyBy('label')->map(function($item) {
+            return $item['value'];
+        })->all();
+
+        return view('admin.campaigns.groups.tabs.'.$tab, compact('group', 'meta'));
     }
 
     public function edit($group)

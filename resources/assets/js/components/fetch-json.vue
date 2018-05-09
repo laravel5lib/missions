@@ -2,7 +2,16 @@
 export default {
     name: 'fetch-json',
 
-    props: ['url', 'parameters'],
+    props: {
+        url: {
+            type: String,
+            required: true
+        }, 
+        parameters: {
+            type: Object,
+            required: false
+        }
+    },
 
     data() {
         return {
@@ -24,22 +33,22 @@ export default {
         }, 100),
         addFilter(key, value) {
             this.filters[key] = value;
-            this.$forceUpdate();
 
-            let params = $.extend(this.filters, {page: 1});
+            let params = $.extend({page: 1}, this.filters);
             this.fetch(params);
+
+            this.$forceUpdate();
         },
         removeFilter(key) {
-            delete this.filters[key];
+           delete this.filters[key];
+
+            let params = $.extend({page: 1}, this.filters);
+            this.fetch(params);
+
             this.$forceUpdate();
-
-            let params = $.extend(this.filters, {page: 1});
-            this.fetch(params);
-
-            this.fetch(params);
         },
         changePage(page) {
-            let params = $.extend(this.filters, {page: page});
+            let params = $.extend({page: page}, this.filters);
             this.fetch(params);
         }
     },

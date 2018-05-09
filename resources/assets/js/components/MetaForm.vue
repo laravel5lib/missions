@@ -43,7 +43,7 @@ export default {
 
     computed: {
         'initial'() {
-            return {meta: (this.meta ? this.meta : { 0: {label: null, value: null}}) }
+            return {meta: (this.meta ? this.meta : [{label: null, value: null}]) }
         }
     },
 

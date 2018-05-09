@@ -47,9 +47,18 @@ class CampaignGroupRequest extends FormRequest
      */
     public function rules()
     {
+        if ($this->isMethod('put')) {
+            return [
+                'group_id' => 'sometimes|required|exists:groups,id',
+                'status_id' => 'sometimes|required|numeric',
+                'meta' => 'nullable|array'
+            ];
+        };
+
         return [
             'group_id' => 'required|exists:groups,id',
-            'status_id' => 'required|numeric'
+            'status_id' => 'required|numeric',
+            'meta' => 'nullable|array'
         ];
     }
 
@@ -57,7 +66,8 @@ class CampaignGroupRequest extends FormRequest
     {
         return [
             'group_id.required' => 'Please select an organization.',
-            'status_id.required' => 'Please choose a status'
+            'status_id.required' => 'Please choose a status',
+            'meta.array' => 'Meta must be an array'
         ];
     }
 }

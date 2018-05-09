@@ -19,7 +19,7 @@
     <template slot="message">Please check the form for errors and try again.</template>
 </alert-error>
 
-<alert-success redirect="/admin/groups/{{ $group->uuid }}/prices">
+<alert-success redirect="/admin/campaign-groups/{{ $group->uuid }}">
     <template slot="title">Saved</template>
     <template slot="message">The group was updated.</template>
     <template slot="cancel">Keep Working</template>
@@ -46,7 +46,7 @@
         <div class="col-md-8">
             @component('panel')
                 @slot('body')
-                <ajax-form method="put" action="/campaign-groups/{{ $group->uuid }}" :horizontal="true" :initial="{{ $group }}">
+                <ajax-form method="put" action="/campaigns/{{ $group->campaign_id }}/groups/{{ $group->group_id }}" :horizontal="true" :initial="{{ json_encode($group->only(['status_id'])) }}">
                     <template slot-scope="{ form }">
                         <input-select name="status" 
                                       :horizontal="true" 
@@ -77,8 +77,8 @@
             @component('panel')
                 @slot('body')
                 <meta-form method="put" 
-                           action="/campaign-groups/{{ $group->uuid }}" 
-                           meta="{{ $group->meta }}">
+                           action="/campaigns/{{ $group->campaign_id }}/groups/{{ $group->group_id }}" 
+                           :meta="{{ json_encode($group->meta) }}">
                 </meta-form>
                 @endslot
             @endcomponent

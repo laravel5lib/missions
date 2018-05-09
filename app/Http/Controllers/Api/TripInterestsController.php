@@ -39,7 +39,7 @@ class TripInterestsController extends Controller
      */
     public function index(Request $request)
     {
-        $interests = $this->interest->current()->latest()->filter($request->all())->paginate();
+        $interests = $this->interest->has('trip')->current()->latest()->filter($request->all())->paginate();
 
         return $this->response->paginator($interests, new TripInterestTransformer);
     }

@@ -9,6 +9,7 @@ class ExportTripInterests extends Exporter
     public function data(array $request)
     {
         $interests = TripInterest::filter($request)
+            ->has('trip')
             ->with('trip.group', 'trip.campaign')
             ->get();
 

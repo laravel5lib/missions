@@ -333,3 +333,12 @@ function groupStatus($statusId)
 
     return $statuses[$statusId];
 }
+
+function roundUpToAny($n,$x=5) {
+    return (round($n)%$x === 0) ? round($n) : round(($n+$x/2)/$x)*$x;
+}
+
+function currency($amount)
+{
+    return '$'.number_format($amount, 2, '.', '');
+}

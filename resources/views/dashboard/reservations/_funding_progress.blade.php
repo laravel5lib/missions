@@ -2,7 +2,7 @@
     <div class="panel-body">
         <div class="row">
             <div class="col-sm-4">
-                <div class="circle-progress" data-percentage="{{ $reservation->getPercentRaised() }}">
+                <div class="circle-progress" data-percentage="{{ roundUpToAny($reservation->getPercentRaised()) }}">
                     <span class="progress-left">
                         <span class="progress-bar"></span>
                     </span>

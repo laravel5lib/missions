@@ -14,52 +14,54 @@ class ItemizedPricing
 
     public function breakdown()
     {  
-       $tripRegistrationPrices = $this->getAllTripRegistrationCosts();
+        // get reservation current rate
+        $currentRate = $this->reservation->getCurrentRate();
 
-       $lastIncrement = $tripRegistrationPrices->shift();
+        // find any registration costs that come after the current rate
+        $tripRates = $this->getTripRates($currentRate);
 
-       $registrationPrices = $tripRegistrationPrices->reject(function($price) {
-           return $price->active_at < $this->reservation->getCurrentRate()->active_at;
-       });
+        // merge these costs
+        $registrationRates = $tripRates->push($currentRate);
 
-       $transformedAmounts = $registrationPrices->map(function($price) use($lastIncrement) {
-           
-            $payment = $price->payments()->whereDate('due_at', '>=', now())->first();
+        // get other costs
+        $otherPrices = $this->getNonRegistrationCosts();
+        // merge all other costs
 
-            return [
-                'name' => $price->cost->name.' Discount',
-                'amount' => '($'. number_format($lastIncrement->amount - $price->amount, 2, '.', '') .')',
-                'amount_due' => '$'. number_format($this->reservation->getTotalCost()/100 * ($payment->percentage_due/100), 2, '.', ''),
-                'due_at' => $payment->due_at->format('M d, Y')
+        $prices = $otherPrices->merge($registrationRates);
+
+        // transform incremental costs into discounts of each other except for the last one
+        $previousAmount = null;
+        return $prices->map(function($price) use($previousAmount) {
+            $array = [
+                'name' => $price->cost->name,
+                'description' => $price->cost->description,
+                'amount' => currency($price->amount)
             ];
-       })->all();
 
-       $otherPrices = $this->getNonRegistrationCosts();
-       
-       $costs = array_merge( 
-           $otherPrices->map(function($price) {
-               return [
-                   'name' => $price->cost->name,
-                   'amount' => '$'.number_format($price->amount, 2, '.', '')
-               ];
-           })->all(),
-           [$lastIncrement ? [
-               'name' => $lastIncrement->cost->name ?? 'N/A',
-               'amount' => '$'.number_format($lastIncrement->amount ?? 0, 2, '.', '')
-           ] : [] ]
-        );
+            if ($price->cost->type === 'incremental') {
+                $payment = $price->payments()
+                    ->whereDate('due_at', '>=', now())
+                    ->first();
 
-        return array_merge($costs, $transformedAmounts);
+                $array['amount_due'] = $previousAmount ? $previousAmount - $price->amount : $price->amount;
+                $array['due_at'] = $payment->due_at->format('M d, Y h:i a');
+
+                $previousAmount = $price->amount;
+            }
+
+            return $array;
+
+        })->all();
     }
 
-    private function getAllTripRegistrationCosts()
+    private function getTripRates($currentRate)
     {
         return $this->reservation->trip
             ->priceables()
-            ->whereHas('cost', function($query) {
-                $query->whereType('incremental');
+            ->whereHas('cost', function($q) {
+                return $q->where('type', 'incremental');
             })
-            ->orderBy('active_at', 'desc')
+            ->whereDate('active_at', '>', $currentRate->active_at->toDateString())
             ->get();
     }
 
@@ -71,5 +73,35 @@ class ItemizedPricing
                 $query->where('type', '<>', 'incremental');
             })
             ->get();
+    }
+
+    public function lateFee()
+    {
+        if ($this->reservation->getPercentRaised() >= 100) return null;
+
+        $reservationLateFeePriceIds = $this->reservation
+            ->priceables()
+            ->whereHas('cost', function($query) {
+                $query->where('type', 'fee');
+            })
+            ->pluck('id')
+            ->toArray();
+
+        $lateFee = $this->reservation
+            ->trip
+            ->priceables()
+            ->whereHas('cost', function($query) {
+                $query->where('type', 'fee');
+            })
+            ->whereNotIn('id', $reservationLateFeePriceIds)
+            ->whereDate('active_at', '>=', now())
+            ->first();
+
+        if (! $lateFee) return null;
+        
+        return [
+            'late_fee' => '$'.number_format($lateFee->amount ?? 0, 2, '.', ''),
+            'applied_at' => $lateFee ? $lateFee->active_at->format('M d, Y') : ''
+        ];
     }
 }

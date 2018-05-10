@@ -158,7 +158,7 @@ class PriceRequest extends FormRequest
 
         $cost = Cost::findOrFail($this->input('cost_id'));
 
-        if ($cost->type === 'incremental') return true;
+        if ($cost->type === 'incremental' or $cost->type === 'fee') return true;
     }
 
     /**

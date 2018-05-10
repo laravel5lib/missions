@@ -177,6 +177,16 @@ class ReservationPriceTest extends TestCase
                  ]);
     }
 
+    public function locks_a_reservation_price()
+    {
+        // TODO
+    }
+
+    public function unlocks_a_reservation_price()
+    {
+        // TODO
+    }
+
     /** @test */
     public function remove_a_trip_price_from_reservation()
     {

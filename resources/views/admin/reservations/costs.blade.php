@@ -13,22 +13,22 @@
 </alert-success>
 
 @component('panel')
-    @slot('body')
-    <div class="row">
-        <div class="col-sm-3">
-            <h4 class="text-primary">${{ $reservation->totalCostInDollars() }}</h4>
-            <p class="small text-muted">Current Goal</p>
-        </div>
-        <div class="col-sm-4">
-            <h4>{{ $reservation->getCurrentRate() ? $reservation->getCurrentRate()->cost->name : 'N/A' }}</h4>
-            <p class="small text-muted">Current Rate</p>
-        </div>
-        <div class="col-sm-5">
-            <h4>{{ $reservation->getUpcomingDeadline() ? $reservation->getUpcomingDeadline()->format('M j, h:i a') : 'N/A' }}</h4>
-            <p class="small text-muted">Upcoming Deadline</p>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-3">
+                <h4 class="text-primary">${{ $reservation->totalCostInDollars() }}</h4>
+                <p class="small text-muted">Current Goal</p>
+            </div>
+            <div class="col-sm-4">
+                <h4>{{ $reservation->getCurrentRate() ? $reservation->getCurrentRate()->cost->name : 'N/A' }}</h4>
+                <p class="small text-muted">Current Registration</p>
+            </div>
+            <div class="col-sm-5">
+                <h4>{{ $reservation->getUpcomingDeadline() ? $reservation->getUpcomingDeadline()->format('M j, h:i a') : 'N/A' }}</h4>
+                <p class="small text-muted">Upcoming Deadline</p>
+            </div>
         </div>
     </div>
-    @endslot
 @endcomponent
 
 @component('panel')

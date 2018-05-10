@@ -4,6 +4,7 @@ namespace App\Models\v1;
 
 use Carbon\Carbon;
 use App\UuidForKey;
+use App\ItemizedPricing;
 use App\Traits\HasPricing;
 use App\Traits\Rewardable;
 use Conner\Tagging\Taggable;
@@ -727,5 +728,15 @@ class Reservation extends Model
         $this->addTodos($this->trip->todos);
 
         event(new ReservationWasProcessed($this));
+    }
+
+    /**
+     * Get Itemized Pricing
+     *
+     * @return void
+     */
+    public function itemizedPrices()
+    {
+        return new ItemizedPricing($this);
     }
 }

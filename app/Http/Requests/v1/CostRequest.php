@@ -45,7 +45,7 @@ class CostRequest extends FormRequest
                     ->where('cost_assignable_id', $this->getCostAssignableId())
             ],
             'description' => 'required|string|max:120',
-            'type' => 'required|in:incremental,static,optional,upfront',
+            'type' => 'required|in:incremental,static,optional,upfront,fee',
         ];
     }
 

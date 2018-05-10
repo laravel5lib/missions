@@ -3,6 +3,8 @@
 @section('tab')
 @include('dashboard.reservations._funding_progress')
 
+@include('dashboard.reservations._cost_breakdown')
+
 <div class="panel panel-body">
     <div class="row">
         <div class="col-sm-6">

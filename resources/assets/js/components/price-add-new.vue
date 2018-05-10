@@ -152,11 +152,15 @@ export default {
 
     mounted() {
         this.$root.$on('cost-change', (cost) => {
-            if (cost.type == 'incremental') {
+            if (cost.type == 'Late Fee' || cost.type == 'Registration') {
                 this.ui.showActiveDate = true;
-                this.ui.showPayments = true;
             } else {
                 this.ui.showActiveDate = false;
+            }
+            
+            if (cost.type == 'Registration') {
+                this.ui.showPayments = true;
+            } else {
                 this.ui.showPayments = false;
             }
         });

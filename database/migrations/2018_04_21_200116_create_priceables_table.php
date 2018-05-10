@@ -17,6 +17,7 @@ class CreatePriceablesTable extends Migration
             $table->bigInteger('price_id')->unsigned()->index();
             $table->uuid('priceable_id')->index();
             $table->string('priceable_type', 60);
+            // $table->boolean('locked')->default(false);
         });
     }
 

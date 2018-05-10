@@ -17,9 +17,22 @@ class CostResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'type' => $this->type,
+            'type' => $this->getUserFriendlyLabel($this->type),
             'description' => $this->description,
             'reservations_count' => $this->reservationsCount()
         ];
+    }
+
+    private function getUserFriendlyLabel($type)
+    {
+        $labels = [
+            'incremental' => 'Registration',
+            'optional' => 'Rooming',
+            'static' => 'Additional',
+            'upfront' => 'Upfront',
+            'fee' => 'Late Fee'
+        ];
+
+        return $labels[$type];
     }
 }

@@ -18,20 +18,16 @@
             <tr class="active">
                 <th>#</th>
                 <th>Name</th>
-                <th>Gender</th>
                 <th>Funds</th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(reservation, index) in reservations" :key="trip.id">
+            <tr v-for="(reservation, index) in reservations" :key="reservation.id">
                 <td>@{{ index+1 }}</td>
                 <td>
-                    <strong><a :href="'/admin/trips/' + trip.id">@{{ reservation.given_names | capitalize }} @{{ reservation.surname | capitalize }}</a></strong>
+                    <strong><a :href="'/admin/reservations/' + reservation.id">@{{ reservation.given_names | capitalize }} @{{ reservation.surname | capitalize }}</a></strong>
                 </td>
                 <td>
-                    @{{ reservation.gender | capitalize }}
-                </td>
-                <td class="text-right">
                     <strong>@{{ currency(reservation.total_raised) }}</strong> / @{{ currency(reservation.total_cost) }}
                 </td>
             </tr>

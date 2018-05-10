@@ -242,19 +242,21 @@ class TripPriceTest extends TestCase
     }
 
     /** @test */
-    public function validates_that_active_at_date_is_required_when_cost_is_incremental()
+    public function validates_that_active_at_date_is_required_when_cost_is_incremental_or_late()
     {
         $trip = factory(Trip::class)->create();
         $cost = factory(Cost::class)->create(['type' => 'incremental']);
-        $price = factory(Price::class)->create([
-            'cost_id' => $cost->id,
-            'model_id' => $trip->id, 
-            'model_type' => 'trips'
-        ]);
 
         $this->json('POST', "/api/trips/{$trip->id}/prices", [
             'cost_id' => $cost->id,
             'amount' => 1500.00
+        ])->assertJsonValidationErrors(['active_at']);
+
+        $costTwo = factory(Cost::class)->create(['type' => 'fee']);
+
+        $this->json('POST', "/api/trips/{$trip->id}/prices", [
+            'cost_id' => $costTwo->id,
+            'amount' => 200.00
         ])->assertJsonValidationErrors(['active_at']);
     }
 

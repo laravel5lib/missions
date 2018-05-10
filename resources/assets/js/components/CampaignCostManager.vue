@@ -24,7 +24,7 @@
                 <template slot-scope="{ form }">
                     <div class="row">
                         <div class="col-md-6">
-                            <input-select name="type" v-model="form.type" :options="{ upfront: 'Upfront', incremental: 'Incremental', static: 'Static', optional: 'Optional'}">
+                            <input-select name="type" v-model="form.type" :options="{ upfront: 'Upfront', incremental: 'Registration', static: 'Additional', optional: 'Rooming', fee: 'Late Fee'}">
                                 <label slot="label" class="control-label">Select a Type</label>
                             </input-select>
                         </div>

@@ -102,11 +102,17 @@
         <div class="col-md-8">
             @component('panel')
                 @slot('body')
-                <price-delete priceable-type="reservations" 
-                              priceable-id="{{ $reservation->id }}" 
-                              id="{{ $price->uuid }}"
-                              cost-name="{{ $price->cost->name}}">
-                </price-delete>
+                <div class="alert alert-warning">
+                    <div class="row">
+                        <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
+                        <div class="col-xs-11">USE CAUTION! Deleting this price will affect fundraising goals and deadlines.</div>
+                    </div>
+                </div>
+                <delete-form url="reservations/{{ $reservation->id }}/prices/{{ $price->uuid }}" 
+                            redirect="/admin/reservations/{{ $reservation->id}}/costs"
+                            match-key="price name"
+                            match-value="{{ $price->cost->name }}">
+                </delete-form>
                 @endslot
             @endcomponent
         </div>

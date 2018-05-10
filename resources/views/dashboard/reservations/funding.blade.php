@@ -4,19 +4,23 @@
 
 @include('dashboard.reservations._funding_progress')
 
-<div class="panel panel-body">
-    <div class="row">
-        <div class="col-sm-6">
-        @if($reservation->fund->fundraisers->count())
-            <a class="btn btn-block btn-default-hollow" href="/dashboard/fundraisers/{{ $reservation->fund->fundraisers->first()->uuid }}/edit">Manage Fundraiser</a>
-        @else
-            <a class="btn btn-block btn-default-hollow" href="/dashboard/funds/{{ $reservation->fund->id }}/fundraisers/create">Start a Fundraiser</a>
-        @endif
-        </div>
-        <div class="col-sm-6">
-            <a href="/donate/{{ $reservation->fund->slug }}" target="_blank" class="btn btn-primary btn-block">
-                Make a Donation
-            </a>
+@include('dashboard.reservations._cost_breakdown')
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-6">
+            @if($reservation->fund->fundraisers->count())
+                <a class="btn btn-block btn-default-hollow" href="/dashboard/fundraisers/{{ $reservation->fund->fundraisers->first()->uuid }}/edit">Manage Fundraiser</a>
+            @else
+                <a class="btn btn-block btn-default-hollow" href="/dashboard/funds/{{ $reservation->fund->id }}/fundraisers/create">Start a Fundraiser</a>
+            @endif
+            </div>
+            <div class="col-sm-6">
+                <a href="/donate/{{ $reservation->fund->slug }}" target="_blank" class="btn btn-primary btn-block">
+                    Make a Donation
+                </a>
+            </div>
         </div>
     </div>
 </div>

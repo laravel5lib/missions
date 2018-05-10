@@ -41,8 +41,8 @@
     @component('list-group', ['data' => [
         'Campaign' => $reservation->trip->campaign->name,
         'Country' => country($reservation->trip->campaign->country_code),
-        'Group' => '<a href="'.url('/admin/groups/'. $reservation->trip->group->id).'">'.$reservation->trip->group->name.'</a>',
-        'Trip Type' => $reservation->trip->type,
+        'Group' => $reservation->trip->group->name,
+        'Trip Type' => '<a href="'.url('/admin/trips/'. $reservation->trip->id).'">'.ucfirst($reservation->trip->type).'</a>',
         'Start Date' => $reservation->trip->started_at->format('F j, Y'),
         'End Date' => $reservation->trip->ended_at->format('F j, Y')
     ]])

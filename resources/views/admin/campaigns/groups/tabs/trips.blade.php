@@ -10,7 +10,7 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-sm-6">
-                    <h5>Trips <span class="badge badge-default">@{{ pagination.pagination.total }}</span></h5>
+                    <h5>Trips <span class="badge badge-default">@{{ pagination.total }}</span></h5>
                 </div>
                 <div class="col-xs-6 text-right">
                     <h5 v-if="loading" class="text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</h5>
@@ -50,8 +50,8 @@
             <span class="lead">No Trips</span>
             <p>Create a trip for this group to get started.</p>
         </div>
-        <div class="panel-footer" v-if="pagination.pagination.total > pagination.pagination.per_page">
-            <pager :pagination="pagination.pagination" :callback="changePage"></pager>
+        <div class="panel-footer" v-if="pagination.total > pagination.per_page">
+            <pager :pagination="pagination" :callback="changePage"></pager>
         </div>
     </div>
 </fetch-json>

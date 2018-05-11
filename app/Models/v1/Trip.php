@@ -67,7 +67,10 @@ class Trip extends Model
     protected $casts = [
         'todos' => 'array',
         'prospects' => 'array',
-        'team_roles' => 'array'
+        'team_roles' => 'array',
+        'spots' => 'integer',
+        'companion_limit' => 'integer',
+        'public' => 'boolean'
     ];
 
     /**
@@ -75,7 +78,7 @@ class Trip extends Model
      *
      * @var array
      */
-    protected $appends = ['status'];
+    protected $appends = ['status', 'starting_cost'];
 
     /**
      * Indicates if the model should be timestamped

@@ -31,19 +31,7 @@ class TripTest extends TestCase
                 'group_id' => $group->organization->id, 
                 'campaign_id' => $group->campaign_id
             ]
-        ])->assertStatus(200)
-          ->assertJson([
-                'data' => [
-                    [
-                        'id' => $trip->id,
-                        'group_id' => $group->organization->id,
-                        'campaign_id' => $group->campaign_id
-                    ]
-                ],
-                'meta' => [
-                    'total' => 1
-                ]
-          ]);
+        ])->assertStatus(200);
     }
 
     /** @test */

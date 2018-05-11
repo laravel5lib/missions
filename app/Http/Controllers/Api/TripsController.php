@@ -6,6 +6,7 @@ use App\Models\v1\Trip;
 use App\Jobs\ExportTrips;
 use App\Jobs\ApplyGroupPricing;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TripResource;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\TripRequest;
 use App\Http\Requests\v1\ExportRequest;
@@ -15,21 +16,6 @@ use App\Http\Transformers\v1\TripTransformer;
 
 class TripsController extends Controller
 {
-
-    /**
-     * @var Trip
-     */
-    private $trip;
-
-    /**
-     * Instantiate a new TripsController instance.
-     * @param Trip $trip
-     */
-    public function __construct(Trip $trip)
-    {
-        $this->trip = $trip;
-    }
-
     /**
      * Get a list of trips
      *
@@ -38,12 +24,11 @@ class TripsController extends Controller
      */
     public function index(Request $request)
     {
-        $trips = $this->trip
-                      ->withCount('reservations')
-                      ->filter($request->all())
-                      ->paginate($request->get('per_page', 10));
+        $trips = Trip::withCount('reservations')
+            ->filter($request->all())
+            ->paginate($request->get('per_page', 10));
 
-        return $this->response->paginator($trips, new TripTransformer);
+        return TripResource::collection($trips);
     }
 
     /**
@@ -54,7 +39,7 @@ class TripsController extends Controller
      */
     public function show($id)
     {
-        $trip = $this->trip->withCount('reservations')->findOrFail($id);
+        $trip = Trip::withCount('reservations')->findOrFail($id);
 
         return $this->response->item($trip, new TripTransformer);
     }
@@ -67,7 +52,7 @@ class TripsController extends Controller
      */
     public function store(TripRequest $request)
     {
-        $trip = $this->trip->create($request->all());
+        $trip = Trip::create($request->all());
 
         if ($request->input('default_prices')) {
             ApplyGroupPricing::dispatch($trip);
@@ -85,7 +70,7 @@ class TripsController extends Controller
      */
     public function update(TripRequest $request, $id)
     {
-        $trip = $this->trip->findOrFail($id);
+        $trip = Trip::findOrFail($id);
 
         $trip->update([
             'campaign_id'     => $request->get('campaign_id', $trip->campaign_id),
@@ -133,7 +118,7 @@ class TripsController extends Controller
 
     public function checkPromoCode($id, Request $request)
     {
-        $trip = $this->trip->findOrFail($id);
+        $trip = Trip::findOrFail($id);
 
         $reward = $trip->applyCode($request->only('promocode'));
 

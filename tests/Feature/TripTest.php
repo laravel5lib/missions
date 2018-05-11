@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\v1\Trip;
 use App\Models\v1\User;
 use Laravel\Passport\Passport;
 use App\Jobs\ApplyGroupPricing;
@@ -14,6 +15,36 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class TripTest extends TestCase
 {
     use RefreshDatabase;
+
+    /** @test */
+    public function get_all_trips_for_a_group()
+    {
+        $otherTrips = factory(Trip::class, 4)->create();
+
+        $group = factory(CampaignGroup::class)->create();
+        $trip = factory(Trip::class)->create([
+            'campaign_id' => $group->campaign_id, 'group_id' => $group->organization->id
+        ]);
+
+        $this->json('GET', '/api/trips', [
+            'filters' => [
+                'group_id' => $group->organization->id, 
+                'campaign_id' => $group->campaign_id
+            ]
+        ])->assertStatus(200)
+          ->assertJson([
+                'data' => [
+                    [
+                        'id' => $trip->id,
+                        'group_id' => $group->organization->id,
+                        'campaign_id' => $group->campaign_id
+                    ]
+                ],
+                'meta' => [
+                    'total' => 1
+                ]
+          ]);
+    }
 
     /** @test */
     public function creates_new_trip_with_default_group_prices()

@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Http\Resources\GroupResource;
+use App\Http\Resources\PriceResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TripResource extends JsonResource
@@ -41,6 +42,7 @@ class TripResource extends JsonResource
             'closed_at'       => optional($this->closed_at)->toIso8601String(),
             'created_at'      => $this->created_at->toIso8601String(),
             'updated_at'      => $this->updated_at->toIso8601String(),
+            'prices'          => PriceResource::collection($this->whenLoaded('priceables')),
             'group'           => new GroupResource($this->whenLoaded('group')),
             // 'campaign'        => new CampaignResource($this->whenLoaded('campaign')),
             // 'requirements'    => RequirementResource::collection($this->whenLoaded('requirements')),

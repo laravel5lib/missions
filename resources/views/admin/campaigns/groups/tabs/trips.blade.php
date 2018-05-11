@@ -2,7 +2,12 @@
 
 @section('tab')
 
-<fetch-json url="/trips?groups[]={{ $group->group_id }}&campaign={{ $group->campaign_id }}" v-cloak>
+<fetch-json url="/trips" :parameters="{{ json_encode([
+    'filter' => [
+        'group_id' => $group->group_id,
+        'campaign_id' => $group->campaign_id
+    ]
+])}}" v-cloak>
     <div class="panel panel-default" 
             style="border-top: 5px solid #f6323e" 
             slot-scope="{ json: trips, loading, pagination, changePage }"
@@ -35,7 +40,7 @@
                         <strong><a :href="'/admin/trips/' + trip.id">@{{ trip.type | capitalize }}</a></strong>
                     </td>
                     <td class="col-sm-5">
-                        @{{ trip.started_at | moment('MMM D') }} - @{{ trip.ended_at | moment('MMM D') }}
+                        @{{ trip.started_at | mFormat('MMM D', false, false) }} - @{{ trip.ended_at | mFormat('MMM D') }}
                     </td>
                     <td class="col-sm-1 text-right">
                         <strong>@{{ trip.reservations}}</strong> / @{{ trip.spots }}

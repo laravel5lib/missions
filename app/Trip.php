@@ -6,14 +6,31 @@ use App\Models\v1\Fund;
 use App\Models\v1\Deadline;
 use App\ReservationFactory;
 use App\Models\v1\Requirement;
+use App\Traits\HasParentModel;
+use Spatie\QueryBuilder\Filter;
 use Illuminate\Support\Facades\DB;
 use App\Models\v1\Trip as TripModel;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class Trip extends TripModel
 {
+    use HasParentModel;
+    
+    public function getMorphClass()
+    {
+        return 'trips'; 
+    } 
+    
     public static function getAll()
     {
-        return static::withCount('reservations')->filter(request()->all());
+        return QueryBuilder::for(static::class)
+            ->allowedFilters(
+                Filter::exact('group_id'), 
+                Filter::exact('campaign_id'), 
+                Filter::exact('type')
+            )
+            ->allowedIncludes(['group', 'priceables'])
+            ->withCount('reservations');
     }
 
     public static function getById($id)

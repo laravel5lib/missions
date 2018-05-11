@@ -10,9 +10,6 @@ use App\Http\Resources\TripResource;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\TripRequest;
 use App\Http\Requests\v1\ExportRequest;
-use App\Http\Requests\v1\ImportRequest;
-use App\Services\Importers\TripListImport;
-use App\Http\Transformers\v1\TripTransformer;
 
 class TripsController extends Controller
 {
@@ -65,7 +62,7 @@ class TripsController extends Controller
      */
     public function update(TripRequest $request, $id)
     {
-        $trip = Trip::findOrFail($id);
+        $trip = Trip::getById($id);
 
         $trip->update([
             'campaign_id'     => $request->get('campaign_id', $trip->campaign_id),
@@ -87,13 +84,9 @@ class TripsController extends Controller
             'public'          => $request->get('public', $trip->public)
         ]);
 
-        if ($request->has('tags')) {
-            $trip->retag($request->get('tags'));
-        }
-
         $trip->syncFacilitators($request->get('facilitators'));
 
-        return $this->response->item($trip, new TripTransformer);
+        return new TripResource($trip);
     }
 
     /**
@@ -104,11 +97,11 @@ class TripsController extends Controller
      */
     public function destroy($id)
     {
-        $trip = Trip::findOrFail($id);
+        $trip = Trip::getById($id);
         
         $trip->delete();
 
-        return $this->response->noContent();
+        return response()->json([], 204);
     }
 
     public function checkPromoCode($id, Request $request)
@@ -133,18 +126,5 @@ class TripsController extends Controller
         return $this->response()->created(null, [
             'message' => 'Report is being generated and will be available shortly.'
         ]);
-    }
-
-    /**
-     * Import a list of trips.
-     *
-     * @param  TripListImport $import
-     * @return response
-     */
-    public function import(ImportRequest $request, TripListImport $import)
-    {
-        $response = $import->handleImport();
-
-        return $this->response()->created(null, $response);
     }
 }

@@ -26,12 +26,8 @@ class TripTest extends TestCase
             'campaign_id' => $group->campaign_id, 'group_id' => $group->organization->id
         ]);
 
-        $this->json('GET', '/api/trips', [
-            'filters' => [
-                'group_id' => $group->organization->id, 
-                'campaign_id' => $group->campaign_id
-            ]
-        ])->assertStatus(200)
+        $this->json('GET', "/api/trips?filter[group_id]={$group->organization->id}&filter[campaign_id]={$group->campaign_id}")
+          ->assertStatus(200)
           ->assertJson([
             'data' => [
                 [

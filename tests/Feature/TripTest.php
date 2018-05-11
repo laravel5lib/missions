@@ -31,7 +31,31 @@ class TripTest extends TestCase
                 'group_id' => $group->organization->id, 
                 'campaign_id' => $group->campaign_id
             ]
-        ])->assertStatus(200);
+        ])->assertStatus(200)
+          ->assertJson([
+            'data' => [
+                [
+                    'id' => $trip->id,
+                    'group_id' => $group->organization->id,
+                    'campaign_id' => $group->campaign_id
+                ]
+            ],
+            'meta' => [
+                'total' => 1
+            ]
+          ]);
+    }
+
+    /** @test */
+    public function get_trip_by_id()
+    {
+        $trip = factory(Trip::class)->create();
+
+        $this->json('GET', "/api/trips/{$trip->id}")
+            ->assertStatus(200)
+            ->assertJson([
+                'data' => ['id' => $trip->id]
+            ]);
     }
 
     /** @test */

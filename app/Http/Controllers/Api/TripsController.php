@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\v1\Trip;
+use App\Trip;
 use App\Jobs\ExportTrips;
 use App\Jobs\ApplyGroupPricing;
 use App\Http\Controllers\Controller;
@@ -17,31 +17,26 @@ use App\Http\Transformers\v1\TripTransformer;
 class TripsController extends Controller
 {
     /**
-     * Get a list of trips
+     * Get all trips
      *
-     * @param Request $request
-     * @return \Dingo\Api\Http\Response
+     * @return response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $trips = Trip::withCount('reservations')
-            ->filter($request->all())
-            ->paginate($request->get('per_page', 10));
+        $trips = Trip::getAll()->paginate(10);
 
         return TripResource::collection($trips);
     }
 
     /**
-     * Get a single trip
+     * Get specific trip
      *
-     * @param $id
-     * @return \Dingo\Api\Http\Response
+     * @param string $id
+     * @return response
      */
     public function show($id)
     {
-        $trip = Trip::withCount('reservations')->findOrFail($id);
-
-        return $this->response->item($trip, new TripTransformer);
+        return new TripResource(Trip::getById($id));
     }
 
     /**

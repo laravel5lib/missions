@@ -3,7 +3,7 @@
         <div class="panel-heading">
             <h5>Cost Breakdown</h5>
         </div>
-        @if($reservation->itemizedPrices()->lateFee())
+        @if($reservation->itemizedPrices()->hasPendingLateFee())
         <div class="panel-body">
             <div class="alert alert-warning" style="margin-bottom: 0">
                 <div class="row">

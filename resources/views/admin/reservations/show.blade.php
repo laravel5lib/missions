@@ -38,7 +38,7 @@
         <div class="col-xs-12 col-md-7">
             @yield('tab')
         </div>
-        <div class="col-md-3 small">
+        <div class="col-xs-12 col-md-3 small">
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active">
                     <a href="#notes" aria-controls="notes" role="tab" data-toggle="tab">Notes</a>

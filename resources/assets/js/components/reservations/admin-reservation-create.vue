@@ -190,7 +190,7 @@
                 this.$http.post('reservations', data).then((response) => {
                     this.$root.$emit('AdminTrip:RefreshReservations');
                     this.$refs.reservationspinner.hide();
-                    location.href = '/admin/reservations/' + response.data.data.id
+                    location.href = '/admin/trips/'+this.tripId+'/reservations';
                     /*$('#addReservationModal').modal('hide');
                     $.extend(this, {
                         stepList:[

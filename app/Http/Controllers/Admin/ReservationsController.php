@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\v1\Trip;
 use App\Models\v1\Reservation;
+use App\Models\v1\CampaignGroup;
 use App\Http\Controllers\Controller;
 use Artesaos\SEOTools\Traits\SEOTools;
 
@@ -88,10 +90,16 @@ class ReservationsController extends Controller
     /**
      * Create a new reservation.
      */
-    public function create()
+    public function create($tripId)
     {
         $this->seo()->setTitle('New Reservation');
-
         $this->authorize('create', $this->reservation);
+
+        $trip = Trip::findOrFail($tripId);
+        $group = CampaignGroup::whereCampaignId($trip->campaign_id)
+            ->whereGroupId($trip->group_id)
+            ->firstOrFail();
+
+        return view('admin.reservations.create', compact('trip', 'group'));
     }
 }

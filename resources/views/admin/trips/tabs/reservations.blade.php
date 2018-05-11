@@ -9,7 +9,7 @@
             </div>
             <div class="col-xs-6 text-right">
                 <h5 v-if="loading" class="text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</h5>
-                <a href="#" class="btn btn-sm btn-primary">Add New Reservation</a>
+                <a href="{{ url('/admin/trips/'.$trip->id.'/reservations/create') }}" class="btn btn-sm btn-primary">Add New Reservation</a>
             </div>
         </div>
     </div>

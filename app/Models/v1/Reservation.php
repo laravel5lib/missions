@@ -709,12 +709,23 @@ class Reservation extends Model
         return $promos->count() ? $promos : false;
     }
 
-    public function process($roomingCosts)
+    public function process($roomingPriceUuid)
     {
-        // add trip's current rate
-        // add all trip's static costs
-        // add all trip's upfront costs
-        // add rooming costs selected by the user
+        // get trip's current rate
+        $this->attachPriceToModel($this->trip->getCurrentRate()->id);
+        // add all trip's static & upfront costs
+       $this->trip
+            ->priceables()
+            ->whereHas('cost', function($q) {
+                return $q->where('type', 'static')
+                         ->orWhere('type', 'upfront');
+            })
+            ->pluck('id')
+            ->each(function ($priceId) {
+                $this->attachPriceToModel($priceId);
+            });
+        // add rooming cost selected by the user
+        $this->addPrice(['price_id' => $roomingPriceUuid]);
 
         $this->syncRequirements($this->trip->requirements);
         $this->syncDeadlines($this->trip->deadlines);

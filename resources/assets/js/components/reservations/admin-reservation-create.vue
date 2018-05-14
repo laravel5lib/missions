@@ -169,7 +169,7 @@
                 user_id: this.userData.id,
                 trip_id: this.tripId,
                 companion_limit: this.companion_limit,
-                costs: _.union(this.tripCosts.incremental, [this.selectedOptions], this.tripCosts.static),
+                costs: this.selectedOptions.id,
                 desired_role: this.userInfo.desired_role.value
               };
               this.$refs.reservationspinner.show();

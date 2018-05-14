@@ -73,7 +73,7 @@
             return {
                 stepList:[
                     {name: 'Basic Info', view: 'step1', complete:false},
-                    {name: 'Trip Options', view: 'step2', complete:false},
+                    {name: 'Rooming Options', view: 'step2', complete:false},
                     {name: 'Review', view: 'step3', complete:false}
                 ],
                 currentStep: null,
@@ -174,46 +174,10 @@
               };
               this.$refs.reservationspinner.show();
 
-                if (this.userData && this.userData.donor_id) {
-                    data.donor_id = this.donor_id;
-                } else {
-                    data.donor = {
-                        name: this.userInfo.firstName + ' ' + this.userInfo.lastName,
-                        company: '',
-                        email: this.userInfo.email,
-                        phone: this.userInfo.phone,
-                        zip: this.userInfo.zipCode,
-                        country_code: this.userInfo.country || 'us'
-                    }
-                }
-
-                this.$http.post('reservations', data).then((response) => {
+                this.$http.post('trips/'+this.tripId+'/register', data).then((response) => {
                     this.$root.$emit('AdminTrip:RefreshReservations');
                     this.$refs.reservationspinner.hide();
                     location.href = '/admin/trips/'+this.tripId+'/reservations';
-                    /*$('#addReservationModal').modal('hide');
-                    $.extend(this, {
-                        stepList:[
-                            {name: 'Basic Info', view: 'step1', complete:false},
-                            {name: 'Trip Options', view: 'step2', complete:false},
-                            {name: 'Review', view: 'step3', complete:false}
-                        ],
-                        currentStep: this.stepList[0],
-                        canContinue: false,
-                        trip: {},
-                        tripCosts: {},
-                        deadlines:[],
-                        requirements:[],
-                        wizardComplete: false,
-
-                        // user generated data
-                        userData: null,
-                        selectedOptions: [],
-                        userInfo: {},
-                        paymentInfo: {},
-                        upfrontTotal: 0,
-                        fundraisingGoal: 0
-                    })*/
                 }, (response) =>  {
                     console.log(response);
                     this.$refs.reservationspinner.hide();
@@ -242,26 +206,26 @@
         },
         mounted(){
             //get trip costs
-            this.$http.get('trips/' + this.tripId, { params: { include: 'costs:status(active),costs.payments,deadlines,requirements' }}).then((response) => {
+            this.$http.get('trips/' + this.tripId, { params: { include: 'priceables' }}).then((response) => {
               let optionalArr = [], staticArr = [], incrementalArr = [];
 
               this.trip = response.data.data;
                 // deadlines, requirements, and companion_limit
-                this.deadlines =  response.data.data.deadlines.data;
-                this.requirements =  response.data.data.requirements.data;
+                // this.deadlines =  response.data.data.deadlines.data;
+                // this.requirements =  response.data.data.requirements.data;
                 this.companion_limit = response.data.data.companion_limit;
 
                 // filter costs by type
-                response.data.data.costs.data.forEach(function (cost) {
-                    switch (cost.type) {
-                        case 'static':
-                            staticArr.push(cost);
+                response.data.data.prices.forEach(function (price) {
+                    switch (price.cost.type) {
+                        case 'Additional':
+                            staticArr.push(price);
                             break;
-                        case 'incremental':
-                            incrementalArr.push(cost);
+                        case 'Registration':
+                            incrementalArr.push(price);
                             break;
-                        case 'optional':
-                            optionalArr.push(cost);
+                        case 'Rooming':
+                            optionalArr.push(price);
                             break;
                     }
                 });

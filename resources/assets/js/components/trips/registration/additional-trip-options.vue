@@ -2,20 +2,37 @@
 	<div class="row">
 		<div class="col-sm-12">
 			<form novalidate name="AdditionalOptionsForm">
-				<div class="" v-for="(option, index) in optionalCosts" :key="option.id">
-					<label style="display:block" :for="'option' + index">
-						<input type="radio" :id="'option' + index" v-model="selectedOptions" :value="option.id" name="additional" v-validate="index === 0 ? 'required' : ''">
-						{{option.name}}
-						<span class="pull-right">{{currency(option.amount)}}</span>
-					</label>
-					<span class="help-block">{{option.description}}</span>
-					<hr class="divider lg">
-				</div>
-				<h5 v-if="optionalCosts.length==0">
+        <h5 v-if="optionalCosts.length==0">
+          <hr class="divider inv">
 					No rooming options available
 				</h5>
+        <table class="table" v-else>
+          <thead>
+            <tr class="active">
+              <th>Room Type</th>
+              <th class="text-right">Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(option, index) in optionalCosts" :key="option.id">
+              <td>
+                <label>
+                <input type="radio" :id="'option' + index" 
+                       v-model="selectedOptions" 
+                       :value="option.id" 
+                       name="additional" 
+                       v-validate="index === 0 ? 'required' : ''"
+                > {{option.cost.name}}
+                </label>
+                <span class="help-block">{{option.cost.description}}</span>
+              </td>
+              <td class="text-right">
+                <strong>{{currency(option.amount)}}</strong>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 			</form>
-
 		</div>
 	</div>
 </template>

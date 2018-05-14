@@ -40,27 +40,7 @@ class ProcessReservation extends Job
      */
     public function handle()
     {
-        if ($this->costs) {
-            $this->reservation->syncCosts(array_filter($this->costs));
-        } else {
-            $active = $this->reservation->trip->activeCosts()->get();
-
-            $maxDate = $active->whereStrict('type', 'incremental')->max('active_at');
-
-            $costs = $active->reject(function ($value) use ($maxDate) {
-                return ($value->type == 'incremental' && $value->active_at < $maxDate) or $value->type == 'optional';
-            });
-
-            $this->reservation->syncCosts($costs);
-        }
-
-        if ($this->tags) {
-            $this->reservation->tag($this->tags);
-        }
-
-        $this->reservation->syncRequirements($this->reservation->trip->requirements);
-        $this->reservation->syncDeadlines($this->reservation->trip->deadlines);
-        $this->reservation->addTodos($this->reservation->trip->todos);
+        $this->reservation->process($this->costs);
 
         event(new ReservationWasProcessed($this->reservation));
     }

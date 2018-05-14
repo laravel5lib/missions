@@ -42,7 +42,7 @@ class ReservationRequest extends FormRequest
             'testimony_id'       => 'string|exists:essays,id',
             'tags'               => 'array',
             'costs'              => 'array',
-            'costs.*.id'         => 'required|exists:costs,id',
+            'costs.*.id'         => 'required|exists:prices,uuid',
             'costs.*.locked'     => 'boolean',
             'companion_limit'    => 'numeric'
         ];
@@ -65,7 +65,7 @@ class ReservationRequest extends FormRequest
                 'testimony_id'       => 'string|exists:essays,id',
                 'tags'               => 'array',
                 'costs'              => 'array',
-                'costs.*.id'         => 'required|exists:costs,id',
+                'costs.*.id'         => 'required|exists:prices,uuid',
                 'costs.*.locked'     => 'boolean',
                 'companion_limit'    => 'numeric'
             ];

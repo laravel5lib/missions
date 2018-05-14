@@ -35,7 +35,10 @@ class Trip extends TripModel
 
     public static function getById($id)
     {
-        return static::withCount('reservations')->findOrFail($id);
+        return QueryBuilder::for(static::class)
+            ->allowedIncludes(['group', 'priceables'])
+            ->withCount('reservations')
+            ->findOrFail($id);
     }
 
     /**
@@ -127,27 +130,5 @@ class Trip extends TripModel
         $this->spots = $this->spots + $number;
 
         $this->save();
-    }
-
-    public function register($request)
-    {
-        return DB::transaction(function () use($request) {
-            
-            $request['companion_limit'] = $this->companion_limit;
-
-            $reservation = $this->reservations()->create(
-                ReservationFactory::make($request)
-            );
-
-            $fund = Fund::make($reservation);
-
-            $reservation->process($request);
-            
-            if ($request->get('amount') > 0) {
-                Deposit::create($fund, $request);
-            }
-
-            return $reservation;
-        });
     }   
 }

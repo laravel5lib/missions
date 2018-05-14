@@ -709,23 +709,12 @@ class Reservation extends Model
         return $promos->count() ? $promos : false;
     }
 
-    public function process($request)
+    public function process($roomingCosts)
     {
-        $costs = $request->get('costs');
-
-        if ($costs) {
-            $this->syncCosts(array_filter($costs));
-        } else {
-            $active = $this->trip->activeCosts()->get();
-
-            $maxDate = $active->whereStrict('type', 'incremental')->max('active_at');
-
-            $costs = $active->reject(function ($value) use ($maxDate) {
-                return ($value->type == 'incremental' && $value->active_at < $maxDate) or $value->type == 'optional';
-            });
-
-            $this->syncCosts($costs);
-        }
+        // add trip's current rate
+        // add all trip's static costs
+        // add all trip's upfront costs
+        // add rooming costs selected by the user
 
         $this->syncRequirements($this->trip->requirements);
         $this->syncDeadlines($this->trip->deadlines);

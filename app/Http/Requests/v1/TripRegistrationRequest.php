@@ -26,7 +26,9 @@ class TripRegistrationRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
+        if (!$this->input('donor') || !$this->input('donor')) return $this->adminRules();
+
+        return [
             'given_names'        => 'required|max:100',
             'surname'            => 'required|max:60',
             'gender'             => 'required|in:male,female,Male,Female',
@@ -59,8 +61,26 @@ class TripRegistrationRequest extends FormRequest
             'payment.type'       => 'required_unless:amount,0|in:cash,check,card',
             'payment.number'     => 'required_if:payment.type,check|string'
         ];
+    }
 
-        return $rules;
+    private function adminRules()
+    {
+        return [
+            'given_names'        => 'required|max:100',
+            'surname'            => 'required|max:60',
+            'gender'             => 'required|in:male,female,Male,Female',
+            'status'             => 'required|string',
+            'shirt_size'         => 'required|in:' . $this->getShirtSizes(),
+            'birthday'           => 'required|date|before:' . Carbon::now()->subYears(12),
+            'user_id'            => 'required|exists:users,id',
+            'address'            => 'required|string',
+            'zip'                => 'required|string',
+            'city'               => 'required|string',
+            'country_code'       => 'required',
+            'email'              => 'required|email',
+            'phone_one'          => 'required_without:phone_two',
+            'phone_two'          => 'required_without:phone_one'
+        ];
     }
 
     private function getShirtSizes()

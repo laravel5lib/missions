@@ -24,9 +24,13 @@ export default {
 
     methods: {
         fetch: _.debounce(function (params = this.filters) {
-            params = decodeURIComponent($.param( params ));
             this.loading = true;
-                this.$http.get(this.url+'?'+params).then((response) => {
+                this.$http.get(this.url, {
+                    params,
+                    paramsSerializer: function(params) {
+                        return decodeURIComponent($.param(params));
+                    }
+                }).then((response) => {
                     this.json = response.data.data;
                     this.pagination = response.data.meta;
                     this.loading = false;

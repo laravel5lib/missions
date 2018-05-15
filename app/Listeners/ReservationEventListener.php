@@ -18,8 +18,6 @@ class ReservationEventListener
      */
     public function register($event)
     {
-        $fund = $this->setupFunding($event);
-
         $this->process($event);
 
         $params = $event->request->only(
@@ -31,7 +29,7 @@ class ReservationEventListener
             'currency',
             'description',
             'details'
-        ) + ['fund_id' => $fund->id, 'fund_name' => $fund->name];
+        ) + ['fund_id' => $event->reservation->fund->id, 'fund_name' => $event->reservation->fund->name];
 
         if ($event->request->get('amount') && $event->request->get('amount') > 0) {
             dispatch(new MakeDeposit($params));
@@ -70,26 +68,6 @@ class ReservationEventListener
     }
 
     /**
-     * Setup funding for the reservation.
-     *
-     * @param $event
-     * @return mixed
-     */
-    public function setupFunding($event)
-    {
-        $name = generateFundName($event->reservation);
-        $fund = $event->reservation->fund()->create([
-            'name' => $name,
-            'slug' => generate_fund_slug($name),
-            'balance' => 0,
-            'class_id' => getAccountingClass($event->reservation)->id,
-            'item_id'  => getAccountingItem($event->reservation)->id
-        ]);
-
-        return $fund;
-    }
-
-    /**
      * Close a spot on the trip.
      *
      * @param $event
@@ -106,26 +84,6 @@ class ReservationEventListener
      */
     public function subscribe($events)
     {
-        // $events->listen(
-        //     'App\Events\ReservationWasCreated',
-        //     'App\Listeners\ReservationEventListener@setupFunding'
-        // );
-
-        // $events->listen(
-        //     'App\Events\ReservationWasCreated',
-        //     'App\Listeners\ReservationEventListener@process'
-        // );
-
-        $events->listen(
-            'App\Events\ReservationWasCreated',
-            'App\Listeners\ReservationEventListener@promos'
-        );
-
-        $events->listen(
-            'App\Events\ReservationWasCreated',
-            'App\Listeners\ReservationEventListener@updateSpotsAvailable'
-        );
-
         $events->listen(
             'App\Events\RegisteredForTrip',
             'App\Listeners\ReservationEventListener@register'

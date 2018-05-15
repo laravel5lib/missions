@@ -10,6 +10,7 @@ use App\Traits\Rewardable;
 use Conner\Tagging\Taggable;
 use App\Utilities\v1\TeamRole;
 use EloquentFilter\Filterable;
+use App\Events\ReservationCreated;
 use Illuminate\Support\Facades\DB;
 use App\Events\ReservationWasProcessed;
 use App\Models\v1\RequirementCondition;
@@ -65,11 +66,13 @@ class Reservation extends Model
     protected $touches = ['trip'];
 
     /**
-     * Indicates if the model should be timestamped
+     * The event map for the model.
      *
-     * @var bool
+     * @var array
      */
-    public $timestamps = true;
+    protected $dispatchesEvents = [
+        'created' => ReservationCreated::class
+    ];
 
     /**
      * Set the reservation's gender.
@@ -709,12 +712,12 @@ class Reservation extends Model
         return $promos->count() ? $promos : false;
     }
 
-    public function process($roomingPriceUuid)
+    public function process($roomingPriceUuid = null)
     {
         // get trip's current rate
         $this->attachPriceToModel($this->trip->getCurrentRate()->id);
         // add all trip's static & upfront costs
-       $this->trip
+        $this->trip
             ->priceables()
             ->whereHas('cost', function($q) {
                 return $q->where('type', 'static')
@@ -725,7 +728,9 @@ class Reservation extends Model
                 $this->attachPriceToModel($priceId);
             });
         // add rooming cost selected by the user
-        $this->addPrice(['price_id' => $roomingPriceUuid]);
+        if ($roomingPriceUuid) {
+            $this->addPrice(['price_id' => $roomingPriceUuid]);
+        }
 
         $this->syncRequirements($this->trip->requirements);
         $this->syncDeadlines($this->trip->deadlines);

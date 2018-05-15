@@ -10,6 +10,7 @@ use Laravel\Passport\Passport;
 use League\Glide\ServerFactory;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
+use App\Observers\ReservationObserver;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
@@ -24,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Reservation::observe(ReservationObserver::class);
+
         Relation::morphMap([
             'fundraisers' => \App\Models\v1\Fundraiser::class,
             'campaign-groups' => \App\Models\v1\CampaignGroup::class,

@@ -24,26 +24,6 @@ class TransactionEventListener
     }
 
     /**
-     * Handle updating outstanding balances on payments due.
-     *
-     * @param $event
-     */
-    public function applyAsPayment($event)
-    {
-        // REFACTOR
-        // Listen for changes to fund balance
-        // Then update a reservation's dues
-        // Then update a project's dues
-        $transaction = $event->transaction;
-
-        if ($transaction->fund->fundable instanceof Reservation) {
-            $transaction->fund->fundable
-                ->payments()
-                ->updateBalances($transaction->amount);
-        }
-    }
-
-    /**
      * Register the listeners for the subscriber.
      *
      * @param  $events
@@ -53,11 +33,6 @@ class TransactionEventListener
         $events->listen(
             'App\Events\TransactionWasCreated',
             'App\Listeners\TransactionEventListener@updateFundBalance'
-        );
-
-        $events->listen(
-            'App\Events\TransactionWasCreated',
-            'App\Listeners\TransactionEventListener@applyAsPayment'
         );
     }
 }

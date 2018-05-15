@@ -32,6 +32,11 @@ class Payment extends Model
 
     public $timestamps = false;
 
+    public function isPastDue()
+    {
+        return $this->due_at->addDays($this->grace_days)->isPast();
+    }
+
     public function setDueAtAttribute($value)
     {
         $this->attributes['due_at'] = is_string($value) ? Carbon::parse($value)->endOfDay() : $value;

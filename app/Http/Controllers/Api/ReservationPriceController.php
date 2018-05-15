@@ -89,13 +89,7 @@ class ReservationPriceController extends Controller
         $reservation = Reservation::findOrFail($reservationId);
         $price = $reservation->priceables()->whereUuid($uuid)->firstOrFail();
 
-        DB::transaction(function() use($reservation, $price) {
-            $reservation->priceables()->detach($price->id);
-
-            if ($price->model_id === $reservation->id && $price->model_type === 'reservations') {
-                $price->delete();
-            }
-        });
+        $reservation->removePrice($price);
 
         return response()->json([], 204);
     }

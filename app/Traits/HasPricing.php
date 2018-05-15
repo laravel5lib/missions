@@ -34,7 +34,7 @@ trait HasPricing
      */
     public function getCurrentRate()
     {
-        return $this->priceables()->whereHas('cost', function ($q) {
+        $rate = $this->priceables()->whereHas('cost', function ($q) {
 
             return $q->type('incremental');
 
@@ -43,6 +43,12 @@ trait HasPricing
             return $q->whereDate('due_at', '>=', now());
 
         })->orderBy('active_at')->first();
+
+        return $rate ?? $this->priceables()->whereHas('cost', function ($q) {
+
+            return $q->type('incremental');
+
+        })->first();
     }
 
     public function getUpcomingPayment()
@@ -114,6 +120,8 @@ trait HasPricing
             }
             
             $this->attachPriceToModel($price->id);
+
+            return $price;
         });
     }
 
@@ -126,5 +134,16 @@ trait HasPricing
     public function attachPriceToModel($priceId)
     {
         return $this->priceables()->attach($priceId);
+    }
+    
+    public function removePrice(Price $price)
+    {
+        DB::transaction(function() use($price) {
+            $this->priceables()->detach($price->id);
+
+            if ($price->model_id === $this->id && $price->model_type === $this->getMorphClass()) {
+                $price->delete();
+            }
+        });
     }
 }

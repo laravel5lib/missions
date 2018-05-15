@@ -748,4 +748,30 @@ class Reservation extends Model
     {
         return new ItemizedPricing($this);
     }
+
+    public function processLatePayment()
+    {
+        if ($this->paymentIsLate() && ! $this->getCurrentRate()->locked) {
+            $this->penalize();
+        }
+    }
+
+    public function paymentIsLate()
+    {
+        $currentPayment = $this->getUpcomingPayment();
+        
+        return $currentPayment->isPastDue() && $this->hasInsufficientFunds($currentPayment);
+    }
+
+    private function hasInsufficientFunds($currentPayment)
+    {
+        return $this->getTotalRaised() <= $this->getTotalCost() * ($currentPayment->percentage_due/100);
+    }
+
+    public function penalize()
+    {
+        $this->removePrice($this->getCurrentRate());
+
+        $this->attachPriceToModel($this->trip->getCurrentRate()->id);
+    }
 }

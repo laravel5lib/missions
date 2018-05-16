@@ -66,6 +66,12 @@ class ReservationTransformer extends TransformerAbstract
             'total_raised'        => $reservation->totalRaisedInDollars(),
             'percent_raised'      => (int) $reservation->getPercentRaised(),
             'total_owed'          => $reservation->totalOwedInDollars(),
+            'current_rate'        => $reservation->getCurrentRate() ? $reservation->getCurrentRate()->cost->name : 'N/A',
+            'rate_locked'         => (boolean) $reservation->getCurrentRate()->pivot->locked,
+            'upcoming_deadline'   => $reservation->getUpcomingDeadline() 
+                                        ? $reservation->getUpcomingDeadline()->format('M j, h:i a') 
+                                        : 'N/A',
+            'grace_days'          => (int) $reservation->getUpcomingPayment()->grace_days,
             'created_at'          => $reservation->created_at->toDateTimeString(),
             'updated_at'          => $reservation->updated_at->toDateTimeString(),
             'deleted_at'          => $reservation->deleted_at ? $reservation->deleted_at->toDateTimeString() : null,

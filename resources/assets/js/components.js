@@ -233,6 +233,7 @@ Vue.component('meta-form', require('./components/MetaForm.vue'));
 Vue.component('group-manager', require('./components/GroupManager.vue'));
 Vue.component('campaign-cost-manager', require('./components/CampaignCostManager.vue'));
 Vue.component('group-reservation-list', require('./components/group-reservation-list.vue'));
+Vue.component('reservation-pricing-overview', require('./components/ReservationPricingOverview.vue'));
 
 /**
  * Utility Components

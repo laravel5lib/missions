@@ -22,6 +22,8 @@ Route::get('campaigns/{campaignId}/groups/{groupId}/prices', function($campaignI
     return redirect('/api/campaign-groups/'.$group->uuid.'/prices');
 });
 Route::apiResource('trips/{tripId}/prices', 'TripPriceController');
+Route::post('reservations/{reservationId}/prices/lock', 'ReservationPriceLockController@store');
+Route::delete('reservations/{reservationId}/prices/lock', 'ReservationPriceLockController@destroy');
 Route::apiResource('reservations/{reservationId}/prices', 'ReservationPriceController');
 
 // Dingo API routes

@@ -177,14 +177,26 @@ class ReservationPriceTest extends TestCase
                  ]);
     }
 
-    public function locks_a_reservation_price()
+    /** @test */
+    public function locks_reservation_current_rate()
     {
-        // TODO
+        $reservation = $this->setupReservationWithPrices();
+
+        $this->json('POST', "/api/reservations/{$reservation->id}/prices/lock")
+             ->assertStatus(200);
+
+        $this->assertEquals(1, $reservation->getCurrentRate()->pivot->locked);
     }
 
-    public function unlocks_a_reservation_price()
+    /** @test */
+    public function unlocks_reservation_current_rate()
     {
-        // TODO
+        $reservation = $this->setupReservationWithPrices();
+
+        $this->json('DELETE', "/api/reservations/{$reservation->id}/prices/lock")
+             ->assertStatus(200);
+
+        $this->assertEquals(0, $reservation->getCurrentRate()->pivot->locked);
     }
 
     /** @test */

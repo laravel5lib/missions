@@ -60,20 +60,20 @@ class HasPricingTraitTest extends TestCase
     }
 
     /** @test */
-    public function locks_and_unlocks_the_current_rate()
+    public function locks_and_unlocks_a_price()
     {
         $reservation = factory(Reservation::class)->create();
-        $reservation->addPrice([
+        $price = $reservation->addPrice([
             'cost_id' => factory(Cost::class)->create(['type' => 'incremental'])->id,
             'amount' => 1000
         ]);
 
-        $reservation->lockCurrentRate();
+        $reservation->lockPrice($price);
 
-        $this->assertEquals(1, $reservation->getCurrentRate()->pivot->locked);
+        $this->assertEquals(1, $reservation->priceables()->first()->pivot->locked);
 
-        $reservation->unlockCurrentRate();
+        $reservation->unlockPrice($price);
         
-        $this->assertEquals(0, $reservation->getCurrentRate()->pivot->locked);
+        $this->assertEquals(0, $reservation->priceables()->first()->pivot->locked);
     }
 }

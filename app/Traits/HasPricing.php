@@ -158,22 +158,30 @@ trait HasPricing
      *
      * @return boolean
      */
-    public function lockCurrentRate()
+    public function lockPrice(Price $price)
     {
-        $price = $this->getCurrentRate();
-        
-        return $this->priceables()->updateExistingPivot($price->id, ['locked' => true]);
+        return $this->togglePrice($price, true);
     }
 
     /**
-     * Unlock the current rate for the model
+     * Unlock the rate for the model
      *
      * @return boolean
      */
-    public function unlockCurrentRate()
+    public function unlockPrice(Price $price)
+    {   
+        return $this->togglePrice($price, false);
+    }
+
+    /**
+     * Toggle the locked status for the given price
+     *
+     * @param Price $price
+     * @param boolean $status
+     * @return void
+     */
+    private function togglePrice(Price $price, $status)
     {
-        $price = $this->getCurrentRate();
-        
-        return $this->priceables()->updateExistingPivot($price->id, ['locked' => false]);
+        return $this->priceables()->updateExistingPivot($price->id, ['locked' => $status]);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Trip;
 use App\Models\v1\Cost;
 
 /**
@@ -13,6 +14,8 @@ $factory->define(App\Models\v1\Price::class, function (Faker\Generator $faker) {
         'active_at' => $faker->dateTimeThisYear('+ 6 months'),
         'amount' => $faker->numberBetween($min = 1000, $max = 3000),
         'model_type' => 'trips',
-        'model_id' => $faker->uuid
+        'model_id' => function() {
+            return factory(Trip::class)->create()->id;
+        },
     ];
 });

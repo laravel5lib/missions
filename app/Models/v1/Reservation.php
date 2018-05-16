@@ -751,7 +751,7 @@ class Reservation extends Model
 
     public function processLatePayment()
     {
-        if ($this->paymentIsLate() && ! $this->getCurrentRate()->locked) {
+        if ($this->paymentIsLate() && ! $this->getCurrentRate()->pivot->locked) {
             $this->penalize();
         }
     }

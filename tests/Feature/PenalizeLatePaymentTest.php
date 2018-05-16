@@ -11,6 +11,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PenalizeLatePaymentTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function reservation_with_late_payment_defaults_to_latest_trip_rate()
     {
@@ -21,6 +23,20 @@ class PenalizeLatePaymentTest extends TestCase
         $reservation->processLatePayment();
         
         $this->assertEquals(2000, $reservation->getCurrentRate()->amount);
+    }
+
+    /** @test */
+    public function reservation_locked_into_current_rate_does_not_change()
+    {
+        $reservation = $this->setupReservation();
+        
+        $reservation->lockCurrentRate();
+
+        $this->assertEquals(1800, $reservation->getCurrentRate()->amount);
+
+        $reservation->processLatePayment();
+        
+        $this->assertEquals(1800, $reservation->getCurrentRate()->amount);
     }
 
     private function setupReservation()

@@ -24,7 +24,7 @@ trait HasPricing
      */
     public function priceables()
     {
-        return $this->morphToMany(Price::class, 'priceable');
+        return $this->morphToMany(Price::class, 'priceable')->withPivot('locked');
     }
     
     /**
@@ -136,6 +136,12 @@ trait HasPricing
         return $this->priceables()->attach($priceId);
     }
     
+    /**
+     * Remove a price from the model.
+     *
+     * @param Price $price
+     * @return void
+     */
     public function removePrice(Price $price)
     {
         DB::transaction(function() use($price) {
@@ -145,5 +151,29 @@ trait HasPricing
                 $price->delete();
             }
         });
+    }
+
+    /**
+     * Lock the current rate for the model
+     *
+     * @return boolean
+     */
+    public function lockCurrentRate()
+    {
+        $price = $this->getCurrentRate();
+        
+        return $this->priceables()->updateExistingPivot($price->id, ['locked' => true]);
+    }
+
+    /**
+     * Unlock the current rate for the model
+     *
+     * @return boolean
+     */
+    public function unlockCurrentRate()
+    {
+        $price = $this->getCurrentRate();
+        
+        return $this->priceables()->updateExistingPivot($price->id, ['locked' => false]);
     }
 }

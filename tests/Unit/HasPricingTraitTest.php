@@ -3,6 +3,8 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
+use App\Models\v1\Cost;
+use App\Models\v1\Reservation;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -55,5 +57,23 @@ class HasPricingTraitTest extends TestCase
         // assert the latest payment for the latest price is the upcoming deadline
 
         $this->assertTrue(true);
+    }
+
+    /** @test */
+    public function locks_and_unlocks_the_current_rate()
+    {
+        $reservation = factory(Reservation::class)->create();
+        $reservation->addPrice([
+            'cost_id' => factory(Cost::class)->create(['type' => 'incremental'])->id,
+            'amount' => 1000
+        ]);
+
+        $reservation->lockCurrentRate();
+
+        $this->assertEquals(1, $reservation->getCurrentRate()->pivot->locked);
+
+        $reservation->unlockCurrentRate();
+        
+        $this->assertEquals(0, $reservation->getCurrentRate()->pivot->locked);
     }
 }

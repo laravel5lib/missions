@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\v1\Reservation;
 use Illuminate\Console\Command;
+use App\Jobs\ProcessLatePayment;
 
 class HandleLatePayments extends Command
 {
@@ -43,22 +44,8 @@ class HandleLatePayments extends Command
      */
     public function handle()
     {
-        $id = $this->argument('id');
-
-        if ($id) {
-            $this->reservation->findOrFail($id)->payments()->bump() ?
-                $this->info('Costs updated for reservation id: '. $id) :
-                $this->error('No changes made to reservation id: '. $id);
-        } else {
-            $reservations = $this->reservation->current()->get();
-
-            $reservations->each(function ($reservation) {
-                $reservation->payments()->bump() ?
-                    $this->info('Costs updated for reservation id: '. $reservation->id) :
-                    $this->error('No changes made to reservation id: '. $reservation->id);
-            });
-
-            $this->info('All reservation costs updated.');
-        }
+        $reservation = $this->reservation->find($this->argument('id'));
+        
+        ProcessLatePayment::dispatch($reservation);
     }
 }

@@ -41,12 +41,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-         $schedule->command('payments:penalize')
-                  ->daily()
-                  ->timezone('America/Detroit')
-                  ->withoutOverlapping();
+        $schedule->command('payments:penalize --force')
+                 ->daily()
+                 ->timezone('America/Detroit')
+                 ->withoutOverlapping();
 
-        $schedule->command('reminders:send')->daily();
+        $schedule->command('reminders:send --force')->daily();
     }
     /**
      * Register the Closure based commands for the application.

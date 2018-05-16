@@ -6,6 +6,8 @@ use Tests\TestCase;
 use App\Models\v1\Cost;
 use App\Models\v1\Trip;
 use App\Models\v1\Reservation;
+use App\Jobs\ProcessLatePayment;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -37,6 +39,36 @@ class PenalizeLatePaymentTest extends TestCase
         $reservation->processLatePayment();
         
         $this->assertEquals(1800, $reservation->getCurrentRate()->amount);
+    }
+
+    /** @test */
+    public function artisan_command_processes_late_payment_for_a_reservation()
+    {
+        $reservationOne = $this->setupReservation();
+        $reservationTwo = $this->setupReservation();
+        
+        $this->assertEquals(1800, $reservationOne->getCurrentRate()->amount);
+        $this->assertEquals(1800, $reservationTwo->getCurrentRate()->amount);
+
+        Artisan::call('payments:penalize', ['id' => $reservationOne->id]);
+        
+        $this->assertEquals(2000, $reservationOne->getCurrentRate()->amount);
+        $this->assertEquals(1800, $reservationTwo->getCurrentRate()->amount);
+    }
+
+    /** @test */
+    public function artisan_command_processes_late_payments_for_all_current_reservations()
+    {
+        $reservationOne = $this->setupReservation();
+        $reservationTwo = $this->setupReservation();
+        
+        $this->assertEquals(1800, $reservationOne->getCurrentRate()->amount);
+        $this->assertEquals(1800, $reservationTwo->getCurrentRate()->amount);
+
+        Artisan::call('payments:penalize');
+        
+        $this->assertEquals(2000, $reservationOne->getCurrentRate()->amount);
+        $this->assertEquals(2000, $reservationTwo->getCurrentRate()->amount);
     }
 
     private function setupReservation()

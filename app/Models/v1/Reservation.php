@@ -5,6 +5,7 @@ namespace App\Models\v1;
 use Carbon\Carbon;
 use App\UuidForKey;
 use App\ItemizedPricing;
+use App\Models\v1\Payment;
 use App\Traits\HasPricing;
 use App\Traits\Rewardable;
 use Conner\Tagging\Taggable;
@@ -749,13 +750,23 @@ class Reservation extends Model
         return new ItemizedPricing($this);
     }
 
+    /**
+     * Process a late payment
+     *
+     * @return boolean
+     */
     public function processLatePayment()
     {
         if ($this->paymentIsLate() && ! $this->getCurrentRate()->pivot->locked) {
-            $this->penalize();
+            return $this->penalize();
         }
     }
 
+    /**
+     * Determine if payment is late
+     *
+     * @return boolean
+     */
     public function paymentIsLate()
     {
         $currentPayment = $this->getUpcomingPayment();
@@ -763,15 +774,26 @@ class Reservation extends Model
         return $currentPayment->isPastDue() && $this->hasInsufficientFunds($currentPayment);
     }
 
-    private function hasInsufficientFunds($currentPayment)
+    /**
+     * Determine if the reservation has insufficient funds
+     *
+     * @param Payment $currentPayment
+     * @return boolean
+     */
+    private function hasInsufficientFunds(Payment $currentPayment)
     {
         return $this->getTotalRaised() <= $this->getTotalCost() * ($currentPayment->percentage_due/100);
     }
 
+    /**
+     * Penalize a late payment
+     *
+     * @return boolean
+     */
     public function penalize()
     {
         $this->removePrice($this->getCurrentRate());
 
-        $this->attachPriceToModel($this->trip->getCurrentRate()->id);
+        return $this->attachPriceToModel($this->trip->getCurrentRate()->id);
     }
 }

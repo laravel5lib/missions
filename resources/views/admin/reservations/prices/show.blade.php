@@ -110,7 +110,7 @@
                 </div>
                 <delete-form url="reservations/{{ $reservation->id }}/prices/{{ $price->uuid }}" 
                             redirect="/admin/reservations/{{ $reservation->id}}/costs"
-                            match-key="price name"
+                            label="Enter the price name to delete it"
                             match-value="{{ $price->cost->name }}">
                 </delete-form>
                 @endslot

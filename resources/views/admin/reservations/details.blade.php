@@ -75,6 +75,7 @@
     @endcomponent
 @endcomponent
 
+@unless($reservation->deleted_at)
 @component('panel')
     @slot('title')
         <h5>Drop Reservation</h5>
@@ -88,10 +89,12 @@
         </div>
         <delete-form url="reservations/{{ $reservation->id }}" 
                         redirect="/admin/reservations/{{ $reservation->id }}"
-                        match-key="traveler's full name"
+                        label="Enter the missionary's full name to drop it"
+                        button="Drop"
                         match-value="{{ $reservation->name }}">
         </delete-form>
     @endslot
 @endcomponent
+@endunless
 
 @endsection

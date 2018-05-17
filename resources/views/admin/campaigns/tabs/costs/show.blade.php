@@ -99,7 +99,7 @@
                     </div>
                     <delete-form url="campaigns/{{ $campaign->id }}/costs/{{ $cost->id }}" 
                                 redirect="/admin/campaigns/{{ $campaign->id}}/costs"
-                                match-key="cost name"
+                                label="Enter the cost name to delete it"
                                 match-value="{{ $cost->name }}">
                     </delete-form>
                 @endslot

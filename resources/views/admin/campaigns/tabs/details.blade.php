@@ -82,7 +82,7 @@
             </div>
             <delete-form url="campaigns/{{ $campaign->id }}" 
                          redirect="/admin/campaigns"
-                         match-key="campaign name"
+                         label="Enter the campaign name to delete it"
                          match-value="{{ $campaign->name }}">
             </delete-form>
         @endslot

@@ -71,7 +71,7 @@
         </div>
         <delete-form url="campaigns/{{ $group->campaign_id }}/groups/{{ $group->uuid }}" 
                         redirect="/admin/campaigns/{{ $group->campaign_id }}/groups"
-                        match-key="group name"
+                        label="Enter the group name to delete it"
                         match-value="{{ $group->organization->name }}">
         </delete-form>
     @endslot

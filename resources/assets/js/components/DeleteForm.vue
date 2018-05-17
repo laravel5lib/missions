@@ -2,11 +2,13 @@
 <div>
     <div class="row">
         <div class="col-xs-12">
-            <label>Enter the {{ matchKey }} to delete it</label>
+            <label>{{ label }}</label>
             <div class="input-group">
                 <input class="form-control" v-model="enteredValue">
                 <span class="input-group-btn">
-                    <button class="btn btn-md btn-primary" :disabled="enteredValue != matchValue" @click.prevent="destroy">Delete</button>
+                    <button class="btn btn-md btn-primary" :disabled="enteredValue != matchValue" @click.prevent="destroy">
+                        {{ button }}
+                    </button>
                 </span>
             </div>
         </div>
@@ -17,7 +19,25 @@
 export default {
     name: 'delete-form',
 
-    props: ['url', 'redirect', 'matchKey', 'matchValue'],
+    props: {
+        'url': {
+            type: String,
+            required: true
+        },
+        'redirect': {
+            type: String,
+            required: true
+        },
+        'label': {
+            required: true
+        },
+        'matchValue': {
+            required: true
+        },
+        'button': {
+            default: 'Delete'
+        }
+    },
 
     data() {
         return { enteredValue: null }
@@ -35,7 +55,7 @@ export default {
                         closeModal: true,
                     },
                     confirm: {
-                        text: "Delete",
+                        text: this.button,
                         value: true,
                         visible: true,
                         closeModal: true

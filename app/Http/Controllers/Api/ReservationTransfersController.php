@@ -3,33 +3,28 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests;
-use Illuminate\Http\Request;
 use App\Models\v1\Reservation;
 use App\Http\Controllers\Controller;
-use App\Http\Transformers\v1\ReservationTransformer;
 
 class ReservationTransfersController extends Controller
 {
-    private $reservation;
-    
-    function __construct(Reservation $reservation)
-    {
-        $this->reservation = $reservation;
-    }
     /**
      * Create a new transfer
      *
      * @return Response
      */
-    public function store($id, Request $request)
+    public function store($id)
     {
-        $reservation = $this->reservation->findOrFail($id);
+        $reservation = Reservation::findOrFail($id);
 
-        $transfer = $reservation->transferToTrip(
-            $request->get('trip_id'),
-            $request->get('desired_role')
+        $reservation->transfer()->toTrip(
+            request()->get('trip_id'),
+            [
+                'desired_role' => request()->get('desired_role'), 
+                'room_price_id' => request()->get('room_price_id')
+            ]
         );
 
-        return $this->response->item($transfer, new ReservationTransformer);
+        return response()->json(['message' => 'Transfer complete.'], 201);
     }
 }

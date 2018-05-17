@@ -26,7 +26,7 @@ class TodoTransformer extends TransformerAbstract
     {
         $array = [
             'id'           => $todo->id,
-            'task'         => $todo->task,
+            'task'         => ucfirst($todo->task),
             'completed_at' => $todo->completed_at ? $todo->completed_at->toDateTimeString() : null,
             'source'       => [
                 'type' => $todo->todoable_type,

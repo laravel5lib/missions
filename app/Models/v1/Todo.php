@@ -59,17 +59,6 @@ class Todo extends Model
     }
 
     /**
-     * Get the todos task
-     *
-     * @param $value
-     * @return string
-     */
-    public function getTaskAttribute($value)
-    {
-        return ucfirst($value);
-    }
-
-    /**
      * Get all the owning todoable models.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo

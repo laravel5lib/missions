@@ -25,6 +25,7 @@ Route::apiResource('trips/{tripId}/prices', 'TripPriceController');
 Route::post('reservations/{reservationId}/prices/lock', 'ReservationPriceLockController@store');
 Route::delete('reservations/{reservationId}/prices/lock', 'ReservationPriceLockController@destroy');
 Route::apiResource('reservations/{reservationId}/prices', 'ReservationPriceController');
+Route::post('reservations/{id}/transfer', 'ReservationTransfersController@store');
 
 // Dingo API routes
 $api = app('Dingo\Api\Routing\Router');
@@ -110,7 +111,6 @@ $api->version('v1', [
         $api->resource('reservations', 'ReservationsController');
         $api->post('reservations/export', 'ReservationsController@export');
         $api->put('reservations/{id}/restore', 'ReservationsController@restore');
-        $api->post('reservations/{id}/transfer', 'ReservationTransfersController@store');
         $api->resource('reservations.requirements', 'ReservationRequirementsController');
         $api->get('reservations/{reservations}/companions', 'CompanionsController@index');
         $api->post('reservations/{reservations}/companions', 'CompanionsController@store');

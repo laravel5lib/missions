@@ -8,6 +8,7 @@ use App\ItemizedPricing;
 use App\Models\v1\Payment;
 use App\Traits\HasPricing;
 use App\Traits\Rewardable;
+use App\TransferReservation;
 use Conner\Tagging\Taggable;
 use App\Utilities\v1\TeamRole;
 use EloquentFilter\Filterable;
@@ -645,32 +646,9 @@ class Reservation extends Model
         $this->restore();
     }
 
-    /**
-     * Transfer Reservation to another trip
-     *
-     * @param  String $trip_id
-     * @param  String $desired_role
-     * @return void
-     */
-    public function transferToTrip($trip_id, $desired_role)
+    public function transfer()
     {
-        DB::transaction(function () use ($trip_id, $desired_role) {
-            // remove the current resources
-            $this->costs()->detach();
-            $this->requirements()->delete();
-            $this->questionnaires()->delete();
-            $this->todos()->delete();
-            $this->squads()->detach();
-
-            // change trip and desired role
-            $this->update([
-                'desired_role' => $desired_role,
-                'trip_id' => $trip_id
-            ]);
-        });
-
-        // sync all other resources
-        dispatch(new ProcessReservation($this));
+        return new TransferReservation($this);
     }
 
     /**

@@ -9,6 +9,7 @@
                 <h5>Traveler Info</h5>
             </div>
             <div class="col-xs-4 text-right">
+                <button class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Edit</button>
             </div>
         </div>
     @endslot
@@ -35,6 +36,7 @@
                 <h5>Trip Details</h5>
             </div>
             <div class="col-xs-4 text-right">
+                <button class="btn btn-default btn-sm"><i class="fa fa-exchange"></i> Transfer</button>
             </div>
         </div>
     @endslot
@@ -56,6 +58,12 @@
                 <h5>Registration Details</h5>
             </div>
             <div class="col-xs-4 text-right">
+                <send-email label="Resend Confirmation"
+                    icon="fa fa-envelope icon-left"
+                    classes="btn btn-default btn-sm"
+                    command="email:send-reservation-confirmation"
+                    :parameters="{id: '{{ $reservation->id }}', email: '{{ $reservation->user->email }}'}">
+                </send-email>
             </div>
         </div>
     @endslot
@@ -65,71 +73,25 @@
         'Reservation ID' => $reservation->id
     ]])
     @endcomponent
-    @slot('footer')
-    <div class="text-right">
-        <hr class="divider inv sm">
-        <send-email label="Resend confirmation email"
-                 icon="fa fa-envelope icon-left"
-                 classes="btn btn-default btn-sm"
-                 command="email:send-reservation-confirmation"
-                 :parameters="{id: '{{ $reservation->id }}', email: '{{ $reservation->user->email }}'}">
-        </send-email>
-    </div>
-    @endslot
 @endcomponent
 
-<companion-manager reservation-id="{{ $reservation->id }}"></companion-manager>
-
-
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h5>Trip Assignments</h5>
-    </div>
-    <div class="panel-body">
-        <div class="col-md-6">
-            <label>Squad(s)</label>
-            <p>
-                @forelse($reservation->squads as $squad)
-                    <strong>{{ ucwords($squad->team->callsign) }}</strong> &middot; {{ $squad->callsign }}
-                @empty
-                    Unassigned
-                @endforelse
-            </p>
-            <hr class="divider">
-            <label>Region(s)</label>
-            <p>
-                @forelse($reservation->squads as $squad)
-                    {{
-                        $squad->team && $squad->team->regions ?
-                        implode(',', $squad->team->regions->pluck('name')->all()) :
-                        'Unassigned'
-                    }}
-                @empty
-                    Unassigned
-                @endforelse
-            </p>
-            <hr class="divider">
+@component('panel')
+    @slot('title')
+        <h5>Drop Reservation</h5>
+    @endslot
+    @slot('body')
+        <div class="alert alert-warning">
+            <div class="row">
+                <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
+                <div class="col-xs-11">USE CAUTION! This will drop the reservation, remove it from any squads, flights, or rooms, and disable fundraising.</div>
+            </div>
         </div>
-        <div class="col-md-6">
-            <label>Accommodations</label>
-            <p>
-                @forelse($reservation->rooms as $room)
-                    <strong>{{ ucwords($room->type->name) }}</strong>
-                    &middot; {{  implode(',', $room->accommodations->pluck('name')->all()) }}
-                @empty
-                    Unassigned
-                @endforelse
-            </p>
-            <hr class="divider">
-        </div>
-    </div>
-</div>
-
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h5>Travel</h5>
-    </div>
-    @include('partials.reservations.transportation', ['reservation' => $reservation])
-</div>
+        <delete-form url="reservations/{{ $reservation->id }}" 
+                        redirect="/admin/reservations/{{ $reservation->id }}"
+                        match-key="traveler's full name"
+                        match-value="{{ $reservation->name }}">
+        </delete-form>
+    @endslot
+@endcomponent
 
 @endsection

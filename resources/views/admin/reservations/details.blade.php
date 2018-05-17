@@ -36,7 +36,7 @@
                 <h5>Trip Details</h5>
             </div>
             <div class="col-xs-4 text-right">
-                <button class="btn btn-default btn-sm"><i class="fa fa-exchange"></i> Transfer</button>
+                <a href="{{ url('admin/reservations/'.$reservation->id.'/transfer') }}" class="btn btn-default btn-sm"><i class="fa fa-exchange"></i> Transfer</a>
             </div>
         </div>
     @endslot

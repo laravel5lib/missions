@@ -103,4 +103,11 @@ class ReservationsController extends Controller
 
         return view('admin.reservations.create', compact('trip', 'group'));
     }
+
+    public function transfer($reservationId)
+    {
+        $reservation = $this->reservation->findOrFail($reservationId);
+
+        return view('admin.reservations.transfer', compact('reservation'));
+    }
 }

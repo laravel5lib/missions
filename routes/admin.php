@@ -45,6 +45,7 @@ Route::prefix('reservations')->group(function () {
     Route::get('{id}/edit', 'ReservationsController@edit');
     Route::get('{id}/{tab?}', 'ReservationsController@show');
     Route::get('{id}/prices/{price}', 'ReservationPriceController@show');
+    Route::get('{id}/transfer', 'ReservationsController@transfer');
 });
 
 Route::get('/funds/{fund}/fundraisers/create', '\App\Http\Controllers\Web\FundraisersController@create');

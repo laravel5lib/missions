@@ -339,6 +339,20 @@ class Reservation extends Model
     }
 
     /**
+     * Get the requested room
+     *
+     * @return mixed
+     */
+    public function getRequestedRoomAttribute()
+    {
+        $room = $this->priceables()->whereHas('cost', function($q) {
+            return $q->whereType('optional');
+        })->first();
+
+        return $room ? $room->cost->name : null;
+    }
+
+    /**
      * Get the total cost for the reservation.
      *
      * @return mixed

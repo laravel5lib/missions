@@ -70,14 +70,5 @@
     </div>
 </div>
 
-<admin-delete-modal
-    id="{{ $reservation->id }}"
-    resource="reservation"
-    label="Drop reservation?"
-    action="Drop">
-</admin-delete-modal>
 <restore-reservation id="{{ $reservation->id }}"></restore-reservation>
-<transfer-reservation id="{{ $reservation->id }}"
-                      campaign-id="{{ $reservation->trip->campaign_id }}">
-</transfer-reservation>
 @endsection

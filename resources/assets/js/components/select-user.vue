@@ -1,19 +1,20 @@
 <template>
-    <div class="form-group" :class="{'has-error' : ($parent.form ? $parent.form.errors.has(name) : false)}">
-        <template v-if="horizontal"> 
-            <slot name="label"><label>Trip Rep</label></slot>
+    <div class="form-group" :class="{'has-error' : ($parent.form ? $parent.form.errors.has(name) : false)}"> 
+        
+        <template v-if="horizontal">
+            <slot name="label">
+                <label class="col-sm-4 control-label">Select a User</label>
+            </slot>
             <div :class="classes">
                 <v-select @keydown.enter.prevent="null"
-                        class="form-control"
-                        :id="name"
-                        v-model="repObj"
-                        :on-search="getReps"
-                        :options="reps"
-                        label="email"
-                        :name="name">
-                        <template slot="option" slot-scope="option">
-                                {{ option.email }} ({{ option.name }})
-                        </template>
+                          class="form-control"
+                          :id="name"
+                          v-model="userObj"
+                          :options="users"
+                          :on-search="getUsers"
+                          :placeholder="placeholder"
+                          label="name"
+                          :name="name">
                 </v-select>
                 <span class="help-block" 
                         v-text="$parent.form.errors.get(name)" 
@@ -23,18 +24,18 @@
             </div>
         </template>
         <template v-else>
-            <slot name="label"><label>Trip Rep</label></slot>
+            <slot name="label">
+                <label class="control-label">Select a User</label>
+            </slot>
             <v-select @keydown.enter.prevent="null"
                       class="form-control"
                       :id="name"
-                      v-model="repObj"
-                      :on-search="getReps"
-                      :options="reps"
-                      label="email"
+                      v-model="userObj"
+                      :options="users"
+                      :on-search="getUsers"
+                      :placeholder="placeholder"
+                      label="name"
                       :name="name">
-                       <template slot="option" slot-scope="option">
-                            {{ option.email }} ({{ option.name }})
-                       </template>
             </v-select>
             <span class="help-block" 
                     v-text="$parent.form.errors.get(name)" 
@@ -42,6 +43,7 @@
             </span>
             <slot name="help-text" v-else></slot>
         </template>
+
     </div>
 </template>
 <script>
@@ -49,14 +51,14 @@ import _ from 'underscore';
 import vSelect from "vue-select";
 
 export default {
-    name: 'select-rep',
+    name: 'select-user',
 
     components: {vSelect},
 
     data() {
         return {
-            repObj: null,
-            reps: []
+            userObj: null,
+            users: []
         }
     },
 
@@ -66,6 +68,10 @@ export default {
             required: true
         },
         'value': {
+            type: String,
+            default: null
+        },
+        'placeholder': {
             type: String,
             default: null
         },
@@ -80,39 +86,39 @@ export default {
     },
 
     computed: {
-        rep_id() {
-            return _.isObject(this.repObj) ? this.repObj.id : null;
-        },
+        user_id() {
+            return _.isObject(this.userObj) ? this.userObj.id : null;
+        }
     },
 
     watch: {
-        'rep_id'(value) {
+        'user_id'(value) {
             this.$parent.form[this.name] = value;
         }
     },
 
     methods: {
-        getReps(search, loading){
+        getUsers(search, loading){
             loading(true);
-            this.$http.get('representatives', { params: {search: search} }).then((response) => {
-                this.reps = response.data.data;
+            this.$http.get('users', { params: {search: search} }).then((response) => {
+                this.users = response.data.data;
                 loading(false);
             });
-        }
+        },
     },
 
     mounted() {
-        this.$parent.form[this.name] = this.value;
-        this.$parent.form.set(this.name, this.value);
+        this.$parent.form[this.name] = this.user_id;
+        this.$parent.form.set(this.name, this.user_id);
 
         if (this.value) {
-            this.$http.get('representatives/' + this.value).then((response) => {
-                this.repObj = response.data.data;
+            this.$http.get('users/' + this.value).then((response) => {
+                this.userObj = response.data.data;
             });
         }
 
         this.$root.$on('form:reset', () => {
-            this.repObj = null;
+            this.userObj = null;
         });
     }
 }

@@ -1,14 +1,33 @@
 <template>
-    <div class="form-group" :class="{'has-error' : $parent.form.errors.has(name)}"> 
+    <div class="form-group" :class="{'has-error' : ($parent.form ? $parent.form.errors.has(name) : false)}"> 
         <slot name="label"></slot>
-        <the-mask class="form-control" 
-                  v-model="phone" 
-                  :mask="format" />
-        <span class="help-block" 
-                v-text="$parent.form.errors.get(name)" 
-                v-if="$parent.form.errors.has(name)">
-        </span>
-        <slot name="help-text" v-if="!$parent.form.errors.has(name)"></slot>
+
+        <template v-if="horizontal">
+        
+        <div :class="classes">
+            <the-mask class="form-control" 
+                    v-model="phone" 
+                    :mask="format" />
+            <span class="help-block" 
+                    v-text="$parent.form.errors.get(name)" 
+                    v-if="($parent.form ? $parent.form.errors.has(name) : false)">
+            </span>
+            <slot name="help-text" v-else></slot>
+        </div>
+
+        </template>
+        <template v-else>
+
+            <the-mask class="form-control" 
+                    v-model="phone" 
+                    :mask="format" />
+            <span class="help-block" 
+                    v-text="$parent.form.errors.get(name)" 
+                    v-if="($parent.form ? $parent.form.errors.has(name) : false)">
+            </span>
+            <slot name="help-text" v-else></slot>
+
+        </template>
     </div>
 </template>
 <script>
@@ -37,6 +56,14 @@ export default {
         'placeholder': {
             type: String,
             default: '(000) 000-0000'
+        },
+        'horizontal': {
+            type: Boolean,
+            default: false
+        },
+        'classes': {
+            type: String,
+            default: 'col-sm-9'
         }
     },
 

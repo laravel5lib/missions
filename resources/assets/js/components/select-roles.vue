@@ -1,20 +1,41 @@
 <template>
-    <div class="form-group" :class="{'has-error' : $parent.form.errors.has(name)}"> 
-        <slot name="label"><label>Team Roles</label></slot>
-        <v-select @keydown.enter.prevent="null"
-                    multiple 
-                    class="form-control" 
-                    :id="name" 
-                    v-model="rolesObj"
-                    :options="UTILITIES.roles" 
-                    label="name"
-                    :name="name">
-        </v-select>
-        <span class="help-block" 
-                v-text="$parent.form.errors.get(name)" 
-                v-if="$parent.form.errors.has(name)">
-        </span>
-        <slot name="help-text" v-if="!$parent.form.errors.has(name)"></slot>
+    <div class="form-group" :class="{'has-error' : ($parent.form ? $parent.form.errors.has(name) : false)}">
+        <template v-if="horizontal">
+            <slot name="label"><label>Team Roles</label></slot>
+            <div :class="classes">
+                <v-select @keydown.enter.prevent="null"
+                            multiple 
+                            class="form-control" 
+                            :id="name" 
+                            v-model="rolesObj"
+                            :options="UTILITIES.roles" 
+                            label="name"
+                            :name="name">
+                </v-select>
+                <span class="help-block" 
+                        v-text="$parent.form.errors.get(name)" 
+                        v-if="($parent.form ? $parent.form.errors.has(name) : false)">
+                </span>
+                <slot name="help-text" v-else></slot>
+            </div>
+        </template>
+        <template v-else>
+            <slot name="label"><label>Team Roles</label></slot>
+            <v-select @keydown.enter.prevent="null"
+                        multiple 
+                        class="form-control" 
+                        :id="name" 
+                        v-model="rolesObj"
+                        :options="UTILITIES.roles" 
+                        label="name"
+                        :name="name">
+            </v-select>
+            <span class="help-block" 
+                    v-text="$parent.form.errors.get(name)" 
+                    v-if="($parent.form ? $parent.form.errors.has(name) : false)">
+            </span>
+            <slot name="help-text" v-else></slot>
+        </template>
     </div>
 </template>
 <script>
@@ -43,6 +64,14 @@ export default {
         'value': {
             type: Array,
             default: []
+        },
+        'horizontal': {
+            type: Boolean,
+            default: false
+        },
+        'classes': {
+            type: String,
+            default: 'col-sm-8'
         }
     },
 

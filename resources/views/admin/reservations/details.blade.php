@@ -9,7 +9,7 @@
                 <h5>Traveler Info</h5>
             </div>
             <div class="col-xs-4 text-right">
-                <button class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Edit</button>
+                <a href="{{ url('admin/reservations/'.$reservation->id.'/edit') }}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Edit</a>
             </div>
         </div>
     @endslot

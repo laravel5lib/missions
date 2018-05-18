@@ -1,21 +1,44 @@
 <template>
-    <div class="form-group" :class="{'has-error' : $parent.form.errors.has(name)}"> 
-        <div class="col-xs-12">
+    <div class="form-group" :class="{'has-error' : ($parent.form ? $parent.form.errors.has(name) : false)}">
+        <template v-if="horizontal">
+            
             <slot name="label"><label>Country</label></slot>
-            <v-select @keydown.enter.prevent="null"
-                        class="form-control"
-                        :name="name"
-                        :id="name"
-                        v-model="countryCodeObj"
-                        :options="UTILITIES.countries"
-                        label="name">
-            </v-select>
-            <span class="help-block" 
-                    v-text="$parent.form.errors.get(name)" 
-                    v-if="$parent.form.errors.has(name)">
-            </span>
-            <slot name="help-text" v-if="!$parent.form.errors.has(name)"></slot>
-        </div>
+
+            <div :class="classes">
+                <v-select @keydown.enter.prevent="null"
+                            class="form-control"
+                            :name="name"
+                            :id="name"
+                            v-model="countryCodeObj"
+                            :options="UTILITIES.countries"
+                            label="name">
+                </v-select>
+                <span class="help-block" 
+                        v-text="$parent.form.errors.get(name)" 
+                        v-if="($parent.form ? $parent.form.errors.has(name) : false)">
+                </span>
+                <slot name="help-text" v-else></slot>
+            </div>
+
+        </template>
+        <template v-else>
+            
+            <slot name="label"><label>Country</label></slot>
+                <v-select @keydown.enter.prevent="null"
+                            class="form-control"
+                            :name="name"
+                            :id="name"
+                            v-model="countryCodeObj"
+                            :options="UTILITIES.countries"
+                            label="name">
+                </v-select>
+                <span class="help-block" 
+                        v-text="$parent.form.errors.get(name)" 
+                        v-if="($parent.form ? $parent.form.errors.has(name) : false)">
+                </span>
+                <slot name="help-text" v-else></slot>
+
+        </template>
     </div>
 </template>
 <script>
@@ -44,6 +67,14 @@ export default {
         'value': {
             type: String,
             default: null
+        },
+        'horizontal': {
+            type: Boolean,
+            default: false
+        },
+        'classes': {
+            type: String,
+            default: 'col-sm-8'
         }
     },
 

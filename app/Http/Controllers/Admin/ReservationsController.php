@@ -81,11 +81,13 @@ class ReservationsController extends Controller
      */
     public function edit($reservationId)
     {
-        $this->authorize('update', $this->reservation);
+        $reservation = $this->reservation->findOrFail($reservationId);
+
+        $this->authorize('update', $reservation);
 
         $this->seo()->setTitle('Edit Reservation');
 
-        return view('admin.reservations.edit')->with('reservationId', $reservationId);
+        return view('admin.reservations.edit', compact('reservation'));
     }
 
     /**

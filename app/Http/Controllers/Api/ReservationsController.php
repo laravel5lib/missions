@@ -105,9 +105,7 @@ class ReservationsController extends Controller
      * @return \Dingo\Api\Http\Response
      */
     public function update(ReservationRequest $request, $id)
-    {
-        // TODO: Refactor to Repository to hide complex implementation
-        
+    {   
         $reservation = $this->reservation->withTrashed()->findOrFail($id);
 
         $reservation->update([
@@ -132,13 +130,8 @@ class ReservationsController extends Controller
             'trip_id' => $request->get('trip_id', $reservation->trip_id)
         ]);
 
-        $reservation->syncCosts($request->get('costs'));
         $reservation->syncRequirements($request->get('requirements'));
         $reservation->syncDeadlines($request->get('deadlines'));
-
-        if ($request->has('tags')) {
-            $reservation->retag($request->get('tags'));
-        }
 
         return $this->response->item($reservation, new ReservationTransformer);
     }

@@ -1,15 +1,13 @@
 @extends('layouts.admin')
 
-@section('header')
+@section('content')
+
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
         'admin/reservations' => 'Reservations',
         'active' => $reservation->name
     ]])
     @endbreadcrumbs
-@endsection
-
-@section('content')
 
 @if($reservation->deleted_at)
 <div class="darker-bg-primary">

@@ -1,13 +1,11 @@
 @extends('layouts.admin')
 
-@section('header')
-    @breadcrumbs(['links' => [
-        'admin' => 'Dashboard', 'active' => 'Campaigns'
-    ]])
-    @endbreadcrumbs
-@endsection
-
 @section('content')
+
+@breadcrumbs(['links' => [
+    'admin' => 'Dashboard', 'active' => 'Campaigns'
+]])
+@endbreadcrumbs
 
 <alert-error>
     <template slot="title">Oops!</template>

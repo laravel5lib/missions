@@ -1,6 +1,6 @@
 @extends('layouts.admin')
+@section('content')
 
-@section('header')
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard', 
         'admin/campaigns' => 'Campaigns', 
@@ -10,9 +10,7 @@
         'active' => $price->cost->name
     ]])
     @endbreadcrumbs
-@endsection
-
-@section('content')
+    
 <hr class="divider inv lg">
 
 <alert-error>

@@ -210,6 +210,30 @@ p.large-line-height {
   }
 }
 
+.nav.navbar-nav.navbar-center > li > a {
+  padding-top: 23px;
+  padding-bottom: 23px;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+  background: transparent;
+  color: $brand-primary;
+}
+
+.nav.nav-tabs.nav-secondary {
+  background: #FFFFFF; 
+  padding: 0px 10px;
+}
+.nav.nav-tabs.nav-secondary > li > a {
+  color: #808080; 
+  font-weight: 500;
+}
+
+.nav.nav-tabs.nav-secondary > li.active > a {
+  color: #000; 
+  font-weight: 500;
+}
+
 .navmenu, .navbar-offcanvas {width:55px; z-index: 9999;}
 
 // .navmenu-nav {

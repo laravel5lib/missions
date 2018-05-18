@@ -1,23 +1,18 @@
 @extends('layouts.admin')
 @inject('refund', 'App\Models\v1\Transaction')
 
-@section('header')
+@section('content')
+    @include('admin.partials._nav_donations')
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
         'admin/transactions' => 'Transactions',
         'active' => 'Details'
     ]])
     @endbreadcrumbs
-@endsection
-
-@section('content')
 <hr class="divider inv lg">
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xs-12 col-md-2">
-            @include('admin.partials._toolbar')
-        </div>
-        <div class="col-xs-12 col-md-7">
+        <div class="col-xs-12 col-md-7 col-md-offset-2">
             @component('panel')
                 @slot('body')
                     <div class="row">

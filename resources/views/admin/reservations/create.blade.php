@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
-@section('header')
+@section('content')
+
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
         'admin/campaigns' => 'Campaigns',
@@ -10,9 +11,7 @@
         'active' => 'New Reservation'
     ]])
     @endbreadcrumbs
-@endsection
-
-@section('content')
+    
 <hr class="divider inv lg">
 
 <div class="container">

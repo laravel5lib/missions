@@ -1,30 +1,26 @@
 @extends('layouts.admin')
 
-@section('header')
+@section('content')
+    @include('admin.partials._nav_donations')
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
         'active' => 'Funds'
     ]])
     @endbreadcrumbs
-@endsection
 
-@section('content')
 <hr class="divider inv lg">
-<div class="container-fluid">
-    <div class="col-xs-12 col-md-2">
-        @include('admin.partials._toolbar')
-    </div>
-    <div class="col-xs-12 col-md-10">
-        <div class="row">
-            <div class="col-sm-12">
-                @include('admin.financials.partials._tabs')
-            </div>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            @component('panel')
+                @slot('title')
+                    <h5>All Funds</h5>
+                @endslot
+                @slot('body')
+                    <admin-funds-list></admin-funds-list>
+                @endslot
+            @endcomponent
         </div>
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <admin-funds-list></admin-funds-list>
-            </div><!-- end panel-body -->
-        </div><!-- end panel -->
     </div>
 </div>
 @stop

@@ -1,24 +1,10 @@
 @extends('admin.layouts.default')
 
 @section('content')
-<div class="white-header-bg">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-12">
-                <ul class="breadcrumb">
-                    <li class="active">Dashboard</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
 <hr class="divider inv lg">
 
-<div class="container-fluid">
+<div class="container">
   <div class="row">
-    <div class="col-xs-12 col-md-2">
-        @include('admin.partials._toolbar')
-    </div>
     <div class="col-xs-12 col-md-10">
       <h4>Current Numbers</h4>
       <hr class="divider lg">

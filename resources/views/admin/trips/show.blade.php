@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('header')
+@section('content')
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
         'admin/campaigns' => 'Campaigns',
@@ -9,9 +9,7 @@
         'active' => ucfirst($trip->type).' Trip'
     ]])
     @endbreadcrumbs
-@endsection
-
-@section('content')
+    
     <hr class="divider inv lg">
     <div class="container-fluid">
         <div class="row">          

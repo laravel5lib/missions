@@ -1,15 +1,14 @@
 @extends('layouts.admin')
 
-@section('header')
-    @breadcrumbs(['links' => [
-        'admin' => 'Dashboard', 
-        'admin/campaigns' => 'Campaigns', 
-        'active' => $campaign->name.' - '.country($campaign->country_code)
-    ]])
-    @endbreadcrumbs
-@endsection
-
 @section('content')
+
+@breadcrumbs(['links' => [
+    'admin' => 'Dashboard', 
+    'admin/campaigns' => 'Campaigns', 
+    'active' => $campaign->name.' - '.country($campaign->country_code)
+]])
+@endbreadcrumbs
+
     <hr class="divider inv lg">
 
     <div class="container-fluid">

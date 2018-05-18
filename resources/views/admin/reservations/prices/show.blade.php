@@ -1,6 +1,7 @@
 @extends('admin.layouts.default')
 
-@section('header')
+@section('content')
+
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
         'admin/reservations' => 'Reservations',
@@ -9,9 +10,7 @@
         'active' => $price->cost->name
     ]])
     @endbreadcrumbs
-@endsection
-
-@section('content')
+    
 <hr class="divider inv lg">
 <alert-error>
     <template slot="title">Oops!</template>

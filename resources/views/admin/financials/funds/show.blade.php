@@ -3,16 +3,15 @@
     <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
 @endsection
 
-@section('header')
+@section('content')
+    @include('admin.partials._nav_donations')
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
         'admin/funds' => 'Funds',
         'active' => $fund->name
     ]])
     @endbreadcrumbs
-@endsection
 
-@section('content')
 @if($fund->deleted_at)
 <div class="darker-bg-primary">
     <div class="container">
@@ -49,10 +48,7 @@
 <hr class="divider inv lg">
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xs-12 col-md-2">
-            @include('admin.partials._toolbar')
-        </div>
-        <div class="col-xs-12 col-md-7">
+        <div class="col-xs-12 col-md-7 col-md-offset-2">
             <fund-manager id="{{ $fund->id }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}">
             </fund-manager>
             <restore-fund id="{{ $fund->id }}"></restore-fund>

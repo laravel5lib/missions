@@ -16,15 +16,14 @@
     </script>
 @endsection
 
-@section('header')
+@section('content')
+
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
         'active' => 'Reservations'
     ]])
     @endbreadcrumbs
-@endsection
-
-@section('content')
+    
 <hr class="divider inv lg">
 <div class="container-fluid">
     <div class="col-xs-12">

@@ -1,21 +1,21 @@
 @extends('layouts.admin')
 
-@section('header')
-    @breadcrumbs(['links' => [
+@section('content')
+
+@include('admin.partials._nav_people')
+
+@breadcrumbs(['links' => [
         'admin' => 'Dashboard',
         'active' => 'Trip Reps'
     ]])
     @endbreadcrumbs
-@endsection
 
-@section('content')
-<hr class="divider inv lg">
-<div class="container-fluid">
-    <div class="col-xs-12 col-md-2">
-        @include('admin.partials._toolbar')
-    </div>
-    <div class="col-xs-12 col-md-10">
-        <representative-list></representative-list>
+<hr class="divider inv">
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <representative-list></representative-list>
+        </div>
     </div>
 </div>
 @endsection

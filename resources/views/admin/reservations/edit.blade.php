@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
-@section('header')
+@section('content')
+
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
         'admin/reservations' => 'Reservations',
@@ -8,9 +9,7 @@
         'active' => 'Edit'
     ]])
     @endbreadcrumbs
-@endsection
 
-@section('content')
 <alert-error>
     <template slot="title">Oops!</template>
     <template slot="message">Please check the form for errors and try again.</template>

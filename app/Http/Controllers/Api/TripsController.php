@@ -65,26 +65,24 @@ class TripsController extends Controller
         $trip = Trip::getById($id);
 
         $trip->update([
-            'campaign_id'     => $request->get('campaign_id', $trip->campaign_id),
-            'group_id'        => $request->get('group_id', $trip->group_id),
-            'country_code'    => $request->get('country_code', $trip->country_code),
-            'type'            => $request->get('type', $trip->type),
-            'difficulty'      => $request->get('difficulty', $trip->difficulty),
-            'started_at'      => $request->get('started_at', $trip->started_at),
-            'ended_at'        => $request->get('ended_at', $trip->ended_at),
-            'closed_at'       => $request->get('closed_at', $trip->closed_at),
-            'rep_id'          => $request->get('rep_id', $trip->rep_id),
-            'spots'           => $request->get('spots', $trip->spots),
-            'todos'           => $request->get('todos', $trip->todos),
-            'prospects'       => $request->get('prospects', $trip->prospects),
-            'team_roles'      => $request->get('team_roles', $trip->team_roles),
-            'description'     => $request->get('description', $trip->description),
-            'published_at'    => $request->has('published_at') ? trim($request->get('published_at')) : $trip->published_at,
-            'companion_limit' => $request->get('companion_limit', $trip->companion_limit),
-            'public'          => $request->get('public', $trip->public)
+            'campaign_id'     => $request->input('campaign_id', $trip->campaign_id),
+            'group_id'        => $request->input('group_id', $trip->group_id),
+            'country_code'    => $request->input('country_code', $trip->country_code),
+            'type'            => $request->input('type', $trip->type),
+            'difficulty'      => $request->input('difficulty', $trip->difficulty),
+            'started_at'      => $request->input('started_at', $trip->started_at),
+            'ended_at'        => $request->input('ended_at', $trip->ended_at),
+            'closed_at'       => $request->input('closed_at', $trip->closed_at),
+            'rep_id'          => $request->input('rep_id', $trip->rep_id),
+            'spots'           => $request->input('spots', $trip->spots),
+            'todos'           => $request->input('todos', $trip->todos),
+            'prospects'       => $request->input('prospects', $trip->prospects),
+            'team_roles'      => $request->input('team_roles', $trip->team_roles),
+            'description'     => $request->input('description', $trip->description),
+            'published_at'    => $request->has('published_at') ? trim($request->input('published_at')) : $trip->published_at,
+            'companion_limit' => $request->input('companion_limit', $trip->companion_limit),
+            'public'          => $request->input('public', $trip->public)
         ]);
-
-        $trip->syncFacilitators($request->get('facilitators'));
 
         return new TripResource($trip);
     }

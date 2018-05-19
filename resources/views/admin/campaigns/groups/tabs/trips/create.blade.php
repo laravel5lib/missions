@@ -150,7 +150,7 @@
         <div class="col-md-8">
             @component('panel')
                 @slot('body')
-                    <select-rep name="rep_id">
+                    <select-rep name="rep_id" v-model="form.rep_id">
                         <label slot="label">Default Trip Rep (optional)</label>
                         <span class="help-block" slot="help-text">
                             Search trip rep by entering an email. Select the rep to assign them.

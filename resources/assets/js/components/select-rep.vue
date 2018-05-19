@@ -87,7 +87,7 @@ export default {
 
     watch: {
         'rep_id'(value) {
-            this.$parent.form[this.name] = value;
+            this.updateValue(value);
         }
     },
 
@@ -98,6 +98,10 @@ export default {
                 this.reps = response.data.data;
                 loading(false);
             });
+        },
+        updateValue(value) {
+            this.$emit('input', value);
+            this.$parent.form ? this.$parent.form.errors.clear(this.name) : null;
         }
     },
 

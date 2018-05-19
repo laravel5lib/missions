@@ -6,7 +6,11 @@
                 {!! $key !!}
             </div>
             <div class="col-xs-8">
-                {!! $value !!}
+                @if(is_callable($value))
+                    {{ $value() }}
+                @else
+                    {!! $value !!}
+                @endif
             </div>
         </div>
     </div>

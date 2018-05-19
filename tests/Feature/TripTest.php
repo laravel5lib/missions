@@ -86,4 +86,10 @@ class TripTest extends TestCase
             'group_id' => $group->group_id
         ]);
     }
+
+    /** @test */
+    public function updates_a_trip()
+    {
+        //
+    }
 }

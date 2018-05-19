@@ -68,13 +68,16 @@ class TripsController extends Controller
 
     public function edit($tripId)
     {
-        $trip = $this->api->get('trips/'.$tripId, ['include' => 'campaign']);
+        $trip = Trip::findOrFail($tripId);
+        $group = CampaignGroup::whereCampaignId($trip->campaign_id)
+            ->whereGroupId($trip->group_id)
+            ->firstOrFail();
 
         $this->authorize('update', $trip);
 
         $this->seo()->setTitle('Edit Trip');
 
-        return view('admin.trips.edit', compact('tripId', 'trip'));
+        return view('admin.trips.edit', compact('tripId', 'trip', 'group'));
     }
 
     public function create($campaignId)

@@ -13,14 +13,28 @@
         'Visibility' => ($trip->public ? 'Public' : 'Private'),
         'Spots Remaining' => $trip->spots,
         'Total Reservations' => $trip->reservations()->count(),
-        'Registration Closes' => ($trip->closed_at ? $trip->closed_at->format('F d, Y h:i a') : null)
+        'Registration Closes' => ($trip->closed_at ? $trip->closed_at->format('F d, Y h:i a') : null),
+        'Roles Available' => function() use($trip) {
+            foreach($trip->team_roles as $role) {
+                echo '<span class="label label-default">'.teamRole($role).'</span>';
+            }
+        }
     ]])
     @endcomponent
 @endcomponent
 
 @component('panel')
     @slot('title')
-        <h5>Details</h5>
+        <div class="row">
+            <div class="col-xs-8">
+                <h5>Details</h5>
+            </div>
+            <div class="col-xs-4 text-right">
+                <a class="btn btn-sm btn-default" href="{{ url('/admin/trips/' . $trip->id . '/edit')}}">
+                    <strong><i class="fa fa-pencil"></i> Edit</strong>
+                </a>
+            </div>
+        </div>
     @endslot
     @component('list-group', ['data' => [
         'Campaign' => '<a href="'.url('admin/campaigns/'.$trip->campaign->id).'">'.$trip->campaign->name.'</a>',
@@ -30,6 +44,11 @@
         'Start Date' => $trip->started_at->format('F d, Y'),
         'End Date' => $trip->ended_at->format('F d, Y'),
         'Difficulty' => $trip->difficulty,
+        'Ideal for' => function() use($trip) {
+            foreach($trip->prospects as $prospect) {
+                echo '<span class="label label-default">'.$prospect.'</span> ';
+            }
+        },
         'Default Trip Rep' => '<a href="'.url('admin/representatives/'.optional($trip->rep)->id).'">'.optional($trip->rep)->name.'</a>',
         'Default Companion Limit' => $trip->companion_limit,
         'Created' => '<datetime-formatted value="'.$trip->created_at->toIso8601String().'" />',
@@ -38,39 +57,22 @@
     @endcomponent
 @endcomponent
 
-<div class="row">
-    <div class="col-xs-12 text-right">
-        <div class="btn-group dropup">
-        <a type="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <strong class="text-primary"><i class="fa fa-cog"></i> Manage</strong>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-right">
-            @can('update', $trip)
-            <li>
-                <a href="{{ url('/admin/trips/' . $trip->id . '/edit')}}">Edit</a>
-            </li>
-            @endcan
-            @can('create', \App\Models\v1\Reservation::class)
-            <li>
-                <a data-toggle="modal"
-                    data-target="#addReservationModal"
-                    data-backdrop="static">
-                    Create Reservation
-                </a>
-            </li>
-            @endcan
-            @can('create', $trip)
-            <li>
-                <a data-toggle="modal" data-target="#duplicationModal">Duplicate</a>
-            </li>
-            @endcan
-            @can('delete', $trip)
-            <li role="separator" class="divider"></li>
-            <li>
-                <a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a>
-            </li>
-            @endcan
-        </ul>
+
+@component('panel')
+    @slot('title')
+        <h5>Delete Trip</h5>
+    @endslot
+    @slot('body')
+        <div class="alert alert-warning">
+            <div class="row">
+                <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
+                <div class="col-xs-11">USE CAUTION! This is a destructive action that cannot be undone. This will delete the trip and drop all it's reservations.</div>
+            </div>
         </div>
-    </div>
-</div>
+        <delete-form url="trips/{{ $trip->id }}" 
+                    redirect="/admin/trips" 
+                    label="Enter the trip type to delete it" 
+                    match-value="{{ ucfirst($trip->type) }}">
+        </delete-form>
+    @endslot
+@endcomponent

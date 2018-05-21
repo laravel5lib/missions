@@ -48,7 +48,7 @@ class TransferReservation
 
     public function addNewRoomPrice($priceUuid)
     {
-        $this->reservation->attachPriceToModel($priceUuid);
+        $this->reservation->addPrice(['price_id' => $priceUuid]);
     }
     
     public function swapRequirements($trip)
@@ -63,7 +63,7 @@ class TransferReservation
     {
         $existingTasks = $this->reservation->todos()->pluck('task')->toArray();
         
-        $tasks = array_diff($trip->todos, $existingTasks);
+        $tasks = array_diff($trip->todos ?? [], $existingTasks);
         foreach($tasks as $task)
         {
             $this->reservation->todos()->create(['task' => $task]);

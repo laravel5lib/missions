@@ -20,6 +20,9 @@ class TransferReservationTest extends TestCase
     {
         $reservation = $this->setupReservation();
         $trip = $this->setupTrip();
+        $room_price_uuid = $trip->priceables()->whereHas('cost', function ($q) {
+            return $q->where('type', 'optional');
+        })->first()->uuid;
 
         $this->assertEquals(2200, $reservation->getCurrentRate()->amount);
         $this->assertEquals(2, $reservation->todos()->count());
@@ -29,7 +32,8 @@ class TransferReservationTest extends TestCase
 
         $this->json('POST', "/api/reservations/{$reservation->id}/transfer", [
             'trip_id' => $trip->id, 
-            ['desired_role' => 'MISS']
+            'desired_role' => 'MISS',
+            'room_price_id' => $room_price_uuid
         ])
         ->assertStatus(201);
 

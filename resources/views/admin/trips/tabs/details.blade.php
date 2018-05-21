@@ -70,7 +70,7 @@
             </div>
         </div>
         <delete-form url="trips/{{ $trip->id }}" 
-                    redirect="/admin/trips" 
+                    redirect="/admin/campaign-groups/{{ $group->uuid }}/trips" 
                     label="Enter the trip type to delete it" 
                     match-value="{{ ucfirst($trip->type) }}">
         </delete-form>

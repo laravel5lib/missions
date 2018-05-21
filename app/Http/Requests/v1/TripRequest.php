@@ -36,6 +36,7 @@ class TripRequest extends FormRequest
 
         if ($this->isMethod('put')) {
             $required = [
+                'campaign_id'  => 'sometimes|required|exists:campaigns,id',
                 'group_id'     => 'sometimes|required|exists:groups,id',
                 'type'         => 'sometimes|required|string',
                 'difficulty'   => 'sometimes|required|in:level_1,level_2,level_3',

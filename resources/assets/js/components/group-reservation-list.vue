@@ -2,7 +2,7 @@
     <fetch-json :url="url" ref="tripList">
         <div class="panel panel-default" 
                 style="border-top: 5px solid #f6323e" 
-                slot-scope="{ json: reservations, loading, pagination }"
+                slot-scope="{ json: reservations, loading, pagination, changePage }"
         >
             <div class="panel-heading">
                 <div class="row">
@@ -41,18 +41,10 @@
                             <strong>{{ reservation.percent_raised }}%</strong>
                         </td>
                         <td>
-                            <tooltip effect="scale" placement="top" content="Complete">
-                                <span class="label label-success">{{ complete(reservation) }}</span>
-                            </tooltip>
-                            <tooltip effect="scale" placement="top" content="Needs Attention">
-                                <span class="label label-info">{{ attention(reservation) }}</span>
-                            </tooltip>
-                            <tooltip effect="scale" placement="top" content="Under Review">
-                                <span class="label label-default">{{ reviewing(reservation) }}</span>
-                            </tooltip>
-                            <tooltip effect="scale" placement="top" content="Incomplete">
-                                <span class="label label-danger" v-text="getIncomplete(reservation)"></span>
-                            </tooltip>
+                            <span class="label label-success">{{ complete(reservation) }}</span>
+                            <span class="label label-info">{{ attention(reservation) }}</span>
+                            <span class="label label-default">{{ reviewing(reservation) }}</span>
+                            <span class="label label-danger">{{ getIncomplete(reservation) }}</span>
                         </td>
                     </tr>
                 </tbody>
@@ -63,7 +55,7 @@
             </div>
             </div>
             <div class="panel-footer" v-if="pagination.pagination.total > pagination.pagination.per_page">
-                <pager :pagination="pagination.pagination"></pager>
+                <pager :pagination="pagination.pagination" :callback="changePage"></pager>
             </div>
         </div>
     </fetch-json>

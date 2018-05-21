@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Web\Dashboard;
 
+use App\Trip;
 use App\Http\Requests;
+use App\Models\v1\Group;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Artesaos\SEOTools\Traits\SEOTools;
@@ -28,7 +30,7 @@ class GroupsController extends Controller
             abort(403);
         }
 
-        $group = $this->api->get('groups/' . $id);
+        $group = Group::findOrFail($id);
 
         $this->seo()->setTitle($group->name . ' Group');
 
@@ -41,7 +43,7 @@ class GroupsController extends Controller
             abort(403);
         }
 
-        $group = $this->api->get('groups/' . $id);
+        $group = Group::findOrFail($id);
 
         $this->seo()->setTitle('Edit Group');
 
@@ -54,9 +56,9 @@ class GroupsController extends Controller
             abort(403);
         }
 
-        $group = $this->api->get('groups/' . $groupId);
+        $group = Group::findOrFail($groupId);
 
-        $trip = $this->api->get('trips/' . $id, ['include' => 'campaign,costs.payments,requirements,notes,deadlines']);
+        $trip = Trip::getById($id);
 
         $this->seo()->setTitle(title_case($trip->type . ' Trip ' . $tab) . ' - ' . $group->name);
 
@@ -68,7 +70,7 @@ class GroupsController extends Controller
             abort(403);
         }
 
-        $group = $this->api->get('groups/' . $groupId);
+        $group = Group::findOrFail($groupId);
 
         $this->seo()->setTitle('Squads - ' . $group->name);
 
@@ -81,7 +83,7 @@ class GroupsController extends Controller
             abort(403);
         }
 
-        $group = $this->api->get('groups/' . $groupId);
+        $group = Group::findOrFail($groupId);
 
         $this->seo()->setTitle('Rooming - ' . $group->name);
 

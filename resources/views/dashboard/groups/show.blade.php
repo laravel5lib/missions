@@ -2,20 +2,15 @@
 
 @section('content')
 
+@breadcrumbs(['links' => [
+    'dashboard/groups' => 'Organizations',
+    'active' => $group->name
+]])
+@endbreadcrumbs
+
 <div class="container-fluid">
 
-    <div class="row">
-        <div class="col-sm-12">
-            <hr class="divider inv">
-            @breadcrumbs(['links' => [
-                'dashboard/groups' => 'Organizations',
-                'active' => $group->name
-            ]])
-            @endbreadcrumbs
-            <hr class="divider">
-            <hr class="divider inv">
-        </div>
-    </div>
+    <hr class="divider inv">
 
     <div class="row">
         <div class="col-sm-2">
@@ -27,7 +22,7 @@
             @endsidenav
         </div>
         <div class="col-sm-7">
-            <fetch-json url="/trips?&status=current&onlyPublished=true&groups[]={{ $group->id }}" ref="tripList">
+            <fetch-json url="/trips?filter[group_id]={{ $group->id }}" ref="tripList">
                 <div class="panel panel-default" 
                         style="border-top: 5px solid #f6323e" 
                         slot-scope="{ json: trips, loading, pagination }"
@@ -35,7 +30,7 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h5>Current Trips <span class="badge badge-default">@{{ pagination.pagination.total }}</span></h5>
+                                <h5>Current Trips <span class="badge badge-default">@{{ pagination.total }}</span></h5>
                             </div>
                             <div class="col-xs-6 text-right text-muted">
                                 <h5 v-if="loading"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</h5>
@@ -78,8 +73,8 @@
                         <p>Please contact Missions.Me staff to setup a trip.</p>
                     </div>
                     </div>
-                    <div class="panel-footer" v-if="pagination.pagination.total > pagination.pagination.per_page">
-                        <pager :pagination="pagination.pagination"></pager>
+                    <div class="panel-footer" v-if="pagination.total > pagination.per_page">
+                        <pager :pagination="pagination"></pager>
                     </div>
                 </div>
             </fetch-json>

@@ -1,21 +1,16 @@
 @extends('dashboard.layouts.default')
 
 @section('content')
-<div class="container-fluid">
 
-    <div class="row">
-        <div class="col-sm-12">
-            <hr class="divider inv">
-            @breadcrumbs(['links' => [
-                'dashboard/groups' => 'Organizations',
-                'dashboard/groups/'.$group->id => $group->name,
-                'active' => $trip->campaign->name.' - '.ucwords($trip->type). ' Trip'
-            ]])
-            @endbreadcrumbs
-            <hr class="divider">
-            <hr class="divider inv">
-        </div>
-    </div>
+@breadcrumbs(['links' => [
+    'dashboard/groups' => 'Organizations',
+    'dashboard/groups/'.$group->id => $group->name,
+    'active' => $trip->campaign->name.' - '.ucwords($trip->type). ' Trip'
+]])
+@endbreadcrumbs
+
+<div class="container-fluid">
+    <hr class="divider inv">
 
     <div class="row">
         <div class="col-sm-2">
@@ -28,7 +23,7 @@
             ]])
             @endsidenav
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-10 col-lg-8">
             @include('dashboard.groups.trips.tabs.'.$tab)
         </div>
     </div>

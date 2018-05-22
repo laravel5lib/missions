@@ -12,6 +12,7 @@
     <li class="{{ request()->segment(2) == 'reservations' ? 'active' : '' }}"><a href="/dashboard/reservations">My Trip</a></li>
     <li class="{{ request()->segment(2) == 'groups' ? 'active' : '' }}"><a href="/dashboard/groups">My Team</a></li>
     <li class="{{ request()->segment(2) == 'records' ? 'active' : '' }}"><a href="/dashboard/records/passports">My Travel Documents</a></li>
+    <li class="{{ request()->segment(2) == 'reports' ? 'active' : '' }}"><a href="/dashboard/reports">My Reports</a></li>
   </ul>
 
 

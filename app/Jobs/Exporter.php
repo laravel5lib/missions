@@ -80,7 +80,7 @@ class Exporter extends Job implements ShouldQueue
     public function filter($data, array $fields)
     {
         return $this->getColumns($data)->filter(function ($value, $key) use ($fields) {
-            return in_array($key, $fields, true);
+            return in_array($key, array_keys($fields), true);
         })->all();
     }
 

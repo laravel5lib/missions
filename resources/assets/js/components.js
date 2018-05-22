@@ -240,6 +240,7 @@ Vue.component('reservation-pricing-overview', require('./components/ReservationP
  */
 Vue.component('delete-form', require('./components/DeleteForm.vue'));
 Vue.component('fetch-json', require('./components/fetch-json.vue'));
+Vue.component('list-filters', require('./components/ListFilters.vue'));
 Vue.component('pager', require('./components/pager.vue'));
 Vue.component('data-list', require('./components/data-list.vue'));
 Vue.component('ajax-form', require('./components/ajax-form.vue'));

@@ -9,7 +9,7 @@ class ExportReservations extends Exporter
     public function data(array $request)
     {
         $reservations = Reservation::filter(array_filter($request))
-            ->with('user', 'trip.campaign', 'trip.group', 'requirements.requirement', 'costs', 'dues.payment', 'deadlines', 'promocodes')
+            ->with('user', 'trip.campaign', 'trip.group', 'requirements.requirement', 'priceables', 'deadlines', 'promocodes')
             ->get();
 
         return $reservations;
@@ -48,10 +48,6 @@ class ExportReservations extends Exporter
             'outstanding' => $reservation->totalOwedInDollars(),
             'desired_role' => teamRole($reservation->desired_role),
             'companions' => $this->getCompanions($reservation->companionReservations),
-            'payments' => $this->getPayments($reservation->dues),
-            'incremental_costs' => $this->getCosts($reservation, 'incremental'),
-            'static_costs' => $this->getCosts($reservation, 'static'),
-            'optional_costs' => $this->getCosts($reservation, 'optional'),
             'requirements' => $this->getRequirements($reservation->requirements),
             'deadlines' => $this->getDeadlines($reservation->deadlines),
             'promocodes' => $this->getPromocodes($reservation->promocodes),
@@ -75,49 +71,6 @@ class ExportReservations extends Exporter
         $companions = implode(", ", $array);
 
         return $companions;
-    }
-
-    private function getPayments($dues)
-    {
-        $array = $dues->map(function ($due) {
-            return $this->getPaymentDetails($due);
-        })->all();
-
-        $payments = implode(", ", $array);
-
-        return $payments;
-    }
-
-    private function getPaymentDetails($due)
-    {
-        return $due->payment->cost->name
-            . ' [balance: $'
-            . number_format($due->outstandingBalanceInDollars(), 2)
-            . '] ('
-            .$due->getStatus()
-            .')';
-    }
-
-    private function getCosts($reservation, $type)
-    {
-        $array = $this->getCostsByType($reservation, $type)
-                      ->map(function ($cost) {
-                          return $this->getCostDetails($cost);
-                      })->all();
-
-        $costs = implode(", ", $array);
-
-        return $costs;
-    }
-
-    private function getCostsByType($reservation, $type)
-    {
-        return $reservation->costs()->type($type)->get();
-    }
-
-    private function getCostDetails($cost)
-    {
-        return $cost->name . ' ($'.number_format($cost->amountInDollars(), 2).')';
     }
 
     private function getRequirements($requirements)

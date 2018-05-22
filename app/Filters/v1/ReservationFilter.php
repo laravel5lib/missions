@@ -241,19 +241,6 @@ class ReservationFilter extends Filter
     }
 
     /**
-     * By applied cost name
-     *
-     * @param  string $name
-     * @return mixed
-     */
-    public function cost($name)
-    {
-        return $this->whereHas('costs', function ($costs) use ($name) {
-            return $costs->where('name', $name);
-        });
-    }
-
-    /**
      * By requirement and/or it's status.
      *
      * @param  String $requirement
@@ -295,49 +282,6 @@ class ReservationFilter extends Filter
                
             return $todos->where('todoable_type', 'reservations')
                         ->where('task', $param[0]);
-        });
-    }
-
-    /**
-     * By payment due and optionally by it's status.
-     *
-     * @param  string $due
-     * @return mixed
-     */
-    public function due($due)
-    {
-        $param = preg_split('/\|+/', urldecode($due));
-
-        return $this->whereHas('dues', function ($payments) use ($param) {
-
-            $payments->whereHas('payment.cost', function ($costs) use ($param) {
-                return $costs->where('name', $param[0]);
-            });
-
-            if (isset($param[1])) {
-                switch ($param[1]) {
-                    case 'overdue':
-                        return $payments->overdue();
-                        break;
-                    case 'late':
-                        return $payments->late();
-                        break;
-                    case 'paid':
-                        return $payments->paid();
-                        break;
-                    case 'pending':
-                        return $payments->pending();
-                        break;
-                    case 'extended':
-                        return $payments->extended();
-                        break;
-                    default:
-                        return $payments;
-                        break;
-                }
-            }
-
-            return $payments;
         });
     }
 
@@ -529,17 +473,7 @@ class ReservationFilter extends Filter
 
     public function name($value)
     {
-        $searchTerms = collect(explode(' ', $value));
-
-        $first = $searchTerms->first();
-        $last = $searchTerms->last();
-
-        return $this->when(($searchTerms->count() > 1), function ($query) use ($searchTerms, $first, $last) {
-            return $query->where('surname', 'LIKE', "%$last%")->where('given_names', 'LIKE', "%$first%");
-        })->when(($searchTerms->count() < 2), function ($query) use ($searchTerms, $first) {
-            return $query->where('given_names', 'LIKE', "%$first%")
-                ->orWhere('surname', 'LIKE', "%$first%");
-        })->current();
+        return $this->whereRaw("concat(given_names, ' ', surname) LIKE '%$value%'");
     }
 
     public function givenNames($value)

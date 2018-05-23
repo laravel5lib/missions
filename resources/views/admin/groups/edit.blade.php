@@ -8,22 +8,20 @@
 @endsection
 
 @section('content')
-<div class="white-header-bg">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <h3>Group <small>&middot; Edit</small></h3>
-            </div>
-        </div>
-    </div>
-</div>
+@breadcrumbs([ 'links' => [
+    'admin' => 'Dashboard', 
+    'admin/organizations' => 'Organizations', 
+    'admin/organizations/'.$group->id => $group->name,
+    'active' => 'Edit'
+]])
+@endbreadcrumbs
 <hr class="divider inv lg">
     <div class="container">
         <div class="row">
             <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
             	<div class="panel panel-default">
             		<div class="panel-body">
-		               <admin-group-edit group-id="{{ $id }}"></admin-group-edit>
+		               <admin-group-edit group-id="{{ $group->id }}"></admin-group-edit>
 		            </div>
             </div>
         </div>

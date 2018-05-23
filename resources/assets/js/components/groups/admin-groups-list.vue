@@ -24,7 +24,7 @@
                         <ul style="padding: 10px 20px;" class="dropdown-menu" aria-labelledby="dropdownMenu1">
                             <li>
                                 <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="name" :disabled="maxCheck('name')"> Group Name
+                                    <input type="checkbox" v-model="activeFields" value="name" :disabled="maxCheck('name')"> Organization Name
                                 </label>
                             </li>
                             <li>
@@ -149,7 +149,7 @@
             <thead>
             <tr>
                 <th v-if="isActive('name')" :class="{'text-primary': orderByField === 'name'}">
-                    Group
+                    Name
                     <i @click="setOrderByField('name')" v-if="orderByField !== 'name'" class="fa fa-sort pull-right"></i>
                     <i @click="direction=direction*-1" v-if="orderByField === 'name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>

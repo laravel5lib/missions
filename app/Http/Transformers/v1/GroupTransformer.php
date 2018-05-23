@@ -28,7 +28,7 @@ class GroupTransformer extends TransformerAbstract
      */
     public function transform(Group $group)
     {
-        $group->load('avatar', 'banner');
+        $group->load('avatar', 'banner', 'slug');
 
         return [
             'id'           => $group->id,
@@ -51,7 +51,6 @@ class GroupTransformer extends TransformerAbstract
             'email'        => $group->email,
             'avatar'       => $group->avatar ? image($group->avatar->source) : url('/images/placeholders/logo-placeholder.png'),
             'banner'       => $group->banner ? image($group->banner->source) : null,
-            'reservations_count' => $group->activeReservations()->count(),
             'created_at'   => $group->created_at->toDateTimeString(),
             'updated_at'   => $group->updated_at->toDateTimeString(),
             'links'        => [

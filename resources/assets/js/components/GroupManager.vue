@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-        <div class="panel-body">
+        <!-- <div class="panel-body">
             <span class="label label-default" v-for="(filter, key) in filters" :key="key" style="padding: 0.5em; margin-right: 1em">
                 {{ key | capitalize }}: "{{ filter }}"
                 <a role="button" style="color: white; margin-left: 0.5em;" @click="removeFilter(key)">
@@ -70,7 +70,7 @@
                     <li><a role="button" @click="addFilter('status_id', 2)">Committed</a></li>
                 </ul>
             </div>
-        </div>
+        </div> -->
         <table class="table" v-if="groups && groups.length">
             <thead>
             <tr class="active">

@@ -8,15 +8,12 @@
 @endsection
 
 @section('content')
-<div class="white-header-bg">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <h3>Group <small>&middot; Create</small></h3>
-            </div>
-        </div>
-    </div>
-</div>
+@breadcrumbs(['links' => [
+        'admin' => 'Dashboard',
+        'admin/organizations' => 'Organizations',
+        'active' => 'New'
+    ]])
+    @endbreadcrumbs
 <hr class="divider inv lg">
     <div class="container">
         <div class="row">

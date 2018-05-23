@@ -63,11 +63,13 @@ class GroupsController extends Controller
      */
     public function edit($id)
     {
-        $this->authorize('update', $this->group);
+        $group = $this->group->findOrFail($id);
+
+        $this->authorize('update', $group);
 
         $this->seo()->setTitle('Edit Group');
 
-        return view('admin.groups.edit')->with('id', $id);
+        return view('admin.groups.edit', compact('group'));
     }
 
     /**

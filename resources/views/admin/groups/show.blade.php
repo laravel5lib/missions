@@ -3,7 +3,8 @@
 @section('content')
 
     @breadcrumbs([ 'links' => [
-        'admin' => 'Dashboard', 'admin/groups' => 'Groups', 'active' => $group->name
+        'admin' => 'Dashboard', 'admin/organizations' => 'Organizations', 
+        'active' => $group->name
     ]])
     @endbreadcrumbs
     
@@ -30,21 +31,9 @@
                                             <h5>Group Details</h5>
                                         </div>
                                         <div class="col-xs-4 text-right">
-                                            <hr class="divider inv sm">
-                                            <div class="btn-group">
-                                                <a type="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <strong class="text-primary"><i class="fa fa-cog"></i> Manage</strong>
-                                                </a>
-                                                <ul class="dropdown-menu dropdown-menu-right">
-                                                    @can('update', $group)
-                                                        <li><a href="{{ Request::url() }}/edit">Edit</a></li>
-                                                    @endcan
-                                                    @can('delete', $group)
-                                                        <li role="separator" class="divider"></li>
-                                                        <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
-                                                    @endcan
-                                                </ul>
-                                            </div>
+                                            @can('update', $group)
+                                            <a href="{{ url('/admin/organizations/'.$group->id.'/edit')}}" class="btn btn-sm btn-primary">Edit</a>
+                                            @endcan
                                         </div>
                                     </div>
                                 @endslot
@@ -66,27 +55,55 @@
                         </div>
                     </div>
 
+                    @unless( ! $group->slug)
+                        <div class="row">
+                            <div class="col-xs-12">
+                                @component('panel')
+                                    @slot('title')
+                                        <h5>Public Profile</h5>
+                                    @endslot
+                                    @slot('body')
+                                        @if($group->public)
+                                            <pre><a href="/{{ $group->slug->url }}">http://missions.me/{{ $group->slug->url }}</a></pre>
+                                        @else
+                                            <pre class="text-strike">http://missions.me/{{ $group->slug->url }}</pre>
+                                        @endif
+                                    @endslot
+                                @endcomponent
+                            </div>
+                        </div>
+                    @endunless
+
                     <div class="row">
                         <div class="col-xs-12">
                             <admin-group-managers group-id="{{ $group->id }}"></admin-group-managers>
                         </div>
                     </div>
-
-                            
-                    <!-- @unless( ! $group->slug)
-                        <div class="row">
-                            <div class="col-sm-12 text-center">
-                                <div class="well">
-                                    <label>Url slug</label>
-                                    @if($group->public)
-                                        <h4><a href="/{{ $group->slug->url }}">http://missions.me/{{ $group->slug->url }}</a></h4>
-                                    @else
-                                        <h4 class="text-strike text-muted">http://missions.me/{{ $group->slug->url }}</h4>
-                                    @endif
-                                </div>
-                            </div>
+                    
+                    @can('delete', $group)
+                    <div class="row">
+                        <div class="col-xs-12">
+                            @component('panel')
+                                @slot('title')
+                                    <h5>Delete Organization</h5>
+                                @endslot
+                                @slot('body')
+                                    <div class="alert alert-warning">
+                                        <div class="row">
+                                            <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
+                                            <div class="col-xs-11">USE CAUTION! This is a destructive action that cannot be undone. This will permanently delete the organization, all of it's trips and reservations.</div>
+                                        </div>
+                                    </div>
+                                    <delete-form url="groups/{{ $group->id }}" 
+                                        redirect="/admin/organizations"
+                                        label="Enter the organization name to delete it"
+                                        match-value="{{ $group->name }}"
+                                    ></delete-form>
+                                @endslot
+                            @endcomponent
                         </div>
-                    @endunless -->
+                    </div>
+                    @endcan
 
                 </div>
                 <div role="tabpanel" class="tab-pane" id="trips">

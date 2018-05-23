@@ -72,6 +72,6 @@ class DonorsController extends Controller
 
         $this->seo()->setTitle('Edit Donor');
 
-        return view('admin.financials.donors.edit')->with('id', $donor->id);
+        return view('admin.financials.donors.edit', compact('donor'));
     }
 }

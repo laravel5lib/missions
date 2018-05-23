@@ -1,15 +1,12 @@
 @extends('layouts.admin')
 
-@section('header')
+@section('content')
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
         'admin/representatives' => 'Trip Reps',
         'active' => $representative->name
     ]])
     @endbreadcrumbs
-@endsection
-
-@section('content')
     <hr class="divider inv lg">
     <div class="container">
         <div class="row">

@@ -2,7 +2,6 @@
 @inject('refund', 'App\Models\v1\Transaction')
 
 @section('content')
-    @include('admin.partials._nav_donations')
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
         'admin/transactions' => 'Transactions',

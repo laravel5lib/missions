@@ -2,18 +2,19 @@
 
 @section('content')
 
-@include('admin.partials._nav_people')
-
 @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
         'active' => 'Trip Reps'
     ]])
     @endbreadcrumbs
 
-<hr class="divider inv">
-<div class="container">
+<hr class="divider lg inv">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-sm-2">
+            @include('admin.partials._nav_people')
+        </div>
+        <div class="col-sm-10">
             <representative-list></representative-list>
         </div>
     </div>

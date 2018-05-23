@@ -4,7 +4,6 @@
 @endsection
 
 @section('content')
-    @include('admin.partials._nav_donations')
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
         'admin/funds' => 'Funds',

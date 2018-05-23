@@ -1,30 +1,33 @@
 @extends('layouts.admin')
 
-@section('header')
-    @breadcrumbs(['links' => [
-        'admin' => 'Dashboard',
-        'admin/donors' => 'Donors',
-        'active' => $donor->name
-    ]])
-    @endbreadcrumbs
-@endsection
-
 @section('content')
 
-<!-- @can('update', $donor)
-                        <a href="{{ url('admin/donors/'. $donor->id .'/edit') }}" class="btn btn-primary">
-                            Edit
-                        </a>
-                        @endcan -->
+@breadcrumbs(['links' => [
+    'admin' => 'Dashboard',
+    'admin/donors' => 'Donors',
+    'active' => $donor->name
+]])
+@endbreadcrumbs
+
     <hr class="divider inv lg">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xs-12 col-md-2">
-                @include('admin.partials._toolbar')
-            </div>
-            <div class="col-xs-12 col-md-7">
+            <div class="col-xs-12 col-md-7 col-md-offset-2">
                 @component('panel')
-                    @slot('title')<h5>Donor</h5> @endslot
+                    @slot('title')
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <h5>Donor</h5> 
+                            </div>
+                            <div class="col-xs-4 text-right">
+                            @can('update', $donor)
+                                <a href="{{ url('admin/donors/'. $donor->id .'/edit') }}" class="btn btn-primary btn-sm">
+                                    Edit
+                                </a>
+                            @endcan
+                            </div>
+                        </div>
+                    @endslot
                     @component('list-group', ['data' => [
                         'Name' => $donor->name,
                         'type' => ($donor->account_id ?

@@ -157,6 +157,7 @@
                                     :options="exportOptions"
                                     :filters="exportFilters">
                     </export-utility>
+                    <a href="/admin/donors/create" class="btn btn-sm btn-primary pull-right">New Donor</a>
                 </form>
             </div>
         </div>

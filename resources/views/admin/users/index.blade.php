@@ -2,26 +2,25 @@
 
 @section('content')
 
-@include('admin.partials._nav_people')
-
 @breadcrumbs(['links' => [
     'admin' => 'Dashboard',
     'active' => 'Users'
 ]])
 @endbreadcrumbs
 
-<hr class="divider inv">
+<hr class="divider lg inv">
 
-<div class="container">
-    <div class="col-xs-12">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <admin-users-list></admin-users-list>
-                    </div><!-- panel-body -->
-                </div><!-- end panel -->
-            </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-2">
+            @include('admin.partials._nav_people')
+        </div>
+        <div class="col-sm-10">
+            @component('panel')
+                @slot('body')
+                    <admin-users-list></admin-users-list>
+                @endslot
+            @endcomponent
         </div>
     </div>
 </div>

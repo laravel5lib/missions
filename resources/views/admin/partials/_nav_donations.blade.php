@@ -1,4 +1,4 @@
-<ul class="nav nav-tabs nav-secondary" style="margin-bottom: 0px">
+<ul class="nav nav-pills nav-stacked">
   <li class="{{ in_array(request()->segment(2), ['transactions']) ? 'active' : '' }}">
     <a href="{{ url('admin/transactions') }}">Transactions</a>
   </li>

@@ -1,15 +1,12 @@
 @extends('layouts.admin')
 
-@section('header')
-    @breadcrumbs(['links' => [
-        'admin' => 'Dashboard',
-        'admin/users' => 'Users',
-        'active' => $user->name
-    ]])
-    @endbreadcrumbs
-@endsection
-
 @section('content')
+@breadcrumbs(['links' => [
+    'admin' => 'Dashboard',
+    'admin/users' => 'Users',
+    'active' => $user->name
+]])
+@endbreadcrumbs
 <hr class="divider inv lg">
 
 <div class="container-fluid">

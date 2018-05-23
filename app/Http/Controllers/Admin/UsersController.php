@@ -52,11 +52,13 @@ class UsersController extends Controller
 
     public function edit($id)
     {
-        $this->authorize('update', $this->user);
+        $user = User::findOrFail($id);
+
+        $this->authorize('update', $user);
 
         $this->seo()->setTitle('Edit User');
 
-        return view('admin.users.edit', compact('id'));
+        return view('admin.users.edit', compact('user'));
     }
 
     public function create()

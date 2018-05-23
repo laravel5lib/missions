@@ -29,9 +29,9 @@
     <div class="col-xs-12">
 
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-2">
                 <!-- TAB NAVIGATION -->
-                <ul class="nav nav-tabs" role="tablist">
+                <ul class="nav nav-pills nav-stacked" role="tablist">
                     <li><a href="#current" role="tab" data-toggle="tab">Current</a></li>
                     <li><a href="#archived" role="tab" data-toggle="tab">Archived</a></li>
                     <li><a href="#dropped" role="tab" data-toggle="tab">Dropped</a></li>
@@ -39,41 +39,43 @@
                         <li><a href="#prospects" role="tab" data-toggle="tab">Interests</a></li>
                     @endcan
                 </ul>
+            </div>
+            <div class="col-sm-10">
                 <!-- TAB CONTENT -->
                 <div class="tab-content">
                     <div class="active tab-pane fade in" id="current">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
+                        @component('panel')
+                            @slot('body')
                                 <admin-reservations-list type="current"
                                                         storage-name="AdminReservationsCurrentStorage">
                                 </admin-reservations-list>
-                            </div>
-                        </div>
+                            @endslot
+                        @endcomponent
                     </div>
                     <div class="tab-pane fade" id="archived">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
+                        @component('panel')
+                            @slot('body')
                                 <admin-reservations-list type="archived"
                                                         storage-name="AdminReservationsArchivedStorage">
                                 </admin-reservations-list>
-                            </div>
-                        </div>
+                            @endslot
+                        @endcomponent
                     </div>
                     <div class="tab-pane fade" id="dropped">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
+                        @component('panel')
+                            @slot('body')
                                 <admin-reservations-list type="dropped"
                                                         storage-name="AdminReservationsDroppedStorage">
                                 </admin-reservations-list>
-                            </div>
-                        </div>
+                            @endslot
+                        @endcomponent
                     </div>
                     <div class="tab-pane fade" id="prospects">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
+                        @component('panel')
+                            @slot('body')
                                 <admin-interests-list></admin-interests-list>
-                            </div>
-                        </div>
+                            @endslot
+                        @endcomponent
                     </div>
                 </div>
 

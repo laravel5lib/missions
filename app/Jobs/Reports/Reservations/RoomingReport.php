@@ -41,7 +41,7 @@ class RoomingReport extends Job implements ShouldQueue
             ->with(
                 'rooms.type',
                 'rooms.plans',
-                'costs',
+                'priceables',
                 'trip.group',
                 'trip.campaign'
             )
@@ -56,37 +56,7 @@ class RoomingReport extends Job implements ShouldQueue
 
     public function columnize($reservations)
     {
-//        $companionCols = [];
-//
-//        foreach(range(1, $reservations->max('companion_reservations_count')) as $number)
-//        {
-//            $companionCols['Companion '.$number . ' Given Names'] = null;
-//            $companionCols['Companion '.$number . ' Surname'] = null;
-//        }
-//
-//        $roommateCols = [];
-//
-//        foreach(range(1, $reservations->pluck('rooms')->flatten()->max('occupants_count')) as $number)
-//        {
-//            $roommateCols['Roommate '.$number . ' Given Names'] = null;
-//            $roommateCols['Roommate '.$number . ' Surname'] = null;
-//        }
-
         return $reservations->map(function ($reservation) {
-
-//            foreach($reservation->companionReservations as $key => $companion)
-//            {
-//                $number = ($key+1);
-//                $companionCols['Companion '. $number .' Surname'] = $companion->surname;
-//                $companionCols['Companion '. $number .' Given Names'] = $companion->given_names;
-//            }
-//
-//            foreach($reservation->rooms->pluck('occupants')->flatten() as $key => $roommate)
-//            {
-//                $number = ($key+1);
-//                $roommateCols['Roommate '. $number .' Surname'] = $roommate->surname;
-//                $roommateCols['Roommate '. $number .' Given Names'] = $roommate->given_names;
-//            }
 
             $data = [
                 'Campaign' => $reservation->trip->campaign->name,
@@ -99,30 +69,12 @@ class RoomingReport extends Job implements ShouldQueue
                 'Marital Status' => $reservation->status,
                 'Designation' => $reservation->designation ?
                     implode('', array_flatten($reservation->designation->content)) : 'none',
-                'Rooming Cost(s)' => implode(", ", $reservation->costs()->type('optional')->get()->map(function ($cost) {
-                    return $cost->name;
-                })->all()),
+                'Requested Room' => $reservation->requested_room,
                 'Rooms' => implode(', ', $reservation->rooms->pluck('type.name')->all()),
-                'Plans' => implode(', ', $reservation->rooms->pluck('plans')->flatten()->pluck('name')->all()),
-//                'Roommates' => implode(', ', $reservation->rooms->pluck('occupants')->flatten()->map(function ($occupant) {
-//                    return $occupant->given_names . ' ' . $occupant->surname;
-//                })->all()),
+                'Plans' => implode(', ', $reservation->rooms->pluck('plans')->flatten()->pluck('name')->all())
             ];
 
             return $data;
         })->all();
     }
-
-//    private function getCompanions($companions)
-//    {
-//        $array = $companions->map(function($companion) {
-//            return $companion->given_names . ' '
-//                . $companion->surname
-//                . '('. $companion->pivot->relationship .')';
-//        })->all();
-//
-//        $companions = implode(", ", $array);
-//
-//        return $companions;
-//    }
 }

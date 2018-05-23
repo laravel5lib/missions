@@ -166,8 +166,6 @@ $api->version('v1', [
         $api->resource('influencers', 'EssaysController');
         $api->post('influencers/export', 'EssaysController@export');
         $api->post('influencers/import', 'EssaysController@import');
-        // $api->resource('costs', 'CostsController');
-        // $api->resource('costs.payments', 'CostPaymentsController');
         $api->resource('reservations.dues', 'ReservationDuesController');
         $api->resource('requirements', 'RequirementsController');
         $api->resource('requirements.conditions', 'RequirementConditionsController');

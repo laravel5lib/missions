@@ -158,7 +158,7 @@
                 </form>
             </div>
         </div>
-        <filters-indicator :filters.sync="filters" :requirement="requirement" :due="due"></filters-indicator>
+        <filters-indicator :filters.sync="filters" :requirement="requirement" :due="cost"></filters-indicator>
         <hr class="divider sm">
 		<div style="position:relative;">
 			<spinner ref="spinner" global size="sm" text="Loading"></spinner>
@@ -380,14 +380,13 @@
 					hasCompanions: null,
                     hasRoomInPlan: null,
                     noRoomInPlan: null,
-					due: '',
+					cost: '',
 					todoName: '',
 					todoStatus: null,
 					designation: '',
 					requirementName: '',
 					requirementStatus: '',
-					dueName: '',
-					dueStatus: '',
+					cost: '',
 					rep: '',
 					age: [0, 120],
                     minPercentRaised: '',
@@ -430,14 +429,13 @@
 					country: 'Country',
 					designation: 'Arrival Designation',
 					companions: 'Companions',
-					payments: 'Payments Due',
-					incremental_costs: 'Incremental Costs',
-					static_costs: 'Static Costs',
-					optional_costs: 'Optional Costs',
 					requirements: 'Travel Requirements',
 					percent_raised: 'Percent Raised',
 					amount_raised: 'Amount Raised',
 					outstanding: 'Amount Outstanding',
+					current_registration: 'Current Registration',
+					upcoming_payment: 'Upcoming Payment',
+					upcoming_deadline: 'Upcoming Deadline',
 					deadlines: 'Other Deadlines',
 					desired_role: 'Role',
 					promocodes: 'Promo Codes',
@@ -463,11 +461,8 @@
 
 				return this.filters.requirementName;
 			},
-			due()  {
-				if (this.filters.dueStatus)
-					return this.filters.dueName + '|' + this.filters.dueStatus;
-
-				return this.filters.dueName;
+			cost()  {
+				return this.filters.cost;
 			}
 			// 'rep': function() {
 			// 	return this.reservation.rep.data.name;
@@ -547,8 +542,7 @@
 						designation: this.filters.designation,
 						requirementName: this.filters.requirementName,
 						requirementStatus: this.filters.requirementStatus,
-						dueName: this.filters.dueName,
-						dueStatus: this.filters.dueStatus,
+						cost: this.filters.cost,
 						rep: this.filters.rep,
 						age: this.filters.age,
                         minPercentRaised: this.filters.minPercentRaised ? this.filters.minPercentRaised : null,
@@ -601,8 +595,7 @@
 					requirementName: '',
 					requirementStatus: '',
 					rep: '',
-					dueName: '',
-					dueStatus: '',
+					cost: '',
 					age: [0, 120],
                     minPercentRaised: '',
                     maxPercentRaised: '',
@@ -651,7 +644,7 @@
 				$.extend(params, {
                     todo: this.todo,
                     requirement: this.requirement,
-                    due: this.due,
+                    cost: this.cost,
                 });
 
               if (this.filters.age[0] === 0 && this.filters.age[1] === 120 )

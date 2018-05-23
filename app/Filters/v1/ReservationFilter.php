@@ -538,4 +538,13 @@ class ReservationFilter extends Filter
     {
         return $this->where($this->column, 'LIKE', "%$keywords%");
     }
+
+    public function cost($id)
+    {
+        return $this->whereHas('priceables', function($query) use ($id) {
+            return $query->whereHas('cost', function ($subQuery) use ($id) {
+                return $subQuery->whereId($id);
+            });
+        });
+    }
 }

@@ -113,7 +113,9 @@ export default {
                     percent_raised: 'Percent Raised',
                     amount_raised: 'Amount Raised',
                     outstanding: 'Amount Outstanding',
-                    deadlines: 'Other Deadlines',
+                    current_registration: 'Current Registration',
+					upcoming_payment: 'Upcoming Payment',
+					upcoming_deadline: 'Upcoming Deadline',
                     desired_role: 'Role',
                     registered_at: 'Register Date',
                     updated_at: 'Last Updated'

@@ -35,7 +35,7 @@ class FundsReport extends Job implements ShouldQueue
     public function handle(Reservation $reservation)
     {
         $reservations = $reservation->filter(array_filter($this->request))
-                             ->with('costs', 'dues.payment.cost')
+                             ->with('priceables')
                              ->get();
 
         $data = $this->columnize($reservations);
@@ -60,18 +60,9 @@ class FundsReport extends Job implements ShouldQueue
                 'amount_raised' => $reservation->totalRaisedInDollars(),
                 'outstanding' => $reservation->totalOwedInDollars(),
                 'percent_raised' => $reservation->getPercentRaised().'%',
-                'incremental_costs' => implode(", ", $reservation->costs()->type('incremental')->get()->map(function ($cost) {
-                    return $cost->name . ' ($'.number_format($cost->amountInDollars(), 2).')';
-                })->all()),
-                'static_costs' => implode(", ", $reservation->costs()->type('static')->get()->map(function ($cost) {
-                    return $cost->name . ' ($'.number_format($cost->amountInDollars(), 2).')';
-                })->all()),
-                'optional_costs' => implode(", ", $reservation->costs()->type('optional')->get()->map(function ($cost) {
-                    return $cost->name . ' ($'.number_format($cost->amountInDollars(), 2).')';
-                })->all()),
-                'payments' => implode(", ", $reservation->dues->map(function ($due) {
-                    return $due->payment->cost->name. ' [balance: $'.number_format($due->outstandingBalanceInDollars(), 2).'] ('.$due->getStatus().')';
-                })->all())
+                'current_registration' => $reservation->getCurrentRate() ? $reservation->getCurrentRate()->cost->name : 'N/A',
+                'upcoming_payment' => $reservation->getUpcomingPayment() ? $reservation->getUpcomingPayment()->percentage_due.'%' : 'N/A',
+                'upcoming_deadline' => $reservation->getUpcomingDeadline() ? $reservation->getUpcomingDeadline()->toDateTimeString() : 'N/A'
             ];
         })->all();
     }

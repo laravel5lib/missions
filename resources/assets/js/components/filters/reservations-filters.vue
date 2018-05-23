@@ -79,30 +79,19 @@
 					</select>
 				</div>
 
-				<!-- Cost/Payments -->
-				<template v-if="!teams && propertyExists('dueName')">
+				<!-- Cost -->
+				<template v-if="propertyExists('cost')">
 					<div class="form-group">
 						<label>Applied Cost</label>
-						<select class="form-control input-sm" v-model="filters.dueName" style="width:100%;">
+						<select class="form-control input-sm" v-model="filters.cost" style="width:100%;">
 							<option value="">Any Cost</option>
-							<option v-for="option in dueOptions" :value="option">
-								{{ option }}
+							<option v-for="cost in costs" :value="cost.id" :key="cost.id">
+								{{ cost.name }}
 							</option>
 						</select>
 					</div>
-					<div class="form-group" v-if="filters.dueName">
-						<label>Payment Status</label>
-						<select class="form-control input-sm" v-model="filters.dueStatus" style="width:100%;">
-							<option value="">Any Status</option>
-							<option value="overdue">Overdue</option>
-							<option value="late">Late</option>
-							<option value="extended">Extended</option>
-							<option value="paid">Paid</option>
-							<option value="pending">Pending</option>
-						</select>
-					</div>
 				</template>
-				<!-- end cost/payments -->
+				<!-- end cost -->
 
 				<div class="form-group" v-if="(isAdminRoute || teams || rooms) && propertyExists('designation')">
 					<label>Arrival Designation</label>
@@ -409,7 +398,7 @@
                 todoOptions: [],
                 requirementOptions: [],
                 repOptions: [],
-                dueOptions: [],
+                costs: [],
                 hasTransportation: null,
                 traveling: null,
                 filters: {},
@@ -456,9 +445,11 @@
 		        this.filters.campaign = val ? val.id : null;
 		        if (val)
                     this.getRegions();
+                    this.getCosts();
             },
             campaignId(val) {
                 this.getRegions();
+                this.getCosts();
             },
 		    shirtSizeArr (val) {
                 if ( this.propertyExists('shirtSize') )
@@ -591,12 +582,11 @@
                 }).catch(this.$root.handleApiError);
             },
             getCosts(){
-                return this.$http.get('costs', { params: {
-                    'assignment': 'trips',
-                    'per_page': 100,
-                    'unique': true
+                let campaign = this.campaignId || this.filters.campaign;
+                return this.$http.get('campaigns/'+campaign+'/costs', { params: {
+                    'per_page': 100
                 }}).then((response) => {
-                    this.dueOptions = _.uniq(_.pluck(response.data.data, 'name'));
+                    this.costs = response.data.data;
                 }).catch(this.$root.handleApiError);
             },
             getRegions(){
@@ -651,8 +641,6 @@
             promises.push(this.getCampaigns());
 
             if (this.isAdminRoute || this.facilitator)
-                promises.push(this.getCosts());
-            if (this.isAdminRoute || this.facilitator)
                 promises.push(this.getRequirements());
             if (this.isAdminRoute)
                 promises.push(this.getTodos());
@@ -660,8 +648,10 @@
                 promises.push(this.getReps());
             if (this.facilitator && !this.isAdminRoute || this.teams)
                 promises.push(this.getRoles());
-            if (this.campaignId || this.filters.campaign)
+            if (this.campaignId || this.filters.campaign) {
                 promises.push(this.getRegions());
+                promises.push(this.getCosts());
+            }
 
             Promise.all(promises).then(() => {
                 if (!self.starter)

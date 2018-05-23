@@ -9,20 +9,11 @@
                 <h5>User Details</h5>
             </div>
             <div class="col-xs-4 text-right">
-                <div class="btn-group btn-group-sm">
-                    <a type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Manage <i class="fa fa-angle-down"></i>
+                 @can('update', $user)
+                    <a class="btn btn-primary btn-sm" href="{{ url('/admin/users/'.$user->id.'/edit') }}">
+                       Edit
                     </a>
-                    <ul class="dropdown-menu">
-                        @can('update', $user)
-                            <li><a href="{{ Request::url() }}/edit">Edit</a></li>
-                        @endcan
-                        @can('delete', $user)
-                            <li role="separator" class="divider"></li>
-                            <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
-                        @endcan
-                    </ul>
-                </div>
+                @endcan
             </div>
         </div>
     @endslot
@@ -53,5 +44,26 @@
     </div>
     @endslot
 @endcomponent
+
+@can('delete', $user)
+    @component('panel')
+        @slot('title')
+            <h5>Delete User</h5>
+        @endslot
+        @slot('body')
+            <div class="alert alert-warning">
+                <div class="row">
+                    <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
+                    <div class="col-xs-11">USE CAUTION! This is a destructive action that cannot be undone. This will permanently delete the user and any reservations they are managing.</div>
+                </div>
+            </div>
+            <delete-form url="users/{{ $user->id }}" 
+                redirect="/admin/users"
+                label="Enter the user's name to delete them"
+                match-value="{{ $user->name }}"
+            ></delete-form>
+        @endslot
+    @endcomponent
+@endcan
 
 @endsection

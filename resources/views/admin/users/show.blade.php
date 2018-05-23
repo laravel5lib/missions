@@ -46,6 +46,4 @@
         </div>
     </div>
 </div>
-
-<admin-user-delete user-id="{{ $user->id }}"></admin-user-delete>
 @endsection

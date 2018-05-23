@@ -190,6 +190,7 @@
 						                :filters="exportFilters">
 						</export-utility>
 					</div>
+					<a href="/admin/users/create" class="btn btn-sm btn-primary pull-right">New User</a>
 				</form>
 			</div>
 		</div>

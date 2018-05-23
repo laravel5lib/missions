@@ -1,6 +1,6 @@
 <template >
 <div>
-	<div class="panel panel-default">
+	<div class="panel panel-default" style="border-top: 5px solid #f6323e">
 		<spinner ref="spinner" global size="sm" text="Loading"></spinner>
 		<div class="panel-heading">
 			<div class="row">

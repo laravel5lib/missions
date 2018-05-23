@@ -37,7 +37,13 @@ export default {
                 });
         }, 100),
         addFilter(key, value) {
-            this.filters[key] = value;
+
+            // temporary check until API is updated to match JSON-API spec
+            if (this.filters.filter) {
+                this.filters.filter[key] = value;
+            } else {
+                this.filters[key] = value;
+            }
 
             let params = $.extend({page: 1}, this.filters);
             this.fetch(params);
@@ -45,7 +51,11 @@ export default {
             this.$forceUpdate();
         },
         removeFilter(key) {
-           delete this.filters[key];
+            if (this.filters.filter) {
+                delete this.filters.filter[key];
+            } else {
+                delete this.filters[key];
+            }
 
             let params = $.extend({page: 1}, this.filters);
             this.fetch(params);

@@ -23069,6 +23069,12 @@ p.large-line-height {
   background: #ffe000;
 }
 
+.panel-default > .panel-heading .badge {
+  background-color: #e6e6e6;
+  color: #818181;
+  margin-left: 1em;
+}
+
 /* panel heading colors */
 .panel-medical {
   background-color: #f6323e !important;

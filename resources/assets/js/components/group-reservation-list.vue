@@ -7,9 +7,7 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-6">
-                        <h5>Reservations <span class="badge badge-default">{{ pagination.pagination.total }}</span>
-                            <span class="pull-right text-muted" v-if="loading"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</span>
-                        </h5>
+                        <h5>Reservations <span class="badge badge-default">{{ pagination.pagination.total }}</span></h5>
                     </div>
                     <div class="col-xs-6 text-right">
                        <hr class="divider inv sm">
@@ -30,7 +28,10 @@
                     <span class="help-block" v-if="keywords.length">Press enter to search. <a role="button" @click="reset">Clear search</a></span>
                 </div>
             </div>
-            <div class="table-responsive">
+            <div class="panel-body" v-if="loading">
+                <p class="lead text-center text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</p>
+            </div>
+            <div class="table-responsive" v-if="!loading">
             <table class="table" v-if="reservations && reservations.length">
                 <thead>
                     <tr class="active">

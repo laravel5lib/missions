@@ -13,7 +13,7 @@
     <hr class="divider inv">
 
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-md-2">
             @sidenav(['links' => [
                 'dashboard/groups/'.$group->id => 'Overview',
                 'dashboard/groups/'.$group->id.'/teams' => 'Squads',
@@ -21,21 +21,36 @@
             ]])
             @endsidenav
         </div>
-        <div class="col-sm-7">
-            <fetch-json url="/trips?filter[group_id]={{ $group->id }}" ref="tripList">
+        <div class="col-md-10 col-lg-8">
+            <fetch-json url="/trips" :parameters="{{ json_encode([
+                    'filter' => [
+                        'group_id' => $group->id,
+                        'current' => true
+                    ]
+                ])}}" ref="tripList" v-cloak>
                 <div class="panel panel-default" 
                         style="border-top: 5px solid #f6323e" 
-                        slot-scope="{ json: trips, loading, pagination }"
+                        slot-scope="{ json: trips, loading, pagination, addFilter, removeFilter, filters }"
                 >
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h5>Current Trips <span class="badge badge-default">@{{ pagination.total }}</span></h5>
+                                <h5>Trips <span class="badge badge-default">@{{ pagination.total }}</span></h5>
                             </div>
                             <div class="col-xs-6 text-right text-muted">
                                 <h5 v-if="loading"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</h5>
                             </div>
                         </div>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="nav nav-pills nav-justified">
+                            <li role="presentation" :class="{'active' : filters.filter.current}">
+                                <a role="button" @click="addFilter('current', true); removeFilter('past')"><i class="fa fa-fire"></i> Current</a>
+                            </li>
+                            <li role="presentation" :class="{'active' : filters.filter.past}">
+                                <a role="button" @click="addFilter('past', true); removeFilter('current')"><i class="fa fa-archive"></i> Past</a>
+                            </li>
+                        </ul>
                     </div>
                     <div class="table-responsive">
                     <table class="table" v-if="trips && trips.length">

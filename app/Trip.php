@@ -28,7 +28,9 @@ class Trip extends TripModel
             ->allowedFilters(
                 Filter::exact('group_id'), 
                 Filter::exact('campaign_id'), 
-                Filter::exact('type')
+                Filter::exact('type'),
+                Filter::scope('current'),
+                Filter::scope('past')
             )
             ->allowedIncludes(['group', 'priceables'])
             ->withCount('reservations');

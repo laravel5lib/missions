@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-sm-12">
                             
-                <fetch-json url="reservations?user[]={{ auth()->user()->id }}&include=trip.campaign,trip.group" :parameters="{current: true}">
+                <fetch-json url="reservations?user[]={{ auth()->user()->id }}&include=trip.campaign,trip.group" :parameters="{current: true}" v-cloak>
                     <div class="panel panel-default" style="border-top: 5px solid #f6323e" slot-scope="{ json:reservations, loading, pagination, filters, addFilter, removeFilter }">
                         <div class="panel-heading">
                             <div class="row">

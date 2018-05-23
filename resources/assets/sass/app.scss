@@ -158,6 +158,13 @@ p.large-line-height {
   background: $brand-warning;
 }
 
+
+.panel-default > .panel-heading .badge {
+  background-color: #e6e6e6;
+  color: #818181;
+  margin-left: 1em;
+}
+
 /* panel heading colors */
 // Trip type background colors
 .panel-medical {

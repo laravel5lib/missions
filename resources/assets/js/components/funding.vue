@@ -31,7 +31,7 @@
                 <tbody>
                     <tr v-for="donor in donors">
                         <td class="col-sm-4">{{ donor.name }}</td>
-                        <td class="col-sm-2 text-right text-success">${{ donor.total_donated }}.00</td>
+                        <td class="col-sm-2 text-right text-success">{{ currency(donor.total_donated) }}</td>
                     </tr>
                 </tbody>
             </table>

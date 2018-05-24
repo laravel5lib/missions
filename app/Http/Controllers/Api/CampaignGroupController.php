@@ -19,14 +19,22 @@ class CampaignGroupController extends Controller
     public function index($campaignId)
     {
         $search = request()->get('search');
+        $hasPublishedTrips = request()->get('hasPublishedTrips');
 
         $groups = Campaign::findOrFail($campaignId)
             ->groups()
             ->when($search, function ($query) use ($search) {
                 return $query->where('name', 'LIKE', "%$search%");
             })
+            ->when($hasPublishedTrips, function ($query) use ($campaignId) {
+                return $query->whereHas('trips', function ($subQuery) use ($campaignId) {
+                    return $subQuery->where('campaign_id', $campaignId)
+                        ->public()
+                        ->published();
+                });
+            })
             ->orderBy('name')
-            ->paginate(10);
+            ->paginate(20);
 
         return GroupResource::collection($groups);
     }

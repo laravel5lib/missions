@@ -7,7 +7,7 @@
 				<h4>Find a team to travel with and register for the trip.</h4>
 			@endslot
 			@slot('cta')
-				<a role="button" class="btn btn-white-hollow" data-toggle="modal" data-target="#myModal">Register for this Trip</a>
+				<a role="button" class="btn btn-white-hollow" data-toggle="modal" data-target="#confirm">Register for this Trip</a>
 			@endslot
 		@else
 			@slot('message')
@@ -32,7 +32,7 @@
 					<h5 class="text-uppercase">Let's Change the World</h5>
 					<h3>Find a team to travel with and register for the trip.</h3>
 					<hr class="divider inv">
-					<a href="{{ url($campaign->slug->url . '/teams') }}" class="btn btn-white-hollow">Register for this Trip</a>
+					<a role="button" data-toggle="modal" data-target="#confirm" class="btn btn-white-hollow">Register for this Trip</a>
 				@else
 					<h5 class="text-uppercase">This Trip has Finished.</h5>
 					<h3>Looking for more trips?</h3>
@@ -45,7 +45,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">

@@ -37,9 +37,11 @@ class CampaignsController extends Controller
             return $query->where('url', $slug);
         })->firstOrFail();
 
-         $this->seo()->setTitle($campaign->name . ' Teams');
+        $this->seo()->setTitle($campaign->name . ' Teams');
 
-        return view('site.campaigns.teams.index', compact('campaign'));
+        $defaultGroup = Group::whereName('Missions. Me')->firstOrFail();
+
+        return view('site.campaigns.teams.index', compact('campaign', 'defaultGroup'));
     }
 
     public function trips($slug, $teamId)

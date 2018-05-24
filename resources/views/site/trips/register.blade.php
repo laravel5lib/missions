@@ -14,17 +14,17 @@
 				<div class="panel-body text-center">
 					<div class="row">
 						<div class="col-md-12 col-sm-4 col-xs-12">
-							<img src="{{ image($trip->group->getAvatar()->source) }}" class="img img-responsive">
+							<img src="{{ image($trip->campaign->getAvatar()->source) }}" class="img img-responsive">
 						</div>
 						<div class="col-md-12 col-sm-8 col-xs-12">
 							<h4 class="text-uppercase">{{ ucwords($trip->type) }} Trip</h4>
 							<h5 class="text-muted"><i class="fa fa-map-marker"></i> {{ country($trip->country_code) }}</h5>
-							<hr class="divider inv lg">
-							<h5>{{ $trip->group->name }}</h5>
 							<p>
-								{{ $trip->started_at->format('M d') }} - {{ $trip->ended_at->format('M d') }}
-								<br /> {{ $trip->ended_at->format('Y') }}
+								{{ $trip->started_at->format('M d') }} - {{ $trip->ended_at->format('M d, Y') }}
 							</p>
+							<hr class="divider inv lg">
+							<img src="{{ image($trip->group->getAvatar()->source)}}" class="img-circle img-xs">
+							<h5>{{ $trip->group->name }}</h5>
 						</div>
 					</div>
 				</div>

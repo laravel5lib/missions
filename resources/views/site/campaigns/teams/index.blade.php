@@ -2,7 +2,7 @@
 
 @section('content')
 
-<fetch-json url="groups?per_page=20" v-cloak>
+<fetch-json url="campaigns/{{ $campaign->id }}/groups?hasPublishedTrips=true&per_page=20" v-cloak>
 <div slot-scope="{ json:groups, loading, pagination, filters, addFilter, removeFilter, changePage }">
 
 <div class="dark-bg-primary">
@@ -12,7 +12,7 @@
             <div class="col-xs-12">
                 <hr class="divider inv">
                 <h3>Step One: Find your team.</h3>
-                <p class="small">If you don't have a church or organization, <a href="#" style="color: white"><strong>click here</strong></a> and we'll help place you on a team.</p>
+                <p class="small">If you don't have a church or organization, <a href="{{ url($campaign->slug->url.'/teams/'.$defaultGroup->id.'/trips') }}" style="color: white"><strong>click here</strong></a> and we'll help place you on a team.</p>
                 <hr class="divider inv">
             </div>
         </div>
@@ -57,11 +57,11 @@
 <div class="text-center text-muted" v-if="loading">
     <p class="lead"><i class="fa fa-spinner fa-spin"></i> Loading...</p>
 </div>
-<div class="container" v-if="pagination.pagination.total > pagination.pagination.per_page">
+<div class="container" v-if="pagination.total > pagination.per_page">
     <div class="row">
         <div class="col-xs-12">
             <hr class="divider inv xlg">
-            <pager :pagination="pagination.pagination" :callback="changePage"></pager>
+            <pager :pagination="pagination" :callback="changePage"></pager>
         </div>
     </div>
 </div>

@@ -22,17 +22,13 @@ class CampaignsController extends Controller
 
     public function show($id)
     {
-        try {
-            $campaign = $this->api->get('campaigns/' . $id);
-        } catch (Dingo\Api\Exception\InternalHttpException $e) {
-            $response = $e->getResponse();
-
-            return $response;
-        }
+        $campaign = Campaign::findOrFail($id);
 
         $this->seo()->setTitle($campaign->name);
 
-        return view('site.campaigns.show', compact('campaign'));
+        $defaultGroup = Group::whereName('Missions. Me')->firstOrFail();
+
+        return view('site.campaigns.show', compact('campaign', 'defaultGroup'));
     }
 
     public function teams($slug)

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Requests;
 use App\Models\v1\Slug;
+use App\Models\v1\Group;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Artesaos\SEOTools\Traits\SEOTools;
@@ -21,9 +22,7 @@ class GroupsController extends Controller
 
     public function show($id)
     {
-        $group = $this->api->get('/groups/'.$id, [
-            'include' => 'social,managers'
-        ]);
+        $group = Group::findOrFail($id);
 
         $authId = auth()->user() ? auth()->user()->id : null;
 
@@ -33,7 +32,16 @@ class GroupsController extends Controller
 
         $this->seo()->setTitle($group->name);
 
-        return view('site.groups.profile', compact('group'))->with('isProfile', true);
+        $campaigns = $group->trips()
+            ->current()
+            ->public()
+            ->published()
+            ->with('campaign')
+            ->get()
+            ->pluck('campaign')
+            ->unique();
+
+        return view('site.groups.profile', compact('group', 'campaigns'))->with('isProfile', true);
     }
 
     public function signup($slug)

@@ -1,16 +1,16 @@
 <template>
     <div class="form-group" :class="{'has-error' : $parent.form.errors.has(name)}"> 
-        <div class="col-xs-12">
-            <input type="checkbox"
-                :name="name"
-                v-model="checked">
-            <slot name="label"></slot>
-            <span class="help-block" 
-                    v-text="$parent.form.errors.get(name)" 
-                    v-if="$parent.form.errors.has(name)">
-            </span>
-            <slot name="help-text" v-if="!$parent.form.errors.has(name)"></slot>
-        </div>
+        <input type="checkbox"
+            :name="name"
+            :value="value"
+            :checked="value"
+            @change="updateValue">
+        <slot name="label"></slot>
+        <span class="help-block" 
+                v-text="$parent.form.errors.get(name)" 
+                v-if="$parent.form.errors.has(name)">
+        </span>
+        <slot name="help-text" v-if="!$parent.form.errors.has(name)"></slot>
     </div>
 </template>
 <script>
@@ -29,23 +29,15 @@ export default {
             required: true
         },
         'value': {
-            type: Number,
-            default: null
+            type: Boolean,
+            default: false
         }
     },
 
-    watch: {
-        'checked'(value) {
-            this.$parent.form[this.name] = value;
-        }
-    },
-
-    mounted() {
-        this.$parent.form[this.name] = this.value;
-        this.$parent.form.set(this.name, this.value);
-
-        if (this.value) {
-            this.checked = this.value;
+     methods: {
+        updateValue() {
+            this.$emit('input', !this.value);
+            this.$parent.form ? this.$parent.form.errors.clear(this.name) : null;
         }
     }
 }

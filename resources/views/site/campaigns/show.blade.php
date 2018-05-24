@@ -7,7 +7,7 @@
 				<h4>Join The Team. Find a church to travel with and register for the trip.</h4>
 			@endslot
 			@slot('cta')
-				<a href="{{ url($campaign->slug->url . '/trips') }}" class="btn btn-white-hollow">Register for this Trip</a>
+				<a href="{{ url($campaign->slug->url . '/teams') }}" class="btn btn-white-hollow">Register for this Trip</a>
 			@endslot
 		@else
 			@slot('message')
@@ -32,7 +32,7 @@
 					<h5 class="text-uppercase">Join The Team</h5>
 					<h3>Find a church to travel with and register for the trip.</h3>
 					<hr class="divider inv">
-					<a href="{{ url($campaign->slug->url . '/trips') }}" class="btn btn-white-hollow">Register for this Trip</a>
+					<a href="{{ url($campaign->slug->url . '/teams') }}" class="btn btn-white-hollow">Register for this Trip</a>
 				@else
 					<h5 class="text-uppercase">This Trip has Finished.</h5>
 					<h3>Looking for more trips?</h3>

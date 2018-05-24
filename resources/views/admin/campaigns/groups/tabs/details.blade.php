@@ -43,12 +43,12 @@
         <h5>Organization</h5>
     @endslot
     @component('list-group', ['data' => [
-        'Name' => $group->organization->name,
+        'Name' => '<a href="/admin/organizations/'.$group->group_id.'"><strong>'.$group->organization->name.'</strong></a>',
         'Type' => $group->organization->type,
         'Status' => ($group->organization->public ? 'Public' : 'Private'),
-        'Email' => $group->organization->email,
-        'Primary Phone' => $group->organization->phone_one,
-        'Secondary Phone' => $group->organization->phone_two,
+        'Email' => '<a href="mailto:'.$group->organization->email.'"><strong>'.$group->organization->email.'</strong></a>',
+        'Primary Phone' => '<a href="tel:'.$group->organization->phone_one.'"><strong>'.$group->organization->phone_one.'</strong></a>',
+        'Secondary Phone' => '<a href="tel:'.$group->organization->phone_two.'"><strong>'.$group->organization->phone_two.'</strong></a>',
         'Timezone' => $group->organization->timezone,
         'Address' => $group->organization->address.'<br />'.$group->organization->address_two.'<br />'.$group->organization->city.', '.$group->organization->state.' '.$group->organization->zip.'<br />'.country($group->organization->country_code),
         'Description' => $group->organization->description,
@@ -71,7 +71,8 @@
         </div>
         <delete-form url="campaigns/{{ $group->campaign_id }}/groups/{{ $group->uuid }}" 
                         redirect="/admin/campaigns/{{ $group->campaign_id }}/groups"
-                        label="Enter the group name to delete it"
+                        label="Enter the group name to remove it"
+                        button="Remove"
                         match-value="{{ $group->organization->name }}">
         </delete-form>
     @endslot

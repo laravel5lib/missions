@@ -20,12 +20,12 @@
             <div class="col-sm-4 text-right hidden-xs">
                 <hr class="divider inv">
                 <hr class="divider inv sm">
-                <a href="{{ url($trip->campaign->slug->url.'/trips') }}" class="btn btn-default">
+                <a href="{{ url($trip->campaign->slug->url.'/teams/'.$trip->group_id.'/trips') }}" class="btn btn-link">
                     <i class="fa fa-chevron-left icon-left"></i> More Options
                 </a>
             </div>
             <div class="col-xs-12 text-center visible-xs">
-                <a href="{{ url($trip->campaign->slug->url.'/trips') }}" class="btn btn-default">
+                <a href="{{ url($trip->campaign->slug->url.'/teams/'.$trip->group_id.'/trips') }}" class="btn btn-link">
                     <i class="fa fa-chevron-left icon-left"></i> More Options
                 </a>
                 <hr class="divider inv">
@@ -39,7 +39,7 @@
     <div class="row">
         <div class="visible-xs">
             <div class="col-xs-12 col-sm-7 col-md-7 col-lg-8 text-center">
-                <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseDetails" aria-expanded="false" aria-controls="collapseDetails">Read Details</a>
+                <a class="lead text-primary" role="button" data-toggle="collapse" href="#collapseDetails" aria-expanded="false" aria-controls="collapseDetails">Read Details...</a>
                 <hr class="divider inv lg">
             </div>
             <div id="collapseDetails" class="collapse">
@@ -84,6 +84,9 @@
                     @endunless
 
                     <hr class="divider lg">
+                    <img src="{{ image($trip->campaign->getAvatar()->source) }}" class="img-responsive">
+                    <p class="text-muted text-center"><em>{{ $trip->campaign->name }}</em></p>
+                    <hr class="divider lg">
                     <h6 class="text-center text-uppercase small text-muted">Type</h6>
                     <h4 class="text-uppercase text-center">
                         {{ $trip->type }} Trip
@@ -109,7 +112,7 @@
                     </h6>
                     <hr class="divider lg">
                     <h6 class="text-center text-uppercase small text-muted">Starts At</h6>
-                    <h4 class="text-center">${{  number_format($trip->startingCostInDollars(), 2, '.', ',') }}</h4>
+                    <h4 class="text-center">${{  number_format($trip->starting_cost, 2, '.', ',') }}</h4>
             	</div>
             </div>
             @if($trip->requirements->count())

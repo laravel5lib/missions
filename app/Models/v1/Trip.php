@@ -214,6 +214,12 @@ class Trip extends Model
                     ->where('published_at', '>', Carbon::now());
     }
 
+    public function scopePublished($query)
+    {
+        return $query->whereNotNull('published_at')
+            ->whereDate('published_at', '<=', now());
+    }
+
     public function scopeDraft($query)
     {
         return $query->whereNull('published_at');

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Requests;
+use App\Models\v1\Group;
+use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Artesaos\SEOTools\Traits\SEOTools;
@@ -33,18 +35,27 @@ class CampaignsController extends Controller
         return view('site.campaigns.show', compact('campaign'));
     }
 
-    public function trips($slug)
+    public function teams($slug)
     {
-        try {
-            $campaign = $this->api->get('campaigns/' . $slug);
-        } catch (Dingo\Api\Exception\InternalHttpException $e) {
-            $response = $e->getResponse();
+        $campaign = Campaign::whereHas('slug', function ($query) use ($slug) {
+            return $query->where('url', $slug);
+        })->firstOrFail();
 
-            return $response;
-        }
+         $this->seo()->setTitle($campaign->name . ' Teams');
 
-         $this->seo()->setTitle($campaign->name . ' Trip Options');
+        return view('site.campaigns.teams.index', compact('campaign'));
+    }
 
-        return view('site.campaigns.trips.index', compact('campaign'));
+    public function trips($slug, $teamId)
+    {
+        $campaign = Campaign::whereHas('slug', function ($query) use ($slug) {
+            return $query->where('url', $slug);
+        })->firstOrFail();
+
+        $group = Group::findOrFail($teamId);
+
+        $this->seo()->setTitle($campaign->name . ' Trip Options');
+
+        return view('site.campaigns.trips.index', compact('campaign', 'group'));
     }
 }

@@ -30,7 +30,9 @@ class Trip extends TripModel
                 Filter::exact('campaign_id'), 
                 Filter::exact('type'),
                 Filter::scope('current'),
-                Filter::scope('past')
+                Filter::scope('past'),
+                Filter::scope('public'),
+                Filter::scope('published')
             )
             ->allowedIncludes(['group', 'priceables'])
             ->withCount('reservations');

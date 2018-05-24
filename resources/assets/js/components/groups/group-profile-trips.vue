@@ -1,18 +1,32 @@
 <template>
 <div>
+    <fetch-json url="/trips" :parameters="{
+        'filter': {
+            'group_id': id,
+            'current': true,
+            'public': true,
+            'published': true
+        }
+    }" v-cloak>
+        <div slot-scope="{ json: trips, loading, pagination, changePage }">
+            
+        </div>
+    </fetch-json>
+
+
     <spinner ref="spinner" global size="sm" text="Loading"></spinner>
     <div class="row">
         <p v-if="trips.length < 1" class="text-center text-muted">
             This group does not have any trips yet. Please check back soon!
         </p>
-        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="trip in trips" style="min-height: 500px;">
+        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="trip in trips" :key="trip.id" style="min-height: 500px;">
             <div class="panel panel-default">
                 <div class="panel-heading" :class="'panel-' + trip.type">
                     <h5 class="text-uppercase text-center">{{ trip.type|capitalize }}</h5>
                 </div>
                 <div class="panel-body text-center">
                     <p class="badge">{{ trip.status|capitalize }}</p><br>
-                    <h4>{{ trip.campaign.data.name }}</h4>
+                    <!-- <h4>{{ trip.campaign.data.name }}</h4> -->
                     <p class="small">{{ trip.country_name }}</p>
                     <label>Travel Dates</label>
                     <p class="small">{{ trip.started_at|moment('MMMM DD', false, true) }} - {{ trip.ended_at|moment('LL', false, true) }}</p>
@@ -38,7 +52,7 @@
         data(){
             return{
                 trips:[],
-                resource: this.$resource('trips?include=campaign&status=current&onlyPublished=true&onlyPublic=true&groups[]=' + this.id)
+                resource: this.$resource('trips?status=current&onlyPublished=true&onlyPublic=true&groups[]=' + this.id)
             }
         },
         methods: {

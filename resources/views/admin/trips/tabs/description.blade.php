@@ -4,10 +4,10 @@
     @endslot
     @slot('body')
         <label>Public Page</label>
-        @if($trip->isPublished())
+        @if(optional($trip->published_at)->isPast())
             <pre>{{ url('/trips/'.$trip->id) }}</pre>  
         @else
-            <pre>{{ url('/trips/'.$trip->id) .'(unpublished' }}</s></pre>  
+            <pre>{{ url('/trips/'.$trip->id) .'(unpublished)' }}</s></pre>  
         @endif
         @if($trip->public)
             <label>Registration Form</label>
@@ -22,12 +22,15 @@
         <h5>Manage Public Page</h5>
     @endslot
     @slot('body')
-        <ajax-form method="put" action="/trips/{{ $trip->id }}">
-            <template slot-scope="props">
+        <ajax-form method="put" action="/trips/{{ $trip->id }}" :initial="{{ json_encode([
+            'published_at' => $trip->published_at ? $trip->published_at->toDateTimeString() : null,
+            'public' => $trip->public,
+            'description' => $trip->description
+        ])}}">
+            <template slot-scope="{ form }">
                 <div class="row">
                     <div class="col-sm-6">
-                        <input-datetime name="published_at" 
-                                        value="{{ $trip->published_at ? $trip->published_at->toDateTimeString() : null }}">
+                        <input-datetime name="published_at" v-model="form.published_at">
                             <label slot="label">Publish (optional)</label>
                             <span class="help-block" slot="help-text">
                                 Set the date and time this page should be available to the public. Leave blank to keep private.
@@ -36,7 +39,7 @@
                     </div>
                     <div class="col-sm-6">
                         <label>Registration Form</label>
-                        <input-checkbox name="public" :value="{{ $trip->public }}">
+                        <input-checkbox name="public" v-model="form.public">
                             <span slot="label">Allow public access</span>
                         </input-checkbox>
                     </div>
@@ -45,7 +48,7 @@
                     <div class="col-xs-12">
                         <input-markdown name="description" 
                                         placeholder="Enter page content here..." 
-                                        value="{{ $trip->description }}">
+                                        v-model="form.description">
                             <label slot="label">Page Content</label>
                             <span class="help-block" slot="help-text">
                                 Use "Markdown" to format text.

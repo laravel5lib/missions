@@ -1,22 +1,19 @@
 <template>
     <div class="form-group" :class="{'has-error' : $parent.form.errors.has(name)}"> 
-        <div class="col-xs-12">
-            <slot name="label"></slot>
-            <textarea class="form-control"
-                v-autosize="content" 
-                v-model="content"
-                :name="name"
-                :value="value"
-                :placeholder="placeholder"
-                :rows="rows"
-                v-html="descriptionHTML">
-            </textarea>
-            <span class="help-block" 
-                    v-text="$parent.form.errors.get(name)" 
-                    v-if="$parent.form.errors.has(name)">
-            </span>
-            <slot name="help-text" v-if="!$parent.form.errors.has(name)"></slot>
-        </div>
+        <slot name="label"></slot>
+        <textarea class="form-control"
+            v-autosize="content" 
+            @input="updateValue($event.target.value)"
+            :name="name"
+            :value="value"
+            :placeholder="placeholder"
+            :rows="rows">
+        </textarea>
+        <span class="help-block" 
+                v-text="$parent.form.errors.get(name)" 
+                v-if="$parent.form.errors.has(name)">
+        </span>
+        <slot name="help-text" v-if="!$parent.form.errors.has(name)"></slot>
     </div>
 </template>
 <script>
@@ -43,39 +40,12 @@ export default {
         }
     },
 
-    data() {
-        return {
-            content: null,
-        }
-    },
-
-    computed: {
-        descriptionHTML() {
-            return this.content;
-        }
-    },
-
-    watch: {
-        'descriptionHTML'(value) {
-            this.$parent.form[this.name] = value;
-        }
-    },
-
     methods: {
-        marked: marked
-    },
-
-    mounted() {
-        this.$parent.form[this.name] = this.value;
-        this.$parent.form.set(this.name, this.value);
-
-        if (this.value) {
-            this.content = this.value;
+        marked: marked,
+        updateValue(value) {
+            this.$emit('input', value);
+            this.$parent.form ? this.$parent.form.errors.clear(this.name) : null;
         }
-
-        this.$root.$on('form:reset', () => {
-            this.content = null;
-        });
     }
 }
 </script>

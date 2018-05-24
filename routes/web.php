@@ -158,7 +158,9 @@ $this->get('/teams/request', 'GroupsController@request');
 $this->get('/fundraisers/{id}', 'FundraisersController@show');
 $this->get('/{slug}/signup', 'GroupsController@signup')
      ->where('sponsor_slug', '^(?!api).*$');
-$this->get('/{slug}/trips', 'CampaignsController@trips')
+$this->get('/{slug}/teams', 'CampaignsController@teams')
+     ->where('sponsor_slug', '^(?!api).*$');
+$this->get('/{slug}/teams/{teamId}/trips', 'CampaignsController@trips')
      ->where('sponsor_slug', '^(?!api).*$');
 
 $this->get('/dashboard/fundraisers/{fundraiser}', function($fundraiser) {

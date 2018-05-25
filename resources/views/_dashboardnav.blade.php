@@ -1,17 +1,40 @@
 <div class="navbar navbar-default" style="padding-left: 0; border-bottom: 1px solid #eee;">
   <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3 col-sm-6 col-xs-6">
 
-        <a href="{{ url('/admin') }}" class="navbar-brand visible-xs">
+        <a href="{{ url('/dashboard') }}" class="navbar-brand visible-xs">
           <img class="db-brand-xs" src="/images/mm-icon-red.png" alt="MM">
         </a>
 
         <div class="navbar-header hidden-xs">
-          <a class="navbar-brand" href="{{ url('/admin') }}">
+          <a class="navbar-brand" href="{{ url('/dashboard') }}">
             <img src="{{ asset('images/mm-logo-horiz.png') }}" alt="Missions.Me">
           </a>
         </div>
+      </div>
 
+        <div class="col-md-6 hidden-xs hidden-sm" style="text-align: center">
+          <div class="nav navbar-nav navbar-center" style="float: none; display:inline-block; vertical-align: middle;">
+            <li class="{{ request()->segment(2) == 'reservations' ? 'active' : '' }}">
+              <a href="/dashboard/reservations">My Trip</a>
+            </li>
+            <li class="{{ request()->segment(2) == 'records' ? 'active' : '' }}">
+              <a href="/dashboard/records/passports">My Documents</a>
+            </li>
 
+            @if(auth()->user()->managing()->count())
+            <li class="{{ request()->segment(2) == 'groups' ? 'active' : '' }}">
+              <a href="/dashboard/groups">My Team</a>
+            </li>
+            <li class="{{ request()->segment(2) == 'reports' ? 'active' : '' }}">
+              <a href="/dashboard/reports">My Reports</a>
+            </li>
+            @endif
+          </div>
+        </div>
+
+      <div class="col-md-3 col-sm-6 col-xs-6">
         <ul class="nav navbar-nav navbar-right dropdown" style="margin-left:75px;">
 
           @if(auth()->check())
@@ -20,7 +43,7 @@
                 <img class="img-xs img-circle av-left"
                     src="{{ image(auth()->user()->getAvatar()->source . '?w=100') }}"
                     alt="{{ auth()->user()->name }}">
-                {{ auth()->user()->name }} <i class="fa fa-angle-down"></i>
+                <span class="hidden-md">{{ auth()->user()->name }}</span> <i class="fa fa-angle-down"></i>
               </a>
             </li>
             <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="userMenu">
@@ -76,6 +99,7 @@
           <top-nav managing="{{ (auth()->check() && auth()->user()->managing()->count()) or 0 }}" fundraiser="{{ request()->route()->named('fundraiser') or 0 }}"></top-nav>
 
         </ul><!-- /.navbar-right -->
-
+      </div>
+    </div>
   </div><!-- end container -->
 </div><!-- end navbar -->

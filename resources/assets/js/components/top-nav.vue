@@ -15,27 +15,27 @@
 				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding:10px 40px;" href="/login">Login</a></li>
 				<li style="display:inline;" v-if="!fundraiser=='1' && !auth"><a style="display:inline-block;padding: 10px 34px;border-left: 1px solid #242424;" href="/give-a-donation">Donate</a></li>
 				<template v-if="auth">
-					<li class=""><a href="/dashboard/settings" id="menu-profile-link"><i class="fa fa-user-circle" style="margin-right:7px;"></i>Profile Settings</a></li>
-					<li><a href="/dashboard"><i class="fa fa-tachometer" style="margin-right:7px;"></i> Dashboard</a></li>
-					<li><a href="/dashboard/reservations"><i class="fa fa-ticket" style="margin-right:7px;"></i> Reservations</a></li>
-					<li><a href="/dashboard/records"><i class="fa fa-archive" style="margin-right:7px;"></i> Records</a></li>
-					<li v-if="normalizedManaging"><a href="/dashboard/groups"><i class="fa fa-users" style="margin-right:7px;"></i> Groups</a></li>
-					<!-- <li><a href="/dashboard/projects"><i class="fa fa-tint" style="margin-left:3px;margin-right:10px;"></i> Projects</a></li> -->
-					<li v-if="admin" class=""><a href="/admin"><i class="fa fa-cogs" style="margin-right:7px;"></i> Admin</a></li>
+					<li class=""><a href="/dashboard/settings" id="menu-profile-link">Profile Settings</a></li>
+					<li><a href="/dashboard">Dashboard</a></li>
+					<li><a href="/dashboard/reservations">My Trip</a></li>
+					<li><a href="/dashboard/records">My Travel Documents</a></li>
+					<li v-if="normalizedManaging"><a href="/dashboard/groups">My Team</a></li>
+					<li v-if="normalizedManaging"><a href="/dashboard/reports">My Reports</a></li>
+					<li v-if="admin" class=""><a href="/admin">Admin Dashboard</a></li>
 					<li class=""><a @click="logout"><i class="fa fa-sign-out"></i> Log Out</a></li>
 				</template>
 
 				<template v-if="isAdmin()">
 					<li class="navlabel">Admin</li>
-					<li><a href="/admin"><i class="fa fa-tachometer" style="margin-right:7px;"></i> Dashboard</a></li>
-					<li><a href="/admin/campaigns"><i class="fa fa-globe" style="margin-left:1px;margin-right:7px;"></i> Campaigns</a></li>
-					<li><a href="/admin/reservations/current"><i class="fa fa-ticket" style="margin-right:6px;"></i> Reservations</a></li>
-					<li><a href="/admin/groups"><i class="fa fa-users" style="margin-right:5px;"></i> Groups</a></li>
-					<li><a href="/admin/users"><i class="fa fa-user" style="margin-left:1px;margin-right:8px;"></i> Users</a></li>
-					<li><a href="/admin/uploads"><i class="fa fa-picture-o" style="margin-right:5px;"></i> Uploads</a></li>
-					<li><a href="/admin/funds"><i class="fa fa-usd" style="margin-left:2px;margin-right:9px;"></i> Financials</a></li>
-					<li><a href="/admin/causes"><i class="fa fa-tint" style="margin-left:2px;margin-right:9px;"></i> Projects</a></li>
-					<li><a href="/admin/records"><i class="fa fa-archive" style="margin-right:6px;"></i> Records</a></li>
+					<li><a href="/admin">Dashboard</a></li>
+					<li><a href="/admin/reservations/current">Reservations</a></li>
+					<li><a href="/admin/campaigns">Trips</a></li>
+					<li><a href="/admin/users">People</a></li>
+					<li><a href="/admin/transactions">Donations</a></li>
+					<li><a href="/admin/groups">Organizations</a></li>
+					<li><a href="/admin/causes">Projects</a></li>
+					<li><a href="/admin/records">Travel Documents</a></li>
+					<li><a href="/admin/reports">Reports</a></li>
 				</template>
 				<!-- Get Started -->
 				<li class="navlabel">Get Started</li>

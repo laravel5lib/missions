@@ -2,20 +2,14 @@
 
 @section('content')
 
-<div class="container-fluid">
-
-    <div class="row">
-        <div class="col-sm-12">
-            <hr class="divider inv">
-            @breadcrumbs(['links' => [
+@breadcrumbs(['links' => [
                 'dashboard/groups' => 'Organizations',
                 'active' => $group->name
             ]])
             @endbreadcrumbs
-            <hr class="divider">
-            <hr class="divider inv">
-        </div>
-    </div>
+
+<div class="container-fluid">
+    <hr class="divider inv">
 
     <div class="row">
         <div class="col-sm-2">

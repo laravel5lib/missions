@@ -1,63 +1,86 @@
-@extends('admin.layouts.default')
+@extends('layouts.admin')
 
 @section('content')
 <hr class="divider inv lg">
 
 <div class="container">
-  <div class="row">
-    <div class="col-xs-12 col-md-10">
-      <h4>Current Numbers</h4>
-      <hr class="divider lg">
-      <div class="row">
-        @foreach($campaigns as $campaign)
-          <div class="col-lg-3 col-sm-6">
-            <div class="circle-tile ">
-              <a href="admin/campaigns/{{ $campaign->id }}"><div class="circle-tile-heading"><img class="img-responsive img-circle" src="{{ image($campaign->getAvatar()->source.'?w=200&h=200&fit=stretch') }}"></div></a>
-              <div class="circle-tile-content">
-                <div class="circle-tile-description">Reservations</div>
-                <div class="circle-tile-name">{{ $campaign->name }}</div>
-                <div class="circle-tile-number">{{ $campaign->reservationsCount() }}</div>
-                <a class="circle-tile-footer" href="admin/reservations/current?campaign={{ $campaign->id }}">View All</a>
-              </div>
+    <h1>Admin Dashboard</h1>
+    <p class="lead">Welcome back, <strong>{{ auth()->user()->name }}</strong></p>
+    <div class="row">
+        <div class="col-sm-6 col-xs-12">
+            <div class="panel panel-default" style="border-style: solid; border-width: 4px 0px 0px; border-color: rgb(246, 50, 62);">
+                <div class="panel-body text-center"><hr class="divider inv"> 
+                    <!-- <i class="fa fa-ticket fa-5x"></i>  -->
+                    <h1 class="text-primary text-oswald font-hero">{{ number_format($reservations, 0, '', ',') }}</h1>
+                    <h6 class="text-uppercase">Reservations</h6> 
+                    <a href="{{ url('/admin/reservations') }}" class="btn btn-sm btn-primary-hollow">Manage</a>
+                    <hr class="divider inv">
+                </div>
             </div>
-          </div>
-        @endforeach 
-      </div>
-      <div class="row">
-        <hr class="divider inv">
-        <div class="col-xs-12">
-          <h4>Latest Records</h4>
-          <hr class="divider lg">
         </div>
-        <div class="col-md-12">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h5>Newest Reservations</h5>
+        <div class="col-sm-6 col-xs-12">
+            <div class="panel panel-default" style="border-style: solid; border-width: 4px 0px 0px; border-color: rgb(246, 50, 62);">
+                <div class="panel-body text-center"><hr class="divider inv"> 
+                    <!-- <i class="fa fa-ticket fa-5x"></i>  -->
+                    <h1 class="text-primary text-oswald font-hero">{{ number_format($campaigns, 0, '', ',') }}</h1>
+                    <h6 class="text-uppercase">Trips</h6> 
+                    <a href="{{ url('/admin/campaigns') }}" class="btn btn-sm btn-primary-hollow">Manage</a>
+                    <hr class="divider inv">
+                </div>
             </div>
-            <table class="table table-hover">
-              <tbody>
-              @foreach($reservations as $reservation)
-                <tr onclick="window.location.href = 'admin/reservations/{{ $reservation->id }}'" style="cursor: pointer;">
-                  <td style="padding:5px 15px;vertical-align:middle;font-size:12px;">{{ $reservation->given_names }}</td>
-                  <td style="padding:5px 15px;vertical-align:middle;font-size:12px;">
-                    {{ $reservation->trip->campaign->name }}
-                    <br /><small class="text-muted">{{ $reservation->trip->group->name }}</small>
-                  </td>
-                  <td style="padding:5px 15px;vertical-align:middle;line-height:12px;">
-                    <small class="text-muted" style="font-size:10px;">{{ carbon($reservation->created_at)->diffForHumans() }}</small>
-                  </td>
-                </tr>
-              @endforeach
-              </tbody>
-            </table>
-            <div class="panel-footer text-center" style="padding:10px;">
-              <a class="small" style="color:#bcbcbc;" href="{{ url('/admin/reservations/current') }}">View All Reservations</a>
-            </div>
-          </div>
         </div>
-
-      </div>
+        <div class="col-sm-6 col-xs-12">
+            <div class="panel panel-default" style="border-style: solid; border-width: 4px 0px 0px; border-color: rgb(246, 50, 62);">
+                <div class="panel-body text-center"><hr class="divider inv"> 
+                    <!-- <i class="fa fa-ticket fa-5x"></i>  -->
+                    <h1 class="text-primary text-oswald font-hero">{{ number_format($users, 0, '', ',') }}</h1>
+                    <h6 class="text-uppercase">Users</h6> 
+                    <a href="{{ url('/admin/users') }}" class="btn btn-sm btn-primary-hollow">Manage</a>
+                    <hr class="divider inv">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xs-12">
+            <div class="panel panel-default" style="border-style: solid; border-width: 4px 0px 0px; border-color: rgb(246, 50, 62);">
+                <div class="panel-body text-center"><hr class="divider inv"> 
+                    <!-- <i class="fa fa-ticket fa-5x"></i>  -->
+                    <h1 class="text-primary text-oswald font-hero">{{ number_format($donors, 0, '', ',') }}</h1>
+                    <h6 class="text-uppercase">Donors</h6> 
+                    <a href="{{ url('/admin/donors') }}" class="btn btn-sm btn-primary-hollow">Manage</a>
+                    <hr class="divider inv">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xs-12">
+            <div class="panel panel-default" style="border-style: solid; border-width: 4px 0px 0px; border-color: rgb(246, 50, 62);">
+                <div class="panel-body text-center"><hr class="divider inv"> 
+                    <!-- <i class="fa fa-ticket fa-5x"></i>  -->
+                    <h1 class="text-primary text-oswald font-hero">{{ number_format($donations, 0, '', ',') }}</h1>
+                    <h6 class="text-uppercase">Donations</h6> 
+                    <a href="{{ url('/admin/transactions') }}" class="btn btn-sm btn-primary-hollow">Manage</a>
+                    <hr class="divider inv">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xs-12">
+            <div class="panel panel-default" style="border-style: solid; border-width: 4px 0px 0px; border-color: rgb(246, 50, 62);">
+                <div class="panel-body text-center"><hr class="divider inv"> 
+                    <!-- <i class="fa fa-ticket fa-5x"></i>  -->
+                    <h1 class="text-primary text-oswald font-hero">{{ number_format($groups, 0, '', ',') }}</h1>
+                    <h6 class="text-uppercase">Organizations</h6> 
+                    <a href="{{ url('/admin/organizations') }}" class="btn btn-sm btn-primary-hollow">Manage</a>
+                    <hr class="divider inv">
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+    <hr class="divider xlg">
+    <div class="row">
+        <div class="col-sm-6 col-xs-12">
+            <div class="panel panel-default" style="border-style: solid; border-width: 4px 0px 0px; border-color: rgb(246, 50, 62);">
+            <div class="panel-body text-center"><hr class="divider inv"> <img src="/images/coordinators/docs-icon.png" width="50px" height="50px"> <h6 class="text-uppercase">Reports</h6> <p class="small hidden-xs">Download export files you have generated.</p> <a href="{{ url('/admin/reports') }}" class="btn btn-sm btn-primary-hollow">View</a> <hr class="divider inv"></div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection

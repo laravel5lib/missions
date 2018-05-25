@@ -16,7 +16,7 @@
         'Registration Closes' => ($trip->closed_at ? $trip->closed_at->format('F d, Y h:i a') : null),
         'Roles Available' => function() use($trip) {
             foreach($trip->team_roles as $role) {
-                echo '<span class="label label-default">'.teamRole($role).'</span>';
+                echo '<span class="label label-default">'.teamRole($role).'</span> ';
             }
         }
     ]])

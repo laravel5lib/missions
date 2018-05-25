@@ -44,10 +44,13 @@ class ItemizedPricing
             ];
 
             if ($price->cost->type === 'incremental') {
-                // grab the latest payment for this price
+                // grab the latest upcoming payment for this price
                 $payment = $price->payments()
                     ->whereDate('due_at', '>=', now())
                     ->first();
+
+                // if no payment is upcoming, then grab the last one
+                $payment ?? $payment = $price->payments()->orderBy('due_at')->get()->last();
                 
                 // if last iteration then add these keys
                 if ($i == $len - 1) {

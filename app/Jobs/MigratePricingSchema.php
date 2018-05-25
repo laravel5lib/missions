@@ -2,8 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Models\v1\Trip;
+use App\Models\v1\Campaign;
 use Illuminate\Bus\Queueable;
 use App\Models\v1\CampaignGroup;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,16 +16,16 @@ class MigratePricingSchema implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $reservation;
+    protected $trip;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Reservation $reservation)
+    public function __construct(Trip $trip)
     {
-        $this->reservation = $reservation;
+        $this->trip = $trip;
     }
 
     /**
@@ -32,41 +35,43 @@ class MigratePricingSchema implements ShouldQueue
      */
     public function handle()
     {
-        $costs = $reservation->costs;
+        $costs = DB::table('costs')
+            ->where('cost_assignable_id', $this->trip->id)
+            ->where('cost_assignable_type', 'trips')
+            ->get();
 
         // create or find campaign costs
-        $campaign = $reservation->trip->campaign;
+        $campaign = Campaign::where('id', $this->trip->campaign_id)->withTrashed()->firstOrFail();
         foreach ($costs as $cost) 
         {
             $campaign->costs()->firstOrCreate([
-                'name' => $cost->name
+                'name' => $cost->name,
+                'type' => $this->getCostType($cost)
             ], [
-                'type' => $cost->type,
                 'description' => $cost->description
             ]);
         }
 
         // add group to campaign
-        $group = CampaignGroup::create([
-            'campaign_id' => $campaign->id,
-            'group_id' => $reservation->trip->group_id,
+        $group = CampaignGroup::firstOrCreate([
+            'campaign_id' => $this->trip->campaign_id,
+            'group_id' => $this->trip->group_id,
             'status_id' => 1
         ]);
 
-        // add pricing to trip
-        $trip = $reservation->trip;
+        // add pricing to group and trip
         foreach ($costs as $cost) 
         {
             $campaignCost = $campaign->costs()->where('name', $cost->name)->first();
 
             $price = [
                 'cost_id' => $campaignCost->id,
-                'amount' => $cost->amount,
+                'amount' => $cost->amount/100,
                 'active_at' => $cost->active_at,
             ];
 
             if ($cost->type === 'incremental') {
-                $price['payments'] = $cost->payments->map(function($payment) {
+                $price['payments'] = DB::table('payments')->where('cost_id', $cost->id)->get()->map(function($payment) {
                     return [
                         'percentage_due' => $payment->percent_owed, // last one needs to be 100%
                         'due_at' => $payment->due_at,
@@ -75,21 +80,66 @@ class MigratePricingSchema implements ShouldQueue
                 })->all();
             }
 
-            $trip->addPrice($price);
+            $campaignGroup = CampaignGroup::where('group_id', $this->trip->group_id)
+                ->where('campaign_id', $this->trip->campaign_id)
+                ->firstOrFail();
+
+            $groupPrice = $campaignGroup->prices()->where('cost_id', $price['cost_id'])->first();
+
+            // if price doesn't already exist, add it to the group
+            if ( ! $groupPrice) {
+                $groupPrice = $campaignGroup->prices()->create([
+                    'cost_id' => $price['cost_id'],
+                    'amount' => $price['amount'],
+                    'active_at' => $price['active_at']
+                ]);
+
+                if (isset($price['payments']) && $price['payments']) {
+                    $groupPrice->syncPayments($price['payments']);
+                }
+            }
+
+            // if price amount doesn't match the group's amount, then add it as a custom price
+            $groupPrice->amount === $price['amount'] 
+                ? $this->trip->attachPriceToModel($groupPrice->id) 
+                : $this->trip->addPrice($price);
         }
 
-        // add pricing to reservation
-        foreach ($costs as $cost) 
+        // add pricing to reservations
+        foreach ($this->trip->reservations as $reservation) 
         {
-            $price = $trip->priceables()->whereHas('cost', function ($q) use ($cost) {
-                return $q->where('name', $cost->name);
-            })->first();
+            $costs = DB::table('reservation_costs')
+                ->join('costs', 'costs.id', '=', 'reservation_costs.cost_id')
+                ->where('reservation_costs.reservation_id', $reservation->id)
+                ->get();
 
-            $reservation->attachPriceToModel($price->id);
+            foreach($costs as $cost) 
+            {
+                $price = $this->trip->priceables()->whereHas('cost', function ($q) use ($cost) {
+                    return $q->where('name', $cost->name);
+                })->first();
 
-            if ($cost->pivot->locked) {
-                $reservation->lockPrice($price);
+                if (!$price) break;
+
+                $reservation->attachPriceToModel($price->id);
+
+                if ($cost->locked) {
+                    $reservation->lockPrice($price);
+                }
             }
         }
+    }
+
+    private function getCostType($cost)
+    {
+        if ($cost->name === 'Deposit') {
+            return 'upfront';
+        }
+
+        if ($cost->name === 'Late Registration') {
+            return 'fee';
+        }
+        
+        return $cost->type;
     }
 }

@@ -107,22 +107,6 @@ class CampaignCostTest extends TestCase
     }
 
     /** @test */
-    public function user_without_permission_cannot_add_new_costs()
-    {
-        Passport::actingAs(factory(User::class)->create());
-
-        $campaign = factory(Campaign::class)->create();
-
-        $response = $this->json('POST', "/api/campaigns/{$campaign->id }/costs", [
-            'name' => 'General Registration',
-            'type' => 'incremental',
-            'description' => 'test'
-        ]);
-
-        $response->assertStatus(403);
-    }
-
-    /** @test */
     public function validates_request_to_add_new_cost_to_campaign()
     {
         $this->setupAdminUser();
@@ -196,8 +180,7 @@ class CampaignCostTest extends TestCase
         ]);
 
         $response = $this->json('PUT', "/api/campaigns/{$campaign->id }/costs/{$cost->id}", [
-            'name' => 'General Registration Updated',
-            'type' => 'static'
+            'name' => 'General Registration Updated'
         ]);
 
         $response->assertStatus(200);
@@ -205,7 +188,7 @@ class CampaignCostTest extends TestCase
             'data' => [
                 'id' => $cost->id,
                 'name' => 'General Registration Updated',
-                'type' => 'incremental'
+                'type' => 'Registration'
             ]
         ]);
     }

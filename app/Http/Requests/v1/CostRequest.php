@@ -14,11 +14,7 @@ class CostRequest extends FormRequest
      */
     public function authorize()
     {
-        if ($this->isMethod('put')) {
-            return auth()->user()->can('edit_costs');
-        }
-
-        return auth()->user()->can('add_costs');
+        return true;
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 
-use App\Trip;
 use App\Models\v1\Cost;
+use App\Models\v1\Trip;
 
 /**
  * Generic Price (trip default)

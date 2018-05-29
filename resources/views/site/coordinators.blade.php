@@ -76,7 +76,7 @@ $('.launch-modal').on('click', function(e){
                       <img src="/images/coordinators/docs-icon.png" width="50px" height="50px">
                       <h6 class="text-uppercase">1N1D19 Launch Media</h6>
                       <p class="small hidden-xs">Including logos, graphics, posters, signage and more</p>
-                      <a href="https://www.dropbox.com/sh/9n53q06ncr70ynw/AAC1wkufiUJwyttoq3bXNbO7a?dl=0&preview=1N1D19-Promo-Pack-4-18.zip" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <a href="https://www.dropbox.com/s/f9ughy785agop7j/1N1D19-promo-pack.zip?dl=1" class="btn btn-sm btn-primary-hollow">Download</a>
                       <hr class="divider inv">
                     </div>
                   </div>
@@ -88,7 +88,7 @@ $('.launch-modal').on('click', function(e){
                       <img src="/images/coordinators/vid-icon.png" width="50px" height="50px">
                       <h6 class="text-uppercase">1N1D19 Promo Video</h6>
                       <p class="small hidden-xs">Great for assisting in delivering the full vision on your Launch Day</p>
-                      <a href="https://www.dropbox.com/sh/9n53q06ncr70ynw/AAC1wkufiUJwyttoq3bXNbO7a?dl=0&preview=1N1D19-Full-Promo.zip" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <a href="https://www.dropbox.com/s/hasb44papw6kz3l/1N1D19-Full-Promo.zip?dl=1" class="btn btn-sm btn-primary-hollow">Download</a>
                       <hr class="divider inv">
                     </div>
                   </div>
@@ -100,7 +100,7 @@ $('.launch-modal').on('click', function(e){
                       <img src="/images/coordinators/vid-icon.png" width="50px" height="50px">
                       <h6 class="text-uppercase">1N1D19 Teaser Video</h6>
                       <p class="small hidden-xs">Great for announcements in the weeks prior to launch</p>
-                      <a href="https://www.dropbox.com/sh/9n53q06ncr70ynw/AAC1wkufiUJwyttoq3bXNbO7a?dl=0&preview=1N1D19-Teaser-16x9.zip" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <a href="https://www.dropbox.com/s/pgetlm50v4kiw56/1N1D19-Teaser.zip?dl=1" class="btn btn-sm btn-primary-hollow">Download</a>
                       <hr class="divider inv">
                     </div>
                   </div>
@@ -114,7 +114,7 @@ $('.launch-modal').on('click', function(e){
                       <img src="/images/coordinators/vid-icon.png" width="50px" height="50px">
                       <h6 class="text-uppercase">1N1D19 Short Trailer</h6>
                       <p class="small hidden-xs">Great for announcements in the weeks following launch</p>
-                      <a href="https://www.dropbox.com/sh/9n53q06ncr70ynw/AAC1wkufiUJwyttoq3bXNbO7a?dl=0&preview=1N1D19-Short-Promo.zip" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <a href="https://www.dropbox.com/s/0ayszte3zexos9i/1N1D19-Short-Trailer.zip?dl=1" class="btn btn-sm btn-primary-hollow">Download</a>
                       <hr class="divider inv">
                     </div>
                   </div>
@@ -126,7 +126,7 @@ $('.launch-modal').on('click', function(e){
                       <img src="/images/coordinators/cam-icon.png" width="50px" height="50px">
                       <h6 class="text-uppercase">1N1D19 Launch Capture</h6>
                       <p class="small hidden-xs">Instructions for your media team to capture your launch</p>
-                      <a href="https://www.dropbox.com/sh/9n53q06ncr70ynw/AAC1wkufiUJwyttoq3bXNbO7a?dl=0&preview=1N1D19-Launch-Media-Guide.pdf" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <a href="https://www.dropbox.com/s/swt4hp5ib409dg4/1N1D19-Launch-Media-Guide.pdf?dl=1" class="btn btn-sm btn-primary-hollow">Download</a>
                       <hr class="divider inv">
                     </div>
                   </div>
@@ -183,7 +183,8 @@ $('.launch-modal').on('click', function(e){
                 <div class="row">
                   <div class="col-md-4 col-md-offset-0 col-sm-12 col-sm-offset-0">
                     <ul class="list-unstyled">
-                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">May 23 at 4pm EST</h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;margin-bottom:0;" class="text-muted">May 23 at 4pm EST</h6>
+                        <p class="text-uppercase" style="font-size:10px;margin-left:35px;"><a href="https://vimeo.com/271571861/8270ebaa44" target="_blank">Watch Meeting</a></p></li>
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">June 20 at 4pm EST</h6></li>
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 class="text-primary" style="display:inline-block;">No meeting in July</h6></li>
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">August 15 at 4pm EST</h6></li>
@@ -193,9 +194,9 @@ $('.launch-modal').on('click', function(e){
                   <div class="col-md-4 col-md-offset-0 col-sm-12 col-sm-offset-0">
                     <ul class="list-unstyled">
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">October 17 at 4pm EST</h6></li>
-                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">November 14 at 4pm EST <span style="vertical-align: top;font-size: 10px;" class="badge">SD</span></h6></li>
-                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">December 12 at 4pm EST <span style="vertical-align: top;font-size: 10px;" class="badge">SD</span></h6></li>
-                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">January 9 at 4pm EST <span style="vertical-align: top;font-size: 10px;" class="badge">SD</span></h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">November 14 at 4pm EST</h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">December 12 at 4pm EST</h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">January 9 at 4pm EST</h6></li>
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">February 20 at 4pm EST</h6></li>
                     </ul>
                   </div>
@@ -204,12 +205,11 @@ $('.launch-modal').on('click', function(e){
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">March 20 at 4pm EST</h6></li>
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">April 17 at 4pm EST</h6></li>
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">May 15 at 4pm EST</h6></li>
-                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">June 5 at 4pm EST <span style="vertical-align: top;font-size: 10px;" class="badge">SD</span></h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">June 5 at 4pm EST</h6></li>
                     </ul>
                   </div>
                 </div><!-- end row -->
                 <p class="small text-italic">* Note, you’ll need to download the FREE Zoom application on a computer or mobile device to connect to the meeting. Please have this installed before tuning into your first meeting.</p>
-                <h6 style="display:inline-block;"><span style="vertical-align: top;font-size: 10px;" class="badge">SD</span> = Special Meeting Date</h6>
                 </div><!-- end panel-body -->
               </div><!-- end panel -->
             </div>

@@ -17,6 +17,7 @@
 @import "partials/donate-ye-layout"; /* Year End Donate Layout */
 @import "partials/interrupter-pop"; /* Interrupter Pop Up On Lower Right */
 @import "partials/storyof-layout"; /* The Story of 1Nation1Day Layout */
+@import "partials/1n1d19-layout"; /* 1Nation1Day 2019 Campaign Page Layout */
 
 /*
  * Variables...
@@ -189,6 +190,10 @@ p.large-line-height {
 }
 .panel-sports {
   background-color: $brand-sports !important;
+  color: #fff !important;
+}
+.panel-water {
+  background-color: $brand-water !important;
   color: #fff !important;
 }
 .panel-hero {
@@ -930,37 +935,6 @@ li.av-nav > a {
   color: #fff;
   background-color: $gray-base;
 }
-.onenation-vision {
-  color: #fff;
-  background: $gray-darker url(../../images/1n1d17/vision-bg.jpg) no-repeat center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  padding: 200px 0 200px;
-}
-.onenation-exp {
-  background: #fff url(../../images/1n1d17/experience-bg.jpg) no-repeat center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  padding: 200px 0 200px;
-}
-.onenation-header {
-  background: $gray-darker url(../../images/1n1d17/reveal-bg.jpg) no-repeat center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  padding: 150px 0 100px;
-  color: #f6323e;
-}
-img.onenation-logo {
-  width: 100%;
-  max-width: 500px;
-  margin: 50px 0 10px;
-}
 .india-vision {
   color: #fff;
   background: $gray-darker url(../../images/india/paperboard-bg.jpg) no-repeat center fixed;
@@ -1435,13 +1409,13 @@ a.btn-college-nav {
   left: 30%;
   right:30%;
       h3 {
-        font-size: 4em;
+        font-size: 3em;
       }
       h6 {
-        font-size: 1.2em;
+        font-size: 1em;
       }
       p {
-        font-size: 1.5em;
+        font-size: 1em;
       }
 }
 @media screen and (max-width: 991px) {
@@ -1455,7 +1429,7 @@ a.btn-college-nav {
         font-size: .8em;
       }
       p {
-        font-size: 1.2em;
+        font-size: .8em;
       }
   }
 }
@@ -1463,7 +1437,7 @@ a.btn-college-nav {
   .campaign-carousel .carousel-caption {
     padding-bottom: 15px;
     h3 {
-      font-size: 1.8em;
+      font-size: 1.6em;
     }
     h6 {
       font-size: .7em;

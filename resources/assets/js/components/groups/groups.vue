@@ -12,7 +12,7 @@
                     <div class="row">
                         <div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center">
                             <h2 class="text-primary">Team trips are what we do!</h2>
-                            <p>Missions.Me specializes in taking teams form around the world on life-changing missions experiences.  If you are interested in partnering with one of our missions trips, please fill out the form.  Missions.Me can provide your group with its own profile, URL and customized  trips created especially for your church or organization.</p>
+                            <p>Missions.Me specializes in taking teams from around the world on life-changing missions experiences.  If you are interested in partnering with one of our missions trips, please fill out the form.  Missions.Me can provide your group with its own profile, URL and customized  trips created especially for your church or organization.</p>
                             <hr class="divider inv">
                             <a class="btn btn-primary btn-lg" href="/teams/request">Take Your Church or Organization</a>
                         </div><!-- end col -->

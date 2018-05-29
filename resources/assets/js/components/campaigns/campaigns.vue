@@ -16,13 +16,10 @@
 			<h4>Current Trips</h4>
 			<hr class="divider">
 		</div>
-		<div class="col-xs-6 text-right">
-			<a v-if="campaigns.length > 3" @click="seeAll" class="btn btn-primary btn-sm">See All</a>
-		</div>
 	</div>
 	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
 		<spinner ref="spinner" global size="sm" text="Loading"></spinner>
-		<div class="col-xs-12 col-sm-6 col-md-4" v-for="campaign in limitBy(campaigns, campaignsLimit)" style="display:flex">
+		<div class="col-xs-12 col-sm-6 col-md-3" v-for="campaign in limitBy(campaigns, campaignsLimit)" style="display:flex">
 			<div class="panel panel-default">
 				<a class="hidden-xs hidden-sm" :href="campaign.page_url" role="button">
 					<img :src="campaign.avatar+'?w=400&h=400&fit=stretch'" :alt="campaign.name" class="img-responsive">
@@ -34,14 +31,17 @@
 						<h5 style="text-transform:capitalize;" class="text-primary">{{campaign.name}}</h5>
 					</a>
 					<h6 style="font-size:12px;">
-						{{campaign.started_at | moment('ll')}} -
-						{{campaign.ended_at | moment('ll')}}
+						{{campaign.started_at | mFormat('ll')}} -
+						{{campaign.ended_at | mFormat('ll')}}
 					</h6>
 					<hr class="divider lg"/>
 					<p style="font-size:12px;" class="small">{{campaign.description}}</p>
 				</div><!-- end panel-body -->
 			</div><!-- end panel -->
 		</div><!-- end col -->
+		<div class="col-xs-12 text-center">
+			<a v-if="campaigns.length > 8" @click="seeAll" class="btn btn-primary btn-sm">See All</a>
+		</div>
 	</div>
 </div>
 </template>
@@ -52,7 +52,7 @@
 		data(){
 			return {
 				campaigns: [],
-				campaignsLimit: 3,
+				campaignsLimit: 8,
 				resource: this.$resource('campaigns', { published: true, current: true})
 			}
 		},

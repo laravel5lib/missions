@@ -107,8 +107,8 @@
 							<em class="text-muted">Or</em>
 						</p>
 						<hr class="divider sm inv">
-						<a class="btn btn-sm btn-default-hollow" @click="previewModal = true">Choose an Image
-						</a>
+						<!-- <a class="btn btn-sm btn-default-hollow" @click="previewModal = true">Choose an Image
+						</a> -->
 					</div>
 				</div>
 			</template>

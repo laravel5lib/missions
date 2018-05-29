@@ -33,7 +33,7 @@ class TripPriceTest extends TestCase
             'meta'
         ]);
         $response->assertJson([
-            'meta' => ['total' => 3]
+            'meta' => ['total' => 2]
         ]);
     }
 
@@ -113,18 +113,23 @@ class TripPriceTest extends TestCase
 
         $response->assertJson([
             'data' => [
-                ['cost' => ['type' => 'incremental']],
+                ['cost' => ['type' => 'Registration']],
             ],
             'meta' => ['total' => 1]
         ]);
     }
 
     /** @test */
-    public function add_campaign_price_to_a_trip()
+    public function add_campaign_group_price_to_a_trip()
     {
         $campaign = $this->setupCampaignWithCosts();
+        $group = factory(CampaignGroup::class)->create(['campaign_id' => $campaign->id]);
+        $groupPrice = factory(Price::class)->create([
+            'model_id' => $group->uuid, 
+            'model_type' => 'campaign-groups'
+        ]);
         $trip = factory(Trip::class)->create(['campaign_id' => $campaign->id]);
-        $prices = $campaign->prices->toArray();
+        $prices = $group->prices->toArray();
 
         $response = $this->json('POST', "/api/trips/{$trip->id}/prices", [
             'price_id' => $prices[0]['uuid']
@@ -164,20 +169,18 @@ class TripPriceTest extends TestCase
     public function add_custom_price_to_a_trip()
     {
         $trip = factory(Trip::class)->create();
-        $cost = factory(Cost::class)->create();
+        $cost = factory(Cost::class)->create(['type' => 'static']);
 
         $response = $this->json('POST', "/api/trips/{$trip->id}/prices", [
             'cost_id' => $cost->id,
-            'amount' => 1500.00,
-            'active_at' => '01/01/2018'
+            'amount' => 1500.00
         ]);
 
         $response->assertStatus(201);
         $response->assertJsonStructure(['message']);
         $this->assertDatabaseHas('prices', [
             'cost_id' => $cost->id,
-            'amount' => 150000,
-            'active_at' => '2018-01-01 00:00:00'
+            'amount' => 150000
         ]);
         $this->assertDatabaseHas('priceables', [
             'priceable_id' => $trip->id,
@@ -343,7 +346,7 @@ class TripPriceTest extends TestCase
         $trip = factory(Trip::class)->create(['campaign_id' => $campaign->id]);
         $group = factory(CampaignGroup::class)->create(['campaign_id' => $campaign->id]);
         $groupPrice = factory(Price::class)->create([
-            'model_id' => $group->id, 
+            'model_id' => $group->uuid, 
             'model_type' => 'campaign-groups'
         ]);
         $tripPrice = factory(Price::class)->create([

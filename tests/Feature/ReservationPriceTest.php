@@ -27,13 +27,13 @@ class ReservationPriceTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 [
-                    'uuid', 'amount', 'active_at', 'cost'
+                    'id', 'amount', 'active_at', 'cost'
                 ]
             ],
             'meta'
         ]);
         $response->assertJson([
-            'meta' => ['total' => 4]
+            'meta' => ['total' => 3]
         ]);
     }
 
@@ -81,7 +81,7 @@ class ReservationPriceTest extends TestCase
     public function add_custom_price_to_reservation()
     {
         $reservation = factory(Reservation::class)->create();
-        $cost = factory(Cost::class)->create();
+        $cost = factory(Cost::class)->create(['type' => 'static']);
 
         $response = $this->json('POST', "/api/reservations/{$reservation->id}/prices", [
             'cost_id' => $cost->id,
@@ -159,7 +159,7 @@ class ReservationPriceTest extends TestCase
     public function updates_a_reservation_price()
     {
         $reservation = factory(Reservation::class)->create();
-        $cost = factory(Cost::class)->create();
+        $cost = factory(Cost::class)->create(['type' => 'static']);
         $reservation->addPrice([
             'cost_id' => $cost->id,
             'amount' => 2000.00

@@ -30,9 +30,9 @@ class PriceRequest extends FormRequest
     {
         $validator->after(function ($validator) {
 
-            // if (!$this->input('cost_id') and !$this->input('price_id')) {
-            //     return;
-            // }
+            if (!$this->input('cost_id') and !$this->input('price_id') and $this->isMethod('post')) {
+                return;
+            }
 
             if($this->assertCustomPrice()) {
                 
@@ -166,7 +166,9 @@ class PriceRequest extends FormRequest
     {
         if ($this->input('active_at') or ! $this->input('cost_id')) return false;
 
-        $cost = Cost::findOrFail($this->input('cost_id'));
+        $cost = $this->getCostById();
+
+        if (!$cost) return false;
 
         if ($cost->type === 'incremental' or $cost->type === 'fee') return true;
     }
@@ -210,7 +212,7 @@ class PriceRequest extends FormRequest
      */
     private function getCostById()
     {
-        return Cost::findOrFail($this->input('cost_id'));
+        return Cost::find($this->input('cost_id'));
     }
 
     /**

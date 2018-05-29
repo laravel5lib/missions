@@ -32,7 +32,7 @@ class PenalizeLatePaymentTest extends TestCase
     {
         $reservation = $this->setupReservation();
         
-        $reservation->lockCurrentRate();
+        $reservation->lockPrice($reservation->getCurrentRate());
 
         $this->assertEquals(1800, $reservation->getCurrentRate()->amount);
 

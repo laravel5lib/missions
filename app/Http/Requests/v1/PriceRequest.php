@@ -30,12 +30,12 @@ class PriceRequest extends FormRequest
     {
         $validator->after(function ($validator) {
 
-            if (!$this->input('cost_id') and !$this->input('price_id')) {
-                return;
-            }
+            // if (!$this->input('cost_id') and !$this->input('price_id')) {
+            //     return;
+            // }
 
             if($this->assertCustomPrice()) {
-            
+                
                 if ($this->assertRequiredPayments()) {
                     $validator->errors()->add('payments', 'At least one payment is required.');
                 }
@@ -78,6 +78,14 @@ class PriceRequest extends FormRequest
      */
     private function assertCustomPrice()
     {
+        $priceUuid = $this->route('price');
+
+        if ($priceUuid) {
+            $price = Price::whereUuid($priceUuid)->firstOrFail();
+
+            return $price->model_id == $this->segment(3);
+        }
+
         return !$this->input('price_id');
     }
 
@@ -88,9 +96,11 @@ class PriceRequest extends FormRequest
      */
     private function assertRequiredPayments()
     {
-        if ($this->requestHasPayments()) return false;
+        if ($this->isForIncrementalCost()) {
+            return $this->requestHasPayments() ? false : true;
+        }
 
-        return $this->isForIncrementalCost();
+        return false;
     }
 
     /**
@@ -154,7 +164,7 @@ class PriceRequest extends FormRequest
      */
     private function assertActivationDateRequired()
     {
-        if ($this->input('active_at')) return false;
+        if ($this->input('active_at') or ! $this->input('cost_id')) return false;
 
         $cost = Cost::findOrFail($this->input('cost_id'));
 

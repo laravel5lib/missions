@@ -84,7 +84,7 @@ class CampaignGroupController extends Controller
             'meta' => $request->input('meta', $group->pivot->meta)
         ]);
 
-        return new GroupResource($group);
+        return new GroupResource($group->fresh());
     }
 
     /**

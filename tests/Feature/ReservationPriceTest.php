@@ -235,6 +235,8 @@ class ReservationPriceTest extends TestCase
 
         $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
         $price = factory(Price::class)->create([
+            'cost_id' => $trip->campaign->costs()->where('name', 'Flight')->first()->id,
+            'amount' => 800,
             'model_id' => $reservation->id, 
             'model_type' => 'reservations'
         ]);
@@ -254,10 +256,14 @@ class ReservationPriceTest extends TestCase
         $trip = factory(Trip::class)->create(['campaign_id' => $campaign->id]);
         $group = factory(CampaignGroup::class)->create(['campaign_id' => $campaign->id]);
         $groupPrice = factory(Price::class)->create([
+            'cost_id' => $campaign->costs()->where('name', 'Deposit')->first()->id,
+            'amount' => 100,
             'model_id' => $group->id, 
             'model_type' => 'campaign-groups'
         ]);
         $tripPrice = factory(Price::class)->create([
+            'cost_id' => $campaign->costs()->where('name', 'General Registration')->first()->id,
+            'amount' => 2500,
             'model_id' => $trip->id, 
             'model_type' => 'trips'
         ]);
@@ -270,9 +276,23 @@ class ReservationPriceTest extends TestCase
     private function setupCampaignWithCosts()
     {
         $campaign = factory(Campaign::class)->create();
-        factory(Cost::class, 2)->create([
+        factory(Cost::class)->create([
+            'name' => 'General Registration',
+            'type' => 'incremental',
             'cost_assignable_id' => $campaign->id, 
-            'cost_assignable_type' => 'campaigns'
+            'cost_assignable_type' => 'campaigns',
+        ]);
+        factory(Cost::class)->create([
+            'name' => 'Deposit',
+            'type' => 'upfront',
+            'cost_assignable_id' => $campaign->id, 
+            'cost_assignable_type' => 'campaigns',
+        ]);
+        factory(Cost::class)->create([
+            'name' => 'Flight',
+            'type' => 'static',
+            'cost_assignable_id' => $campaign->id, 
+            'cost_assignable_type' => 'campaigns',
         ]);
 
         return $campaign;

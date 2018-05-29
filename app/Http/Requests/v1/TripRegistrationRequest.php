@@ -26,7 +26,7 @@ class TripRegistrationRequest extends FormRequest
      */
     public function rules()
     {
-        if (!$this->input('donor') || !$this->input('donor')) return $this->adminRules();
+        if (!$this->input('donor')) return $this->adminRules();
 
         return [
             'given_names'        => 'required|max:100',

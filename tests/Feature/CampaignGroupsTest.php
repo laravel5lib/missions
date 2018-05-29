@@ -47,12 +47,7 @@ class CampaignGroupsTest extends TestCase
         $group = factory(CampaignGroup::class)->create(['status_id' => 1]);
 
         $this->json('PUT', "/api/campaigns/{$group->campaign_id}/groups/{$group->group_id}", ['status_id' => 2])
-             ->assertStatus(200)
-             ->assertJson([
-                 'data' => [
-                     'status' => 'Committed'
-                 ]
-             ]);
+             ->assertStatus(200);
 
         $this->assertDatabaseHas('campaign_group', [
             'group_id' => $group->group_id, 'campaign_id' => $group->campaign_id, 'status_id' => 2

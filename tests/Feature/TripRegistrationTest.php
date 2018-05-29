@@ -59,7 +59,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('given_names', $response);
+        $response->assertJsonValidationErrors(['given_names']);
     }
 
     /** @test */
@@ -73,7 +73,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('surname', $response);
+        $response->assertJsonValidationErrors(['surname']);
     }
 
     /** @test */
@@ -87,7 +87,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('gender', $response);
+        $response->assertJsonValidationErrors(['gender']);
     }
 
     /** @test */
@@ -101,7 +101,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('status', $response);
+        $response->assertJsonValidationErrors(['status']);
     }
 
     /** @test */
@@ -115,7 +115,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('shirt_size', $response);
+        $response->assertJsonValidationErrors(['shirt_size']);
     }
 
     /** @test */
@@ -129,7 +129,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('birthday', $response);
+        $response->assertJsonValidationErrors(['birthday']);
     }
 
     /** @test */
@@ -144,7 +144,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('birthday', $response);
+        $response->assertJsonValidationErrors(['birthday']);
     }
 
     /** @test */
@@ -158,7 +158,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('user_id', $response);
+        $response->assertJsonValidationErrors(['user_id']);
     }
 
     /** @test */
@@ -172,7 +172,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('address', $response);
+        $response->assertJsonValidationErrors(['address']);
     }
 
     /** @test */
@@ -186,7 +186,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('zip', $response);
+        $response->assertJsonValidationErrors(['zip']);
     }
 
     /** @test */
@@ -200,7 +200,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('city', $response);
+        $response->assertJsonValidationErrors(['city']);
     }
 
     /** @test */
@@ -214,7 +214,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('country_code', $response);
+        $response->assertJsonValidationErrors(['country_code']);
     }
 
     /** @test */
@@ -228,7 +228,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('email', $response);
+        $response->assertJsonValidationErrors(['email']);
     }
 
     /** @test */
@@ -243,7 +243,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('email', $response);
+        $response->assertJsonValidationErrors(['email']);
     }
 
     /** @test */
@@ -257,7 +257,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('phone_one', $response);
+        $response->assertJsonValidationErrors(['phone_one']);
     }
 
     /** @test */
@@ -271,21 +271,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('phone_two', $response);
-    }
-
-    /** @test */
-    public function requires_donor_without_donor_id_to_register()
-    {
-        Passport::actingAs($this->user);
-        
-        $trip = $this->makeTrip();
-
-        $data = array_except($this->formData(), ['donor']);
-
-        $response = $this->register($trip->id, $data);
-
-        $this->assertValidationError('donor', $response);
+        $response->assertJsonValidationErrors(['phone_two']);
     }
 
     /** @test */
@@ -299,7 +285,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('donor.first_name', $response);
+        $response->assertJsonValidationErrors(['donor.first_name']);
     }
 
     /** @test */
@@ -313,7 +299,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('donor.last_name', $response);
+        $response->assertJsonValidationErrors(['donor.last_name']);
     }
 
     /** @test */
@@ -327,7 +313,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('donor.email', $response);
+        $response->assertJsonValidationErrors(['donor.email']);
     }
 
     /** @test */
@@ -341,7 +327,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('donor.zip', $response);
+        $response->assertJsonValidationErrors(['donor.zip']);
     }
 
     /** @test */
@@ -355,7 +341,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('donor.country_code', $response);
+        $response->assertJsonValidationErrors(['donor.country_code']);
     }
 
     /** @test */
@@ -369,7 +355,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('amount', $response);
+        $response->assertJsonValidationErrors(['amount']);
     }
 
     /** @test */
@@ -398,7 +384,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('token', $response);
+        $response->assertJsonValidationErrors(['token']);
     }
 
     /** @test */
@@ -427,7 +413,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('description', $response);
+        $response->assertJsonValidationErrors(['description']);
     }
 
     /** @test */
@@ -441,7 +427,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('currency', $response);
+        $response->assertJsonValidationErrors(['currency']);
     }
 
     /** @test */
@@ -455,7 +441,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('payment', $response);
+        $response->assertJsonValidationErrors(['payment']);
     }
 
     /** @test */
@@ -469,7 +455,7 @@ class TripRegistrationTest extends TestCase
 
         $response = $this->register($trip->id, $data);
 
-        $this->assertValidationError('payment.type', $response);
+        $response->assertJsonValidationErrors(['payment.type']);
     }
 
     private function makeTrip()
@@ -488,12 +474,6 @@ class TripRegistrationTest extends TestCase
     private function register($tripId, $formData)
     {
         return $this->json('POST', "/api/trips/{$tripId}/register", $formData);
-    }
-
-    private function assertValidationError($field, $response)
-    {
-        $response->assertStatus(422);
-        $this->assertArrayHasKey($field, $response->decodeResponseJson()['errors']);
     }
 
     private function formData()

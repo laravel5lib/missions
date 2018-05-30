@@ -26,6 +26,7 @@ Route::post('reservations/{reservationId}/prices/lock', 'ReservationPriceLockCon
 Route::delete('reservations/{reservationId}/prices/lock', 'ReservationPriceLockController@destroy');
 Route::apiResource('reservations/{reservationId}/prices', 'ReservationPriceController');
 Route::post('reservations/{id}/transfer', 'ReservationTransfersController@store');
+Route::apiResource('leads', 'LeadController');
 
 // Dingo API routes
 $api = app('Dingo\Api\Routing\Router');

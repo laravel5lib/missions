@@ -132,6 +132,8 @@ class GroupsController extends Controller
                 ', Campaign of Interest: ' . $request->get('campaign')
         ]);
 
+        // send email to coordinators@missions.me
+
         return $this->response->item($group, new GroupTransformer);
     }
 

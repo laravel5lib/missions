@@ -81,6 +81,11 @@
             <div class="panel-body text-center"><hr class="divider inv"> <img src="/images/coordinators/docs-icon.png" width="50px" height="50px"> <h6 class="text-uppercase">Reports</h6> <p class="small hidden-xs">Download export files you have generated.</p> <a href="{{ url('/admin/reports') }}" class="btn btn-sm btn-primary-hollow">View</a> <hr class="divider inv"></div>
             </div>
         </div>
+        <div class="col-sm-6 col-xs-12">
+            <div class="panel panel-default" style="border-style: solid; border-width: 4px 0px 0px; border-color: rgb(246, 50, 62);">
+            <div class="panel-body text-center"><hr class="divider inv"> <img src="/images/coordinators/env-icon.png" width="50px" height="50px"> <h6 class="text-uppercase">Leads</h6> <p class="small hidden-xs">View data collected from lead generating forms.</p> <a href="{{ url('/admin/leads') }}" class="btn btn-sm btn-primary-hollow">View</a> <hr class="divider inv"></div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection

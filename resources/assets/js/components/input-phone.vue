@@ -69,7 +69,8 @@ export default {
 
     watch: {
         'phone'(value) {
-            this.$parent.form[this.name] = value;
+            this.$emit('input', value);
+            // this.$parent.form[this.name] = value;
         }
     },
 

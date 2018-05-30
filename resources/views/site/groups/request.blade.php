@@ -38,7 +38,7 @@
         <div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
             <ajax-form method="post" action="/leads" :horizontal="true" :initial="{ 
                 'category_id': 1, 
-                'content': { 'spoken_with_rep': false} 
+                'content': { 'spoke_with_rep': false} 
             }">
                 <template slot-scope="{ form }">
 
@@ -53,8 +53,8 @@
                         </input-select>
                         
                         <div class="col-sm-offset-4" style="padding-left: 1em">
-                            <input-checkbox name="content.spoken_with_rep" 
-                                            v-model="form.content.spoken_with_rep"
+                            <input-checkbox name="content.spoke_with_rep" 
+                                            v-model="form.content.spoke_with_rep"
                             >
                                 <label slot="label" class="control-label">
                                     I have spoken with a Missions.Me Representative

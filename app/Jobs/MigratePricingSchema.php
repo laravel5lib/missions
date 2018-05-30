@@ -71,9 +71,11 @@ class MigratePricingSchema implements ShouldQueue
             ];
 
             if ($cost->type === 'incremental') {
-                $price['payments'] = DB::table('payments')->where('cost_id', $cost->id)->get()->map(function($payment) {
+                $payments = DB::table('payments')->where('cost_id', $cost->id)->orderBy('due_at')->get();
+                
+                $price['payments'] = $payments->map(function($payment, $index) use($payments) {
                     return [
-                        'percentage_due' => $payment->percent_owed, // last one needs to be 100%
+                        'percentage_due' => count($payments) === $index+1 ? 100 : $payment->percent_owed,
                         'due_at' => $payment->due_at,
                         'grace_days' => $payment->grace_period
                     ];

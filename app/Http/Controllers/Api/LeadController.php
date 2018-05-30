@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\v1\Lead;
 use Illuminate\Http\Request;
+use App\Http\Requests\LeadRequest;
 use App\Http\Controllers\Controller;
 
 class LeadController extends Controller
@@ -24,7 +25,7 @@ class LeadController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(LeadRequest $request)
     {
         Lead::create($request->all());
         

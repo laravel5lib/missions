@@ -17,9 +17,8 @@ class LeadTest extends TestCase
         $data = [ 
             'category_id' => 1,
             'content' => [
-                'name' => 'Victory Church',
+                'organization' => 'Victory Church',
                 'type' => 'church',
-                'timezone' => 'American/Detroit',
                 'address_one' => '123 Main Street',
                 'address_two' => '',
                 'city' => 'Detroit',
@@ -41,5 +40,22 @@ class LeadTest extends TestCase
         $lead = Lead::first();
         $this->assertEquals($lead->category_id, 1);
         $this->assertEquals($lead->content, $data['content']);
+    }
+
+    /** @test */
+    public function validates_new_organization_lead()
+    {
+        $data = [ 
+            'category_id' => 1,
+            'content' => []
+        ];
+
+        $this->json('POST', '/api/leads', $data)
+             ->assertStatus(422)
+             ->assertJsonValidationErrors([
+                 'content.organization', 'content.type', 'content.address_one',
+                 'content.city', 'content.state', 'content.zip', 'content.country', 'content.phone_one',
+                 'content.email', 'content.contact', 'content.position', 'content.campaign_of_interest'
+            ]);
     }
 }

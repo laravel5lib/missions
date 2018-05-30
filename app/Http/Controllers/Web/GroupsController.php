@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Requests;
 use App\Models\v1\Slug;
 use App\Models\v1\Group;
+use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Artesaos\SEOTools\Traits\SEOTools;
@@ -62,6 +63,8 @@ class GroupsController extends Controller
     {
         $this->seo()->setTitle('Custom Group Mission Trips');
 
-        return view('site.groups.request');
+        $trips = Campaign::active()->pluck('name', 'name')->toArray();
+
+        return view('site.groups.request', compact('trips'));
     }
 }

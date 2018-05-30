@@ -12,7 +12,7 @@ class LeadTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function create_new_organization_lead()
+    public function creates_new_organization_lead()
     {
         $data = [ 
             'category_id' => 1,
@@ -57,5 +57,61 @@ class LeadTest extends TestCase
                  'content.city', 'content.state', 'content.zip', 'content.country', 'content.phone_one',
                  'content.email', 'content.contact', 'content.position', 'content.campaign_of_interest'
             ]);
+    }
+
+    /** @test */
+    public function gets_all_organization_leads()
+    {
+        factory(Lead::class, 4)->states('organization')->create();
+        factory(Lead::class)->create();
+
+        $this->json('GET', '/api/leads?filter[category_id]=1')
+             ->assertStatus(200)
+             ->assertJsonStructure([
+                'data' => [
+                     [
+                         'id', 'category_id', 'content', 'created_at', 'updated_at'
+                     ]
+                ],
+                'meta'
+             ])
+             ->assertJson([
+                 'meta' => ['total' => 4]
+             ]);
+    }
+
+    /** @test */
+    public function gets_lead_by_id()
+    {
+        $lead = factory(Lead::class)->states('organization')->create([
+            'content' => [
+                'organization' => 'Acme',
+                'type' => 'business'
+            ]
+        ]);
+
+        $this->json('GET', '/api/leads/'. $lead->uuid)
+             ->assertStatus(200)
+             ->assertJson([
+                'data' => [
+                    'id' => $lead->uuid,
+                    'category_id' => 1,
+                    'content' => [
+                        'organization' => 'Acme',
+                        'type' => 'business'
+                    ]
+                ]
+            ]);
+    }
+
+    /** @test */
+    public function deletes_lead()
+    {
+        $lead = factory(Lead::class)->create();
+
+        $this->json('DELETE', '/api/leads/'. $lead->uuid)
+             ->assertStatus(204);
+        
+        $this->assertDatabaseMissing('leads', ['uuid' => $lead->uuid]);
     }
 }

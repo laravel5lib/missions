@@ -3,11 +3,13 @@
     <div class="list-group-item">
         <div class="row">
             <div class="col-xs-4 text-muted text-right">
-                {!! $key !!}
+                {!! ucfirst(str_replace('_', ' ', $key)) !!}
             </div>
             <div class="col-xs-8">
                 @if(is_callable($value))
                     {{ $value() }}
+                @elseif(is_bool($value))
+                    {{ $value ? 'Yes' : 'No' }}
                 @else
                     {!! $value !!}
                 @endif

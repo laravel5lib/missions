@@ -129,3 +129,13 @@ Route::get('reports', function () {
     SEOMeta::setTitle('Reports');
     return view('admin.reports.index');
 })->middleware('can:view,App\Models\v1\Report');
+
+Route::get('leads', function () {
+    SEOMeta::setTitle('Leads');
+    return view('admin.leads.index');
+})->middleware('can:view,App\Models\v1\Lead');
+
+Route::get('leads/{lead}', function ($lead) {
+    SEOMeta::setTitle('Lead Details');
+    return view('admin.leads.show', compact('lead'));
+})->middleware('can:view,App\Models\v1\Lead');

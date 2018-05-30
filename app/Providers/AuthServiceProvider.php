@@ -49,7 +49,8 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\v1\RoomType' => 'App\Policies\RoomTypePolicy',
         'App\Models\v1\Fundraiser' => 'App\Policies\FundraiserPolicy',
         'App\Models\v1\Representative' => 'App\Policies\RepresentativePolicy',
-        'App\Models\v1\Upload' => 'App\Policies\UploadPolicy'
+        'App\Models\v1\Upload' => 'App\Policies\UploadPolicy',
+        'App\Models\v1\Lead' => 'App\Policies\LeadPolicy',
     ];
 
     /**

@@ -6,6 +6,8 @@ use App\Models\v1\Lead;
 use Illuminate\Http\Request;
 use App\Http\Requests\LeadRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\LeadResource;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class LeadController extends Controller
 {
@@ -16,7 +18,12 @@ class LeadController extends Controller
      */
     public function index()
     {
-        //
+        $leads = QueryBuilder::for(Lead::class)
+            ->allowedFilters('category_id')
+            ->latest()
+            ->paginate(25);
+        
+        return LeadResource::collection($leads);
     }
 
     /**
@@ -40,19 +47,9 @@ class LeadController extends Controller
      */
     public function show($id)
     {
-        //
-    }
+        $lead = Lead::whereUuid($id)->firstOrFail();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        return new LeadResource($lead);
     }
 
     /**
@@ -63,6 +60,10 @@ class LeadController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $lead = Lead::whereUuid($id)->firstOrFail();
+
+        $lead->delete();
+
+        return response()->json(['message' => 'Lead deleted'], 204);
     }
 }

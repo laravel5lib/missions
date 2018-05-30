@@ -42,6 +42,9 @@
               <li class="{{ in_array(request()->segment(2), ['reports']) ? 'active' : '' }}">
                 <a href="{{ url('/admin/reports') }}">Reports</a>
               </li>
+              <li class="{{ in_array(request()->segment(2), ['leads']) ? 'active' : '' }}">
+                <a href="{{ url('/admin/leads') }}">Leads</a>
+              </li>
             </ul>
           </li>
         </div>

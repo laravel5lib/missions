@@ -1,6 +1,6 @@
-@extends('site.layouts.default')
+@extends('master')
 
-@section('content')
+@section('layout')
     <div class="container">
         <div class="content-section">
             <div class="row">

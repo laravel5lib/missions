@@ -11,6 +11,8 @@ class Lead extends Model
 
     protected $casts = ['content' => 'array'];
 
+    protected $dates = ['created_at', 'updated_at'];
+
     /**
      * Boot the Uuid trait for the model.
      *

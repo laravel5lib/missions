@@ -24,12 +24,12 @@
 				</template>
 			</template>
 
-			<div class="form-group" v-if="propertyExists('campaign')">
+			<!-- <div class="form-group" v-if="propertyExists('campaign')">
 				<label>Campaign</label>
 				<v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
 				          v-model="campaignObj" :options="campaignOptions" label="name"
 				          placeholder="Filter by Campaign"></v-select>
-			</div>
+			</div> -->
 
 			<div class="form-group" v-if="propertyExists('type')">
 				<label>Trip Type</label>

@@ -78,6 +78,7 @@ class ItemizedPricing
             ->when($currentRate, function ($query) use ($currentRate) {
                 return $query->whereDate('active_at', '>', $currentRate->active_at->toDateString());
             })
+            ->orderBy('active_at', 'desc')
             ->get();
     }
 

@@ -3,10 +3,11 @@
 @section('content')
 
     @breadcrumbs(['links' => [
-        'admin' => 'Dashboard', 
-        'admin/campaigns/'.$trip->campaign->id.'/trips' => 'Trips', 
-        'admin/trips/'.$trip->id =>  $trip->group->name.' - '.ucfirst($trip->type).' Trip',
-        'admin/trips/'.$trip->id.'/prices' =>  'Pricing',
+        'admin' => 'Dashboard',
+        'admin/campaigns' => 'Campaigns',
+        '/admin/campaigns/'.$trip->campaign->id.'/groups' => $trip->campaign->name.' - '.country($trip->country_code),
+        '/admin/campaign-groups/'.$group->uuid.'/trips' => $trip->group->name,
+        'admin/trips/'.$trip->id.'/prices' =>  ucfirst($trip->type).' Trip',
         'active' => $price->cost->name
     ]])
     @endbreadcrumbs

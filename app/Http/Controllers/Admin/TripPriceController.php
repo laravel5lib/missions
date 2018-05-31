@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\v1\Trip;
 use Illuminate\Http\Request;
+use App\Models\v1\CampaignGroup;
 use App\Http\Controllers\Controller;
 
 class TripPriceController extends Controller
@@ -13,6 +14,10 @@ class TripPriceController extends Controller
         $trip = Trip::findOrFail($id);
         $price = $trip->priceables()->whereUuid($price)->firstOrFail();
 
-        return view('admin.trips.tabs.prices.show', compact('trip', 'price'));
+        $group = CampaignGroup::where('campaign_id', $trip->campaign_id)
+            ->where('group_id', $trip->group_id)
+            ->firstOrFail();
+
+        return view('admin.trips.tabs.prices.show', compact('trip', 'price', 'group'));
     }
 }

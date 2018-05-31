@@ -9,7 +9,7 @@
         </div>
     @endslot
     @component('list-group', ['data' => [
-        'Current Status' => '<strong>'.ucfirst($trip->status).'</strong>',
+        'Current Status' => ucfirst($trip->status),
         'Visibility' => ($trip->public ? 'Public' : 'Private'),
         'Spots Remaining' => $trip->spots,
         'Total Reservations' => $trip->reservations()->count(),
@@ -37,10 +37,10 @@
         </div>
     @endslot
     @component('list-group', ['data' => [
-        'Campaign' => '<a href="'.url('admin/campaigns/'.$trip->campaign->id).'">'.$trip->campaign->name.'</a>',
+        'Campaign' => '<a href="'.url('admin/campaigns/'.$trip->campaign->id).'"><strong>'.$trip->campaign->name.'</strong></a>',
         'Country' => country($trip->country_code),
-        'Organization' => '<a href="'.url('admin/groups/'.$trip->group->id).'">'.$trip->group->name.'</a>',
-        'Type' => '<strong>'.ucfirst($trip->type).'</strong>',
+        'Organization' => '<a href="'.url('admin/groups/'.$trip->group->id).'"><strong>'.$trip->group->name.'</strong></a>',
+        'Type' => ucfirst($trip->type),
         'Start Date' => $trip->started_at->format('F d, Y'),
         'End Date' => $trip->ended_at->format('F d, Y'),
         'Difficulty' => $trip->difficulty,
@@ -49,7 +49,7 @@
                 echo '<span class="label label-default">'.$prospect.'</span> ';
             }
         },
-        'Default Trip Rep' => '<a href="'.url('admin/representatives/'.optional($trip->rep)->id).'">'.optional($trip->rep)->name.'</a>',
+        'Default Trip Rep' => '<a href="'.url('admin/representatives/'.optional($trip->rep)->id).'"><strong>'.optional($trip->rep)->name.'</strong></a>',
         'Default Companion Limit' => $trip->companion_limit,
         'Created' => '<datetime-formatted value="'.$trip->created_at->toIso8601String().'" />',
         'Last Updated' => '<datetime-formatted value="'.$trip->updated_at->toIso8601String().'" />'

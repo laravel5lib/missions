@@ -70,7 +70,11 @@ class ReservationsController extends Controller
             'admin/reservations/'.$reservation->id.'/resources' => 'Resources'
         ];
 
-        return view('admin.reservations.' . $tab, compact('reservation', 'rep', 'tab', 'locked', 'pageLinks'));
+        $group = CampaignGroup::where('campaign_id', $reservation->trip->campaign_id)
+            ->where('group_id', $reservation->trip->group_id)
+            ->firstOrFail();
+
+        return view('admin.reservations.' . $tab, compact('reservation', 'rep', 'tab', 'locked', 'pageLinks', 'group'));
     }
 
     /**

@@ -21,9 +21,9 @@
         'Age' => $reservation->birthday->age,
         'Team Role' => teamRole($reservation->desired_role),
         'Shirt Size' => shirtSize($reservation->shirt_size),
-        'Email' => $reservation->email,
-        'Home Phone' => $reservation->phone_one,
-        'Mobile Phone' => $reservation->phone_two,
+        'Email' => '<a href="mailto:'.$reservation->email.'"><strong>'.$reservation->email.'</strong></a>',
+        'Home Phone' => '<a href="tel:'.$reservation->phone_one.'"><strong>'.$reservation->phone_one.'</strong></a>',
+        'Mobile Phone' => '<a href="tel:'.$reservation->phone_two.'"><strong>'.$reservation->phone_two.'</strong></a>',
         'Address' => $reservation->address.'<br />'.$reservation->city.', '.$reservation->state.' '.$reservation->zip.'<br />'.country($reservation->country_code)
     ]])
     @endcomponent
@@ -41,10 +41,10 @@
         </div>
     @endslot
     @component('list-group', ['data' => [
-        'Campaign' => $reservation->trip->campaign->name,
+        'Campaign' => '<a href="/admin/campaigns/'.$reservation->trip->campaign_id.'"><strong>'.$reservation->trip->campaign->name.'</strong></a>',
         'Country' => country($reservation->trip->campaign->country_code),
-        'Group' => $reservation->trip->group->name,
-        'Trip Type' => '<a href="'.url('/admin/trips/'. $reservation->trip->id).'">'.ucfirst($reservation->trip->type).'</a>',
+        'Group' => '<a href="/admin/campaign-groups/'.$group->uuid.'"><strong>'.$reservation->trip->group->name.'</strong></a>',
+        'Trip Type' => '<a href="'.url('/admin/trips/'. $reservation->trip->id).'"><strong>'.ucfirst($reservation->trip->type).'</strong></a>',
         'Start Date' => $reservation->trip->started_at->format('F j, Y'),
         'End Date' => $reservation->trip->ended_at->format('F j, Y')
     ]])
@@ -68,7 +68,7 @@
         </div>
     @endslot
     @component('list-group', ['data' => [
-        'Managing Account' => $reservation->user->name,
+        'Managing Account' => '<a href="/admin/users/'.$reservation->user_id.'"><strong>'.$reservation->user->name.'</strong></a>',
         'Date Registered' => $reservation->created_at->format('F j, Y h:i a'),
         'Reservation ID' => $reservation->id
     ]])

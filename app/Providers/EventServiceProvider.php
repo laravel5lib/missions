@@ -37,8 +37,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\TripInterestWasCreated' => [
             'App\Listeners\NotifyFacilitatorsOfNewTripInterest',
-            'App\Listeners\NotifyTripRepOfNewTripInterest',
-            // 'App\Listeners\SendTripInterestConfirmationEmail'
+            'App\Listeners\NotifyTripRepOfNewTripInterest'
+        ],
+        'App\Events\LeadCreated' => [
+            'App\Listeners\SendNewLeadNotification'
         ]
     ];
 
@@ -50,7 +52,6 @@ class EventServiceProvider extends ServiceProvider
     protected $subscribe = [
         'App\Listeners\ReservationEventListener',
         'App\Listeners\TransactionEventListener',
-//        'App\Listeners\RequirementEventListener'
     ];
 
     /**
@@ -128,65 +129,5 @@ class EventServiceProvider extends ServiceProvider
             $group->banner_upload_id = $banner ? $banner->id : null;
             $group->save();
         });
-
-        Cost::created(function ($cost) {
-            if ($cost->costAssignable instanceof Project) {
-
-                if ($cost->costAssignable->fund->fundraisers()->count()) {
-                    $cost->costAssignable
-                     ->fund
-                     ->fundraisers()
-                     ->first()
-                     ->update(['goal_amount' => $cost->costAssignable->goal/100]);
-                }
-
-                $cost->costAssignable->payments()->sync();
-            }
-        });
-
-        Cost::updated(function ($cost) {
-            if ($cost->costAssignable instanceof Project) {
-
-                if ($cost->costAssignable->fund->fundraisers()->count()) {
-
-                    $cost->costAssignable
-                        ->fund
-                        ->fundraisers()
-                        ->first()
-                        ->update([
-                            'goal_amount' => $cost->costAssignable->goal/100,
-                            'ended_at' => $cost->payments->last()->due_at->toDateTimeString()
-                        ]);
-                }
-
-                $cost->costAssignable->payments()->sync();
-            }
-        });
-
-        Payment::updated(function ($payment) {
-            if ($payment->cost->costAssignable instanceof Project) {
-                if ($payment->cost->costAssignable->fund->fundraisers()->count()) {
-                    $payment->cost->costAssignable
-                            ->fund
-                            ->fundraisers()
-                            ->first()
-                            ->update([
-                                'goal_amount' => $payment->cost->costAssignable->goal/100,
-                                'ended_at' => $payment->cost->payments->last()->due_at->toDateTimeString()
-                            ]);
-                }
-            }
-        });
-
-        // Due::updated(function ($due) {
-        //     if ($due->payable->fund->fundraisers()->count()) {
-        //         $fundraiser = $due->payable->fund->fundraisers()->first();
-
-        //         if ($due->payable_type === 'reservations' && $due->payment->cost->type === 'incremental') {
-        //             $fundraiser->ended_at = $due->due_at->toDateTimeSTring();
-        //             $fundraiser->save();
-        //         }
-        //     }
-        // });
     }
 }

@@ -10,6 +10,12 @@ use Artesaos\SEOTools\Facades\SEOMeta;
 |--------------------------------------------------------------------------
 */
 
+Route::get('/mailable', function () {
+    $lead = App\Models\v1\Lead::find(1);
+
+    return new App\Mail\NewOrganizationLead($lead);
+});
+
 Route::angelHouseRoutes();
 
 $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {

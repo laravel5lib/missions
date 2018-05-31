@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lead extends Model
 {
-    protected $fillable = ['category_id', 'content'];
+    protected $fillable = ['category_id', 'content', 'created_at'];
 
     protected $casts = ['content' => 'array'];
 

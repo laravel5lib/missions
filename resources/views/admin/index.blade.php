@@ -23,7 +23,7 @@
                 <div class="panel-body text-center"><hr class="divider inv"> 
                     <!-- <i class="fa fa-ticket fa-5x"></i>  -->
                     <h1 class="text-primary text-oswald font-hero">{{ number_format($campaigns, 0, '', ',') }}</h1>
-                    <h6 class="text-uppercase">Trips</h6> 
+                    <h6 class="text-uppercase">Campaigns</h6> 
                     <a href="{{ url('/admin/campaigns') }}" class="btn btn-sm btn-primary-hollow">Manage</a>
                     <hr class="divider inv">
                 </div>

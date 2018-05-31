@@ -22,7 +22,29 @@ class PriceResource extends JsonResource
             'active_at' => optional($this->active_at)->toIso8601String(),
             'cost' => new CostResource($this->cost),
             'payments' => PaymentResource::collection($this->whenLoaded('payments')),
-            'reservations_count' => $this->reservations()->count()
+            'reservations_count' => $this->reservations()->count(),
+            'custom' => $this->isCustom($request)
         ];
+    }
+
+    private function isCustom($request)
+    {
+        switch ($request->segment(2)) {
+            case 'campaign-groups':
+                return $this->model_id === $request->route('groupId');
+                break;
+            
+            case 'trips':
+                return $this->model_id === $request->route('tripId');
+                break;
+            
+            case 'reservations':
+                return $this->model_id === $request->route('reservationId');
+                break;
+
+            default:
+                return false;
+                break;
+        }
     }
 }

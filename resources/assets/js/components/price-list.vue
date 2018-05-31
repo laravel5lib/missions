@@ -33,6 +33,7 @@
                 </td>
                 <td class="col-sm-1 text-right">
                     <strong class="text-primary">{{ currency(price.amount) }}</strong>
+                    <br /><span class="label" style="background:#eee; color:#777" v-if="price.custom">Custom</span>
                 </td>
                 <td class="col-sm-1 text-right">
                     <strong>{{ price.reservations_count }}</strong>

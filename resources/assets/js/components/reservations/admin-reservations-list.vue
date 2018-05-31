@@ -351,6 +351,10 @@
 			type: {
 				type: String,
 				default: 'current'
+			},
+			campaignId: {
+				type: String,
+				required: true
 			}
 		},
 		data(){
@@ -373,7 +377,6 @@
 					//tags: [],
 					user: [],
 					groups: [],
-					campaign: null,
 					gender: '',
 					status: '',
 					shirtSize: [],
@@ -658,7 +661,7 @@
         	  this.showFilters = false;
 				this.$refs.spinner.show();
 				let params = this.getListSettings();
-				this.$http.get('reservations', {params: params, before: function(xhr) {
+				this.$http.get('reservations?campaign=' + this.campaignId, {params: params, before: function(xhr) {
                     if (this.lastReservationRequest) {
                         this.lastReservationRequest.abort();
                     }

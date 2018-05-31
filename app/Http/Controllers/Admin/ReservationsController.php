@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\v1\Trip;
+use App\Models\v1\Campaign;
 use App\Models\v1\Reservation;
 use App\Models\v1\CampaignGroup;
 use App\Http\Controllers\Controller;
@@ -31,13 +32,15 @@ class ReservationsController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($tab = null)
+    public function index($campaignId, $tab = null)
     {
         $this->authorize('view', $this->reservation);
 
         $this->seo()->setTitle('Reservations');
 
-        return view('admin.reservations.index', compact('tab'));
+        $campaign = Campaign::findOrFail($campaignId);
+
+        return view('admin.reservations.index', compact('tab', 'campaign'));
     }
 
     /**

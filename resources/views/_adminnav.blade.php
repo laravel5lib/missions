@@ -14,9 +14,6 @@
       </div>
       <div class="col-md-6 hidden-xs hidden-sm" style="text-align: center">
         <div class="nav navbar-nav navbar-center" style="float: none; display:inline-block; vertical-align: middle;">
-          <li class="{{ in_array(request()->segment(2), ['reservations']) ? 'active' : '' }}">
-            <a href="{{ url('/admin/reservations') }}">Reservations</a>
-          </li>
           <li class="{{ in_array(request()->segment(2), ['campaigns', 'campaign-groups', 'trips']) ? 'active' : '' }}">
             <a href="{{ url('/admin/campaigns') }}">Trips</a>
           </li>

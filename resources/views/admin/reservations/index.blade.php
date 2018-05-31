@@ -20,6 +20,8 @@
 
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
+        'admin/campaigns' => 'Campaigns',
+        'admin/campaigns/'.$campaign->id => $campaign->name.' - '.country($campaign->country_code),
         'active' => 'Reservations'
     ]])
     @endbreadcrumbs
@@ -47,6 +49,7 @@
                         @component('panel')
                             @slot('body')
                                 <admin-reservations-list type="current"
+                                                        campaign-id="{{ $campaign->id }}"
                                                         storage-name="AdminReservationsCurrentStorage">
                                 </admin-reservations-list>
                             @endslot
@@ -56,6 +59,7 @@
                         @component('panel')
                             @slot('body')
                                 <admin-reservations-list type="archived"
+                                                        campaign-id="{{ $campaign->id }}"
                                                         storage-name="AdminReservationsArchivedStorage">
                                 </admin-reservations-list>
                             @endslot
@@ -65,6 +69,7 @@
                         @component('panel')
                             @slot('body')
                                 <admin-reservations-list type="dropped"
+                                                        campaign-id="{{ $campaign->id }}"
                                                         storage-name="AdminReservationsDroppedStorage">
                                 </admin-reservations-list>
                             @endslot

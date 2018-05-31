@@ -91,7 +91,6 @@ Vue.component('campaign-trip-edit-wizard', require('./components/trips/admin-tri
 Vue.component('admin-campaign-trips', require('./components/campaigns/admin-campaign-trips.vue'));
 Vue.component('admin-trip-reservations', require('./components/trips/admin-trip-reservations-list.vue'));
 Vue.component('admin-trip-facilitators', require('./components/trips/admin-trip-facilitators.vue'));
-Vue.component('admin-trip-duplicate', require('./components/trips/admin-trip-duplicate.vue'));
 Vue.component('campaign-trip-form', require('./components/trips/CampaignTripForm.vue'));
 Vue.component('cost-manager', require('./components/admin/cost-manager.vue'));
 Vue.component('deadlines-manager', require('./components/admin/deadlines-manager.vue'));

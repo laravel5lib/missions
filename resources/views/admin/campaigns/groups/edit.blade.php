@@ -5,9 +5,9 @@
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard', 
         'admin/campaigns' => 'Campaigns', 
-        'admin/campaigns/'.$group->campaign_id => $group->campaign->name.' - '.country($group->campaign->country_code),
-        'admin/campaigns/'.$group->campaign_id.'/groups' => 'Groups',
-        'active' => $group->organization->name
+        'admin/campaigns/'.$group->campaign_id.'/groups' => $group->campaign->name.' - '.country($group->campaign->country_code),
+        'admin/campaign-groups/'.$group->uuid => $group->organization->name,
+        'active' => 'Edit'
     ]])
     @endbreadcrumbs
     

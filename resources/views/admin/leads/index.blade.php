@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-sm-10">
                     @component('panel')
-                        @slot('title')<h5>Organization Leads</h5> @endslot
+                        @slot('title')<h5>Organization Leads <span class="badge badge-default">@{{ pagination.total }}</span></h5> @endslot
                         <div class="panel-body" v-if="loading">
                             <p class="lead text-center text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</p>
                         </div>
@@ -32,6 +32,7 @@
                                     <th>#</th>
                                     <th>Date</th>
                                     <th>Organization</th>
+                                    <th>Campaign of Interest</th>
                                     <th>Contact</th>
                                 </tr>
                                 <tr v-for="(lead, index) in leads" :key="lead.id">
@@ -42,6 +43,7 @@
                                         </a>
                                     </td>
                                     <td>@{{ lead.content.organization }}</td>
+                                    <td>@{{ lead.content.campaign_of_interest }}</td>
                                     <td>@{{ lead.content.contact }}</td>
                                 </tr>
                             </thead>

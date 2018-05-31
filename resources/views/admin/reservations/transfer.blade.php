@@ -12,6 +12,17 @@
 
 <hr class="divider inv lg">
 
+<alert-error>
+    <template slot="title">Oops!</template>
+    <template slot="message">Please check the form for errors and try again.</template>
+</alert-error>
+
+<alert-success redirect="/admin/reservations/{{ $reservation->id }}">
+    <template slot="title">Nice Work!</template>
+    <template slot="message">The reservation has been successfully transferred.</template>
+    <template slot="confirm">Ok</template>
+</alert-success>
+
 <div class="container">
     <div class="row">
         <div class="col-md-offset-1 col-md-10">

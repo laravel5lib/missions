@@ -446,7 +446,9 @@
 					updated_at: 'Last Updated',
 					dropped_at: 'Drop Date'
 				},
-				exportFilters: {},
+				exportFilters: {
+					campaign: this.campaignId
+				},
                 lastReservationRequest: null
 			}
 		},
@@ -533,7 +535,6 @@
                         //tags: this.filters.tags,
 						user: this.filters.user,
 						groups: this.filters.groups,
-						campaign: this.filters.campaign,
 						gender: this.filters.gender,
 						status: this.filters.status,
 						shirtSize: this.filters.shirtSize,
@@ -647,7 +648,8 @@
 				$.extend(params, {
                     todo: this.todo,
                     requirement: this.requirement,
-                    cost: this.cost,
+					cost: this.cost,
+					campaign: this.campaignId
                 });
 
               if (this.filters.age[0] === 0 && this.filters.age[1] === 120 )

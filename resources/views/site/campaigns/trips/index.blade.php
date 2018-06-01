@@ -72,7 +72,6 @@
                             <th>Type</th>
                             <th>Dates</th>
                             <th>Status</th>
-                            <th>Difficulty</th>
                             <th class="text-right">Starts At</th>
                             <th class="text-right">Spots Left</th>
                             <th></th>
@@ -84,7 +83,6 @@
                                 <td><strong><a :href="'/trips/'+trip.id">{{ trip.type | capitalize }}</a></strong></td>
                                 <td>{{ trip.started_at | mFormat('MMMM D') }} - {{ trip.ended_at | mFormat('MMMM D, Y') }}</td>
                                 <td><span class="label" :class="{'label-success' : trip.status === 'active', 'label-danger' : trip.status != 'active'}">{{ trip.status }}</span></td>
-                                <td><em>{{ trip.difficulty }}</em></td>
                                 <td class="text-primary text-right"><strong>{{ currency(trip.starting_cost) }}</strong></td>
                                 <td class="text-right"><strong>{{ trip.spots }}</strong></td>
                                 <td class="text-right"><a :href="'/trips/'+trip.id" class="btn btn-primary-hollow btn-sm">Select</a></td>

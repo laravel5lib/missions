@@ -51,6 +51,15 @@
         </div><!-- end visible-xs -->
         <div class="col-sm-7 col-md-7 col-lg-8 hidden-xs">
 
+            <div class="well">
+            <label>This trip is ideal for:</label>
+            <p>
+            @foreach($trip->prospects as $prospect)
+                <span class="label label-default">{{ $prospect }}</span>
+            @endforeach
+            </p>
+            </div>
+
             {!! $markdown->convertToHtml($trip->description) !!}
 
             <hr class="divider inv" />

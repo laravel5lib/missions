@@ -24,6 +24,7 @@ Route::prefix('campaigns')->group(function () {
     Route::get('{id}/trips/create', 'TripsController@create');
     Route::get('{campaignId}/reservations/{tab?}', 'ReservationsController@index')
         ->where('tab', 'current|archived|dropped|prospects');
+    Route::get('{campaignId}/flights', 'FlightController@index');
     Route::get('{id}/{tab?}', 'CampaignsController@show');
     Route::get('{id}/costs/{cost}', 'CampaignCostController@show');
 });

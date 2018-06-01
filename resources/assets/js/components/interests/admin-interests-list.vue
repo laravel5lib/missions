@@ -26,11 +26,6 @@
                         <option value="family">Family</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
-                              v-model="campaignObj" :options="campaignOptions" label="name"
-                              placeholder="Filter by Campaign"></v-select>
-                </div>
 
                 <hr class="divider inv sm">
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter"><i class="fa fa-times"></i> Reset Filters</button>
@@ -133,11 +128,7 @@
                 Status
                 <i class="fa fa-close"></i>
             </span>
-            <span style="margin-right:2px;" class="label label-default" v-show="filters.campaign.length" @click="filters.campaign = ''" >
-                Campaign
-                <i class="fa fa-close"></i>
-            </span>
-            <span style="margin-right:2px;" class="label label-default" v-show="filters.trip_type.length" @click="filters.campaign = ''" >
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.trip_type.length" @click="filters.trip_type = ''" >
                 Trip Type
                 <i class="fa fa-close"></i>
             </span>
@@ -242,6 +233,7 @@
     export default{
         name: 'admin-interests-list',
         components: {vSelect, exportUtility},
+        props: ['campaignId'],
         data(){
             return{
                 app: MissionsMe,
@@ -257,14 +249,12 @@
                 search: '',
                 groupObj: null,
                 groupsOptions: [],
-                campaignObj: null,
                 campaignOptions: [],
                 tripObj: null,
                 tripOptions: [],
                 // filter vars
                 filters: {
                     group: '',
-                    campaign: '',
                     trip: '',
                     trip_type: '',
                     status: ''
@@ -299,9 +289,6 @@
             },
             'tripObj'(val, oldVal) {
                 this.filters.trip = val ? val.id : '';
-            },
-            'campaignObj'(val, oldVal) {
-                this.filters.campaign = val ? val.id : '';
             },
             'search'(val, oldVal) {
                 this.pagination.current_page = 1;
@@ -341,13 +328,6 @@
                     loading ? loading(false) : void 0;
                 })
             },
-            getCampaigns(search, loading){
-                loading ? loading(true) : void 0;
-                this.$http.get('campaigns', { params: { search: search} }).then((response) => {
-                    this.campaignOptions = response.data.data;
-                    loading ? loading(false) : void 0;
-                })
-            },
             getTrips(search, loading){
                 loading ? loading(true) : void 0;
                 this.$http.get('trips', { params: { search: search} }).then((response) => {
@@ -358,6 +338,7 @@
             searchInterests(){
                 let params = {
                     include:'trip.group,trip.campaign',
+                    campaign: this.campaignId,
                     search: this.searchText,
                     per_page: this.per_page,
                     page: this.pagination.current_page
@@ -377,7 +358,6 @@
             // populate
             // this.$refs.spinner.show();
             this.getGroups();
-            this.getCampaigns();
             this.getTrips();
             this.searchInterests();
 

@@ -24,6 +24,7 @@
                 @endsidenav
             </div>
             <div class="col-sm-10">
+                <flight-list campaign-id="{{ $campaign->id }}"></flight-list>
             </div>
         </div>
 

@@ -53,6 +53,7 @@
     <div class="panel-body">
         <a role="button">+ Add a filter</a>
     </div>
+    <div class="table-responsive">
     <table class="table">
         <thead>
             <tr class="active">
@@ -68,6 +69,7 @@
             </tr>
         </thead>
     </table>
+    </div>
 
     <div class="modal fade" id="newSegment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">

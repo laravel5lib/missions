@@ -28,6 +28,7 @@ Route::apiResource('reservations/{reservationId}/prices', 'ReservationPriceContr
 Route::post('reservations/{id}/transfer', 'ReservationTransfersController@store');
 Route::apiResource('leads', 'LeadController');
 Route::apiResource('campaigns/{campaignId}/flights/segments', 'FlightSegmentController');
+Route::apiResource('flights', 'FlightController');
 
 // Dingo API routes
 $api = app('Dingo\Api\Routing\Router');

@@ -13,6 +13,7 @@ use Conner\Tagging\Taggable;
 use App\Utilities\v1\TeamRole;
 use EloquentFilter\Filterable;
 use App\Events\ReservationCreated;
+use App\Models\v1\FlightItinerary;
 use Illuminate\Support\Facades\DB;
 use App\Events\ReservationWasProcessed;
 use App\Models\v1\RequirementCondition;
@@ -287,6 +288,11 @@ class Reservation extends Model
     public function transports()
     {
         return $this->belongsToMany(Transport::class, 'passengers');
+    }
+
+    public function flightItinerary()
+    {
+        return $this->belongsTo(FlightItinerary::class);
     }
 
     /**

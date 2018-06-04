@@ -16,6 +16,6 @@ $factory->define(Flight::class, function (Faker $faker) {
         'flight_no' => $faker->bothify('??####'),
         'date' => $faker->date,
         'time' => $faker->time,
-        'iata_code' => $faker->lexify('###')
+        'iata_code' => $faker->bothify('###')
     ];
 });

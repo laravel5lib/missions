@@ -28,6 +28,8 @@ Route::apiResource('reservations/{reservationId}/prices', 'ReservationPriceContr
 Route::post('reservations/{id}/transfer', 'ReservationTransfersController@store');
 Route::apiResource('leads', 'LeadController');
 Route::apiResource('campaigns/{campaignId}/flights/segments', 'FlightSegmentController');
+Route::apiResource('campaigns/{campaignId}/flights/itineraries', 'FlightItineraryController');
+Route::apiResource('campaigns/{campaignId}/flights/passengers', 'FlightPassengerController');
 Route::apiResource('flights', 'FlightController');
 
 // Dingo API routes

@@ -12,6 +12,7 @@
 					<img style="max-width:80px;padding:8px;" src="../images/storyof/1n1d13-logo.png" />
 					<img style="max-width:80px;padding:8px;" src="../images/storyof/1n1d15-logo.png" />
 					<img style="max-width:80px;padding:8px;" src="../images/storyof/1n1d17-logo.png" />
+					<img style="max-width:80px;padding:8px;" src="../images/storyof/1n1d19-logo.png" />
 				<hr class="divider inv lg">
 				<hr class="divider inv lg">
 				<h5 class="text-uppercase text-primary">The Vision</h5>
@@ -19,6 +20,8 @@
 				<hr class="divider inv lg">
 				<div class="col-sm-6 col-sm-offset-3 text-center">
 					<div class="sharethis-inline-share-buttons"></div>
+					<hr class="divider inv sm">
+					<a class="btn btn-primary btn-md btn-block" href="{{ url('campaigns') }}">Join The 1N1D Team</a>
 				</div><!-- end col -->
 			</div><!-- end col -->
 		</div><!-- end row -->
@@ -283,7 +286,7 @@
 				<hr class="divider inv lg">
 			</div><!-- end col -->
 			<div class="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-2 col-md-3 col-md-offset-3">
-					<a class="btn btn-primary btn-md btn-block" href="{{ url('campaigns') }}">Go On A Trip</a>
+					<a class="btn btn-primary btn-md btn-block" href="{{ url('campaigns') }}">Join The 1N1D Team</a>
 					<hr class="divider inv md">
 			</div><!-- end col -->
 			<div class="col-xs-10 col-xs-offset-1 col-sm-4 col-md-3 col-sm-offset-0 col-md-offset-0">

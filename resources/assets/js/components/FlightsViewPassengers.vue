@@ -1,6 +1,64 @@
 <template>
 <fetch-json :url="`campaigns/${campaignId}/flights/passengers?filter[segment]=${segmentId}`" ref="passengersList">
-<div slot-scope="{ json:passengers, pagination, changePage, loading }">
+<div slot-scope="{ json:passengers, pagination, changePage, loading, addFilter, removeFilter, filters }">
+    <div class="panel-heading">
+        <div class="btn-group btn-group-sm" style="margin-right: 1em;">
+            <button class="btn btn-primary" 
+                    :disabled="! selected.length"
+                    @click="ui.edit = true"
+            >
+                Edit Passengers 
+                <span class="badge" 
+                        style="margin-left: 1em;"
+                >
+                    {{ selected.length }}
+                </span>
+            </button>
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :disabled="! selected.length">
+                <i class="fa fa-caret-down" style="padding-bottom: 4px"></i>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#">Edit Passengers</a></li>
+                <li><a href="#">Remove Passengers</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Download</a></li>
+            </ul>
+        </div>
+
+        <span v-for="(value, key, index) in filters.filter" 
+              :key="index" 
+              class="label label-filter">
+              {{ key | capitalize }}: "{{ value | capitalize}}" <a type="button" @click="removeFilter(key)"><i class="fa fa-times"></i></a>
+        </span>
+        <div class="dropdown" style="display: inline-block; margin-left: 1em;">
+            <a role="button" class="dropdown-toggle" data-toggle="dropdown">+ Add a filter</a>
+            <ul class="dropdown-menu">
+                <li class="dropdown-header">Filter By</li>
+                <li><a type="button" @click="openFilterModal('surname', 'Surname')">Surname</a></li>
+                <li><a type="button" @click="openFilterModal('given_names', 'Given Names')">Given Names</a></li>
+            </ul>
+
+            <div class="modal fade" id="filterModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Filter By {{ filterModal.title }}</h4>
+                    </div>
+                    <div class="modal-body">
+                       <input class="form-control" name="search" v-model="searchFor" :placeholder="`Enter a ${filterModal.title} ...`">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" @click="addFilter(searchBy, searchFor), searchBy = null, searchFor = null" data-dismiss="modal">Apply</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
     <div class="panel-body" v-if="loading">
         <p class="lead text-center text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</p>
     </div>
@@ -8,7 +66,12 @@
             <table class="table" v-if="passengers && passengers.length">
                 <thead>
                     <tr class="active">
-                        <th><input type="checkbox"></th>
+                        <th>
+                            <input type="checkbox" 
+                                @change="selectAll(passengers, $event.target.checked)"
+                                :checked="selected.length === passengers.length"
+                            >
+                        </th>
                         <th>Surname</th>
                         <th>Given Names</th>
                         <th>Group</th>
@@ -23,7 +86,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="passenger in passengers" :key="passenger.id">
-                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox" :checked="isSelected(passenger)" @change="select(passenger, $event.target.checked)"></td>
                         <td><strong><a href="#">{{ passenger.surname }}</a></strong></td>
                         <td>{{ passenger.given_names }}</td>
                         <td>{{ passenger.group }}</td>
@@ -54,6 +117,46 @@ export default {
     watch: {
         'segmentId'(val) {
             this.$refs.passengersList.fetch();
+        }
+    },
+    data() {
+        return {
+            selected: [],
+            selectedItineraries: [],
+            ui: {
+                edit: false
+            },
+            filterModal: {
+                title: null
+            },
+            searchBy: null,
+            searchFor: null
+        }
+    },
+    methods: {
+        select(record, value) {
+            if (value) {
+                this.selected.push(record);
+            } else {
+                this.selected = _.without(this.selected, record);
+            }
+        },
+        selectAll(records, value) {
+            if (value) {
+                this.selected = records;
+            } else {
+                this.selected = [];
+            }
+        },
+        isSelected(record)
+        {
+            return _.findWhere(this.selected, record)
+        },
+        openFilterModal(filter, title)
+        {
+            this.searchBy = filter;
+            this.filterModal.title = title;
+            $('#filterModal').modal('show');
         }
     }
 }

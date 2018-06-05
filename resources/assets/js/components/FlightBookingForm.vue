@@ -12,22 +12,24 @@
                 <label slot="label" class="control-label col-sm-4">Record Locator / Contract #</label>
             </input-text>
 
+            <div class="alert alert-warning" v-if="lockFields"><strong>Itineraries with the same record locator cannot be modified here</strong>. To make changes you'll need to edit the itinerary from the itineraries list.</div>
+
             <div v-for="(flight, index) in form.flights" :key="index">
                 <hr class="divider">
                 <h5>{{ getSegmentName(flight.flight_segment_id) }} <a role="button" class="pull-right" @click="removeFlight(index)">X</a></h5>
-                <input-text :name="'flight.' + index + '.type'" v-model="flight.flight_no" :horizontal="true" classes="col-md-2 col-sm-4">
+                <input-text :readonly="lockFields" :name="'flight.' + index + '.type'" v-model="flight.flight_no" :horizontal="true" classes="col-md-2 col-sm-4">
                     <label slot="label" class="control-label col-sm-4">Flight Number</label>
                 </input-text>
 
-                <input-text :name="'flight.' + index + '.iata_code'" v-model="flight.iata_code" :horizontal="true" classes="col-md-2 col-sm-4">
+                <input-text :readonly="lockFields" :name="'flight.' + index + '.iata_code'" v-model="flight.iata_code" :horizontal="true" classes="col-md-2 col-sm-4">
                     <label slot="label" class="control-label col-sm-4">City</label>
                 </input-text>
 
-                <input-date :name="'flight.' + index + '.date'" v-model="flight.date" :horizontal="true" classes="col-md-2 col-sm-4">
+                <input-date :readonly="lockFields" :name="'flight.' + index + '.date'" v-model="flight.date" :horizontal="true" classes="col-md-2 col-sm-4">
                     <label slot="label" class="control-label col-sm-4">Date</label>
                 </input-date>
 
-                <input-time :name="'flight.' + index + '.time'" v-model="flight.time" :horizontal="true" classes="col-md-2 col-sm-4">
+                <input-time :readonly="lockFields" :name="'flight.' + index + '.time'" v-model="flight.time" :horizontal="true" classes="col-md-2 col-sm-4">
                     <label slot="label" class="control-label col-sm-4">24-Hour Time</label>
                 </input-time>
             </div>
@@ -39,7 +41,7 @@
                         {{ option.text }}
                     </option>
                 </select>
-                <button class="btn btn-link btn-sm" type="button" @click.prevent="addFlight">Add Flight</button>
+                <button class="btn btn-link btn-sm" type="button" @click.prevent="addFlight" :disabled="lockFields">Add Flight</button>
             </form>
 
             <hr class="divider">
@@ -68,13 +70,15 @@ export default {
             types: {
                 'individual': 'Individual',
                 'group': 'Group'
-            }
+            },
+            lockFields: false
         }
     },
     computed: {
         availableSegments() {
+            let that = this;
             return _.map(this.segments, function(segment) {
-                return {value: segment.id, text: segment.name};
+                return {value: segment.id, text: segment.name}
             });
         }
     },
@@ -129,9 +133,13 @@ export default {
                               this.$refs.ajax.form.type = itinerary.type;
                               this.$refs.ajax.form.flights = flights;
 
+                              this.lockFields = true;
+
                           } else {
                                 this.$refs.ajax.form.type = 'individual';
                                 this.$refs.ajax.form.flights = [];
+
+                                this.lockFields = false;
                           }
 
                           this.$forceUpdate();

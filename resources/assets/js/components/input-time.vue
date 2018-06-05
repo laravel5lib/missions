@@ -9,6 +9,7 @@
                 <input class="form-control" 
                     v-model="time"
                     v-mask="format" 
+                    :readonly="readonly"
                     :name="name"
                     :placeholder="placeholder">
                 <span class="help-block" 
@@ -24,6 +25,7 @@
             <input class="form-control" 
                 v-model="date"
                 v-mask="format" 
+                :readonly="readonly"
                 :name="name"
                 :placeholder="placeholder">
             <span class="help-block" 
@@ -69,19 +71,22 @@ export default {
         'classes': {
             type: String,
             default: 'col-sm-9'
+        },
+        'readonly': {
+            type: Boolean
         }
     },
 
     watch: {
         'time'(value) {
-            this.$emit('input', moment(value).format('mm:ss'));
+            this.$emit('input', value);
         }
     },
 
     mounted() {
         this.$nextTick(() =>  {
             if (this.value) {
-                this.date = moment(this.value).format('mm:ss');
+                this.date = value;
             }
         });
 

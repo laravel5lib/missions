@@ -26,6 +26,19 @@ $active-icon-color: #6CC94D;
 /*$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 $fa-font-path: "~font-awesome/fonts/";*/
 
+.label.label-filter {
+  background-color: #eee;
+  color: #777;
+  padding: 10px;
+  margin-right: 0.5em;
+  display: inline-block;
+}
+
+.label.label-filter > a {
+  padding-left: 0.5em;
+  color: #777;
+}
+
 .well {
   min-height: 20px;
   padding: 19px;

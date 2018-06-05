@@ -9,6 +9,7 @@
                 <input class="form-control" 
                     v-model="date"
                     v-mask="format" 
+                    :readonly="readonly"
                     :name="name"
                     :placeholder="placeholder">
                 <span class="help-block" 
@@ -24,6 +25,7 @@
             <input class="form-control" 
                 v-model="date"
                 v-mask="format" 
+                :readonly="readonly"
                 :name="name"
                 :placeholder="placeholder">
             <span class="help-block" 
@@ -69,6 +71,9 @@ export default {
         'classes': {
             type: String,
             default: 'col-sm-9'
+        },
+        'readonly': {
+            type: Boolean
         }
     },
 

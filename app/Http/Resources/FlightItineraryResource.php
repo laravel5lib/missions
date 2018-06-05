@@ -19,6 +19,7 @@ class FlightItineraryResource extends JsonResource
             'id' => $this->uuid,
             'type' => $this->type,
             'record_locator' => $this->record_locator,
+            'published' => $this->published,
             'flight_count' => $this->flights_count,
             'passenger_count' => $this->reservations_count,
             'created_at' => $this->created_at->toIso8601String(),

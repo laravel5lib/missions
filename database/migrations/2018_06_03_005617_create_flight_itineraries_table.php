@@ -18,6 +18,7 @@ class CreateFlightItinerariesTable extends Migration
             $table->uuid('uuid')->index();
             $table->string('record_locator', 60);
             $table->string('type');
+            $table->boolean('published')->default(false);
             $table->timestamps();
         });
     }

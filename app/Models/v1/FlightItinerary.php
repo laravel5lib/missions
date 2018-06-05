@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class FlightItinerary extends Model
 {
-    protected $fillable = ['type', 'record_locator'];
+    protected $fillable = ['type', 'record_locator', 'published'];
+
+    protected $casts = ['published' => 'boolean'];
 
     /**
      * Boot the Uuid trait for the model.

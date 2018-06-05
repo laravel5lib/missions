@@ -11,6 +11,7 @@
                     <input class="form-control"
                         :name="name"
                         :value="value"
+                        :readonly="readonly"
                         :placeholder="placeholder"
                         @input="updateValue($event.target.value)">
                     <slot name="suffix"></slot>
@@ -32,6 +33,7 @@
             <input class="form-control"
                 :name="name"
                 :value="value"
+                :readonly="readonly"
                 :placeholder="placeholder"
                 @input="updateValue($event.target.value)">
             <slot name="suffix"></slot>
@@ -70,6 +72,9 @@ export default {
         'classes': {
             type: String,
             default: 'col-sm-9'
+        },
+        'readonly': {
+            type: Boolean
         }
     },
 

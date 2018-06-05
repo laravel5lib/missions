@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\Filter;
 use App\Models\v1\FlightSegment;
 use App\Models\v1\FlightItinerary;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,11 @@ class FlightItineraryController extends Controller
         $query = FlightItinerary::forCampaign($campaignId);
         
         $itineraries = QueryBuilder::for($query)
-            ->allowedFilters('record_locator')
+            ->allowedFilters([
+                'record_locator', 
+                Filter::exact('published'), 
+                Filter::exact('type')
+            ])
             ->allowedIncludes('flights.flight-segment')
             ->withCount(['reservations', 'flights'])
             ->paginate(25);
@@ -28,7 +33,7 @@ class FlightItineraryController extends Controller
     public function store($campaignId, Request $request)
     {
         DB::transaction(function () use ($request) {
-            $itinerary = FlightItinerary::create([
+            $itinerary = FlightItinerary::firstOrCreate([
                 'record_locator' => $request->input('record_locator'),
                 'type' => $request->input('type')
             ]);
@@ -40,7 +45,7 @@ class FlightItineraryController extends Controller
 
             // create flights
             foreach($request->input('flights') as $flight) {
-                $itinerary->flights()->create([
+                $itinerary->flights()->firstOrCreate([
                     'flight_segment_id' => FlightSegment::whereUuid($flight['flight_segment_id'])->firstOrFail()->id,
                     'flight_no' => $flight['flight_no'],
                     'date' => $flight['date'],

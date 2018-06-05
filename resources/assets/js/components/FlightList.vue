@@ -37,7 +37,7 @@ export default {
     },
     data() {
         return {
-            flightList: 'flights-not-booked',
+            flightList: 'flights-booked',
             bookedTotal: 0,
             notBookedTotal: 0
         }

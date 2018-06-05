@@ -547,4 +547,9 @@ class ReservationFilter extends Filter
             });
         });
     }
+
+    public function notBooked()
+    {
+        return $this->whereNull('flight_itinerary_id');
+    }
 }

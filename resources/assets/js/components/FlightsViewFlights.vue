@@ -1,5 +1,5 @@
 <template>
-<fetch-json :url="`flights?filter[segment]=${segmentId}`" ref="fetchJson">
+<fetch-json :url="`flights?filter[segment]=${segmentId}`" ref="flightsList">
 <div slot-scope="{ json:flights, pagination, changePage, loading }">
     <div class="panel-body" v-if="loading">
         <p class="lead text-center text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</p>
@@ -41,7 +41,7 @@ export default {
     props: ['campaignId', 'segmentId'],
     watch: {
         'segmentId'(val) {
-            this.$refs.fetchJson.fetch();
+            this.$refs.flightsList.fetch();
         }
     }
 }

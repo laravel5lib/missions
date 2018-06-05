@@ -15,7 +15,7 @@ export default {
 
     data() {
         return {
-            json: null,
+            json: [],
             loading: true,
             pagination: {},
             filters: this.parameters ? this.parameters : {}

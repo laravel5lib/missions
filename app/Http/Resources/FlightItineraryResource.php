@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\FlightResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FlightItineraryResource extends JsonResource
@@ -21,7 +22,8 @@ class FlightItineraryResource extends JsonResource
             'flight_count' => $this->flights_count,
             'passenger_count' => $this->reservations_count,
             'created_at' => $this->created_at->toIso8601String(),
-            'updated_at' => $this->updated_at->toIso8601String()
+            'updated_at' => $this->updated_at->toIso8601String(),
+            'flights' => FlightResource::collection($this->whenLoaded('flights')),
         ];
     }
 }

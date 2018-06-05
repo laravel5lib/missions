@@ -4,12 +4,12 @@
         <ul class="nav nav-pills nav-justified">
             <li :class="{ 'active': flightList === 'flights-booked'}">
                 <a role="button" @click="changeView('flights-booked')">
-                    Booked <span class="badge badge-default">0</span>
+                    Booked <span class="badge badge-default">{{ bookedTotal }}</span>
                 </a>
             </li>
             <li :class="{ 'active': flightList === 'flights-not-booked'}">
                 <a role="button" @click="changeView('flights-not-booked')">
-                    To be Booked <span class="badge badge-default">0</span>
+                    To be Booked <span class="badge badge-default">{{ notBookedTotal }}</span>
                 </a>
             </li>
             <li :class="{ 'active': flightList === 'flights-none'}">
@@ -19,9 +19,11 @@
             </li>
         </ul>
     </div>
-    <keep-alive>
-      <component :is="flightList" :campaign-id="campaignId"></component>
-    </keep-alive>
+    <component :is="flightList" 
+               :campaign-id="campaignId" 
+               @update:booked="updateBooked" 
+               @update:notBooked="updateNotBooked"
+    ></component>
 </div> 
 </template>
 <script>
@@ -35,12 +37,20 @@ export default {
     },
     data() {
         return {
-            flightList: 'flights-booked'
+            flightList: 'flights-not-booked',
+            bookedTotal: 0,
+            notBookedTotal: 0
         }
     },
     methods: {
         changeView(component) {
             this.flightList = component;
+        },
+        updateBooked(total) {
+            this.bookedTotal = total;
+        },
+        updateNotBooked(total) {
+            this.notBookedTotal = total;
         }
     }
 }

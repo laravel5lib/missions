@@ -246,6 +246,7 @@ Vue.component('ajax-form', require('./components/ajax-form.vue'));
 Vue.component('input-text', require('./components/input-text.vue'));
 Vue.component('input-textarea', require('./components/input-textarea.vue'));
 Vue.component('input-date', require('./components/input-date.vue'));
+Vue.component('input-time', require('./components/input-time.vue'));
 Vue.component('input-datetime', require('./components/input-datetime.vue'));
 Vue.component('input-currency', require('./components/input-currency.vue'));
 Vue.component('input-phone', require('./components/input-phone.vue'));

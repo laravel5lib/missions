@@ -49,9 +49,7 @@
         </div>
     </div>
     
-    <keep-alive>
-      <component :is="flightView" :campaign-id="campaignId" :segment-id="selectedSegment"></component>
-    </keep-alive>
+    <component :is="flightView" :campaign-id="campaignId" :segment-id="selectedSegment"></component>
 
     <div class="modal fade" id="newSegment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">

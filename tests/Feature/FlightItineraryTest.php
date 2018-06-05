@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\v1\Trip;
 use App\Models\v1\Reservation;
+use App\Models\v1\FlightSegment;
 use App\Models\v1\FlightItinerary;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -62,5 +63,37 @@ class FlightItineraryTest extends TestCase
                      ]
                  ]
              ]);
+    }
+
+    /** @test */
+    public function creates_itinerary_for_reservations_with_flights()
+    {
+        $trip = factory(Trip::class)->create();
+        factory(Reservation::class, 2)->create(['trip_id' => $trip->id]);
+        $reservationIds = Reservation::pluck('id')->toArray();
+
+        $this->json('POST', "/api/campaigns/{$trip->campaign_id}/flights/itineraries", [
+            'type' => 'individual',
+            'record_locator' => 'RX2Q3F',
+            'reservations' => $reservationIds,
+            'flights' => [
+                [
+                    'flight_segment_id' => factory(FlightSegment::class)->create()->id,
+                    'iata_code' => 'SNA',
+                    'date' => today()->addMonth()->toDateString(),
+                    'time' => '12:00'
+                ],
+                [
+                    'flight_segment_id' => factory(FlightSegment::class)->create()->id,
+                    'iata_code' => 'MGA',
+                    'date' => today()->addMonths(2)->toDateString(),
+                    'time' => '22:00'
+                ]
+            ]
+        ])->assertStatus(201);
+
+        $this->assertDatabaseHas('flight_itineraries', ['record_locator' => 'RX2Q3F']);
+        $this->assertDatabaseHas('flights', ['iata_code' => 'SNA']);
+        $this->assertDatabaseHas('flights', ['iata_code' => 'MGA']);
     }
 }

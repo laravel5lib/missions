@@ -104,9 +104,9 @@ export default {
         resetAndCloseForm() {
             this.$emit('close:form')
         },
-        lookupRecord(value) {
-            if (value) {
-            this.$http.get(`campaigns/${this.campaignId}/flights/itineraries?filter[record_locator]=${value}&include=flights.flight-segment`)
+        lookupRecord : _.debounce(function (value) {
+            // if (value) {
+                this.$http.get(`campaigns/${this.campaignId}/flights/itineraries?filter[record_locator]=${value}&include=flights.flight-segment`)
                       .then(response => {
                           
                           let itineraries = response.data.data;
@@ -129,11 +129,15 @@ export default {
                               this.$refs.ajax.form.type = itinerary.type;
                               this.$refs.ajax.form.flights = flights;
 
-                              this.$forceUpdate();
+                          } else {
+                                this.$refs.ajax.form.type = 'individual';
+                                this.$refs.ajax.form.flights = [];
                           }
+
+                          this.$forceUpdate();
                       });
-            }
-        }
+            // }
+        }, 1000)
     },
     mounted() {
         return this.getSegments();

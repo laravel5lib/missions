@@ -62,7 +62,7 @@ export default {
     methods: {
         updateValue(value) {
             this.$emit('input', value);
-            this.$parent.form ? this.$parent.form.errors.clear(this.name) : null;
+            this.$parent.form.errors ? this.$parent.form.errors.clear(this.name) : null;
         }
     }
 }

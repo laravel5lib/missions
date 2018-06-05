@@ -185,7 +185,7 @@ $('.launch-modal').on('click', function(e){
                     <ul class="list-unstyled">
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;margin-bottom:0;" class="text-muted">May 23 at 4pm EST</h6>
                         <p class="text-uppercase" style="font-size:10px;margin-left:35px;"><a href="https://vimeo.com/271571861/8270ebaa44" target="_blank">Watch Meeting</a></p></li>
-                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">June 20 at 4pm EST</h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">June 27 at 4pm EST</h6></li>
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 class="text-primary" style="display:inline-block;">No meeting in July</h6></li>
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">August 15 at 4pm EST</h6></li>
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">September 19 at 4pm EST</h6></li>

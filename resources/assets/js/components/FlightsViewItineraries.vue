@@ -1,5 +1,5 @@
 <template>
-<fetch-json :url="`campaigns/${campaignId}/flights/itineraries`" ref="itinerariesList" :parameters="{filter: {}}">
+<fetch-json :url="`campaigns/${campaignId}/flights/itineraries`" ref="itinerariesList" :parameters="{filter: {}, sort: 'record_locator'}">
 <div slot-scope="{ json:itineraries, pagination, changePage, loading, addFilter, removeFilter, filters, sortBy }">
     <div class="panel-heading" v-if="!ui.edit">
         <div class="btn-group btn-group-sm" style="margin-right: 1em;">
@@ -10,8 +10,7 @@
                 Publish Itineraries 
                 <span class="badge" 
                         style="margin-left: 1em;"
-                >
-                    {{ selected.length }}
+                >{{ selected.length }}
                 </span>
             </button>
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :disabled="! selected.length">
@@ -19,7 +18,6 @@
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
             <ul class="dropdown-menu">
-                <li><a href="#">Publish Itineraries</a></li>
                 <li><a href="#">Unpublish Itineraries</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="#">Download</a></li>

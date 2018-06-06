@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Http\Resources\FlightSegmentResource;
+use App\Http\Resources\FlightItineraryResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FlightResource extends JsonResource
@@ -23,6 +24,7 @@ class FlightResource extends JsonResource
             'iata_code' => $this->iata_code,
             'created_at' => $this->created_at->toIso8601String(),
             'updated_at' => $this->updated_at->toIso8601String(),
+            'itinerary' => new FlightItineraryResource($this->whenLoaded('flightItinerary')),
             'segment' => new FlightSegmentResource($this->whenLoaded('flightSegment')),
         ];
     }

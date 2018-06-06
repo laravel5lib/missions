@@ -29,7 +29,7 @@ class Flight extends Model
 
     public function flightItinerary()
     {
-        return $this->belongsTo(FlightItinerary::class);
+        return $this->belongsTo(FlightItinerary::class)->withCount('reservations');
     }
 
     public function flightSegment()

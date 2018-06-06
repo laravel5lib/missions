@@ -1,31 +1,21 @@
 <template>
 <fetch-json :url="`campaigns/${campaignId}/flights/passengers?segment=${segmentId}&include=flight-itinerary`" 
             ref="passengersList" 
-            :parameters="{filter: {}}"
+            :parameters="{filter: {}, sort: 'surname'}"
 >
 <div slot-scope="{ json:passengers, pagination, changePage, loading, addFilter, removeFilter, filters, sortBy }">
-    <div class="panel-heading" v-if="!ui.edit">
-        <div class="btn-group btn-group-sm" style="margin-right: 1em;">
-            <button class="btn btn-primary" 
-                    :disabled="! selected.length"
-                    @click="ui.edit = true, $emit('mode:edit')"
-            >
-                Edit Passengers 
-                <span class="badge" 
-                        style="margin-left: 1em;"
-                >{{ selected.length }}
-                </span>
-            </button>
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :disabled="! selected.length">
-                <i class="fa fa-caret-down" style="padding-bottom: 4px"></i>
-                <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a type="button" @click="removePassengers">Remove Passengers</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#">Download</a></li>
-            </ul>
-        </div>
+    <div class="panel-heading">
+        <button class="btn btn-primary btn-sm" 
+                style="margin-right: 1em;"
+                :disabled="! selected.length"
+                @click="removePassengers"
+        >
+            Remove Passengers 
+            <span class="badge" 
+                  style="margin-left: 1em;"
+            >{{ selected.length }}
+            </span>
+        </button>
 
         <span v-for="(value, key, index) in filters.filter" 
               :key="index" 
@@ -63,15 +53,10 @@
 
         </div>
     </div>
-    <div class="panel-body" v-if="ui.edit">
-        <flight-passenger-form :campaign-id="campaignId"            
-                               :passengers="selected"
-        ></flight-passenger-form>
-    </div>
-    <div class="panel-body" v-if="loading && !ui.edit">
+    <div class="panel-body" v-if="loading">
         <p class="lead text-center text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</p>
     </div>
-    <div class="table-responsive" v-if="!loading && !ui.edit">
+    <div class="table-responsive" v-if="!loading">
             <table class="table" v-if="passengers && passengers.length">
                 <thead>
                     <tr class="active">
@@ -136,23 +121,19 @@
                 </tbody>
             </table>
     </div>
-    <div class="panel-body text-center" v-if="!passengers.length && !loading && !ui.edit">
+    <div class="panel-body text-center" v-if="!passengers.length && !loading">
         <span class="lead">No Passengers</span>
         <p>Try adjusting the filters, or book some flights.</p>
     </div>
-    <div class="panel-footer" v-if="pagination.total > pagination.per_page && !ui.edit">
+    <div class="panel-footer" v-if="pagination.total > pagination.per_page">
         <pager :pagination="pagination" :callback="changePage"></pager>
     </div>
 </div>
 </fetch-json>
 </template>
 <script>
-import FlightPassengerForm from '../components/FlightPassengerForm';
 export default {
     props: ['campaignId', 'segmentId'],
-    components: {
-        'flight-passenger-form': FlightPassengerForm
-    },
     watch: {
         'segmentId'(val) {
             this.$refs.passengersList.fetch();
@@ -161,10 +142,6 @@ export default {
     data() {
         return {
             selected: [],
-            selectedItineraries: [],
-            ui: {
-                edit: false
-            },
             filterModal: {
                 title: null
             },

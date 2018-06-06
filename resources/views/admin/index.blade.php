@@ -13,7 +13,7 @@
                     <!-- <i class="fa fa-ticket fa-5x"></i>  -->
                     <h1 class="text-primary text-oswald font-hero">{{ number_format($reservations, 0, '', ',') }}</h1>
                     <h6 class="text-uppercase">Reservations</h6> 
-                    <a href="{{ url('/admin/reservations') }}" class="btn btn-sm btn-primary-hollow">Manage</a>
+                    <a href="{{ url('/admin/campaigns') }}" class="btn btn-sm btn-primary-hollow">Manage</a>
                     <hr class="divider inv">
                 </div>
             </div>

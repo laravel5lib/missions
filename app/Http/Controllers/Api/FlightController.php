@@ -25,6 +25,7 @@ class FlightController extends Controller
                 Filter::scope('segment'),
                 Filter::scope('itinerary')
             ])
+            ->allowedIncludes('flight-itinerary')
             ->paginate();
 
         return FlightResource::collection($flights);

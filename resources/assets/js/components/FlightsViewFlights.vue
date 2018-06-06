@@ -1,7 +1,7 @@
 <template>
-<fetch-json :url="`flights?filter[segment]=${segmentId}`" 
+<fetch-json :url="`flights?filter[segment]=${segmentId}&include=flight-itinerary`" 
             ref="flightsList" 
-            :parameters="{filter: {}}"
+            :parameters="{filter: {}, sort: 'date'}"
 >
 <div slot-scope="{ json:flights, pagination, changePage, loading, addFilter, removeFilter, filters, sortBy }">
     <div class="panel-heading">
@@ -45,16 +45,33 @@
             <table class="table" v-if="flights && flights.length">
                 <thead>
                     <tr class="active">
-                        <th><input type="checkbox"></th>
-                        <th>Flight</th>
-                        <th>City</th>
-                        <th>Date</th>
-                        <th>Time</th>
+                        <th @click="sortBy('flight_no')" style="cursor: pointer">
+                            Flight <i class="pull-right fa" 
+                                    :class="[{ 'fa-sort-up': filters.sort === 'flight_no', 'fa-sort-down': filters.sort === '-flight_no' }, 'fa-sort']"
+                                ></i>
+                        </th>
+                        <th @click="sortBy('iata_code')" style="cursor: pointer">
+                            City <i class="pull-right fa" 
+                                    :class="[{ 'fa-sort-up': filters.sort === 'iata_code', 'fa-sort-down': filters.sort === '-iata_code' }, 'fa-sort']"
+                                ></i>
+                        </th>
+                        <th @click="sortBy('date')" style="cursor: pointer">
+                            Date <i class="pull-right fa" 
+                                    :class="[{ 'fa-sort-up': filters.sort === 'date', 'fa-sort-down': filters.sort === '-date' }, 'fa-sort']"
+                                ></i>
+                        </th>
+                        <th @click="sortBy('time')" style="cursor: pointer">
+                            Time <i class="pull-right fa" 
+                                    :class="[{ 'fa-sort-up': filters.sort === 'time', 'fa-sort-down': filters.sort === '-time' }, 'fa-sort']"
+                                ></i>
+                        </th>
+
+                        <th>Record Locator</th>
+                        <th class="text-right">Passengers</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="flight in flights" :key="flight.id">
-                        <td><input type="checkbox"></td>
                         <td>
                             <strong>
                                 <a :href="`/admin/flights/${flight.id}`">
@@ -65,6 +82,16 @@
                         <td>{{ flight.iata_code }}</td>
                         <td>{{ flight.date | mFormat('ll') }}</td>
                         <td>{{ flight.time }}</td>
+                        <td>
+                            <strong>
+                                <a :href="`/admin/campaigns/${campaignId}/itineraries/${flight.itinerary.id}`">
+                                    {{ flight.itinerary.record_locator }}
+                                </a>
+                            </strong>
+                        </td>
+                        <td class="text-right">
+                            <code>{{ flight.itinerary.passenger_count }}</code>
+                        </td>
                     </tr>
                 </tbody>
             </table>

@@ -65,7 +65,8 @@ class CampaignsController extends Controller
             'admin/campaigns/'.$campaign->id => 'Overview',
             'admin/campaigns/'.$campaign->id.'/costs' => 'Costs',
             'admin/campaigns/'.$campaign->id.'/groups' => 'Groups ',
-            'admin/campaigns/'.$campaign->id.'/reservations' => 'Reservations'
+            'admin/campaigns/'.$campaign->id.'/reservations' => 'Reservations',
+            'admin/campaigns/'.$campaign->id.'/flights' => 'Flights'
         ];
 
         // if (auth()->user()->can('view', \App\Models\v1\Team::class)) {

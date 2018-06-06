@@ -19,7 +19,6 @@
                     <span class="sr-only">Toggle Dropdown</span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a href="#">Book Flights</a></li>
                     <li><a href="#">Add to No Flight</a></li>
                     <li role="separator" class="divider"></li>
                     <li><a href="#">Download</a></li>
@@ -52,7 +51,7 @@
                             <component :is="filterModal.component"></component>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
                             <button type="button" class="btn btn-primary">Apply</button>
                         </div>
                         </div>
@@ -154,18 +153,16 @@ export default {
                 this.selectedReservations = [];
             }
         },
-        isSelected(reservation)
-        {
+        isSelected(reservation) {
             return _.findWhere(this.selectedReservations, reservation)
         },
-        closeFormAndReload()
-        {
+        closeFormAndReload() {
+            this.$emit('update:bookedTotal', this.selectedReservations.length);
             this.ui.booking = false;
             this.selectedReservations = [];
             this.$refs.list.fetch();
         },
-        openFilterModal(component, title)
-        {
+        openFilterModal(component, title) {
             this.filterModal.component = component;
             this.filterModal.title = title;
             $('#filterModal').modal('show');

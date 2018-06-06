@@ -34,7 +34,9 @@
                 @endsidenav
             </div>
             <div class="col-sm-10">
-                <flight-list campaign-id="{{ $campaign->id }}"></flight-list>
+                <flight-list campaign-id="{{ $campaign->id }}" 
+                             :totals="{{ json_encode($totals) }}"
+                ></flight-list>
             </div>
         </div>
 

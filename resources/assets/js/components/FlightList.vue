@@ -14,15 +14,14 @@
             </li>
             <li :class="{ 'active': flightList === 'flights-none'}">
                 <a href="#">
-                    No Flight <span class="badge badge-default">0</span>
+                    No Flight <span class="badge badge-default">{{ noFlightTotal }}</span>
                 </a>
             </li>
         </ul>
     </div>
     <component :is="flightList" 
-               :campaign-id="campaignId" 
-               @update:booked="updateBooked" 
-               @update:notBooked="updateNotBooked"
+               :campaign-id="campaignId"
+               @update:bookedTotal="updateBookedCount"
     ></component>
 </div> 
 </template>
@@ -30,7 +29,13 @@
 import FlightsBooked from '../components/FlightsBooked.vue';
 import FlightsNotBooked from '../components/FlightsNotBooked.vue';
 export default {
-    props: ['campaignId'],
+    props: {
+        campaignId: String,
+        totals: {
+            type: Object,
+            required: true
+        }
+    },
     components: {
         'flights-booked': FlightsBooked,
         'flights-not-booked': FlightsNotBooked,
@@ -38,19 +43,18 @@ export default {
     data() {
         return {
             flightList: 'flights-booked',
-            bookedTotal: 0,
-            notBookedTotal: 0
+            bookedTotal: this.totals.booked,
+            notBookedTotal: this.totals.not_booked,
+            noFlightTotal: this.totals.no_flight
         }
     },
     methods: {
         changeView(component) {
             this.flightList = component;
         },
-        updateBooked(total) {
-            this.bookedTotal = total;
-        },
-        updateNotBooked(total) {
-            this.notBookedTotal = total;
+        updateBookedCount(total) {
+            this.notBookedTotal = this.notBookedTotal - total;
+            this.bookedTotal = this.bookedTotal + total;
         }
     }
 }

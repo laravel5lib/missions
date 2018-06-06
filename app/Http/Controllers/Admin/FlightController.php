@@ -16,7 +16,13 @@ class FlightController extends Controller
 
         $segments = FlightSegment::where('campaign_id', $campaign->id)->get();
 
-        return view('admin.flights.index', compact('campaign', 'segments'));
+        $totals = [
+            'booked' => $campaign->reservations()->whereNotNull('flight_itinerary_id')->count(),
+            'not_booked' => $campaign->reservations()->whereNull('flight_itinerary_id')->count(),
+            'no_flight' => 0
+        ];
+
+        return view('admin.flights.index', compact('campaign', 'segments', 'totals'));
     }
 
     public function show($flight)

@@ -101,7 +101,13 @@
             <tbody>
                 <tr v-for="itinerary in itineraries" :key="itinerary.id">
                     <td><input type="checkbox" :checked="isSelected(itinerary)" @change="select(itinerary, $event.target.checked)"></td>
-                    <td><strong><a href="#">{{ itinerary.record_locator }}</a></strong></td>
+                    <td>
+                        <strong>
+                            <a :href="`/admin/campaigns/${campaignId}/itineraries/${itinerary.id}`">
+                                {{ itinerary.record_locator }}
+                            </a>
+                        </strong>
+                    </td>
                     <td><em>{{ itinerary.type | capitalize }}</em></td>
                     <td>{{ itinerary.updated_at | moment('lll') }}</td>
                     <td><em>{{ itinerary.published ? 'Published' : 'Draft' }}</em></td>

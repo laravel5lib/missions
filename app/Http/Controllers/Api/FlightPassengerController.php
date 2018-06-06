@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Models\v1\Reservation;
 use Spatie\QueryBuilder\Filter;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Http\Resources\FlightPassengerResource;
@@ -33,8 +34,19 @@ class FlightPassengerController extends Controller
                 Filter::scope('flight_no'),
                 Filter::scope('iata_code')
             ])
+            ->allowedIncludes('flight-itinerary')
             ->paginate(25);
 
         return FlightPassengerResource::collection($passengers);
+    }
+
+    public function update($campaignId, Request $request)
+    {
+        foreach($request->input('reservations') as $id)
+        {
+            DB::table('reservations')
+                ->where('id', $id)
+                ->update(['flight_itinerary_id' => null]);
+        }
     }
 }

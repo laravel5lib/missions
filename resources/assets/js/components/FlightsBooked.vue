@@ -52,7 +52,8 @@
     <component :is="flightView" 
                :campaign-id="campaignId" 
                :segment-id="selectedSegment"
-               @mode:edit="ui.showMenu = false">
+               @mode:edit="ui.showMenu = false"
+               @update:bookedTotal="updateBookedTotal">
     </component>
 
     <div class="modal fade" id="newSegment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -179,6 +180,9 @@ export default {
                         });
                 }
             })
+        },
+        updateBookedTotal(total) {
+            this.$emit('update:bookedTotal', total);
         }
     },
     mounted() {

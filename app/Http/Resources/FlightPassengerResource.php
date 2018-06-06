@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Http\Resources\FlightResource;
+use App\Http\Resources\FlightItineraryResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FlightPassengerResource extends JsonResource
@@ -21,8 +22,7 @@ class FlightPassengerResource extends JsonResource
             'given_names' => $this->given_names,
             'group' => $this->trip->group->name,
             'trip' => $this->trip->type,
-            'type' => $this->flightItinerary->type,
-            'record_locator' => $this->flightItinerary->record_locator,
+            'itinerary' => new FlightItineraryResource($this->whenLoaded('flightItinerary')),
             'flight' => new FlightResource($this->flightItinerary->flights->first())
         ];
     }

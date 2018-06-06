@@ -1,5 +1,5 @@
 <template>
-<fetch-json :url="`campaigns/${campaignId}/flights/passengers?segment=${segmentId}`" 
+<fetch-json :url="`campaigns/${campaignId}/flights/passengers?segment=${segmentId}&include=flight-itinerary`" 
             ref="passengersList" 
             :parameters="{filter: {}}"
 >
@@ -13,8 +13,7 @@
                 Edit Passengers 
                 <span class="badge" 
                         style="margin-left: 1em;"
-                >
-                    {{ selected.length }}
+                >{{ selected.length }}
                 </span>
             </button>
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :disabled="! selected.length">
@@ -22,8 +21,7 @@
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
             <ul class="dropdown-menu">
-                <li><a href="#">Edit Passengers</a></li>
-                <li><a href="#">Remove Passengers</a></li>
+                <li><a type="button" @click="removePassengers">Remove Passengers</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="#">Download</a></li>
             </ul>
@@ -116,11 +114,11 @@
                         <td>{{ passenger.given_names }}</td>
                         <td>{{ passenger.group }}</td>
                         <td>{{ passenger.trip }}</td>
-                        <td><em>{{ passenger.type }}</em></td>
+                        <td><em>{{ passenger.itinerary.type }}</em></td>
                         <td>
                             <strong>
-                                <a :href="`/admin/itineraries/${passenger.flight_itinerary_id}`">
-                                    {{ passenger.record_locator }}
+                                <a :href="`/admin/campaigns/${campaignId}/itineraries/${passenger.itinerary.id}`">
+                                    {{ passenger.itinerary.record_locator }}
                                 </a>
                             </strong>
                         </td>
@@ -189,15 +187,50 @@ export default {
                 this.selected = [];
             }
         },
-        isSelected(record)
-        {
+        isSelected(record) {
             return _.findWhere(this.selected, record)
         },
-        openFilterModal(filter, title)
-        {
+        openFilterModal(filter, title) {
             this.searchBy = filter;
             this.filterModal.title = title;
             $('#filterModal').modal('show');
+        },
+        removePassengers() {
+            swal('WARNING!', `Are you sure you want to remove the ${this.selected.length} selected passenger(s)? This will remove them from all itineraries. To undo this action, flights must be booked again.`, 'warning', {
+                closeOnClickOutside: true,
+                buttons: {
+                    cancel: {
+                        text: "Keep",
+                        value: null,
+                        visible: true,
+                        closeModal: true,
+                    },
+                    confirm: {
+                        text: "Remove",
+                        value: true,
+                        visible: true,
+                        closeModal: true
+                    }
+                },
+                dangerMode: true
+            }).then((value) => {
+                if (value) {
+                    this.$http
+                        .patch(`campaigns/${this.campaignId}/flights/passengers`, {reservations: this.selected})
+                        .then(response => {
+                            swal("Nice Work!", "Passengers removed.", "success", {
+                                buttons: false,
+                                timer: 1000
+                            });
+                            this.$emit('update:bookedTotal', -this.selected.length);
+                            this.selected = [];
+                            this.$refs.passengersList.fetch();
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                }
+            })
         }
     }
 }

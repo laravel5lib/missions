@@ -22,14 +22,20 @@ Route::get('campaigns/{campaignId}/groups/{groupId}/prices', function($campaignI
     return redirect('/api/campaign-groups/'.$group->uuid.'/prices');
 });
 Route::apiResource('trips/{tripId}/prices', 'TripPriceController');
+
+// Reservations
 Route::post('reservations/{reservationId}/prices/lock', 'ReservationPriceLockController@store');
 Route::delete('reservations/{reservationId}/prices/lock', 'ReservationPriceLockController@destroy');
 Route::apiResource('reservations/{reservationId}/prices', 'ReservationPriceController');
 Route::post('reservations/{id}/transfer', 'ReservationTransfersController@store');
+
 Route::apiResource('leads', 'LeadController');
+
+// Flights
 Route::apiResource('campaigns/{campaignId}/flights/segments', 'FlightSegmentController');
 Route::apiResource('campaigns/{campaignId}/flights/itineraries', 'FlightItineraryController');
-Route::apiResource('campaigns/{campaignId}/flights/passengers', 'FlightPassengerController');
+Route::get('campaigns/{campaignId}/flights/passengers', 'FlightPassengerController@index');
+Route::patch('campaigns/{campaignId}/flights/passengers', 'FlightPassengerController@update');
 Route::apiResource('flights', 'FlightController');
 
 // Dingo API routes

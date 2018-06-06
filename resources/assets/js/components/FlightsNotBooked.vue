@@ -10,8 +10,7 @@
                     Book Flights 
                     <span class="badge" 
                             style="margin-left: 1em;"
-                    >
-                        {{ selectedReservations.length }}
+                    >{{ selectedReservations.length }}
                     </span>
                 </button>
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :disabled="! selectedReservations.length">

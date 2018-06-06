@@ -39,9 +39,9 @@ class FlightItinerary extends Model
 
     public function scopeForCampaign($query, $campaignId)
     {
-        return $query->whereHas('reservations', function ($reservation) use ($campaignId) {
-            return $reservation->whereHas('trip', function ($trip) use ($campaignId) {
-                return $trip->where('campaign_id', $campaignId);
+        return $query->whereHas('flights', function ($flight) use ($campaignId) {
+            return $flight->whereHas('flightSegment', function ($segment) use ($campaignId) {
+                return $segment->where('campaign_id', $campaignId);
             });
         });
     }

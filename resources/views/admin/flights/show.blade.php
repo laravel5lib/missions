@@ -27,10 +27,10 @@
         </alert-success>
 
         <div class="row">
-            <div class="col-sm-2">
+            <div class="col-xs-12 col-md-2">
                 
             </div>
-            <div class="col-sm-10">
+            <div class="col-xs-12 col-md-7">
                 @component('panel')
                     @slot('title')<h5>Details</h5> @endslot
                     @component('list-group', ['data' => [
@@ -40,6 +40,34 @@
                         'time' => $flight->time
                     ]])@endcomponent
                 @endcomponent
+            </div>
+            <div class="col-xs-12 col-md-3 small">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#notes" aria-controls="notes" role="tab" data-toggle="tab">Notes</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#tasks" aria-controls="tasks" role="tab" data-toggle="tab">Tasks</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="notes">
+                        <notes type="flights"
+                            id="{{ $flight->uuid }}"
+                            user_id="{{ auth()->user()->id }}"
+                            :per_page="10"
+                            :can-modify="{{ auth()->user()->can('modify-notes')?1:0 }}">
+                        </notes>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tasks">
+                        <todos type="flights"
+                            id="{{ $flight->uuid }}"
+                            user_id="{{ auth()->user()->id }}"
+                            :can-modify="{{ auth()->user()->can('modify-todos')?1:0 }}">
+                        </todos>
+                    </div>
+                </div>
             </div>
         </div>
 

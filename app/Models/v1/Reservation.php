@@ -601,6 +601,27 @@ class Reservation extends Model
         });
     }
 
+    public function scopeRecordLocator($query, $record)
+    {
+        return $query->whereHas('flightItinerary', function ($subQuery) use ($record) {
+            return $subQuery->where('record_locator', 'like', "%$record%");
+        });
+    }
+
+    public function scopeFlightNo($query, $number)
+    {
+        return $query->whereHas('flightItinerary.flights', function ($subQuery) use ($number) {
+            return $subQuery->where('flight_no', 'like', "%$number%");
+        });
+    }
+
+    public function scopeIataCode($query, $code)
+    {
+        return $query->whereHas('flightItinerary.flights', function ($subQuery) use ($code) {
+            return $subQuery->where('iata_code', 'like', "%$code%");
+        });
+    }
+
     /**
      * Helper method to retrieve the user's avatar
      *

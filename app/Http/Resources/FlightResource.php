@@ -18,7 +18,7 @@ class FlightResource extends JsonResource
         return [
             'id' => $this->uuid,
             'flight_no' => $this->flight_no,
-            'date' => $this->date,
+            'date' => $this->date->toDateString(),
             'time' => $this->time,
             'iata_code' => $this->iata_code,
             'created_at' => $this->created_at->toIso8601String(),

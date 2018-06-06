@@ -11,6 +11,8 @@ class Flight extends Model
 {
     protected $fillable = ['flight_segment_id', 'flight_no', 'date', 'time', 'iata_code', 'flight_itinerary_id'];
 
+    protected $dates = ['date', 'created_at', 'updated_at'];
+
     /**
      * Boot the Uuid trait for the model.
      *

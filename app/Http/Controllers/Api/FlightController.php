@@ -20,8 +20,10 @@ class FlightController extends Controller
     {
         $flights = QueryBuilder::for(Flight::class)
             ->allowedFilters([
+                'flight_no',
+                'iata_code',
                 Filter::scope('segment'),
-                Filter::scope('itinerary'),
+                Filter::scope('itinerary')
             ])
             ->paginate();
 

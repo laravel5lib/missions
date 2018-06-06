@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div class="panel-heading">
+    <div class="panel-heading" v-if="ui.showMenu">
         <div class="row">
             <div class="col-xs-12">
                 <form class="form-inline">
@@ -49,7 +49,11 @@
         </div>
     </div>
     
-    <component :is="flightView" :campaign-id="campaignId" :segment-id="selectedSegment"></component>
+    <component :is="flightView" 
+               :campaign-id="campaignId" 
+               :segment-id="selectedSegment"
+               @mode:edit="ui.showMenu = false">
+    </component>
 
     <div class="modal fade" id="newSegment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
@@ -123,9 +127,12 @@ export default {
     props: ['campaignId'],
     data() {
         return {
-            flightView: 'flights-view-itineraries',
+            flightView: 'flights-view-passengers',
             segments: [],
-            selectedSegment: null
+            selectedSegment: null,
+            ui: {
+                showMenu: true
+            }
         }
     },
     watch: {

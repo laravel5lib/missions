@@ -16,6 +16,7 @@ class FlightPassengerResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'surname' => $this->surname,
             'given_names' => $this->given_names,
             'group' => $this->trip->group->name,

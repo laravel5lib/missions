@@ -1,11 +1,14 @@
 <template>
-<fetch-json :url="`campaigns/${campaignId}/flights/passengers?filter[segment]=${segmentId}`" ref="passengersList">
-<div slot-scope="{ json:passengers, pagination, changePage, loading, addFilter, removeFilter, filters }">
-    <div class="panel-heading">
+<fetch-json :url="`campaigns/${campaignId}/flights/passengers?segment=${segmentId}`" 
+            ref="passengersList" 
+            :parameters="{filter: {}}"
+>
+<div slot-scope="{ json:passengers, pagination, changePage, loading, addFilter, removeFilter, filters, sortBy }">
+    <div class="panel-heading" v-if="!ui.edit">
         <div class="btn-group btn-group-sm" style="margin-right: 1em;">
             <button class="btn btn-primary" 
                     :disabled="! selected.length"
-                    @click="ui.edit = true"
+                    @click="ui.edit = true, $emit('mode:edit')"
             >
                 Edit Passengers 
                 <span class="badge" 
@@ -37,6 +40,9 @@
                 <li class="dropdown-header">Filter By</li>
                 <li><a type="button" @click="openFilterModal('surname', 'Surname')">Surname</a></li>
                 <li><a type="button" @click="openFilterModal('given_names', 'Given Names')">Given Names</a></li>
+                <li><a type="button" @click="openFilterModal('record_locator', 'Record Locator')">Record Locator</a></li>
+                <li><a type="button" @click="openFilterModal('flight_no', 'Flight No.')">Flight No.</a></li>
+                <li><a type="button" @click="openFilterModal('iata_code', 'City')">City</a></li>
             </ul>
 
             <div class="modal fade" id="filterModal" tabindex="-1" role="dialog">
@@ -59,10 +65,15 @@
 
         </div>
     </div>
-    <div class="panel-body" v-if="loading">
+    <div class="panel-body" v-if="ui.edit">
+        <flight-passenger-form :campaign-id="campaignId"            
+                               :passengers="selected"
+        ></flight-passenger-form>
+    </div>
+    <div class="panel-body" v-if="loading && !ui.edit">
         <p class="lead text-center text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</p>
     </div>
-    <div class="table-responsive" v-if="!loading">
+    <div class="table-responsive" v-if="!loading && !ui.edit">
             <table class="table" v-if="passengers && passengers.length">
                 <thead>
                     <tr class="active">
@@ -72,8 +83,16 @@
                                 :checked="selected.length === passengers.length"
                             >
                         </th>
-                        <th>Surname</th>
-                        <th>Given Names</th>
+                        <th @click="sortBy('surname')" style="cursor: pointer; min-width: 150px">
+                            Surname <i class="pull-right fa" 
+                                    :class="[{ 'fa-sort-up': filters.sort === 'surname', 'fa-sort-down': filters.sort === '-surname' }, 'fa-sort']"
+                                ></i>
+                        </th>
+                        <th @click="sortBy('given_names')" style="cursor: pointer; min-width: 200px">
+                            Given Names <i class="pull-right fa" 
+                                    :class="[{ 'fa-sort-up': filters.sort === 'given_names', 'fa-sort-down': filters.sort === '-given_names' }, 'fa-sort']"
+                                ></i>
+                        </th>
                         <th>Group</th>
                         <th>Trip</th>
                         <th>Type</th>
@@ -87,33 +106,55 @@
                 <tbody>
                     <tr v-for="passenger in passengers" :key="passenger.id">
                         <td><input type="checkbox" :checked="isSelected(passenger)" @change="select(passenger, $event.target.checked)"></td>
-                        <td><strong><a href="#">{{ passenger.surname }}</a></strong></td>
+                        <td>
+                            <strong>
+                                <a :href="`/admin/reservations/${passenger.id}`">
+                                    {{ passenger.surname }}
+                                </a>
+                            </strong>
+                        </td>
                         <td>{{ passenger.given_names }}</td>
                         <td>{{ passenger.group }}</td>
                         <td>{{ passenger.trip }}</td>
                         <td><em>{{ passenger.type }}</em></td>
-                        <td>{{ passenger.record_locator }}</td>
+                        <td>
+                            <strong>
+                                <a :href="`/admin/itineraries/${passenger.flight_itinerary_id}`">
+                                    {{ passenger.record_locator }}
+                                </a>
+                            </strong>
+                        </td>
                         <td>{{ passenger.flight.date | mFormat('ll') }}</td>
                         <td>{{ passenger.flight.time }}</td>
-                        <td>{{ passenger.flight.flight_no }}</td>
+                        <td>
+                            <strong>
+                                <a :href="`/admin/flights/${passenger.flight.id}`">
+                                    {{ passenger.flight.flight_no }}
+                                </a>
+                            </strong>
+                        </td>
                         <td>{{ passenger.flight.iata_code }}</td>
                     </tr>
                 </tbody>
             </table>
     </div>
-    <div class="panel-body text-center" v-if="!passengers.length && !loading">
+    <div class="panel-body text-center" v-if="!passengers.length && !loading && !ui.edit">
         <span class="lead">No Passengers</span>
         <p>Try adjusting the filters, or book some flights.</p>
     </div>
-    <div class="panel-footer" v-if="pagination.total > pagination.per_page">
+    <div class="panel-footer" v-if="pagination.total > pagination.per_page && !ui.edit">
         <pager :pagination="pagination" :callback="changePage"></pager>
     </div>
 </div>
 </fetch-json>
 </template>
 <script>
+import FlightPassengerForm from '../components/FlightPassengerForm';
 export default {
     props: ['campaignId', 'segmentId'],
+    components: {
+        'flight-passenger-form': FlightPassengerForm
+    },
     watch: {
         'segmentId'(val) {
             this.$refs.passengersList.fetch();
@@ -161,3 +202,11 @@ export default {
     }
 }
 </script>
+<style>
+    th, td {
+        white-space: nowrap;
+    }
+    .panel-heading {
+        border-color: #e6e6e6;
+    }
+</style>

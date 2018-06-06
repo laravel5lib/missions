@@ -1,13 +1,13 @@
 <template>
 <fetch-json :url="`campaigns/${campaignId}/flights/itineraries`" ref="itinerariesList" :parameters="{filter: {}}">
-<div slot-scope="{ json:itineraries, pagination, changePage, loading, addFilter, removeFilter, filters }">
-    <div class="panel-heading">
+<div slot-scope="{ json:itineraries, pagination, changePage, loading, addFilter, removeFilter, filters, sortBy }">
+    <div class="panel-heading" v-if="!ui.edit">
         <div class="btn-group btn-group-sm" style="margin-right: 1em;">
             <button class="btn btn-primary" 
                     :disabled="! selected.length"
                     @click="ui.edit = true"
             >
-                Edit Itineraries 
+                Publish Itineraries 
                 <span class="badge" 
                         style="margin-left: 1em;"
                 >
@@ -19,8 +19,8 @@
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
             <ul class="dropdown-menu">
-                <li><a href="#">Edit Itineraries</a></li>
                 <li><a href="#">Publish Itineraries</a></li>
+                <li><a href="#">Unpublish Itineraries</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="#">Download</a></li>
             </ul>
@@ -69,7 +69,7 @@
     <div class="panel-body" v-if="loading">
         <p class="lead text-center text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</p>
     </div>
-    <div class="table-responsive" v-if="!loading">
+    <div class="table-responsive" v-if="!loading && !ui.edit">
         <table class="table" v-if="itineraries && itineraries.length">
             <thead>
                 <tr class="active">
@@ -78,9 +78,21 @@
                             :checked="selected.length === itineraries.length"
                         >
                     </th>
-                    <th>Record Locator</th>
-                    <th>Type</th>
-                    <th>Last Updated</th>
+                    <th @click="sortBy('record_locator')" style="cursor: pointer">
+                        Record Locator <i class="pull-right fa" 
+                                :class="[{ 'fa-sort-up': filters.sort === 'record_locator', 'fa-sort-down': filters.sort === '-record_locator' }, 'fa-sort']"
+                            ></i>
+                    </th>
+                    <th @click="sortBy('type')" style="cursor: pointer">
+                        Type <i class="pull-right fa" 
+                                :class="[{ 'fa-sort-up': filters.sort === 'type', 'fa-sort-down': filters.sort === '-type' }, 'fa-sort']"
+                            ></i>
+                    </th>
+                    <th @click="sortBy('updated_at')" style="cursor: pointer">
+                        Last Updated <i class="pull-right fa" 
+                                :class="[{ 'fa-sort-up': filters.sort === 'updated_at', 'fa-sort-down': filters.sort === '-updated_at' }, 'fa-sort']"
+                            ></i>
+                    </th>
                     <th>Status</th>
                     <th class="text-right">Flights</th>
                     <th class="text-right">Passengers</th>
@@ -103,7 +115,7 @@
         <span class="lead">No Itineraries</span>
         <p>Try adjusting the filters, or book some flights.</p>
     </div>
-    <div class="panel-footer" v-if="pagination.total > pagination.per_page">
+    <div class="panel-footer" v-if="pagination.total > pagination.per_page && !ui.edit">
         <pager :pagination="pagination" :callback="changePage"></pager>
     </div>
 </div>

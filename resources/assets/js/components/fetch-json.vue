@@ -62,6 +62,18 @@ export default {
 
             this.$forceUpdate();
         },
+        sortBy(column) {
+            if(column === this.filters.sort) {
+                this.filters.sort = '-'+column;
+            } else {
+                this.filters.sort = column;
+            }
+
+            let params = $.extend({page: 1}, this.filters);
+            this.fetch(params);
+
+            this.$forceUpdate();
+        },
         changePage(page) {
             let params = $.extend({page: page}, this.filters);
             this.fetch(params);
@@ -81,7 +93,8 @@ export default {
             addFilter: this.addFilter,
             removeFilter: this.removeFilter,
             fetch: this.fetch,
-            changePage: this.changePage
+            changePage: this.changePage,
+            sortBy: this.sortBy
         })
     }
 }

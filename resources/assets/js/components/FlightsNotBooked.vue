@@ -1,5 +1,5 @@
 <template>
-<fetch-json :url="`reservations?filter[campaign]=${campaignId}&filter[has_flight]=${false}&include=trip.group&sort=surname`" ref="list" :parameters="{filter: {}}">
+<fetch-json :url="`reservations?filter[campaign]=${campaignId}&filter[has_flight]=${false}&include=trip.group,passport&sort=surname`" ref="list" :parameters="{filter: {}}">
     <div slot-scope="{ json:reservations, pagination, changePage, loading, addFilter, removeFilter, filters, sort }">
         <div class="panel-heading" v-if="!ui.booking">
             <div class="btn-group btn-group-sm">
@@ -116,8 +116,10 @@
                         <td>{{ reservation.trip.type }}</td>
                         <td>{{ reservation.birthday | mFormat('ll') }}</td>
                         <td>{{ reservation.gender }}</td>
-                        <td></td>
-                        <td></td>
+                        <td>{{ reservation.passport ? reservation.passport.number : null }}</td>
+                        <td><template v-if="reservation.passport">
+                            {{ reservation.passport.expires_at | mFormat('ll') }}
+                        </template></td>
                         <td>{{ reservation.percent_raised }}%</td>
                         <td>{{ reservation.current_rate }}</td>
                     </tr>

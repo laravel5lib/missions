@@ -295,6 +295,21 @@ class Reservation extends Model
         return $this->belongsTo(FlightItinerary::class);
     }
 
+    public function passport()
+    {
+        return $this->hasMany(ReservationRequirement::class)
+            ->where('document_type', 'passports')
+            ->whereNotNull('document_id')
+            ->take(1);
+            
+        // $requirement = $this->requirements()
+        //     ->where('document_type', 'passports')
+        //     ->whereNotNull('document_id')
+        //     ->first();
+        
+        // return $requirement ?? $requirement->document;
+    }
+
     /**
      * Get the reservation's avatar.
      *

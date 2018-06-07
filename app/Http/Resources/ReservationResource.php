@@ -58,7 +58,10 @@ class ReservationResource extends JsonResource
             'created_at'          => $this->created_at->toDateTimeString(),
             'updated_at'          => $this->updated_at->toDateTimeString(),
             'deleted_at'          => $this->deleted_at ? $this->deleted_at->toDateTimeString() : null,
-            'trip' => new TripResource($this->whenLoaded('trip'))
+            'trip'                => new TripResource($this->whenLoaded('trip')),
+            'passport'            => $this->whenLoaded('passport', function () {
+                return optional($this->passport()->first())->document;
+            })
         ];
     }
 }

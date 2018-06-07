@@ -57,7 +57,7 @@ class ReservationsController extends Controller
                 Filter::scope('campaign'),
                 Filter::scope('has_flight')
             ])
-            ->allowedIncludes(['trip.group'])
+            ->allowedIncludes(['trip.group', 'passport'])
             ->paginate(25);
         
         return ReservationResource::collection($reservations);

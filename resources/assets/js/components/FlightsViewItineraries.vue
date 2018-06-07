@@ -97,7 +97,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="itinerary in itineraries" :key="itinerary.id">
+                <tr v-for="itinerary in itineraries" :key="itinerary.id" :class="{ 'selected' : isSelected(itinerary) }">
                     <td><input type="checkbox" :checked="isSelected(itinerary)" @change="select(itinerary, $event.target.checked)"></td>
                     <td>
                         <strong>
@@ -171,6 +171,9 @@ export default {
 }
 </script>
 <style>
+    tr.selected {
+        background-color: #fcf8e3;
+    }
     th, td {
         white-space: nowrap;
     }

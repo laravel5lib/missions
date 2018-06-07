@@ -49,12 +49,14 @@
         </div>
     </div>
     
-    <component :is="flightView" 
-               :campaign-id="campaignId" 
-               :segment-id="selectedSegment"
-               @mode:edit="ui.showMenu = false"
-               @update:bookedTotal="updateBookedTotal">
-    </component>
+    <keep-alive>
+        <component :is="flightView" 
+                :campaign-id="campaignId" 
+                :segment-id="selectedSegment"
+                @mode:edit="ui.showMenu = false"
+                @update:bookedTotal="updateBookedTotal">
+        </component>
+    </keep-alive>
 
     <div class="modal fade" id="newSegment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">

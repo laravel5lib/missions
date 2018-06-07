@@ -622,6 +622,34 @@ class Reservation extends Model
         });
     }
 
+    public function scopeGroup($query, $uuid)
+    {
+        return $query->whereHas('trip', function ($subQuery) use ($uuid) {
+            return $subQuery->where('group_id', $uuid);
+        });
+    }
+
+    public function scopeTripType($query, $type)
+    {
+        return $query->whereHas('trip', function ($subQuery) use ($type) {
+            return $subQuery->where('type', $type);
+        });
+    }
+
+    public function scopeCampaign($query, $uuid)
+    {
+        return $query->whereHas('trip', function ($subQuery) use ($uuid) {
+            return $subQuery->where('campaign_id', $uuid);
+        });
+    }
+
+    public function scopeHasFlight($query, $hasFlight)
+    {
+        return $hasFlight 
+            ? $query->whereNotNull('flight_itinerary_id') 
+            : $query->whereNull('flight_itinerary_id');
+    }
+
     /**
      * Helper method to retrieve the user's avatar
      *

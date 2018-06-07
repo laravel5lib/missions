@@ -19,10 +19,12 @@
             </li>
         </ul>
     </div>
-    <component :is="flightList" 
-               :campaign-id="campaignId"
-               @update:bookedTotal="updateBookedCount"
-    ></component>
+    <keep-alive>
+        <component :is="flightList" 
+                :campaign-id="campaignId"
+                @update:bookedTotal="updateBookedCount"
+        ></component>
+    </keep-alive>
 </div> 
 </template>
 <script>

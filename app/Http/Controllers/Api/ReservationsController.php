@@ -4,13 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use Carbon\Carbon;
 use App\Models\v1\Reservation;
+use Spatie\QueryBuilder\Filter;
 use App\Jobs\ExportReservations;
 use App\Events\RegisteredForTrip;
 use Silber\Bouncer\Database\Role;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
 use App\Events\ReservationWasCreated;
+use Spatie\QueryBuilder\QueryBuilder;
 use App\Http\Requests\v1\ExportRequest;
+use App\Http\Resources\ReservationResource;
 use App\Http\Requests\v1\RequirementRequest;
 use App\Http\Requests\v1\ReservationRequest;
 use App\Http\Transformers\v1\RequirementTransformer;
@@ -42,11 +45,28 @@ class ReservationsController extends Controller
      */
     public function index(Request $request)
     {
-        $reservations = $this->reservation
-                            ->filter($request->all())
-                            ->paginate($request->get('per_page', 10));
+        $reservations = QueryBuilder::for(Reservation::class)
+            ->allowedFilters([
+                'surname', 'given_names', 'email', 'phone_one', 'phone_two',
+                Filter::exact('gender'),
+                Filter::exact('status'),
+                Filter::exact('shirt_size'),
+                Filter::exact('desired_role'),
+                Filter::scope('group'),
+                Filter::scope('trip_type'),
+                Filter::scope('campaign'),
+                Filter::scope('has_flight')
+            ])
+            ->allowedIncludes(['trip.group'])
+            ->paginate(25);
+        
+        return ReservationResource::collection($reservations);
+        
+        // $reservations = $this->reservation
+        //                     ->filter($request->all())
+        //                     ->paginate($request->get('per_page', 10));
 
-        return $this->response->paginator($reservations, new ReservationTransformer);
+        // return $this->response->paginator($reservations, new ReservationTransformer);
     }
 
     /**

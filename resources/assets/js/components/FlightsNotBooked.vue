@@ -1,6 +1,6 @@
 <template>
-<fetch-json :url="`reservations?campaign=${campaignId}&notBooked=${true}&include=trip.group&sort=surname`" ref="list">
-    <div slot-scope="{ json:reservations, pagination, changePage, loading }">
+<fetch-json :url="`reservations?filter[campaign]=${campaignId}&filter[has_flight]=${false}&include=trip.group&sort=surname`" ref="list" :parameters="{filter: {}}">
+    <div slot-scope="{ json:reservations, pagination, changePage, loading, addFilter, removeFilter, filters, sort }">
         <div class="panel-heading" v-if="!ui.booking">
             <div class="btn-group btn-group-sm">
                 <button class="btn btn-primary" 
@@ -25,15 +25,29 @@
             </div>
         </div>
         <div class="panel-heading" v-if="!ui.booking">
-            <div class="dropdown">
+            <span v-for="(value, key, index) in filters.filter" 
+                :key="index" 
+                class="label label-filter">
+                {{ key | capitalize }}: "{{ value | capitalize}}" <a type="button" @click="removeFilter(key)"><i class="fa fa-times"></i></a>
+            </span>
+            <div class="dropdown" style="display: inline-block; margin-left: 1em;">
                 <a role="button" class="dropdown-toggle" data-toggle="dropdown">+ Add a filter</a>
                 <ul class="dropdown-menu">
                     <li class="dropdown-header">Filter By</li>
-                    <li><a type="button" @click="openFilterModal('filter-fullname', 'Name')">Name</a></li>
+                    <li>
+                        <a type="button" 
+                           @click="openFilterModal(filterConfiguration.surname)"
+                        >Surname</a>
+                    </li>
+                    <li>
+                        <a type="button" 
+                           @click="openFilterModal(filterConfiguration.given_names)"
+                        >Given Names</a>
+                    </li>
                     <li><a type="button" @click="openFilterModal('filter-group', 'Group')">Group</a></li>
                     <li><a type="button" @click="openFilterModal('filter-trip-type', 'Trip')">Trip</a></li>
                     <li><a type="button" @click="openFilterModal('filter-age', 'Age')">Age</a></li>
-                    <li><a type="button" @click="openFilterModal('filter-gender', 'Gender')">Gender</a></li>
+                    <li><a type="button" @click="openFilterModal('filter-select', 'Gender')">Gender</a></li>
                     <li><a type="button" @click="openFilterModal('filter-search', 'Passport')">Passport</a></li>
                     <li><a type="button" @click="openFilterModal('filter-percent-raised', 'Percent Raised')">Percent Raised</a></li>
                     <li><a type="button" @click="openFilterModal('filter-current-rate', 'Current Rate')">Current Rate</a></li>
@@ -42,17 +56,17 @@
                 <div class="modal fade" id="filterModal" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">Filter By {{ filterModal.title }}</h4>
-                        </div>
-                        <div class="modal-body">
-                            <component :is="filterModal.component"></component>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Apply</button>
-                        </div>
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Filter By {{ filterModal.title }}</h4>
+                            </div>
+                            <div class="modal-body">
+                                <component :is="filterModal.component" 
+                                        :callback="addFilter" 
+                                        :field="filterModal.field"
+                                        @apply:filter="closeFilterModal"
+                                ></component>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -91,12 +105,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="reservation in reservations" :key="reservation.id">
+                    <tr v-for="reservation in reservations" 
+                        :key="reservation.id" 
+                        :class="{ 'selected' : isSelected(reservation) }"
+                    >
                         <td><input type="checkbox" :checked="isSelected(reservation)" @change="selectReservation(reservation, $event.target.checked)"></td>
                         <td><strong><a :href="`/admin/reservations/${reservation.id}`">{{ reservation.surname }}</a></strong></td>
                         <td>{{ reservation.given_names }}</td>
-                        <td>{{ reservation.trip.data.group.data.name }}</td>
-                        <td>{{ reservation.trip.data.type }}</td>
+                        <td>{{ reservation.trip.group.name }}</td>
+                        <td>{{ reservation.trip.type }}</td>
                         <td>{{ reservation.birthday | mFormat('ll') }}</td>
                         <td>{{ reservation.gender }}</td>
                         <td></td>
@@ -111,19 +128,21 @@
             <span class="lead">No Reservations</span>
             <p>Try adjusting the filters, otherwide all flights have been booked!</p>
         </div>
-        <div class="panel-footer" v-if="pagination.pagination.total > pagination.pagination.per_page">
-            <pager :pagination="pagination.pagination" :callback="changePage"></pager>
+        <div class="panel-footer" v-if="pagination.total > pagination.per_page">
+            <pager :pagination="pagination" :callback="changePage"></pager>
         </div>
     </div>
 </fetch-json>
 </template>
 <script>
 import FlightBookingForm from '../components/FlightBookingForm';
+import FilterSearch from '../components/FilterSearch';
 export default {
     name: 'flights-not-booked',
     props: ['campaignId'],
     components: {
-        'flight-booking-form': FlightBookingForm
+        'flight-booking-form': FlightBookingForm,
+        'filter-search': FilterSearch
     },
     data() {
         return {
@@ -133,7 +152,25 @@ export default {
             },
             filterModal: {
                 component: null,
-                title: null
+                title: null,
+                field: null
+            },
+            filterConfiguration: {
+                surname: {
+                    component: 'filter-search', 
+                    title: 'Surname', 
+                    field: 'surname'
+                },
+                given_names: {
+                    component: 'filter-search',
+                    title: 'Given Names', 
+                    field: 'given_names'
+                },
+                trip_type: {
+                    component: 'filter-select',
+                    title: 'Trip', 
+                    field: 'trip_type'
+                }
             }
         }
     },
@@ -161,15 +198,25 @@ export default {
             this.selectedReservations = [];
             this.$refs.list.fetch();
         },
-        openFilterModal(component, title) {
-            this.filterModal.component = component;
-            this.filterModal.title = title;
+        openFilterModal(filter) {
+            this.filterModal.component = filter.component;
+            this.filterModal.title = filter.title;
+            this.filterModal.field = filter.field;
             $('#filterModal').modal('show');
+        },
+        closeFilterModal() {
+            this.filterModal.component = null;
+            this.filterModal.title = null;
+            this.filterModal.field = null;
+            $('#filterModal').modal('hide');
         }
     }
 }
 </script>
 <style>
+    tr.selected {
+        background-color: #fcf8e3;
+    }
     th, td {
         white-space: nowrap;
     }

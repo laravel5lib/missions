@@ -714,7 +714,7 @@ class Reservation extends Model
             ->selectRaw('reservations.id, funds.balance, prices.amount')
             ->pluck('reservations.id');
 
-        return $query->whereIn('id', $ids);
+        return $query->whereIn('reservations.id', $ids);
     }
 
     public function scopeRegisteredBetween($query, ...$dates)
@@ -732,6 +732,61 @@ class Reservation extends Model
     {
         $query->whereDate('deleted_at', '>=', $dates[0])
               ->whereDate('deleted_at', '<=', $dates[1]);
+    }
+
+    public function scopeDeposited($query)
+    {
+        $ids = DB::table('reservations')
+            ->join('priceables', 'priceables.priceable_id', '=', 'reservations.id')
+            ->join('prices', 'prices.id', '=', 'priceables.price_id')
+            ->join('costs', 'prices.cost_id', '=', 'costs.id')
+            ->join('funds', 'reservations.id', '=', 'funds.fundable_id')
+            ->where('costs.type', 'upfront')
+            ->whereNull('reservations.deleted_at')
+            ->groupBy('reservations.id')
+            ->havingRaw("funds.balance <= SUM(prices.amount)")
+            ->selectRaw('reservations.id, funds.balance, prices.amount')
+            ->pluck('reservations.id');
+
+        return $query->whereIn('reservations.id', $ids);
+    }
+
+    public function scopeInProcess($query)
+    {
+        $ids = DB::table('reservations')
+            ->join('priceables', 'priceables.priceable_id', '=', 'reservations.id')
+            ->join('prices', 'prices.id', '=', 'priceables.price_id')
+            ->join('costs', 'prices.cost_id', '=', 'costs.id')
+            ->join('funds', 'reservations.id', '=', 'funds.fundable_id')
+            ->where('costs.type', 'upfront')
+            ->whereNull('reservations.deleted_at')
+            ->groupBy('reservations.id')
+            ->havingRaw("funds.balance > SUM(prices.amount)")
+            ->selectRaw('reservations.id, funds.balance, prices.amount')
+            ->pluck('reservations.id');
+
+        return $query->whereIn('reservations.id', $ids)->percentRaisedRange(0, 99);
+    }
+
+    public function scopeFunded($query)
+    {
+         $query->percentRaisedRange(100)
+               ->whereHas('requirements', function($subQuery) {
+                   return $subQuery->whereIn('status', ['incomplete', 'reviewing', 'attention']);
+               });
+    }
+
+    public function scopeReady($query)
+    {
+        $query->percentRaisedRange(100)
+              ->whereHas('requirements', function($subQuery) {
+                  return $subQuery->whereNotIn('status', ['incomplete', 'reviewing', 'attention']);
+              });
+    }
+
+    public function scopeFunnel($query, $funnel)
+    {
+        $query->{camel_case($funnel)}();
     }
     
     /**

@@ -40,7 +40,15 @@ class ReservationsController extends Controller
 
         $campaign = Campaign::findOrFail($campaignId);
 
-        return view('admin.reservations.index', compact('campaign'));
+        $totals = [
+            'all' => $campaign->reservations()->count(),
+            'deposited' => $campaign->reservations()->deposited()->count(),
+            'process' => $campaign->reservations()->inProcess()->count(),
+            'funded' => $campaign->reservations()->funded()->count(),
+            'ready' => $campaign->reservations()->ready()->count()
+        ];
+
+        return view('admin.reservations.index', compact('campaign', 'totals'));
     }
 
     /**

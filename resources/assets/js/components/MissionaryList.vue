@@ -9,29 +9,32 @@
         >
             <div class="panel-heading">
                 <ul class="nav nav-pills nav-justified">
-                    <li class="active">
-                        <a role="button">
-                            All <span class="badge badge-default">0</span>
+                    <li :class="{ 'active' : ! filters.filter.funnel }">
+                        <a role="button" @click="removeFilter('funnel')">
+                            All <span class="badge badge-default">{{ totals.all }}</span> 
                         </a>
                     </li>
-                    <li>
-                        <a role="button">
-                            Deposit Only <span class="badge badge-default">0</span>
+                    <li :class="{ 'active' : filters.filter.funnel === 'deposited' }">
+                        <a role="button" @click="addFilter('funnel', 'deposited')">
+                            Deposit Only <span class="badge badge-default">{{ totals.deposited }}</span>
+                            <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
-                    <li>
-                        <a href="#">
-                            In Process <span class="badge badge-default">0</span>
+                    <li :class="{ 'active' : filters.filter.funnel === 'in_process' }">
+                        <a role="button" @click="addFilter('funnel', 'in_process')">
+                            In Process <span class="badge badge-default">{{ totals.process }}</span>
+                            <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
-                    <li>
-                        <a href="#">
-                            Fully Funded <span class="badge badge-default">0</span>
+                    <li :class="{ 'active' : filters.filter.funnel === 'funded' }">
+                        <a role="button" @click="addFilter('funnel', 'funded')">
+                            Fully Funded <span class="badge badge-default">{{ totals.funded }}</span>
+                            <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
-                    <li>
-                        <a href="#">
-                            Travel Ready <span class="badge badge-default">0</span>
+                    <li :class="{ 'active' : filters.filter.funnel === 'ready' }">
+                        <a role="button" @click="addFilter('funnel', 'ready')">
+                            Travel Ready <span class="badge badge-default">{{ totals.ready }}</span>
                         </a>
                     </li>
                 </ul>
@@ -309,7 +312,7 @@ import FilterSearch from '../components/FilterSearch';
 import FilterRadio from '../components/FilterRadio';
 import FilterSelect from '../components/FilterSelect';
 export default {
-    props: ['campaignId'],
+    props: ['campaignId', 'totals'],
 
     components: {
         'filter-search': FilterSearch,

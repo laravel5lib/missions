@@ -25,7 +25,7 @@
                 @endsidenav
             </div>
             <div class="col-sm-10">
-                <missionary-list campaign-id="{{ $campaign->id }}"></missionary-list>
+                <missionary-list campaign-id="{{ $campaign->id }}" :totals="{{ json_encode($totals) }}"></missionary-list>
             </div>
         </div>
     </div>

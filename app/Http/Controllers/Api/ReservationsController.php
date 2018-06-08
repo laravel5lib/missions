@@ -48,6 +48,7 @@ class ReservationsController extends Controller
         $reservations = QueryBuilder::for(Reservation::class)
             ->allowedFilters([
                 'surname', 'given_names', 'email', 'phone_one', 'phone_two',
+                'address', 'city', 'zip', 'state',
                 Filter::exact('gender'),
                 Filter::exact('status'),
                 Filter::exact('shirt_size'),
@@ -57,7 +58,10 @@ class ReservationsController extends Controller
                 Filter::scope('campaign'),
                 Filter::scope('has_flight'),
                 Filter::scope('passport_number'),
-                Filter::scope('cost')
+                Filter::scope('cost'),
+                Filter::scope('age_range'),
+                Filter::scope('percent_raised_range'),
+                Filter::scope('registered_between')
             ])
             ->allowedIncludes(['trip.group', 'passport'])
             ->paginate(25);

@@ -35,7 +35,7 @@ export default {
             this.$emit('apply:filter', {
                 key: this.config.field, 
                 text: this.config.title, 
-                value: this.picked
+                value: _.findWhere(this.config.options, {value: this.picked}).label
             });
         }
     }

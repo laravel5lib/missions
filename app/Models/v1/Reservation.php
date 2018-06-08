@@ -683,6 +683,44 @@ class Reservation extends Model
         });
     }
 
+    public function scopeAgeRange($query, ...$ages)
+    {
+        if(isset($ages[1])) {
+            $startDob = Carbon::now()->startOfYear()->subYears($ages[1]);
+            $endDob = Carbon::now()->startOfYear()->subYears($ages[0]);
+
+            $query->whereBetween('birthday', [$startDob, $endDob]);
+        } else {
+            $dob = Carbon::now()->startOfYear()->subYears($ages[0]);
+
+            $query->where('birthday', '<=', $dob);
+        }
+    }
+
+    public function scopePercentRaisedRange($query, ...$percentages)
+    {
+        $startDecimal = $percentages[0] / 100;
+        $endDecimal = $percentages[1] / 100;
+
+        $ids = DB::table('reservations')
+            ->join('priceables', 'priceables.priceable_id', '=', 'reservations.id')
+            ->join('prices', 'prices.id', '=', 'priceables.price_id')
+            ->join('funds', 'reservations.id', '=', 'funds.fundable_id')
+            ->groupBy('reservations.id')
+            ->havingRaw("funds.balance/SUM(prices.amount) >= $startDecimal")
+            ->havingRaw("funds.balance/SUM(prices.amount) <= $endDecimal")
+            ->selectRaw('reservations.id, funds.balance, prices.amount')
+            ->pluck('reservations.id');
+
+        return $query->whereIn('id', $ids);
+    }
+
+    public function scopeRegisteredBetween($query, ...$dates)
+    {
+        $query->whereDate('created_at', '>=', $dates[0])
+              ->whereDate('created_at', '<=', $dates[1]);
+    }
+
     /**
      * Helper method to retrieve the user's avatar
      *

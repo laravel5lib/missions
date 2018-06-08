@@ -233,6 +233,7 @@ Vue.component('campaign-cost-manager', require('./components/CampaignCostManager
 Vue.component('group-reservation-list', require('./components/group-reservation-list.vue'));
 Vue.component('reservation-pricing-overview', require('./components/ReservationPricingOverview.vue'));
 Vue.component('flight-list', require('./components/FlightList.vue'));
+Vue.component('missionary-list', require('./components/MissionaryList.vue'));
 
 /**
  * Utility Components

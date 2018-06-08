@@ -34,7 +34,7 @@ class CampaignGroupController extends Controller
                 });
             })
             ->orderBy('name')
-            ->paginate(20);
+            ->paginate(request()->input('per_page', 25));
 
         return GroupResource::collection($groups);
     }

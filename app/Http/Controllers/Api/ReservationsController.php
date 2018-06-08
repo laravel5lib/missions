@@ -55,18 +55,14 @@ class ReservationsController extends Controller
                 Filter::scope('group'),
                 Filter::scope('trip_type'),
                 Filter::scope('campaign'),
-                Filter::scope('has_flight')
+                Filter::scope('has_flight'),
+                Filter::scope('passport_number'),
+                Filter::scope('cost')
             ])
             ->allowedIncludes(['trip.group', 'passport'])
             ->paginate(25);
         
         return ReservationResource::collection($reservations);
-        
-        // $reservations = $this->reservation
-        //                     ->filter($request->all())
-        //                     ->paginate($request->get('per_page', 10));
-
-        // return $this->response->paginator($reservations, new ReservationTransformer);
     }
 
     /**

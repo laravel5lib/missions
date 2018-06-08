@@ -665,6 +665,24 @@ class Reservation extends Model
             : $query->whereNull('flight_itinerary_id');
     }
 
+    public function scopePassportNumber($query, $number)
+    {
+        return $query->whereHas('passport', function ($subQuery) use ($number) {
+
+            return $subQuery->join('passports', 'passports.id', '=', 'reservation_requirements.document_id')
+                ->where('passports.number', 'LIKE', "$number%");
+        });
+    }
+
+    public function scopeCost($query, $uuid)
+    {
+        $query->whereHas('priceables', function($subQuery) use($uuid) {
+            return $subQuery->whereHas('cost', function ($q) use($uuid) {
+                return $q->where('id', $uuid);
+            });
+        });
+    }
+
     /**
      * Helper method to retrieve the user's avatar
      *

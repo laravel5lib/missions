@@ -32,7 +32,9 @@ class FlightPassengerController extends Controller
                 'given_names', 
                 Filter::scope('record_locator'),
                 Filter::scope('flight_no'),
-                Filter::scope('iata_code')
+                Filter::scope('iata_code'),
+                Filter::scope('group'),
+                Filter::scope('trip_type')
             ])
             ->allowedIncludes('flight-itinerary')
             ->paginate(25);

@@ -48,6 +48,8 @@ export default {
             let params = $.extend({page: 1}, this.filters);
             this.fetch(params);
 
+            this.$emit('filter:added', {key: value});
+
             this.$forceUpdate();
         },
         removeFilter(key) {
@@ -59,6 +61,8 @@ export default {
 
             let params = $.extend({page: 1}, this.filters);
             this.fetch(params);
+
+            this.$emit('filter:removed', key);
 
             this.$forceUpdate();
         },

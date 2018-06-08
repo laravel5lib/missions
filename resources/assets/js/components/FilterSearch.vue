@@ -17,7 +17,7 @@
 export default {
     props: {
         callback: Function,
-        field: String
+        config: Object
     },
     data() {
         return {
@@ -26,8 +26,13 @@ export default {
     },
     methods: {
         apply() {
-            this.callback(this.field, this.search);
-            this.$emit('apply:filter', this.search);
+            this.callback(this.config.field, this.search);
+
+            this.$emit('apply:filter', {
+                key: this.config.field, 
+                text: this.config.title, 
+                value: this.search
+            });
         }
     }
 }

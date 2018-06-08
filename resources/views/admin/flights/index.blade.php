@@ -28,8 +28,9 @@
         <div class="row">
             <div class="col-sm-2">
                 @sidenav(['links' => [
-                    "admin/campaigns/{$campaign->id}/reservations" => 'Missionaries',
-                    "admin/campaigns/{$campaign->id}/flights" => 'Flights'
+                    "admin/campaigns/{$campaign->id}/reservations/missionaries" => 'Missionaries',
+                    "admin/campaigns/{$campaign->id}/reservations/flights" => 'Flights',
+                    "admin/campaigns/{$campaign->id}/reservations/dropped" => 'Dropped',
                 ]])
                 @endsidenav
             </div>

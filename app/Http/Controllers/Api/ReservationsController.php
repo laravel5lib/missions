@@ -61,7 +61,9 @@ class ReservationsController extends Controller
                 Filter::scope('cost'),
                 Filter::scope('age_range'),
                 Filter::scope('percent_raised_range'),
-                Filter::scope('registered_between')
+                Filter::scope('registered_between'),
+                Filter::scope('dropped'),
+                Filter::scope('dropped_between')
             ])
             ->allowedIncludes(['trip.group', 'passport'])
             ->paginate(25);

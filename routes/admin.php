@@ -22,9 +22,9 @@ Route::prefix('campaigns')->group(function () {
     Route::get('create', 'CampaignsController@create');
     Route::get('{id}/edit', 'CampaignsController@edit');
     Route::get('{id}/trips/create', 'TripsController@create');
-    Route::get('{campaignId}/reservations/{tab?}', 'ReservationsController@index')
-        ->where('tab', 'current|archived|dropped|prospects');
-    Route::get('{campaignId}/flights', 'FlightController@index');
+    Route::get('{campaignId}/reservations/missionaries', 'ReservationsController@index');
+    Route::get('{campaignId}/reservations/dropped', 'ReservationsController@dropped');
+    Route::get('{campaignId}/reservations/flights', 'FlightController@index');
     Route::get('{campaign}/itineraries/{itinerary}', 'FlightItineraryController@show');
     Route::get('{id}/{tab?}', 'CampaignsController@show');
     Route::get('{id}/costs/{cost}', 'CampaignCostController@show');

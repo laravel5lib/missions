@@ -32,7 +32,7 @@ class ReservationsController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($campaignId, $tab = null)
+    public function index($campaignId)
     {
         $this->authorize('view', $this->reservation);
 
@@ -40,7 +40,7 @@ class ReservationsController extends Controller
 
         $campaign = Campaign::findOrFail($campaignId);
 
-        return view('admin.reservations.index', compact('tab', 'campaign'));
+        return view('admin.reservations.index', compact('campaign'));
     }
 
     /**
@@ -118,5 +118,16 @@ class ReservationsController extends Controller
         $reservation = $this->reservation->findOrFail($reservationId);
 
         return view('admin.reservations.transfer', compact('reservation'));
+    }
+
+    public function dropped($campaignId)
+    {
+        $this->authorize('view', $this->reservation);
+
+        $this->seo()->setTitle('Reservations');
+
+        $campaign = Campaign::findOrFail($campaignId);
+
+        return view('admin.reservations.dropped', compact('campaign'));
     }
 }

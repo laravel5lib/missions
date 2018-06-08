@@ -700,7 +700,7 @@ class Reservation extends Model
     public function scopePercentRaisedRange($query, ...$percentages)
     {
         $startDecimal = $percentages[0] / 100;
-        $endDecimal = $percentages[1] / 100;
+        $endDecimal = isset($percentages[1]) ? $percentages[1] / 100 : null;
 
         $ids = DB::table('reservations')
             ->join('priceables', 'priceables.priceable_id', '=', 'reservations.id')
@@ -708,7 +708,9 @@ class Reservation extends Model
             ->join('funds', 'reservations.id', '=', 'funds.fundable_id')
             ->groupBy('reservations.id')
             ->havingRaw("funds.balance/SUM(prices.amount) >= $startDecimal")
-            ->havingRaw("funds.balance/SUM(prices.amount) <= $endDecimal")
+            ->when($endDecimal, function ($query) use ($endDecimal) {
+                $query->havingRaw("funds.balance/SUM(prices.amount) <= $endDecimal");
+            })
             ->selectRaw('reservations.id, funds.balance, prices.amount')
             ->pluck('reservations.id');
 
@@ -721,6 +723,17 @@ class Reservation extends Model
               ->whereDate('created_at', '<=', $dates[1]);
     }
 
+    public function scopeDropped($query)
+    {
+        $query->onlyTrashed();
+    }
+
+    public function scopeDroppedBetween($query, ...$dates)
+    {
+        $query->whereDate('deleted_at', '>=', $dates[0])
+              ->whereDate('deleted_at', '<=', $dates[1]);
+    }
+    
     /**
      * Helper method to retrieve the user's avatar
      *

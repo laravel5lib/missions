@@ -244,10 +244,10 @@
                         </template>
                         <template v-if="view === 'fundraising'">
                             <th>% Raised</th>
-                            <th>Current Rate</th>
+                            <th v-if="!filters.filter.cost">Current Rate</th>
                         </template>
                         <template v-if="view === 'mailing'">
-                            <th>Shirt Size</th>
+                            <th v-if="!filters.filter.shirt_size">Shirt Size</th>
                             <th>Country</th>
                             <th>Zip Code</th>
                             <th>State/Providence</th>
@@ -279,10 +279,10 @@
                         </template>
                         <template v-if="view === 'fundraising'">
                             <td>{{ reservation.percent_raised }}%</td>
-                            <td>{{ reservation.current_rate }}</td>
+                            <td v-if="!filters.filter.cost">{{ reservation.current_rate }}</td>
                         </template>
                         <template v-if="view === 'mailing'">
-                            <td>{{ reservation.shirt_size }}</td>
+                            <td v-if="!filters.filter.shirt_size">{{ reservation.shirt_size }}</td>
                             <td>{{ reservation.country_name }}</td>
                             <td>{{ reservation.zip }}</td>
                             <td>{{ reservation.state }}</td>
@@ -492,6 +492,16 @@ export default {
                     component: 'filter-search', 
                     title: 'Zip Code', 
                     field: 'zip',
+                },
+                country_code: {
+                    component: 'filter-select',
+                    title: 'Country',
+                    field: 'country_code',
+                    ajax: {
+                        url: 'utilities/countries',
+                        value: 'code',
+                        label: 'name'
+                    }
                 }
             }
         }

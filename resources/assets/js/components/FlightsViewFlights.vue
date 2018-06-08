@@ -2,41 +2,60 @@
 <fetch-json :url="`flights?filter[segment]=${segmentId}&include=flight-itinerary`" 
             ref="flightsList" 
             :parameters="{filter: {}, sort: 'date'}"
+            @filter:removed="removeActiveFilter"
 >
 <div slot-scope="{ json:flights, pagination, changePage, loading, addFilter, removeFilter, filters, sortBy }">
     <div class="panel-heading">
-        <span v-for="(value, key, index) in filters.filter" 
-              :key="index" 
-              class="label label-filter">
-              {{ key | capitalize }}: "{{ value | capitalize}}" <a type="button" @click="removeFilter(key)"><i class="fa fa-times"></i></a>
+        <span v-for="(label, index) in activeFilters" 
+            :key="index" 
+            class="label label-filter">
+            {{ label.text | capitalize }}: "{{ label.value | capitalize}}" <a type="button" @click="removeFilter(label.key)"><i class="fa fa-times"></i></a>
         </span>
         <div class="dropdown" style="display: inline-block; margin-left: 1em;">
             <a role="button" class="dropdown-toggle" data-toggle="dropdown">+ Add a filter</a>
             <ul class="dropdown-menu">
                 <li class="dropdown-header">Filter By</li>
-                <li><a type="button" @click="openFilterModal('flight_no', 'Flight No.')">Flight No.</a></li>
-                <li><a type="button" @click="openFilterModal('iata_code', 'City')">City</a></li>
+                <li>
+                    <a type="button" 
+                        @click="openFilterModal(filterConfiguration.record_locator)"
+                    >Record Locator</a>
+                </li>
+                <li>
+                    <a type="button" 
+                        @click="openFilterModal(filterConfiguration.flight_no)"
+                    >Flight No.</a>
+                </li>
+                <li>
+                    <a type="button" 
+                        @click="openFilterModal(filterConfiguration.city)"
+                    >City</a>
+                </li>
             </ul>
 
             <div class="modal fade" id="filterModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Filter By {{ filterModal.title }}</h4>
-                    </div>
-                    <div class="modal-body">
-                       <input class="form-control" name="search" v-model="searchFor" :placeholder="`Enter a ${filterModal.title} ...`">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" @click="addFilter(searchBy, searchFor), searchBy = null, searchFor = null" data-dismiss="modal">Apply</button>
-                    </div>
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Filter By {{ filterModal.title }}</h4>
+                        </div>
+                        <div class="modal-body">
+                        <component :is="filterModal.component" 
+                                    :callback="addFilter" 
+                                    :config="filterModal"
+                                    @apply:filter="closeFilterModal"
+                            ></component>
+                        </div>
                     </div>
                 </div>
             </div>
 
         </div>
+
+        <em class="text-muted small">
+            Showing {{ flights.length || 0 }} of {{ pagination.total || 0 }} results
+        </em>
+
     </div>
     <div class="panel-body" v-if="loading">
         <p class="lead text-center text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</p>
@@ -107,14 +126,35 @@
 </fetch-json>
 </template>
 <script>
+import FilterSearch from '../components/FilterSearch';
 export default {
     props: ['campaignId', 'segmentId'],
+    components: {
+        'filter-search': FilterSearch,
+    },
     data() {
         return {
-            searchBy: null,
-            searchFor: null,
+            activeFilters: [],
             filterModal: {
+                component: null,
                 title: null
+            },
+            filterConfiguration: {
+                record_locator: {
+                    component: 'filter-search',
+                    title: 'Record Locator', 
+                    field: 'record_locator',
+                },
+                flight_no: {
+                    component: 'filter-search',
+                    title: 'Flight No.', 
+                    field: 'flight_no',
+                },
+                city: {
+                    component: 'filter-search',
+                    title: 'City', 
+                    field: 'iata_code',
+                }
             }
         }
     },
@@ -124,10 +164,20 @@ export default {
         }
     },
     methods: {
-        openFilterModal(filter, title) {
-            this.searchBy = filter;
-            this.filterModal.title = title;
+        openFilterModal(filter) {
+            this.filterModal = filter;
             $('#filterModal').modal('show');
+        },
+        closeFilterModal(data) {
+            this.activeFilters.push(data);
+            this.filterModal = {
+                component: null,
+                title: null
+            }
+            $('#filterModal').modal('hide');
+        },
+        removeActiveFilter(key) {
+            this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
         }
     }
 }

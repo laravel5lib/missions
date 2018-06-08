@@ -63,6 +63,11 @@
             </div>
 
         </div>
+
+        <em class="text-muted small">
+            Showing {{ itineraries.length || 0 }} of {{ pagination.total || 0 }} results
+        </em>
+
     </div>
     <div class="panel-body" v-if="loading">
         <p class="lead text-center text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</p>
@@ -170,14 +175,3 @@ export default {
     }
 }
 </script>
-<style>
-    tr.selected {
-        background-color: #fcf8e3;
-    }
-    th, td {
-        white-space: nowrap;
-    }
-    .panel-heading {
-        border-color: #e6e6e6;
-    }
-</style>

@@ -51,6 +51,13 @@ class Flight extends Model
         });
     }
 
+    public function scopeRecordLocator($query, $record)
+    {
+        return $query->whereHas('flightItinerary', function ($subQuery) use ($record) {
+            return $subQuery->where('record_locator', 'LIKE', "%$record%");
+        });
+    }
+
     public function setFlightNoAttribute($value)
     {
         $this->attributes['flight_no'] = strtoupper($value);

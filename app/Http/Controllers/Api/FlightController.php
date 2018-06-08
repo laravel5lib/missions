@@ -23,7 +23,8 @@ class FlightController extends Controller
                 'flight_no',
                 'iata_code',
                 Filter::scope('segment'),
-                Filter::scope('itinerary')
+                Filter::scope('itinerary'),
+                Filter::scope('record_locator')
             ])
             ->allowedIncludes('flight-itinerary')
             ->paginate();

@@ -317,15 +317,4 @@ export default {
     }
 }
 </script>
-<style>
-    tr.selected {
-        background-color: #fcf8e3;
-    }
-    th, td {
-        white-space: nowrap;
-    }
-    .panel-heading {
-        border-color: #e6e6e6;
-    }
-</style>
 

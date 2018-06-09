@@ -48,7 +48,7 @@ class ReservationsController extends Controller
         $reservations = QueryBuilder::for(Reservation::class)
             ->allowedFilters([
                 'surname', 'given_names', 'email', 'phone_one', 'phone_two',
-                'address', 'city', 'zip', 'state',
+                'address', 'city', 'zip', 'state', 'trip_id',
                 Filter::exact('gender'),
                 Filter::exact('status'),
                 Filter::exact('shirt_size'),

@@ -779,8 +779,8 @@ class Reservation extends Model
     public function scopeReady($query)
     {
         $query->percentRaisedRange(100)
-              ->whereHas('requirements', function($subQuery) {
-                  return $subQuery->whereNotIn('status', ['incomplete', 'reviewing', 'attention']);
+              ->whereDoesntHave('requirements', function($subQuery) {
+                  return $subQuery->whereIn('status', ['incomplete', 'reviewing', 'attention']);
               });
     }
 

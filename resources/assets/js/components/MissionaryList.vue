@@ -17,19 +17,19 @@
                     <li :class="{ 'active' : filters.filter.funnel === 'deposited' }">
                         <a role="button" @click="addFilter('funnel', 'deposited')">
                             Deposit Only <span class="badge badge-default">{{ totals.deposited }}</span>
-                            <i class="fa fa-arrow-right"></i>
+                            <i class="fa fa-arrow-right text-muted"></i>
                         </a>
                     </li>
                     <li :class="{ 'active' : filters.filter.funnel === 'in_process' }">
                         <a role="button" @click="addFilter('funnel', 'in_process')">
                             In Process <span class="badge badge-default">{{ totals.process }}</span>
-                            <i class="fa fa-arrow-right"></i>
+                            <i class="fa fa-arrow-right text-muted"></i>
                         </a>
                     </li>
                     <li :class="{ 'active' : filters.filter.funnel === 'funded' }">
                         <a role="button" @click="addFilter('funnel', 'funded')">
                             Fully Funded <span class="badge badge-default">{{ totals.funded }}</span>
-                            <i class="fa fa-arrow-right"></i>
+                            <i class="fa fa-arrow-right text-muted"></i>
                         </a>
                     </li>
                     <li :class="{ 'active' : filters.filter.funnel === 'ready' }">

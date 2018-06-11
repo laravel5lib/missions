@@ -235,6 +235,7 @@ Vue.component('reservation-pricing-overview', require('./components/ReservationP
 Vue.component('flight-list', require('./components/FlightList.vue'));
 Vue.component('missionary-list', require('./components/MissionaryList.vue'));
 Vue.component('dropped-reservation-list', require('./components/DroppedReservationList.vue'));
+Vue.component('itinerary-flight-list', require('./components/ItineraryFlightList.vue'));
 
 /**
  * Utility Components

@@ -788,6 +788,13 @@ class Reservation extends Model
     {
         $query->{camel_case($funnel)}();
     }
+
+    public function scopeItinerary($query, $uuid)
+    {
+        $query->whereHas('flightItinerary', function ($subQuery) use ($uuid) {
+            return $subQuery->whereUuid($uuid);
+        });
+    }
     
     /**
      * Helper method to retrieve the user's avatar

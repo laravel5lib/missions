@@ -8,7 +8,7 @@
         'admin' => 'Dashboard',
         'admin/campaigns' => 'Campaigns',
         'admin/campaigns/'.$campaign->id => $campaign->name.' - '.country($campaign->country_code),
-        'admin/campaigns/'.$campaign->id.'/flights' => 'Flights',
+        'admin/campaigns/'.$campaign->id.'/reservations/flights' => 'Flights',
         'active' => $itinerary->record_locator
     ]])
     @endbreadcrumbs
@@ -27,25 +27,26 @@
         </alert-success>
 
         <div class="row">
-            <div class="col-xs-12 col-md-2">
-                
-            </div>
-            <div class="col-xs-12 col-md-7">
+            <div class="col-xs-12 col-md-7 col-md-offset-2">
                 @component('panel')
-                    @slot('title')<h5>Details</h5> @endslot
+                    @slot('title')
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <h5>Details</h5> 
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <a type="button" class="btn btn-sm btn-default">Edit</a>
+                        </div>
+                    </div>
+                    @endslot
                     @component('list-group', ['data' => [
                         'record_locator' => $itinerary->record_locator,
                         'type' => $itinerary->type
                     ]])@endcomponent
                 @endcomponent
 
-                @component('panel')
-                    @slot('title')<h5>Passengers</h5> @endslot
-                @endcomponent
+                <itinerary-flight-list itinerary-id="{{ $itinerary->uuid }}"></itinerary-fight-list>
 
-                @component('panel')
-                    @slot('title')<h5>Flights</h5> @endslot
-                @endcomponent
             </div>
             <div class="col-xs-12 col-md-3 small">
                 <ul class="nav nav-tabs" role="tablist">

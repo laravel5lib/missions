@@ -14,16 +14,19 @@ class FlightPassengerController extends Controller
 {
     public function index($campaignId)
     {
+        $segment = request()->input('segment');
+
         $query = Reservation::whereHas('trip', function ($trip) use ($campaignId) {
             return $trip->where('campaign_id', $campaignId);
         })
         ->whereNotNull('flight_itinerary_id')
-        ->whereHas('flightItinerary.flights', function($flight) {
-            return $flight->segment(request()->input('segment'));
-        })
-        ->with(['flightItinerary.flights' => function($flight) {
-            $flight->segment(request()->input('segment'));
-        }, 'trip.group']);
+        ->when($segment, function ($query) use ($segment) {
+            $query->whereHas('flightItinerary.flights', function($flight) use ($segment) {
+                return $flight->segment($segment);
+            })->with(['flightItinerary.flights' => function($flight) use ($segment) {
+                $flight->segment($segment);
+            }, 'trip.group']);
+        });
 
 
         $passengers = QueryBuilder::for($query)
@@ -34,7 +37,8 @@ class FlightPassengerController extends Controller
                 Filter::scope('flight_no'),
                 Filter::scope('iata_code'),
                 Filter::scope('group'),
-                Filter::scope('trip_type')
+                Filter::scope('trip_type'),
+                Filter::scope('itinerary')
             ])
             ->allowedIncludes('flight-itinerary')
             ->paginate(25);

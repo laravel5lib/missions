@@ -8,8 +8,8 @@
         'admin' => 'Dashboard',
         'admin/campaigns' => 'Campaigns',
         'admin/campaigns/'.$campaign->id => $campaign->name.' - '.country($campaign->country_code),
-        'admin/campaigns/'.$campaign->id.'/flights' => 'Flights',
-        'active' => $flight->flight_no
+        'admin/campaigns/'.$campaign->id.'/reservations/flights' => 'Flights',
+        'active' => $flight->flight_no . ' (' . $flight->flightSegment->name . ')'
     ]])
     @endbreadcrumbs
     
@@ -32,12 +32,23 @@
             </div>
             <div class="col-xs-12 col-md-7">
                 @component('panel')
-                    @slot('title')<h5>Details</h5> @endslot
+                    @slot('title')
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <h5>Details</h5>
+                            </div>
+                            <div class="col-xs-4 text-right">
+                                <a href="#" class="btn btn-sm btn-default">Edit</a>
+                            </div>
+                        </div>
+                    @endslot
                     @component('list-group', ['data' => [
                         'flight_number' => $flight->flight_no,
                         'city' => $flight->iata_code,
                         'date' => $flight->date->format('F j, Y'),
-                        'time' => $flight->time
+                        'time' => $flight->time,
+                        'segment' => $flight->flightSegment->name,
+                        'record_locator' => '<a href="'.url('admin/campaigns/'.$campaign->id.'/itineraries/'.$flight->flightItinerary->uuid).'"><strong>'.$flight->flightItinerary->record_locator.'</strong></a>'
                     ]])@endcomponent
                 @endcomponent
             </div>

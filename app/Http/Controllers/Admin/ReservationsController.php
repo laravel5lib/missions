@@ -60,7 +60,9 @@ class ReservationsController extends Controller
      */
     public function show($id, $tab = "details")
     {
-        $reservation = $this->api->get('reservations/'.$id, ['include' => 'trip.campaign,fundraisers,costs.payments,squads.team,rooms.type, rooms.accommodations']);
+        // $reservation = $this->api->get('reservations/'.$id, ['include' => 'trip.campaign,fundraisers,costs.payments,squads.team,rooms.type, rooms.accommodations']);
+
+        $reservation = Reservation::findOrFail($id);
 
         $this->authorize('view', $reservation);
 

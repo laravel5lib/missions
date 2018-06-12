@@ -4,6 +4,8 @@ use Carbon\Carbon;
 use App\Models\v1\Fund;
 use App\Models\v1\Slug;
 use App\Models\v1\Trip;
+use App\Models\v1\Airline;
+use App\Models\v1\Airport;
 use App\Models\v1\Project;
 use App\Models\v1\Campaign;
 use App\Services\Accounting;
@@ -341,4 +343,16 @@ function roundUpToAny($n,$x=5) {
 function currency($amount)
 {
     return '$'.number_format($amount, 2, '.', '');
+}
+
+function airport($iata)
+{
+    return Airport::where('iata', $iata)->first();
+}
+
+function airline($flight_no)
+{
+    $iata = substr($flight_no, 0, 2);
+
+    return Airline::where('iata', $iata)->first();
 }

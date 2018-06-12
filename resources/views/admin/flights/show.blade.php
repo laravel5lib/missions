@@ -30,10 +30,10 @@
                         </div>
                     @endslot
                     @component('list-group', ['data' => [
-                        'flight_number' => $flight->flight_no,
-                        'city' => $flight->iata_code,
+                        'flight_number' => $flight->flight_no .' <em class="text-muted">'. airline($flight->flight_no)['name'].'</em>',
+                        'city' => $flight->iata_code . ' <em class="text-muted">'. airport($flight->iata_code)['name'].'</em>',
                         'date' => $flight->date->format('F j, Y'),
-                        'time' => $flight->time,
+                        'time' => $flight->time . ' <span class="text-muted">('. carbon($flight->time)->format('h:i a').')</span>',
                         'segment' => $flight->flightSegment->name,
                         'record_locator' => '<a href="'.url('admin/campaigns/'.$campaign->id.'/itineraries/'.$flight->flightItinerary->uuid).'"><strong>'.$flight->flightItinerary->record_locator.'</strong></a>',
                         'passengers' => $flight->flightItinerary->reservations()->count()

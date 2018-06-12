@@ -126,7 +126,7 @@
                         <td><input type="checkbox" :checked="isSelected(passenger)" @change="select(passenger, $event.target.checked)"></td>
                         <td>
                             <strong>
-                                <a :href="`/admin/reservations/${passenger.id}`">
+                                <a :href="`/admin/reservations/${passenger.id}/travel`">
                                     {{ passenger.surname }}
                                 </a>
                             </strong>

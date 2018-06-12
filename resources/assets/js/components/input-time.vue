@@ -23,7 +23,7 @@
         <template v-else>
 
             <input class="form-control" 
-                v-model="date"
+                v-model="time"
                 v-mask="format" 
                 :readonly="readonly"
                 :name="name"
@@ -86,12 +86,12 @@ export default {
     mounted() {
         this.$nextTick(() =>  {
             if (this.value) {
-                this.date = value;
+                this.time = this.value;
             }
         });
 
         this.$root.$on('form:reset', () => {
-            this.date = null;
+            this.time = null;
         });
     }
 }

@@ -33,4 +33,13 @@ class FlightController extends Controller
 
         return view('admin.flights.show', compact('flight', 'campaign'));
     }
+
+    public function edit($flight, Request $request)
+    {
+        $flight = Flight::whereUuid($flight)->firstOrFail();
+
+        $campaign = Campaign::findOrFail($flight->flightSegment->campaign_id);
+
+        return view('admin.flights.edit', compact('flight', 'campaign'));
+    }
 }

@@ -36,6 +36,7 @@ Route::get('campaign-groups/{group}/prices/{price}', 'CampaignGroupPriceControll
 Route::get('campaign-groups/{group}/trips/create', 'CampaignGroupTripController@create');
 
 Route::get('flights/{flight}', 'FlightController@show');
+Route::get('flights/{flight}/edit', 'FlightController@edit');
 
 Route::get('trips/{id}/{tab?}', 'TripsController@show');
 Route::get('trips/{id}/prices/{price}', 'TripPriceController@show');

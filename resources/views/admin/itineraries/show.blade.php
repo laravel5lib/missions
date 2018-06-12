@@ -43,7 +43,8 @@
                             @endslot
                             @component('list-group', ['data' => [
                                 'record_locator' => $itinerary->record_locator,
-                                'type' => $itinerary->type
+                                'type' => $itinerary->type,
+                                'passengers' => $itinerary->reservations()->count()
                             ]])@endcomponent
                         @endcomponent
                     </div>

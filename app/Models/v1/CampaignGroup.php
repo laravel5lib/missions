@@ -88,4 +88,20 @@ class CampaignGroup extends Pivot
 
         return Reservation::whereIn('trip_id', $tripIds)->count();
     }
+
+    public function scopeName($query, $name)
+    {
+        $query->whereHas('organization', function($org) use ($name) {
+            return $org->where('name', 'LIKE', "%$name%");
+        });
+    }
+
+    public function scopeHasPublishedTrips($query)
+    {
+        $query->whereHas('campaign', function($campaign) {
+            return $campaign->whereHas('trips', function ($trip) {
+                return $trip->public()->published();
+            });
+        });
+    }
 }

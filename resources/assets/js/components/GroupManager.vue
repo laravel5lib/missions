@@ -42,8 +42,8 @@
     </div>
 </div>
 
-<fetch-json :url="'/campaigns/'+campaignId+'/groups'" ref="groupList">
-    <div class="panel panel-default" style="border-top: 5px solid #f6323e" slot-scope="{ json:groups, loading, pagination, filters, addFilter, removeFilter, changePage }">
+<fetch-json :url="'/campaigns/'+campaignId+'/groups'" ref="groupList" @filter:removed="removeActiveFilter">
+    <div class="panel panel-default" style="border-top: 5px solid #f6323e" slot-scope="{ json:groups, loading, pagination, filters, addFilter, removeFilter, changePage, sortBy }">
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-6">
@@ -54,23 +54,54 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="panel-body">
-            <span class="label label-default" v-for="(filter, key) in filters" :key="key" style="padding: 0.5em; margin-right: 1em">
-                {{ key | capitalize }}: "{{ filter }}"
-                <a role="button" style="color: white; margin-left: 0.5em;" @click="removeFilter(key)">
-                    <i class="fa fa-times"></i>
-                </a>
+        <div class="panel-heading">
+            <span v-for="(label, index) in activeFilters" 
+                :key="index" 
+                class="label label-filter">
+                {{ label.text | capitalize }}: "{{ label.value | capitalize}}" <a type="button" @click="removeFilter(label.key)"><i class="fa fa-times"></i></a>
             </span>
-            <div class="btn-group">
-                <button type="button" class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-plus"></i> Add a Filter
-                </button>
+            <div class="dropdown" style="display: inline-block; margin-left: 1em;">
+                <a role="button" class="dropdown-toggle" data-toggle="dropdown">+ Add a filter</a>
                 <ul class="dropdown-menu">
-                    <li><a role="button" @click="addFilter('status_id', 1)">Pending</a></li>
-                    <li><a role="button" @click="addFilter('status_id', 2)">Committed</a></li>
+                    <li class="dropdown-header">Filter By</li>
+                    <li>
+                        <a type="button" 
+                            @click="openFilterModal(filterConfiguration.name)"
+                        >Name</a>
+                    </li>
+                    <li>
+                        <a type="button" 
+                            @click="openFilterModal(filterConfiguration.status)"
+                        >Status</a>
+                    </li>
                 </ul>
+
+                <div class="modal fade" id="filterModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Filter By {{ filterModal.title }}</h4>
+                            </div>
+                            <div class="modal-body">
+                            <component :is="filterModal.component" 
+                                        :callback="addFilter" 
+                                        :config="filterModal"
+                                        @apply:filter="closeFilterModal"
+                                ></component>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </div> -->
+
+            <em class="text-muted small">
+                Showing {{ groups.length || 0 }} of {{ pagination.total || 0 }} results
+            </em>
+
+        </div>
+        <div class="table-responsive">
         <table class="table" v-if="groups && groups.length">
             <thead>
             <tr class="active">
@@ -99,9 +130,10 @@
             </tr>
             </tbody>
         </table>
-        <div class="panel-body text-center" v-else>
+        </div>
+        <div class="panel-body text-center" v-if="!loading && groups.length < 1">
             <span class="lead">No Groups</span>
-            <p>Add a group to this campaign to get started.</p>
+            <p>Try chainging filters or add a group to this campaign to get started.</p>
         </div>
         <div class="panel-footer" v-if="pagination.total > pagination.per_page">
             <pager :pagination="pagination" :callback="changePage"></pager>
@@ -122,22 +154,65 @@
 </div>
 </template>
 <script>
+import FilterSearch from '../components/FilterSearch';
+import FilterRadio from '../components/FilterRadio';
 export default {
     props: ['campaignId'],
-
+    components: {
+        'filter-search': FilterSearch,
+        'filter-radio': FilterRadio,
+    },
     data() {
         return {
             defaultData: {
                 'status_id': '1',
                 'group_id': null
             },
-            statusOptions: {1:'Pending', 2:'Committed', 3:'Ready to Launch', 4:'Launched'}
+            statusOptions: {1:'Pending', 2:'Committed', 3:'Ready to Launch', 4:'Launched'},
+            activeFilters: [],
+            filterModal: {
+                component: null,
+                title: null
+            },
+            filterConfiguration: {
+                name: {
+                    component: 'filter-search',
+                    title: 'Name', 
+                    field: 'search',
+                },
+                status: {
+                    component: 'filter-radio',
+                    title: 'Status', 
+                    field: 'status',
+                    options: [
+                        {value: 1, label: 'Pending'},
+                        {value: 2, label: 'Committed'},
+                        {value: 3, label: 'Ready to Launch'},
+                        {value: 4, label: 'Launch'}
+                    ]
+                }
+            }
         }
     },
 
     methods: {
         updateList(params) {
             this.$refs.groupList.fetch(params);
+        },
+        openFilterModal(filter) {
+            this.filterModal = filter;
+            $('#filterModal').modal('show');
+        },
+        closeFilterModal(data) {
+            this.activeFilters.push(data);
+            this.filterModal = {
+                component: null,
+                title: null
+            }
+            $('#filterModal').modal('hide');
+        },
+        removeActiveFilter(key) {
+            this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
         }
     }
 }

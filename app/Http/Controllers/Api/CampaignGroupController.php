@@ -20,6 +20,7 @@ class CampaignGroupController extends Controller
     {
         $search = request()->get('search');
         $hasPublishedTrips = request()->get('hasPublishedTrips');
+        $status = request()->get('status');
 
         $groups = Campaign::findOrFail($campaignId)
             ->groups()
@@ -32,6 +33,9 @@ class CampaignGroupController extends Controller
                         ->public()
                         ->published();
                 });
+            })
+            ->when($status, function ($query) use ($status) {
+                return $query->where('campaign_group.status_id', $status);
             })
             ->orderBy('name')
             ->paginate(request()->input('per_page', 25));

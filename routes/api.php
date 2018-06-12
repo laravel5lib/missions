@@ -36,6 +36,7 @@ Route::apiResource('campaigns/{campaignId}/flights/segments', 'FlightSegmentCont
 Route::apiResource('campaigns/{campaignId}/flights/itineraries', 'FlightItineraryController');
 Route::get('campaigns/{campaignId}/flights/passengers', 'FlightPassengerController@index');
 Route::patch('campaigns/{campaignId}/flights/passengers', 'FlightPassengerController@update');
+Route::put('flights/itineraries/published', 'FlightItineraryPublicationController@update');
 Route::apiResource('flights', 'FlightController');
 
 // Dingo API routes

@@ -5,7 +5,7 @@
         <div class="btn-group btn-group-sm" style="margin-right: 1em;">
             <button class="btn btn-primary" 
                     :disabled="! selected.length"
-                    @click="ui.edit = true"
+                    @click="publish"
             >
                 Publish Itineraries 
                 <span class="badge" 
@@ -18,9 +18,7 @@
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
             <ul class="dropdown-menu">
-                <li><a href="#">Unpublish Itineraries</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#">Download</a></li>
+                <li><a type="button" @click="unpublish">Unpublish Itineraries</a></li>
             </ul>
         </div>
 
@@ -171,6 +169,78 @@ export default {
             this.searchBy = filter;
             this.filterModal.title = title;
             $('#filterModal').modal('show');
+        },
+        publish() {
+            swal('WARNING!', `Are you sure you want to publish the ${this.selected.length} selected itinerarie(s)? They will be publicly visible and passengers will be notified.`, 'warning', {
+                closeOnClickOutside: true,
+                buttons: {
+                    cancel: {
+                        text: "Keep Private",
+                        value: null,
+                        visible: true,
+                        closeModal: true,
+                    },
+                    confirm: {
+                        text: "Publish",
+                        value: true,
+                        visible: true,
+                        closeModal: true
+                    }
+                },
+                dangerMode: true
+            }).then((value) => {
+                if (value) {
+                    this.$http
+                        .put(`flights/itineraries/published`, {itineraries: this.selected, published: true})
+                        .then(response => {
+                            swal("Nice Work!", "Itineraries published.", "success", {
+                                buttons: false,
+                                timer: 1000
+                            });
+                            this.selected = [];
+                            this.$refs.itinerariesList.fetch();
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                }
+            })
+        },
+        unpublish() {
+            swal('WARNING!', `Are you sure you want to unpublish the ${this.selected.length} selected itinerarie(s)? They will no longer be publicly visible.`, 'warning', {
+                closeOnClickOutside: true,
+                buttons: {
+                    cancel: {
+                        text: "Keep Public",
+                        value: null,
+                        visible: true,
+                        closeModal: true,
+                    },
+                    confirm: {
+                        text: "Unpublish",
+                        value: true,
+                        visible: true,
+                        closeModal: true
+                    }
+                },
+                dangerMode: true
+            }).then((value) => {
+                if (value) {
+                    this.$http
+                        .put(`flights/itineraries/published`, {itineraries: this.selected, published: false})
+                        .then(response => {
+                            swal("Nice Work!", "Itineraries unpublished.", "success", {
+                                buttons: false,
+                                timer: 1000
+                            });
+                            this.selected = [];
+                            this.$refs.itinerariesList.fetch();
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                }
+            })
         }
     }
 }

@@ -57,4 +57,32 @@ class FlightItineraryController extends Controller
 
         return response()->json(['message' => 'Flight itinerary created.'], 201);
     }
+
+    public function update($campaignId, $itineraryId, Request $request)
+    {
+        $itinerary = FlightItinerary::whereUuid($itineraryId)->firstOrFail();
+
+        $itinerary->update([
+            'record_locator' => $request->input('record_locator', $itinerary->record_locator),
+            'type' => $request->input('type', $itinerary->type)
+        ]);
+
+        return new FlightItineraryResource($itinerary);
+    }
+
+    public function destroy($campaignId, $itineraryId)
+    {
+        $itinerary = FlightItinerary::whereUuid($itineraryId)->firstOrFail();
+        
+        DB::transaction(function () use ($itinerary) {
+            $itinerary->flights()->delete();
+            $itinerary->reservations->each(function ($reservation) {
+                $reservation->flight_itinerary_id = null;
+                $reservation->save();
+            });
+            $itinerary->delete();
+        });
+
+        return response()->json(['message' => 'Itinerary deleted.'], 204);
+    }
 }

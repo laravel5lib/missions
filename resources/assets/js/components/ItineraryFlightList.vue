@@ -100,7 +100,6 @@
         </div>
     </fetch-json>
 </template>
-
 <script>
 import FilterSearch from '../components/FilterSearch';
 export default {

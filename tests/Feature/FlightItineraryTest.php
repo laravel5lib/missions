@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\v1\Trip;
+use App\Models\v1\Flight;
 use App\Models\v1\Reservation;
 use App\Models\v1\FlightSegment;
 use App\Models\v1\FlightItinerary;
@@ -95,5 +96,22 @@ class FlightItineraryTest extends TestCase
         $this->assertDatabaseHas('flight_itineraries', ['record_locator' => 'RX2Q3F']);
         $this->assertDatabaseHas('flights', ['iata_code' => 'SNA']);
         $this->assertDatabaseHas('flights', ['iata_code' => 'MGA']);
+    }
+
+    /** @test */
+    public function deletes_an_itinerary_and_flights_and_removes_passengers()
+    {
+        $reservation = factory(Reservation::class)->create();
+        $itinerary = factory(FlightItinerary::class)->create(['record_locator' => 'QX4R6M']);
+        $flight = factory(Flight::class)->create(['flight_itinerary_id' => $itinerary->id]);
+        $reservation->flight_itinerary_id = $itinerary->id;
+        $reservation->save();
+
+        $this->json('DELETE', "/api/campaigns/{$reservation->trip->campaign_id}/flights/itineraries/{$itinerary->uuid}")
+            ->assertStatus(204);
+
+        $this->assertDatabaseMissing('flight_itineraries', ['id' => $itinerary->id]);
+        $this->assertDatabaseMissing('flights', ['id' => $flight->id]);
+        $this->assertNull($reservation->fresh()->flight_itinerary_id);
     }
 }

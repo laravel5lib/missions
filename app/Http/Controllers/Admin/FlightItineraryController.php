@@ -16,4 +16,12 @@ class FlightItineraryController extends Controller
         
         return view('admin.itineraries.show', compact('itinerary', 'campaign'));
     }
+
+    public function edit($campaign, $itinerary)
+    {
+        $campaign = Campaign::findOrFail($campaign);
+        $itinerary = FlightItinerary::whereUuid($itinerary)->firstOrFail();
+        
+        return view('admin.itineraries.edit', compact('itinerary', 'campaign'));
+    }
 }

@@ -138,7 +138,7 @@ $('.launch-modal').on('click', function(e){
                       <img src="/images/coordinators/vision-doc-icon.png" width="50px" height="50px">
                       <h6 class="text-uppercase">1N1D19 Vision Booklet</h6>
                       <p class="small hidden-xs">Print ready booklet file ready to submit to your printer</p>
-                      <a href="https://www.dropbox.com/s/swt4hp5ib409dg4/1N1D19-Launch-Media-Guide.pdf?dl=1" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <a href="{{ download_file('resources/coordinators/vision-packet-v2_final.pdf.zip') }}" class="btn btn-sm btn-primary-hollow">Download</a>
                       <hr class="divider inv">
                     </div>
                   </div>

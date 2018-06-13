@@ -22,7 +22,8 @@
                     <span v-for="(label, index) in activeFilters" 
                         :key="index" 
                         class="label label-filter">
-                        {{ label.text | capitalize }}: "{{ label.value | capitalize}}" <a type="button" @click="removeFilter(label.key)"><i class="fa fa-times"></i></a>
+                        <a type="button" @click="openFilterModal(filterConfiguration[label.key])">{{ label.text | capitalize }}: "{{ label.value | capitalize}}"</a> 
+                        <a type="button" @click="removeFilter(label.key)"><i class="fa fa-times"></i></a>
                     </span>
                     <div class="dropdown" style="display: inline-block; margin-left: 1em;">
                         <a role="button" class="dropdown-toggle" data-toggle="dropdown">+ Add a filter</a>
@@ -235,6 +236,7 @@ export default {
             $('#filterModal').modal('show');
         },
         closeFilterModal(data) {
+            this.removeActiveFilter(data.key);
             this.activeFilters.push(data);
             this.filterModal = {
                 component: null,

@@ -213,7 +213,7 @@
                         <ul class="list-unstyled">
                             <li>
                                 <a type="button" 
-                                @click="openFilterModal(registeredBetween)"
+                                @click="openFilterModal(filterConfiguration.registered_between)"
                                 >+ Registered</a>
                             </li>
                         </ul>
@@ -503,6 +503,12 @@ export default {
                         value: 'code',
                         label: 'name'
                     }
+                },
+                registered_between: {
+                    component: 'filter-radio',
+                    title: 'Registered', 
+                    field: 'registered_between',
+                    options: []
                 }
             }
         }
@@ -545,18 +551,13 @@ export default {
             return time.clone().endOf('month').format();
         },
         registeredBetween() {
-            return {
-                component: 'filter-radio',
-                title: 'Registered', 
-                field: 'registered_between',
-                options: [
+            return [
                     {value: `${this.startOfToday},${this.endOfToday}`, label: 'Today'},
                     {value: `${this.startOfYesterday},${this.endOfYesterday}`, label: 'Yesterday'},
                     {value: `${this.startOfWeek},${this.endOfWeek}`, label: 'This Week'},
                     {value: `${this.startOfMonth},${this.endOfMonth}`, label: 'This Month'},
                     {value: `${this.startOfLastMonth},${this.endOfLastMonth}`, label: 'Last Month'}
-                ]
-            }
+                ];
         }
     },
 
@@ -577,6 +578,10 @@ export default {
         removeActiveFilter(key) {
             this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
         }
+    },
+
+    mounted() {
+        this.filterConfiguration.registered_between.options = this.registeredBetween;
     }
 }
 </script>

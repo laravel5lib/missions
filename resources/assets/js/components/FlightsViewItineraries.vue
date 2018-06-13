@@ -1,5 +1,5 @@
 <template>
-<fetch-json :url="`campaigns/${campaignId}/flights/itineraries`" ref="itinerariesList" :parameters="{filter: {}, sort: 'record_locator'}">
+<fetch-json :url="`campaigns/${campaignId}/flights/itineraries`" ref="itinerariesList" :parameters="{filter: {}, sort: 'record_locator'}" @filter:removed="removeActiveFilter">
 <div slot-scope="{ json:itineraries, pagination, changePage, loading, addFilter, removeFilter, filters, sortBy }">
     <div class="panel-heading" v-if="!ui.edit">
         <div class="btn-group btn-group-sm" style="margin-right: 1em;">
@@ -22,40 +22,35 @@
             </ul>
         </div>
 
-        <span v-for="(value, key, index) in filters.filter" 
-              :key="index" 
-              class="label label-filter">
-              {{ key | capitalize }}: "{{ value | capitalize}}" <a type="button" @click="removeFilter(key)"><i class="fa fa-times"></i></a>
+        <span v-for="(label, index) in activeFilters" 
+            :key="index" 
+            class="label label-filter">
+            <a type="button" @click="openFilterModal(filterConfiguration[label.key])">{{ label.text | capitalize }}: "{{ label.value | capitalize}}"</a> 
+            <a type="button" @click="removeFilter(label.key)"><i class="fa fa-times"></i></a>
         </span>
         <div class="dropdown" style="display: inline-block; margin-left: 1em;">
             <a role="button" class="dropdown-toggle" data-toggle="dropdown">+ Add a filter</a>
             <ul class="dropdown-menu">
-                <li class="dropdown-header">Filter By Type</li>
-                <li><a type="button" @click="addFilter('type', 'group')">Group</a></li>
-                <li><a type="button" @click="addFilter('type', 'individual')">Individual</a></li>
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Filter By Status</li>
-                <li><a type="button" @click="addFilter('published', false)">Draft</a></li>
-                <li><a type="button" @click="addFilter('published', true)">Published</a></li>
-                <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Filter By</li>
-                <li><a type="button" @click="openFilterModal('record_locator', 'Record Locator')">Record Locator</a></li>
+                <li><a type="button" @click="openFilterModal(filterConfiguration.type)">Type</a></li>
+                <li><a type="button" @click="openFilterModal(filterConfiguration.published)">Status</a></li>
+                <li><a type="button" @click="openFilterModal(filterConfiguration.record_locator)">Record Locator</a></li>
             </ul>
 
             <div class="modal fade" id="filterModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Filter By {{ filterModal.title }}</h4>
-                    </div>
-                    <div class="modal-body">
-                       <input class="form-control" name="search" v-model="searchFor" :placeholder="`Enter a ${filterModal.title} ...`">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" @click="addFilter(searchBy, searchFor), searchBy = null, searchFor = null" data-dismiss="modal">Apply</button>
-                    </div>
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Filter By {{ filterModal.title }}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <component :is="filterModal.component" 
+                                    :callback="addFilter" 
+                                    :config="filterModal"
+                                    @apply:filter="closeFilterModal"
+                            ></component>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -129,8 +124,16 @@
 </fetch-json>
 </template>
 <script>
+import FilterSearch from '../components/FilterSearch';
+import FilterRadio from '../components/FilterRadio';
 export default {
     props: ['campaignId', 'segmentId'],
+
+    components: {
+        'filter-search': FilterSearch,
+        'filter-radio': FilterRadio
+    },
+
     data() {
         return {
             selected: [],
@@ -138,11 +141,36 @@ export default {
             ui: {
                 edit: false
             },
+            activeFilters: [],
             filterModal: {
+                component: null,
                 title: null
             },
-            searchBy: null,
-            searchFor: null
+            filterConfiguration: {
+                record_locator: {
+                    component: 'filter-search', 
+                    title: 'Record Locator', 
+                    field: 'record_locator'
+                },
+                type: {
+                    component: 'filter-radio', 
+                    title: 'Type', 
+                    field: 'type',
+                    options: [
+                        {value: 'individual', label: 'Individual'},
+                        {value: 'group', label: 'Group'}
+                    ]
+                },
+                published: {
+                    component: 'filter-radio', 
+                    title: 'Status', 
+                    field: 'published',
+                    options: [
+                        {value: false, label: 'Draft'},
+                        {value: true, label: 'Published'}
+                    ]
+                },
+            }
         }
     },
     methods: {
@@ -164,11 +192,21 @@ export default {
         {
             return _.findWhere(this.selected, record)
         },
-        openFilterModal(filter, title)
-        {
-            this.searchBy = filter;
-            this.filterModal.title = title;
+        openFilterModal(filter) {
+            this.filterModal = filter;
             $('#filterModal').modal('show');
+        },
+        closeFilterModal(data) {
+            this.removeActiveFilter(data.key);
+            this.activeFilters.push(data);
+            this.filterModal = {
+                component: null,
+                title: null
+            }
+            $('#filterModal').modal('hide');
+        },
+        removeActiveFilter(key) {
+            this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
         },
         publish() {
             swal('WARNING!', `Are you sure you want to publish the ${this.selected.length} selected itinerarie(s)? They will be publicly visible and passengers will be notified.`, 'warning', {

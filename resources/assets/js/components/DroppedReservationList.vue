@@ -21,7 +21,8 @@
                 <span v-for="(label, index) in activeFilters" 
                     :key="index" 
                     class="label label-filter">
-                    {{ label.text | capitalize }}: "{{ label.value | capitalize}}" <a type="button" @click="removeFilter(label.key)"><i class="fa fa-times"></i></a>
+                    <a type="button" @click="openFilterModal(filterConfiguration[label.key])">{{ label.text | capitalize }}: "{{ label.value | capitalize}}"</a> 
+                    <a type="button" @click="removeFilter(label.key)"><i class="fa fa-times"></i></a>
                 </span>
                 <div class="dropdown" style="display: inline-block; margin-left: 1em;">
                     <a role="button" class="dropdown-toggle" data-toggle="dropdown">+ Add a filter</a>
@@ -49,7 +50,7 @@
                             </li>
                             <li>
                                 <a type="button" 
-                                @click="openFilterModal(droppedBetween)"
+                                @click="openFilterModal(filterConfiguration.dropped_between)"
                                 >Dropped</a>
                             </li>
                         </ul>
@@ -181,6 +182,12 @@ export default {
                         value: 'id',
                         label: 'name'
                     }
+                },
+                dropped_between: {
+                    component: 'filter-radio',
+                    title: 'Dropped', 
+                    field: 'dropped_between',
+                    options: []
                 }
             }
         }
@@ -223,18 +230,13 @@ export default {
             return time.clone().endOf('month').format();
         },
         droppedBetween() {
-            return {
-                component: 'filter-radio',
-                title: 'Dropped', 
-                field: 'dropped_between',
-                options: [
+            return [
                     {value: `${this.startOfToday},${this.endOfToday}`, label: 'Today'},
                     {value: `${this.startOfYesterday},${this.endOfYesterday}`, label: 'Yesterday'},
                     {value: `${this.startOfWeek},${this.endOfWeek}`, label: 'This Week'},
                     {value: `${this.startOfMonth},${this.endOfMonth}`, label: 'This Month'},
                     {value: `${this.startOfLastMonth},${this.endOfLastMonth}`, label: 'Last Month'}
                 ]
-            }
         }
     },
 
@@ -244,6 +246,7 @@ export default {
             $('#filterModal').modal('show');
         },
         closeFilterModal(data) {
+            this.removeActiveFilter(data.key);
             this.activeFilters.push(data);
             this.filterModal = {
                 component: null,
@@ -254,6 +257,9 @@ export default {
         removeActiveFilter(key) {
             this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
         }
+    },
+    mounted() {
+        this.filterConfiguration.dropped_between.options = this.droppedBetween;
     }
 }
 </script>

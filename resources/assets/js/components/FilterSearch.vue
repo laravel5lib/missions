@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-xs-12 text-right">
                 <hr class="divider">
-                <button class="btn btn-primary" @click="apply">Search</button>
+                <button class="btn btn-primary" @click="apply" :disabled="!search">Search</button>
             </div>
         </div>
     </div>

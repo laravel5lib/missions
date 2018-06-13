@@ -23,7 +23,10 @@ class FlightPassengerResource extends JsonResource
             'group' => $this->trip->group->name,
             'trip' => $this->trip->type,
             'itinerary' => new FlightItineraryResource($this->whenLoaded('flightItinerary')),
-            'flight' => new FlightResource($this->flightItinerary->flights->first())
+            'flight' => new FlightResource($this->flightItinerary->flights->first()),
+            'passport' => $this->whenLoaded('passport', function () {
+                return optional($this->passport()->first())->document;
+            })
         ];
     }
 }

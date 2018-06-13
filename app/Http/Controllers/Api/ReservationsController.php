@@ -70,7 +70,7 @@ class ReservationsController extends Controller
                 Filter::scope('ready'),
                 Filter::scope('funnel')
             ])
-            ->allowedIncludes(['trip.group', 'passport'])
+            ->allowedIncludes(['trip.group', 'passport', 'requirements'])
             ->paginate(25);
         
         return ReservationResource::collection($reservations);

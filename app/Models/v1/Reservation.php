@@ -795,6 +795,13 @@ class Reservation extends Model
             return $subQuery->whereUuid($uuid);
         });
     }
+
+    public function scopePublishedItinerary($query)
+    {
+        $query->whereHas('flightItinerary', function ($subQuery) {
+            return $subQuery->where('published', true);
+        });
+    }
     
     /**
      * Helper method to retrieve the user's avatar

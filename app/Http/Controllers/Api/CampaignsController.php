@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests;
 use App\Models\v1\Campaign;
 use App\Jobs\ExportCampaigns;
-use Dingo\Api\Contract\Http\Request;
+use Spatie\QueryBuilder\Filter;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\v1\ImportRequest;
+use Dingo\Api\Contract\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 use App\Http\Requests\v1\ExportRequest;
+use App\Http\Requests\v1\ImportRequest;
+use App\Http\Resources\CampaignResource;
 use App\Http\Requests\v1\CampaignRequest;
 use App\Services\Importers\CampaignListImport;
 use App\Http\Transformers\v1\CampaignTransformer;
@@ -23,10 +26,16 @@ class CampaignsController extends Controller
      */
     public function index(Request $request)
     {
-        $campaigns = Campaign::filter($request->all())
-                          ->paginate($request->get('per_page', 25));
+        $campaigns = QueryBuilder::for(Campaign::class)
+            ->allowedFilters([
+                'name',
+                Filter::scope('active'),
+                Filter::scope('inactive'),
+                Filter::scope('organization')
+            ])
+            ->paginate($request->get('per_page', 25));
 
-        return $this->response->paginator($campaigns, new CampaignTransformer);
+        return CampaignResource::collection($campaigns);
     }
 
     /**

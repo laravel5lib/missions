@@ -43,7 +43,10 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
 
     // Group Routes...
     $this->resource('groups', 'Dashboard\GroupsController', ['only' => ['index', 'show', 'edit']]);
-    $this->get('groups/{groupId}/trips/{id}/{tab?}', 'Dashboard\GroupsController@trips');
+    $this->get('groups/{groupId}/campaigns/{id}', 'Dashboard\GroupsController@trips');
+    $this->get('groups/{groupId}/campaigns/{id}/reservations', 'Dashboard\GroupsController@reservations');
+    $this->get('groups/{groupId}/campaigns/{id}/flights', 'Dashboard\GroupsController@flights');
+    $this->get('groups/{groupId}/trips/{id}/{tab?}', 'Dashboard\GroupsController@trip');
     $this->get('groups/{groupId}/teams', 'Dashboard\GroupsController@teams');
     $this->get('groups/{groupId}/rooms', 'Dashboard\GroupsController@rooms');
 

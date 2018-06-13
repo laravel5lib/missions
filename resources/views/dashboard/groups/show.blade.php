@@ -13,29 +13,21 @@
     <hr class="divider inv">
 
     <div class="row">
-        <div class="col-md-2">
-            @sidenav(['links' => [
-                'dashboard/groups/'.$group->id => 'Overview',
-                'dashboard/groups/'.$group->id.'/teams' => 'Squads',
-                'dashboard/groups/'.$group->id.'/rooms' => 'Rooming'
-            ]])
-            @endsidenav
-        </div>
-        <div class="col-md-10 col-lg-8">
-            <fetch-json url="/trips" :parameters="{{ json_encode([
+        <div class="col-md-10 col-lg-8 col-lg-offset-2 col-md-offset-1">
+            <fetch-json url="/campaigns" :parameters="{{ json_encode([
                     'filter' => [
-                        'group_id' => $group->id,
-                        'current' => true
+                        'organization' => $group->id,
+                        'active' => true
                     ]
                 ])}}" ref="tripList" v-cloak>
                 <div class="panel panel-default" 
                         style="border-top: 5px solid #f6323e" 
-                        slot-scope="{ json: trips, loading, pagination, addFilter, removeFilter, filters }"
+                        slot-scope="{ json: campaigns, loading, pagination, addFilter, removeFilter, filters }"
                 >
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h5>Trips <span class="badge badge-default">@{{ pagination.total }}</span></h5>
+                                <h5>Campaigns <span class="badge badge-default">@{{ pagination.total }}</span></h5>
                             </div>
                             <div class="col-xs-6 text-right text-muted">
                                 <h5 v-if="loading"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</h5>
@@ -44,48 +36,40 @@
                     </div>
                     <div class="panel-body">
                         <ul class="nav nav-pills nav-justified">
-                            <li role="presentation" :class="{'active' : filters.filter.current}">
-                                <a role="button" @click="addFilter('current', true); removeFilter('past')"><i class="fa fa-fire"></i> Current</a>
+                            <li role="presentation" :class="{'active' : filters.filter.active}">
+                                <a role="button" @click="addFilter('active', true); removeFilter('inactive')"><i class="fa fa-fire"></i> Current</a>
                             </li>
-                            <li role="presentation" :class="{'active' : filters.filter.past}">
-                                <a role="button" @click="addFilter('past', true); removeFilter('current')"><i class="fa fa-archive"></i> Past</a>
+                            <li role="presentation" :class="{'active' : filters.filter.inactive}">
+                                <a role="button" @click="addFilter('inactive', true); removeFilter('active')"><i class="fa fa-archive"></i> Past</a>
                             </li>
                         </ul>
                     </div>
                     <div class="table-responsive">
-                    <table class="table" v-if="trips && trips.length">
+                    <table class="table" v-if="campaigns && campaigns.length">
                         <thead>
                             <tr class="active">
                                 <th>#</th>
-                                <th>Type</th>
+                                <th>Name</th>
                                 <th>Country</th>
                                 <th>Dates</th>
-                                <th>Reservations</th>
-                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(trip, index) in trips" :key="trip.id">
+                            <tr v-for="(campaign, index) in campaigns" :key="campaign.id">
                                 <td>@{{ index+1 }}</td>
                                 <td>
-                                    <strong><a :href="'/dashboard/groups/' + trip.group_id +'/trips/' + trip.id">@{{ trip.type | capitalize }}</a></strong>
+                                    <strong><a :href="'/dashboard/groups/{{ $group->id }}/campaigns/' + campaign.id">@{{ campaign.name | capitalize }}</a></strong>
                                 </td>
-                                <td class="col-sm-3">@{{ trip.country_name }}</td>
+                                <td class="col-sm-3">@{{ campaign.country.name }}</td>
                                 <td class="col-sm-5">
-                                    @{{ trip.started_at | moment('MMM d') }} - @{{ trip.ended_at | moment('MMM d') }}
-                                </td>
-                                <td class="col-sm-1 text-right">
-                                    <strong>@{{ trip.reservations}}</strong> / @{{ trip.spots }}
-                                </td>
-                                <td>
-                                    @{{ trip.status | capitalize }}
+                                    @{{ campaign.started_at | mFormat('MMM D') }} - @{{ campaign.ended_at | mFormat('MMM D') }}
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                     <div class="panel-body text-center" v-else>
-                        <span class="lead">No Trips</span>
-                        <p>Please contact Missions.Me staff to setup a trip.</p>
+                        <span class="lead">No Campaigns</span>
+                        <p>Please contact Missions.Me staff to participate in an upcoming campaign.</p>
                     </div>
                     </div>
                     <div class="panel-footer" v-if="pagination.total > pagination.per_page">
@@ -121,6 +105,22 @@
                 ]])
                 @endcomponent
             @endcomponent
+
+            @component('panel')
+            @slot('title')
+                <h5>Public Profile &amp; Interest Form</h5>
+            @endslot
+            @slot('body')
+                <label>Public Profile</label>
+                @if($group->public)
+                    <pre><a href="{{ url('/'.$group->slug->url) }}">{{ url('/'.$group->slug->url) }}</a></pre>
+                @else
+                    <pre><a href="{{ url('/'.$group->slug->url) }}">{{ url('/'.$group->slug->url) .'(private)' }}</a></pre>
+                @endif
+                <label>Interest Form</label>
+                <pre><a href="{{ url('/'.$group->slug->url.'/signup') }}">{{ url('/'.$group->slug->url.'/signup') }}</a></pre>
+            @endslot
+        @endcomponent
 
         </div>
     </div>

@@ -264,6 +264,20 @@ class Campaign extends Model implements HasMedia
     }
 
     /**
+     * Get Campaigns by participating organization
+     *
+     * @param $query
+     * @param string $organizationId
+     * @return void
+     */
+    public function scopeOrganization($query, $organizationId)
+    {
+        return $query->whereHas('groups', function ($group) use ($organizationId) {
+            return $group->where('groups.id', $organizationId);
+        });
+    }
+
+    /**
      * Get all the campaign's trip reservations.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough

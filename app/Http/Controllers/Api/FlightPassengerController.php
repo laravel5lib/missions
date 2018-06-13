@@ -38,9 +38,10 @@ class FlightPassengerController extends Controller
                 Filter::scope('iata_code'),
                 Filter::scope('group'),
                 Filter::scope('trip_type'),
-                Filter::scope('itinerary')
+                Filter::scope('itinerary'),
+                Filter::scope('published_itinerary')
             ])
-            ->allowedIncludes('flight-itinerary')
+            ->allowedIncludes(['flight-itinerary', 'passport'])
             ->paginate(25);
 
         return FlightPassengerResource::collection($passengers);

@@ -1,4 +1,28 @@
 @component('panel')
+@slot('title')<h5>Missionaries <span class="badge">{{ $trip->reservations()->count() }}</span></h5>@endslot
+@slot('body')
+    <div class="row">
+        <div class="col-sm-3">
+            <h4 class="text-primary">{{ $trip->reservations()->deposited()->count() }}</h4>
+            <p class="small text-muted">Deposit Only</p>
+        </div>
+        <div class="col-sm-3">
+            <h4 class="text-primary">{{ $trip->reservations()->inProcess()->count() }}</h4>
+            <p class="small text-muted">In Process</p>
+        </div>
+        <div class="col-sm-3">
+            <h4 class="text-primary">{{ $trip->reservations()->funded()->count() }}</h4>
+            <p class="small text-muted">Fully Funded</p>
+        </div>
+        <div class="col-sm-3">
+            <h4 class="text-primary">{{ $trip->reservations()->ready()->count() }}</h4>
+            <p class="small text-muted">Travel Ready</p>
+        </div>
+    </div>
+@endslot
+@endcomponent
+
+@component('panel')
     @slot('title')
         <h5>Details</h5>
     @endslot
@@ -42,13 +66,13 @@
     @slot('body')
         <label>Public Page</label>
         @if($trip->isPublished())
-            <pre>{{ url('/trips/'.$trip->id) }}</pre>  
+            <pre><a href="{{ url('/trips/'.$trip->id) }}">{{ url('/trips/'.$trip->id) }}</a></pre>  
         @else
-            <pre>{{ url('/trips/'.$trip->id) .'(unpublished' }}</s></pre>  
+            <pre>{{ url('/trips/'.$trip->id) .'(unpublished)' }}</s></pre>  
         @endif
         @if($trip->public)
             <label>Registration Form</label>
-            <pre>{{ url('/trips/'.$trip->id.'/register') }}</pre>
+            <pre><a href="{{ url('/trips/'.$trip->id.'/register') }}">{{ url('/trips/'.$trip->id.'/register') }}</a></pre>
             <span class="help-block">End-user will be prompted to log in.</span>
         @endif
     @endslot

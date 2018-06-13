@@ -5,7 +5,8 @@
 @breadcrumbs(['links' => [
     'dashboard/groups' => 'Organizations',
     'dashboard/groups/'.$group->id => $group->name,
-    'active' => $trip->campaign->name.' - '.ucwords($trip->type). ' Trip'
+    'dashboard/groups/'.$group->id.'/campaigns/'.$trip->campaign_id => $trip->campaign->name,
+    'active' => ucwords($trip->type). ' Trip'
 ]])
 @endbreadcrumbs
 
@@ -18,8 +19,7 @@
                 'dashboard/groups/'.$group->id.'/trips/'.$trip->id => 'Trip Details',
                 'dashboard/groups/'.$group->id.'/trips/'.$trip->id.'/pricing' => 'Pricing',
                 'dashboard/groups/'.$group->id.'/trips/'.$trip->id.'/requirements' => 'Requirements',
-                'dashboard/groups/'.$group->id.'/trips/'.$trip->id.'/resources' => 'Resources',
-                'dashboard/groups/'.$group->id.'/trips/'.$trip->id.'/reservations' => 'Reservations'
+                'dashboard/groups/'.$group->id.'/trips/'.$trip->id.'/resources' => 'Resources'
             ]])
             @endsidenav
         </div>

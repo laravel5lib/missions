@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Dashboard;
 use App\Trip;
 use App\Http\Requests;
 use App\Models\v1\Group;
+use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Artesaos\SEOTools\Traits\SEOTools;
@@ -50,7 +51,39 @@ class GroupsController extends Controller
         return view('dashboard.groups.edit', compact('group', 'id'));
     }
 
-    public function trips($groupId, $id, $tab = 'details')
+    public function reservations($groupId, $campaignId)
+    {
+        $group = Group::findOrFail($groupId);
+        $campaign = Campaign::findOrFail($campaignId);
+
+        $totals = [
+            'all' => $group->reservations()->campaign($campaignId)->count(),
+            'deposited' => $group->reservations()->campaign($campaignId)->deposited()->count(),
+            'process' => $group->reservations()->campaign($campaignId)->inProcess()->count(),
+            'funded' => $group->reservations()->campaign($campaignId)->funded()->count(),
+            'ready' => $group->reservations()->campaign($campaignId)->ready()->count()
+        ];
+
+        return view('dashboard.groups.reservations.index', compact('group', 'campaign', 'totals'));
+    }
+
+    public function flights($groupId, $campaignId)
+    {
+        $group = Group::findOrFail($groupId);
+        $campaign = Campaign::findOrFail($campaignId);
+
+        return view('dashboard.groups.flights.index', compact('group', 'campaign'));
+    }
+
+    public function trips($groupId, $campaignId)
+    {
+        $group = Group::findOrFail($groupId);
+        $campaign = Campaign::findOrFail($campaignId);
+
+        return view('dashboard.groups.trips.index', compact('group', 'campaign'));
+    }
+
+    public function trip($groupId, $id, $tab = 'details')
     {
         if (! auth()->user()->managing()->count()) {
             abort(403);
@@ -64,6 +97,7 @@ class GroupsController extends Controller
 
         return view('dashboard.groups.trips.show', compact('group', 'groupId', 'trip', 'id', 'tab'));
     }
+
     public function teams($groupId)
     {
         if (! auth()->user()->managing()->count()) {

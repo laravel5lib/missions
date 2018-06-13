@@ -94,14 +94,14 @@
 
 
             <div class="row">
-                <fetch-json url="/campaigns" :parameters="{current: true}" v-cloak>
+                <fetch-json url="/campaigns" :parameters="{filter: {active: true}}" v-cloak>
                 <div class="col-sm-12" 
                      slot-scope="{ json: campaigns, loading, pagination, filters, addFilter, removeFilter, changePage }">
                     @component('panel')
                         @slot('title')
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <h5>Campaigns <span class="badge badge-default">@{{ pagination.pagination.total }}</span></h5>
+                                    <h5>Campaigns <span class="badge badge-default">@{{ pagination.total }}</span></h5>
                                 </div>
                                 <div class="col-sm-6 text-muted text-right">
                                     <h5 v-if="loading"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</h5>
@@ -110,11 +110,11 @@
                         @endslot
                         <div class="panel-body">
                             <ul class="nav nav-pills nav-justified">
-                                <li role="presentation" :class="{'active' : filters.current}">
-                                    <a role="button" @click="addFilter('current', true); removeFilter('archived')"><i class="fa fa-fire"></i> Current</a>
+                                <li role="presentation" :class="{'active' : filters.filter.active}">
+                                    <a role="button" @click="addFilter('active', true); removeFilter('inactive')"><i class="fa fa-fire"></i> Current</a>
                                 </li>
-                                <li role="presentation" :class="{'active' : filters.archived}">
-                                    <a role="button" @click="addFilter('archived', true); removeFilter('current')"><i class="fa fa-archive"></i> Past</a>
+                                <li role="presentation" :class="{'active' : filters.filter.inactive}">
+                                    <a role="button" @click="addFilter('inactive', true); removeFilter('active')"><i class="fa fa-archive"></i> Past</a>
                                 </li>
                             </ul>
                         </div>
@@ -135,7 +135,7 @@
                                         <strong><a :href="'/admin/campaigns/' + campaign.id">@{{ campaign.name }}</a></strong>
                                     </td>
                                     <td>
-                                        @{{ campaign.country }}
+                                        @{{ campaign.country.name }}
                                     </td>
                                     <td class="col-sm-1 text-right">
                                         <strong>@{{ campaign.groups_count}}</strong>
@@ -150,8 +150,8 @@
                             <span class="lead">No Campaigns</span>
                             <p>Create a campaign to get started.</p>
                         </div>
-                        <div class="panel-footer" v-if="pagination.pagination.total > pagination.pagination.per_page">
-                            <pager :pagination="pagination.pagination" :callback="changePage"></pager>
+                        <div class="panel-footer" v-if="pagination.total > pagination.per_page">
+                            <pager :pagination="pagination" :callback="changePage"></pager>
                         </div>
                     @endcomponent
                 </div>

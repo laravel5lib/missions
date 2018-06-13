@@ -306,11 +306,18 @@
 </template>
 
 <script>
+import expiringStorage from '../expiring-storage';
+import { pick } from '../helpers';
 import FilterSearch from '../components/FilterSearch';
 import FilterRadio from '../components/FilterRadio';
 import FilterSelect from '../components/FilterSelect';
 export default {
-    props: ['campaignId', 'totals'],
+    props: {
+        campaignId: String,
+        totals: Object,
+        cacheKey: { default: null },
+        cacheLifetime: { default: 5 }
+    },
 
     components: {
         'filter-search': FilterSearch,
@@ -430,9 +437,9 @@ export default {
                     title: 'Role',
                     field: 'desired_role',
                     ajax: {
-                        url: `/team-roles`,
+                        url: '/utilities/team-roles',
                         value: '',
-                        lavel: ''
+                        label: ''
                     }
                 },
                 current_rate: {
@@ -558,6 +565,20 @@ export default {
                     {value: `${this.startOfMonth},${this.endOfMonth}`, label: 'This Month'},
                     {value: `${this.startOfLastMonth},${this.endOfLastMonth}`, label: 'Last Month'}
                 ];
+        },
+        storageKey() {
+            return this.cacheKey
+                ? `missionary-list-component.${this.cacheKey}`
+                : `missionary-list-component.${window.location.host}${window.location.pathname}${this.cacheKey}`;
+        }
+    },
+
+    watch: {
+        activeFilters() {
+            this.saveState();
+        },
+        view() {
+            this.saveState();
         }
     },
 
@@ -576,12 +597,31 @@ export default {
             $('#filterModal').modal('hide');
         },
         removeActiveFilter(key) {
-            this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
+            if (_.findWhere(this.activeFilters, {key: key})) {
+                this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
+            }
+        },
+        saveState() {
+            expiringStorage.set(this.storageKey, pick(this.$data, ['activeFilters', 'view']), this.cacheLifetime);
+        },
+        restoreState() {
+            const previousState = expiringStorage.get(this.storageKey);
+
+            if (previousState === null) {
+                return;
+            }
+
+            this.activeFilters = previousState.activeFilters;
+            this.view = previousState.view;
+
+            this.saveState();
         }
     },
 
     mounted() {
         this.filterConfiguration.registered_between.options = this.registeredBetween;
+
+        this.restoreState();
     }
 }
 </script>

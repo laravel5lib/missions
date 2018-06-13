@@ -206,7 +206,9 @@ export default {
             $('#filterModal').modal('hide');
         },
         removeActiveFilter(key) {
-            this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
+            if (_.findWhere(this.activeFilters, {key: key})) {
+                this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
+            }
         },
         publish() {
             swal('WARNING!', `Are you sure you want to publish the ${this.selected.length} selected itinerarie(s)? They will be publicly visible and passengers will be notified.`, 'warning', {

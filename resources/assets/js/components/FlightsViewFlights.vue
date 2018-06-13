@@ -179,8 +179,10 @@ export default {
             $('#filterModal').modal('hide');
         },
         removeActiveFilter(key) {
-            this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
-        }
+            if (_.findWhere(this.activeFilters, {key: key})) {
+                this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
+            }
+        },
     }
 }
 </script>

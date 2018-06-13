@@ -1,4 +1,6 @@
 <script>
+import expiringStorage from '../expiring-storage';
+import { pick } from '../helpers';
 export default {
     name: 'fetch-json',
 
@@ -10,7 +12,9 @@ export default {
         parameters: {
             type: Object,
             required: false
-        }
+        },
+        cacheKey: { default: null },
+        cacheLifetime: { default: 5 }
     },
 
     data() {
@@ -19,6 +23,14 @@ export default {
             loading: true,
             pagination: {},
             filters: this.parameters ? this.parameters : {}
+        }
+    },
+
+    computed: {
+        storageKey() {
+            return this.cacheKey
+                ? `fetch-json-component.${this.cacheKey}`
+                : `fetch-json-component.${window.location.host}${window.location.pathname}${this.cacheKey}`;
         }
     },
 
@@ -81,11 +93,34 @@ export default {
         changePage(page) {
             let params = $.extend({page: page}, this.filters);
             this.fetch(params);
+        },
+        saveState() {
+            expiringStorage.set(this.storageKey, pick(this.$data, ['filters']), this.cacheLifetime);
+        },
+        restoreState() {
+            const previousState = expiringStorage.get(this.storageKey);
+
+            if (previousState === null) {
+                return;
+            }
+
+            this.filters = previousState.filters;
+
+            this.saveState();
         }
     },
 
     created() {
+        this.restoreState();
         this.fetch();
+
+        this.$on('filter:removed', function() {
+            this.saveState();
+        });
+        
+        this.$on('filter:added', function() {
+            this.saveState();
+        });
     },
 
     render() {

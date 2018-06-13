@@ -277,7 +277,9 @@ export default {
             $('#filterModal').modal('hide');
         },
         removeActiveFilter(key) {
-            this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
+            if (_.findWhere(this.activeFilters, {key: key})) {
+                this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
+            }
         },
         removePassengers() {
             swal('WARNING!', `Are you sure you want to remove the ${this.selected.length} selected passenger(s)? This will remove them from all itineraries. To undo this action, flights must be booked again.`, 'warning', {

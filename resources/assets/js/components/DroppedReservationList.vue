@@ -9,9 +9,6 @@
         >
             <div class="panel-heading">
                 <form class="form-inline" style="display: inline">
-                    <!-- <label>Layout:</label>
-                    <a type="button" class="btn btn-xs btn-link"><i class="fa fa-th-list"></i></a>
-                    <a type="button" class="btn btn-xs btn-link"><i class="fa fa-list"></i></a> -->
                     <label>Per Page:</label>
                     <select class="form-control input-sm" v-model="pagination.per_page">
                         <option value="10">10</option>

@@ -41,9 +41,6 @@
             </div>
             <div class="panel-heading">
                 <form class="form-inline" style="display: inline">
-                    <!-- <label>Layout:</label>
-                    <a type="button" class="btn btn-xs btn-link"><i class="fa fa-th-list"></i></a>
-                    <a type="button" class="btn btn-xs btn-link"><i class="fa fa-list"></i></a> -->
                     <label>Per Page:</label>
                     <select class="form-control input-sm" v-model="pagination.per_page">
                         <option value="10">10</option>
@@ -62,7 +59,8 @@
                 <span v-for="(label, index) in activeFilters" 
                     :key="index" 
                     class="label label-filter">
-                    {{ label.text | capitalize }}: "{{ label.value | capitalize}}" <a type="button" @click="removeFilter(label.key)"><i class="fa fa-times"></i></a>
+                    <a type="button" @click="openFilterModal(filterConfiguration[label.key])">{{ label.text | capitalize }}: "{{ label.value | capitalize}}"</a>
+                    <a type="button" @click="removeFilter(label.key)"><i class="fa fa-times"></i></a>
                 </span>
                 <div class="dropdown" style="display: inline-block; margin-left: 1em;">
                     <a role="button" @click="ui.allFilters = true">+ Add a filter</a>
@@ -550,6 +548,7 @@ export default {
             $('#filterModal').modal('show');
         },
         closeFilterModal(data) {
+            this.removeActiveFilter(data.key);
             this.activeFilters.push(data);
             this.filterModal = {
                 component: null,

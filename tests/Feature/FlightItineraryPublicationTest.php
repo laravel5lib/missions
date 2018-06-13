@@ -44,4 +44,10 @@ class FlightItineraryPublicationTest extends TestCase
         $this->assertDatabaseHas('flight_itineraries', ['published' => 0]);
         $this->assertEquals(FlightItinerary::where('published', false)->count(), 2);
     }
+
+    public function sends_notifications_when_itinerary_is_published()
+    {
+        // sends email to all passengers
+        // sends email to team coordinators
+    }
 }

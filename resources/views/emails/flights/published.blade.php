@@ -7,10 +7,19 @@ Your flight itinerary is now available! You can view it anytime online using the
 **This is NOT a boarding pass or eTicket. You must obtain your boarding pass from your airline carrier.**
 @endcomponent
 
+@component('mail::table')
+| Record Locator |
+| :------------------------------- |
+| {{ $itinerary->record_locator }} |
+@endcomponent
+
 @foreach($itinerary->flights as $flight)
 @component('mail::table')
 | {{ $flight->flightSegment->name }} | |
 | :-- | :-------------- |
+@if(airline($flight->flight_no)['name'])
+| Airline | {{ airline($flight->flight_no)['name'] }} |
+@endif
 | Flight No. | {{ $flight->flight_no }} |
 | City | {{ $flight->iata_code }} |
 | Date | {{ $flight->date->format('F j, Y') }} |

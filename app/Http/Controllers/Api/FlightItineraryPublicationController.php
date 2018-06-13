@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Jobs\NotifyOfPublishedFlights;
 
 class FlightItineraryPublicationController extends Controller
 {
@@ -18,6 +19,10 @@ class FlightItineraryPublicationController extends Controller
             DB::table('flight_itineraries')
                 ->where('uuid', $itinerary)
                 ->update(['published' => $status]);
+        }
+
+        if ($status) {
+            NotifyOfPublishedFlights::dispatch($itineraries);
         }
 
         return response()->json(['message' => 'Flight itineraries updated.'], 200);

@@ -8,8 +8,8 @@
         <div class="col-xs-12" v-error-handler="{ value: campaign_id, handle: 'campaign_id' }">
           <label>Campaign of Interest</label>
           <select v-model="campaign_id" class="form-control" name="campaign_id" v-validate="'required'">
-            <option v-for="campaign in campaigns" :value="campaign.data.id">
-              {{ campaign.data.name }}
+            <option v-for="campaign in campaigns" :value="campaign.id" :key="campaign.id">
+              {{ campaign.name }}
             </option>
           </select>
         </div>
@@ -19,7 +19,7 @@
         <div class="col-xs-12" v-error-handler="{ value: interest.trip_id, handle: 'trip_id' }">
           <label>Trip Type</label>
           <select name="trip_id" v-model="interest.trip_id" class="form-control" v-validate="'required'">
-            <option v-for="trip in trips" :value="trip.id">
+            <option v-for="trip in trips" :value="trip.id" :key="trip.id">
               {{ trip.type | capitalize }} Trip
             </option>
           </select>
@@ -121,7 +121,7 @@
         let lookup = {};
 
         for (let i in arr) {
-          lookup[arr[i]['data'][prop]] = arr[i];
+          lookup[arr[i][prop]] = arr[i];
         }
 
         for (let i in lookup) {
@@ -176,12 +176,8 @@
         this.interest.trip_id = this.preselected;
       }
 
-      this.$http.get('trips?groups[]=' + this.id, {
-        params: {
-          status: 'current',
-          include: 'group,campaign'
-        }
-      }).then((response) => {
+      this.$http.get('trips?filter[group_id]=' + this.id + '&filter[current]=true&include=group,campaign')
+      .then((response) => {
         // this.group = response.data.data.group.data;
         this.allTrips = response.data.data;
         let campaigns = _.mapObject(response.data.data, 'campaign');

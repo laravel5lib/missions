@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use App\Events\ReservationWasProcessed;
 use App\Models\v1\RequirementCondition;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use App\Jobs\Reservations\SyncPaymentsDue;
 use Illuminate\Database\Eloquent\Collection;
 use App\Jobs\Reservations\ProcessReservation;
@@ -26,7 +27,7 @@ use App\Models\Presenters\ReservationPresenter;
 
 class Reservation extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey, Taggable, Rewardable, ReservationPresenter, HasPricing;
+    use SoftDeletes, Filterable, UuidForKey, Taggable, Rewardable, ReservationPresenter, HasPricing, Notifiable;
 
     /**
      * The table associated with the model.

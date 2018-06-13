@@ -3,7 +3,11 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\v1\Flight;
+use App\Models\v1\Reservation;
 use App\Models\v1\FlightItinerary;
+use Illuminate\Support\Facades\Queue;
+use App\Jobs\NotifyOfPublishedFlights;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -45,9 +49,39 @@ class FlightItineraryPublicationTest extends TestCase
         $this->assertEquals(FlightItinerary::where('published', false)->count(), 2);
     }
 
+    /** @test */
     public function sends_notifications_when_itinerary_is_published()
     {
-        // sends email to all passengers
-        // sends email to team coordinators
+        $itinerary = factory(FlightItinerary::class)->create();
+        factory(Flight::class, 2)->create(['flight_itinerary_id' => $itinerary->id]);
+        factory(Reservation::class, 2)->create(['flight_itinerary_id' => $itinerary->id]);
+
+        Queue::fake();
+
+        $this->json('PUT', '/api/flights/itineraries/published', [
+            'itineraries' => [$itinerary->uuid],
+            'published' => true
+        ])
+        ->assertStatus(200);
+
+        Queue::assertPushed(NotifyOfPublishedFlights::class);
+    }
+
+    /** @test */
+    public function does_not_send_notifications_when_itinerary_is_unpublished()
+    {
+        $itinerary = factory(FlightItinerary::class)->create(['published' => true]);
+        factory(Flight::class, 2)->create(['flight_itinerary_id' => $itinerary->id]);
+        factory(Reservation::class, 2)->create(['flight_itinerary_id' => $itinerary->id]);
+
+        Queue::fake();
+
+        $this->json('PUT', '/api/flights/itineraries/published', [
+            'itineraries' => [$itinerary->uuid],
+            'published' => false
+        ])
+        ->assertStatus(200);
+
+        Queue::assertNotPushed(NotifyOfPublishedFlights::class);
     }
 }

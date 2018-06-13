@@ -34,7 +34,7 @@ class Trip extends TripModel
                 Filter::scope('public'),
                 Filter::scope('published')
             )
-            ->allowedIncludes(['group', 'priceables'])
+            ->allowedIncludes(['group', 'priceables', 'campaign'])
             ->withCount('reservations');
     }
 

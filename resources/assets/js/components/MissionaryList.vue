@@ -308,6 +308,7 @@
 <script>
 import state from '../state.mixin';
 import dates from '../dates.mixin';
+import activeFilter from '../activeFilter.mixin';
 import genders from '../data/genders.json';
 import tripTypes from '../data/trip_types.json';
 import ageRanges from '../data/age_ranges.json';
@@ -323,7 +324,7 @@ export default {
         totals: Object
     },
 
-    mixins: [state, dates],
+    mixins: [state, dates, activeFilter],
 
     components: {
         'filter-search': FilterSearch,
@@ -337,7 +338,6 @@ export default {
                 allFilters: false
             },
             view: 'missionary',
-            activeFilters: [],
             filterModal: {
                 component: null,
                 title: null
@@ -519,15 +519,6 @@ export default {
                 title: null
             }
             $('#filterModal').modal('hide');
-        },
-        addActiveFilter(data) {
-            this.removeActiveFilter(data.key);
-            this.activeFilters.push(data);
-        },
-        removeActiveFilter(key) {
-            if (_.findWhere(this.activeFilters, {key: key})) {
-                this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
-            }
         }
     },
 

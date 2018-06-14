@@ -4,6 +4,7 @@
                 ref="passengersList" 
                 :parameters="{filter: {}, sort: 'surname'}"
                 @filter:removed="removeActiveFilter"
+                :cache-key="`dashboard.campaign.${campaignId}.groupFlightList`"
     >
     <div slot-scope="{ json:passengers, pagination, changePage, loading, addFilter, removeFilter, filters, sortBy }">
         <div class="panel-heading">
@@ -159,19 +160,28 @@
 </div>
 </template>
 <script>
+import state from '../state.mixin';
+import activeFilter from '../activeFilter.mixin';
+import tripTypes from '../data/trip_types.json';
 import FilterSearch from '../components/FilterSearch';
 import FilterRadio from '../components/FilterRadio';
 import FilterSelect from '../components/FilterSelect';
 export default {
-    props: ['campaignId', 'groupId'],
+    props: {
+        campaignId: String,
+        groupId: String
+    },
+
     components: {
         'filter-search': FilterSearch,
         'filter-radio': FilterRadio,
         'filter-select': FilterSelect
     },
+
+    mixins: [state, activeFilter],
+
     data() {
         return {
-            activeFilters: [],
             filterModal: {
                 component: null,
                 title: null
@@ -206,16 +216,7 @@ export default {
                     component: 'filter-radio',
                     title: 'Trip', 
                     field: 'trip_type',
-                    options: [
-                        {value: 'family', label: 'Family'},
-                        {value: 'international', label: 'International'},
-                        {value: 'media', label: 'Media'},
-                        {value: 'medical', label: 'Medical'},
-                        {value: 'ministry', label: 'Ministry'},
-                        {value: 'leader', label: 'Leader'},
-                        {value: 'sports', label: 'Sports'},
-                        {value: 'water', label: 'Water'},
-                    ]
+                    options: tripTypes
                 }
             },
             segments: [],
@@ -225,39 +226,50 @@ export default {
             }
         }
     },
+
     watch: {
-        'selectedSegment'(val) {
+        selectedSegment(val) {
            this.$refs.passengersList.fetch();
+           this.saveState(['activeFilters', 'selectedSegment']);
+        },
+        activeFilters() {
+            this.saveState(['activeFilters', 'selectedSegment']);
         }
     },
+
     methods: {
         openFilterModal(filter) {
             this.filterModal = filter;
             $('#filterModal').modal('show');
         },
         closeFilterModal(data) {
-            this.removeActiveFilter(data.key);
-            this.activeFilters.push(data);
+            this.addActiveFilter(data);
             this.filterModal = {
                 component: null,
                 title: null
             }
             $('#filterModal').modal('hide');
         },
-        removeActiveFilter(key) {
-            if (_.findWhere(this.activeFilters, {key: key})) {
-                this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
-            }
-        },
         getSegments() {
-            this.$http.get(`/campaigns/${this.campaignId}/flights/segments`).then(response => {
+            return this.$http.get(`/campaigns/${this.campaignId}/flights/segments`).then(response => {
                 this.segments = response.data.data;
-                this.selectedSegment = _.first(this.segments).id;
             });
         }
     },
+
     mounted() {
-        this.getSegments();
+        let promise = this.getSegments();
+
+        promise.then(() => {
+            var previousState = this.restoreState();
+
+            if (previousState) {
+                this.activeFilters = previousState.activeFilters;
+                this.selectedSegment = previousState.selectedSegment;
+            } else {
+                this.selectedSegment = _.first(this.segments).id;
+            }
+        });
     }
 }
 </script>

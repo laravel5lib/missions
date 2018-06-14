@@ -117,17 +117,29 @@
 </div>
 </template>
 <script>
+import state from '../state.mixin';
 import FlightsViewItineraries from '../components/FlightsViewItineraries.vue';
 import FlightsViewPassengers from '../components/FlightsViewPassengers.vue';
 import FlightsViewFlights from '../components/FlightsViewFlights.vue';
 export default {
     name: 'flights-booked',
+
     components: {
         'flights-view-itineraries': FlightsViewItineraries,
         'flights-view-passengers': FlightsViewPassengers,
         'flights-view-flights': FlightsViewFlights
     },
-    props: ['campaignId'],
+
+    props: {
+        campaignId: String,
+        cacheKey: {
+            type: String,
+            default: `${window.location.host}${window.location.pathname}.flightsBooked`
+        }
+    },
+
+    mixins: [state],
+
     data() {
         return {
             flightView: 'flights-view-passengers',
@@ -138,13 +150,18 @@ export default {
             }
         }
     },
+
     watch: {
         'selectedSegment'(val) {
             // get flights by segment
             this.$refs.editForm.form.name = _.findWhere(this.segments, {id: val}).name;
             this.$forceUpdate();
+        },
+        flightView() {
+            this.saveState(['flightView']);
         }
     },
+
     methods: {
         getSegments() {
             $('#newSegment').modal('hide');
@@ -155,6 +172,7 @@ export default {
                 this.selectedSegment = _.first(this.segments).id;
             });
         },
+
         deleteSegment() {
             swal('WARNING!', 'Are you sure? This action cannot be undone!', 'warning', {
                 closeOnClickOutside: true,
@@ -183,12 +201,19 @@ export default {
                 }
             })
         },
+
         updateBookedTotal(total) {
             this.$emit('update:bookedTotal', total);
         }
     },
+    
     mounted() {
         this.getSegments();
+
+        var previousState = this.restoreState();
+        if (previousState) {
+            this.flightView = previousState.flightView;
+        }
     }
 }
 </script>

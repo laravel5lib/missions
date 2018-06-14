@@ -24,7 +24,10 @@
             @endsidenav
         </div>
         <div class="col-md-10">
-            <group-flight-list group-id="{{ $group->id }}" campaign-id="{{ $campaign->id }}"></group-flight-list>
+            <group-flight-list group-id="{{ $group->id }}" 
+                               campaign-id="{{ $campaign->id }}"
+                               cache-key="dashboard.groups.{{$group->id}}.campaign.{{$campaign->id}}.flights.groupFlightList"
+            ></group-flight-list>
         </div>
     </div>
 </div>

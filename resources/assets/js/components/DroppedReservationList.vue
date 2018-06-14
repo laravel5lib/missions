@@ -3,6 +3,7 @@
                 ref="list" 
                 :parameters="{filter: {}}" 
                 @filter:removed="removeActiveFilter"
+                :cache-key="`admin.droppped.reservations.${campaignId}`"
     >
         <div class="panel panel-default" 
              slot-scope="{ json:reservations, pagination, changePage, loading, addFilter, removeFilter, filters, sort }" style="border-top: 5px solid #f6323e"
@@ -123,11 +124,17 @@
 </template>
 
 <script>
+import state from '../state.mixin';
+import dates from '../dates.mixin';
+import activeFilter from '../activeFilter.mixin';
+import tripTypes from '../data/trip_types.json';
 import FilterSearch from '../components/FilterSearch';
 import FilterRadio from '../components/FilterRadio';
 import FilterSelect from '../components/FilterSelect';
 export default {
-    props: ['campaignId'],
+    props: {
+        campaignId: String
+    },
 
     components: {
         'filter-search': FilterSearch,
@@ -135,12 +142,13 @@ export default {
         'filter-select': FilterSelect
     },
 
+    mixins: [state, dates, activeFilter],
+
     data() {
         return {
             ui: {
                 allFilters: false
             },
-            activeFilters: [],
             filterModal: {
                 component: null,
                 title: null
@@ -150,28 +158,17 @@ export default {
                     component: 'filter-search', 
                     title: 'Surname', 
                     field: 'surname',
-                    options: []
                 },
                 given_names: {
                     component: 'filter-search',
                     title: 'Given Names', 
                     field: 'given_names',
-                    options: []
                 },
                 trip_type: {
                     component: 'filter-radio',
                     title: 'Trip', 
                     field: 'trip_type',
-                    options: [
-                        {value: 'family', label: 'Family'},
-                        {value: 'international', label: 'International'},
-                        {value: 'media', label: 'Media'},
-                        {value: 'medical', label: 'Medical'},
-                        {value: 'ministry', label: 'Ministry'},
-                        {value: 'leader', label: 'Leader'},
-                        {value: 'sports', label: 'Sports'},
-                        {value: 'water', label: 'Water'},
-                    ]
+                    options: tripTypes
                 },
                 group: {
                     component: 'filter-select',
@@ -193,42 +190,13 @@ export default {
         }
     },
 
+    watch: {
+        activeFilters() {
+            this.saveState(['activeFilters']);
+        }
+    },
+
     computed: {
-        startOfToday() {
-            return moment().startOf('day').format();
-        },
-        endOfToday() {
-            var time = moment().startOf('day');
-            return time.clone().endOf('day').format();
-        },
-        startOfYesterday() {
-            return moment().subtract(1, 'day').startOf('day').format();
-        },
-        endOfYesterday() {
-            var time = moment().subtract(1, 'day').startOf('day');
-            return time.clone().endOf('day').format();
-        },
-        startOfWeek() {
-            return moment().startOf('week').format();
-        },
-        endOfWeek() {
-            var time = moment().startOf('week');
-            return time.clone().endOf('week').format();
-        },
-        startOfMonth() {
-            return moment().startOf('month').format();
-        },
-        endOfMonth() {
-            var time = moment().startOf('month');
-            return time.clone().endOf('month').format();
-        },
-        startOfLastMonth() {
-            return moment().subtract(1, 'month').startOf('month').format();
-        },
-        endOfLastMonth() {
-            var time = moment().subtract(1, 'month').startOf('month');
-            return time.clone().endOf('month').format();
-        },
         droppedBetween() {
             return [
                     {value: `${this.startOfToday},${this.endOfToday}`, label: 'Today'},
@@ -246,22 +214,22 @@ export default {
             $('#filterModal').modal('show');
         },
         closeFilterModal(data) {
-            this.removeActiveFilter(data.key);
-            this.activeFilters.push(data);
+            this.addActiveFilter(data);
             this.filterModal = {
                 component: null,
                 title: null
             }
             $('#filterModal').modal('hide');
-        },
-        removeActiveFilter(key) {
-            if (_.findWhere(this.activeFilters, {key: key})) {
-                this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
-            }
-        },
+        }
     },
+
     mounted() {
         this.filterConfiguration.dropped_between.options = this.droppedBetween;
+
+        var previousState = this.restoreState();
+        if (previousState) {
+            this.activeFilters = previousState.activeFilters;
+        }
     }
 }
 </script>

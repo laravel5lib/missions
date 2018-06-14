@@ -3,6 +3,7 @@
             ref="flightsList" 
             :parameters="{filter: {}, sort: 'date'}"
             @filter:removed="removeActiveFilter"
+            :cache-key="`flightsViewFlights.campaign.${campaignId}`"
 >
 <div slot-scope="{ json:flights, pagination, changePage, loading, addFilter, removeFilter, filters, sortBy }">
     <div class="panel-heading">
@@ -127,15 +128,27 @@
 </fetch-json>
 </template>
 <script>
+import state from '../state.mixin';
+import activeFilter from '../activeFilter.mixin';
 import FilterSearch from '../components/FilterSearch';
 export default {
-    props: ['campaignId', 'segmentId'],
+    props: {
+        campaignId: String,
+        segmentId: String,
+        cacheKey: {
+            type: String,
+            default: `${window.location.host}${window.location.pathname}.flightsViewFlights`
+        }
+    },
+
     components: {
         'filter-search': FilterSearch,
     },
+
+    mixins: [state, activeFilter],
+
     data() {
         return {
-            activeFilters: [],
             filterModal: {
                 component: null,
                 title: null
@@ -159,30 +172,36 @@ export default {
             }
         }
     },
+
     watch: {
-        'segmentId'(val) {
+        segmentId(val) {
             this.$refs.flightsList.fetch();
+        },
+        activeFilters() {
+            this.saveState(['activeFilters']);
         }
     },
+
     methods: {
         openFilterModal(filter) {
             this.filterModal = filter;
             $('#filterModal').modal('show');
         },
         closeFilterModal(data) {
-            this.removeActiveFilter(data.key);
-            this.activeFilters.push(data);
+            this.addActiveFilter(data);
             this.filterModal = {
                 component: null,
                 title: null
             }
             $('#filterModal').modal('hide');
-        },
-        removeActiveFilter(key) {
-            if (_.findWhere(this.activeFilters, {key: key})) {
-                this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
-            }
-        },
+        }
+    },
+
+    mounted() {
+        var previousState = this.restoreState();
+        if (previousState) {
+            this.activeFilters = previousState.activeFilters;
+        }
     }
 }
 </script>

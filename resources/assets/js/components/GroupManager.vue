@@ -42,8 +42,15 @@
     </div>
 </div>
 
-<fetch-json :url="'/campaigns/'+campaignId+'/groups'" ref="groupList" @filter:removed="removeActiveFilter">
-    <div class="panel panel-default" style="border-top: 5px solid #f6323e" slot-scope="{ json:groups, loading, pagination, filters, addFilter, removeFilter, changePage, sortBy }">
+<fetch-json :url="`/campaigns/${campaignId}/groups`" 
+            ref="groupList" 
+            @filter:removed="removeActiveFilter"
+            :cache-key="`admin.campaign.${campaignId}.groupList`"
+>
+    <div class="panel panel-default" 
+         style="border-top: 5px solid #f6323e" 
+         slot-scope="{ json:groups, loading, pagination, filters, addFilter, removeFilter, changePage, sortBy }"
+    >
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-6">
@@ -155,14 +162,22 @@
 </div>
 </template>
 <script>
+import state from '../state.mixin';
+import activeFilter from '../activeFilter.mixin';
 import FilterSearch from '../components/FilterSearch';
 import FilterRadio from '../components/FilterRadio';
 export default {
-    props: ['campaignId'],
+    props: {
+        campaignId: String
+    },
+
     components: {
         'filter-search': FilterSearch,
         'filter-radio': FilterRadio,
     },
+
+    mixins: [state, activeFilter],
+
     data() {
         return {
             defaultData: {
@@ -170,7 +185,6 @@ export default {
                 'group_id': null
             },
             statusOptions: {1:'Pending', 2:'Committed', 3:'Ready to Launch', 4:'Launched'},
-            activeFilters: [],
             filterModal: {
                 component: null,
                 title: null
@@ -196,6 +210,12 @@ export default {
         }
     },
 
+    watch: {
+        activeFilters() {
+            this.saveState(['activeFilters']);
+        }
+    },
+
     methods: {
         updateList(params) {
             this.$refs.groupList.fetch(params);
@@ -205,19 +225,20 @@ export default {
             $('#filterModal').modal('show');
         },
         closeFilterModal(data) {
-            this.removeActiveFilter(data.key);
-            this.activeFilters.push(data);
+            this.addActiveFilter(data);
             this.filterModal = {
                 component: null,
                 title: null
             }
             $('#filterModal').modal('hide');
-        },
-        removeActiveFilter(key) {
-            if (_.findWhere(this.activeFilters, {key: key})) {
-                this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
-            }
-        },
+        }
+    },
+
+    mounted() {
+        var previousState = this.restoreState();
+        if (previousState) {
+            this.activeFilters = previousState.activeFilters;
+        }
     }
 }
 </script>

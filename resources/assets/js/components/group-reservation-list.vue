@@ -299,11 +299,23 @@
 </template>
 
 <script>
+import state from '../state.mixin';
+import dates from '../dates.mixin';
+import activeFilter from '../activeFilter.mixin';
+import genders from '../data/genders.json';
+import tripTypes from '../data/trip_types.json';
+import ageRanges from '../data/age_ranges.json';
+import shirtSizes from '../data/shirt_sizes.json';
+import maritalStatuses from '../data/marital_statuses.json';
+import percentageRanges from '../data/percentage_ranges.json';
 import FilterSearch from '../components/FilterSearch';
 import FilterRadio from '../components/FilterRadio';
 import FilterSelect from '../components/FilterSelect';
 export default {
-    props: ['totals', 'url'],
+    props: {
+        totals: Object, 
+        url: String
+    },
 
     components: {
         'filter-search': FilterSearch,
@@ -311,13 +323,14 @@ export default {
         'filter-select': FilterSelect
     },
 
+    mixins: [state, dates, activeFilter],
+
     data() {
         return {
             ui: {
                 allFilters: false
             },
             view: 'missionary',
-            activeFilters: [],
             filterModal: {
                 component: null,
                 title: null
@@ -339,64 +352,31 @@ export default {
                     component: 'filter-radio',
                     title: 'Trip', 
                     field: 'trip_type',
-                    options: [
-                        {value: 'family', label: 'Family'},
-                        {value: 'international', label: 'International'},
-                        {value: 'media', label: 'Media'},
-                        {value: 'medical', label: 'Medical'},
-                        {value: 'ministry', label: 'Ministry'},
-                        {value: 'leader', label: 'Leader'},
-                        {value: 'sports', label: 'Sports'},
-                        {value: 'water', label: 'Water'},
-                    ]
+                    options: tripTypes
                 },
                 gender: {
                     component: 'filter-radio',
                     title: 'Gender', 
                     field: 'gender',
-                    options: [
-                        {value: 'male', label: 'Male'},
-                        {value: 'female', label: 'Female'}
-                    ]
+                    options: genders
                 },
                 status: {
                     component: 'filter-radio',
                     title: 'Marital Status', 
                     field: 'status',
-                    options: [
-                        {value: 'single', label: 'Single'},
-                        {value: 'engaged', label: 'Engaged'},
-                        {value: 'married', label: 'Married'},
-                        {value: 'divorced', label: 'Divorced'},
-                        {value: 'widowed', label: 'Widowed'},
-                    ]
+                    options: maritalStatuses
                 },
                 age_range: {
                     component: 'filter-radio',
                     title: 'Age Range', 
                     field: 'age_range',
-                    options: [
-                        { value: '8,12', label: '8-12' },
-                        { value: '13,17', label: '13-17' },
-                        { value: '18,30', label: '18-30' },
-                        { value: '30,40', label: '30-40' },
-                        { value: '40,50', label: '40-50' },
-                        { value: '50', label: '50+' }
-                    ]
+                    options: ageRanges
                 },
                 shirt_size: {
                     component: 'filter-radio',
                     title: 'Shirt Size', 
                     field: 'shirt_size',
-                    options: [
-                        {value: 'XS', label: '(XS) Extra Small'},
-                        {value: 'S', label: '(S) Small'},
-                        {value: 'M', label: '(M) Medium'},
-                        {value: 'L', label: '(L) Large'},
-                        {value: 'XL', label: '(XL) Extra Large'},
-                        {value: 'XXL', label: '(XXL) Extra Large x2'},
-                        {value: 'XXXL', label: '(XXXL) Extra Large x3'},
-                    ]
+                    options: shirtSizes
                 },
                 current_rate: {
                     component: 'filter-select',
@@ -432,14 +412,7 @@ export default {
                     component: 'filter-radio',
                     title: 'Percentage Raised', 
                     field: 'percent_raised_range',
-                    options: [
-                        { value: '0,5', label: '<5%' },
-                        { value: '6,20', label: '6-20%' },
-                        { value: '21,49', label: '21-49%' },
-                        { value: '50,75', label: '50-75%' },
-                        { value: '76,99', label: '76-99%' },
-                        { value: '100', label: '100%' },
-                    ]
+                    options: percentageRanges
                 },
                 email: {
                     component: 'filter-search', 
@@ -497,41 +470,6 @@ export default {
     },
 
     computed: {
-        startOfToday() {
-            return moment().startOf('day').format();
-        },
-        endOfToday() {
-            var time = moment().startOf('day');
-            return time.clone().endOf('day').format();
-        },
-        startOfYesterday() {
-            return moment().subtract(1, 'day').startOf('day').format();
-        },
-        endOfYesterday() {
-            var time = moment().subtract(1, 'day').startOf('day');
-            return time.clone().endOf('day').format();
-        },
-        startOfWeek() {
-            return moment().startOf('week').format();
-        },
-        endOfWeek() {
-            var time = moment().startOf('week');
-            return time.clone().endOf('week').format();
-        },
-        startOfMonth() {
-            return moment().startOf('month').format();
-        },
-        endOfMonth() {
-            var time = moment().startOf('month');
-            return time.clone().endOf('month').format();
-        },
-        startOfLastMonth() {
-            return moment().subtract(1, 'month').startOf('month').format();
-        },
-        endOfLastMonth() {
-            var time = moment().subtract(1, 'month').startOf('month');
-            return time.clone().endOf('month').format();
-        },
         registeredBetween() {
             return [
                     {value: `${this.startOfToday},${this.endOfToday}`, label: 'Today'},
@@ -549,23 +487,32 @@ export default {
             $('#filterModal').modal('show');
         },
         closeFilterModal(data) {
-            this.removeActiveFilter(data.key);
-            this.activeFilters.push(data);
+            this.addActiveFilter(data);
             this.filterModal = {
                 component: null,
                 title: null
             }
             $('#filterModal').modal('hide');
         },
-        removeActiveFilter(key) {
-            if (_.findWhere(this.activeFilters, {key: key})) {
-                this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
-            }
+    },
+
+    watch: {
+        activeFilters() {
+            this.saveState(['activeFilters', 'view']);
         },
+        view() {
+            this.saveState(['activeFilters', 'view']);
+        }
     },
     
     mounted() {
         this.filterConfiguration.registered_between.options = this.registeredBetween;
+        
+        var previousState = this.restoreState();
+        if (previousState) {
+            this.activeFilters = previousState.activeFilters;
+            this.view = previousState.view;
+        }
     }
 }
 </script>

@@ -1,5 +1,10 @@
 <template>
-<fetch-json :url="`campaigns/${campaignId}/flights/itineraries`" ref="itinerariesList" :parameters="{filter: {}, sort: 'record_locator'}" @filter:removed="removeActiveFilter">
+<fetch-json :url="`campaigns/${campaignId}/flights/itineraries`" 
+            ref="itinerariesList" 
+            :parameters="{filter: {}, sort: 'record_locator'}" 
+            @filter:removed="removeActiveFilter" 
+            :cache-key="`flightsViewItineraries.campaign.${campaignId}`"
+>
 <div slot-scope="{ json:itineraries, pagination, changePage, loading, addFilter, removeFilter, filters, sortBy }">
     <div class="panel-heading" v-if="!ui.edit">
         <div class="btn-group btn-group-sm" style="margin-right: 1em;">
@@ -124,10 +129,21 @@
 </fetch-json>
 </template>
 <script>
+import state from '../state.mixin';
+import activeFilter from '../activeFilter.mixin';
 import FilterSearch from '../components/FilterSearch';
 import FilterRadio from '../components/FilterRadio';
 export default {
-    props: ['campaignId', 'segmentId'],
+    props: {
+        campaignId: String,
+        segmentId: String,
+        cacheKey: {
+            type: String,
+            default: `${window.location.host}${window.location.pathname}.flightsViewItineraries`
+        }
+    },
+
+    mixins: [state, activeFilter],
 
     components: {
         'filter-search': FilterSearch,
@@ -141,7 +157,6 @@ export default {
             ui: {
                 edit: false
             },
-            activeFilters: [],
             filterModal: {
                 component: null,
                 title: null
@@ -173,6 +188,13 @@ export default {
             }
         }
     },
+
+    watch: {
+        activeFilters() {
+            this.saveState(['activeFilters']);
+        }
+    },
+
     methods: {
         select(record, value) {
             if (value) {
@@ -188,8 +210,7 @@ export default {
                 this.selected = [];
             }
         },
-        isSelected(record)
-        {
+        isSelected(record) {
             return _.findWhere(this.selected, record)
         },
         openFilterModal(filter) {
@@ -197,18 +218,12 @@ export default {
             $('#filterModal').modal('show');
         },
         closeFilterModal(data) {
-            this.removeActiveFilter(data.key);
-            this.activeFilters.push(data);
+            this.addActiveFilter(data);
             this.filterModal = {
                 component: null,
                 title: null
             }
             $('#filterModal').modal('hide');
-        },
-        removeActiveFilter(key) {
-            if (_.findWhere(this.activeFilters, {key: key})) {
-                this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
-            }
         },
         publish() {
             swal('WARNING!', `Are you sure you want to publish the ${this.selected.length} selected itinerarie(s)? They will be publicly visible and passengers will be notified.`, 'warning', {
@@ -281,6 +296,13 @@ export default {
                         });
                 }
             })
+        }
+    },
+
+    mounted() {
+        var previousState = this.restoreState();
+        if (previousState) {
+            this.activeFilters = previousState.activeFilters;
         }
     }
 }

@@ -3,6 +3,7 @@
                 ref="list" 
                 :parameters="{filter: {}}" 
                 @filter:removed="removeActiveFilter"
+                :cache-key="`missionaryList.admin.campaign.${campaignId}`"
     >
         <div class="panel panel-default" 
              slot-scope="{ json:reservations, pagination, changePage, loading, addFilter, removeFilter, filters, sort }" style="border-top: 5px solid #f6323e"
@@ -321,7 +322,11 @@ import FilterSelect from '../components/FilterSelect';
 export default {
     props: {
         campaignId: String,
-        totals: Object
+        totals: Object,
+        cacheKey: {
+            type: String,
+            default: `${window.location.host}${window.location.pathname}.admin.missionaryList`
+        }
     },
 
     mixins: [state, dates, activeFilter],

@@ -37,6 +37,7 @@
             <div class="col-sm-10">
                 <flight-list campaign-id="{{ $campaign->id }}" 
                              :totals="{{ json_encode($totals) }}"
+                             cache-key="flight-list-component.campaign.{{ $campaign->id }}"
                 ></flight-list>
             </div>
         </div>

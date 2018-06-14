@@ -28,6 +28,7 @@
 </div> 
 </template>
 <script>
+import state from '../state.mixin';
 import FlightsBooked from '../components/FlightsBooked.vue';
 import FlightsNotBooked from '../components/FlightsNotBooked.vue';
 export default {
@@ -38,10 +39,14 @@ export default {
             required: true
         }
     },
+
     components: {
         'flights-booked': FlightsBooked,
         'flights-not-booked': FlightsNotBooked,
     },
+
+    mixins: [state],
+
     data() {
         return {
             flightList: 'flights-booked',
@@ -50,6 +55,13 @@ export default {
             noFlightTotal: this.totals.no_flight
         }
     },
+
+    watch: {
+        flightList() {
+            this.saveState(['flightList']);
+        }
+    },
+
     methods: {
         changeView(component) {
             this.flightList = component;
@@ -57,6 +69,13 @@ export default {
         updateBookedCount(total) {
             this.notBookedTotal = this.notBookedTotal - total;
             this.bookedTotal = this.bookedTotal + total;
+        }
+    },
+
+    mounted() {
+        var previousState = this.restoreState();
+        if (previousState) {
+            this.flightList = previousState.flightList;
         }
     }
 }

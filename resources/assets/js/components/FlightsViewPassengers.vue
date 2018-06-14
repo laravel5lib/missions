@@ -3,6 +3,7 @@
             ref="passengersList" 
             :parameters="{filter: {}, sort: 'surname'}"
             @filter:removed="removeActiveFilter"
+            :cache-key="`flightsViewPassengers.campaign.${campaignId}`"
 >
 <div slot-scope="{ json:passengers, pagination, changePage, loading, addFilter, removeFilter, filters, sortBy }">
     <div class="panel-heading">
@@ -168,24 +169,41 @@
 </fetch-json>
 </template>
 <script>
+import state from '../state.mixin';
+import activeFilter from '../activeFilter.mixin';
+import tripTypes from '../data/trip_types.json';
 import FilterSearch from '../components/FilterSearch';
 import FilterRadio from '../components/FilterRadio';
 import FilterSelect from '../components/FilterSelect';
 export default {
-    props: ['campaignId', 'segmentId'],
+    props: {
+        campaignId: String,
+        segmentId: String,
+        cacheKey: {
+            type: String,
+            default: `${window.location.host}${window.location.pathname}.flightsViewPassengers`
+        }
+    },
+
     components: {
         'filter-search': FilterSearch,
         'filter-radio': FilterRadio,
         'filter-select': FilterSelect
     },
+
+    mixins: [state, activeFilter],
+
     watch: {
-        'segmentId'(val) {
+        segmentId(val) {
             this.$refs.passengersList.fetch();
+        },
+        activeFilters() {
+            this.saveState(['activeFilters']);
         }
     },
+
     data() {
         return {
-            activeFilters: [],
             selected: [],
             filterModal: {
                 component: null,
@@ -221,16 +239,7 @@ export default {
                     component: 'filter-radio',
                     title: 'Trip', 
                     field: 'trip_type',
-                    options: [
-                        {value: 'family', label: 'Family'},
-                        {value: 'international', label: 'International'},
-                        {value: 'media', label: 'Media'},
-                        {value: 'medical', label: 'Medical'},
-                        {value: 'ministry', label: 'Ministry'},
-                        {value: 'leader', label: 'Leader'},
-                        {value: 'sports', label: 'Sports'},
-                        {value: 'water', label: 'Water'},
-                    ]
+                    options: tripTypes
                 },
                 group: {
                     component: 'filter-select',
@@ -268,18 +277,12 @@ export default {
             $('#filterModal').modal('show');
         },
         closeFilterModal(data) {
-            this.removeActiveFilter(data.key);
-            this.activeFilters.push(data);
+            this.addActiveFilter(data);
             this.filterModal = {
                 component: null,
                 title: null
             }
             $('#filterModal').modal('hide');
-        },
-        removeActiveFilter(key) {
-            if (_.findWhere(this.activeFilters, {key: key})) {
-                this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
-            }
         },
         removePassengers() {
             swal('WARNING!', `Are you sure you want to remove the ${this.selected.length} selected passenger(s)? This will remove them from all itineraries. To undo this action, flights must be booked again.`, 'warning', {
@@ -317,6 +320,13 @@ export default {
                         });
                 }
             })
+        }
+    },
+
+    mounted() {
+        var previousState = this.restoreState();
+        if (previousState) {
+            this.activeFilters = previousState.activeFilters;
         }
     }
 }

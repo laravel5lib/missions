@@ -1,5 +1,5 @@
 <template>
-<fetch-json :url="`reservations?filter[campaign]=${campaignId}&filter[has_flight]=${false}&include=trip.group,passport&sort=surname`" ref="list" :parameters="{filter: {}}" @filter:removed="removeActiveFilter">
+<fetch-json :url="`reservations?filter[campaign]=${campaignId}&filter[has_flight]=${false}&include=trip.group,passport&sort=surname`" ref="list" :parameters="{filter: {}}" @filter:removed="removeActiveFilter" :cache-key="`flightsNotBooked.campaign.${campaignId}`">
     <div slot-scope="{ json:reservations, pagination, changePage, loading, addFilter, removeFilter, filters, sort }">
         <div class="panel-heading" v-if="!ui.booking">
             <div class="btn-group btn-group-sm">
@@ -168,26 +168,41 @@
 </fetch-json>
 </template>
 <script>
+import state from '../state.mixin';
+import activeFilter from '../activeFilter.mixin';
+import genders from '../data/genders.json';
+import tripTypes from '../data/trip_types.json';
+import percentageRanges from '../data/percentage_ranges.json';
 import FlightBookingForm from '../components/FlightBookingForm';
 import FilterSearch from '../components/FilterSearch';
 import FilterRadio from '../components/FilterRadio';
 import FilterSelect from '../components/FilterSelect';
 export default {
     name: 'flights-not-booked',
-    props: ['campaignId'],
+
+    props: {
+        campaignId: String,
+        cacheKey: {
+            type: String,
+            default: `${window.location.host}${window.location.pathname}.flightsNotBooked`
+        }
+    },
+
     components: {
         'flight-booking-form': FlightBookingForm,
         'filter-search': FilterSearch,
         'filter-radio': FilterRadio,
         'filter-select': FilterSelect
     },
+
+    mixins: [state, activeFilter],
+
     data() {
         return {
             selectedReservations: [],
             ui: {
                 booking: false
             },
-            activeFilters: [],
             filterModal: {
                 component: null,
                 title: null
@@ -197,61 +212,28 @@ export default {
                     component: 'filter-search', 
                     title: 'Surname', 
                     field: 'surname',
-                    options: []
                 },
                 given_names: {
                     component: 'filter-search',
                     title: 'Given Names', 
                     field: 'given_names',
-                    options: []
                 },
                 passport_number: {
                     component: 'filter-search',
                     title: 'Passport Number', 
                     field: 'passport_number',
-                    options: []
                 },
                 trip_type: {
                     component: 'filter-radio',
                     title: 'Trip', 
                     field: 'trip_type',
-                    options: [
-                        {value: 'family', label: 'Family'},
-                        {value: 'international', label: 'International'},
-                        {value: 'media', label: 'Media'},
-                        {value: 'medical', label: 'Medical'},
-                        {value: 'ministry', label: 'Ministry'},
-                        {value: 'leader', label: 'Leader'},
-                        {value: 'sports', label: 'Sports'},
-                        {value: 'water', label: 'Water'},
-                    ]
+                    options: tripTypes
                 },
                 gender: {
                     component: 'filter-radio',
                     title: 'Gender', 
                     field: 'gender',
-                    options: [
-                        {value: 'male', label: 'Male'},
-                        {value: 'female', label: 'Female'}
-                    ]
-                },
-                // status: {
-                //     component: 'filter-radio',
-                //     title: 'Marital Status', 
-                //     field: 'status',
-                //     options: [
-                //         {value: 'single', label: 'Single'},
-                //         {value: 'engaged', label: 'Engaged'},
-                //         {value: 'married', label: 'Married'},
-                //         {value: 'divorced', label: 'Divorced'},
-                //         {value: 'widowed', label: 'Widowed'},
-                //     ]
-                // },
-                age: {
-                    component: 'filter-radio',
-                    title: 'Age Range', 
-                    field: 'age',
-                    options: []
+                    options: genders
                 },
                 current_rate: {
                     component: 'filter-select',
@@ -272,10 +254,23 @@ export default {
                         value: 'id',
                         label: 'name'
                     }
-                }
+                },
+                percent_raised: {
+                    component: 'filter-radio',
+                    title: 'Percentage Raised', 
+                    field: 'percent_raised_range',
+                    options: percentageRanges
+                },
             }
         }
     },
+
+    watch: {
+        activeFilters() {
+            this.saveState(['activeFilters']);
+        }
+    },
+
     methods: {
         selectReservation(reservation, value) {
             if (value) {
@@ -305,19 +300,20 @@ export default {
             $('#filterModal').modal('show');
         },
         closeFilterModal(data) {
-            this.removeActiveFilter(data.key);
-            this.activeFilters.push(data);
+            this.addActiveFilter(data);
             this.filterModal = {
                 component: null,
                 title: null
             }
             $('#filterModal').modal('hide');
-        },
-        removeActiveFilter(key) {
-            if (_.findWhere(this.activeFilters, {key: key})) {
-                this.activeFilters = _.reject(this.activeFilters, _.findWhere(this.activeFilters, {key: key}));
-            }
-        },
+        }
+    },
+
+    mounted() {
+        var previousState = this.restoreState();
+        if (previousState) {
+            this.activeFilters = previousState.activeFilters;
+        }
     }
 }
 </script>

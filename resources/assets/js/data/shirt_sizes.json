@@ -1,0 +1,9 @@
+[
+    {"value": "XS", "label": "(XS) Extra Small"},
+    {"value": "S", "label": "(S) Small"},
+    {"value": "M", "label": "(M) Medium"},
+    {"value": "L", "label": "(L) Large"},
+    {"value": "XL", "label": "(XL) Extra Large"},
+    {"value": "XXL", "label": "(XXL) Extra Large x2"},
+    {"value": "XXXL", "label": "(XXXL) Extra Large x3"}
+]

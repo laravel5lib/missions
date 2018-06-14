@@ -1,0 +1,10 @@
+[
+    {"value": "family", "label": "Family"},
+    {"value": "international", "label": "International"},
+    {"value": "media", "label": "Media"},
+    {"value": "medical", "label": "Medical"},
+    {"value": "ministry", "label": "Ministry"},
+    {"value": "leader", "label": "Leader"},
+    {"value": "sports", "label": "Sports"},
+    {"value": "water", "label": "Water"}
+]

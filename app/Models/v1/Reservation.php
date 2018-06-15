@@ -12,9 +12,11 @@ use App\TransferReservation;
 use Conner\Tagging\Taggable;
 use App\Utilities\v1\TeamRole;
 use EloquentFilter\Filterable;
+use Spatie\QueryBuilder\Filter;
 use App\Events\ReservationCreated;
 use App\Models\v1\FlightItinerary;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\QueryBuilder;
 use App\Events\ReservationWasProcessed;
 use App\Models\v1\RequirementCondition;
 use Illuminate\Database\Eloquent\Model;
@@ -996,5 +998,36 @@ class Reservation extends Model
         $this->removePrice($this->getCurrentRate());
 
         return $this->attachPriceToModel($this->trip->getCurrentRate()->id);
+    }
+
+    public static function getQuery()
+    {
+        return QueryBuilder::for(static::class)
+                ->allowedFilters([
+                    'surname', 'given_names', 'email', 'phone_one', 'phone_two',
+                    'address', 'city', 'zip', 'state', 'trip_id',
+                    Filter::exact('gender'),
+                    Filter::exact('status'),
+                    Filter::exact('shirt_size'),
+                    Filter::exact('desired_role'),
+                    Filter::exact('country_code'),
+                    Filter::scope('group'),
+                    Filter::scope('trip_type'),
+                    Filter::scope('campaign'),
+                    Filter::scope('has_flight'),
+                    Filter::scope('passport_number'),
+                    Filter::scope('cost'),
+                    Filter::scope('age_range'),
+                    Filter::scope('percent_raised_range'),
+                    Filter::scope('registered_between'),
+                    Filter::scope('dropped'),
+                    Filter::scope('dropped_between'),
+                    Filter::scope('deposited'),
+                    Filter::scope('in_process'),
+                    Filter::scope('funded'),
+                    Filter::scope('ready'),
+                    Filter::scope('funnel')
+                ])
+                ->allowedIncludes(['trip.group', 'passport', 'requirements']);
     }
 }

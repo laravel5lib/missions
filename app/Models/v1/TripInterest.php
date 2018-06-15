@@ -55,4 +55,31 @@ class TripInterest extends Model
             return $trip->current();
         });
     }
+
+    public function scopeCampaign($query, $campaignId)
+    {
+        return $query->whereHas('trip', function ($trip) use ($campaignId) {
+            return $trip->where('campaign_id', $campaignId);
+        });
+    }
+
+    public function scopeTripType($query, $type)
+    {
+        return $query->whereHas('trip', function ($trip) use ($type) {
+            return $trip->where('type', $type);
+        });
+    }
+
+    public function scopeGroup($query, $groupId)
+    {
+        return $query->whereHas('trip', function ($trip) use ($groupId) {
+            return $trip->where('group_id', $groupId);
+        });
+    }
+
+    public function scopeReceivedBetween($query, ...$dates)
+    {
+        $query->whereDate('created_at', '>=', $dates[0])
+              ->whereDate('created_at', '<=', $dates[1]);
+    }
 }

@@ -405,7 +405,7 @@ export default {
                     title: 'Group',
                     field: 'group',
                     ajax: {
-                        url: `/campaigns/${this.campaignId}/groups?per_page=100`,
+                        url: `/campaigns/${this.campaignId}/groups?per_page=200`,
                         value: 'id',
                         label: 'name'
                     }

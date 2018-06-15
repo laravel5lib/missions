@@ -1,33 +1,60 @@
-@extends('admin.layouts.default')
+@extends('layouts.admin')
 
 @section('content')
-    <div class="white-header-bg">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-8">
-                    <h3 class="text-capitalize">
-                        Trip Interest
-                    </h3>
-                </div>
-                <div class="col-sm-4 text-right">
-                    <hr class="divider inv sm">
-                    <a href="{{ url('admin/reservations/prospects') }}" class="btn btn-default-hollow">
-                        <i class="fa fa-list"></i> All Interests
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <hr class="divider inv">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-offset-2 col-md-8">
-                <trip-interest-editor id="{{ $interest->id }}"></trip-interest-editor>
-            </div>
-        </div>
 
+    @breadcrumbs(['links' => [
+        'admin' => 'Dashboard',
+        'admin/campaigns' => 'Campaigns',
+        'admin/campaigns/'.$campaign->id => $campaign->name.' - '.country($campaign->country_code),
+        'admin/campaigns/'.$campaign->id.'/reservations/interests' => 'Interests',
+        'active' => 'Details'
+    ]])
+    @endbreadcrumbs
+
+    <hr class="divider inv lg">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-offset-2 col-md-8">
+            <div class="col-xs-12 col-md-7 col-md-offset-1">
+                @component('panel')
+                    @slot('title')
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <h5>Details</h5>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <a href="{{ url('/admin/campaigns/'.$campaign->id.'/reservations/interests/'.$interest->id.'/edit') }}"
+                                   class="btn btn-sm btn-default"
+                                >
+                                    Edit
+                                </a>
+                            </div>
+                        </div>
+                    @endslot
+                    @component('list-group', ['data' => [
+                        'status' => function() use ($interest) {
+                            if ($interest->status === 'converted') {
+                                echo '<i class="fa fa-check-circle text-success"></i><em>'.$interest->status.'</em>';
+                            } elseif ($interest->status == 'declined') {
+                                echo '<i class="fa fa-times-circle text-danger"></i><em>'.$interest->status.'</em>';
+                            } else {
+                                echo '<i class="fa fa-question-circle text-muted"></i><em>'.$interest->status.'</em>';
+                            }
+                        },
+                        'name' => $interest->name,
+                        'email' => '<strong><a href="mailto:'.$interest->email.'">'.$interest->email.'</a></strong>',
+                        'phone' => '<strong><a href="tel:'.stripPhone($interest->phone).'">'.$interest->phone.'</a></strong>',
+                        'prefers' => function () use ($interest) {
+                            foreach($interest->communication_preferences as $value) {
+                                echo '<span class="label label-default">'.ucfirst($value).'</span> ';
+                            }
+                        },
+                        'trip_of_interest' => $interest->trip->campaign->name.'<br /><em>'.ucfirst($interest->trip->type).' Trip</em>',
+                        'group' => '<strong><a href="'.url('/admin/organizations/'.$interest->trip->group_id).'">'.$interest->trip->group->name.'</a></strong>',
+                        'Received' => '<datetime-formatted value="'.$interest->created_at->toIso8601String().'" />',
+                        'Last Updated' => '<datetime-formatted value="'.$interest->updated_at->toIso8601String().'" />'
+                    ]]) @endcomponent
+                @endcomponent
+
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5>Direct Link to Trip Registration Page</h5>
@@ -38,29 +65,34 @@
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="col-xs-12 col-md-3 col-md-offset-1 small">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#notes" aria-controls="notes" role="tab" data-toggle="tab">Notes</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#tasks" aria-controls="tasks" role="tab" data-toggle="tab">Tasks</a>
+                    </li>
+                </ul>
 
-        @can('view', \App\Models\v1\Todo::class)
-        <div class="row">
-            <div class="col-md-offset-2 col-md-8">
-                <todos type="trip_interests"
-                       id="{{ $interest->id }}"
-                       user_id="{{ auth()->user()->id }}">
-                </todos>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="notes">
+                        <notes type="trip_interests"
+                            id="{{ $interest->id }}"
+                            user_id="{{ auth()->user()->id }}"
+                            :per_page="10"
+                            :can-modify="{{ auth()->user()->can('modify-notes')?1:0 }}">
+                        </notes>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tasks">
+                        <todos type="trip_interests"
+                            id="{{ $interest->id }}"
+                            user_id="{{ auth()->user()->id }}"
+                            :can-modify="{{ auth()->user()->can('modify-todos')?1:0 }}">
+                        </todos>
+                    </div>
+                </div>
             </div>
         </div>
-        @endcan
-
-        @can('view', \App\Models\v1\Note::class)
-        <div class="row">
-            <div class="col-md-offset-2 col-md-8">
-                <notes type="trip_interests"
-                       id="{{ $interest->id }}"
-                       user_id="{{ auth()->user()->id }}"
-                       :per_page="3">
-                </notes>
-            </div>
-        </div>
-        @endcan
     </div>
 @endsection

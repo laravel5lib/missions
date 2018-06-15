@@ -25,6 +25,7 @@ Route::prefix('campaigns')->group(function () {
     Route::get('{campaignId}/reservations/missionaries', 'ReservationsController@index');
     Route::get('{campaignId}/reservations/dropped', 'ReservationsController@dropped');
     Route::get('{campaignId}/reservations/flights', 'FlightController@index');
+    Route::resource('{campaignId}/reservations/interests', 'TripInterestsController');
     Route::get('{campaign}/itineraries/{itinerary}', 'FlightItineraryController@show');
     Route::get('{campaign}/itineraries/{itinerary}/edit', 'FlightItineraryController@edit');
     Route::get('{id}/{tab?}', 'CampaignsController@show');
@@ -44,7 +45,6 @@ Route::get('/trips/{id}/reservations/create', 'ReservationsController@create');
 Route::resource('trips', 'TripsController');
 
 Route::resource('organizations', 'GroupsController');
-Route::resource('interests', 'TripInterestsController');
 
 Route::prefix('reservations')->group(function () {
     Route::get('create', 'ReservationsController@create');

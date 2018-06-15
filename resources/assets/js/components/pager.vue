@@ -7,6 +7,7 @@
                     <span aria-hidden="true">&larr;</span> Previous
                 </a>
         </li>
+        <li class="small" v-if="showPageCount">Page {{ pagination.current_page }} of {{ pagination.last_page }}</li>
         <li class="next" 
             :class="{ 'disabled' : pagination.current_page === pagination.last_page }">
                 <a @click.prevent="nextPage()">
@@ -28,6 +29,10 @@ export default {
         callback: {
             type: Function,
             required: true
+        },
+        showPageCount: {
+            type: Boolean,
+            default: true
         }
     },
 

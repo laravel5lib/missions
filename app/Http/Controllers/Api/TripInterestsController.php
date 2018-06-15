@@ -6,31 +6,18 @@ use App\Http\Requests;
 use App\Models\v1\Todo;
 use Illuminate\Http\Request;
 use App\Models\v1\TripInterest;
+use Spatie\QueryBuilder\Filter;
 use App\Jobs\ExportTripInterests;
 use App\Http\Controllers\Controller;
+use Spatie\QueryBuilder\QueryBuilder;
 use App\Events\TripInterestWasCreated;
 use App\Http\Requests\v1\ExportRequest;
+use App\Http\Resources\TripInterestResource;
 use App\Http\Requests\v1\TripInterestRequest;
 use App\Http\Transformers\v1\TripInterestTransformer;
 
 class TripInterestsController extends Controller
 {
-
-    /**
-     * @var TripInterest
-     */
-    private $interest;
-
-    /**
-     * TripInterestsController constructor.
-     * @param TripInterest $interest
-     */
-    public function __construct(TripInterest $interest)
-    {
-        $this->interest = $interest;
-        $this->middleware('api.auth')->except('store');
-    }
-
     /**
      * Get all trip interests.
      *
@@ -39,9 +26,19 @@ class TripInterestsController extends Controller
      */
     public function index(Request $request)
     {
-        $interests = $this->interest->has('trip')->current()->latest()->filter($request->all())->paginate();
+        $interests = QueryBuilder::for(TripInterest::class)
+            ->allowedFilters([
+                'name', 'status', 'email',
+                Filter::exact('trip_id'),
+                Filter::scope('campaign'),
+                Filter::scope('trip_type'),
+                Filter::scope('group'),
+                Filter::scope('received_between')
+            ])
+            ->allowedIncludes(['trip.campaign', 'trip.group'])
+            ->paginate($request->input('per_page', 25));
 
-        return $this->response->paginator($interests, new TripInterestTransformer);
+        return TripInterestResource::collection($interests);
     }
 
     /**
@@ -52,9 +49,9 @@ class TripInterestsController extends Controller
      */
     public function show($id)
     {
-        $interest = $this->interest->findOrFail($id);
+        $interest = TripInterest::findOrFail($id);
 
-        return $this->response->item($interest, new TripInterestTransformer);
+        return new TripInterestResource($interest);
     }
 
     /**
@@ -65,7 +62,7 @@ class TripInterestsController extends Controller
      */
     public function store(TripInterestRequest $request)
     {
-        $interest = $this->interest->create($request->all());
+        $interest = TripInterest::create($request->all());
 
         $interest->todos()->saveMany([
             new Todo(['task' => '1st Contact']),
@@ -76,7 +73,7 @@ class TripInterestsController extends Controller
 
         event(new TripInterestWasCreated($interest));
 
-        return $this->response->item($interest, new TripInterestTransformer);
+        return response()->json(['message' => 'Interest submitted.'], 201);
     }
 
     /**
@@ -87,11 +84,11 @@ class TripInterestsController extends Controller
      */
     public function update(TripInterestRequest $request, $id)
     {
-        $interest = $this->interest->findOrFail($id);
+        $interest = TripInterest::findOrFail($id);
 
         $interest->update($request->all());
 
-        return $this->response->item($interest, new TripInterestTransformer);
+        return new TripInterestResource($interest);
     }
 
     /**
@@ -102,11 +99,11 @@ class TripInterestsController extends Controller
      */
     public function destroy($id)
     {
-        $interest = $this->interest->findOrFail($id);
+        $interest = TripInterest::findOrFail($id);
 
         $interest->delete();
 
-        return $this->response->noContent();
+        return response()->json(['message' => 'Interest deleted.'], 204);
     }
 
     /**

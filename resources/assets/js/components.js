@@ -96,8 +96,6 @@ Vue.component('cost-manager', require('./components/admin/cost-manager.vue'));
 Vue.component('deadlines-manager', require('./components/admin/deadlines-manager.vue'));
 Vue.component('admin-trip-requirements', require('./components/trips/admin-trip-requirements.vue'));
 Vue.component('admin-trip-todos', require('./components/trips/admin-trip-todos.vue'));
-Vue.component('admin-interests-list', require('./components/interests/admin-interests-list.vue'));
-Vue.component('trip-interest-editor', require('./components/interests/trip-interests-editor.vue'));
 Vue.component('promotionals', require('./components/admin/promotionals.vue'));
 
 /**
@@ -237,6 +235,7 @@ Vue.component('missionary-list', require('./components/MissionaryList.vue'));
 Vue.component('dropped-reservation-list', require('./components/DroppedReservationList.vue'));
 Vue.component('itinerary-flight-list', require('./components/ItineraryFlightList.vue'));
 Vue.component('group-flight-list', require('./components/GroupFlightList.vue'));
+Vue.component('interest-list', require('./components/InterestList.vue'));
 
 /**
  * Utility Components

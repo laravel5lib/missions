@@ -6,7 +6,9 @@
 $factory->define(App\Models\v1\TripInterest::class, function (Faker\Generator $faker) {
     return [
         'id' => $faker->unique()->uuid,
-        'trip_id' => $faker->uuid,
+        'trip_id' => function () {
+            return factory(App\Models\v1\Trip::class)->create()->id;
+        },
         'status' => 'undecided',
         'name' => $faker->firstName. ' ' .$faker->lastName,
         'email' => $faker->safeEmail,

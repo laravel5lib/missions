@@ -296,4 +296,15 @@ class Country
 
         return implode(',', array_flatten(static::all()));
     }
+
+    public static function toJson()
+    {
+        $countries = [];
+
+        foreach(static::all() as $value => $key) {
+            array_push($countries, ['value' => $key, 'label' => $value]);
+        }
+
+        return $countries;
+    }
 }

@@ -156,4 +156,15 @@ class TeamRole
 
         return array_keys($result)[0];
     }
+
+    public static function toJson()
+    {
+        $roles = [];
+
+        foreach(static::all() as $key => $value) {
+            array_push($roles, ['value' => $key, 'label' => $value]);
+        }
+
+        return $roles;
+    }
 }

@@ -53,6 +53,7 @@ class ReservationsController extends Controller
                 Filter::exact('status'),
                 Filter::exact('shirt_size'),
                 Filter::exact('desired_role'),
+                Filter::exact('country_code'),
                 Filter::scope('group'),
                 Filter::scope('trip_type'),
                 Filter::scope('campaign'),

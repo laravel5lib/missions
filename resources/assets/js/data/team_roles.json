@@ -1,0 +1,226 @@
+[
+    {
+        "value": "GPLR",
+        "label": "Group Leader"
+    },
+    {
+        "value": "TMLR",
+        "label": "Squad Leader"
+    },
+    {
+        "value": "PRDR",
+        "label": "Project Director"
+    },
+    {
+        "value": "PRAS",
+        "label": "Project Assistant"
+    },
+    {
+        "value": "CODR",
+        "label": "Country Director"
+    },
+    {
+        "value": "SSPK",
+        "label": "Stadium Speaker"
+    },
+    {
+        "value": "MCDR",
+        "label": "Medical Clinic Director"
+    },
+    {
+        "value": "INFL",
+        "label": "Influencer"
+    },
+    {
+        "value": "PAST",
+        "label": "Pastor"
+    },
+    {
+        "value": "MISS",
+        "label": "Missionary (13+)"
+    },
+    {
+        "value": "MINR",
+        "label": "Missionary (Child 8-12)"
+    },
+    {
+        "value": "POLI",
+        "label": "Politican"
+    },
+    {
+        "value": "BUSP",
+        "label": "Business Professional"
+    },
+    {
+        "value": "MEDI",
+        "label": "Media Professional"
+    },
+    {
+        "value": "MDPF",
+        "label": "Medical Professional"
+    },
+    {
+        "value": "WATR",
+        "label": "Clean Water Team Member"
+    },
+    {
+        "value": "ATHL",
+        "label": "Athlete"
+    },
+    {
+        "value": "MDSG",
+        "label": "Medical Student"
+    },
+    {
+        "value": "MDSN",
+        "label": "Medical Student: Nursing"
+    },
+    {
+        "value": "MDSP",
+        "label": "Medical Student: Pre-Med"
+    },
+    {
+        "value": "MDSD",
+        "label": "Medical Student: Dental"
+    },
+    {
+        "value": "RESP",
+        "label": "Respitory Therapist"
+    },
+    {
+        "value": "PHYS",
+        "label": "Physician"
+    },
+    {
+        "value": "PHYA",
+        "label": "Physician's Assistant"
+    },
+    {
+        "value": "PHYT",
+        "label": "Physical Therapist"
+    },
+    {
+        "value": "PHAT",
+        "label": "Pharmacy Tech"
+    },
+    {
+        "value": "PHAA",
+        "label": "Pharmacy Assistant"
+    },
+    {
+        "value": "PHAR",
+        "label": "Pharmacist"
+    },
+    {
+        "value": "OTEC",
+        "label": "Optometry Tech"
+    },
+    {
+        "value": "ODOC",
+        "label": "Optometry Doctor"
+    },
+    {
+        "value": "OAST",
+        "label": "Optical Assistant"
+    },
+    {
+        "value": "DIET",
+        "label": "Dietitian"
+    },
+    {
+        "value": "NUTR",
+        "label": "Nutrionist"
+    },
+    {
+        "value": "LACT",
+        "label": "Lactation Consultant"
+    },
+    {
+        "value": "NAST",
+        "label": "Nurse Assistant"
+    },
+    {
+        "value": "NTEC",
+        "label": "Nurse Tech"
+    },
+    {
+        "value": "NPRC",
+        "label": "Nurse Practitioner"
+    },
+    {
+        "value": "REGN",
+        "label": "Nurse (RN)"
+    },
+    {
+        "value": "LPNN",
+        "label": "Nurse (LPN)"
+    },
+    {
+        "value": "NCRT",
+        "label": "Non-Certified"
+    },
+    {
+        "value": "MEDA",
+        "label": "Medical Assistant"
+    },
+    {
+        "value": "LVNN",
+        "label": "LVN"
+    },
+    {
+        "value": "HEDU",
+        "label": "Health Education"
+    },
+    {
+        "value": "ETEC",
+        "label": "EMT"
+    },
+    {
+        "value": "MDFG",
+        "label": "Doctor (OB\/GYN)"
+    },
+    {
+        "value": "MDOC",
+        "label": "Doctor (MD)"
+    },
+    {
+        "value": "DDOC",
+        "label": "Doctor (DO)"
+    },
+    {
+        "value": "DENT",
+        "label": "Dentist (DDS)"
+    },
+    {
+        "value": "DENH",
+        "label": "Dental Hygienist"
+    },
+    {
+        "value": "DENA",
+        "label": "Dental Assistant"
+    },
+    {
+        "value": "CHRA",
+        "label": "Chiropractor Assistant"
+    },
+    {
+        "value": "CHRO",
+        "label": "Chiropractor"
+    },
+    {
+        "value": "RDIO",
+        "label": "Radiologist"
+    },
+    {
+        "value": "CRDO",
+        "label": "Cardiologist"
+    },
+    {
+        "value": "ANES",
+        "label": "Anesthesiologist"
+    },
+    {
+        "value": "PRAY",
+        "label": "Prayer Team"
+    }
+]

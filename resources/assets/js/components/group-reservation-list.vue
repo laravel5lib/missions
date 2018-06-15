@@ -228,7 +228,7 @@
                         <th>Given Names</th>
                         <th v-if="!filters.filter.trip_type">Trip</th>
                         <template v-if="view === 'missionary'">
-                            <th v-if="!filters.filter.marital_status">Role</th>
+                            <th v-if="!filters.filter.desired_role">Role</th>
                             <th>Age</th>
                             <th v-if="!filters.filter.gender">Gender</th>
                             <th v-if="!filters.filter.status">Status</th>
@@ -303,6 +303,8 @@ import state from '../state.mixin';
 import dates from '../dates.mixin';
 import activeFilter from '../activeFilter.mixin';
 import genders from '../data/genders.json';
+import countries from '../data/countries.json';
+import teamRoles from '../data/team_roles.json';
 import tripTypes from '../data/trip_types.json';
 import ageRanges from '../data/age_ranges.json';
 import shirtSizes from '../data/shirt_sizes.json';
@@ -392,11 +394,7 @@ export default {
                     component: 'filter-select',
                     title: 'Role',
                     field: 'desired_role',
-                    ajax: {
-                        url: `/team-roles`,
-                        value: '',
-                        lavel: ''
-                    }
+                    options: teamRoles
                 },
                 current_rate: {
                     component: 'filter-select',
@@ -453,11 +451,7 @@ export default {
                     component: 'filter-select',
                     title: 'Country',
                     field: 'country_code',
-                    ajax: {
-                        url: 'utilities/countries',
-                        value: 'code',
-                        label: 'name'
-                    }
+                    options: countries
                 },
                 registered_between: {
                     component: 'filter-radio',

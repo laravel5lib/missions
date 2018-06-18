@@ -86,6 +86,11 @@
                         Showing {{ passengers.length || 0 }} of {{ pagination.total || 0 }} results
                     </em>
 
+                    <export-list type="passengers" 
+                                :params="`campaign=${campaignId}&segment=${selectedSegment}&filter[group]=${groupId}&filter[published_itinerary]=true&include=flight-itinerary.flights,passport`"
+                                :filters="filters"
+                    ></export-list>
+
         </div>
         <div class="panel-body" v-if="loading">
             <hr class="divider inv xlg">

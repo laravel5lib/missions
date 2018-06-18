@@ -15,12 +15,7 @@
 
     <div class="row">
         <div class="col-md-2">
-            @sidenav(['links' => [
-                'dashboard/groups/'.$group->id.'/campaigns/'.$campaign->id => 'Overview',
-                'dashboard/groups/'.$group->id.'/campaigns/'.$campaign->id.'/reservations' => 'Missionaries',
-                'dashboard/groups/'.$group->id.'/campaigns/'.$campaign->id.'/flights' => 'Flights'
-            ]])
-            @endsidenav
+            @include('dashboard.groups._sidenav')
         </div>
         <div class="col-md-10 col-lg-8">
             @component('panel')

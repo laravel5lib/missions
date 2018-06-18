@@ -116,7 +116,7 @@
                         </td>
                         <td v-if="!filters.filter.group">{{ interest.trip.group.name }}</td>
                         <td v-if="!filters.filter.trip_type">{{ interest.trip.type | capitalize }}</td>
-                        <td><strong><a :href="`mailto:${interest.email}}`">{{ interest.email }}</a></strong></td>
+                        <td><strong><a :href="`mailto:${interest.email}`">{{ interest.email }}</a></strong></td>
                         <td>{{ interest.phone }}</td>
                         <td>
                             <span v-for="(preference, index) in interest.communication_preferences" 

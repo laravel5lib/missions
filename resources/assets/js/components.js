@@ -236,6 +236,7 @@ Vue.component('dropped-reservation-list', require('./components/DroppedReservati
 Vue.component('itinerary-flight-list', require('./components/ItineraryFlightList.vue'));
 Vue.component('group-flight-list', require('./components/GroupFlightList.vue'));
 Vue.component('interest-list', require('./components/InterestList.vue'));
+Vue.component('group-interest-list', require('./components/GroupInterestList.vue'));
 
 /**
  * Utility Components

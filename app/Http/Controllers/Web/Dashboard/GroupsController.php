@@ -75,6 +75,14 @@ class GroupsController extends Controller
         return view('dashboard.groups.flights.index', compact('group', 'campaign'));
     }
 
+    public function interests($groupId, $campaignId)
+    {
+        $group = Group::findOrFail($groupId);
+        $campaign = Campaign::findOrFail($campaignId);
+
+        return view('dashboard.groups.interests.index', compact('group', 'campaign'));
+    }
+
     public function trips($groupId, $campaignId)
     {
         $group = Group::findOrFail($groupId);

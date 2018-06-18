@@ -31,13 +31,19 @@
 
         <div class="col-sm-6 col-xs-12">
             <div class="panel panel-default" style="border-style: solid; border-width: 4px 0px 0px; border-color: rgb(246, 50, 62);">
+            <div class="panel-body text-center"><hr class="divider inv"> <i class="fa fa-flag-o fa-3x"></i> <h6 class="text-uppercase">My Fundraiser</h6> <p class="small hidden-xs">View and manage your fundraisers.</p> <a href="{{ url('/dashboard/reservations?target=funding') }}" class="btn btn-sm btn-primary-hollow">Get Started</a> <hr class="divider inv"></div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-xs-12">
+            <div class="panel panel-default" style="border-style: solid; border-width: 4px 0px 0px; border-color: rgb(246, 50, 62);">
             <div class="panel-body text-center"><hr class="divider inv"> <i class="fa fa-file-text-o fa-3x"></i> <h6 class="text-uppercase">Travel Documents</h6> <p class="small hidden-xs">Passports, medical releases, and more.</p> <a href="{{ url('/dashboard/records') }}" class="btn btn-sm btn-primary-hollow">Get Started</a> <hr class="divider inv"></div>
             </div>
         </div>
 
         <div class="col-sm-6 col-xs-12">
             <div class="panel panel-default" style="border-style: solid; border-width: 4px 0px 0px; border-color: rgb(246, 50, 62);">
-            <div class="panel-body text-center"><hr class="divider inv"> <img src="/images/coordinators/tools-icon.png" width="50px" height="50px"> <h6 class="text-uppercase">Profile Settings</h6> <p class="small hidden-xs">Make changes to your account and public profile.</p> <a href="{{ url('/dashboard/settings') }}" class="btn btn-sm btn-primary-hollow">Get Started</a> <hr class="divider inv"></div>
+            <div class="panel-body text-center"><hr class="divider inv"> <i class="fa fa-user fa-3x"></i> <h6 class="text-uppercase">Profile Settings</h6> <p class="small hidden-xs">Make changes to your account and public profile.</p> <a href="{{ url('/dashboard/settings') }}" class="btn btn-sm btn-primary-hollow">Get Started</a> <hr class="divider inv"></div>
             </div>
         </div>
 

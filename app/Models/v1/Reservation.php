@@ -1005,7 +1005,7 @@ class Reservation extends Model
         return QueryBuilder::for(static::class)
                 ->allowedFilters([
                     'surname', 'given_names', 'email', 'phone_one', 'phone_two',
-                    'address', 'city', 'zip', 'state', 'trip_id',
+                    'address', 'city', 'zip', 'state', 'trip_id', 'user_id',
                     Filter::exact('gender'),
                     Filter::exact('status'),
                     Filter::exact('shirt_size'),
@@ -1026,9 +1026,11 @@ class Reservation extends Model
                     Filter::scope('in_process'),
                     Filter::scope('funded'),
                     Filter::scope('ready'),
-                    Filter::scope('funnel')
+                    Filter::scope('funnel'),
+                    Filter::scope('current'),
+                    Filter::scope('past')
                 ])
-                ->allowedIncludes(['trip.group', 'passport', 'requirements'])
+                ->allowedIncludes(['trip.group', 'trip.campaign', 'passport', 'requirements'])
                 ->with('priceables.cost');
     }
 }

@@ -39,6 +39,9 @@ Route::patch('campaigns/{campaignId}/flights/passengers', 'FlightPassengerContro
 Route::put('flights/itineraries/published', 'FlightItineraryPublicationController@update');
 Route::apiResource('flights', 'FlightController');
 
+// Reports
+Route::get('reports/create/{type}/{format}', 'UserReportsController@create')->middleware('auth:api');
+
 // Dingo API routes
 $api = app('Dingo\Api\Routing\Router');
 
@@ -120,7 +123,7 @@ $api->version('v1', [
         $api->post('trips/{id}/promo', 'TripsController@checkPromoCode');
         $api->post('interests/export', 'TripInterestsController@export');
         $api->resource('reservations', 'ReservationsController');
-        $api->post('reservations/export', 'ReservationsController@export');
+        // $api->post('reservations/export', 'ReservationsController@export');
         $api->put('reservations/{id}/restore', 'ReservationsController@restore');
         $api->resource('reservations.requirements', 'ReservationRequirementsController');
         $api->get('reservations/{reservations}/companions', 'CompanionsController@index');

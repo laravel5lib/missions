@@ -268,6 +268,7 @@ Vue.component('select-user', require('./components/select-user.vue'));
 Vue.component('alert-error', require('./components/alert-error.vue'));
 Vue.component('alert-success', require('./components/alert-success.vue'));
 Vue.component('datetime-formatted', require('./components/datetime-formatted.vue'));
+Vue.component('export-list', require('./components/ExportList.vue'));
 
 /**
  * Vue Strap Components

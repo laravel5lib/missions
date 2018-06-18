@@ -1028,6 +1028,7 @@ class Reservation extends Model
                     Filter::scope('ready'),
                     Filter::scope('funnel')
                 ])
-                ->allowedIncludes(['trip.group', 'passport', 'requirements']);
+                ->allowedIncludes(['trip.group', 'passport', 'requirements'])
+                ->with('priceables.cost');
     }
 }

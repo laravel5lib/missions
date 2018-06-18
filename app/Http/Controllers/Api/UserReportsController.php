@@ -6,6 +6,7 @@ use App\Http\Requests;
 use App\Models\v1\User;
 use App\Models\v1\Report;
 use Illuminate\Http\Request;
+use App\Exports\ReservationsExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -39,6 +40,43 @@ class UserReportsController extends Controller
             ->paginate(request()->get('per_page', 10));
 
         return $this->response->paginator($reports, new ReportTransformer);
+    }
+
+    public function create($type, $format, Request $request)
+    {
+        $filename = snake_case($request->input('filename', $type).'_'.time());
+
+        $location = 'export/reports/'.auth()->user()->id.'/'.$filename.'.'.$format;
+
+        $exportable = [
+            'reservations' => ReservationsExport::class,
+            'groups' => '',
+            'passengers' => '',
+            'itineraries' => '',
+            'flights' => ''
+        ];
+
+        if ((new $exportable[$type])->store($location, 's3')) {
+
+            $report = Report::create([
+                'name' => $filename,
+                'type' => $format,
+                'source' => $location,
+                'user_id' => auth()->user()->id
+            ]);
+
+            return response()->json([
+                'message' => 'Export created.', 
+                'data' => [
+                    'id' => $report->id,
+                    'name' => $report->name,
+                    'type' => $report->type,
+                    'source' => $report->source
+                ]
+            ], 201);
+        }
+
+        return response()->json(['message' => 'Unable to create export.'], 422);
     }
 
     /**

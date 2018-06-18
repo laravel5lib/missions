@@ -89,6 +89,11 @@
                     Showing {{ reservations.length || 0 }} of {{ pagination.total || 0 }} results
                 </em>
 
+                <export-list type="reservations" 
+                            :params="`filter[campaign]=${campaignId}&filter[group]=${groupId}&include=trip.group`"
+                            :filters="filters"
+                ></export-list>
+
             </div>
             <div class="panel-body" v-if="ui.allFilters">
                 <div class="row text-right">
@@ -316,7 +321,8 @@ import FilterSelect from '../components/FilterSelect';
 export default {
     props: {
         totals: Object, 
-        url: String
+        campaignId: String,
+        groupId: String,
     },
 
     components: {
@@ -464,6 +470,9 @@ export default {
     },
 
     computed: {
+        url() {
+            return `/reservations?filter[campaign]=${this.campaignId}&filter[group]=${this.groupId}&include=trip.group`
+        },
         registeredBetween() {
             return [
                     {value: `${this.startOfToday},${this.endOfToday}`, label: 'Today'},

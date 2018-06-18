@@ -90,6 +90,11 @@
                     Showing {{ reservations.length || 0 }} of {{ pagination.total || 0 }} results
                 </em>
 
+                <export-list type="reservations" 
+                            :params="`filter[campaign]=${campaignId}&include=trip.group`"
+                            :filters="filters"
+                ></export-list>
+
             </div>
             <div class="panel-body" v-if="ui.allFilters">
                 <div class="row text-right">

@@ -65,7 +65,7 @@
                                 <p class="text-center">{{ report.created_at | moment('lll') }}</p>
                             </div>
                             <div class="col-sm-2 hidden-xs">
-                                <p><i class="fa fa-file-excel-o"></i> {{ report.type.toUpperCase() }}</p>
+                                <p><i :class="{ 'fa fa-file-excel-o' : report.type === 'xlsx', 'fa fa-file-o' : report.type === 'csv'}"></i> {{ report.type.toUpperCase() }}</p>
                             </div>
                             <div class="col-sm-2 visible-xs">
                                 <p class="text-center"><i class="fa fa-file-excel-o"></i> {{ report.type.toUpperCase() }}</p>
@@ -89,7 +89,7 @@
         <admin-delete-modal :id="selectedReportId" 
                             resource="report" 
                             label="Delete Report Forever"
-                            redirect="/admin/reports">
+                            :redirect="`/${firstUrlSegment}/reports`">
         </admin-delete-modal>
 
         <modal :value="showDisclaimer" ok-text="Download" cancel-text="Cancel">

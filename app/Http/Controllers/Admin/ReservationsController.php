@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\v1\Trip;
 use App\Models\v1\Campaign;
+use Illuminate\Http\Request;
 use App\Models\v1\Reservation;
 use App\Models\v1\CampaignGroup;
 use App\Http\Controllers\Controller;

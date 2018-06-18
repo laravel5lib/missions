@@ -26,7 +26,8 @@
         <div class="col-md-10">
 
         <group-reservation-list 
-            url="/reservations?filter[campaign]={{ $campaign->id }}&filter[group]={{ $group->id }}&include=trip.group"
+            campaign-id="{{ $campaign->id }}"
+            group-id="{{ $group->id }}"
             :totals="{{ json_encode($totals) }}"
         ></group-reservation-list>
 

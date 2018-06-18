@@ -10,7 +10,6 @@ use Silber\Bouncer\Database\Role;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
 use App\Events\ReservationWasCreated;
-use App\Http\Requests\v1\ExportRequest;
 use App\Http\Resources\ReservationResource;
 use App\Http\Requests\v1\RequirementRequest;
 use App\Http\Requests\v1\ReservationRequest;
@@ -199,20 +198,5 @@ class ReservationsController extends Controller
             ->first(),
             new RequirementTransformer
         );
-    }
-
-    /**
-     * Export Reservations.
-     *
-     * @param ExportRequest $request
-     * @return mixed
-     */
-    public function export(ExportRequest $request)
-    {
-        $this->dispatch(new ExportReservations($request->all()));
-
-        return $this->response()->created(null, [
-            'message' => 'Report is being generated and will be available shortly.'
-        ]);
     }
 }

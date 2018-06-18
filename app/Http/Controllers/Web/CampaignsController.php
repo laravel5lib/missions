@@ -15,9 +15,11 @@ class CampaignsController extends Controller
 
     public function index()
     {
+        $campaigns = Campaign::public()->active()->get();
+
         $this->seo()->setTitle('Mission Trips');
 
-        return view('site.campaigns.index');
+        return view('site.campaigns.index', compact('campaigns'));
     }
 
     public function show($id)

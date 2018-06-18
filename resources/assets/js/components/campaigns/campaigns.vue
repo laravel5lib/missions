@@ -26,7 +26,7 @@
 				</a>
 				<div style="min-height:220px;" class="panel-body">
 					<h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;"><i
-							class="fa fa-map-marker"></i> {{campaign.country}}</h6>
+							class="fa fa-map-marker"></i> {{campaign.country.name }}</h6>
 					<a :href="campaign.page_url" role="button">
 						<h5 style="text-transform:capitalize;" class="text-primary">{{campaign.name}}</h5>
 					</a>

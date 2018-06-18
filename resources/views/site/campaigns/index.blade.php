@@ -14,7 +14,44 @@
 
     <hr class="divider inv xlg">
 
-    <campaigns></campaigns>
+    <div class="container">
+    <div class="row">
+        <div class="col-sm-offset-2 col-sm-8 col-xs-12">
+            <h4>Current Trips</h4>
+	        <hr class="divider">
+            @foreach($campaigns as $campaign)
+            
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a href="{{ url($campaign->slug->url) }}">
+                                    <img class="img-responsive" 
+                                            src="{{ image($campaign->getAvatar()->source).'?w=500' }}">
+                                </a>
+                                <hr class="divider inv visible-sm visible-xs">
+                            </div>
+                            <div class="col-md-8">
+                                <h4 class="media-heading">{{ $campaign->name }}</h4>
+                                <p><strong class="text-primary">
+                                    {{ $campaign->started_at->format('F d') }} - 
+                                    {{ $campaign->ended_at->format('F d, Y') }}
+                                </strong></p>
+                                <p><i class="fa fa-map-marker"></i> {{ country($campaign->country_code) }}</p>
+                                <hr class="divider">
+                                <p>{{ $campaign->short_desc }}</p>
+                                <a href="{{ url($campaign->slug->url) }}" class="text-primary"><strong>Learn More &raquo;</strong></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            @endforeach
+        </div>
+    </div>
+    </div>
+
+    <!-- <campaigns></campaigns> -->
 
     <hr class="divider inv xlg">
 

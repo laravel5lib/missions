@@ -61,7 +61,8 @@ class ReservationResource extends JsonResource
             'trip'                => new TripResource($this->whenLoaded('trip')),
             'passport'            => $this->whenLoaded('passport', function () {
                 return optional($this->passport()->first())->document;
-            })
+            }),
+            'trip_rep'      => $this->getRep()
         ];
     }
 }

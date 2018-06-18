@@ -42,7 +42,7 @@ class ReservationsController extends Controller
      */
     public function index(Request $request)
     {
-        $reservations = Reservation::getQuery()->paginate(25);
+        $reservations = Reservation::getQuery()->paginate($request->input('per_page', 25));
         
         return ReservationResource::collection($reservations);
     }

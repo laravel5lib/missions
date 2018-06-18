@@ -6,7 +6,7 @@
                 :cache-key="`missionaryList.admin.campaign.${campaignId}`"
     >
         <div class="panel panel-default" 
-             slot-scope="{ json:reservations, pagination, changePage, loading, addFilter, removeFilter, filters, sort }" style="border-top: 5px solid #f6323e"
+             slot-scope="{ json:reservations, pagination, changePage, changePerPage, loading, addFilter, removeFilter, filters, sort }" style="border-top: 5px solid #f6323e"
         >
             <div class="panel-heading">
                 <ul class="nav nav-pills nav-justified">
@@ -43,7 +43,7 @@
             <div class="panel-heading">
                 <form class="form-inline" style="display: inline">
                     <label>Per Page:</label>
-                    <select class="form-control input-sm" v-model="pagination.per_page">
+                    <select class="form-control input-sm" v-model="pagination.per_page" @change="changePerPage($event.target.value)">
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
@@ -255,12 +255,13 @@
                         </template>
                         <template v-if="view === 'mailing'">
                             <th v-if="!filters.filter.shirt_size">Shirt Size</th>
-                            <th>Country</th>
-                            <th>Zip Code</th>
-                            <th>State/Providence</th>
-                            <th>City</th>
                             <th>Address</th>
+                            <th>City</th>
+                            <th>State/Providence</th>
+                            <th>Zip Code</th>
+                            <th>Country</th>
                         </template>
+                        <th>Trip Rep</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -290,12 +291,13 @@
                         </template>
                         <template v-if="view === 'mailing'">
                             <td v-if="!filters.filter.shirt_size">{{ reservation.shirt_size }}</td>
-                            <td>{{ reservation.country_name }}</td>
-                            <td>{{ reservation.zip }}</td>
-                            <td>{{ reservation.state }}</td>
-                            <td>{{ reservation.city }}</td>
                             <td>{{ reservation.address }}</td>
+                            <td>{{ reservation.city }}</td>
+                            <td>{{ reservation.state }}</td>
+                            <td>{{ reservation.zip }}</td>
+                            <td>{{ reservation.country_name }}</td>
                         </template>
+                        <td>{{ reservation.trip_rep ? reservation.trip_rep.name : 'none' }}</td>
                     </tr>
                 </tbody>
             </table>

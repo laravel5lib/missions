@@ -94,6 +94,10 @@ export default {
             let params = $.extend({page: page}, this.filters);
             this.fetch(params);
         },
+        changePerPage(count) {
+            let params = $.extend({per_page: count}, this.filters);
+            this.fetch(params);
+        },
         saveState() {
             expiringStorage.set(this.storageKey, pick(this.$data, ['filters']), this.cacheLifetime);
         },
@@ -133,6 +137,7 @@ export default {
             removeFilter: this.removeFilter,
             fetch: this.fetch,
             changePage: this.changePage,
+            changePerPage: this.changePerPage,
             sortBy: this.sortBy
         })
     }

@@ -805,6 +805,19 @@ class Reservation extends Model
             return $subQuery->where('published', true);
         });
     }
+
+    public function scopeRep($query, $repId)
+    {
+        $query->where('rep_id', $repId)
+              ->orWhereHas('trip', function ($subQuery) use ($repId) {
+                    return $subQuery->where('rep_id', $repId);
+            });
+    }
+
+    public function getRep()
+    {
+        return $this->rep ?? $this->trip->rep;
+    }
     
     /**
      * Helper method to retrieve the user's avatar
@@ -1028,7 +1041,8 @@ class Reservation extends Model
                     Filter::scope('ready'),
                     Filter::scope('funnel'),
                     Filter::scope('current'),
-                    Filter::scope('past')
+                    Filter::scope('past'),
+                    Filter::scope('rep')
                 ])
                 ->allowedIncludes(['trip.group', 'trip.campaign', 'passport', 'requirements'])
                 ->with('priceables.cost');

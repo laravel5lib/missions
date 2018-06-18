@@ -108,12 +108,6 @@ import 'debug.addIndicators';
  */
 import swal from 'sweetalert';
 
-/**
- * Custom helper functions
- */
-import helpers from './utilities/Helpers';
-window.helpers = helpers;
-
 
 /**
  * AOS allows you to animate elements as you scroll down, and up. If you scroll back to

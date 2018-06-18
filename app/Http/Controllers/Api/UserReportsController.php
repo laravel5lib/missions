@@ -7,6 +7,7 @@ use App\Models\v1\User;
 use App\Models\v1\Report;
 use Illuminate\Http\Request;
 use App\Exports\FlightsExport;
+use App\Exports\InterestsExport;
 use App\Exports\PassengersExport;
 use App\Exports\ItinerariesExport;
 use App\Exports\ReservationsExport;
@@ -56,7 +57,8 @@ class UserReportsController extends Controller
             'groups' => '',
             'passengers' => PassengersExport::class,
             'itineraries' => ItinerariesExport::class,
-            'flights' => FlightsExport::class
+            'flights' => FlightsExport::class,
+            'interests' => InterestsExport::class
         ];
 
         if ((new $exportable[$type])->store($location, 's3')) {

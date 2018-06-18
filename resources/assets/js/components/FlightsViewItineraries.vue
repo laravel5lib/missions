@@ -66,6 +66,11 @@
             Showing {{ itineraries.length || 0 }} of {{ pagination.total || 0 }} results
         </em>
 
+        <export-list type="itineraries" 
+                    :params="`campaign=${campaignId}`"
+                    :filters="filters"
+        ></export-list>
+
     </div>
     <div class="panel-body" v-if="loading">
         <p class="lead text-center text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</p>

@@ -1,5 +1,5 @@
 <template>
-<fetch-json :url="`campaigns/${campaignId}/flights/passengers?segment=${segmentId}&include=flight-itinerary`" 
+<fetch-json :url="`campaigns/${campaignId}/flights/passengers?segment=${segmentId}&include=flight-itinerary,passport`" 
             ref="passengersList" 
             :parameters="{filter: {}, sort: 'surname'}"
             @filter:removed="removeActiveFilter"
@@ -89,6 +89,11 @@
         <em class="text-muted small">
             Showing {{ passengers.length || 0 }} of {{ pagination.total || 0 }} results
         </em>
+
+        <export-list type="passengers" 
+                    :params="`campaign=${campaignId}&segment=${segmentId}&include=flight-itinerary.flights,passport`"
+                    :filters="filters"
+        ></export-list>
     </div>
     <div class="panel-body" v-if="loading">
         <p class="lead text-center text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</p>
@@ -121,6 +126,8 @@
                         <th>Time</th>
                         <th>Flight</th>
                         <th>City</th>
+                        <th>Passport No.</th>
+                        <th>Passport Exp.</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -154,6 +161,10 @@
                             </strong>
                         </td>
                         <td>{{ passenger.flight.iata_code }}</td>
+                        <td>{{ passenger.passport ? passenger.passport.number : null }}</td>
+                        <td><template v-if="passenger.passport">
+                            {{ passenger.passport.expires_at | mFormat('ll') }}
+                        </template></td>
                     </tr>
                 </tbody>
             </table>

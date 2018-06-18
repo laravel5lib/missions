@@ -44,8 +44,18 @@ class CampaignGroup extends Pivot
 
     public function getCurrentRate()
     {
-        return $this->prices()->whereHas('cost', function ($cost) {
+        $rate = $this->prices()->whereHas('cost', function ($cost) {
             return $cost->whereType('incremental');
+        })->whereHas('payments', function ($q) {
+
+            return $q->whereDate('due_at', '>=', now());
+
+        })->orderBy('active_at')->first();
+
+        return $rate ?? $this->priceables()->whereHas('cost', function ($q) {
+
+            return $q->type('incremental');
+
         })->first();
     }
 

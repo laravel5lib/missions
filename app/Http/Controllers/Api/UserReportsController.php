@@ -6,6 +6,7 @@ use App\Http\Requests;
 use App\Models\v1\User;
 use App\Models\v1\Report;
 use Illuminate\Http\Request;
+use App\Exports\GroupsExport;
 use App\Exports\FlightsExport;
 use App\Exports\InterestsExport;
 use App\Exports\PassengersExport;
@@ -54,7 +55,7 @@ class UserReportsController extends Controller
 
         $exportable = [
             'reservations' => ReservationsExport::class,
-            'groups' => '',
+            'groups' => GroupsExport::class,
             'passengers' => PassengersExport::class,
             'itineraries' => ItinerariesExport::class,
             'flights' => FlightsExport::class,

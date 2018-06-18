@@ -108,6 +108,11 @@
                 Showing {{ groups.length || 0 }} of {{ pagination.total || 0 }} results
             </em>
 
+            <export-list type="groups" 
+                        :params="`campaign=${campaignId}`"
+                        :filters="filters"
+            ></export-list>
+
         </div>
         <div class="table-responsive">
         <table class="table" v-if="groups && groups.length">

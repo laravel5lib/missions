@@ -135,9 +135,10 @@ $('.launch-modal').on('click', function(e){
                   <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
                     <div class="panel-body text-center">
                       <hr class="divider inv">
-                      <img src="/images/coordinators/tools-icon.png" width="50px" height="50px">
-                      <h6 class="text-uppercase">More Coming Soon!</h6>
-                      <p style="margin-bottom:15px;" class="small hidden-xs">As the campaign progresses we'll be adding new print files, social media graphics, fundraising tutorials, and so much more. Our goal is to give you all the tools needed to succeed.</p>
+                      <img src="/images/coordinators/vision-doc-icon.png" width="50px" height="50px">
+                      <h6 class="text-uppercase">1N1D19 Vision Booklet</h6>
+                      <p class="small hidden-xs">Print ready booklet file ready to submit to your printer</p>
+                      <a href="{{ download_file('resources/coordinators/vision-packet-v2_final.pdf.zip') }}" class="btn btn-sm btn-primary-hollow">Download</a>
                       <hr class="divider inv">
                     </div>
                   </div>
@@ -185,7 +186,7 @@ $('.launch-modal').on('click', function(e){
                     <ul class="list-unstyled">
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;margin-bottom:0;" class="text-muted">May 23 at 4pm EST</h6>
                         <p class="text-uppercase" style="font-size:10px;margin-left:35px;"><a href="https://vimeo.com/271571861/8270ebaa44" target="_blank">Watch Meeting</a></p></li>
-                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">June 20 at 4pm EST</h6></li>
+                      <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">June 27 at 4pm EST</h6></li>
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 class="text-primary" style="display:inline-block;">No meeting in July</h6></li>
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">August 15 at 4pm EST</h6></li>
                       <li><img src="/images/coordinators/chat-icon.png" style="margin-right:5px;" width="25px" height="25px"> <h6 style="display:inline-block;">September 19 at 4pm EST</h6></li>

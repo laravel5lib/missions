@@ -93,7 +93,7 @@
                 <div class="panel">
                   <img class="img-responsive" src="images/about-mm/leadership-thumb.jpg" alt="">
                   <div class="panel-body">
-                    <h6 class="text-uppercase text-center">Leadership Centers</h6>
+                    <h6 class="text-uppercase text-center">Leadership Conferences</h6>
                   </div>
                 </div>
               </div><!-- end col -->

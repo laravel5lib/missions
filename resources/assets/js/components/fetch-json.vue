@@ -21,7 +21,10 @@ export default {
         return {
             json: [],
             loading: true,
-            pagination: {},
+            pagination: {
+                page: 0,
+                per_page: 25
+            },
             filters: this.parameters ? this.parameters : {}
         }
     },
@@ -88,10 +91,12 @@ export default {
             let params = $.extend({page: 1}, this.filters);
             this.fetch(params);
 
+            this.saveState();
+
             this.$forceUpdate();
         },
         changePage(page) {
-            let params = $.extend({page: page}, this.filters);
+            let params = $.extend({page: page, per_page: this.pagination.per_page}, this.filters);
             this.fetch(params);
         },
         changePerPage(count) {

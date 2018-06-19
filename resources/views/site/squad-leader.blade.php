@@ -15,7 +15,7 @@
 				<h2 class="text-center">Squad Leader Training</h2>
                 <hr class="divider red-small">
                 <hr class="divider inv sm">
-                <p class="text-center">Congratulations, you have been nominated to lead a squad in Nicaragua this summer. As an official "Squad Leader", you'll need to view the four-part training series with the Missions.Me Country Directors at your convenience.  All four parts will be viewable here.</p>
+                <p class="text-center">Congratulations, you have been nominated to lead a squad! As an official "Squad Leader", you'll need to view the four-part training series with the Missions.Me Country Directors at your convenience.  All four parts will be viewable here.</p>
                 <p class="text-center"><strong>It is imperative that you view these sessions as well as read the Squad Leader Manual PDF document which can be downloaded below.</strong></p>
 				<hr class="divider inv">
                 <div class="row">
@@ -35,7 +35,7 @@
 						<div class="panel panel-default">
 							<div class="video-outer">
 								<div class="video-inner">
-									<iframe src="https://player.vimeo.com/video/221800851?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+									<iframe src="https://player.vimeo.com/video/274123289?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 								</div><!-- end video-inner -->
 							</div><!-- end video-outer -->
 							<div class="panel-body text-center">
@@ -47,23 +47,11 @@
 						<div class="panel panel-default">
 							<div class="video-outer">
 								<div class="video-inner">
-									<iframe src="https://player.vimeo.com/video/222901667?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+									<iframe src="https://player.vimeo.com/video/274123281?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 								</div><!-- end video-inner -->
 							</div><!-- end video-outer -->
 							<div class="panel-body text-center">
 								<h6 class="text-uppercase">Squad Leader &middot; Session 2</h6>
-							</div><!-- end panel-body -->
-						</div><!-- end panel -->
-					</div><!-- end col -->
-					<div class="col-xs-12 col-sm-offset-3 col-sm-6">
-						<div class="panel panel-default">
-							<div class="video-outer">
-								<div class="video-inner">
-									<iframe src="https://player.vimeo.com/video/224147385?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-								</div><!-- end video-inner -->
-							</div><!-- end video-outer -->
-							<div class="panel-body text-center">
-								<h6 class="text-uppercase">Squad Leader &middot; Session 3</h6>
 							</div><!-- end panel-body -->
 						</div><!-- end panel -->
 					</div><!-- end col -->

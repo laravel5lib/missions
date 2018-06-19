@@ -12,11 +12,11 @@
                     To be Booked <span class="badge badge-default">{{ notBookedTotal }}</span>
                 </a>
             </li>
-            <li :class="{ 'active': flightList === 'flights-none'}">
+            <!-- <li :class="{ 'active': flightList === 'flights-none'}">
                 <a href="#">
                     No Flight <span class="badge badge-default">{{ noFlightTotal }}</span>
                 </a>
-            </li>
+            </li> -->
         </ul>
     </div>
     <keep-alive>

@@ -1,5 +1,5 @@
 <template>
-<fetch-json :url="`reservations?filter[campaign]=${campaignId}&filter[has_flight]=${false}&include=trip.group,passport&sort=surname`" ref="list" :parameters="{filter: {}}" @filter:removed="removeActiveFilter" :cache-key="`flightsNotBooked.campaign.${campaignId}`">
+<fetch-json :url="`reservations?filter[campaign]=${campaignId}&filter[has_flight]=${false}&include=trip.group,passport&sort=surname&per_page=100`" ref="list" :parameters="{filter: {}}" @filter:removed="removeActiveFilter" :cache-key="`flightsNotBooked.campaign.${campaignId}`">
     <div slot-scope="{ json:reservations, pagination, changePage, loading, addFilter, removeFilter, filters, sort }">
         <div class="panel-heading" v-if="!ui.booking">
             <div class="btn-group btn-group-sm">
@@ -13,15 +13,13 @@
                     >{{ selectedReservations.length }}
                     </span>
                 </button>
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :disabled="! selectedReservations.length">
+                <!-- <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :disabled="! selectedReservations.length">
                     <i class="fa fa-caret-down" style="padding-bottom: 4px"></i>
                     <span class="sr-only">Toggle Dropdown</span>
-                </button>
-                <ul class="dropdown-menu">
+                </button> -->
+                <!-- <ul class="dropdown-menu">
                     <li><a href="#">Add to No Flight</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Download</a></li>
-                </ul>
+                </ul> -->
             </div>
         </div>
         <div class="panel-heading" v-if="!ui.booking">

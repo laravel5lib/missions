@@ -85,8 +85,21 @@ class LeadTest extends TestCase
     {
         $lead = factory(Lead::class)->states('organization')->create([
             'content' => [
+                'campaign_of_interest' => '1Nation1Day',
+                'spoke_with_rep' => false,
                 'organization' => 'Acme',
-                'type' => 'business'
+                'type' => 'business',
+                'address_one' => '123 Main Street',
+                'address_two' => '',
+                'city' => 'Dana Pointe',
+                'state' => 'CA',
+                'zip' => '12345',
+                'country' => 'us',
+                'contact' => 'Joe',
+                'position' => 'CEO',
+                'phone_one' => 1234567890,
+                'phone_two' => 1234567890,
+                'email' => 'joe@hotmail.com' 
             ]
         ]);
 
@@ -97,8 +110,21 @@ class LeadTest extends TestCase
                     'id' => $lead->uuid,
                     'category_id' => 1,
                     'content' => [
+                        'campaign_of_interest' => '1Nation1Day',
+                        'spoke_with_rep' => false,
                         'organization' => 'Acme',
-                        'type' => 'business'
+                        'type' => 'business',
+                        'address_one' => '123 Main Street',
+                        'address_two' => '',
+                        'city' => 'Dana Pointe',
+                        'state' => 'CA',
+                        'zip' => '12345',
+                        'country' => 'us',
+                        'contact' => 'Joe',
+                        'position' => 'CEO',
+                        'phone_one' => 1234567890,
+                        'phone_two' => 1234567890,
+                        'email' => 'joe@hotmail.com'
                     ]
                 ]
             ]);

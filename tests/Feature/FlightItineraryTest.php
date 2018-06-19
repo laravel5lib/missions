@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\v1\Trip;
 use App\Models\v1\Flight;
+use App\Models\v1\Campaign;
 use App\Models\v1\Reservation;
 use App\Models\v1\FlightSegment;
 use App\Models\v1\FlightItinerary;
@@ -17,13 +18,15 @@ class FlightItineraryTest extends TestCase
 
     /** @test */
     public function gets_all_itineraries_for_a_campaign()
-    {
-        $reservation = factory(Reservation::class)->create();
+    {   
+        $campaign = factory(Campaign::class)->create();
         $itinerary = factory(FlightItinerary::class)->create();
-        $reservation->flight_itinerary_id = $itinerary->id;
-        $reservation->save();
+        $segment = factory(FlightSegment::class)
+            ->create(['campaign_id' => $campaign->id]);
+        $flight = factory(Flight::class)
+            ->create(['flight_itinerary_id' => $itinerary->id, 'flight_segment_id' => $segment->id]);
 
-        $this->json('GET', "/api/campaigns/{$reservation->trip->campaign_id}/flights/itineraries")
+        $this->json('GET', "/api/campaigns/{$campaign->id}/flights/itineraries")
              ->assertStatus(200)
              ->assertJsonStructure([
                  'data' => [
@@ -35,19 +38,20 @@ class FlightItineraryTest extends TestCase
     /** @test */
     public function searches_itineraries_by_record_locator()
     {
-        $trip = factory(Trip::class)->create();
-        
+        $campaign = factory(Campaign::class)->create();
+        $segment = factory(FlightSegment::class)->create(['campaign_id' => $campaign->id]);
+
         $otherItinerary = factory(FlightItinerary::class)->create(['record_locator' => 'FJ3N2C']);
-        $otherReservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
-        $otherReservation->flight_itinerary_id = $otherItinerary->id;
-        $otherReservation->save();
+        $otherFlight = factory(Flight::class)->create([
+            'flight_itinerary_id' => $otherItinerary->id, 'flight_segment_id' => $segment->id
+        ]);
 
-        $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
         $itinerary = factory(FlightItinerary::class)->create(['record_locator' => 'QX4R6M']);
-        $reservation->flight_itinerary_id = $itinerary->id;
-        $reservation->save();
+        $flight = factory(Flight::class)->create([
+            'flight_itinerary_id' => $itinerary->id, 'flight_segment_id' => $segment->id
+        ]);
 
-        $this->json('GET', "/api/campaigns/{$reservation->trip->campaign_id}/flights/itineraries?filter[record_locator]=QX")
+        $this->json('GET', "/api/campaigns/{$campaign->id}/flights/itineraries?filter[record_locator]=QX")
              ->assertStatus(200)
              ->assertJson([
                  'data' => [

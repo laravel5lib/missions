@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Http\Resources\FlightItineraryResource;
+use App\Http\Requests\CreateFlightItineraryRequest;
 
 class FlightItineraryController extends Controller
 {
@@ -30,7 +31,7 @@ class FlightItineraryController extends Controller
         return FlightItineraryResource::collection($itineraries);
     }
 
-    public function store($campaignId, Request $request)
+    public function store($campaignId, CreateFlightItineraryRequest $request)
     {
         DB::transaction(function () use ($request) {
             $itinerary = FlightItinerary::firstOrCreate([

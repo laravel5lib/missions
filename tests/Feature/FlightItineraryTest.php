@@ -103,6 +103,26 @@ class FlightItineraryTest extends TestCase
     }
 
     /** @test */
+    public function validates_request_to_create_itinerary()
+    {
+        $trip = factory(Trip::class)->create();
+
+        $this->json('POST', "/api/campaigns/{$trip->campaign_id}/flights/itineraries", [
+            'reservations' => 'invalid',
+            'flights' => [
+                [
+                    'date' => 'invalid',
+                ]
+            ]
+        ])
+        ->assertStatus(422)
+        ->assertJsonValidationErrors([
+            'type', 'record_locator', 'flights.0.flight_no', 'flights.0.date', 
+            'flights.0.time', 'flights.0.iata_code'
+        ]);
+    }
+
+    /** @test */
     public function deletes_an_itinerary_and_flights_and_removes_passengers()
     {
         $reservation = factory(Reservation::class)->create();

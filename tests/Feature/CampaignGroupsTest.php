@@ -53,5 +53,18 @@ class CampaignGroupsTest extends TestCase
             'group_id' => $group->group_id, 'campaign_id' => $group->campaign_id, 'status_id' => 2
         ]);
     }
+
+    /** @test */
+    public function removes_group_from_campaign()
+    {
+        $group = factory(CampaignGroup::class)->create();
+
+        $this->json('DELETE', "/api/campaigns/{$group->campaign_id}/groups/{$group->group_id}")
+             ->assertStatus(204);
+
+        $this->assertDatabaseMissing('campaign_group', [
+            'group_id' => $group->group_id, 'campaign_id' => $group->campaign_id
+        ]);
+    }
     
 }

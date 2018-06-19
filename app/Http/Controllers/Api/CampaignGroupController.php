@@ -97,8 +97,12 @@ class CampaignGroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($campaignId, $groupId)
     {
-        //
+        $campaign = Campaign::findOrFail($campaignId);
+
+        $campaign->groups()->detach($groupId);
+
+        return response()->json(['message' => 'Group removed.'], 204);
     }
 }

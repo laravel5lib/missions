@@ -69,7 +69,7 @@
                 <div class="col-xs-11">USE CAUTION! This is a destructive action that cannot be undone. This will disassociate the group from the campaign but also delete trips and drop reservations.</div>
             </div>
         </div>
-        <delete-form url="campaigns/{{ $group->campaign_id }}/groups/{{ $group->uuid }}" 
+        <delete-form url="campaigns/{{ $group->campaign_id }}/groups/{{ $group->group_id }}" 
                         redirect="/admin/campaigns/{{ $group->campaign_id }}/groups"
                         label="Enter the group name to remove it"
                         button="Remove"

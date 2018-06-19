@@ -1,3 +1,4 @@
+@unless(! $trip->priceables)
 @component('panel')
     @slot('body')
     <div class="row">
@@ -16,6 +17,7 @@
     </div>
     @endslot
 @endcomponent
+@endunless
 
 
 <fetch-json url="/trips/{{ $trip->id }}/prices">

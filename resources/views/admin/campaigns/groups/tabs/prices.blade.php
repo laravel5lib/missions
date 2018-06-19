@@ -11,6 +11,7 @@
     <template slot="message">A new price was added.</template>
 </alert-success>
 
+@unless(!$group->priceables)
 @component('panel')
     @slot('body')
     <div class="row">
@@ -29,6 +30,7 @@
     </div>
     @endslot
 @endcomponent
+@endunless
 
 @component('panel')
     @slot('title')

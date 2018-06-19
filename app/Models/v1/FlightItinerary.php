@@ -45,4 +45,14 @@ class FlightItinerary extends Model
             });
         });
     }
+
+    public function setRecordLocatorAttribute($value)
+    {
+        $this->attributes['record_locator'] = strtoupper($value);
+    }
+
+    public function getRecordLocatorAttribute($value)
+    {
+        return strtoupper($value);
+    }
 }

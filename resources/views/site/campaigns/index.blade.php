@@ -51,8 +51,6 @@
     </div>
     </div>
 
-    <!-- <campaigns></campaigns> -->
-
     <hr class="divider inv xlg">
 
     @component('section', ['class' => 'white-bg'])

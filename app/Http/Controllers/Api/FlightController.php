@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Models\v1\Flight;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\Filter;
+use App\Models\v1\FlightSegment;
+use App\Models\v1\FlightItinerary;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FlightRequest;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Http\Resources\FlightResource;
 
@@ -38,9 +41,19 @@ class FlightController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(FlightRequest $request)
     {   
-        Flight::create($request->all());
+        $segment = FlightSegment::whereUuid($request->input('flight_segment_id'))->firstOrFail();
+        $itinerary = FlightItinerary::whereUuid($request->input('flight_itinerary_id'))->firstOrFail();
+
+        Flight::create([
+            'flight_segment_id' => $segment->id,
+            'flight_itinerary_id' => $itinerary->id,
+            'flight_no' => $request->input('flight_no'),
+            'date' => $request->input('date'),
+            'time' => $request->input('time'),
+            'iata_code' => $request->input('iata_code')
+        ]);
 
         return response()->json(['message' => 'New flight created.'], 201);
     }
@@ -65,7 +78,7 @@ class FlightController extends Controller
      * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $uuid)
+    public function update(FlightRequest $request, $uuid)
     {
         $flight = Flight::whereUuid($uuid)->firstOrFail();
 

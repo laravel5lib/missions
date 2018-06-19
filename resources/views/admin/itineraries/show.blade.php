@@ -52,7 +52,10 @@
 
                 <div class="row">
                     <div class="col-xs-12">
-                        <itinerary-flight-list itinerary-id="{{ $itinerary->uuid }}"></itinerary-fight-list>
+                        <itinerary-flight-manager 
+                            itinerary-id="{{ $itinerary->uuid }}"
+                            campaign-id="{{ $campaign->id }}"
+                        ></itinerary-flight-manager>
                     </div>
                 </div>
 

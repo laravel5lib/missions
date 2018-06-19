@@ -82,7 +82,7 @@
                                     </a>
                                 </strong>
                             </td>
-                            <td>{{ flight.date | moment('ll') }}</td>
+                            <td>{{ flight.date | mFormat('ll') }}</td>
                             <td>{{ flight.time }}</td>
                             <td>{{ flight.iata_code }}</td>
                             <td>{{ flight.segment.name }}</td>

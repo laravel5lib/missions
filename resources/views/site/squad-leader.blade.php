@@ -20,9 +20,18 @@
 				<hr class="divider inv">
                 <div class="row">
                     <div class="col-xs-12 col-sm-10 col-sm-offset-1 text-center">
-                        <a class="btn btn-primary" href="{{ download_file('resources/SLmanual2017_dig.pdf') }}">
-                           	<i class="fa fa-file-pdf-o icon-left"></i> Squad Leader Manual
-                            <small>(2.4MB)</small>
+                        <a class="btn btn-primary" href="downloads/SLmanual2018_hond.pdf">
+                           	<i class="fa fa-file-pdf-o icon-left"></i> Honduras Squad Leader Manual
+                            <small>(6.4MB)</small>
+                        </a>
+                    </div>
+                </div>
+                <hr class="divider inv">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-sm-offset-1 text-center">
+                        <a class="btn btn-primary" href="downloads/SLmanual2018_dr.pdf">
+                           	<i class="fa fa-file-pdf-o icon-left"></i> Dominican Squad Leader Manual
+                            <small>(6.4MB)</small>
                         </a>
                     </div>
                 </div>

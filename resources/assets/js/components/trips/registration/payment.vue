@@ -182,15 +182,24 @@
             staticCosts(){
                 return this.$parent.tripCosts.static || [];
             },
-            incrementalCosts(){
+            incrementalCost(){
                 return this.$parent.tripCosts.incremental || [];
+            },
+            upfrontCosts(){
+                return this.$parent.tripCosts.upfront || [];
             },
             selectedOptions(){
                 return this.$parent.selectedOptions || null;
             },
             totalCosts(){
                 let amount = 0;
-                // add static costs if they exists
+                // add upfront costs if they exists
+				if(this.upfrontCosts && this.upfrontCosts.constructor === Array) {
+                    this.upfrontCosts.forEach(function (cost) {
+                        amount += parseFloat(cost.amount);
+                    });
+                }
+				// add additional costs if they exists
                 if(this.staticCosts && this.staticCosts.constructor === Array) {
                     this.staticCosts.forEach(function (cost) {
                         amount += parseFloat(cost.amount);
@@ -198,54 +207,21 @@
                 }
                 // add optional costs if they exists
                 if (this.selectedOptions && _.isObject(this.selectedOptions)) {
-//					this.selectedOptions.forEach(function (cost) {
                     amount += parseFloat(this.selectedOptions.amount);
-//					});
                 }
-
-                // add incremental costs if they exists
-                if (this.incrementalCosts && this.incrementalCosts.constructor === Array) {
-                    this.incrementalCosts.forEach(function (cost) {
-                        amount += parseFloat(cost.amount);
-                    });
-                }
+                
+				// add the registration cost
+				amount += parseFloat(this.incrementalCost.amount);
 
                 return amount;
             },
             upfrontTotal(){
                 let amount = 0;
-                // add static costs if they exists
-                if(this.staticCosts && this.staticCosts.constructor === Array) {
-                    this.staticCosts.forEach(function (cost) {
-                        cost.payments.data.forEach(function (payment) {
-                            if (payment.upfront) {
-                                amount += parseFloat(payment.amount_owed);
-                            }
-                        });
-
+                if(this.upfrontCosts && this.upfrontCosts.constructor === Array) {
+                    this.upfrontCosts.forEach(function (cost) {
+                        amount += parseFloat(cost.amount);
                     });
-                }
-                // add optional costs if they exists
-                if (this.selectedOptions && _.isObject(this.selectedOptions)) {
-                    //this.selectedOptions.forEach(function (cost) {
-                    this.selectedOptions.payments.data.forEach(function (payment) {
-                        if (payment.upfront) {
-                            amount += parseFloat(payment.amount_owed);
-                        }
-                    });
-                    //});
-                }
-
-                // add incremental costs if they exists
-                if (this.incrementalCosts && this.incrementalCosts.constructor === Array) {
-                    this.incrementalCosts.forEach(function (cost) {
-                        cost.payments.data.forEach(function (payment) {
-                            if (payment.upfront) {
-                                amount += parseFloat(payment.amount_owed);
-                            }
-                        });
-                    });
-                }
+                } 
                 this.$parent.upfrontTotal = amount;
                 return amount;
             },

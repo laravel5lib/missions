@@ -269,7 +269,7 @@
 			},
 			prepareFinalCosts(){
 			    let finalCosts = [];
-			    let unionCosts = _.union(this.tripCosts.incremental, [this.selectedOptions], this.tripCosts.static);
+			    let unionCosts = _.union(this.tripCosts.incremental, [this.selectedOptions], this.tripCosts.static, this.tripCosts.upfront);
 			    _.each(unionCosts, (cost) => {
 				    if (_.isObject(cost))
                         finalCosts.push(cost);
@@ -289,33 +289,33 @@
 		mounted(){
             let self = this;
             //get trip costs
-			let resource = this.$resource('trips{/id}', { include: 'costs:status(active),costs.payments,deadlines,requirements' });
+			let resource = this.$resource('trips{/id}', { include: 'priceables.cost,priceables.payments,requirements' });
 			resource.query({id: this.tripId}).then((trip) => {
 				this.trip = trip.data.data;
-				// deadlines, requirements, and companion_limit
-				this.deadlines =  trip.data.data.deadlines.data;
-				this.requirements =  trip.data.data.requirements.data;
+				// requirements, and companion_limit
+				this.requirements =  trip.data.data.requirements;
 				this.companion_limit = trip.data.data.companion_limit;
 
 				// filter costs by type
-				let optionalArr = [], staticArr = [], incrementalArr = [];
-				trip.data.data.costs.data.forEach(function (cost) {
-					switch (cost.type) {
-						case 'static':
-							staticArr.push(cost);
+				let optionalArr = [], staticArr = [], upfrontArr = [];
+				this.trip.prices.forEach(function (price) {
+					switch (price.cost.type) {
+						case 'Upfront':
+							upfrontArr.push(price);
 							break;
-						case 'incremental':
-							incrementalArr.push(cost);
+						case 'Additional':
+							staticArr.push(price);
 							break;
-						case 'optional':
-							optionalArr.push(cost);
+						case 'Rooming':
+							optionalArr.push(price);
 							break;
 					}
 				});
 				this.tripCosts = {
 					static: staticArr,
-					incremental: incrementalArr,
+					incremental: this.trip.current_rate,
 					optional: optionalArr,
+					upfront: upfrontArr,
 				}
 			});
 

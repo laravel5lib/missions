@@ -9,38 +9,15 @@ use App\TransferTransaction;
 use Illuminate\Http\Request;
 use App\Models\v1\Transaction;
 use Spatie\QueryBuilder\Filter;
-use App\Jobs\ExportTransactions;
 use App\Http\Controllers\Controller;
 use Spatie\QueryBuilder\QueryBuilder;
-use App\Http\Requests\v1\ExportRequest;
 use App\Http\Requests\TransactionRequest;
 use App\Http\Resources\TransactionResource;
 use Illuminate\Database\Eloquent\Collection;
 use App\Http\Transformers\v1\TransactionTransformer;
 
 class TransactionsController extends Controller
-{
-    /**
-     * @var Transaction
-     */
-    private $transaction;
-
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * TransactionsController constructor.
-     * @param Transaction $transaction
-     * @param Request $request
-     */
-    public function __construct(Transaction $transaction, Request $request)
-    {
-        $this->transaction = $transaction;
-        $this->request = $request;
-    }
-    
+{    
     /**
      * Get transactions
      *
@@ -60,21 +37,6 @@ class TransactionsController extends Controller
             ->paginate($request->input('per_page', 25));
         
         return TransactionResource::collection($transactions);
-    }
-
-    /**
-     * Export transactions.
-     *
-     * @param ExportRequest $request
-     * @return mixed
-     */
-    public function export(ExportRequest $request)
-    {
-        $this->dispatch(new ExportTransactions($request->all()));
-
-        return $this->response()->created(null, [
-            'message' => 'Report is being generated and will be available shortly.'
-        ]);
     }
 
     /**

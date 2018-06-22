@@ -15,7 +15,7 @@
 				<h3 style="color:#08384b;">July 21-29, 2018</h3>
 				<hr class="divider inv">
 				<h5 style="color:#08384b;">1Nation1Day was never the end, it was always the beginning.</h5>
-				<p data-aos="fade-up" style="color:#08384b;">In 2018, together we will take the next step in discipling nations by growing the platform of the local church, awakening the next generation, speaking prophetically to measurable transformation, fueling these movements and advancing the Kingdom of God.</p>
+				<p style="color:#08384b;">In 2018, together we will take the next step in discipling nations by growing the platform of the local church, awakening the next generation, speaking prophetically to measurable transformation, fueling these movements and advancing the Kingdom of God.</p>
 			</div><!-- end col -->
 		</div><!-- end row -->
 	</div>

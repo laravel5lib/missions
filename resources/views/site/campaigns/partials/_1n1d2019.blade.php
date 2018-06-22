@@ -34,8 +34,8 @@
 			<div class="col-sm-8 col-sm-offset-2 text-center">
 				<hr class="divider inv xlg">
 				<hr class="divider inv lg">
-				<h5 class="text-center text-uppercase" style="color:#052314;" data-aos="fade-up">5,000 Missionaries Gathered</h5>
-				<h1 class="text-center" style="color:#052314;font-family: 'Merriweather', serif;" data-aos="fade-up">To see the <span style="display: inline-block; border-bottom: 2px solid #ffa489;line-height: 1em;">salvation</span> and <span style="display: inline-block; border-bottom: 2px solid #ffa489;line-height: 1em;">transformation</span> of entire nations</h1>
+				<h5 class="text-center text-uppercase" style="color:#052314;">5,000 Missionaries Gathered</h5>
+				<h1 class="text-center" style="color:#052314;font-family: 'Merriweather', serif;">To see the <span style="display: inline-block; border-bottom: 2px solid #ffa489;line-height: 1em;">salvation</span> and <span style="display: inline-block; border-bottom: 2px solid #ffa489;line-height: 1em;">transformation</span> of entire nations</h1>
 				<img width="50px" src="../images/1n1d19/tri-rec.png">
 			</div><!-- end col -->
 		</div><!-- end row -->
@@ -47,12 +47,12 @@
 	<div class="content-section">
 		<div class="row">
 			<div class="col-sm-5">
-				<h1 style="color:#052314;font-family: 'Merriweather', serif;" data-aos="fade-up">Uniting For<br>Transformation</h1>
+				<h1 style="color:#052314;font-family: 'Merriweather', serif;">Uniting For<br>Transformation</h1>
 				<img width="50px" src="../images/1n1d19/tri-rec.png">
 				<hr class="divider inv">
-				<p data-aos="fade-up" style="line-height:1.9em;">Since the birth of this movement in 2013, 1Nation1Day has swept across three nations mobilizing over 8,000 international missionaries, reaching more than 2.5 million people face to face, and millions more through media. Together we stood in awe as entire nations encountered historic national reconciliation, measurable change and sustainable follow up.</p>
+				<p style="line-height:1.9em;">Since the birth of this movement in 2013, 1Nation1Day has swept across three nations mobilizing over 8,000 international missionaries, reaching more than 2.5 million people face to face, and millions more through media. Together we stood in awe as entire nations encountered historic national reconciliation, measurable change and sustainable follow up.</p>
 
-				<p data-aos="fade-up" style="line-height:1.9em;">Every nation is going to hear before Christ returns. We believe that the church carries the mantle and authority to expedite Christ’s return with each nation that hears His gospel.</p>
+				<p style="line-height:1.9em;">Every nation is going to hear before Christ returns. We believe that the church carries the mantle and authority to expedite Christ’s return with each nation that hears His gospel.</p>
 			</div><!-- end col -->
 			<div class="col-sm-6 col-sm-offset-1">
 				<hr class="divider inv xlg">
@@ -73,10 +73,10 @@
 				<img class="img-responsive" src="../images/1n1d19/stadium-2.png" alt="1Nation1Day Stadium Outreach">
 			</div><!-- end col -->
 			<div class="col-sm-5">
-				<h1 data-aos="fade-up" style="font-family: 'Merriweather', serif;">Experience History<br>Being Made</h1>
+				<h1 style="font-family: 'Merriweather', serif;">Experience History<br>Being Made</h1>
 				<img width="50px" src="../images/1n1d19/tri-rec.png">
 				<hr class="divider inv">
-				<p data-aos="fade-up" style="line-height:1.9em;">This isn't a normal missions trip - it’s 1Nation1Day. 5,000 passionate missionaries, over 360 teams holding over 5,400 outreaches, 15 stadium events in every major stadium around the country - we’d like to call it epic, but this is so much bigger.</p>
+				<p style="line-height:1.9em;">This isn't a normal missions trip - it’s 1Nation1Day. 5,000 passionate missionaries, over 360 teams holding over 5,400 outreaches, 15 stadium events in every major stadium around the country - we’d like to call it epic, but this is so much bigger.</p>
 			</div><!-- end col -->
 		</div><!-- end row -->
 	</div>

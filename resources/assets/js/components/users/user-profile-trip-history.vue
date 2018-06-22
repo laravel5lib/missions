@@ -1,7 +1,7 @@
 <template>
     <div style="position:relative;">
 		<spinner ref="spinner" global size="sm" text="Loading"></spinner>
-		<div class="panel panel-default" data-aos="fade-up">
+		<div class="panel panel-default">
             <div class="panel-heading">
 				<div class="row">
 					<div class="col-xs-8">

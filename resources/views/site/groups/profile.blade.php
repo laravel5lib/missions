@@ -34,7 +34,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-sm-4 col-xs-12">
-                <div class="panel panel-default profile-pic-panel" data-aos="fade-up">
+                <div class="panel panel-default profile-pic-panel">
                     <img src="{{ image($group->getAvatar()->source.'?w=400') }}" alt="{{ $group->name }}" class="img-responsive">
                     <div class="panel-body">
                         <h4>{{ $group->name }}</h4>

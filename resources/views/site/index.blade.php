@@ -91,15 +91,15 @@ $('.video-modal').on('hide.bs.modal', function(e) {
     <div class="row">
       <div class="col-md-8 col-md-offset-2 text-center">
         <div class="vid-bg-caption">
-          <h1 class="text-white text-hero" data-aos="fade-up">Where <span class="text-primary" data-aos="zoom-in" data-aos-delay="400">you</span> can change the world.</h1>
+          <h1 class="text-white text-hero">Where <span class="text-primary">you</span> can change the world.</h1>
           <hr class="divider inv">
-          <a href="{{ url('campaigns') }}" class="btn btn-primary hidden-xs" data-aos="fade-up" data-aos-delay="200">Go On A Trip</a>
-          <a href="{{ url('fundraisers') }}" class="btn btn-white-hollow hidden-xs" data-aos="fade-up" data-aos-delay="300">Support A Cause</a>
+          <a href="{{ url('campaigns') }}" class="btn btn-primary hidden-xs">Go On A Trip</a>
+          <a href="{{ url('fundraisers') }}" class="btn btn-white-hollow hidden-xs">Support A Cause</a>
           <div class="row visible-xs">
             <div class="col-xs-8 col-xs-offset-2">
-              <a href="{{ url('campaigns') }}" class="btn btn-primary btn-block" data-aos="fade-up" data-aos-delay="200">Go On A Trip</a>
+              <a href="{{ url('campaigns') }}" class="btn btn-primary btn-block">Go On A Trip</a>
               <hr class="divider inv visible-xs">
-              <a href="{{ url('fundraisers') }}" class="btn btn-white-hollow btn-block" data-aos="fade-up" data-aos-delay="300">Support A Cause</a>
+              <a href="{{ url('fundraisers') }}" class="btn btn-white-hollow btn-block">Support A Cause</a>
             </div>
           </div>
         </div>
@@ -129,13 +129,13 @@ $('.video-modal').on('hide.bs.modal', function(e) {
     <div class="content-section">
       <div class="row">
         <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 text-center">
-          <img data-aos="fade-up" class="img-responsive" src="../images/home/take-group.png">
-          <h1 data-aos="fade-up">Mobilize A Team</h1>
-          <hr data-aos="fade-up" class="divider red-small">
+          <img class="img-responsive" src="../images/home/take-group.png">
+          <h1>Mobilize A Team</h1>
+          <hr class="divider red-small">
           <hr class="divider inv">
-          <p class="large-line-height" data-aos="fade-up">Missions.Me produces the most exciting, highest impact team missions experiences in the world.  Let us provide your team a "once in a life-time” level outreach.</p>
+          <p class="large-line-height">Missions.Me produces the most exciting, highest impact team missions experiences in the world.  Let us provide your team a "once in a life-time” level outreach.</p>
           <hr class="divider inv">
-          <a data-aos="fade-up" href="{{ url('teams') }}" class="btn btn-info">Take Your Team</a>
+          <a href="{{ url('teams') }}" class="btn btn-info">Take Your Team</a>
         </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->
@@ -148,13 +148,13 @@ $('.video-modal').on('hide.bs.modal', function(e) {
       <div class="onenation-home-section">
         <div class="row">
           <div class="col-sm-6">
-            <img data-aos="fade-right" class="img-responsive img-rounded" src="../images/home/1nation1day.jpg">
+            <img class="img-responsive img-rounded" src="../images/home/1nation1day.jpg">
           </div><!-- end col -->
           <div class="col-sm-6 home-half-section">
-            <h1 class="dash-trailing" data-aos="fade-left">1Nation1Day</h1>
-            <p class="large-line-height large-type" data-aos="fade-left">We are now living in a new missions era.  The vision of 1Nation1Day is to unite the global church for the salvation and transformation of nations.</p>
+            <h1 class="dash-trailing">1Nation1Day</h1>
+            <p class="large-line-height large-type">We are now living in a new missions era.  The vision of 1Nation1Day is to unite the global church for the salvation and transformation of nations.</p>
             <hr class="divider inv">
-            <a href="/1nation1day" class="btn btn-info" data-aos="fade-left">Learn More</a>
+            <a href="/1nation1day" class="btn btn-info">Learn More</a>
           </div><!-- end col -->
         </div><!-- end row -->
       </div><!-- end content-section -->
@@ -166,14 +166,14 @@ $('.video-modal').on('hide.bs.modal', function(e) {
     <div class="content-section">
       <div class="row">
         <div class="col-sm-6 home-half-section">
-          <h1 class="dash-trailing" data-aos="fade-right">Angel House</h1>
-          <p class="large-line-height large-type" data-aos="fade-right">Our mission is to bring abandoned children from the slum to safety and into the loving arms of caretakers that will educate, love and raise them to become future leaders in their generation.</p>
+          <h1 class="dash-trailing">Angel House</h1>
+          <p class="large-line-height large-type">Our mission is to bring abandoned children from the slum to safety and into the loving arms of caretakers that will educate, love and raise them to become future leaders in their generation.</p>
           <hr class="divider inv">
-          <a href="https://angelhouse.me/" class="btn btn-info" data-aos="fade-right">Learn More</a>
+          <a href="https://angelhouse.me/" class="btn btn-info">Learn More</a>
         </div><!-- end col -->
         <hr class="divider inv lg visible-xs visible-sm">
         <div class="col-sm-6">
-          <img data-aos="fade-up" class="img-responsive img-rounded" src="../images/home/angel-house.jpg">
+          <img class="img-responsive img-rounded" src="../images/home/angel-house.jpg">
         </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->
@@ -191,12 +191,12 @@ $('.video-modal').on('hide.bs.modal', function(e) {
       <hr class="divider inv xlg">
       <hr class="divider inv xlg">
       <div class="col-md-6 col-md-offset-3 text-center">
-        <h1 class="home-college-header text-white" data-aos="fade-up">Missions.Me College</h1>
-        <hr class="divider red-small" data-aos="fade-up">
+        <h1 class="home-college-header text-white">Missions.Me College</h1>
+        <hr class="divider red-small">
         <hr class="divider inv">
-        <p class="large-line-height text-white" data-aos="fade-up">To create a movement of young leaders to <em>Live The Impossible</em> through world-class leadership training, innovative academic instruction, real-world experience, and global outreach opportunities.</p>
+        <p class="large-line-height text-white">To create a movement of young leaders to <em>Live The Impossible</em> through world-class leadership training, innovative academic instruction, real-world experience, and global outreach opportunities.</p>
         <hr class="divider inv">
-        <a href="{{ url('college') }}" class="btn btn-white-hollow" data-aos="fade-up">Learn More</a>
+        <a href="{{ url('college') }}" class="btn btn-white-hollow">Learn More</a>
         <hr class="divider inv xlg">
         <hr class="divider inv xlg">
         <hr class="divider inv xlg">
@@ -210,9 +210,9 @@ $('.video-modal').on('hide.bs.modal', function(e) {
     <div class="content-section">
       <div class="row">
         <div class="col-sm-12 text-center">
-          <h1 data-aos="zoom-in" data-aos-duration="500" data-aos-delay="100">Begin changing the world with us.</h1>
-          <a data-aos="zoom-in" data-aos-duration="500" data-aos-delay="200" href="{{ url('register') }}" class="btn btn-default btn-lg" style="background-color:#3e3e3e;border-color:#3e3e3e;">Get Started</a>
-          <a href="{{ url('donate') }}"><h6 data-aos="zoom-in" data-aos-duration="800" data-aos-delay="300" class="text-uppercase text-white">Or Donate</h6></a>
+          <h1>Begin changing the world with us.</h1>
+          <a href="{{ url('register') }}" class="btn btn-default btn-lg" style="background-color:#3e3e3e;border-color:#3e3e3e;">Get Started</a>
+          <a href="{{ url('donate') }}"><h6 class="text-uppercase text-white">Or Donate</h6></a>
         </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->

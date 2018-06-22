@@ -7,10 +7,10 @@
                 <h3 style="color:#08384b;">Three Nations, One Generation</h3>
                 <hr class="divider inv">
                 <h5 style="color:#08384b;">1Nation1Day is the moment that creates the movement.</h5>
-                <p data-aos="fade-up" style="color:#08384b;">
+                <p style="color:#08384b;">
                     It's a movement of young people following their dreams; teachers mentoring their students; the Body of Christ united across borders and denominations; pastors equiped; the chruch mobilized to lead; women empowered to stand for justice; millions encountering God!
                 </p>
-                <p data-aos="fade-up" style="color:#08384b;">
+                <p style="color:#08384b;">
                     <em>This is what you were made for. This is your mandate. This is what's next...</em>
                 </p>
             </div>

@@ -9,7 +9,7 @@
 <div id="page-wrap"><!-- page-wrap important for sticky footer -->
   @yield('content')
 </div>
-<!--<div class="interrupter-pop panel panel-default hidden-xs" data-aos="fade-up" id="yearendpopup">
+<!--<div class="interrupter-pop panel panel-default hidden-xs" id="yearendpopup">
 	<figure>
 		<img class="img-responsive" src="/images/donate/ye-2017/year-end-thumb.jpg" />
 	</figure>

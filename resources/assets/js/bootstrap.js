@@ -108,15 +108,6 @@ import 'debug.addIndicators';
  */
 import swal from 'sweetalert';
 
-
-/**
- * AOS allows you to animate elements as you scroll down, and up. If you scroll back to
- * top, elements will animate to it's previous state and are ready to animate again if
- * you scroll down.
- */
-window.AOS = require('aos');
-AOS.init();
-
 /**
  * Shepherd is a javascript library for guiding users through your app.
  * It uses Tether, another open source library,

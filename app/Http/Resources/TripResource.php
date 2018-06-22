@@ -43,10 +43,13 @@ class TripResource extends JsonResource
             'closed_at'       => optional($this->closed_at)->toIso8601String(),
             'created_at'      => $this->created_at->toIso8601String(),
             'updated_at'      => $this->updated_at->toIso8601String(),
+            'current_rate'    => $this->whenLoaded('priceables', function () {
+                return new PriceResource($this->getCurrentRate());
+            }),
             'prices'          => PriceResource::collection($this->whenLoaded('priceables')),
             'group'           => new GroupResource($this->whenLoaded('group')),
             'campaign'        => new CampaignResource($this->whenLoaded('campaign')),
-            // 'requirements'    => RequirementResource::collection($this->whenLoaded('requirements')),
+            'requirements'    => RequirementResource::collection($this->whenLoaded('requirements')),
             // 'rep'             => new RepresentativeResource($this->whenLoaded('rep'))
         ];
     }

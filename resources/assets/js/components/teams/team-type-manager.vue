@@ -70,11 +70,11 @@
 							<input type="text" class="form-control" name="name=" v-model="currentType.name" v-validate="'required'">
 						</div>
 						<div class="row">
-							<template v-for="(value, key) in currentType.rules">
-								<div class="col-sm-6"  v-error-handler="{ value: value, client: key, scope: 'type-modal' }">
+							<template v-for="(rule, key) in currentType.rules">
+								<div class="col-sm-6"  v-error-handler="{ value: rule, client: key, scope: 'type-modal' }">
 									<div class="form-group">
 										<label v-text="getRuleLabel(key)"></label>
-										<input type="number" class="form-control" v-model="currentType.rules[key]" :name="key" v-validate="'required'" :value="value" min="0">
+										<input type="number" class="form-control" v-model="currentType.rules[key]" :name="key" v-validate="'required'" min="0">
 									</div>
 								</div>
 							</template>

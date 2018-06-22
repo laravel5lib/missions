@@ -6,12 +6,15 @@ use App\CreditTransaction;
 use App\RefundTransaction;
 use App\DonationTransaction;
 use App\TransferTransaction;
+use Illuminate\Http\Request;
 use App\Models\v1\Transaction;
+use Spatie\QueryBuilder\Filter;
 use App\Jobs\ExportTransactions;
 use App\Http\Controllers\Controller;
-use Dingo\Api\Contract\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 use App\Http\Requests\v1\ExportRequest;
 use App\Http\Requests\TransactionRequest;
+use App\Http\Resources\TransactionResource;
 use Illuminate\Database\Eloquent\Collection;
 use App\Http\Transformers\v1\TransactionTransformer;
 
@@ -37,20 +40,26 @@ class TransactionsController extends Controller
         $this->transaction = $transaction;
         $this->request = $request;
     }
-
+    
     /**
-     * Get all transactions.
+     * Get transactions
      *
      * @param Request $request
-     * @return \Dingo\Api\Http\Response
+     * @return void
      */
     public function index(Request $request)
     {
-        $transactions = $this->transaction
-                             ->filter($request->all())
-                             ->paginate($request->get('per_page', 10));
-
-        return $this->response->paginator($transactions, new TransactionTransformer);
+        $transactions = QueryBuilder::for(Transaction::class)
+            ->allowedFilters([
+                Filter::exact('type'),
+                Filter::exact('amount'),
+                Filter::scope('donor_name'),
+                Filter::scope('fund_name')
+            ])
+            ->allowedIncludes(['fund', 'donor'])
+            ->paginate($request->input('per_page', 25));
+        
+        return TransactionResource::collection($transactions);
     }
 
     /**
@@ -76,9 +85,11 @@ class TransactionsController extends Controller
      */
     public function show($id)
     {
-        $transaction = $this->transaction->findOrFail($id);
+        $transaction = Transaction::findOrFail($id);
 
-        return $this->response->item($transaction, new TransactionTransformer);
+        $transaction->load(['fund', 'donor']);
+
+        return new TransactionResource($transaction);
     }
 
     /**

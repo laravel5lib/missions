@@ -74,7 +74,7 @@ class Transaction extends Model
      * @var array
      */
     protected $casts = [
-        'details' => 'array',
+        'details' => 'array'
     ];
 
     /**
@@ -142,5 +142,35 @@ class Transaction extends Model
     public function scopeTo($query, $date)
     {
         return $query->where('created_at', '<=', $date);
+    }
+    
+    /**
+     * Scope a query to only include transactions 
+     * with a donor matching the name.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $name
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeDonorName($query, $name)
+    {
+        return $query->whereHas('donor', function ($subQuery) use ($name) {
+            return $subQuery->whereRaw("concat(first_name, ' ', last_name) LIKE '%$name%'");
+        });
+    }
+
+    /**
+     * Scope a query to only include transactions 
+     * with a fund matching the name.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $name
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFundName($query, $name)
+    {
+        return $query->whereHas('fund', function ($subQuery) use ($name) {
+            return $subQuery->where('name', 'LIKE', "%$name%");
+        });
     }
 }

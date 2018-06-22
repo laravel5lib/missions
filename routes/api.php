@@ -39,6 +39,9 @@ Route::patch('campaigns/{campaignId}/flights/passengers', 'FlightPassengerContro
 Route::put('flights/itineraries/published', 'FlightItineraryPublicationController@update');
 Route::apiResource('flights', 'FlightController');
 
+// Transactions
+Route::apiResource('transactions', 'TransactionsController');
+
 // Reports
 Route::get('reports/create/{type}/{format}', 'UserReportsController@create')->middleware('auth:api');
 
@@ -163,8 +166,6 @@ $api->version('v1', [
         $api->put('funds/{id}/reconcile', 'FundsController@reconcile');
         $api->put('funds/{id}/restore', 'FundsController@restore');
         $api->get('funds/{id}/donors', 'FundDonorsController@index');
-        $api->resource('transactions', 'TransactionsController');
-        $api->post('transactions/export', 'TransactionsController@export');
         $api->resource('causes', 'ProjectCausesController');
         $api->post('causes/export', 'ProjectCausesController@export');
         $api->get('causes/{cause}/initiatives', 'ProjectInitiativesController@index');

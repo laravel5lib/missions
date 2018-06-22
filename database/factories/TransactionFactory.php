@@ -5,8 +5,12 @@
  */
 $factory->define(App\Models\v1\Transaction::class, function (Faker\Generator $faker) {
     return [
-        'fund_id' => $faker->uuid,
-        'donor_id' => $faker->uuid,
+        'fund_id' => function () {
+            return factory(App\Models\v1\Fund::class)->create()->id;
+        },
+        'donor_id' => function () {
+            return factory(App\Models\v1\Donor::class)->create()->id;
+        },
         'type' => 'donation',
         'amount' => $faker->randomNumber(2),
         'anonymous' => $faker->boolean(25),

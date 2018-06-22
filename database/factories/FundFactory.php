@@ -12,8 +12,12 @@ $factory->define(App\Models\v1\Fund::class, function (Faker\Generator $faker) {
         'balance' => $faker->randomNumber,
         'fundable_type' => 'reservations',
         'fundable_id' => $faker->uuid,
-        'class' => $faker->catchPhrase,
-        'item' => 'Missionary Donation'
+        'class_id' => function () {
+            return factory(App\Models\v1\AccountingClass::class)->create()->id;
+        },
+        'item_id' => function () {
+            return factory(App\Models\v1\AccountingItem::class)->create()->id;
+        }
     ];
 });
 
@@ -26,8 +30,6 @@ $factory->defineAs(App\Models\v1\Fund::class, 'trip', function (Faker\Generator 
     return array_merge($fund, [
         'fundable_type' => 'trips',
         'fundable_id' => $faker->uuid,
-        'class' => $faker->catchPhrase,
-        'item' => 'Missionary Donation'
     ]);
 });
 
@@ -40,8 +42,6 @@ $factory->defineAs(App\Models\v1\Fund::class, 'campaign', function (Faker\Genera
     return array_merge($fund, [
         'fundable_type' => 'campaigns',
         'fundable_id' => $faker->uuid,
-        'class' => $faker->catchPhrase,
-        'item' => 'General Donation'
     ]);
 });
 
@@ -54,8 +54,6 @@ $factory->defineAs(App\Models\v1\Fund::class, 'project', function (Faker\Generat
     return array_merge($fund, [
         'fundable_type' => 'projects',
         'fundable_id' => $faker->uuid,
-        'class' => $faker->catchPhrase,
-        'item' => $faker->catchPhrase
     ]);
 });
 
@@ -68,7 +66,5 @@ $factory->defineAs(App\Models\v1\Fund::class, 'cause', function (Faker\Generator
     return array_merge($fund, [
         'fundable_type' => 'causes',
         'fundable_id' => $faker->uuid,
-        'class' => $faker->catchPhrase,
-        'item' => 'General Donation'
     ]);
 });

@@ -4,7 +4,8 @@
                 @filter:removed="removeActiveFilter"
                 :cache-key="cacheKey+'.fetchJson'"
     >
-        <div class="panel panel-default" 
+        <div class="panel panel-default"
+             style="border-top: 5px solid #f6323e"
              slot-scope="{ json:transactions, changePage, addFilter, removeFilter, filters, pagination, changePerPage, sortBy, loading }"
         >
             <div class="panel-heading">
@@ -130,7 +131,7 @@
                     <tbody>
                         <tr v-for="(transaction, index) in transactions" :key="transaction.id">
                             <td>{{ index+1 }}</td>
-                            <td class="text-right" :class="{ 'text-danger' : transaction.amount < 0, 'text-info' : transaction.amount > 0 }">
+                            <td class="text-right" :class="{ 'text-danger' : transaction.amount < 0, 'text-success' : transaction.amount > 0 }">
                                 {{ currency(transaction.amount) }}
                             </td>
                             <td v-if="!filters.filter.type"><em>{{ transaction.type }}</em></td>

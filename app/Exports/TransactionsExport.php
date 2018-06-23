@@ -22,6 +22,7 @@ class TransactionsExport implements FromQuery, WithHeadings, WithMapping, Should
         return QueryBuilder::for(Transaction::class)
             ->allowedFilters([
                 'description',
+                Filter::exact('fund_id'),
                 Filter::exact('type'),
                 Filter::scope('amount'),
                 Filter::scope('donor_name'),

@@ -1,8 +1,8 @@
 <template>
-    <fetch-json url="transactions?include=fund.accounting-class,fund.accounting-item,donor" 
+    <fetch-json :url="url" 
                 :parameters="{ filter: {}, sort: '-created_at' }" 
                 @filter:removed="removeActiveFilter"
-                cache-key="admin.transactions.list"
+                :cache-key="cacheKey+'.fetchJson'"
     >
         <div class="panel panel-default" 
              slot-scope="{ json:transactions, changePage, addFilter, removeFilter, filters, pagination, changePerPage, sortBy, loading }"
@@ -173,6 +173,17 @@ import activeFilter from '../activeFilter.mixin';
 import FilterSearch from './FilterSearch';
 import FilterRadio from './FilterRadio';
 export default {
+    props: {
+        url: {
+            type: String,
+            default: 'transactions?include=fund.accounting-class,fund.accounting-item,donor'
+        },
+        cacheKey: {
+            type: String,
+            default: `${window.location.host}${window.location.pathname}.admin.transactionList`
+        }
+    },
+
     components: {
         'filter-search': FilterSearch,
         'filter-radio': FilterRadio

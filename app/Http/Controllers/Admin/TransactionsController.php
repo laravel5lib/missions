@@ -51,9 +51,9 @@ class TransactionsController extends Controller
      */
     public function edit($id)
     {
-        $this->authorize('view', Transaction::class);
+        $transaction = Transaction::findOrFail($id);
 
-        $transaction = $this->api->get('transactions/' . $id);
+        $this->authorize('view', $transaction);
 
         $this->seo()->setTitle('Edit Transaction');
 

@@ -6,16 +6,10 @@
             
             <transaction-form :fund-id="id" @transactionCreated="transactionCreated"></transaction-form>
 
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h5>Transactions</h5>
-                </div><!-- end panel-heading -->
-                <div class="panel-body">
-                    <admin-transactions-list :fund="id"
-                                             storage-name="AdminFundTransactionsConfig">
-                    </admin-transactions-list>
-                </div>
-            </div>
+            <admin-transactions-list 
+                :url="`transactions?filter[fund_id]=${id}&include=fund.accounting-class,fund.accounting-item,donor`" 
+                :cache-key="`admin.fund.${id}.transactionsList`"
+            ></admin-transactions-list>
         </div>
 
     </section>

@@ -20,7 +20,6 @@ Vue.component('donations-list', require('./components/reservations/donations-lis
 Vue.component('reconcile-fund', require('./components/reconcile-fund.vue'));
 Vue.component('admin-donors-list', require('./components/financials/donors/admin-donors-list.vue'));
 Vue.component('admin-funds-list', require('./components/financials/funds/admin-funds-list.vue'));
-Vue.component('admin-transactions-list', require('./components/financials/transactions/admin-transactions-list.vue'));
 Vue.component('donor-form', require('./components/financials/donors/donor-form.vue'));
 Vue.component('refund-form', require('./components/financials/transactions/refund-form.vue'));
 Vue.component('transaction-delete', require('./components/financials/transactions/transaction-delete.vue'));
@@ -74,6 +73,7 @@ Vue.component('admin-group-create', require('./components/groups/admin-group-cre
 Vue.component('admin-group-edit', require('./components/groups/admin-group-edit.vue'));
 Vue.component('admin-group-delete', require('./components/groups/admin-group-delete.vue'));
 Vue.component('admin-group-managers', require('./components/groups/admin-group-managers.vue'));
+Vue.component('admin-transactions-list', require('./components/AdminTransactionList.vue'));
 
 /**
  * Campaign and Trip Components

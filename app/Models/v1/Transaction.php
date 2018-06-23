@@ -173,4 +173,41 @@ class Transaction extends Model
             return $subQuery->where('name', 'LIKE', "%$name%");
         });
     }
+
+    public function scopeAmount($query, $amount)
+    {
+        return $query->where('amount', $amount*100);
+    }
+
+    public function scopeDonorEmail($query, $email)
+    {
+        return $query->whereHas('donor', function ($subQuery) use ($email) {
+            return $subQuery->where('email', 'LIKE', "%$email%");
+        });
+    }
+
+    public function scopePaymentMethod($query, $method)
+    {
+        return $query->where('details->type', $method);
+    }
+
+    public function scopeCreatedBetween($query, ...$dates)
+    {
+        return $query->whereDate('created_at', '>=', $dates[0])
+              ->whereDate('created_at', '<=', $dates[1]);
+    }
+
+    public function scopeAccountingClass($query, $class)
+    {
+        return $query->whereHas('fund.accountingClass', function ($query) use ($class) {
+            return $query->where('name', 'LIKE', "%$class%");
+        });
+    }
+
+    public function scopeAccountingItem($query, $item)
+    {
+        return $query->whereHas('fund.accountingItem', function ($query) use ($item) {
+            return $query->where('name', 'LIKE', "%$item%");
+        });
+    }
 }

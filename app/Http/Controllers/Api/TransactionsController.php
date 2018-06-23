@@ -28,13 +28,21 @@ class TransactionsController extends Controller
     {
         $transactions = QueryBuilder::for(Transaction::class)
             ->allowedFilters([
+                'description',
                 Filter::exact('type'),
-                Filter::exact('amount'),
+                Filter::scope('amount'),
                 Filter::scope('donor_name'),
-                Filter::scope('fund_name')
+                Filter::scope('donor_email'),
+                Filter::scope('fund_name'),
+                Filter::scope('payment_method'),
+                Filter::scope('created_between'),
+                Filter::scope('accounting_class'),
+                Filter::scope('accounting_item')
             ])
-            ->allowedIncludes(['fund', 'donor'])
-            ->paginate($request->input('per_page', 25));
+            ->allowedIncludes(['fund.accounting-class', 'fund.accounting-item', 'donor'])
+            ->defaultSort('-created_at')
+            ->allowedSorts('type', 'amount', 'created_at')
+            ->paginate($request->input('per_page', 50));
         
         return TransactionResource::collection($transactions);
     }

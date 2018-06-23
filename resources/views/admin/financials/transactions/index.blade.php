@@ -15,14 +15,7 @@
             @include('admin.partials._nav_donations')
         </div>
         <div class="col-sm-10">
-            @component('panel')
-                @slot('title')
-                    <h5>All Transactions</h5>
-                @endslot
-                @slot('body')
-                    <admin-transactions-list></admin-transactions-list>
-               @endslot
-            @endcomponent
+            <admin-transactions-list></admin-transactions-list>
         </div>
     </div>
 </div>

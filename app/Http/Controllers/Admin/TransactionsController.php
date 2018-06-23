@@ -21,13 +21,9 @@ class TransactionsController extends Controller
     {
         $this->authorize('view', Transaction::class);
 
-        $transactions = $this->api->get('transactions?page=' . $request->get('page', 1));
-
-        $transactions->setPath('/admin/transactions');
-
         $this->seo()->setTitle('Transactions');
 
-        return view('admin.financials.transactions.index', compact('transactions'));
+        return view('admin.financials.transactions.index');
     }
 
     /**

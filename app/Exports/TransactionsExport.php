@@ -21,12 +21,20 @@ class TransactionsExport implements FromQuery, WithHeadings, WithMapping, Should
     {
         return QueryBuilder::for(Transaction::class)
             ->allowedFilters([
+                'description',
                 Filter::exact('type'),
-                Filter::exact('amount'),
+                Filter::scope('amount'),
                 Filter::scope('donor_name'),
-                Filter::scope('fund_name')
+                Filter::scope('donor_email'),
+                Filter::scope('fund_name'),
+                Filter::scope('payment_method'),
+                Filter::scope('created_between'),
+                Filter::scope('accounting_class'),
+                Filter::scope('accounting_item')
             ])
-            ->with(['fund', 'donor']);
+            ->with(['fund.accounting-class, fund.accountin-item', 'donor'])
+            ->defaultSort('-created_at')
+            ->allowedSorts('type', 'amount', 'created_at');
     }
 
     public function headings(): array
@@ -63,13 +71,14 @@ class TransactionsExport implements FromQuery, WithHeadings, WithMapping, Should
             $transaction->type,
             $transaction->amountInDollars(),
             isset($transaction->details['type']) ? $transaction->details['type'] : null,
-            optional($transaction->accountingClass)->name,
-            optional($transaction->accountingItem)->name,
+            optional($transaction->fund->accountingClass)->name,
+            optional($transaction->fund->accountingItem)->name,
             $transaction->description,
             optional($transaction->fund)->name,
             $transaction->anonymous ? 'Yes' : 'No',
             optional($transaction->donor)->first_name,
             optional($transaction->donor)->last_name,
+            optional($transaction->donor)->company,
             optional($transaction->donor)->email,
             optional($transaction->donor)->phone,
             optional($transaction->donor)->address,

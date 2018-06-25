@@ -6,6 +6,7 @@ use App\Http\Requests;
 use App\Models\v1\Campaign;
 use App\Jobs\ExportCampaigns;
 use Spatie\QueryBuilder\Filter;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -99,7 +100,9 @@ class CampaignsController extends Controller
     {
         $campaign = Campaign::findOrFail($id);
 
-        $campaign->delete();
+        DB::transaction(function () use ($campaign) {
+            $campaign->delete();
+        });
 
         return $this->response->noContent();
     }

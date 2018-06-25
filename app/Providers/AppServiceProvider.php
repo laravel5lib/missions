@@ -2,12 +2,16 @@
 
 namespace App\Providers;
 
+use App\Models\v1\Trip;
 use League\Glide\Server;
+use App\Models\v1\Campaign;
 use App\TransactionHandler;
 use Laravel\Horizon\Horizon;
 use App\Models\v1\Reservation;
 use Laravel\Passport\Passport;
+use App\Observers\TripObserver;
 use League\Glide\ServerFactory;
+use App\Observers\CampaignObserver;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use App\Observers\ReservationObserver;
@@ -25,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Campaign::observe(CampaignObserver::class);
+        Trip::observe(TripObserver::class);
         Reservation::observe(ReservationObserver::class);
 
         Relation::morphMap([

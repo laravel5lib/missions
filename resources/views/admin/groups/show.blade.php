@@ -12,14 +12,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xs-12 col-md-2">
-            <!-- Nav tabs -->
-            <ul class="nav nav-pills nav-stacked" role="tablist">
-                <li role="presentation" class="active"><a href="#details" aria-controls="home" role="tab" data-toggle="tab">Details</a></li>
-                <li role="presentation"><a href="#trips" aria-controls="profile" role="tab" data-toggle="tab">Trips</a></li>
-            </ul>
-        </div>
-        <div class="col-xs-12 col-md-7">
+        <div class="col-xs-12 col-md-7 col-md-offset-2">
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="details">
                     <div class="row">

@@ -136,7 +136,7 @@ export default {
     getReservations(search, loading) {
         loading(true);
         var that = this;
-        this.$http.get('reservations?campaign='+this.campaignId+'&groups[]='+this.groupId+'&search='+search+'&per_page=5&ignore[]=' + this.reservationId).then((response) => {
+        this.$http.get('reservations?filter[campaign]='+this.campaignId+'&filter[group]='+this.groupId+'&filter[search]='+search+'&per_page=5&filter[ignore]=' + this.reservationId).then((response) => {
             this.reservations = _.chain(response.data.data).reject(function(reservation) {
                 return _.chain(that.companions).pluck('id').contains(reservation.id).value();
             }).map(function(reservation) {

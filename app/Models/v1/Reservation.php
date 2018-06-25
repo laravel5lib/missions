@@ -813,6 +813,17 @@ class Reservation extends Model
                     return $subQuery->where('rep_id', $repId);
             });
     }
+    
+    public function scopeSearch($query, $search)
+    {
+        return $query->whereRaw("CONCAT(given_names,' ',surname) LIKE '%$search%'")
+            ->orWhere('email', 'LIKE', "%$search%");
+    }
+
+    public function scopeIgnore($query, $id)
+    {
+        return $query->where('id', '<>', $id);
+    }
 
     public function getRep()
     {
@@ -1042,7 +1053,9 @@ class Reservation extends Model
                     Filter::scope('funnel'),
                     Filter::scope('current'),
                     Filter::scope('past'),
-                    Filter::scope('rep')
+                    Filter::scope('rep'),
+                    Filter::scope('search'),
+                    Filter::scope('ignore')
                 ])
                 ->allowedIncludes(['trip.group', 'trip.campaign', 'passport', 'requirements'])
                 ->with('priceables.cost');

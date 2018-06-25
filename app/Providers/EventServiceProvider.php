@@ -41,6 +41,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\LeadCreated' => [
             'App\Listeners\SendNewLeadNotification'
+        ],
+        'App\Events\GroupRemoved' => [
+            'App\Listeners\DeleteGroupTrips'
         ]
     ];
 

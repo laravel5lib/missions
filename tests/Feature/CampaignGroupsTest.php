@@ -3,8 +3,10 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\v1\Trip;
 use App\Models\v1\Group;
 use App\Models\v1\Campaign;
+use App\Models\v1\Reservation;
 use App\Models\v1\CampaignGroup;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -55,9 +57,11 @@ class CampaignGroupsTest extends TestCase
     }
 
     /** @test */
-    public function removes_group_from_campaign()
+    public function removes_group_from_campaign_deletes_trips_and_drops_reservations()
     {
         $group = factory(CampaignGroup::class)->create();
+        $trip = factory(Trip::class)->create(['campaign_id' => $group->campaign_id, 'group_id' => $group->group_id]);
+        $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
 
         $this->json('DELETE', "/api/campaigns/{$group->campaign_id}/groups/{$group->group_id}")
              ->assertStatus(204);
@@ -65,6 +69,9 @@ class CampaignGroupsTest extends TestCase
         $this->assertDatabaseMissing('campaign_group', [
             'group_id' => $group->group_id, 'campaign_id' => $group->campaign_id
         ]);
+
+        $this->assertNotNull($trip->fresh()->deleted_at);
+        $this->assertNotNull($reservation->fresh()->deleted_at);
     }
     
 }

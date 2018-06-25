@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\v1\Campaign;
+use App\Events\GroupRemoved;
 use Illuminate\Http\Request;
 use App\Models\v1\CampaignGroup;
 use App\Http\Controllers\Controller;
@@ -102,6 +103,8 @@ class CampaignGroupController extends Controller
         $campaign = Campaign::findOrFail($campaignId);
 
         $campaign->groups()->detach($groupId);
+
+        event(new GroupRemoved($campaignId, $groupId));
 
         return response()->json(['message' => 'Group removed.'], 204);
     }

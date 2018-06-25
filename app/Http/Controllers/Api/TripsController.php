@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Trip;
 use App\Jobs\ExportTrips;
 use App\Jobs\ApplyGroupPricing;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TripResource;
 use Dingo\Api\Contract\Http\Request;
@@ -97,7 +98,10 @@ class TripsController extends Controller
     {
         $trip = Trip::getById($id);
         
-        $trip->delete();
+        DB::transaction(function () use ($trip) {
+            $trip->reservations()->delete();
+            $trip->delete();
+        });
 
         return response()->json([], 204);
     }

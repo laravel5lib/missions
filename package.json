@@ -59,6 +59,7 @@
     ]
   },
   "dependencies": {
+    "aos": "^2.3.2",
     "countdown": "^2.6.0",
     "moment-countdown": "0.0.3",
     "sweetalert": "^2.0.6",

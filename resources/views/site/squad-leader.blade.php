@@ -38,7 +38,6 @@
                 <hr class="divider inv lg">
             </div><!-- end col -->
         </div><!-- end row -->
-		<div class="row">
 				<div class="row">
 					<div class="col-xs-12 col-sm-6">
 						<div class="panel panel-default">
@@ -64,10 +63,42 @@
 							</div><!-- end panel-body -->
 						</div><!-- end panel -->
 					</div><!-- end col -->
+					<div class="col-xs-12 col-sm-6">
+						<div class="panel panel-default">
+							<div>
+								<div style="background: #f5f5f5;">
+									<div style="min-height: 315px; display: flex; align-items: center; justify-content: center;">
+										<h1 class="text-muted">COMING SOON</h1>
+									</div>
+								</div><!-- end video-inner -->
+							</div><!-- end video-outer -->
+							<div class="panel-body text-center">
+								<h6 class="text-uppercase">Squad Leader &middot; Session 3</h6>
+							</div><!-- end panel-body -->
+						</div><!-- end panel -->
+					</div><!-- end col -->
+					<div class="col-xs-12 col-sm-6">
+						<div class="panel panel-default">
+							<div>
+								<div style="background: #f5f5f5;">
+									<div style="min-height: 315px; display: flex; align-items: center;">
+										<div class="text-center text-muted" style="padding: 5px">
+											<h2>LIVE ON ZOOM</h2>
+											<h5>Monday July 16 at 9pm eastern</h5>
+											<p>Link to Join Call: <a href="https://zoom.us/j/155334666">https://zoom.us/j/155334666</a></p>
+											<p>Be sure to attend to get last minute details and ask questions about being a Squad Leader!</p>
+										</div>
+									</div>
+								</div><!-- end video-inner -->
+							</div><!-- end video-outer -->
+							<div class="panel-body text-center">
+								<h6 class="text-uppercase">Squad Leader &middot; Session 4</h6>
+							</div><!-- end panel-body -->
+						</div><!-- end panel -->
+					</div><!-- end col -->
 				</div><!-- end row -->
 			</div><!-- end col -->
 		</div><!-- end row -->
-	</div>
 	</div><!-- end container -->
 </div><!-- end white-bg -->
 @endsection

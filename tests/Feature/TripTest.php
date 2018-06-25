@@ -273,6 +273,7 @@ class TripTest extends TestCase
 
         $trip = factory(Trip::class)->create();
         $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
+        $otherReservation = factory(Reservation::class)->create();
 
         $this->json('DELETE', "/api/trips/$trip->id")
              ->assertStatus(204);
@@ -281,6 +282,7 @@ class TripTest extends TestCase
         $this->assertDatabaseHas('reservations', ['id' => $reservation->id]);
         $this->assertNotNull($trip->fresh()->deleted_at);
         $this->assertNotNull($reservation->fresh()->deleted_at);
+        $this->assertNull($otherReservation->fresh()->deleted_at);
     }
     
 }

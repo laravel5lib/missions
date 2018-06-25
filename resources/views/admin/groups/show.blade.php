@@ -63,7 +63,7 @@
                                             <pre class="text-strike">http://missions.me/{{ $group->slug->url }}</pre>
                                         @endif
                                         <label>Trip Interest Form</label>
-                                        <pre><a href="/{{ $group->slug->url }}">http://missions.me/{{ $group->slug->url }}/signup</a></pre>
+                                        <pre><a href="/{{ $group->slug->url }}/signup">http://missions.me/{{ $group->slug->url }}/signup</a></pre>
                                     @endslot
                                 @endcomponent
                             </div>

@@ -11,9 +11,14 @@ class TripType
      * @var array
      */
     protected static $types = [
-        'FUL' => 'Full Week',
-        'SRT' => 'Short Trip',
-        'MED' => 'Medical'
+        'ministry' => 'Ministry',
+        'family' => 'Family',
+        'international' => 'International',
+        'media' => 'Media',
+        'medical' => 'Medical',
+        'leader' => 'Leader',
+        'sports' => 'Sports',
+        'water' => 'Water'
     ];
 
     /**
@@ -27,15 +32,15 @@ class TripType
     }
 
     /**
-     * Get a single type by id
+     * Get a single type by string
      *
-     * @param $id
+     * @param string $string
      * @return array
      */
-    public static function get($id)
+    public static function get($string)
     {
-        $result = array_where(static::all(), function ($value, $key) use ($id) {
-            return $key === strtoupper($id);
+        $result = array_where(static::all(), function ($value, $key) use ($string) {
+            return $key === strtolower($string);
         });
 
         return $result;

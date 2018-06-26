@@ -1,3 +1,5 @@
+@inject('types', App\Utilities\v1\TripType)
+
 @extends('layouts.admin')
 
 @section('content')
@@ -66,15 +68,7 @@
                 @slot('body')
                 <div class="row">
                     <div class="col-sm-6">
-                        <input-select name="type" v-model="form.type" :options="{
-                            'ministry': 'Ministry',
-                            'family': 'Family',
-                            'international': 'International',
-                            'media': 'Media',
-                            'medical': 'Medical',
-                            'leader': 'Leader',
-                            'sports': 'Sports',
-                        }">
+                        <input-select name="type" v-model="form.type" :options="{{ json_encode($types->all()) }}">
                             <label slot="label">Trip Type</label>
                         </input-select>
                     </div>

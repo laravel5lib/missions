@@ -22,10 +22,19 @@ class FlightRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {
+    {   
+        if ($this->isMethod('post')) {
+            return [
+                'flight_itinerary_id' => 'required|exists:flight_itineraries,uuid',
+                'flight_segment_id' => 'required|exists:flight_segments,uuid',
+                'flight_no' => 'required|string',
+                'date' => 'required|date',
+                'time' => 'required',
+                'iata_code' => 'required|max:10'
+            ];
+        }
+
         return [
-            'flight_itinerary_id' => 'required|exists:flight_itineraries,uuid',
-            'flight_segment_id' => 'required|exists:flight_segments,uuid',
             'flight_no' => 'required|string',
             'date' => 'required|date',
             'time' => 'required',

@@ -13,9 +13,9 @@
         <template slot="confirm">Continue</template>
     </alert-success>
 
-    <ajax-form method="post" action="/fundraisers" :hidden-values="{{ $fundraiser }}">
+    <ajax-form method="post" action="/fundraisers" :initial="{{ $fundraiser }}">
 
-    <template slot-scope="props">
+    <template slot-scope="{ form }">
 
     <div class="container">
         <div class="row">
@@ -26,12 +26,12 @@
                     </div>
                     <div class="panel-body">
 
-                        <input-text name="name">
+                        <input-text name="name" v-model="form.name">
                             <label slot="label">Title</label>
                             <span class="help-block" slot="help-text">Give your fundraiser a name.</span>
                         </input-text>
 
-                        <input-text name="url">
+                        <input-text name="url" v-model="form.url">
                             <label slot="label">Page Link</label>
                             <span class="input-group-addon" slot="prefix">{{ url('/') }}/</span>
                             <span class="help-block" slot="help-text">Provide a link to share access to your fundraising page.</span>

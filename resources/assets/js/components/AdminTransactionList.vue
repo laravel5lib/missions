@@ -1,6 +1,7 @@
 <template>
     <fetch-json :url="url" 
                 :parameters="{ filter: {}, sort: '-created_at' }" 
+                ref="list"
                 @filter:removed="removeActiveFilter"
                 :cache-key="cacheKey+'.fetchJson'"
     >
@@ -294,6 +295,11 @@ export default {
     },
 
     mounted() {
+        let that = this;
+        this.$root.$on('refreshTransactions', function () {
+            that.$refs.list.fetch();
+        });
+
         this.filterConfiguration.created_between.options = this.createdBetween;
 
         var previousState = this.restoreState();

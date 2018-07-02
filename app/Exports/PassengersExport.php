@@ -82,13 +82,13 @@ class PassengersExport implements FromCollection, WithHeadings, WithMapping, Sho
         })->first();
 
         return [
-            $flight->flightSegment->name,
+            optional($flight->flightSegment)->name,
             $passenger->surname,
             $passenger->given_names,
             $passenger->trip->group->name,
             $passenger->trip->type,
-            $passenger->flightItinerary->type,
-            $passenger->flightItinerary->record_locator,
+            optional($passenger->flightItinerary)->type,
+            optional($passenger->flightItinerary)->record_locator,
             $flight->date->toDateString(),
             $flight->time,
             $flight->flight_no,

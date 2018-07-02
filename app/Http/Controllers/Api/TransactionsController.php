@@ -112,7 +112,7 @@ class TransactionsController extends Controller
      */
     private function getTransactionHandler()
     {
-        switch ($this->request->get('type')) {
+        switch (request()->get('type')) {
             case 'donation':
                 return app()->make(DonationTransaction::class);
                 break;

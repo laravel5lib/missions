@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use Illuminate\Http\Request;
 use Spatie\QueryBuilder\Filter;
 use App\Models\v1\FlightItinerary;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -17,9 +18,16 @@ class ItinerariesExport implements FromQuery, WithHeadings, WithMapping, ShouldA
 {
     use Exportable;
 
+    protected $campaignId;
+
+    public function __construct(Request $request)
+    {
+        $this->campaignId = $request->input('campaign');
+    }
+
     public function query()
     {
-        $query = FlightItinerary::forCampaign(request()->input('campaign'));
+        $query = FlightItinerary::forCampaign($this->campaignId);
         
         $itineraries = QueryBuilder::for($query)
             ->allowedFilters([

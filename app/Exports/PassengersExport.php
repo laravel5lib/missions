@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use Illuminate\Http\Request;
 use App\Models\v1\Reservation;
 use Spatie\QueryBuilder\Filter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -17,10 +18,17 @@ class PassengersExport implements FromCollection, WithHeadings, WithMapping, Sho
 {
     use Exportable;
 
+    protected $request;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request->all();
+    }
+
     public function collection()
     {
-        $segment = request()->input('segment');
-        $campaignId = request()->input('campaign');
+        $segment = $this->request['segment'] ?? null;
+        $campaignId = $this->request['campaign'] ?? null;
 
         $query = Reservation::whereHas('trip', function ($trip) use ($campaignId) {
             return $trip->where('campaign_id', $campaignId);
@@ -76,9 +84,10 @@ class PassengersExport implements FromCollection, WithHeadings, WithMapping, Sho
     public function map($passenger): array
     {
         $passport = optional($passenger->passport()->first())->document;
+        $segment = $this->request['segment'] ?? null;
 
-        $flight = $passenger->flightItinerary->flights()->whereHas('flightSegment', function ($query) {
-            return $query->whereUuid(request()->input('segment'));
+        $flight = $passenger->flightItinerary->flights()->whereHas('flightSegment', function ($query) use ($segment) {
+            return $query->whereUuid($segment);
         })->first();
 
         return [

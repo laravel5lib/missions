@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\v1\Campaign;
+use Illuminate\Http\Request;
 use Spatie\QueryBuilder\Filter;
 use Spatie\QueryBuilder\QueryBuilder;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -17,12 +18,19 @@ class GroupsExport implements FromCollection, WithHeadings, WithMapping, ShouldA
 {
     use Exportable;
 
+    protected $request;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request->all();
+    }
+
     public function collection()
     {
-        $search = request()->get('search');
-        $hasPublishedTrips = request()->get('hasPublishedTrips');
-        $status = request()->get('status');
-        $campaignId = request()->get('campaign');
+        $search = $this->request['search'] ?? null;
+        $hasPublishedTrips = $this->request['hasPublishedTrips'] ?? null;
+        $status = $this->request['status'] ?? null;
+        $campaignId = $this->request['campaign'] ?? null;
 
         $groups = Campaign::findOrFail($campaignId)
             ->groups()

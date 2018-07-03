@@ -64,7 +64,7 @@ class UserReportsController extends Controller
             'transactions' => TransactionsExport::class
         ];
 
-        if ((new $exportable[$type])->store($location, 's3')) {
+        if ((new $exportable[$type]($request))->store($location, 's3')) {
 
             $report = Report::create([
                 'name' => $filename,

@@ -28,6 +28,7 @@
                                       :options="{
                                           undecided: 'Undecided',
                                           converted: 'Converted',
+                                          unresponsive: 'No Response',
                                           declined: 'Declined'
                                       }"
                         >

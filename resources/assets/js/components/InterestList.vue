@@ -22,6 +22,12 @@
                             Converted <span class="badge badge-default">{{ totals.converted }}</span>
                         </a>
                     </li>
+                    <li :class="{ 'active' : filters.filter.status === 'unresponsive' }">
+                        <a role="button" @click="addFilter('status', 'unresponsive')">
+                            <i class="fa fa-minus-circle text-warning"></i> 
+                            No Response <span class="badge badge-default">{{ totals.unresponsive }}</span>
+                        </a>
+                    </li>
                     <li :class="{ 'active' : filters.filter.status === 'declined' }">
                         <a role="button" @click="addFilter('status', 'declined')">
                             <i class="fa fa-times-circle text-danger"></i> 

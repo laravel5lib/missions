@@ -17,6 +17,7 @@ class TripInterestsController extends Controller
         $totals = [
             'undecided' => $interests->where('status', 'undecided')->count(),
             'converted' => $interests->where('status', 'converted')->count(),
+            'unresponsive' => $interests->where('status', 'unresponsive')->count(),
             'declined' => $interests->where('status', 'declined')->count()
         ];
         

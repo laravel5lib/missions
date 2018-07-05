@@ -43,6 +43,8 @@ class Region extends Model
 
         $regionalMissionaries = $this->members()->count();
 
+        if ($allMissionaries == 0) return 0;
+
         return round(($regionalMissionaries / $allMissionaries) * 100);
     }
 }

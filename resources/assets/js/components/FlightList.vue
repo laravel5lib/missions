@@ -82,7 +82,7 @@ export default {
 </script>
 <style>
     tr.selected, tr:hover {
-        background-color: #fcf8e3;
+        background-color: #fcf8e3 !important;
     }
     th, td {
         white-space: nowrap;

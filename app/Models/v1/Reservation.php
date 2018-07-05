@@ -842,6 +842,34 @@ class Reservation extends Model
         return $query->has('companions', '>=', $count);
     }
 
+    /**
+     * Scope query to reservations having incomplete task
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $task
+     * @return void
+     */
+    public function scopeIncompleteTask($query, $task)
+    {
+        return $query->whereHas('todos', function ($subQuery) use ($task) {
+            return $subQuery->where('task', $task)->whereNull('completed_at');
+        });
+    }
+
+    /**
+     * Scope query to reservations having completed task
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $task
+     * @return void
+     */
+    public function scopeCompleteTask($query, $task)
+    {
+        return $query->whereHas('todos', function ($subQuery) use ($task) {
+            return $subQuery->where('task', $task)->whereNotNull('completed_at');
+        });
+    }
+
     public function getRep()
     {
         return $this->rep ?? $this->trip->rep;
@@ -1075,7 +1103,9 @@ class Reservation extends Model
                     Filter::scope('search'),
                     Filter::scope('ignore'),
                     Filter::scope('squads_count'),
-                    Filter::scope('companions_count')
+                    Filter::scope('companions_count'),
+                    Filter::scope('incomplete_task'),
+                    Filter::scope('complete_task')
                 ])
                 ->allowedIncludes(['trip.group', 'trip.campaign', 'passport', 'requirements', 'companion-reservations'])
                 ->with('priceables.cost')

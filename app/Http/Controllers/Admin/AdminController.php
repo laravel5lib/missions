@@ -20,8 +20,8 @@ class AdminController extends Controller
     {
         SEOMeta::setTitle('Admin Dashboard');
         $users = User::count();
-        $reservations = Reservation::count();
-        $campaigns = Campaign::count();
+        $reservations = Reservation::current()->count();
+        $campaigns = Campaign::where('ended_at', '>', now())->count();
         $groups = Group::where('status', 'approved')->count();
         $donations = Transaction::where('type', 'donation')->count();
         $donors = Donor::count();

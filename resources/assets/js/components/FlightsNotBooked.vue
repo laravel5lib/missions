@@ -112,7 +112,7 @@
             <p class="lead text-center text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</p>
         </div>
         <div class="table-responsive" v-if="!loading && !ui.booking">
-            <table class="table" v-if="reservations && reservations.length">
+            <table class="table table-condensed table-striped" v-if="reservations && reservations.length">
                 <thead>
                     <tr class="active">
                         <th>

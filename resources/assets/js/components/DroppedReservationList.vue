@@ -1,7 +1,7 @@
 <template>
     <fetch-json :url="`reservations?filter[dropped]=true&filter[campaign]=${campaignId}&include=trip.group`" 
                 ref="list" 
-                :parameters="{filter: {}}" 
+                :parameters="{filter: {}, per_page: 50}" 
                 @filter:removed="removeActiveFilter"
                 :cache-key="`admin.droppped.reservations.${campaignId}`"
     >
@@ -85,7 +85,7 @@
                 <p class="lead text-center text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</p>
             </div>
             <div class="table-responsive" v-if="!loading">
-            <table class="table" v-if="reservations && reservations.length">
+            <table class="table table-condensed table-striped" v-if="reservations && reservations.length">
                 <thead>
                     <tr class="active">
                         <th>#</th>
@@ -236,7 +236,7 @@ export default {
 
 <style>
     tr.selected, tr:hover {
-        background-color: #fcf8e3;
+        background-color: #fcf8e3 !important;
     }
     th, td {
         white-space: nowrap;

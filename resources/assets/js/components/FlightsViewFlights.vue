@@ -68,7 +68,7 @@
         <p class="lead text-center text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</p>
     </div>
     <div class="table-responsive" v-if="!loading">
-            <table class="table" v-if="flights && flights.length">
+            <table class="table table-condensed table-striped" v-if="flights && flights.length">
                 <thead>
                     <tr class="active">
                         <th @click="sortBy('flight_no')" style="cursor: pointer">

@@ -76,7 +76,7 @@
         <p class="lead text-center text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</p>
     </div>
     <div class="table-responsive" v-if="!loading && !ui.edit">
-        <table class="table" v-if="itineraries && itineraries.length">
+        <table class="table table-condensed table-striped" v-if="itineraries && itineraries.length">
             <thead>
                 <tr class="active">
                     <th><input type="checkbox" 

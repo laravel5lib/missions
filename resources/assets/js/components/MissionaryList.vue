@@ -1,5 +1,5 @@
 <template>
-    <fetch-json :url="`reservations?filter[campaign]=${campaignId}&include=trip.group`" 
+    <fetch-json :url="`reservations?filter[campaign]=${campaignId}&include=trip.group&per_page=50`" 
                 ref="list" 
                 :parameters="{filter: {}}" 
                 @filter:removed="removeActiveFilter"
@@ -223,6 +223,19 @@
                                 >+ Registered</a>
                             </li>
                         </ul>
+                        <label>Filter By Task</label>
+                        <ul class="list-unstyled">
+                            <li>
+                                <a type="button" 
+                                @click="openFilterModal(filterConfiguration.incomplete_task)"
+                                >+ Incomplete</a>
+                            </li>
+                            <li>
+                                <a type="button" 
+                                @click="openFilterModal(filterConfiguration.complete_task)"
+                                >+ Complete</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
@@ -231,7 +244,7 @@
                 <p class="lead text-center text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</p>
             </div>
             <div class="table-responsive" v-if="!loading">
-            <table class="table" v-if="reservations && reservations.length">
+            <table class="table table-condensed table-striped" v-if="reservations && reservations.length">
                 <thead>
                     <tr class="active">
                         <th>#</th>
@@ -487,7 +500,27 @@ export default {
                     title: 'Registered', 
                     field: 'registered_between',
                     options: []
-                }
+                },
+                incomplete_task: {
+                    component: 'filter-select',
+                    title: 'Incomplete Task',
+                    field: 'incomplete_task',
+                    ajax: {
+                        url: `todos?type=reservations&unique=true&per_page=200`, // old api
+                        value: 'task',
+                        label: 'task'
+                    }
+                },
+                complete_task: {
+                    component: 'filter-select',
+                    title: 'Complete Task',
+                    field: 'complete_task',
+                    ajax: {
+                        url: `todos?type=reservations&unique=true&per_page=200`, // old api
+                        value: 'task',
+                        label: 'task'
+                    }
+                },
             }
         }
     },
@@ -542,7 +575,7 @@ export default {
 
 <style>
     tr.selected, tr:hover {
-        background-color: #fcf8e3;
+        background-color: #fcf8e3 !important;
     }
     th, td {
         white-space: nowrap;

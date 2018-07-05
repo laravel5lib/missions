@@ -96,7 +96,7 @@
                 <p class="lead text-center text-muted"><i class="fa fa-spinner fa-spin fa-fw"></i> Loading</p>
             </div>
             <div class="table-responsive" v-if="!loading">
-            <table class="table" v-if="interests && interests.length">
+            <table class="table table-condensed table-striped" v-if="interests && interests.length">
                 <thead>
                     <tr class="active">
                         <th>#</th>
@@ -212,10 +212,10 @@ export default {
     computed: {
         url() {
             if (this.groupId) {
-                return `interests?filter[campaign]=${this.campaignId}&filter[group]=${this.groupId}&include=trip.group`;
+                return `interests?filter[campaign]=${this.campaignId}&filter[group]=${this.groupId}&include=trip.group&per_page=50`;
             }
 
-            return `interests?filter[campaign]=${this.campaignId}&include=trip.group`
+            return `interests?filter[campaign]=${this.campaignId}&include=trip.group&per_page=50`
         },
         receivedBetween() {
             return [
@@ -262,7 +262,7 @@ export default {
 
 <style>
     tr.selected, tr:hover {
-        background-color: #fcf8e3;
+        background-color: #fcf8e3 !important;
     }
     th, td {
         white-space: nowrap;

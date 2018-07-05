@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\v1\Todo;
 use App\Models\v1\Trip;
 use App\Models\v1\User;
 use App\Models\v1\Reservation;
@@ -264,6 +265,38 @@ class ReservationFilterTest extends TestCase
                     ],
                     'meta' => [
                         'total' => 1
+                    ]
+                ]);
+    }
+
+    /** @test */
+    public function filter_reservations_by_incomplete_task()
+    {
+        factory(Todo::class, 2)->create(['task' => 'sent t-shirt', 'completed_at' => null]);
+        factory(Todo::class, 3)->create(['task' => 'sent t-shirt', 'completed_at' => now()->subDay()]);
+        factory(Todo::class, 4)->create(['task' => 'welcome email', 'completed_at' => null]);
+
+        $this->json('GET', "/api/reservations?filter[incomplete_task]=sent+t-shirt")
+             ->assertStatus(200)
+             ->assertJson([
+                    'meta' => [
+                        'total' => 2
+                    ]
+                ]);
+    }
+
+    /** @test */
+    public function filter_reservations_by_complete_task()
+    {
+        factory(Todo::class, 2)->create(['task' => 'sent t-shirt', 'completed_at' => null]);
+        factory(Todo::class, 3)->create(['task' => 'sent t-shirt', 'completed_at' => now()->subDay()]);
+        factory(Todo::class, 4)->create(['task' => 'welcome email', 'completed_at' => null]);
+
+        $this->json('GET', "/api/reservations?filter[complete_task]=sent+t-shirt")
+             ->assertStatus(200)
+             ->assertJson([
+                    'meta' => [
+                        'total' => 3
                     ]
                 ]);
     }

@@ -902,8 +902,7 @@ class Reservation extends Model
      */
     public function drop()
     {
-        $this->archiveFund()
-             ->removeFromSquads();
+        $this->archiveFund();
 
         $this->delete();
     }

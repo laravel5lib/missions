@@ -5,11 +5,13 @@ namespace App\Models\v1;
 use Carbon\Carbon;
 use App\UuidForKey;
 use App\ItemizedPricing;
+use App\Models\v1\Squad;
 use App\Models\v1\Payment;
 use App\Traits\HasPricing;
 use App\Traits\Rewardable;
 use App\TransferReservation;
 use Conner\Tagging\Taggable;
+use App\Models\v1\SquadMember;
 use App\Utilities\v1\TeamRole;
 use EloquentFilter\Filterable;
 use Spatie\QueryBuilder\Filter;
@@ -146,14 +148,11 @@ class Reservation extends Model
     /**
      * Team squads the reservation is assigned to.
      *
-     * @return BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
      */
-    public function squads()
+    public function squadMemberships()
     {
-        return $this->belongsToMany(TeamSquad::class, 'team_members')
-                    ->has('team')
-                    ->withPivot('leader')
-                    ->withTimestamps();
+        return $this->hasMany(SquadMember::class);
     }
 
     /**
@@ -825,6 +824,24 @@ class Reservation extends Model
         return $query->where('id', '<>', $id);
     }
 
+    public function scopeSquadsCount($query, $count)
+    {
+        if ($count == 0) {
+            return $query->doesntHave('squadMemberships');
+        }
+
+        return $query->has('squadMemberships', '>=', $count);
+    }
+
+    public function scopeCompanionsCount($query, $count)
+    {
+        if ($count == 0) {
+            return $query->doesntHave('companions');
+        }
+
+        return $query->has('companions', '>=', $count);
+    }
+
     public function getRep()
     {
         return $this->rep ?? $this->trip->rep;
@@ -1030,6 +1047,7 @@ class Reservation extends Model
                 ->allowedFilters([
                     'surname', 'given_names', 'email', 'phone_one', 'phone_two',
                     'address', 'city', 'zip', 'state', 'trip_id', 'user_id',
+                    Filter::exact('id'),
                     Filter::exact('gender'),
                     Filter::exact('status'),
                     Filter::exact('shirt_size'),
@@ -1055,9 +1073,12 @@ class Reservation extends Model
                     Filter::scope('past'),
                     Filter::scope('rep'),
                     Filter::scope('search'),
-                    Filter::scope('ignore')
+                    Filter::scope('ignore'),
+                    Filter::scope('squads_count'),
+                    Filter::scope('companions_count')
                 ])
-                ->allowedIncludes(['trip.group', 'trip.campaign', 'passport', 'requirements'])
-                ->with('priceables.cost');
+                ->allowedIncludes(['trip.group', 'trip.campaign', 'passport', 'requirements', 'companion-reservations'])
+                ->with('priceables.cost')
+                ->withCount('companions');
     }
 }

@@ -22,12 +22,25 @@ Route::prefix('campaigns')->group(function () {
     Route::get('create', 'CampaignsController@create');
     Route::get('{id}/edit', 'CampaignsController@edit');
     Route::get('{id}/trips/create', 'TripsController@create');
+    // Reservations
     Route::get('{campaignId}/reservations/missionaries', 'ReservationsController@index');
     Route::get('{campaignId}/reservations/dropped', 'ReservationsController@dropped');
+    // Flights
     Route::get('{campaignId}/reservations/flights', 'FlightController@index');
-    Route::resource('{campaignId}/reservations/interests', 'TripInterestsController');
     Route::get('{campaign}/itineraries/{itinerary}', 'FlightItineraryController@show');
     Route::get('{campaign}/itineraries/{itinerary}/edit', 'FlightItineraryController@edit');
+    // Squads
+    Route::get('{campaignId}/reservations/squads', 'SquadController@index');
+    Route::get('{campaignId}/reservations/squads/create', 'SquadController@create');
+    Route::get('{campaignId}/reservations/squads/{squad}', 'SquadController@show');
+    Route::get('{campaignId}/reservations/squads/{squad}/edit', 'SquadController@edit');
+    // Regions
+    Route::get('{campaignId}/regions/create', 'RegionController@create');
+    Route::get('{campaignId}/regions/{region}', 'RegionController@show');
+    Route::get('{campaignId}/regions/{region}/edit', 'RegionController@edit');
+    // Interests
+    Route::resource('{campaignId}/reservations/interests', 'TripInterestsController');
+    // Campaign details
     Route::get('{id}/{tab?}', 'CampaignsController@show');
     Route::get('{id}/costs/{cost}', 'CampaignCostController@show');
 });

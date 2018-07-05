@@ -129,7 +129,7 @@
                             <td>{{ index+1 }}</td>
                             <td>
                                 <strong>
-                                    <a :href="`/dashboard/reservations/${passenger.id}/squads`">
+                                    <a :href="`/dashboard/reservations/${passenger.id}/travel`">
                                         {{ passenger.surname }}
                                     </a>
                                 </strong>

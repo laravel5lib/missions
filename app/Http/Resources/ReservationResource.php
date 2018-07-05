@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Http\Resources\TripResource;
+use App\Http\Resources\CompanionResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ReservationResource extends JsonResource
@@ -62,7 +63,9 @@ class ReservationResource extends JsonResource
             'passport'            => $this->whenLoaded('passport', function () {
                 return optional($this->passport()->first())->document;
             }),
-            'trip_rep'      => $this->getRep()
+            'trip_rep'      => $this->getRep(),
+            'companions_count' => $this->companions_count,
+            'companions'    => CompanionResource::collection($this->whenLoaded('companionReservations'))
         ];
     }
 }

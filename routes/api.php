@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+// Campaigns
 Route::apiResource('campaigns/{campaignId}/groups', 'CampaignGroupController');
 Route::apiResource('campaigns/{campaignId}/costs', 'CampaignCostController')->middleware('auth:api');
 Route::apiResource('campaign-groups/{groupId}/prices', 'CampaignGroupPriceController');
@@ -21,6 +22,8 @@ Route::get('campaigns/{campaignId}/groups/{groupId}/prices', function($campaignI
     $group = \App\Models\v1\CampaignGroup::whereCampaignId($campaignId)->whereGroupId($groupId)->firstOrFail();
     return redirect('/api/campaign-groups/'.$group->uuid.'/prices');
 });
+
+// Trips
 Route::apiResource('trips/{tripId}/prices', 'TripPriceController');
 
 // Reservations
@@ -29,6 +32,10 @@ Route::delete('reservations/{reservationId}/prices/lock', 'ReservationPriceLockC
 Route::apiResource('reservations/{reservationId}/prices', 'ReservationPriceController');
 Route::post('reservations/{id}/transfer', 'ReservationTransfersController@store');
 
+// Companions
+Route::get('companions', 'CompanionController@index');
+
+// Leads
 Route::apiResource('leads', 'LeadController');
 
 // Flights
@@ -44,6 +51,12 @@ Route::apiResource('transactions', 'TransactionsController');
 
 // Reports
 Route::get('reports/create/{type}/{format}', 'UserReportsController@create')->middleware('auth:api');
+
+// Squads
+Route::apiResource('regions', 'RegionController');
+Route::put('squads/published', 'SquadPublicationController@update');
+Route::apiResource('squads', 'SquadController');
+Route::apiResource('squad-members', 'SquadMemberController');
 
 // Dingo API routes
 $api = app('Dingo\Api\Routing\Router');
@@ -147,7 +160,6 @@ $api->version('v1', [
         $api->resource('visas/import', 'VisasController@import');
         $api->post('referrals/export', 'ReferralsController@export');
         $api->post('referrals/import', 'ReferralsController@import');
-        $api->resource('campaigns.regions', 'RegionsController');
 
         $api->group(['namespace' => 'Teams'], function ($api) {
             $api->resource('teams/types', 'TeamTypesController');

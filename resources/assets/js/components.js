@@ -237,6 +237,8 @@ Vue.component('itinerary-flight-manager', require('./components/ItineraryFlightM
 Vue.component('group-flight-list', require('./components/GroupFlightList.vue'));
 Vue.component('interest-list', require('./components/InterestList.vue'));
 Vue.component('group-interest-list', require('./components/GroupInterestList.vue'));
+Vue.component('squad-manager', require('./components/SquadManager.vue'));
+Vue.component('group-squad-member-list', require('./components/GroupSquadMemberList.vue'));
 
 /**
  * Utility Components

@@ -3,56 +3,46 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
-use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Region extends Model
 {
-    use Filterable, UuidForKey, SoftDeletes;
+    use UuidForKey;
 
     protected $guarded = [];
 
     protected $dates = [
-        'created_at', 'updated_at', 'deleted_at'
+        'created_at', 'updated_at'
     ];
-
-    public function setNameAttribute($value)
-    {
-        $this->attributes['name'] = trim(strtolower($value));
-    }
-
-    public function setCallsignAttribute($value)
-    {
-        if ($value) {
-            $this->attributes['callsign'] = trim(strtolower($value));
-        }
-    }
-
-    public function getNameAttribute($value)
-    {
-        return ucwords($value);
-    }
-
-    public function getCallsignAttribute($value)
-    {
-        if ($value) {
-            return ucwords($value);
-        }
-    }
 
     public function campaign()
     {
         return $this->belongsTo(Campaign::class);
     }
 
-    public function teams()
+    public function squads()
     {
-        return $this->morphToMany(Team::class, 'teamable');
+        return $this->hasMany(Squad::class);
     }
 
-    public function accommodations()
+    public function members()
     {
-        return $this->hasMany(Accommodation::class);
+        return $this->hasManyThrough(SquadMember::class, Squad::class);
+    }
+
+    public function getAverageSquadSize()
+    {
+        return round($this->squads()->withCount('members')->pluck('members_count')->avg());
+    }
+
+    public function getPercentageOfAllMissionaries()
+    {
+        $allMissionaries = SquadMember::whereHas('squad.region', function ($region) {
+            return $region->where('campaign_id', $this->campaign_id);
+        })->count();
+
+        $regionalMissionaries = $this->members()->count();
+
+        return round(($regionalMissionaries / $allMissionaries) * 100);
     }
 }

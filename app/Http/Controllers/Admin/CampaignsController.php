@@ -66,24 +66,10 @@ class CampaignsController extends Controller
             'admin/campaigns/'.$campaign->id.'/costs' => 'Costs',
             'admin/campaigns/'.$campaign->id.'/groups' => 'Groups ',
             'admin/campaigns/'.$campaign->id.'/reservations/missionaries' => 'Reservations',
-            'admin/campaigns/'.$campaign->id.'/reservations/flights' => 'Flights'
+            'admin/campaigns/'.$campaign->id.'/reservations/flights' => 'Flights',
+            'admin/campaigns/'.$campaign->id.'/reservations/squads' => 'Squads',
+            'admin/campaigns/'.$campaign->id.'/reservations/interests' => 'Interests'
         ];
-
-        // if (auth()->user()->can('view', \App\Models\v1\Team::class)) {
-        //     $links['admin/campaigns/'.$campaign->id.'/squads'] = 'Squads';
-        // }
-
-        // if (auth()->user()->can('view', \App\Models\v1\TeamType::class)) {
-        //     $links['admin/campaigns/'.$campaign->id.'/squad-types'] = 'Squad Types';
-        // }
-
-        // if (auth()->user()->can('view', \App\Models\v1\Region::class)) {
-        //     $links['admin/campaigns/'.$campaign->id.'/regions'] = 'Squad Assignments';
-        // }
-
-        // if (auth()->user()->can('view', \App\Models\v1\Accommodation::class)) {
-        //     $links['admin/campaigns/'.$campaign->id.'/region-accommodations'] = 'Accommodations';
-        // }
 
         return $links;
     }

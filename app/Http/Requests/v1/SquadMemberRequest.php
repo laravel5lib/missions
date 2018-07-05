@@ -23,30 +23,18 @@ class SquadMemberRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
-            'members' => 'array',
-            'members.*.id' => 'required_with:members|string|exists:reservations,id|unique:team_members,reservation_id,NULL,reservation_id,team_squad_id,' . $this->route('squad'),
-            'members.*.leader' => 'boolean',
-            'id' => 'required_without:members|string|exists:reservations,id|unique:team_members,reservation_id,NULL,reservation_id,team_squad_id,' . $this->route('squad'),
-            'leader' => 'boolean'
-        ];
-
-        if ($this->isMethod('put')) {
+        if ($this->isMethod('post')) {
             $rules = [
-                'id' => 'sometimes|required_without:members|string|exists:reservations,id|unique:team_members,reservation_id,NULL,reservation_id,team_squad_id,' . $this->route('squad'),
-                'leader' => 'boolean',
-                'team_squad_id' => 'string|exists:team_squads,id'
+                'reservation_ids' => 'required',
+                'squad_id' => 'required|exists:squads,uuid',
+                'group' => 'nullable|string'
             ];
         }
 
-        return $rules;
-    }
-
-    public function messages()
-    {
         return [
-            'members.*.id.unique' => 'Attempting to add a duplicate member.',
-            'id.unique' => 'Attempting to add a duplicate member.'
+            'reservation_ids' => 'required',
+            'squad_id' => 'required|exists:squads,uuid',
+            'group' => 'nullable|string'
         ];
     }
 }

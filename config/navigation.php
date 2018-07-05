@@ -17,7 +17,11 @@ return [
             ],
             [
                 'label' => 'Travel',
-                'url' => 'squads'
+                'url' => 'travel'
+            ],
+            [
+                'label' => 'Squad',
+                'url' => 'squad'
             ],
             [
                 'label' => 'Resources',

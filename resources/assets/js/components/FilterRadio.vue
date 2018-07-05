@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-xs-12 text-right">
                 <hr class="divider">
-                <button class="btn btn-primary" @click="apply" :disabled="!picked">Apply</button>
+                <button class="btn btn-primary" @click="apply" :disabled="picked == null">Apply</button>
             </div>
         </div>
     </div>

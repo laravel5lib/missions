@@ -43,7 +43,7 @@ class FlightItineraryPublished extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = url("dashboard/reservations/$notifiable->id/squads");
+        $url = url("dashboard/reservations/$notifiable->id/travel");
 
         return (new MailMessage)
                     ->subject('Flight Itinerary')

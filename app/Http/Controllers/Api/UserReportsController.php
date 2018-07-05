@@ -7,11 +7,14 @@ use App\Models\v1\User;
 use App\Models\v1\Report;
 use Illuminate\Http\Request;
 use App\Exports\GroupsExport;
+use App\Exports\SquadsExport;
 use App\Exports\FlightsExport;
+use App\Exports\RegionsExport;
 use App\Exports\InterestsExport;
 use App\Exports\PassengersExport;
 use App\Exports\ItinerariesExport;
 use App\Exports\ReservationsExport;
+use App\Exports\SquadMembersExport;
 use App\Exports\TransactionsExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
@@ -61,7 +64,10 @@ class UserReportsController extends Controller
             'itineraries' => ItinerariesExport::class,
             'flights' => FlightsExport::class,
             'interests' => InterestsExport::class,
-            'transactions' => TransactionsExport::class
+            'transactions' => TransactionsExport::class,
+            'squad-members' => SquadMembersExport::class,
+            'squads' => SquadsExport::class,
+            'regions' => RegionsExport::class
         ];
 
         if ((new $exportable[$type]($request))->store($location, 's3')) {

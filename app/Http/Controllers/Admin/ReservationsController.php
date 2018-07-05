@@ -6,6 +6,7 @@ use App\Models\v1\Trip;
 use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
 use App\Models\v1\Reservation;
+use App\Models\v1\SquadMember;
 use App\Models\v1\CampaignGroup;
 use App\Http\Controllers\Controller;
 use Artesaos\SEOTools\Traits\SEOTools;
@@ -61,34 +62,86 @@ class ReservationsController extends Controller
      */
     public function show($id, $tab = "details")
     {
-        // $reservation = $this->api->get('reservations/'.$id, ['include' => 'trip.campaign,fundraisers,costs.payments,squads.team,rooms.type, rooms.accommodations']);
-
         $reservation = Reservation::findOrFail($id);
 
         $this->authorize('view', $reservation);
 
-        $rep = $reservation->rep ? $reservation->rep : $reservation->trip->rep;
-
-        $locked = $reservation->trip->campaign->reservations_locked;
-
         $title = $reservation->name . '\'s Reservation ' . title_case(str_replace("-", " ", $tab));
         $this->seo()->setTitle($title);
+
+        $rep = $reservation->rep ? $reservation->rep : $reservation->trip->rep;
+
+        $group = CampaignGroup::where('campaign_id', $reservation->trip->campaign_id)
+            ->where('group_id', $reservation->trip->group_id)
+            ->firstOrFail();
 
         $pageLinks = [
             'admin/reservations/'.$reservation->id => 'Overview',
             'admin/reservations/'.$reservation->id.'/funding' => 'Funding',
             'admin/reservations/'.$reservation->id.'/requirements' => 'Requirements',
             'admin/reservations/'.$reservation->id.'/travel' => 'Travel',
+            'admin/reservations/'.$reservation->id.'/squad' => 'Squad',
             'admin/reservations/'.$reservation->id.'/costs' => 'Pricing',
             'admin/reservations/'.$reservation->id.'/legal' => 'Legal',
             'admin/reservations/'.$reservation->id.'/resources' => 'Resources'
         ];
 
-        $group = CampaignGroup::where('campaign_id', $reservation->trip->campaign_id)
-            ->where('group_id', $reservation->trip->group_id)
-            ->firstOrFail();
+        $locked = $reservation->trip->campaign->reservations_locked;
+        
+        $data = $this->loadPageData($tab, $reservation);
 
-        return view('admin.reservations.' . $tab, compact('reservation', 'rep', 'tab', 'locked', 'pageLinks', 'group'));
+        return view('admin.reservations.'.$tab, compact('reservation', 'rep', 'pageLinks', 'locked', 'group'))->with($data);
+    }
+
+    private function loadPageData($tab, $reservation)
+    {
+        $data = [
+            'squad' => 'getSquadData',
+            'details' => 'getData',
+            'funding' => 'getData',
+            'requirements' => 'getData',
+            'travel' => 'getData',
+            'costs' => 'getData',
+            'legal' => 'getData',
+            'resources' => 'getData'
+        ];
+
+        return $this->{$data[$tab]}($reservation);
+    }
+
+    private function getData($reservation)
+    {
+        return [];
+    }
+
+    private function getSquadData($reservation)
+    {
+        $membership = $reservation
+                ->squadMemberships()
+                ->with('squad.members.reservation.user')
+                ->first();
+        
+        $squadLeaders = SquadMember::where('squad_id', $membership->squad_id)->whereHas('reservation', function ($query) {
+            return $query->whereIn('desired_role', ['TMLR', 'MCDR']);
+        })->with('reservation')->get();
+
+        $squadIds = $membership->squad->region->squads->pluck('id')->toArray();
+
+        $regionalLeaders = SquadMember::whereIn('squad_id', $squadIds)->whereHas('reservation', function ($query) {
+            return $query->whereIn('desired_role', ['PRDR', 'PRAS']);
+        })->with('reservation')->get();
+
+        $leaders = $regionalLeaders->merge($squadLeaders);
+
+        $groupMembers = SquadMember::where('squad_id', $membership->squad_id)
+            ->where('group', $membership->group)
+            ->with('reservation')
+            ->get()
+            ->reject(function ($member) use ($reservation) {
+                return $member->reservation_id == $reservation->id;
+            });
+        
+        return ['membership' => $membership, 'leaders' => $leaders, 'groupMembers' => $groupMembers];
     }
 
     /**

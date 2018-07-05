@@ -27,7 +27,7 @@
     <template slot="confirm">Done</template>
 </alert-success>
 
-<ajax-form method="put" action="/trips/{{ $trip->id }}" :initial="{{ $trip }}">
+<ajax-form method="put" action="/trips/{{ $trip->id }}" :initial="{{ $formData }}">
 
 <template slot-scope="{ form }">
 

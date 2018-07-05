@@ -77,7 +77,21 @@ class TripsController extends Controller
 
         $this->seo()->setTitle('Edit Trip');
 
-        return view('admin.trips.edit', compact('tripId', 'trip', 'group'));
+        $formData = json_encode([
+            'type' => $trip->type,
+            'difficulty' => $trip->difficulty,
+            'started_at' => $trip->started_at->toDateString(),
+            'ended_at' => $trip->ended_at->toDateString(),
+            'rep_id' => $trip->rep_id,
+            'team_roles' => $trip->team_roles,
+            'prospects' => $trip->prospects,
+            'published_at' => optional($trip->published_at)->toDateTimeString(),
+            'spots' => $trip->spots,
+            'companion_limit' => $trip->companion_limit,
+            'closed_at' => optional($trip->closed_at)->toDateTimeString()
+        ]);
+
+        return view('admin.trips.edit', compact('tripId', 'trip', 'group', 'formData'));
     }
 
     public function create($campaignId)

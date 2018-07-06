@@ -38,7 +38,7 @@
                                 </span>
                                 @endif
                             </h1>
-                            <small class="small text-muted">vs past 7 days</small>
+                            <small class="small text-muted">vs past 14 days</small>
                             </div>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                                     </span>
                                     @endif
                                 </h1>
-                                <small class="small text-muted">vs past 7 days</small>
+                                <small class="small text-muted">vs past 14 days</small>
                             </div>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                                     </span>
                                     @endif
                                 </h1>
-                                <small class="small text-muted">vs past 7 days</small>
+                                <small class="small text-muted">vs past 14 days</small>
                             </div>
                         </div>
                     </div>
@@ -106,7 +106,7 @@
                                     </span>
                                     @endif
                                 </h1>
-                                <small class="small text-muted">vs past 7 days</small>
+                                <small class="small text-muted">vs past 14 days</small>
                             </div>
                         </div>
                     </div>

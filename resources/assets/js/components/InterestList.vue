@@ -12,25 +12,21 @@
                 <ul class="nav nav-pills nav-justified">
                     <li :class="{ 'active' : filters.filter.status === 'undecided' }">
                         <a role="button" @click="addFilter('status', 'undecided')">
-                            <i class="fa fa-question-circle text-muted"></i> 
                             Undecided <span class="badge badge-default">{{ totals.undecided }}</span>
                         </a>
                     </li>
                     <li :class="{ 'active' : filters.filter.status === 'converted' }">
                         <a role="button" @click="addFilter('status', 'converted')">
-                            <i class="fa fa-check-circle text-success"></i> 
                             Converted <span class="badge badge-default">{{ totals.converted }}</span>
                         </a>
                     </li>
                     <li :class="{ 'active' : filters.filter.status === 'unresponsive' }">
                         <a role="button" @click="addFilter('status', 'unresponsive')">
-                            <i class="fa fa-minus-circle text-warning"></i> 
                             No Response <span class="badge badge-default">{{ totals.unresponsive }}</span>
                         </a>
                     </li>
                     <li :class="{ 'active' : filters.filter.status === 'declined' }">
                         <a role="button" @click="addFilter('status', 'declined')">
-                            <i class="fa fa-times-circle text-danger"></i> 
                             Declined <span class="badge badge-default">{{ totals.declined }}</span>
                         </a>
                     </li>

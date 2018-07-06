@@ -20,8 +20,32 @@ class TripInterestsController extends Controller
             'unresponsive' => $interests->where('status', 'unresponsive')->count(),
             'declined' => $interests->where('status', 'declined')->count()
         ];
+
+        $percentChanges = [
+            'undecided' => $this->getMetrics($interests, $campaignId, 'undecided'),
+            'converted' => $this->getMetrics($interests, $campaignId, 'converted'),
+            'unresponsive' => $this->getMetrics($interests, $campaignId, 'unresponsive'),
+            'declined' => $this->getMetrics($interests, $campaignId, 'declined'),
+        ];
         
-        return view('admin.trips.interests.index', compact('campaign', 'totals'));
+        return view('admin.trips.interests.index', compact('campaign', 'totals', 'percentChanges'));
+    }
+
+    private function getMetrics($interests, $campaignId, $status)
+    {
+        $previousSevenDayPeriod = TripInterest::campaign($campaignId)
+            ->where('status', $status)
+            ->whereBetween('updated_at', [today()->endOfDay()->subDays(17), today()->endOfDay()->subDays(7)])
+            ->count();
+        
+        $pastSevenDayPeriod = TripInterest::campaign($campaignId)
+            ->where('status', $status)
+            ->whereBetween('updated_at', [today()->endOfDay()->subDays(6), today()->endOfDay()])
+            ->count();
+
+        if ($pastSevenDayPeriod == 0) return ['count' => 0, 'change' => 0]; // prevent division by zero
+
+        return ['count' => $pastSevenDayPeriod, 'change' => round( (($previousSevenDayPeriod - $pastSevenDayPeriod) / $pastSevenDayPeriod) * 100, 1)];
     }
 
     public function show($campaignId, $id)

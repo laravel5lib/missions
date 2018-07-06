@@ -21962,6 +21962,15 @@ p.large-line-height {
   margin-left: 1em;
 }
 
+.badge.badge-muted {
+  background-color: #e6e6e6;
+  color: #818181;
+}
+
+.badge.badge-success {
+  background-color: #05ce7b;
+}
+
 /* panel heading colors */
 .panel-medical {
   background-color: #f6323e !important;

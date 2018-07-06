@@ -22,7 +22,7 @@ class TripInterestsController extends Controller
         ];
 
         $percentChanges = [
-            'undecided' => $this->getMetrics($interests, $campaignId, 'undecided'),
+            'received' => $this->getMetrics($interests, $campaignId, 'received'),
             'converted' => $this->getMetrics($interests, $campaignId, 'converted'),
             'unresponsive' => $this->getMetrics($interests, $campaignId, 'unresponsive'),
             'declined' => $this->getMetrics($interests, $campaignId, 'declined'),
@@ -33,19 +33,21 @@ class TripInterestsController extends Controller
 
     private function getMetrics($interests, $campaignId, $status)
     {
-        $previousSevenDayPeriod = TripInterest::campaign($campaignId)
+        $dateColumn = $status == 'received' ? 'created_at' : 'updated_at';
+
+        $original = TripInterest::campaign($campaignId)
             ->where('status', $status)
-            ->whereBetween('updated_at', [today()->endOfDay()->subDays(17), today()->endOfDay()->subDays(7)])
+            ->whereBetween($dateColumn, [today()->endOfDay()->subDays(17), today()->endOfDay()->subDays(7)])
             ->count();
         
-        $pastSevenDayPeriod = TripInterest::campaign($campaignId)
+        $new = TripInterest::campaign($campaignId)
             ->where('status', $status)
-            ->whereBetween('updated_at', [today()->endOfDay()->subDays(6), today()->endOfDay()])
+            ->whereBetween($dateColumn, [today()->endOfDay()->subDays(6), today()->endOfDay()])
             ->count();
 
-        if ($pastSevenDayPeriod == 0) return ['count' => 0, 'change' => 0]; // prevent division by zero
+        if ($original == 0) return ['count' => 0, 'change' => 0]; // prevent division by zero
 
-        return ['count' => $pastSevenDayPeriod, 'change' => round( (($previousSevenDayPeriod - $pastSevenDayPeriod) / $pastSevenDayPeriod) * 100, 1)];
+        return ['count' => $new, 'change' => round( (($original - $new) / $original) * 100, 1)];
     }
 
     public function show($campaignId, $id)

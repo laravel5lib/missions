@@ -106,6 +106,10 @@ class TripPriceController extends Controller
         DB::transaction(function() use($trip, $price) {
             $trip->priceables()->detach($price->id);
 
+            $trip->reservations()->get()->each(function ($reservation) use ($price) {
+                $reservation->priceables()->detach($price->id);
+            });
+
             if ($price->model_id === $trip->id && $price->model_type === 'trips') {
                 $price->delete();
             }

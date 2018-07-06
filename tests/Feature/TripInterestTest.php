@@ -2,14 +2,15 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\v1\Trip;
-use App\Models\v1\User;
 use App\Models\v1\Campaign;
-use Laravel\Passport\Passport;
+use App\Models\v1\Todo;
+use App\Models\v1\Trip;
 use App\Models\v1\TripInterest;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\v1\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Passport\Passport;
+use Tests\TestCase;
 
 class TripInterestTest extends TestCase
 {
@@ -54,8 +55,77 @@ class TripInterestTest extends TestCase
             ]);
     }
 
-    public function creates_new_trip_interest()
+    /** @test */
+    public function filter_interests_by_incomplete_task()
     {
-        //
+        factory(Todo::class, 2)->create([
+            'todoable_type' => 'trip_interests', 
+            'todoable_id' => function () {
+                return factory(TripInterest::class)->create()->id;
+            },
+            'task' => '1st contact', 
+            'completed_at' => null
+        ]);
+        factory(Todo::class, 3)->create([
+            'todoable_type' => 'trip_interests', 
+            'todoable_id' => function () {
+                return factory(TripInterest::class)->create()->id;
+            },
+            'task' => '1st contact', 
+            'completed_at' => now()->subDay()
+        ]);
+        factory(Todo::class, 4)->create([
+            'todoable_type' => 'trip_interests', 
+            'todoable_id' => function () {
+                return factory(TripInterest::class)->create()->id;
+            },
+            'task' => '2nd contact', 
+            'completed_at' => null
+        ]);
+
+        $this->json('GET', "/api/interests?filter[incomplete_task]=1st+contact")
+             ->assertStatus(200)
+             ->assertJson([
+                    'meta' => [
+                        'total' => 2
+                    ]
+                ]);
+    }
+
+    /** @test */
+    public function filter_interests_by_complete_task()
+    {
+        factory(Todo::class, 2)->create([
+            'todoable_type' => 'trip_interests', 
+            'todoable_id' => function () {
+                return factory(TripInterest::class)->create()->id;
+            },
+            'task' => '1st contact', 
+            'completed_at' => null
+        ]);
+        factory(Todo::class, 3)->create([
+            'todoable_type' => 'trip_interests', 
+            'todoable_id' => function () {
+                return factory(TripInterest::class)->create()->id;
+            },
+            'task' => '1st contact', 
+            'completed_at' => now()->subDay()
+        ]);
+        factory(Todo::class, 4)->create([
+            'todoable_type' => 'trip_interests', 
+            'todoable_id' => function () {
+                return factory(TripInterest::class)->create()->id;
+            },
+            'task' => '2nd contact', 
+            'completed_at' => null
+        ]);
+
+        $this->json('GET', "/api/interests?filter[complete_task]=1st+contact")
+             ->assertStatus(200)
+             ->assertJson([
+                    'meta' => [
+                        'total' => 3
+                    ]
+                ]);
     }
 }

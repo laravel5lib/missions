@@ -33,19 +33,23 @@ class TripInterestsController extends Controller
 
     private function getMetrics($interests, $campaignId, $status)
     {
-        $dateColumn = $status == 'received' ? 'created_at' : 'updated_at';
+        $dateColumn = ($status == 'received') ? 'created_at' : 'updated_at';
 
         $original = TripInterest::campaign($campaignId)
-            ->where('status', $status)
-            ->whereBetween($dateColumn, [today()->endOfDay()->subDays(17), today()->endOfDay()->subDays(7)])
+            ->when($dateColumn == 'updated_at', function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->whereBetween($dateColumn, [today()->startOfDay()->subDays(28), today()->endOfDay()->subDays(14)])
             ->count();
         
         $new = TripInterest::campaign($campaignId)
-            ->where('status', $status)
-            ->whereBetween($dateColumn, [today()->endOfDay()->subDays(6), today()->endOfDay()])
+            ->when($dateColumn == 'updated_at', function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->whereBetween($dateColumn, [today()->startOfDay()->subDays(13), today()->endOfDay()])
             ->count();
 
-        if ($original == 0) return ['count' => 0, 'change' => 0]; // prevent division by zero
+        if ($original == 0) return ['count' => $new, 'change' => 0]; // prevent division by zero
 
         return ['count' => $new, 'change' => round( (($original - $new) / $original) * 100, 1)];
     }

@@ -28,7 +28,7 @@
                             <h1>
                                 {{ $percentChanges['received']['count'] }}
 
-                                @if($percentChanges['received']['change'] < 0)
+                                @if($percentChanges['received']['change'] <= 0)
                                 <span class="badge badge-success">
                                     <i class="fa fa-arrow-up"></i> {{ $percentChanges['received']['change'] * -1 }}%
                                 </span>
@@ -50,7 +50,7 @@
                             <div class="panel-body">
                                 <h1>
                                     {{ $percentChanges['converted']['count'] }}
-                                    @if($percentChanges['converted']['change'] < 0)
+                                    @if($percentChanges['converted']['change'] <= 0)
                                     <span class="badge badge-success">
                                         <i class="fa fa-arrow-up"></i> {{ $percentChanges['converted']['change'] * -1 }}%
                                     </span>
@@ -73,7 +73,7 @@
                                 <h1>
                                     {{ $percentChanges['unresponsive']['count'] }}
 
-                                    @if($percentChanges['unresponsive']['change'] < 0)
+                                    @if($percentChanges['unresponsive']['change'] <= 0)
                                     <span class="badge badge-default">
                                         <i class="fa fa-arrow-up"></i> {{ $percentChanges['unresponsive']['change'] * -1 }}%
                                     </span>
@@ -96,7 +96,7 @@
                                 <h1>
                                     {{ $percentChanges['declined']['count'] }}
 
-                                    @if($percentChanges['declined']['change'] < 0)
+                                    @if($percentChanges['declined']['change'] <= 0)
                                     <span class="badge badge-default">
                                         <i class="fa fa-arrow-up"></i> {{ $percentChanges['declined']['change'] * -1 }}%
                                     </span>

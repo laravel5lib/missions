@@ -24,6 +24,7 @@ Route::get('campaigns/{campaignId}/groups/{groupId}/prices', function($campaignI
 });
 
 // Trips
+Route::post('trips/{tripId}/prices/{priceId}/push', 'TripPriceableController@store');
 Route::apiResource('trips/{tripId}/prices', 'TripPriceController');
 
 // Reservations

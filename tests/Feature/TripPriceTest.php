@@ -388,6 +388,21 @@ class TripPriceTest extends TestCase
         ]);
     }
 
+    /** @test **/
+    public function add_a_custom_trip_price_to_all_its_reservations_on_demand()
+    {
+        $trip = $this->setupTripWithPrices();
+        $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
+        $price = Price::where('model_type', 'trips')->first();
+
+        $response = $this->json('POST', "/api/trips/{$trip->id}/prices/{$price->uuid}/push");
+
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('priceables', [
+            'price_id' => $price->id, 'priceable_id' => $reservation->id, 'priceable_type' => 'reservations'
+        ]);
+    }
+
     private function setupTripWithPrices()
     {
         $campaign = $this->setupCampaignWithCosts();

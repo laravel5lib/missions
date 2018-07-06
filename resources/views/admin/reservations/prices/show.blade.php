@@ -32,41 +32,6 @@
     </div>
 </div>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">
-            <h5>Manage</h5>
-            <p class="text-muted">Lock in the price or extend the grace period.</p>
-        </div>
-        <div class="col-md-8">
-            @component('panel')
-                @slot('body')
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>Lock this price</label>
-                        <span class="help-block">Lock this reservation into the current price. Even if the user is late on payment, their pricing will not change.</span>
-                        <button class="btn btn-sm btn-default"><i class="fa fa-unlock"></i> Unlocked</button>
-                    </div>
-                    <div class="col-md-6">
-                        <label>Extend Grace Period</label>
-                        <span class="help-block">Increase the grace period to give the user a little more time before they default.</span>
-                        <div class="input-group input-group-sm col-xs-8">
-                            <span class="input-group-addon">
-                                Days:
-                            </span>
-                            <input type="number" class="form-control" value="3">
-                            <span class="input-group-btn">
-                                <button class="btn btn-sm btn-default">Update</button>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                @endslot
-            @endcomponent
-        </div>
-    </div>
-</div>
-
 @if($price->model_type === 'reservations' && $price->model_id === $reservation->id)
 <hr class="divider inv">
 

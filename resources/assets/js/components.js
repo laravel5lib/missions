@@ -225,6 +225,7 @@ Vue.component('price-list', require('./components/price-list.vue'));
 Vue.component('price-add-new', require('./components/price-add-new.vue'));
 Vue.component('price-edit', require('./components/price-edit.vue'));
 Vue.component('price-delete', require('./components/price-delete.vue'));
+Vue.component('price-push', require('./components/price-push.vue'));
 Vue.component('meta-form', require('./components/MetaForm.vue'));
 Vue.component('group-manager', require('./components/GroupManager.vue'));
 Vue.component('campaign-cost-manager', require('./components/CampaignCostManager.vue'));

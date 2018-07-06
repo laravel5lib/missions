@@ -133,7 +133,7 @@ trait HasPricing
      */
     public function attachPriceToModel($priceId)
     {
-        return $this->priceables()->attach($priceId);
+        return $this->priceables()->syncWithoutDetaching($priceId);
     }
     
     /**

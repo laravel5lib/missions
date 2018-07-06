@@ -67,6 +67,16 @@
                             @click="openFilterModal(filterConfiguration.received_between)"
                             >Received</a>
                         </li>
+                        <li>
+                            <a type="button" 
+                            @click="openFilterModal(filterConfiguration.incomplete_task)"
+                            >Incomplete Task</a>
+                        </li>
+                        <li>
+                            <a type="button" 
+                            @click="openFilterModal(filterConfiguration.complete_task)"
+                            >Complete Task</a>
+                        </li>
                     </ul>
 
                     <div class="modal fade" id="filterModal" tabindex="-1" role="dialog">
@@ -109,6 +119,7 @@
                         <th>Name</th>
                         <th v-if="!filters.filter.group">Group</th>
                         <th v-if="!filters.filter.trip_type">Trip</th>
+                        <th>Tasks</th>
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Preference</th>
@@ -117,7 +128,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="(interest, index) in interests" :key="interest.id">
-                        <td>{{ index+1 }}</td>
+                        <td class="text-muted">{{ index+1 }}</td>
                         <td>
                             <strong>
                                 <a :href="`/admin/campaigns/${campaignId}/reservations/interests/${interest.id}`">
@@ -127,6 +138,7 @@
                         </td>
                         <td v-if="!filters.filter.group">{{ interest.trip.group.name }}</td>
                         <td v-if="!filters.filter.trip_type">{{ interest.trip.type | capitalize }}</td>
+                        <td><strong>{{ interest.complete_tasks_count }}</strong> / {{ interest.incomplete_tasks_count }}</td>
                         <td><strong><a :href="`mailto:${interest.email}`">{{ interest.email }}</a></strong></td>
                         <td>{{ interest.phone }}</td>
                         <td>
@@ -210,7 +222,27 @@ export default {
                     title: 'Received',
                     field: 'received_between',
                     options: []
-                }
+                },
+                incomplete_task: {
+                    component: 'filter-select',
+                    title: 'Incomplete Task',
+                    field: 'incomplete_task',
+                    ajax: {
+                        url: `todos?type=trip_interests&unique=true&per_page=200`, // old api
+                        value: 'task',
+                        label: 'task'
+                    }
+                },
+                complete_task: {
+                    component: 'filter-select',
+                    title: 'Complete Task',
+                    field: 'complete_task',
+                    ajax: {
+                        url: `todos?type=trip_interests&unique=true&per_page=200`, // old api
+                        value: 'task',
+                        label: 'task'
+                    }
+                },
             }
         }
     },

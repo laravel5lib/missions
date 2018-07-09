@@ -1,0 +1,45 @@
+@extends('admin.campaigns.show')
+
+@section('tab')
+
+<fetch-json url="requirements?filter[campaign_id]={{ $campaign->id }}" v-cloak>
+    <div class="panel panel-default" slot-scope="{ json:requirements, loading, pagination }">
+        <div class="panel-heading">
+            <h5>Travel Requirements <span class="badge">@{{ pagination.total }}</span></h5>
+        </div>
+        <div class="panel-body text-center" v-if="!loading && !requirements.length">
+            <span class="lead">No Requirements</span>
+            <p>Add a requirement to get started.</p>
+        </div>
+        <div class="table-responsive" v-else>
+            <table class="table">
+                <thead>
+                    <tr class="active">
+                        <th>#</th>
+                        <th>Requirement</th>
+                        <th class="text-right">Groups</th>
+                        <th class="text-right">Trips</th>
+                        <th class="text-right">Reservations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(requirement, index) in requirements">
+                        <td>@{{ index + 1 }}</td>
+                        <td>
+                            <strong>
+                                <a :href="`/admin/campaigns/${requirement.requester.id}/requirements/${requirement.id}`">
+                                    @{{ requirement.name }}
+                                </a>
+                            </strong>
+                        </td>
+                        <td class="text-right"><code>@{{ requirement.groups_count }}</code></td>
+                        <td class="text-right"><code>@{{ requirement.trips_count }}</code></td>
+                        <td class="text-right"><code>@{{ requirement.reservations_count }}</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</fetch-json>
+
+@endsection

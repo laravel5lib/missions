@@ -21,7 +21,7 @@ class GroupPolicy extends BasePolicy
         }
 
         // only group managers can view the group.
-        return $group ? in_array($user->id, $group->managers()->get('id')->toArray()) : false;
+        return $group ? in_array($user->id, $group->managers()->get(['id'])->toArray()) : false;
     }
 
     /**

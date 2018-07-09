@@ -21,11 +21,12 @@ class AdminController extends Controller
         SEOMeta::setTitle('Admin Dashboard');
         $users = User::count();
         $reservations = Reservation::current()->count();
-        $campaigns = Campaign::where('ended_at', '>', now())->count();
+        $interests = TripInterest::where('status', 'undecided')->current()->count();
         $groups = Group::where('status', 'approved')->count();
         $donations = Transaction::where('type', 'donation')->count();
         $donors = Donor::count();
+        $activeCampaigns = Campaign::where('ended_at', '>', now())->get();
 
-        return view('admin.index', compact('users', 'reservations', 'groups', 'campaigns', 'donations', 'donors'));
+        return view('admin.index', compact('users', 'reservations', 'groups', 'interests', 'donations', 'donors', 'activeCampaigns'));
     }
 }

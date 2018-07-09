@@ -33,9 +33,19 @@ class TripInterestsController extends Controller
                 Filter::scope('campaign'),
                 Filter::scope('trip_type'),
                 Filter::scope('group'),
-                Filter::scope('received_between')
+                Filter::scope('received_between'),
+                Filter::scope('incomplete_task'),
+                Filter::scope('complete_task')
             ])
             ->allowedIncludes(['trip.campaign', 'trip.group'])
+            ->withCount([
+                'todos as incomplete_tasks_count' => function ($query) {
+                    return $query->whereNull('completed_at');
+                },
+                'todos as complete_tasks_count' => function ($query) {
+                    return $query->whereNotNull('completed_at');
+                }
+            ])
             ->paginate($request->input('per_page', 25));
 
         return TripInterestResource::collection($interests);

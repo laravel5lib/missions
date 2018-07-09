@@ -12,19 +12,21 @@
                 <ul class="nav nav-pills nav-justified">
                     <li :class="{ 'active' : filters.filter.status === 'undecided' }">
                         <a role="button" @click="addFilter('status', 'undecided')">
-                            <i class="fa fa-question-circle text-muted"></i> 
                             Undecided <span class="badge badge-default">{{ totals.undecided }}</span>
                         </a>
                     </li>
                     <li :class="{ 'active' : filters.filter.status === 'converted' }">
                         <a role="button" @click="addFilter('status', 'converted')">
-                            <i class="fa fa-check-circle text-success"></i> 
                             Converted <span class="badge badge-default">{{ totals.converted }}</span>
+                        </a>
+                    </li>
+                    <li :class="{ 'active' : filters.filter.status === 'unresponsive' }">
+                        <a role="button" @click="addFilter('status', 'unresponsive')">
+                            No Response <span class="badge badge-default">{{ totals.unresponsive }}</span>
                         </a>
                     </li>
                     <li :class="{ 'active' : filters.filter.status === 'declined' }">
                         <a role="button" @click="addFilter('status', 'declined')">
-                            <i class="fa fa-times-circle text-danger"></i> 
                             Declined <span class="badge badge-default">{{ totals.declined }}</span>
                         </a>
                     </li>
@@ -60,6 +62,16 @@
                             <a type="button" 
                             @click="openFilterModal(filterConfiguration.received_between)"
                             >Received</a>
+                        </li>
+                        <li>
+                            <a type="button" 
+                            @click="openFilterModal(filterConfiguration.incomplete_task)"
+                            >Incomplete Task</a>
+                        </li>
+                        <li>
+                            <a type="button" 
+                            @click="openFilterModal(filterConfiguration.complete_task)"
+                            >Complete Task</a>
                         </li>
                     </ul>
 
@@ -103,6 +115,7 @@
                         <th>Name</th>
                         <th v-if="!filters.filter.group">Group</th>
                         <th v-if="!filters.filter.trip_type">Trip</th>
+                        <th>Tasks</th>
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Preference</th>
@@ -111,7 +124,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="(interest, index) in interests" :key="interest.id">
-                        <td>{{ index+1 }}</td>
+                        <td class="text-muted">{{ index+1 }}</td>
                         <td>
                             <strong>
                                 <a :href="`/admin/campaigns/${campaignId}/reservations/interests/${interest.id}`">
@@ -121,6 +134,7 @@
                         </td>
                         <td v-if="!filters.filter.group">{{ interest.trip.group.name }}</td>
                         <td v-if="!filters.filter.trip_type">{{ interest.trip.type | capitalize }}</td>
+                        <td><strong>{{ interest.complete_tasks_count }}</strong> / {{ interest.incomplete_tasks_count }}</td>
                         <td><strong><a :href="`mailto:${interest.email}`">{{ interest.email }}</a></strong></td>
                         <td>{{ interest.phone }}</td>
                         <td>
@@ -204,7 +218,27 @@ export default {
                     title: 'Received',
                     field: 'received_between',
                     options: []
-                }
+                },
+                incomplete_task: {
+                    component: 'filter-select',
+                    title: 'Incomplete Task',
+                    field: 'incomplete_task',
+                    ajax: {
+                        url: `todos?type=trip_interests&unique=true&per_page=200`, // old api
+                        value: 'task',
+                        label: 'task'
+                    }
+                },
+                complete_task: {
+                    component: 'filter-select',
+                    title: 'Complete Task',
+                    field: 'complete_task',
+                    ajax: {
+                        url: `todos?type=trip_interests&unique=true&per_page=200`, // old api
+                        value: 'task',
+                        label: 'task'
+                    }
+                },
             }
         }
     },

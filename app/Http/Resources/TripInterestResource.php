@@ -24,6 +24,8 @@ class TripInterestResource extends JsonResource
             'email'                     => $this->email,
             'phone'                     => $this->phone,
             'communication_preferences' => $this->communication_preferences,
+            'incomplete_tasks_count'    => $this->incomplete_tasks_count,
+            'complete_tasks_count'      => $this->complete_tasks_count,  
             'created_at'                => $this->created_at->toIso8601String(),
             'updated_at'                => $this->updated_at->toIso8601String(),
         ];

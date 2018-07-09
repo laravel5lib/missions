@@ -82,4 +82,18 @@ class TripInterest extends Model
         $query->whereDate('created_at', '>=', $dates[0])
               ->whereDate('created_at', '<=', $dates[1]);
     }
+
+    public function scopeIncompleteTask($query, $task)
+    {
+        return $query->whereHas('todos', function ($subQuery) use ($task) {
+            return $subQuery->where('task', $task)->whereNull('completed_at');
+        });
+    }
+
+    public function scopeCompleteTask($query, $task)
+    {
+        return $query->whereHas('todos', function ($subQuery) use ($task) {
+            return $subQuery->where('task', $task)->whereNotNull('completed_at');
+        });
+    }
 }

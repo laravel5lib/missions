@@ -179,6 +179,14 @@ p.large-line-height {
   margin-left: 1em;
 }
 
+.badge.badge-muted {
+  background-color: #e6e6e6;
+  color: #818181;
+}
+.badge.badge-success {
+  background-color: $brand-success;
+}
+
 /* panel heading colors */
 // Trip type background colors
 .panel-medical {

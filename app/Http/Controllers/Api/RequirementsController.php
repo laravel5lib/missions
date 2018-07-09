@@ -36,9 +36,9 @@ class RequirementsController extends Controller
      */
     public function show($id)
     {
-        // $requirement = $this->requirement->findOrFail($id);
+        $requirement = Requirement::findOrFail($id);
 
-        // return $this->response->item($requirement, new RequirementTransformer);
+        return new RequirementResource($requirement);
     }
 
     /**

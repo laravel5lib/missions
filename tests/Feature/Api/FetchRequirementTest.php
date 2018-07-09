@@ -52,4 +52,19 @@ class FetchRequirementTest extends TestCase
                     'meta' => [ 'total' => 2]
                  ]);
     }
+
+    /** @test */
+    public function fetch_requirement_by_id()
+    {
+        $requirement = factory(Requirement::class)->create();
+
+        $response = $this->getJson("/api/requirements/{$requirement->id}");
+
+        $response->assertStatus(200)
+                 ->assertJson([
+                    'data' => [
+                        'id' => $requirement->id
+                    ]
+                 ]);
+    }
 }

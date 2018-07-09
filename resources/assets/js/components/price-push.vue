@@ -7,6 +7,9 @@ export default {
         url: {
             type: String,
             default: false,
+        },
+        params: {
+            type: Object
         }
     },
 
@@ -31,7 +34,7 @@ export default {
                 dangerMode: true
             }).then((value) => {
                 if (value) {
-                    this.$http.post(this.url)
+                    this.$http.post(this.url, this.params)
                         .then((response) => {
                             swal('Nice Work!', 'Price has been added.', 'success', {
                               buttons: false,

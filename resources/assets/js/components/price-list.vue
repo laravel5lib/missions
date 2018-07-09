@@ -24,7 +24,7 @@
         <tbody>
             <template v-for="(price, index) in prices">
             <tr :key="price.id">
-                <td>{{ index+1 }}</td>
+                <td class="text-muted">{{ index+1 }}</td>
                 <td>
                     <strong><a :href="'/admin/' + priceableType + '/' + priceableId + '/prices/' + price.id">
                         {{ price.cost.name | capitalize }}
@@ -55,7 +55,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="payment in price.payments" :key="payment.id">
-                                <td class="col-xs-4">{{ payment.percentage_due.toFixed(2) }}%</td>
+                                <td class="col-xs-4">{{ payment.percentage_due.toFixed(0) }}%</td>
                                 <td class="col-xs-4">{{ payment.due_at|mFormat('ll') }}</td>
                                 <td class="col-xs-4">{{ payment.grace_days}} days</td>
                             </tr>

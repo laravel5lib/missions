@@ -47,11 +47,15 @@
                 @slot('body')
                     <div class="row">
                         <div class="col-sm-6">
-                            <h4 class="text-primary">{{ $price->trips()->count() }}</h4>
+                            <h4 class="text-primary">
+                                {{ $price->trips_count }} <span class="text-muted">/ {{ $trips_count }}</span>
+                            </h4>
                             <p class="small text-muted"><strong>Trips</strong></p>
                         </div>
                         <div class="col-sm-6">
-                            <h4 class="text-primary">{{ $price->reservations()->count() }}</h4>
+                            <h4 class="text-primary">
+                                {{ $price->reservations_count }} <span class="text-muted">/ {{ $reservations_count }}</span>
+                            </h4>
                             <p class="small text-muted"><strong>Reservations</strong></p>
                         </div>
                     </div>
@@ -59,8 +63,11 @@
                         <div class="col-sm-6">
                             <p class="small text-muted">You can add this price to any existing trips where it has not been assigned yet.</p>
                             <price-push url="campaign-groups/{{ $group->uuid }}/prices/{{ $price->uuid }}/push">
-                                <div slot-scope="{ addPrice }">
-                                    <button @click="addPrice" class="btn btn-default btn-sm">Add only to existing trips</button>
+                                <div slot-scope="{ addPrice, processing }">
+                                    <button @click="addPrice" class="btn btn-default btn-sm">
+                                        <span v-if="processing" v-cloak><i class="fa fa-spinner fa-spin"></i> Processing...</span>
+                                        <span v-else>Add only to existing trips</span>
+                                    </button>
                                 </div>
                             </price-push>
                         </div>
@@ -68,8 +75,11 @@
                         <div class="col-sm-6">
                             <p class="small text-muted">You can add this price to any existing trips and reservations where it has not been assigned yet.</p>
                             <price-push url="campaign-groups/{{ $group->uuid }}/prices/{{ $price->uuid }}/push" :params="{ with_reservations: true }">
-                                <div slot-scope="{ addPrice }">
-                                    <button @click="addPrice" class="btn btn-default btn-sm">Add to all trips &amp; reservations</button>
+                                <div slot-scope="{ addPrice, processing }">
+                                    <button @click="addPrice" class="btn btn-default btn-sm">
+                                        <span v-if="processing" v-cloak><i class="fa fa-spinner fa-spin"></i> Processing...</span>
+                                        <span v-else>Add to all trips &amp; reservations</span>
+                                    </button>
                                 </div>
                             </price-push>
                         </div>

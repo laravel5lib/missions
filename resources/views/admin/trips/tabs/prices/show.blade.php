@@ -46,15 +46,20 @@
                 @slot('body')
                     <div class="row">
                         <div class="col-sm-4">
-                            <h4 class="text-primary">{{ $price->reservations()->count() }}</h4>
+                            <h4 class="text-primary">
+                                {{ $price->reservations_count }} <span class="text-muted">/ {{ $trip->reservations_count }}<span>
+                            </h4>
                             <p class="small text-muted">Reservations</p>
                         </div>
                         @if($price->cost->type != 'incremental')
                         <div class="col-sm-8">
                             <p class="small text-muted">You can add this price to any existing reservations where it has not been assigned yet.</p>
                             <price-push url="trips/{{ $trip->id }}/prices/{{ $price->uuid }}/push">
-                                <div slot-scope="{ addPrice }">
-                                    <button @click="addPrice" class="btn btn-primary btn-sm">Add to all existing reservations</button>
+                                <div slot-scope="{ addPrice, processing }">
+                                    <button @click="addPrice" class="btn btn-default btn-sm">
+                                        <span v-if="processing" v-cloak><i class="fa fa-spinner fa-spin"></i> Processing...</span>
+                                        <span v-else>Add to all existing reservations</span>
+                                    </button>
                                 </div>
                             </price-push>
                         </div>

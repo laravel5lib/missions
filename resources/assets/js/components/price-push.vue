@@ -13,8 +13,15 @@ export default {
         }
     },
 
+    data() {
+        return {
+            processing: false
+        }
+    },
+
     methods: {
         addPrice() {
+            this.processing = true;
             swal('WARNING!', 'This action will add the price to all the trip\'s reservations. This action cannot be easily undone!', 'warning', {
                 closeOnClickOutside: true,
                 buttons: {
@@ -34,11 +41,15 @@ export default {
                 dangerMode: true
             }).then((value) => {
                 if (value) {
+                    let that = this;
                     this.$http.post(this.url, this.params)
                         .then((response) => {
+                            that.processing = false;
                             swal('Nice Work!', 'Price has been added.', 'success', {
                               buttons: false,
                               timer: 1000,
+                            }).then((value) => {
+                                window.location.reload();
                             })
                         });
                 }
@@ -49,6 +60,7 @@ export default {
     render() {
         return this.$scopedSlots.default({
             addPrice: this.addPrice,
+            processing: this.processing
         })
     }
 }

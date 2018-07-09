@@ -80,4 +80,16 @@ class Requirement extends Model
     {
         return $this->hasMany(RequirementCondition::class);
     }
+
+    /**
+     * Scope query to requirements belonging to a campaign.
+     * 
+     * @param  Illuminate\Database\Eloquent\Builder $query 
+     * @param  String $id
+     * @return Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeCampaignId($query, $id)
+    {
+        return $query->whereRequesterType('campaigns')->whereRequesterId($id);
+    }
 }

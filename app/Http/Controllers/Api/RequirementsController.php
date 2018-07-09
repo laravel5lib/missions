@@ -1,31 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use App\Models\v1\Requirement;
 use App\Http\Controllers\Controller;
-use App\Jobs\UpdateReservationRequirements;
-use App\Http\Requests\v1\RequirementRequest;
-use App\Http\Transformers\v1\RequirementTransformer;
+use App\Http\Resources\RequirementResource;
+use App\Models\v1\Requirement;
+use Illuminate\Http\Request;
+use Spatie\QueryBuilder\Filter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class RequirementsController extends Controller
 {
-
-    /**
-     * @var Requirement
-     */
-    private $requirement;
-
-    /**
-     * RequirementsController constructor.
-     * @param Requirement $requirement
-     */
-    public function __construct(Requirement $requirement)
-    {
-        $this->requirement = $requirement;
-    }
-
     /**
      * Get all requirements.
      *
@@ -34,11 +19,13 @@ class RequirementsController extends Controller
      */
     public function index(Request $request)
     {
-        $requirements = $this->requirement
-                             ->filter($request->all())
-                             ->paginate($request->get('per_page', 10));
+        $requirements = QueryBuilder::for(Requirement::class)
+            ->allowedFilters([
+                Filter::scope('campaign_id')
+            ])
+            ->paginate($request->input('per_page', 25));
 
-        return $this->response->paginator($requirements, new RequirementTransformer);
+        return RequirementResource::collection($requirements);
     }
 
     /**
@@ -49,9 +36,9 @@ class RequirementsController extends Controller
      */
     public function show($id)
     {
-        $requirement = $this->requirement->findOrFail($id);
+        // $requirement = $this->requirement->findOrFail($id);
 
-        return $this->response->item($requirement, new RequirementTransformer);
+        // return $this->response->item($requirement, new RequirementTransformer);
     }
 
     /**
@@ -62,19 +49,19 @@ class RequirementsController extends Controller
      */
     public function store(RequirementRequest $request)
     {
-        $requirement = $this->requirement->create([
-            'requester_type' => $request->get('requester_type'),
-            'requester_id' => $request->get('requester_id'),
-            'name' => $request->get('name'),
-            'document_type' => $request->get('document_type'),
-            'short_desc' => $request->get('short_desc', null),
-            'due_at' => $request->get('due_at'),
-            'grace_period' => $request->get('grace_period', 0)
-        ]);
+        // $requirement = $this->requirement->create([
+        //     'requester_type' => $request->get('requester_type'),
+        //     'requester_id' => $request->get('requester_id'),
+        //     'name' => $request->get('name'),
+        //     'document_type' => $request->get('document_type'),
+        //     'short_desc' => $request->get('short_desc', null),
+        //     'due_at' => $request->get('due_at'),
+        //     'grace_period' => $request->get('grace_period', 0)
+        // ]);
 
-        $this->dispatch(new UpdateReservationRequirements($requirement));
+        // $this->dispatch(new UpdateReservationRequirements($requirement));
 
-        return $this->response->item($requirement, new RequirementTransformer);
+        // return $this->response->item($requirement, new RequirementTransformer);
     }
 
     /**
@@ -86,21 +73,21 @@ class RequirementsController extends Controller
      */
     public function update(RequirementRequest $request, $id)
     {
-        $requirement = $this->requirement->findOrFail($id);
+        // $requirement = $this->requirement->findOrFail($id);
 
-        $requirement->update([
-            'requester_type' => $request->get('requester_type', $requirement->requester_type),
-            'requester_id' => $request->get('requester_id', $requirement->requester_id),
-            'name' => $request->get('name'),
-            'document_type' => $request->get('document_type'),
-            'short_desc' => $request->get('short_desc', $requirement->short_desc),
-            'due_at' => $request->get('due_at'),
-            'grace_period' => $request->get('grace_period', $requirement->grace_period)
-        ]);
+        // $requirement->update([
+        //     'requester_type' => $request->get('requester_type', $requirement->requester_type),
+        //     'requester_id' => $request->get('requester_id', $requirement->requester_id),
+        //     'name' => $request->get('name'),
+        //     'document_type' => $request->get('document_type'),
+        //     'short_desc' => $request->get('short_desc', $requirement->short_desc),
+        //     'due_at' => $request->get('due_at'),
+        //     'grace_period' => $request->get('grace_period', $requirement->grace_period)
+        // ]);
 
-        $this->dispatch(new UpdateReservationRequirements($requirement));
+        // $this->dispatch(new UpdateReservationRequirements($requirement));
 
-        return $this->response->item($requirement, new RequirementTransformer);
+        // return $this->response->item($requirement, new RequirementTransformer);
     }
 
     /**
@@ -111,10 +98,10 @@ class RequirementsController extends Controller
      */
     public function destroy($id)
     {
-        $requirement = $this->requirement->findOrFail($id);
+        // $requirement = $this->requirement->findOrFail($id);
 
-        $requirement->delete();
+        // $requirement->delete();
 
-        return $this->response->noContent();
+        // return $this->response->noContent();
     }
 }

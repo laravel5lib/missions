@@ -60,6 +60,9 @@ Route::put('squads/published', 'SquadPublicationController@update');
 Route::apiResource('squads', 'SquadController');
 Route::apiResource('squad-members', 'SquadMemberController');
 
+// Requirements
+Route::apiResource('requirements', 'RequirementsController');
+
 // Dingo API routes
 $api = app('Dingo\Api\Routing\Router');
 
@@ -196,7 +199,6 @@ $api->version('v1', [
         $api->post('influencers/export', 'EssaysController@export');
         $api->post('influencers/import', 'EssaysController@import');
         $api->resource('reservations.dues', 'ReservationDuesController');
-        $api->resource('requirements', 'RequirementsController');
         $api->resource('requirements.conditions', 'RequirementConditionsController');
         $api->resource('deadlines', 'DeadlinesController');
         $api->resource('questionnaires', 'QuestionnairesController');

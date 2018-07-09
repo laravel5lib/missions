@@ -115,7 +115,7 @@
 
         </div>
         <div class="table-responsive">
-        <table class="table" v-if="groups && groups.length">
+        <table class="table table-condensed table-striped" v-if="groups && groups.length">
             <thead>
             <tr class="active">
                 <th>#</th>
@@ -127,15 +127,15 @@
             </thead>
             <tbody>
             <tr v-for="(group, index) in groups" :key="group.id">
-                <td>{{ index+1 }}</td>
+                <td class="text-muted">{{ index+1 }}</td>
                 <td>
                     <strong><a :href="'/admin/campaign-groups/' + group.group_id">{{ group.name }}</a></strong>
                 </td>
                 <td class="col-sm-1 text-right">
-                    <strong>{{ group.reservations }}</strong>
+                    <code>{{ group.reservations }}</code>
                 </td>
                 <td class="col-sm-1 text-right">
-                    <strong>{{ group.trips }}</strong>
+                    <code>{{ group.trips }}</code>
                 </td>
                 <td>
                     <em>{{ group.status }}</em>

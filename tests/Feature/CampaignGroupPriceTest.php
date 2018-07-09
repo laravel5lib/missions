@@ -2,16 +2,17 @@
 
 namespace Tests\Feature;
 
-use Carbon\Carbon;
-use Tests\TestCase;
-use App\Models\v1\Cost;
-use App\Models\v1\Trip;
-use App\Models\v1\Price;
-use App\Models\v1\Payment;
 use App\Models\v1\Campaign;
 use App\Models\v1\CampaignGroup;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\v1\Cost;
+use App\Models\v1\Payment;
+use App\Models\v1\Price;
+use App\Models\v1\Reservation;
+use App\Models\v1\Trip;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class CampaignGroupPriceTest extends TestCase
 {
@@ -169,5 +170,64 @@ class CampaignGroupPriceTest extends TestCase
         $response->assertStatus(204);
         $this->assertDatabaseMissing('prices', ['id' => $price->id]);
         $this->assertDatabaseMissing('price_payments', ['price_id' => $price->id]);
+    }
+
+    /** @test **/
+    public function remove_price_from_trip_and_all_reservations_when_deleted_from_campaign_group()
+    {
+        $group = factory(CampaignGroup::class)->create();
+        $price = factory(Price::class)->create([
+            'model_id' => $group->uuid, 
+            'model_type' => 'campaign-groups',
+        ]);
+        $trip = factory(Trip::class)->create(['group_id' => $group->group_id, 'campaign_id' => $group->campaign_id]);
+        $trip->priceables()->attach([$price->id]);
+        $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
+        $reservation->priceables()->attach([$price->id]);
+
+        $response = $this->json('DELETE', "/api/campaign-groups/{$group->uuid}/prices/{$price->uuid}");
+        $response->assertStatus(204);
+        $this->assertDatabaseMissing('prices', ['id' => $price->id]);
+        $this->assertDatabaseMissing('priceables', ['price_id' => $price->id]);
+    }
+
+    /** @test **/
+    public function add_a_group_price_to_all_its_trips_on_demand()
+    {
+        $group = factory(CampaignGroup::class)->create();
+        $price = factory(Price::class)->create([
+            'model_id' => $group->uuid, 
+            'model_type' => 'campaign-groups',
+        ]);
+        $trip = factory(Trip::class)->create(['group_id' => $group->group_id, 'campaign_id' => $group->campaign_id]);
+
+        $response = $this->json('POST', "/api/campaign-groups/{$group->uuid}/prices/{$price->uuid}/push");
+        
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('priceables', [
+            'price_id' => $price->id, 'priceable_id' => $trip->id, 'priceable_type' => 'trips'
+        ]);
+    }
+
+    /** @test **/
+    public function add_a_group_price_to_all_its_trips_and_reservations_on_demand()
+    {
+        $group = factory(CampaignGroup::class)->create();
+        $price = factory(Price::class)->create([
+            'model_id' => $group->uuid, 
+            'model_type' => 'campaign-groups',
+        ]);
+        $trip = factory(Trip::class)->create(['group_id' => $group->group_id, 'campaign_id' => $group->campaign_id]);
+        $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
+
+        $response = $this->json('POST', "/api/campaign-groups/{$group->uuid}/prices/{$price->uuid}/push", ['with_reservations' => true]);
+        
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('priceables', [
+            'price_id' => $price->id, 'priceable_id' => $trip->id, 'priceable_type' => 'trips'
+        ]);
+        $this->assertDatabaseHas('priceables', [
+            'price_id' => $price->id, 'priceable_id' => $reservation->id, 'priceable_type' => 'reservations'
+        ]);
     }
 }

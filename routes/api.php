@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
 // Campaigns
 Route::apiResource('campaigns/{campaignId}/groups', 'CampaignGroupController');
 Route::apiResource('campaigns/{campaignId}/costs', 'CampaignCostController')->middleware('auth:api');
+Route::post('campaign-groups/{groupId}/prices/{priceId}/push', 'CampaignGroupPriceableController@store');
 Route::apiResource('campaign-groups/{groupId}/prices', 'CampaignGroupPriceController');
 Route::get('campaigns/{campaignId}/groups/{groupId}/prices', function($campaignId, $groupId) {
     $group = \App\Models\v1\CampaignGroup::whereCampaignId($campaignId)->whereGroupId($groupId)->firstOrFail();
@@ -24,6 +25,7 @@ Route::get('campaigns/{campaignId}/groups/{groupId}/prices', function($campaignI
 });
 
 // Trips
+Route::post('trips/{tripId}/prices/{priceId}/push', 'TripPriceableController@store');
 Route::apiResource('trips/{tripId}/prices', 'TripPriceController');
 
 // Reservations

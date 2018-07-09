@@ -2,15 +2,16 @@
 
 namespace Tests\Feature;
 
-use Carbon\Carbon;
-use Tests\TestCase;
-use App\Models\v1\Cost;
-use App\Models\v1\Trip;
-use App\Models\v1\Price;
 use App\Models\v1\Campaign;
 use App\Models\v1\CampaignGroup;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\v1\Cost;
+use App\Models\v1\Price;
+use App\Models\v1\Reservation;
+use App\Models\v1\Trip;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class TripPriceTest extends TestCase
 {
@@ -336,6 +337,69 @@ class TripPriceTest extends TestCase
         $this->assertDatabaseMissing('prices', ['id' => $price->id]);
         $this->assertDatabaseMissing('priceables', [
             'price_id' => $price->id, 'priceable_id' => $trip->id, 'priceable_type' => 'trips'
+        ]);
+    }
+
+    /** @test **/
+    public function remove_price_from_all_reservations_when_custom_price_is_removed_from_trip()
+    {
+        $trip = $this->setupTripWithPrices();
+        $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
+        $price = $trip->prices()->where('model_type', 'trips')->first();
+        $reservation->attachPriceToModel($price->id);
+
+        $this->assertDatabaseHas('priceables', [
+            'price_id' => $price->id, 'priceable_id' => $reservation->id, 'priceable_type' => 'reservations'
+        ]);
+
+        $response = $this->json('DELETE', "/api/trips/{$trip->id}/prices/{$price->uuid}");
+
+        $response->assertStatus(204);
+        $this->assertDatabaseMissing('prices', ['id' => $price->id]);
+        $this->assertDatabaseMissing('priceables', [
+            'price_id' => $price->id, 'priceable_id' => $trip->id, 'priceable_type' => 'trips'
+        ]);
+        $this->assertDatabaseMissing('priceables', [
+            'price_id' => $price->id, 'priceable_id' => $reservation->id, 'priceable_type' => 'reservations'
+        ]);
+    }
+
+    /** @test **/
+    public function remove_price_from_all_reservations_when_group_price_is_removed_from_trip()
+    {
+        $trip = $this->setupTripWithPrices();
+        $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
+        $price = Price::where('model_type', 'campaign-groups')->first();
+        $reservation->attachPriceToModel($price->id);
+
+        $this->assertDatabaseHas('priceables', [
+            'price_id' => $price->id, 'priceable_id' => $reservation->id, 'priceable_type' => 'reservations'
+        ]);
+
+        $response = $this->json('DELETE', "/api/trips/{$trip->id}/prices/{$price->uuid}");
+
+        $response->assertStatus(204);
+        $this->assertDatabaseHas('prices', ['id' => $price->id]);
+        $this->assertDatabaseMissing('priceables', [
+            'price_id' => $price->id, 'priceable_id' => $trip->id, 'priceable_type' => 'campaign-groups'
+        ]);
+        $this->assertDatabaseMissing('priceables', [
+            'price_id' => $price->id, 'priceable_id' => $reservation->id, 'priceable_type' => 'reservations'
+        ]);
+    }
+
+    /** @test **/
+    public function add_a_custom_trip_price_to_all_its_reservations_on_demand()
+    {
+        $trip = $this->setupTripWithPrices();
+        $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
+        $price = Price::where('model_type', 'trips')->first();
+
+        $response = $this->json('POST', "/api/trips/{$trip->id}/prices/{$price->uuid}/push");
+
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('priceables', [
+            'price_id' => $price->id, 'priceable_id' => $reservation->id, 'priceable_type' => 'reservations'
         ]);
     }
 

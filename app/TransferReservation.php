@@ -29,8 +29,8 @@ class TransferReservation
             
             $this->addNewTasks($trip);
             
-            // remove squads
-            $this->reservation->squads()->detach();
+            // remove all squad assignments
+            $this->reservation->squadMemberships()->delete();
             
             // change trip and desired role
             $this->reservation->update([

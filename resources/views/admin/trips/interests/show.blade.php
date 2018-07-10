@@ -64,6 +64,20 @@
                         <span class="help-block">Copy & Paste this link to share with the interested party.</span>
                     </div>
                 </div>
+
+                @component('panel')
+                    @slot('title')
+                        <h5>Delete Trip Interest</h5>
+                    @endslot
+                    @slot('body')
+                        <delete-form url="interests/{{ $interest->id }}" 
+                                    redirect="/admin/campaigns/{{ $campaign->id }}/reservations/interests"
+                                    label="Enter the interested party's email address to delete it"
+                                    match-value="{{ $interest->email }}">
+                        </delete-form>
+                    @endslot
+                @endcomponent
+
             </div>
             <div class="col-xs-12 col-md-3 col-md-offset-1 small">
                 <ul class="nav nav-tabs" role="tablist">

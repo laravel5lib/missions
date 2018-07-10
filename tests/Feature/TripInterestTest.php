@@ -130,4 +130,16 @@ class TripInterestTest extends TestCase
                     ]
                 ]);
     }
+
+    /** @test */
+    public function delete_a_trip_interest_and_remove_from_storage()
+    {
+        $interest = factory(TripInterest::class)->create();
+
+        $response = $this->deleteJson("/api/interests/{$interest->id}");
+
+        $response->assertStatus(204);
+
+        $this->assertNotNull($interest->fresh()->deleted_at);
+    }
 }

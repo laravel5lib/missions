@@ -1,5 +1,16 @@
 @extends('layouts.admin')
 
+@push('styles')
+<style>
+    th, td {
+        white-space: nowrap;
+    }
+    .panel-heading {
+        border-color: #e6e6e6;
+    }
+</style>
+@endpush
+
 @section('content')
 
     @breadcrumbs(['links' => [
@@ -55,6 +66,50 @@
                     ]]) @endcomponent
                 @endcomponent
 
+                @component('panel')
+                    @slot('title')
+                        <h5>Possible Matching Reservation(s)</h5>
+                    @endslot
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <th>#</th>
+                                <th>Given Names</th>
+                                <th>Surname</th>
+                                <th>Email</th>
+                                <th>Trip</th>
+                                <th>Group</th>
+                                <th>Campaign</th>
+                            </thead>
+                            <tbody>
+                                @foreach($reservations as $reservation)
+                                <tr>
+                                    <td class="text-muted">{{ $loop->index + 1 }}</td>
+                                    <td>
+                                        <strong>
+                                            <a href="{{ url('admin/reservations/'.$reservation->id) }}">
+                                                {{ $reservation->given_names }}
+                                            </a>
+                                        </strong>
+                                    </td>
+                                    <td>{{ $reservation->surname }}</td>
+                                    <td>{{ $reservation->email }}</td>
+                                    <td>{{ $reservation->trip->type }}</td>
+                                    <td>{{ $reservation->trip->group->name }}</td>
+                                    <td>{{ $reservation->trip->campaign->name }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    @else
+                    <div class="panel-body text-center">
+                        <span class="lead">No Matches Found</span>
+                        <p>Please confirm by checking the reservations list.</p>
+                    </div>
+                    @endif
+                @endcomponent
+
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5>Direct Link to Trip Registration Page</h5>
@@ -77,7 +132,6 @@
                         </delete-form>
                     @endslot
                 @endcomponent
-
             </div>
             <div class="col-xs-12 col-md-3 col-md-offset-1 small">
                 <ul class="nav nav-tabs" role="tablist">

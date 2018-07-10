@@ -24,17 +24,17 @@ class RequirementRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'requester_type' => 'required|string|in:trips,reservations',
+            'requester_type' => 'required|string|in:trips,reservations,campaigns',
             'requester_id' => 'required|string',
             'name' => 'required|string',
             'document_type' => 'required|string',
-            'short_desc' => 'string|max:120',
+            'short_desc' => 'nullable|string|max:225',
             'due_at' => 'required|date',
-            'grace_period' => 'numeric'
+            'grace_period' => 'nullable|numeric'
         ];
 
-        if ($this->isMethod('put')) {
-            $rules['requester_type'] = 'sometimes|required|string|in:trips,reservations';
+        if (!$this->isMethod('post')) {
+            $rules['requester_type'] = 'sometimes|required|string|in:trips,reservations,campaigns';
             $rules['requester_id'] = 'sometimes|required|string';
         }
 

@@ -22,7 +22,7 @@ class Requirement extends Model
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $fillable = ['name', 'short_desc', 'document_type', 'requester_id', 'requester_type', 'due_at'];
 
     /**
      * The attributes that should be mutated to dates.

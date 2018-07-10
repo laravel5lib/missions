@@ -12,6 +12,21 @@ class CampaignRequirementController extends Controller
     {
         $campaign = Campaign::findOrFail($id);
 
-        return view('admin.campaigns.tabs.requirements.create', compact('campaign'));
+        $docTypes = [
+            'airport_preferences'     => 'Airport Preference',
+            'arrival_designations'    => 'Arrival Designation',
+            'influencer_applications' => 'Influencer Application',
+            'media_credentials'       => 'Media Credentials',
+            'medical_credentials'     => 'Medical Credentials',
+            'medical_releases'        => 'Medical Release',
+            'minor_releases'          => 'Minor Release',
+            'passports'               => 'Passport',
+            'referrals'               => 'Referral',
+            'essays'                  => 'Testimony',
+            'travel_itineraries'      => 'Travel Itinerary',
+            'visas'                   => 'Visa',
+        ];
+
+        return view('admin.campaigns.tabs.requirements.create', compact('campaign', 'docTypes'));
     }
 }

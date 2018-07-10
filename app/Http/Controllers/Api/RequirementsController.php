@@ -89,10 +89,10 @@ class RequirementsController extends Controller
      */
     public function destroy($id)
     {
-        // $requirement = $this->requirement->findOrFail($id);
+        $requirement = Requirement::findOrFail($id);
 
-        // $requirement->delete();
+        $requirement->delete();
 
-        // return $this->response->noContent();
+        return response()->json([], 204);
     }
 }

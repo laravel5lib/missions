@@ -5,11 +5,10 @@ namespace App\Models\v1;
 use App\UuidForKey;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Requirement extends Model
 {
-    use Filterable, UuidForKey, SoftDeletes;
+    use Filterable, UuidForKey;
     
     /**
      * The table associated with the model.

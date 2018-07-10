@@ -10,15 +10,15 @@ use Tests\TestCase;
 class DeleteRequirementTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     /** @test */
-    public function soft_deletes_requirement()
+    public function deletes_requirement_and_removes_from_storage()
     {
         $requirement = factory(Requirement::class)->create();
 
         $this->deleteJson("/api/requirements/{$requirement->id}")
              ->assertStatus(204);
 
-        $this->assertNotNull($requirement->fresh()->deleted_at);
+        $this->assertDatabaseMissing('requirements', ['id' => $requirement->id]);
     }
 }

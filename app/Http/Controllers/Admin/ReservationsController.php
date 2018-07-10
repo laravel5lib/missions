@@ -62,7 +62,7 @@ class ReservationsController extends Controller
      */
     public function show($id, $tab = "details")
     {
-        $reservation = Reservation::findOrFail($id);
+        $reservation = Reservation::withTrashed()->findOrFail($id);
 
         $this->authorize('view', $reservation);
 

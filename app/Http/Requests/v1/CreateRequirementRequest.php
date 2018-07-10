@@ -5,7 +5,7 @@ namespace App\Http\Requests\v1;
 use Dingo\Api\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class RequirementRequest extends FormRequest
+class CreateRequirementRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class RequirementRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
+        return [
             'requester_type' => 'required|string|in:trips,reservations,campaigns',
             'requester_id' => 'required|string',
             'name' => [
@@ -40,12 +40,5 @@ class RequirementRequest extends FormRequest
             'due_at' => 'required|date',
             'grace_period' => 'nullable|numeric'
         ];
-
-        if (!$this->isMethod('post')) {
-            $rules['requester_type'] = 'sometimes|required|string|in:trips,reservations,campaigns';
-            $rules['requester_id'] = 'sometimes|required|string';
-        }
-
-        return $rules;
     }
 }

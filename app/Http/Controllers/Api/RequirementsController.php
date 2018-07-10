@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\v1\RequirementRequest;
+use App\Http\Requests\UpdateRequirementRequest;
+use App\Http\Requests\v1\CreateRequirementRequest;
 use App\Http\Resources\RequirementResource;
 use App\Models\v1\Requirement;
 use Illuminate\Http\Request;
@@ -45,10 +46,10 @@ class RequirementsController extends Controller
     /**
      * Create a new requirement.
      *
-     * @param RequirementRequest $request
+     * @param CreateRequirementRequest $request
      * @return \Dingo\Api\Http\Response
      */
-    public function store(RequirementRequest $request)
+    public function store(CreateRequirementRequest $request)
     {
         Requirement::create($request->all());
 
@@ -62,23 +63,13 @@ class RequirementsController extends Controller
      * @param $id
      * @return \Dingo\Api\Http\Response
      */
-    public function update(RequirementRequest $request, $id)
+    public function update(UpdateRequirementRequest $request, $id)
     {
-        // $requirement = $this->requirement->findOrFail($id);
+        $requirement = Requirement::findOrFail($id);
 
-        // $requirement->update([
-        //     'requester_type' => $request->get('requester_type', $requirement->requester_type),
-        //     'requester_id' => $request->get('requester_id', $requirement->requester_id),
-        //     'name' => $request->get('name'),
-        //     'document_type' => $request->get('document_type'),
-        //     'short_desc' => $request->get('short_desc', $requirement->short_desc),
-        //     'due_at' => $request->get('due_at'),
-        //     'grace_period' => $request->get('grace_period', $requirement->grace_period)
-        // ]);
+        $requirement->update($request->all());
 
-        // $this->dispatch(new UpdateReservationRequirements($requirement));
-
-        // return $this->response->item($requirement, new RequirementTransformer);
+        return new RequirementResource($requirement);
     }
 
     /**

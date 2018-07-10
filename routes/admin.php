@@ -43,6 +43,7 @@ Route::prefix('campaigns')->group(function () {
     // Campaign details
     Route::get('{id}/{tab?}', 'CampaignsController@show');
     Route::get('{id}/costs/{cost}', 'CampaignCostController@show');
+    Route::get('{id}/requirements/create', 'CampaignRequirementController@create');
 });
 Route::get('campaign-groups/{group}/edit', 'CampaignGroupController@edit');
 Route::get('campaign-groups/{group}/{tab?}', 'CampaignGroupController@show');

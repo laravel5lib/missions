@@ -3,7 +3,10 @@
 @section('tab')
 
 <fetch-json url="requirements?filter[campaign_id]={{ $campaign->id }}" v-cloak>
-    <div class="panel panel-default" slot-scope="{ json:requirements, loading, pagination }">
+    <div class="panel panel-default" 
+         slot-scope="{ json:requirements, loading, pagination }" 
+         style="border-top: 5px solid #f6323e"
+    >
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-8">

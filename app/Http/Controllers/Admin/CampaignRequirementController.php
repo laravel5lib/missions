@@ -7,10 +7,17 @@ use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
 
 class CampaignRequirementController extends Controller
-{
-    public function create($id, Request $request)
+{   
+    /**
+     * Show form to create a new requirement
+     * 
+     * @param  string  $campaignId 
+     * @param  Illuminate\Http\Request $request    
+     * @return Illuminate\Http\Response              
+     */
+    public function create($campaignId, Request $request)
     {
-        $campaign = Campaign::findOrFail($id);
+        $campaign = Campaign::findOrFail($campaignId);
 
         $docTypes = [
             'airport_preferences'     => 'Airport Preference',
@@ -28,5 +35,21 @@ class CampaignRequirementController extends Controller
         ];
 
         return view('admin.campaigns.tabs.requirements.create', compact('campaign', 'docTypes'));
+    }
+
+    /**
+     * Show a page for a specific requirement.
+     * 
+     * @param  string $campaignId 
+     * @param  string $id         
+     * @return Illuminate\Http\Response             
+     */
+    public function show($campaignId, $id)
+    {
+        $campaign = Campaign::findOrFail($campaignId);
+
+        $requirement = $campaign->requirements()->findOrFail($id);
+
+        return view('admin.campaigns.tabs.requirements.show', compact('campaign', 'requirement'));
     }
 }

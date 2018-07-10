@@ -2,20 +2,21 @@
 
 namespace App\Models\v1;
 
-use App\UuidForKey;
-use App\Models\v1\Team;
 use App\Models\v1\Price;
 use App\Models\v1\Region;
-use App\Traits\Rewardable;
-use App\Traits\Promoteable;
-use EloquentFilter\Filterable;
+use App\Models\v1\Requirement;
+use App\Models\v1\Team;
 use App\Models\v1\TripInterest;
-use Spatie\Image\Manipulations;
-use Spatie\MediaLibrary\Models\Media;
+use App\Traits\Promoteable;
+use App\Traits\Rewardable;
+use App\UuidForKey;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\Models\Media;
 
 class Campaign extends Model implements HasMedia
 {
@@ -239,6 +240,16 @@ class Campaign extends Model implements HasMedia
     public function promotionals()
     {
         return $this->morphMany(Promotional::class, 'promoteable');
+    }
+
+    /**
+     * Get the campaign's requirements.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function requirements()
+    {
+        return $this->morphMany(Requirement::class, 'requester');
     }
 
     /**

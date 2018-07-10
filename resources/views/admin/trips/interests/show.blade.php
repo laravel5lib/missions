@@ -70,6 +70,7 @@
                     @slot('title')
                         <h5>Possible Matching Reservation(s)</h5>
                     @endslot
+                    @if($reservations->count())
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>

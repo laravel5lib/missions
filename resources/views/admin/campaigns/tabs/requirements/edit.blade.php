@@ -35,7 +35,7 @@
 <hr class="divider inv">
 
 <ajax-form :horizontal="true" 
-           action="/requirements/{{ $requirement->id}}" 
+           action="/campaigns/{{ $campaign->id }}/requirements/{{ $requirement->id}}" 
            method="put" 
            :initial="{{ json_encode([
                 'name' => $requirement->name, 

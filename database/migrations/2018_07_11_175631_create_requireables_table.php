@@ -19,6 +19,12 @@ class CreateRequireablesTable extends Migration
             $table->string('requireable_type');
             $table->timestamps();
         });
+
+        Schema::table('requireables', function (Blueprint $table) {
+            $table->foreign('requirement_id')
+                  ->references('id')->on('requirements')
+                  ->onDelete('cascade');
+        });
     }
 
     /**

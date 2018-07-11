@@ -3,6 +3,7 @@
 namespace Tests\Feature\Api;
 
 use App\Models\v1\Campaign;
+use App\Models\v1\CampaignGroup;
 use App\Models\v1\Requirement;
 use App\Models\v1\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -48,6 +49,26 @@ class FetchRequirementTest extends TestCase
                     ],
                     'meta' => ['total']
                  ])
+                 ->assertJson([
+                    'meta' => [ 'total' => 2]
+                 ]);
+    }
+
+    /** @test */
+    public function fetchs_all_requirements_for_campaign_group()
+    {
+        $group = factory(CampaignGroup::class)->create();
+
+        // custom requirement
+        $reqOne = factory(Requirement::class)->create(['requester_type' => 'campaign-groups', 'requester_id' => $group->uuid]);
+        // campaign requirement
+        $reqTwo = factory(Requirement::class)->create(['requester_type' => 'campaigns', 'requester_id' => $group->campaign_id]);
+
+        $group->requireables()->attach([$reqOne->id, $reqTwo->id]);
+
+        $response = $this->getJson("/api/campaign-groups/{$group->uuid}/requirements");
+
+        $response->assertStatus(200)
                  ->assertJson([
                     'meta' => [ 'total' => 2]
                  ]);

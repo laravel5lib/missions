@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\v1\Requirement;
+use Illuminate\Support\Facades\DB;
 
 trait HasRequirements 
 {
@@ -24,5 +25,56 @@ trait HasRequirements
     public function requireables()
     {
         return $this->morphToMany(Requirement::class, 'requireable')->withTimestamps();
+    }
+
+    /**
+     * Add a new requirement to the model.
+     *
+     * @param array $requirement
+     * @return void
+     */
+    public function addRequirement(array $requirement)
+    {
+        if (isset($requirement['requirement_id'])) {
+
+            return $this->attachRequirementToModel($requirement['requirement_id']);
+        }
+
+        return $this->createNewRequirementAndAttachToModel($requirement);
+    }
+
+    /**
+     * Create new requirement and attach it to the model
+     *
+     * @param array $requirement
+     * @return void
+     */
+    public function createNewRequirementAndAttachToModel(array $data)
+    {
+        return DB::transaction(function() use($data) {
+            $requirement = $this->requirements()->create([
+                'name' => isset($data['name']) ? $data['name'] : null,
+                'short_desc' => isset($data['short_desc']) ? $data['short_desc'] : null,
+                'document_type' => isset($data['document_type']) ? $data['document_type'] : null,
+                'due_at' => isset($data['due_at']) ? $data['due_at'] : null
+            ]);
+
+            // attach rules here?
+            
+            $this->attachRequirementToModel($requirement->id);
+
+            return $requirement;
+        });
+    }
+
+    /**
+     * Attach requirement to the model.
+     *
+     * @param string $requirementId
+     * @return void
+     */
+    public function attachRequirementToModel($requirementId)
+    {
+        return $this->requireables()->syncWithoutDetaching($requirementId);
     }
 }

@@ -27,10 +27,12 @@ class FetchRequirementTest extends TestCase
     {
         $campaign = factory(Campaign::class)->create();
 
-        factory(Requirement::class, 2)->create(['requester_type' => 'campaigns', 'requester_id' => $campaign->id]);
+        $req = factory(Requirement::class)->create(['requester_type' => 'campaigns', 'requester_id' => $campaign->id]);
         factory(Requirement::class)->create();
 
-        $response = $this->getJson("/api/requirements?filter[campaign_id]={$campaign->id}");
+        $campaign->requireables()->attach($req->id);
+
+        $response = $this->getJson("/api/campaigns/{$campaign->id}/requirements");
 
         $response->assertStatus(200)
                  ->assertJsonStructure([
@@ -50,7 +52,7 @@ class FetchRequirementTest extends TestCase
                     'meta' => ['total']
                  ])
                  ->assertJson([
-                    'meta' => [ 'total' => 2]
+                    'meta' => [ 'total' => 1]
                  ]);
     }
 
@@ -77,9 +79,11 @@ class FetchRequirementTest extends TestCase
     /** @test */
     public function fetch_requirement_by_id()
     {
-        $requirement = factory(Requirement::class)->create();
+        $campaign = factory(Campaign::class)->create();
+        $requirement = factory(Requirement::class)->create(['requester_type' => 'campaigns', 'requester_id' => $campaign->id]);
+        $campaign->requireables()->attach($requirement->id);
 
-        $response = $this->getJson("/api/requirements/{$requirement->id}");
+        $response = $this->getJson("/api/campaigns/{$campaign->id}/requirements/{$requirement->id}");
 
         $response->assertStatus(200)
                  ->assertJson([

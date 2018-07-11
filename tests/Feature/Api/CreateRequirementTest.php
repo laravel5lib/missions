@@ -21,17 +21,18 @@ class CreateRequirementTest extends TestCase
             'name' => 'Passport',
             'short_desc' => 'A passport document is required to travel.',
             'document_type' => 'passport',
-            'due_at' => '2019-05-01',
-            'requester_type' => 'campaigns',
-            'requester_id' => $campaign->id
+            'due_at' => '2019-05-01'
         ];
 
-        $response = $this->postJson('/api/requirements', $data);
+        $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);
 
         $response->assertStatus(201);
 
         $this->assertDatabaseHas('requirements', [
             'name' => 'Passport', 'requester_id' => $campaign->id, 'requester_type' => 'campaigns'
+        ]);
+        $this->assertDatabaseHas('requireables', [
+            'requireable_id' => $campaign->id, 'requireable_type' => 'campaigns'
         ]);
     }
 
@@ -43,12 +44,10 @@ class CreateRequirementTest extends TestCase
         $data = [
             'short_desc' => 'A passport document is required to travel.',
             'document_type' => 'passport',
-            'due_at' => '2019-05-01',
-            'requester_type' => 'campaigns',
-            'requester_id' => $campaign->id
+            'due_at' => '2019-05-01'
         ];
 
-        $response = $this->postJson('/api/requirements', $data);
+        $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);
 
         $response->assertStatus(422)->assertJsonValidationErrors(['name']);
     }
@@ -65,12 +64,10 @@ class CreateRequirementTest extends TestCase
             'name' => 'Passport',
             'short_desc' => 'A passport document is required to travel.',
             'document_type' => 'passport',
-            'due_at' => '2019-05-01',
-            'requester_type' => 'campaigns',
-            'requester_id' => $campaign->id
+            'due_at' => '2019-05-01'
         ];
 
-        $response = $this->postJson('/api/requirements', $data);
+        $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);
 
         $response->assertStatus(422)->assertJsonValidationErrors(['name']);
     }
@@ -83,12 +80,10 @@ class CreateRequirementTest extends TestCase
         $data = [
             'name' => 'Passport',
             'short_desc' => 'A passport document is required to travel.',
-            'due_at' => '2019-05-01',
-            'requester_type' => 'campaigns',
-            'requester_id' => $campaign->id
+            'due_at' => '2019-05-01'
         ];
 
-        $response = $this->postJson('/api/requirements', $data);
+        $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);
 
         $response->assertStatus(422)->assertJsonValidationErrors(['document_type']);
     }
@@ -101,30 +96,11 @@ class CreateRequirementTest extends TestCase
         $data = [
             'name' => 'Passport',
             'short_desc' => 'A passport document is required to travel.',
-            'document_type' => 'passport',
-            'requester_type' => 'campaigns',
-            'requester_id' => $campaign->id
+            'document_type' => 'passport'
         ];
 
-        $response = $this->postJson('/api/requirements', $data);
+        $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);
 
         $response->assertStatus(422)->assertJsonValidationErrors(['due_at']);
-    }
-
-    /** @test */
-    public function requester_type_and_id_is_required_to_create_requirement()
-    {
-        $campaign = factory(Campaign::class)->create();
-        
-        $data = [
-            'name' => 'Passport',
-            'short_desc' => 'A passport document is required to travel.',
-            'document_type' => 'passport',
-            'due_at' => '2019-05-01',
-        ];
-
-        $response = $this->postJson('/api/requirements', $data);
-
-        $response->assertStatus(422)->assertJsonValidationErrors(['requester_type', 'requester_id']);
     }
 }

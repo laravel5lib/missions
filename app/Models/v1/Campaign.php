@@ -2,25 +2,26 @@
 
 namespace App\Models\v1;
 
+use App\UuidForKey;
+use App\Models\v1\Team;
 use App\Models\v1\Price;
 use App\Models\v1\Region;
-use App\Models\v1\Requirement;
-use App\Models\v1\Team;
-use App\Models\v1\TripInterest;
-use App\Traits\Promoteable;
 use App\Traits\Rewardable;
-use App\UuidForKey;
+use App\Traits\Promoteable;
+use App\Models\v1\Requirement;
 use EloquentFilter\Filterable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\v1\TripInterest;
+use App\Traits\HasRequirements;
 use Spatie\Image\Manipulations;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\Models\Media;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
 class Campaign extends Model implements HasMedia
 {
-    use SoftDeletes, Filterable, UuidForKey, Promoteable, HasMediaTrait;
+    use SoftDeletes, Filterable, UuidForKey, Promoteable, HasMediaTrait, HasRequirements;
 
     /**
      * The table associated with the model.
@@ -240,16 +241,6 @@ class Campaign extends Model implements HasMedia
     public function promotionals()
     {
         return $this->morphMany(Promotional::class, 'promoteable');
-    }
-
-    /**
-     * Get the campaign's requirements.
-     * 
-     * @return Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function requirements()
-    {
-        return $this->morphMany(Requirement::class, 'requester');
     }
 
     /**

@@ -25,14 +25,12 @@ class CreateRequirementRequest extends FormRequest
     public function rules()
     {
         return [
-            'requester_type' => 'required|string|in:trips,reservations,campaigns',
-            'requester_id' => 'required|string',
             'name' => [
                 'required',
                 'string',
                 Rule::unique('requirements')->where(function ($query) {
-                        return $query->where('requester_type', $this->requester_type)
-                                     ->where('requester_id', $this->requester_id);
+                        return $query->where('requester_type', $this->route('requireableType'))
+                                     ->where('requester_id', $this->route('requireableId'));
                     })
             ],
             'document_type' => 'required|string',

@@ -15,8 +15,10 @@ class UpdateRequirementTest extends TestCase
     /** @test */
     public function update_campaign_requirement_and_save_changes_in_storage()
     {
+        $campaign = factory(Campaign::class)->create();
+
         $requirement = factory(Requirement::class)->create([
-            'requester_id' => factory(Campaign::class)->create()->id, 
+            'requester_id' => $campaign->id, 
             'requester_type' => 'campaigns',
             'name' => 'Passport',
             'short_desc' => 'Test description.',
@@ -24,12 +26,13 @@ class UpdateRequirementTest extends TestCase
             'due_at' => today()->addYear()
         ]);
 
-        $this->putJson("/api/requirements/{$requirement->id}", [
+        $campaign->requireables()->attach($requirement->id);
+
+        $response = $this->putJson("/api/campaigns/{$campaign->id}/requirements/{$requirement->id}", [
             'name' => 'Passport Book',
             'short_desc' => 'Updated description.',
             'due_at' => today()->addMonths(6)->toDateTimeString()
-        ])
-        ->assertStatus(200)
+        ])->assertStatus(200)
         ->assertJson([
             'data' => [
                 'id' => $requirement->id,
@@ -54,13 +57,13 @@ class UpdateRequirementTest extends TestCase
 
         $requirement = factory(Requirement::class)->create();
 
+        $campaign->requireables()->attach($requirement->id);
+
         $changes = [
-            'name' => '',
-            'requester_id' => $campaign->id, 
-            'requester_type' => 'campaigns'
+            'name' => ''
         ];
 
-        $this->putJson("/api/requirements/{$requirement->id}", $changes)
+        $this->putJson("/api/campaigns/{$campaign->id}/requirements/{$requirement->id}", $changes)
              ->assertStatus(422)
              ->assertJsonValidationErrors(['name']);
     }
@@ -78,31 +81,15 @@ class UpdateRequirementTest extends TestCase
             'name' => 'Visa', 'requester_id' => $campaign->id, 'requester_type' => 'campaigns'
         ]);
 
+        $campaign->requireables()->attach($requirement->id);
+
         $changes = [
-            'name' => 'Passport',
-            'requester_id' => $campaign->id, 
-            'requester_type' => 'campaigns'
+            'name' => 'Passport'
         ];
 
-        $this->putJson("/api/requirements/{$requirement->id}", $changes)
+        $this->putJson("/api/campaigns/{$campaign->id}/requirements/{$requirement->id}", $changes)
              ->assertStatus(422)
              ->assertJsonValidationErrors(['name']);
-    }
-
-    /** @test */
-    public function requester_type_and_id_are_required_to_update_requirement()
-    {
-        $campaign = factory(Campaign::class)->create();
-        
-        $requirement = factory(Requirement::class)->create();
-
-        $changes = [
-            'name' => 'Updated name',
-        ];
-
-        $this->putJson("/api/requirements/{$requirement->id}", $changes)
-             ->assertStatus(422)
-             ->assertJsonValidationErrors(['requester_id', 'requester_type']);
     }
 
     /** @test */
@@ -112,13 +99,13 @@ class UpdateRequirementTest extends TestCase
         
         $requirement = factory(Requirement::class)->create();
 
+        $campaign->requireables()->attach($requirement->id);
+
         $changes = [
-            'document_type' => '',
-            'requester_id' => $campaign->id, 
-            'requester_type' => 'campaigns'
+            'document_type' => ''
         ];
 
-        $this->putJson("/api/requirements/{$requirement->id}", $changes)
+        $this->putJson("/api/campaigns/{$campaign->id}/requirements/{$requirement->id}", $changes)
              ->assertStatus(422)
              ->assertJsonValidationErrors(['document_type']);
     }
@@ -130,13 +117,13 @@ class UpdateRequirementTest extends TestCase
         
         $requirement = factory(Requirement::class)->create();
 
+        $campaign->requireables()->attach($requirement->id);
+
         $changes = [
-            'due_at' => 'invalid',
-            'requester_id' => $campaign->id, 
-            'requester_type' => 'campaigns'
+            'due_at' => 'invalid'
         ];
 
-        $this->putJson("/api/requirements/{$requirement->id}", $changes)
+        $this->putJson("/api/campaigns/{$campaign->id}/requirements/{$requirement->id}", $changes)
              ->assertStatus(422)
              ->assertJsonValidationErrors(['due_at']);
     }

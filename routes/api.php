@@ -62,6 +62,7 @@ Route::apiResource('squad-members', 'SquadMemberController');
 
 // Requirements
 Route::apiResource('requirements', 'RequirementsController');
+Route::apiResource('campaign-groups/{groupId}/requirements', 'CampaignGroupRequirementController');
 
 // Dingo API routes
 $api = app('Dingo\Api\Routing\Router');

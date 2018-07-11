@@ -2,15 +2,18 @@
 
 namespace App\Models\v1;
 
-use Ramsey\Uuid\Uuid;
+use App\Models\v1\Campaign;
 use App\Models\v1\Group;
 use App\Models\v1\Price;
-use App\Models\v1\Campaign;
 use App\Models\v1\Reservation;
+use App\Traits\HasRequirements;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Ramsey\Uuid\Uuid;
 
 class CampaignGroup extends Pivot
 {
+    use HasRequirements;
+    
     /**
      * Attributes cast to native types.
      * 
@@ -30,6 +33,17 @@ class CampaignGroup extends Pivot
         static::creating(function ($model) {
             $model->uuid = (string) Uuid::uuid4();
         });
+    }
+
+    /**
+     * Get all requirements assigned to the campaign group.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function requireables()
+    {
+        return $this->morphToMany(Requirement::class, 'requireable', 'requireables', 'requireable_id', 'requirement_id', 'uuid', 'id')
+                    ->withTimestamps();
     }
 
     /**

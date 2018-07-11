@@ -92,4 +92,10 @@ class Requirement extends Model
     {
         return $query->whereRequesterType('campaigns')->whereRequesterId($id);
     }
+
+    public function isCustom($type, $id)
+    {
+        return $this->requester_id === $id 
+            && $this->requester_type === $type;
+    }
 }

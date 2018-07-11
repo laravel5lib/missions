@@ -23,7 +23,14 @@ class RequirementResource extends JsonResource
             'grace_period'  => (int) $this->grace_period,
             'requester'     => [ 'id' => $this->requester_id, 'type' => $this->requester_type ],
             'created_at'    => $this->created_at->toIso8601String(),
-            'updated_at'    => $this->updated_at->toIso8601String()
+            'updated_at'    => $this->updated_at->toIso8601String(),
+            'custom'        => $this->isCustom($request)
         ];
+    }
+
+    private function isCustom($request)
+    {
+        return $this->requester_id === $request->route('requesterId') 
+            && $this->requester_type === $request->route('requesterType');
     }
 }

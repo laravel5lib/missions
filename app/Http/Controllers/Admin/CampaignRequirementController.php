@@ -35,7 +35,7 @@ class CampaignRequirementController extends Controller
     {
         $campaign = Campaign::findOrFail($campaignId);
 
-        $requirement = $campaign->requirements()->findOrFail($id);
+        $requirement = $campaign->requireables()->findOrFail($id);
 
         return view('admin.campaigns.tabs.requirements.show', compact('campaign', 'requirement'));
     }

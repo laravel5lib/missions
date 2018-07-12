@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\v1\Trip;
 use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
 use App\Models\v1\Requirement;
@@ -82,11 +83,14 @@ class RequirementsController extends Controller
      */
     public function destroy($requireableType, $requireableId, $id)
     {
-        $requirement = $this->requireable($requireableType, $requireableId)
-                            ->requireables()
-                            ->findOrFail($id);
+        $requireable = $this->requireable($requireableType, $requireableId);
+        $requirement = $requireable->requireables()->findOrFail($id);
 
-        $requirement->delete();
+        $requireable->requireables()->detach($id);
+
+        if ($requirement->requester_id === $requireableId && $requirement->requester_type === $requireableType) {
+            $requirement->delete();
+        }
 
         return response()->json([], 204);
     }
@@ -102,7 +106,8 @@ class RequirementsController extends Controller
     {
         $requireables = [
             'campaigns' => Campaign::class,
-            'campaign-groups' => CampaignGroup::class
+            'campaign-groups' => CampaignGroup::class,
+            'trips' => Trip::class
         ];
 
         if ($type == 'campaign-groups') {

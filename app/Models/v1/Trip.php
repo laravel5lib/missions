@@ -8,12 +8,13 @@ use App\Models\v1\Fund;
 use App\Traits\HasPricing;
 use App\Traits\Promoteable;
 use EloquentFilter\Filterable;
+use App\Traits\HasRequirements;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Trip extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey, Promoteable, HasPricing;
+    use SoftDeletes, Filterable, UuidForKey, Promoteable, HasPricing, HasRequirements;
 
     /**
      * The attributes that are mass assignable

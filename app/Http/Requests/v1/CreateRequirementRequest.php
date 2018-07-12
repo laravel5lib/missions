@@ -24,6 +24,12 @@ class CreateRequirementRequest extends FormRequest
      */
     public function rules()
     {
+        if ($this->has('requirement_id')) {
+            return [
+                'requirement_id' => 'required|string|exists:requirements,id'
+            ];
+        }
+
         return [
             'name' => [
                 'required',
@@ -37,6 +43,15 @@ class CreateRequirementRequest extends FormRequest
             'short_desc' => 'nullable|string|max:225',
             'due_at' => 'required|date',
             'grace_period' => 'nullable|numeric'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'requirement_id.required' => 'Please select a requirement.',
+            'requirement_id.string' => 'Invalid requirement id.',
+            'requirement_id.exists' => 'That requirement id does not exist.'
         ];
     }
 }

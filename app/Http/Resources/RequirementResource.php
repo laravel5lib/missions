@@ -30,7 +30,7 @@ class RequirementResource extends JsonResource
 
     private function isCustom($request)
     {
-        return $this->requester_id === $request->route('requesterId') 
-            && $this->requester_type === $request->route('requesterType');
+        return $this->requester_id === $request->route('requireableId') 
+            && $this->requester_type === $request->route('requireableType');
     }
 }

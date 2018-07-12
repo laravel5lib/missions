@@ -50,7 +50,9 @@ Route::prefix('campaigns')->group(function () {
 Route::get('campaign-groups/{group}/edit', 'CampaignGroupController@edit');
 Route::get('campaign-groups/{group}/{tab?}', 'CampaignGroupController@show');
 Route::get('campaign-groups/{group}/prices/{price}', 'CampaignGroupPriceController@show');
+Route::get('campaign-groups/{group}/requirements/create', 'CampaignGroupRequirementController@create');
 Route::get('campaign-groups/{group}/requirements/{requirement}', 'CampaignGroupRequirementController@show');
+Route::get('campaign-groups/{group}/requirements/{requirement}/edit', 'CampaignGroupRequirementController@edit');
 Route::get('campaign-groups/{group}/trips/create', 'CampaignGroupTripController@create');
 
 Route::get('flights/{flight}', 'FlightController@show');
@@ -58,6 +60,9 @@ Route::get('flights/{flight}/edit', 'FlightController@edit');
 
 Route::get('trips/{id}/{tab?}', 'TripsController@show');
 Route::get('trips/{id}/prices/{price}', 'TripPriceController@show');
+Route::get('trips/{id}/requirements/create', 'TripRequirementController@create');
+Route::get('trips/{id}/requirements/{requirement}', 'TripRequirementController@show');
+Route::get('trips/{id}/requirements/{requirement}/edit', 'TripRequirementController@edit');
 Route::get('/trips/{id}/reservations/create', 'ReservationsController@create');
 Route::resource('trips', 'TripsController');
 

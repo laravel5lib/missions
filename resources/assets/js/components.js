@@ -240,6 +240,8 @@ Vue.component('interest-list', require('./components/InterestList.vue'));
 Vue.component('group-interest-list', require('./components/GroupInterestList.vue'));
 Vue.component('squad-manager', require('./components/SquadManager.vue'));
 Vue.component('group-squad-member-list', require('./components/GroupSquadMemberList.vue'));
+Vue.component('travel-requirement-form', require('./components/TravelRequirementForm.vue'));
+Vue.component('requirements-manager', require('./components/RequirementsManager.vue'));
 
 /**
  * Utility Components

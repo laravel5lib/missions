@@ -36,6 +36,16 @@ class CampaignGroup extends Pivot
     }
 
     /**
+     * Get all the model's requirements.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function requirements()
+    {
+        return $this->morphMany(Requirement::class, 'requester', 'requester_type', 'requester_id', 'uuid');
+    }
+
+    /**
      * Get all requirements assigned to the campaign group.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany

@@ -2,11 +2,12 @@
 
 namespace Tests\Feature\Api;
 
+use Tests\TestCase;
 use App\Models\v1\Campaign;
 use App\Models\v1\Requirement;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\v1\CampaignGroup;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CreateRequirementTest extends TestCase
 {
@@ -102,5 +103,21 @@ class CreateRequirementTest extends TestCase
         $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);
 
         $response->assertStatus(422)->assertJsonValidationErrors(['due_at']);
+    }
+
+    /** @test */
+    public function add_campaign_requirement_to_group()
+    {
+        $campaign = factory(Campaign::class)->create();
+        $requirement = factory(Requirement::class)->create(['requester_id' => $campaign->id, 'requester_type' => 'campaigns']);
+        $campaign->requireables()->attach($requirement->id);
+        $group = factory(CampaignGroup::class)->create(['campaign_id' => $campaign->id]);
+
+        $this->postJson("/api/campaign-groups/{$group->uuid}/requirements", ['requirement_id' => $requirement->id])
+             ->assertStatus(201);
+
+        $this->assertDatabaseHas('requireables', [
+            'requirement_id' => $requirement->id, 'requireable_id' => $group->uuid, 'requireable_type' => 'campaign-groups'
+        ]);
     }
 }

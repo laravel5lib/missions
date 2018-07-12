@@ -55,7 +55,7 @@
                                 <div class="col-xs-11">USE CAUTION! This is a destructive action that cannot be undone. The requirement will be removed from the group and all trips and reservations it is assigned to.</div>
                             </div>
                         </div>
-                        <delete-form url="requirements/{{ $requirement->id }}" 
+                        <delete-form url="campaign-groups/{{ $group->uuid }}/requirements/{{ $requirement->id }}" 
                                      redirect="/admin/campaign-groups/{{ $group->uuid }}/requirements"
                                      label="Enter the requirement name to remove it"
                                      button="Remove"

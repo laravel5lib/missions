@@ -53,23 +53,27 @@ class BadgesExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSi
 
     public function map($member): array
     {
-        $departureFlight = $this->getDepatureFlight($member);
-        $arrivalFlight = $this->getArrivalFlight($member);
+        if ($member->reservation) {
 
-        return [
-            $member->reservation->given_names,
-            $member->reservation->surname,
-            teamRole($member->reservation->desired_role),
-            $member->reservation->trip->group->name,
-            $member->squad->callsign,
-            $member->group,
-            optional($member->reservation->flightItinerary)->record_locator,
-            $departureFlight ? airline($departureFlight->flight_no)->name : null,
-            $departureFlight ? $departureFlight->flight_no : null,
-            $departureFlight ? $departureFlight->iata_code : null,
-            $departureFlight ? Carbon::parse($departureFlight->time)->format('h:i a') : null,
-            $arrivalFlight ? $arrivalFlight->iata_code : null
-        ];
+            $departureFlight = $this->getDepatureFlight($member);
+            $arrivalFlight = $this->getArrivalFlight($member);
+
+            return [
+                $member->reservation->given_names,
+                $member->reservation->surname,
+                teamRole($member->reservation->desired_role),
+                $member->reservation->trip->group->name,
+                $member->squad->callsign,
+                $member->group,
+                optional($member->reservation->flightItinerary)->record_locator,
+                $departureFlight ? airline($departureFlight->flight_no)->name : null,
+                $departureFlight ? $departureFlight->flight_no : null,
+                $departureFlight ? $departureFlight->iata_code : null,
+                $departureFlight ? Carbon::parse($departureFlight->time)->format('h:i a') : null,
+                $arrivalFlight ? $arrivalFlight->iata_code : null
+            ];
+
+        }
     }
 
     private function getDepatureFlight($member)

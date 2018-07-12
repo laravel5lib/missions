@@ -74,6 +74,8 @@ class BadgesExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSi
             ];
 
         }
+
+        return [];
     }
 
     private function getDepatureFlight($member)

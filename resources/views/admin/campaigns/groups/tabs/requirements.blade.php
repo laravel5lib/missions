@@ -13,9 +13,16 @@
                     <h5>Travel Requirements <span class="badge">@{{ pagination.total }}</span></h5>
                 </div>
                 <div class="col-xs-4 text-right">
-                    <a href="{{ url('admin/campaign-groups/'.$group->uuid.'/requirements/create') }}" 
-                       class="btn btn-sm btn-primary"
-                    >Add New</a>
+                    <div class="btn-group btn-group-sm">
+                      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Add New <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a href="#">Campaign Requirement</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{{ url('admin/campaign-groups/'.$group->uuid.'/requirements/create') }}">Custom Requirement</a></li>
+                      </ul>
+                    </div>
                 </div>
             </div>
         </div>

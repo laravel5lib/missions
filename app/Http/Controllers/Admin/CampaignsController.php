@@ -66,10 +66,7 @@ class CampaignsController extends Controller
             'admin/campaigns/'.$campaign->id.'/costs' => 'Costs',
             'admin/campaigns/'.$campaign->id.'/requirements' => 'Requirements',
             'admin/campaigns/'.$campaign->id.'/groups' => 'Groups ',
-            'admin/campaigns/'.$campaign->id.'/reservations/missionaries' => 'Reservations',
-            'admin/campaigns/'.$campaign->id.'/reservations/flights' => 'Flights',
-            'admin/campaigns/'.$campaign->id.'/reservations/squads' => 'Squads',
-            'admin/campaigns/'.$campaign->id.'/reservations/interests' => 'Interests'
+            'admin/campaigns/'.$campaign->id.'/reservations/missionaries' => 'Reservations'
         ];
 
         return $links;

@@ -3,7 +3,9 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use App\Models\v1\Trip;
 use EloquentFilter\Filterable;
+use App\Models\v1\CampaignGroup;
 use Illuminate\Database\Eloquent\Model;
 
 class Requirement extends Model
@@ -56,6 +58,26 @@ class Requirement extends Model
     public function requester()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Get all the groups assigned to this requirement.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function groups()
+    {
+        return $this->morphedByMany(CampaignGroup::class, 'requireable', 'requireables', 'requirement_id', 'requireable_id', 'id', 'uuid');
+    }
+
+    /**
+     * Get all the groups assigned to this requirement.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function trips()
+    {
+        return $this->morphedByMany(Trip::class, 'requireable');
     }
 
     /**

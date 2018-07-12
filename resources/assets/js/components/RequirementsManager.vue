@@ -56,7 +56,16 @@
                         <tr class="active">
                             <th>#</th>
                             <th>Requirement</th>
-                            <th class="text-right">Trips</th>
+                            <th class="text-right" 
+                                v-if="requesterType === 'campaigns'"
+                            >
+                                Groups
+                            </th>
+                            <th class="text-right" 
+                                v-if="requesterType === 'campaign-groups' || requesterType === 'campaigns'"
+                            >
+                                Trips
+                            </th>
                             <th class="text-right">Reservations</th>
                         </tr>
                     </thead>
@@ -75,7 +84,14 @@
                                     </a>
                                 </strong>
                             </td>
-                            <td class="text-right">
+                            <td class="text-right" 
+                                v-if="requesterType === 'campaigns'"
+                            >
+                                <code>{{ requirement.groups_count }}</code>
+                            </td>
+                            <td class="text-right" 
+                                v-if="requesterType === 'campaigns' || requesterType === 'campaign-groups'"
+                            >
                                 <code>{{ requirement.trips_count }}</code>
                             </td>
                             <td class="text-right">

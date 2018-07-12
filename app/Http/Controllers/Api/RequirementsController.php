@@ -26,6 +26,7 @@ class RequirementsController extends Controller
     {
         $requirements = $this->requireable($requireableType, $requireableId)
             ->requireables()
+            ->withCount(['groups', 'trips'])
             ->paginate(request()->input('per_page', 25));
 
         return RequirementResource::collection($requirements);

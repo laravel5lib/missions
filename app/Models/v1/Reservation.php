@@ -14,6 +14,7 @@ use Conner\Tagging\Taggable;
 use App\Models\v1\SquadMember;
 use App\Utilities\v1\TeamRole;
 use EloquentFilter\Filterable;
+use App\Traits\HasRequirements;
 use Spatie\QueryBuilder\Filter;
 use App\Events\ReservationCreated;
 use App\Models\v1\FlightItinerary;
@@ -31,7 +32,7 @@ use App\Models\Presenters\ReservationPresenter;
 
 class Reservation extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey, Taggable, Rewardable, ReservationPresenter, HasPricing, Notifiable;
+    use SoftDeletes, Filterable, UuidForKey, Taggable, Rewardable, ReservationPresenter, HasPricing, HasRequirements, Notifiable;
 
     /**
      * The table associated with the model.
@@ -245,16 +246,6 @@ class Reservation extends Model
     public function notes()
     {
         return $this->morphMany(Note::class, 'noteable');
-    }
-
-    /**
-     * Get all of the reservation's requirements
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function requirements()
-    {
-        return $this->hasMany(ReservationRequirement::class);
     }
 
     /**

@@ -74,6 +74,9 @@ Route::prefix('reservations')->group(function () {
     Route::get('{id}/transfer', 'ReservationsController@transfer');
     Route::get('{id}/{tab?}', 'ReservationsController@show');
     Route::get('{id}/prices/{price}', 'ReservationPriceController@show');
+    Route::get('{id}/requirements/create', 'ReservationRequirementController@create');
+    Route::get('{id}/requirements/{requirement}', 'ReservationRequirementController@show');
+    Route::get('{id}/requirements/{requirement}/edit', 'ReservationRequirementController@edit');
 });
 
 Route::get('/funds/{fund}/fundraisers/create', '\App\Http\Controllers\Web\FundraisersController@create');

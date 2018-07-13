@@ -146,7 +146,6 @@ $api->version('v1', [
         $api->resource('reservations', 'ReservationsController');
         // $api->post('reservations/export', 'ReservationsController@export');
         $api->put('reservations/{id}/restore', 'ReservationsController@restore');
-        $api->resource('reservations.requirements', 'ReservationRequirementsController');
         $api->get('reservations/{reservations}/companions', 'CompanionsController@index');
         $api->post('reservations/{reservations}/companions', 'CompanionsController@store');
         $api->delete('reservations/{reservations}/companions', 'CompanionsController@destroy');
@@ -199,7 +198,7 @@ $api->version('v1', [
         $api->post('influencers/export', 'EssaysController@export');
         $api->post('influencers/import', 'EssaysController@import');
         $api->resource('reservations.dues', 'ReservationDuesController');
-        $api->resource('requirements.conditions', 'RequirementConditionsController');
+        // $api->resource('requirements.conditions', 'RequirementConditionsController');
         $api->resource('deadlines', 'DeadlinesController');
         $api->resource('questionnaires', 'QuestionnairesController');
         $api->resource('permissions/roles', 'PermissionRolesController');

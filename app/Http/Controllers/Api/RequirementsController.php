@@ -6,6 +6,7 @@ use App\Models\v1\Trip;
 use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
 use App\Models\v1\Requirement;
+use App\Models\v1\Reservation;
 use Spatie\QueryBuilder\Filter;
 use App\Models\v1\CampaignGroup;
 use App\Http\Controllers\Controller;
@@ -26,7 +27,7 @@ class RequirementsController extends Controller
     {
         $requirements = $this->requireable($requireableType, $requireableId)
             ->requireables()
-            ->withCount(['groups', 'trips'])
+            ->withCount(['groups', 'trips', 'reservations'])
             ->paginate(request()->input('per_page', 25));
 
         return RequirementResource::collection($requirements);
@@ -108,7 +109,8 @@ class RequirementsController extends Controller
         $requireables = [
             'campaigns' => Campaign::class,
             'campaign-groups' => CampaignGroup::class,
-            'trips' => Trip::class
+            'trips' => Trip::class,
+            'reservations' => Reservation::class
         ];
 
         if ($type == 'campaign-groups') {

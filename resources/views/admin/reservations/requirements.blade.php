@@ -1,9 +1,10 @@
 @extends('admin.reservations.show')
 
 @section('tab')
-    <reservation-requirements id="{{ $reservation->id }}"
-                              user-id="{{ $reservation->user_id }}" 
-                              :age="{{ $reservation->age }}"
-                              :locked="{{ $locked ? 1 : 0 }}">
-    </reservation-requirements>
+    <requirements-manager 
+        inheritable-id="{{ $reservation->trip_id }}" 
+        inheritable-type="trips" 
+        requester-type="reservations" 
+        requester-id="{{ $reservation->id }}"
+    ></requirements-manager>
 @endsection

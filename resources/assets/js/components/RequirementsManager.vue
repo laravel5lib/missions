@@ -66,7 +66,8 @@
                             >
                                 Trips
                             </th>
-                            <th class="text-right">Reservations</th>
+                            <th class="text-right" v-if="requesterType != 'reservations'">Reservations</th>
+                            <th v-else>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -94,8 +95,11 @@
                             >
                                 <code>{{ requirement.trips_count }}</code>
                             </td>
-                            <td class="text-right">
+                            <td class="text-right" v-if="requesterType != 'reservations'">
                                 <code>{{ requirement.reservations_count }}</code>
+                            </td>
+                            <td v-else>
+                                <em>Pending</em>
                             </td>
                         </tr>
                     </tbody>

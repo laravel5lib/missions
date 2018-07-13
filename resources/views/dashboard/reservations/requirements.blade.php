@@ -1,65 +1,71 @@
 @extends('dashboard.reservations.show')
 
-@section('styles')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.0/css/Jcrop.min.css" type="text/css">
-@endsection
-@section('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.0/js/Jcrop.min.js"></script>
-@endsection
-
 @section('tab')
     
     <div class="row">
-        <div class="col-xs-12 tour-step-requirements">
-            <reservation-requirements id="{{ $reservation->id }}"
-                                      user-id="{{ auth()->user()->id ?: $reservation->user_id }}" 
-                                      :age="{{ $reservation->age }}"
-                                      :locked="{{ $locked?'true':'false' }}">
-            </reservation-requirements>
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="circle-progress" data-percentage="50">
+                                <span class="progress-left">
+                                    <span class="progress-bar"></span>
+                                </span>
+                                <span class="progress-right">
+                                    <span class="progress-bar"></span>
+                                </span>
+                                <div class="progress-value">
+                                    <div>
+                                    1/2
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <h4>Travel Requirements</h4>
+                            <p class="text-muted">To make sure you're ready </p>
+                            <hr class="divider">
+                            <p class="small text-muted">
+                                <span class="badge badge-error">1</span> Incomplete &nbsp; 
+                                <span class="badge badge-muted">0</span> Review &nbsp; 
+                                <span class="badge badge-success">1</span> Complete &nbsp; 
+                                <span class="badge badge-info">0</span> Attention 
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-xs-12">
+            <fetch-json url="reservations/{{ $reservation->id }}/requirements" v-cloak>
+                <div class="row" slot-scope="{ json:requirements }" style="display: flex; flex-flow: row wrap">              
+                    <div class="col-lg-6 col-xs-12" v-for="(requirement, index) in requirements" style="display: flex;">
+                        <div class="panel panel-default" 
+                             style="border-style: solid; border-width: 4px 0px 0px; border-color: rgb(246, 50, 62); width: 100%"
+                        >
+                            <div class="panel-body">
+                                <p class="badge badge-error">Incomplete</p>
+                                <p class="small text-muted"><strong>Due before @{{ requirement.due_at | mFormat('LL') }}</strong></p>
+                                <hr class="divider inv">
+                                <h5 class="text-uppercase">@{{ requirement.name }}</h5>
+                                <p>@{{ requirement.short_desc }}</p>
+                                <hr class="divider inv">
+                                <p><a :href="`/dashboard/requirements/${requirement.id}`" class="btn btn-sm btn-primary">
+                                    Get Started
+                                </a></p>
+                                <hr class="divider inv">
+                                <hr class="divider">
+                                <p class="small text-muted text-left">Last updated @{{ requirement.updated_at | moment('', true) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fetch-json>
         </div>
     </div>
 
-@endsection
-
-@section('tour')
-    <script>
-        window.pageSteps = [
-            {
-                id: 'requirements',
-                title: 'Travel Requirements',
-                text: 'Every trip requires a certain set of documents and information to be submitted.',
-                attachTo: {
-                    element: '.tour-step-requirements',
-                    on: 'top'
-                },
-            },
-            {
-                id: 'search',
-                title: 'Find Requirements',
-                text: 'Search or browse the list for a requirement to manage.',
-                attachTo: {
-                    element: '.tour-step-search',
-                    on: 'top'
-                },
-            },
-            {
-                id: 'status',
-                title: 'Check the Status',
-                text: '<p>Requirements start as</p><p><span class="label label-danger small">incomplete</span></p><hr class="divider"><p>Submitted the required information and it will change to</p><p><span class="label label-default small">reviewing</span></p><hr class="divider"><p>Missions.Me staff will review your document and if everything is in order, the requirement will be statused as</p><p><span class="label label-success small">complete</span></p><hr class="divider"><p>If changes need to be made, look for a status of</p><p><span class="label label-info small">attention</span></p><hr class="divider"><p>You will need to achieve a complete status on all travel requirements to be travel ready.</p>',
-                attachTo: {
-                    element: '.tour-step-status',
-                    on: 'top'
-                },
-            },
-            {
-                id: 'attach',
-                title: 'Attach Documents',
-                text: 'Attach an existing document from your records or create a new one.',
-                attachTo: {
-                    element: '.tour-step-attach',
-                    on: 'top'
-                },
-            },
-        ];
-    </script>
 @endsection

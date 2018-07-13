@@ -24,6 +24,9 @@ class RequirementResource extends JsonResource
             'requester'          => [ 'id' => $this->requester_id, 'type' => $this->requester_type ],
             'created_at'         => $this->created_at->toIso8601String(),
             'updated_at'         => $this->updated_at->toIso8601String(),
+            'updated_at'         => $this->whenPivotLoaded('requireables', function () {
+                return $this->pivot->updated_at->toIso8601String();
+            }),
             'custom'             => $this->isCustom($request),
             'groups_count'       => $this->groups_count,
             'trips_count'        => $this->trips_count,

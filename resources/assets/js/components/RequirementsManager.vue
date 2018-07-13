@@ -68,6 +68,7 @@
                             </th>
                             <th class="text-right" v-if="requesterType != 'reservations'">Reservations</th>
                             <th v-else>Status</th>
+                            <th>Updated</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -101,6 +102,7 @@
                             <td v-else>
                                 <em>Pending</em>
                             </td>
+                            <td>{{ requirement.updated_at | moment('lll', true) }}</td>
                         </tr>
                     </tbody>
                 </table>

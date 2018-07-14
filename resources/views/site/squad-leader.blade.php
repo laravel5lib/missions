@@ -63,20 +63,18 @@
 							</div><!-- end panel-body -->
 						</div><!-- end panel -->
 					</div><!-- end col -->
-					<div class="col-xs-12 col-sm-6">
-						<div class="panel panel-default">
-							<div>
-								<div style="background: #f5f5f5;">
-									<div style="min-height: 315px; display: flex; align-items: center; justify-content: center;">
-										<h1 class="text-muted">COMING SOON</h1>
-									</div>
-								</div><!-- end video-inner -->
-							</div><!-- end video-outer -->
-							<div class="panel-body text-center">
-								<h6 class="text-uppercase">Squad Leader &middot; Session 3</h6>
-							</div><!-- end panel-body -->
-						</div><!-- end panel -->
-					</div><!-- end col -->
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="panel panel-default">
+                            <div class="video-outer">
+                                <div class="video-inner">
+                                    <iframe src="https://player.vimeo.com/video/279937027?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                                </div><!-- end video-inner -->
+                            </div><!-- end video-outer -->
+                            <div class="panel-body text-center">
+                                <h6 class="text-uppercase">Squad Leader &middot; Session 3</h6>
+                            </div><!-- end panel-body -->
+                        </div><!-- end panel -->
+                    </div><!-- end col -->
 					<div class="col-xs-12 col-sm-6">
 						<div class="panel panel-default">
 							<div>

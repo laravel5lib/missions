@@ -47,9 +47,7 @@ export default {
                 buttons: buttons,
                 timer: timer
             }).then((value) => {
-                if (value) {
-                    this.$emit('form:redirect', data)
-                }
+                this.$emit('form:redirect', data)
             })
 
         });

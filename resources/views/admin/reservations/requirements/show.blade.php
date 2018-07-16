@@ -33,19 +33,26 @@
                             <div class="col-xs-8">
                                 <h5>Details</h5>
                             </div>
-                            @if($requirement->isCustom('reservations', $reservation->id))
                             <div class="col-xs-4 text-right">
+                                @if($requirement->isCustom('reservations', $reservation->id))
                                 <a href="{{ url('/admin/reservations/'.$reservation->id.'/requirements/'.$requirement->id.'/edit') }}" 
-                                   class="btn btn-default btn-sm"
+                                   class="btn btn-link btn-sm"
                                 >
                                     Edit
                                 </a>
+                                @endif
+                                <button class="btn btn-default btn-sm" 
+                                        data-toggle="modal" 
+                                        data-target="#changeStatusModal"
+                                >
+                                    Change Status
+                                </button>
                             </div>
-                            @endif
                         </div>
                     @endslot
                     @component('list-group', [
                         'data' => [
+                            'Status' => requirementStatusLabel($requirement->pivot->status ?? 'incomplete'),
                             'Name' => $requirement->name,
                             'Short Description' => $requirement->short_desc,
                             'Document Type' => '<code>'.$requirement->document_type.'</code>',
@@ -104,6 +111,49 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <alert-error>
+        <template slot="title">Oops!</template>
+        <template slot="message">Unable to change the requirement status.</template>
+    </alert-error>
+
+    <alert-success :timer="1000" :reload="true">
+        <template slot="title">Changes Saved!</template>
+        <template slot="message">The requirement status was updated.</template>
+    </alert-success>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="changeStatusModal">
+      <div class="modal-dialog" role="document">
+        <ajax-form 
+            method="put" 
+            action="reservations/{{ $reservation->id }}/requirements/{{ $requirement->id }}" 
+            :initial="{{ json_encode(['status' => $requirement->pivot->status ])}}"
+        >
+            <template slot-scope="{ form }">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Change Status</h4>
+                  </div>
+                  <div class="modal-body">
+                    <input-select 
+                        name="status" 
+                        v-model="form.status" 
+                        :options="{ 'incomplete': 'Incomplete', 'attention': 'Needs Attention', 'reviewing': 'Under Review', 'complete': 'Completed'}"
+                    > 
+                        <label slot="label">Status</label>
+                    </input-select>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                  </div>
+                </div>
+            </template>
+        </ajax-form>
+      </div>
     </div>
 
 @endsection

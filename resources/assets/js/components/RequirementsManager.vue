@@ -99,9 +99,7 @@
                             <td class="text-right" v-if="requesterType != 'reservations'">
                                 <code>{{ requirement.reservations_count }}</code>
                             </td>
-                            <td v-else>
-                                <em>Pending</em>
-                            </td>
+                            <td v-else v-html="getStatusLabel(requirement.status)"></td>
                             <td>{{ requirement.updated_at | moment('lll', true) }}</td>
                         </tr>
                     </tbody>
@@ -224,6 +222,17 @@ export default {
         updateList() {
             $('#addRequirementModal').modal('hide');
             this.$refs.list.fetch();
+        },
+        getStatusLabel(status)
+        {
+            let labels = {
+                'incomplete': '<span class="badge badge-error">Incomplete</span>',
+                'attention': '<span class="badge badge-info">Needs Attention</span>',
+                'reviewing': '<span class="badge badge-muted">Under Review</span>',
+                'complete': '<span class="badge badge-success">Completed</span>'
+            };
+
+            return labels[status];
         }
     },
 

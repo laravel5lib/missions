@@ -79,4 +79,29 @@ trait HasRequirements
     {
         return $this->requireables()->syncWithoutDetaching($requirementId);
     }
+
+    /**
+     * Update a requirement for the model.
+     * 
+     * @param  string $id
+     * @param  array  $data
+     * @return Requirement
+     */
+    public function updateRequirement($id, array $data)
+    {
+        $requirement = $this->requireables()->findOrFail($id);
+
+        $requirement->update($data);
+
+        // update the status attribute on the pivot table
+        if (array_key_exists('status', $data)) {
+            $this->requireables()
+                 ->updateExistingPivot(
+                    $id, ['status' => $data['status']]
+                 );
+        }
+
+        // need to reload the model to get updated changes to pivot
+        return $this->requireables()->findOrFail($id);
+    }
 }

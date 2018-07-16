@@ -2,11 +2,12 @@
 
 namespace Tests\Feature\Api;
 
+use Tests\TestCase;
 use App\Models\v1\Campaign;
 use App\Models\v1\Requirement;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\v1\Reservation;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UpdateRequirementTest extends TestCase
 {
@@ -126,5 +127,27 @@ class UpdateRequirementTest extends TestCase
         $this->putJson("/api/campaigns/{$campaign->id}/requirements/{$requirement->id}", $changes)
              ->assertStatus(422)
              ->assertJsonValidationErrors(['due_at']);
+    }
+
+    /** @test */
+    public function change_requirement_status_for_reservation()
+    {
+        $requirement = factory(Requirement::class)->create();
+        $reservation = factory(Reservation::class)->create(['trip_id' => $requirement->requester_id]);
+        $reservation->requireables()->attach($requirement->id, ['status' => 'incomplete']);
+
+        $this->putJson("/api/reservations/{$reservation->id}/requirements/{$requirement->id}", ['status' => 'completed'])
+             ->assertStatus(200)
+             ->assertJson(['data' => ['status' => 'completed']]);
+
+        $this->assertDatabaseHas(
+            'requireables', 
+            [
+                'requirement_id' => $requirement->id, 
+                'requireable_type' => 'reservations', 
+                'requireable_id' => $reservation->id, 
+                'status' => 'completed'
+            ]
+        );
     }
 }

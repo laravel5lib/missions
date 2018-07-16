@@ -69,10 +69,7 @@ class RequirementsController extends Controller
     public function update(UpdateRequirementRequest $request, $requireableType, $requireableId, $id)
     {
         $requirement = $this->requireable($requireableType, $requireableId)
-                            ->requireables()
-                            ->findOrFail($id);
-
-        $requirement->update($request->all());
+                            ->updateRequirement($id, $request->all());
 
         return new RequirementResource($requirement);
     }

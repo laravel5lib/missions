@@ -17,6 +17,7 @@ class CreateRequireablesTable extends Migration
             $table->uuid('requirement_id')->index();
             $table->uuid('requireable_id')->index();
             $table->string('requireable_type');
+            $table->string('status')->nullable();
             $table->timestamps();
         });
 

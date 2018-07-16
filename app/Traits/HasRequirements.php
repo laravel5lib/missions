@@ -24,7 +24,9 @@ trait HasRequirements
      */
     public function requireables()
     {
-        return $this->morphToMany(Requirement::class, 'requireable')->withTimestamps();
+        return $this->morphToMany(Requirement::class, 'requireable')
+                    ->withPivot('status')
+                    ->withTimestamps();
     }
 
     /**

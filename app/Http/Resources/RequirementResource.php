@@ -30,7 +30,10 @@ class RequirementResource extends JsonResource
             'custom'             => $this->isCustom($request),
             'groups_count'       => $this->groups_count,
             'trips_count'        => $this->trips_count,
-            'reservations_count' => $this->reservations_count
+            'reservations_count' => $this->reservations_count,
+            'status' => $this->whenPivotLoaded('requireables', function () {
+                return $this->pivot->status;
+            })
         ];
     }
 

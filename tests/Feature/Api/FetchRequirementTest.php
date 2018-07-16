@@ -46,7 +46,8 @@ class FetchRequirementTest extends TestCase
                             'grace_period', 
                             'requester' => ['id', 'type'], 
                             'created_at', 
-                            'updated_at'
+                            'updated_at',
+                            'status'
                         ]
                     ],
                     'meta' => ['total']

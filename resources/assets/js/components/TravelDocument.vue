@@ -2,8 +2,12 @@
     <div class="panel panel-default" style="border-top: 5px solid #f6323e">
         <div class="panel-heading"><h5>{{ docType | underscoreToSpace | titleCase }}</h5></div>
         <template v-if="documents.length && !selectedDocument">
-            
-            <div class="table-responsive">
+                
+                <div class="panel-body">
+                    <div class="alert alert-warning">Select an existing {{ docType }} to use it.</div>
+                </div>
+                
+                <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr class="active">
@@ -23,6 +27,7 @@
             </div>
             
             <div class="panel-body text-right">
+                <button class="btn btn-link" @click="documents = []">Cancel</button>
                 <button class="btn btn-primary">Add New {{ docType }}</button>
             </div>
     

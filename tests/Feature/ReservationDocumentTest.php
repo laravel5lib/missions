@@ -25,7 +25,28 @@ class ReservationDocumentTest extends TestCase
         $response->assertStatus(201);
 
         $this->assertDatabaseHas(
-            'reservation_documents', 
+            'reservation_documents',
+            [
+                'reservation_id' => $reservation->id,
+                'documentable_id' => $passport->id, 
+                'documentable_type' => 'passports'
+            ]
+        );
+    }
+
+    /** @test */
+    public function remove_passport_from_reservation()
+    {
+        $reservation = factory(Reservation::class)->create();
+        $passport = factory(Passport::class)->create(['user_id' => $reservation->user_id]);
+        $reservation->passports()->attach($passport->id);
+
+        $response = $this->deleteJson("/api/reservations/{$reservation->id}/passports/{$passport->id}");
+
+        $response->assertStatus(204);
+
+        $this->assertDatabaseMissing(
+            'reservation_documents',
             [
                 'reservation_id' => $reservation->id,
                 'documentable_id' => $passport->id, 

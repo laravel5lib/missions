@@ -33,7 +33,8 @@ Route::post('reservations/{reservationId}/prices/lock', 'ReservationPriceLockCon
 Route::delete('reservations/{reservationId}/prices/lock', 'ReservationPriceLockController@destroy');
 Route::apiResource('reservations/{reservationId}/prices', 'ReservationPriceController');
 Route::post('reservations/{id}/transfer', 'ReservationTransfersController@store');
-Route::apiResource('reservations/{reservationId}/{documentType}', 'ReservationDocumentController');
+Route::post('reservations/{reservationId}/{documentType}', 'ReservationDocumentController@store');
+Route::delete('reservations/{reservationId}/{documentType}/{documentId}', 'ReservationDocumentController@destroy');
 
 // Companions
 Route::get('companions', 'CompanionController@index');

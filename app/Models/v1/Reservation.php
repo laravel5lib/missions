@@ -9,6 +9,7 @@ use App\Models\v1\Squad;
 use App\Models\v1\Payment;
 use App\Traits\HasPricing;
 use App\Traits\Rewardable;
+use App\Traits\HasDocuments;
 use App\TransferReservation;
 use Conner\Tagging\Taggable;
 use App\Models\v1\SquadMember;
@@ -32,7 +33,7 @@ use App\Models\Presenters\ReservationPresenter;
 
 class Reservation extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey, Taggable, Rewardable, ReservationPresenter, HasPricing, HasRequirements, Notifiable;
+    use SoftDeletes, Filterable, UuidForKey, Taggable, Rewardable, ReservationPresenter, HasPricing, HasRequirements, HasDocuments, Notifiable;
 
     /**
      * The table associated with the model.

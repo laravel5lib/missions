@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\v1\Passport;
+use App\Models\v1\Requirement;
 use App\Models\v1\Reservation;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -83,5 +84,55 @@ class ReservationDocumentTest extends TestCase
                 ]
             ]
         ]);
+    }
+
+    /** @test */
+    public function change_requirement_status_when_document_is_added_to_reservation()
+    {
+        $reservation = factory(Reservation::class)->create();
+
+        $requirement = factory(Requirement::class)->create(
+            ['requester_type' => 'trips', 'requester_id' => $reservation->trip_id, 'document_type' => 'passports']
+        );
+        $reservation->requireables()->attach($requirement->id);
+
+        $passport = factory(Passport::class)->create(
+            ['user_id' => $reservation->user_id]
+        );
+
+        $response = $this->postJson("/api/reservations/{$reservation->id}/passports", [
+            'document_id' => $passport->id
+        ]);
+
+        $response->assertStatus(201);
+
+        $requirement = $reservation->requireables()->find($requirement->id);
+
+        $this->assertEquals($requirement->pivot->status, 'reviewing');
+    }
+
+    /** @test */
+    public function change_requirement_status_when_document_is_removed_from_reservation()
+    {
+        $reservation = factory(Reservation::class)->create();
+
+        $requirement = factory(Requirement::class)->create(
+            ['requester_type' => 'trips', 'requester_id' => $reservation->trip_id, 'document_type' => 'passports']
+        );
+        $reservation->requireables()->attach($requirement->id);
+
+        $passport = factory(Passport::class)->create(
+            ['user_id' => $reservation->user_id]
+        );
+
+        $reservation->passports()->attach($passport->id);
+
+        $response = $this->deleteJson("/api/reservations/{$reservation->id}/passports/{$passport->id}");
+
+        $response->assertStatus(204);
+
+        $requirement = $reservation->requireables()->find($requirement->id);
+
+        $this->assertEquals($requirement->pivot->status, 'incomplete');
     }
 }

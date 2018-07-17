@@ -9,35 +9,56 @@
 </div><!-- end c-page-header -->
 <div class="white-bg">
 	<div class="container">
-	<div class="content-section">
-		<div class="row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<h2 class="text-center">Squad Leader Training</h2>
-                <hr class="divider red-small">
-                <hr class="divider inv sm">
-                <p class="text-center">Congratulations, you have been nominated to lead a squad! As an official "Squad Leader", you'll need to view the four-part training series with the Missions.Me Country Directors at your convenience.  All four parts will be viewable here.</p>
-                <p class="text-center"><strong>It is imperative that you view these sessions as well as read the Squad Leader Manual PDF document which can be downloaded below.</strong></p>
-				<hr class="divider inv">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-10 col-sm-offset-1 text-center">
-                        <a class="btn btn-primary" href="downloads/SLmanual2018_hond.pdf">
-                           	<i class="fa fa-file-pdf-o icon-left"></i> Honduras Squad Leader Manual
-                            <small>(6.4MB)</small>
-                        </a>
+    	<div class="content-section">
+    		<div class="row">
+    			<div class="col-sm-6 col-sm-offset-3">
+    				<h2 class="text-center">Squad Leader Training</h2>
+                    <hr class="divider red-small">
+                    <hr class="divider inv sm">
+                    <p class="text-center">Congratulations, you have been nominated to lead a squad! As an official "Squad Leader", you'll need to view the four-part training series with the Missions.Me Country Directors at your convenience.  All four parts will be viewable here.</p>
+                    <p class="text-center"><strong>It is imperative that you view these sessions as well as read the Squad Leader Manual PDF document which can be downloaded below.</strong></p>
+    				<hr class="divider inv">
+                </div><!-- end col -->
+            </div><!-- end row -->
+        </div>
+    </div>
+</div>
+
+<div class="grey-bg">
+    <div class="container">
+        <div class="content-section">
+            <div class="row">
+                <div class="col-sm-12 col-md-4 text-center">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                        <p><i class="fa fa-file-pdf-o fa-2x"></i></p>
+                        <p><strong>Honduras Squad Leader Manual</strong></p>
+                        <a href="downloads/SLmanual2018_hond.pdf" target="_blank">Download <small>(6.4MB)</small></a>
+                        </div>
                     </div>
                 </div>
-                <hr class="divider inv">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-10 col-sm-offset-1 text-center">
-                        <a class="btn btn-primary" href="downloads/SLmanual2018_dr.pdf">
-                           	<i class="fa fa-file-pdf-o icon-left"></i> Dominican Squad Leader Manual
-                            <small>(6.4MB)</small>
-                        </a>
+                <div class="col-sm-12 col-md-4 text-center">
+                    <div class="panel panel-default panel-body">
+                        <p><i class="fa fa-file-pdf-o fa-2x"></i></p>
+                        <p><strong>Dominican Squad Leader Manual</strong></p>
+                        <a href="downloads/SLmanual2018_dr.pdf" target="_blank">Download <small>(6.4MB)</small></a>
                     </div>
                 </div>
-                <hr class="divider inv lg">
-            </div><!-- end col -->
-        </div><!-- end row -->
+                <div class="col-sm-12 col-md-4 text-center">
+                    <div class="panel panel-default panel-body">
+                        <p><i class="fa fa-file-pdf-o fa-2x"></i></p>
+                        <p><strong>Ministry Training Guide</strong></p>
+                        <a href="downloads/MinistryTrainingGuide2018.pdf" target="_blank">Download <small>(529kb)</small></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="white-bg">
+    <div class="container">
+    <div class="content-section">
 				<div class="row">
 					<div class="col-xs-12 col-sm-6">
 						<div class="panel panel-default">

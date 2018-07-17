@@ -15,7 +15,7 @@
 			<div class="col-sm-8 col-sm-offset-2">
                 <h3 class="text-primary">Greetings Legacy Partners,</h3>
 
-				<p>Praying you and your families are blessed. I wanted to take a moment and update you on what’s happening at Missions.Me this summer and beyond. Check out this video update for more information.</p>
+				<p>1Nation1Day has officially launched in Peru. Check this exciting update from Lima.</p>
 				<hr class="divider inv">
 				<p>Blessings,</p>
 				<h5 class="text-primary"><em>Gabe</em></h5>
@@ -35,7 +35,7 @@
 				<hr class="divider inv">
 				<div class="video-outer">
 					<div class="video-inner">
-						<iframe src="https://player.vimeo.com/video/270898946?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+						<iframe src="https://player.vimeo.com/video/280295072?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 					</div>
 				</div>
 			</div><!-- end col -->

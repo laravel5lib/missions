@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Storage;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+// Requirements
+Route::apiResource('{requireableType}/{requireableId}/requirements', 'RequirementsController');
+
 // Campaigns
 Route::apiResource('campaigns/{campaignId}/groups', 'CampaignGroupController');
 Route::apiResource('campaigns/{campaignId}/costs', 'CampaignCostController')->middleware('auth:api');
@@ -61,9 +64,6 @@ Route::apiResource('regions', 'RegionController');
 Route::put('squads/published', 'SquadPublicationController@update');
 Route::apiResource('squads', 'SquadController');
 Route::apiResource('squad-members', 'SquadMemberController');
-
-// Requirements
-Route::apiResource('{requireableType}/{requireableId}/requirements', 'RequirementsController');
 
 // Dingo API routes
 $api = app('Dingo\Api\Routing\Router');

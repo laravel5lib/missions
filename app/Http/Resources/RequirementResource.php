@@ -32,7 +32,7 @@ class RequirementResource extends JsonResource
             'trips_count'        => $this->trips_count,
             'reservations_count' => $this->reservations_count,
             'status' => $this->whenPivotLoaded('requireables', function () {
-                return $this->pivot->status;
+                return $this->pivot->status ?? 'incomplete';
             })
         ];
     }

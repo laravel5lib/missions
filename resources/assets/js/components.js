@@ -242,6 +242,7 @@ Vue.component('squad-manager', require('./components/SquadManager.vue'));
 Vue.component('group-squad-member-list', require('./components/GroupSquadMemberList.vue'));
 Vue.component('travel-requirement-form', require('./components/TravelRequirementForm.vue'));
 Vue.component('requirements-manager', require('./components/RequirementsManager.vue'));
+Vue.component('travel-document', require('./components/TravelDocument.vue'));
 
 /**
  * Utility Components

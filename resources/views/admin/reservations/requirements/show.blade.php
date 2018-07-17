@@ -16,16 +16,10 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-12 col-md-8">
-
-                @component('panel')
-                    @slot('title')
-                        <h5>Travel Document</h5>
-                    @endslot
-                    <div class="panel-body text-center">
-                        <span class="lead">No Travel Document Found</span>
-                        <p>Attach an existing travel document or create a new one.</p>
-                    </div>
-                @endcomponent
+                <travel-document 
+                    type="{{ $requirement->document_type }}" 
+                    reservation-id="{{ $reservation->id }}"
+                ></travel-document>
                 
                 @component('panel')
                     @slot('title')

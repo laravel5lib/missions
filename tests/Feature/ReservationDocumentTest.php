@@ -54,4 +54,34 @@ class ReservationDocumentTest extends TestCase
             ]
         );
     }
+
+    /** @test */
+    public function get_passports_for_reservation()
+    {
+        $reservation = factory(Reservation::class)->create();
+        $passport = factory(Passport::class)->create(['user_id' => $reservation->user_id]);
+        $reservation->passports()->attach($passport->id);
+
+        $response = $this->getJson("/api/reservations/{$reservation->id}/passports");
+
+        $response->assertStatus(200)->assertJsonStructure([
+            'data' => [
+                [
+                    'id',
+                    'given_names',
+                    'surname',
+                    'number',
+                    'birth_country',
+                    'birth_country_name',
+                    'citizenship',
+                    'citizenship_name',
+                    'upload_id',
+                    'expires_at',
+                    'created_at',
+                    'updated_at',
+                    'expired'
+                ]
+            ]
+        ]);
+    }
 }

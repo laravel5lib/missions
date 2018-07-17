@@ -1,6 +1,6 @@
 <template>
     <div class="panel panel-default" style="border-top: 5px solid #f6323e">
-        <div class="panel-heading"><h5>Travel Document</h5></div>
+        <div class="panel-heading"><h5>{{ docType | underscoreToSpace | titleCase }}</h5></div>
         <template v-if="documents.length && !selectedDocument">
             
             <div class="table-responsive">
@@ -13,7 +13,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="document in mapRows(documents)" @click="selectedDocument = document">
+                        <tr v-for="document in mapRows(documents)" @click="addDocument(document)">
                             <td v-for="(value, key) in document" v-if="key != 'id'">
                                 {{ value }}
                             </td>
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="panel-body text-right">
-                    <button @click="selectedDocument = null" class="btn btn-sm btn-link">Choose a Different {{ docType }}</button>
+                    <button @click="removeDocument(selectedDocument)" class="btn btn-sm btn-link">Choose a different {{ docType }}</button>
                 </div>
             </template>
             <template v-else>
@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import DocumentTransformer from '../utilities/DocumentTransformer';
+
 export default {
     props: {
         reservationId: {
@@ -80,87 +82,82 @@ export default {
 
     computed: {
         docType() {
+            // make it singular
             return this.type.substring(0, this.type.length - 1);
         },
         headings() {
+            // grab the first document so we can use it's keys as table headings
             return _.first(this.mapRows(this.documents));
         }
     },
 
     methods: {
-        addDocument() {
+        addDocument(document) {
             this.$http
-                .post(`reservations/${this.reservationId}/${this.type}`, { 'document_id': this.document.id })
+                .post(`reservations/${this.reservationId}/${this.type}`, { 'document_id': document.id })
                 .then((response) => {
-                    console.log('yay! it worked!');
+                    this.selectedDocument = document;
+                    swal('Nice Work!', 'Document has been added.', 'success');
                 })
                 .catch((error) => {
-                    console.log('oops! something went wrong.');
+                    this.handleError(error)
                 });
         },
-        removeDocument() {
+        removeDocument(document) {
+            // load a list of documents if empty
+            if (!this.documents.length) {
+                this.fetchDocuments();
+            }
+
             this.$http
-                .delete(`reservations/${this.reservationId}/${this.type}/${this.document.id}`)
+                .delete(`reservations/${this.reservationId}/${this.type}/${document.id}`)
                 .then((response) => {
-                    console.log('yay! it worked!');
+                    this.selectedDocument = null;
                 })
                 .catch((error) => {
-                    console.log('oops! something went wrong.');
+                    this.handleError(error)
                 });
         },
         fetchDocument() {
+            // replace underscores with dashes
             let type = this.type.replace(/_/g, '-');
+
             this.$http
                 .get(`reservations/${this.reservationId}/${type}`)
                 .then((response) => {
-                    this.selectedDocument = _.first(response.data.data);
-                    console.log('yay! it worked!');
+                    this.selectedDocument = _.first(this.mapRows(response.data.data));
                 })
                 .catch((error) => {
-                    console.log('oops! something went wrong.');
+                    this.handleError(error)
                 });
         },
         fetchDocuments() {
+            // replace underscores with dashes
             let type = this.type.replace(/_/g, '-');
+
             this.$http
                 .get(`${type}`)
                 .then((response) => {
                     this.documents = response.data.data;
-                    console.log('yay! it worked!');
                 })
                 .catch((error) => {
-                    console.log('oops! something went wrong.');
+                    this.handleError(error)
                 });
         },
         mapRows(documents) {
             let that = this;
             return _.map(documents, function (document) {
-
-                if (that.type == 'passports') {
-                    return {
-                        id: document.id,
-                        name: document.given_names + ' ' + document.surname,
-                        number: document.number,
-                        nationality: document.birth_country_name,
-                        citizenship: document.citizenship_name,
-                        expiration: moment(document.expires_at).format('ll'),
-                        expired: document.expired ? 'Yes' : 'No'
-                    }
-                }
-
-                if (that.type == 'medical_releases') {
-                    return {
-                        id: document.id,
-                        name: document.name,
-                        last_updated: moment(document.updated).format('ll')
-                    }
-                }
-
+                return new DocumentTransformer(document, that.type).get();
             })
+        },
+        handleError(error) {
+            swal('Oops!', error, 'error');
         }
     },
 
     mounted() {
+        // check if a document has already 
+        // been attached and retrieve it
         this.fetchDocument();
     }
 }

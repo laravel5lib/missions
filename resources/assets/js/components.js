@@ -80,7 +80,6 @@ Vue.component('admin-transactions-list', require('./components/AdminTransactionL
  */
 Vue.component('campaigns', require('./components/campaigns/campaigns.vue'));
 Vue.component('campaign-groups', require('./components/campaigns/campaign-groups.vue'));
-Vue.component('visibility-controls', require('./components/campaigns/visibility-controls.vue'));
 Vue.component('trip-details-missionaries', require('./components/trips/trip-details-missionaries.vue'));
 Vue.component('trip-registration-wizard', require('./components/trips/trip-registration-wizard.vue'));
 Vue.component('campaign-create', require('./components/campaigns/admin-campaign-create.vue'));

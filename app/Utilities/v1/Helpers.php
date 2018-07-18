@@ -366,5 +366,5 @@ function requirementStatusLabel($status)
         'complete'   => '<span class="badge badge-success">Completed</span>'
     ];
 
-    return $label[$status];
+    return $label[$status] ?? $label['incomplete'];
 }

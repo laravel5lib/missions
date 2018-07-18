@@ -1,7 +1,7 @@
 <div class="navbar navbar-default" style="padding-left: 0; border-bottom: 1px solid #eee;">
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-3 col-sm-6 col-xs-6">
+    <div style="display: flex; justify-content: space-between;">
+      <div>
 
         <a href="{{ url('/dashboard') }}" class="navbar-brand visible-xs">
           <img class="db-brand-xs" src="/images/mm-icon-red.png" alt="MM">
@@ -14,7 +14,7 @@
         </div>
       </div>
 
-        <div class="col-md-6 hidden-xs hidden-sm" style="text-align: center">
+        <div class="hidden-xs hidden-sm text-center">
           <div class="nav navbar-nav navbar-center" style="float: none; display:inline-block; vertical-align: middle;">
             <li class="{{ request()->segment(2) == 'reservations' ? 'active' : '' }}">
               <a href="/dashboard/reservations">My Trip</a>
@@ -34,7 +34,7 @@
           </div>
         </div>
 
-      <div class="col-md-3 col-sm-6 col-xs-6">
+      <div>
         <ul class="nav navbar-nav navbar-right dropdown" style="margin-left:75px;">
 
           @if(auth()->check())

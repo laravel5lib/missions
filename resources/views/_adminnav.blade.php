@@ -1,4 +1,4 @@
-<div class="navbar navbar-default" style="padding-left: 0; border-bottom: 1px solid #eee; position: -webkit-sticky; position: sticky; top: 0; z-index: 2">
+<div class="navbar navbar-default" style="padding-left: 0; border-bottom: 1px solid #eee; position: -webkit-sticky; position: sticky; top: 0; z-index: 4">
   <div class="container-fluid">
     <div style="display: flex; justify-content: space-between;">
       <div>

@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use App\Models\v1\Visa;
+use App\Models\v1\Essay;
 use App\Models\v1\Passport;
 
 trait HasDocuments
@@ -45,6 +47,26 @@ trait HasDocuments
     public function passports()
     {
         return $this->morphedByMany(Passport::class, 'documentable', $this->getTableName());
+    }
+
+    /**
+     * Get visas related to the model.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function visas()
+    {
+        return $this->morphedByMany(Visa::class, 'documentable', $this->getTableName());
+    }
+
+    /**
+     * Get essays related to the model.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function essays()
+    {
+        return $this->morphedByMany(Essay::class, 'documentable', $this->getTableName());
     }
 
     // TODO: add all possible document types

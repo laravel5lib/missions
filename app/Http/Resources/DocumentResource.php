@@ -31,12 +31,40 @@ class DocumentResource extends JsonResource
                     'citizenship_name' => country($this->citizenship),
                     'upload_id' => $this->upload_id,
                     'expires_at' => $this->expires_at->format('Y-m-d'),
-                    'created_at' => $this->created_at->toDateTimeString(),
-                    'updated_at' => $this->updated_at->toDateTimeString(),
+                    'created_at' => $this->created_at->toIso8601String(),
+                    'updated_at' => $this->updated_at->toIso8601String(),
+                    'expired' => $this->expires_at->isPast() ? true : false,
+                ];
+                break;
+
+            case 'visas':
+                return [
+                    'id' => $this->id,
+                    'given_names' => $this->given_names,
+                    'surname' => $this->surname,
+                    'number' => $this->number,
+                    'country' => $this->country_code,
+                    'country_name' => country($this->country_code),
+                    'upload_id' => $this->upload_id,
+                    'issued_at' => $this->issued_at->format('Y-m-d'),
+                    'expires_at' => $this->expires_at->format('Y-m-d'),
+                    'created_at' => $this->created_at->toIso8601String(),
+                    'updated_at' => $this->updated_at->toIso8601String(),
                     'expired' => $this->expires_at->isPast() ? true : false,
                 ];
                 break;
             
+            case 'essays':
+                return [
+                    'id' => $this->id,
+                    'author_name' => $this->author_name,
+                    'subject' => $this->subject,
+                    'content' => $this->content,
+                    'created_at' => $this->created_at->toIso8601String(),
+                    'updated_at' => $this->updated_at->toIso8601String()
+                ];
+                break;
+
             default:
                 return [
                     'message' => 'Undefined or unrecognized document type'

@@ -3,32 +3,32 @@
         <div class="panel-heading"><h5>{{ docType | underscoreToSpace | titleCase }}</h5></div>
         <template v-if="documents.length && !selectedDocument">
                 
-                <div class="panel-body">
-                    <div class="alert alert-warning">Select an existing {{ docType }} to use it.</div>
-                </div>
+            <div class="panel-body">
+                <div class="alert alert-warning">Click on an existing {{ docType }} to use it.</div>
                 
                 <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr class="active">
-                            <th v-for="(value, key) in headings" v-if="key != 'id'">
-                                {{ key | underscoreToSpace | titleCase }}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="document in mapRows(documents)" @click="addDocument(document)">
-                            <td v-for="(value, key) in document" v-if="key != 'id'">
-                                {{ value }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="active">
+                                <th v-for="(value, key) in headings" v-if="key != 'id'">
+                                    {{ key | underscoreToSpace | titleCase }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="document in mapRows(documents)" @click="addDocument(document)">
+                                <td v-for="(value, key) in document" v-if="key != 'id'">
+                                    {{ value }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             
             <div class="panel-body text-right">
                 <button class="btn btn-link" @click="documents = []">Cancel</button>
-                <button class="btn btn-primary">Add New {{ docType }}</button>
+                <a class="btn btn-primary" :href="`/${firstUrlSegment}/records/${type}/create?requirement=${requirement.id}`">Add New {{ docType }}</a>
             </div>
     
         </template>
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel-body text-right" v-if="requirement.pivot.status != 'complete'">
+                <div class="panel-body text-right">
                     <button @click="removeDocument(selectedDocument)" class="btn btn-sm btn-link">Choose a different {{ docType }}</button>
                 </div>
             </template>
@@ -77,8 +77,7 @@ export default {
             required: true
         },
         requirement: {
-            type: Object,
-            required: true
+            type: Object
         }
     },
 

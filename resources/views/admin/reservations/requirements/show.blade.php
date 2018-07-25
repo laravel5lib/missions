@@ -19,6 +19,7 @@
                 <travel-document 
                     type="{{ $requirement->document_type }}" 
                     reservation-id="{{ $reservation->id }}"
+                    :requirement="{{ json_encode($requirement) }}"
                 ></travel-document>
                 
                 @component('panel')

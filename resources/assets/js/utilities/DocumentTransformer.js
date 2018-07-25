@@ -25,6 +25,33 @@ class DocumentTransformer {
             }
         }
 
+        if (this.type == 'visas') {
+            return {
+                id: this.document.id,
+                name: this.document.given_names + ' ' + this.document.surname,
+                number: this.document.number,
+                country: this.document.country_name,
+                expired: this.document.expired ? 'Yes' : 'No',
+                issued: moment(this.document.issued_at).format('ll'),
+                expiration: moment(this.document.expires_at).format('ll'),
+                last_updated: moment(this.document.updated).format('ll')
+            }
+        }
+
+        if (this.type == 'essays') {
+            let essay = {
+                id: this.document.id,
+                name: this.document.author_name,
+                last_updated: moment(this.document.updated).format('ll')
+            }
+
+            _.each(this.document.content, function (item) {
+                essay[item.q] = item.a;
+            });
+
+            return essay;
+        }
+
         throw "Unrecognized document type";
     }
 }

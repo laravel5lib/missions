@@ -65,6 +65,23 @@ class DocumentResource extends JsonResource
                 ];
                 break;
 
+            case 'referrals':
+                return [
+                    'id' => $this->id,
+                    'applicant_name' => $this->applicant_name,
+                    'type' => $this->type,
+                    'attention_to' => $this->attention_to,
+                    'recipient_email' => $this->recipient_email,
+                    'referrer' => $this->referrer,
+                    'response' => $this->response,
+                    'status' => $this->status,
+                    'sent_at' => $this->sent_at ? $this->sent_at->toIso8601String() : null,
+                    'responded_at' => $this->responded_at ? $this->responded_at->toIso8601String() : null,
+                    'created_at' => $this->created_at->toIso8601String(),
+                    'updated_at' => $this->updated_at->toIso8601String(),
+                ];
+                break;
+
             default:
                 return [
                     'message' => 'Undefined or unrecognized document type'

@@ -42,7 +42,7 @@
                 </div>
             </div>
 
-            <!-- <div class="container">
+            <div class="container">
                 <div class="row">
                     <div class="col-md-4">
                         <h5>Rules (optional)</h5>
@@ -50,14 +50,24 @@
                         <p class="text-muted">If <strong>no rules</strong> are set, the requirement will always be applied to every reservation.</p>
                     </div>
                     <div class="col-md-8">
-                        @component('panel')
-                            @slot('body')
-                            
-                            @endslot
-                        @endcomponent
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <select-roles name="roles" 
+                                              :horizontal="true" 
+                                              classes="col-md-8" 
+                                              v-model="form.rules.roles" 
+                                >
+                                    <label slot="label" class="control-label col-md-4">Apply only to these roles:</label>
+                                </select-roles>
+
+                                <input-text name="age" :horizontal="true" classes="col-md-2" v-model="form.rules.age">
+                                    <label slot="label" class="control-label col-md-4">Apply if under the age of:</label>
+                                </input-text>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
 
             <div class="container">
                 <div class="row">
@@ -116,7 +126,8 @@ export default {
                 document_type: this.requirement ? this.requirement.document_type : null, 
                 due_at: this.requirement ? this.requirement.due_at : null, 
                 requester_type: this.requesterType, 
-                requester_id: this.requesterId
+                requester_id: this.requesterId,
+                rules: this.requirement ? (this.requirement.rules ? this.requirement.rules : false) : {age: null, roles: null}
             }
         },
         submitButtonLabel() {

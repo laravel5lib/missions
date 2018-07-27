@@ -4,6 +4,7 @@ namespace App\Models\v1;
 
 use App\UuidForKey;
 use App\Models\v1\Trip;
+use App\RequirementRules;
 use EloquentFilter\Filterable;
 use App\Models\v1\CampaignGroup;
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +25,7 @@ class Requirement extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'short_desc', 'document_type', 'requester_id', 'requester_type', 'due_at'];
+    protected $fillable = ['name', 'short_desc', 'document_type', 'requester_id', 'requester_type', 'due_at', 'rules'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -35,13 +36,7 @@ class Requirement extends Model
         'created_at', 'updated_at', 'deleted_at', 'due_at'
     ];
 
-    /**
-     * All of the relationships to be touched.
-     * Update the parent's timestamp.
-     *
-     * @var array
-     */
-    protected $touches = ['reservations'];
+    protected $casts = ['rules' => 'array'];
 
     /**
      * Indicates if the model should be timestamped.
@@ -88,16 +83,6 @@ class Requirement extends Model
     public function reservations()
     {
         return $this->morphedByMany(Reservation::class, 'requireable');
-    }
-
-    /**
-     * Get the requirement's conditions
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function conditions()
-    {
-        return $this->hasMany(RequirementCondition::class);
     }
 
     /**

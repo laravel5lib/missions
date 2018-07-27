@@ -58,10 +58,9 @@ trait HasRequirements
                 'name' => isset($data['name']) ? $data['name'] : null,
                 'short_desc' => isset($data['short_desc']) ? $data['short_desc'] : null,
                 'document_type' => isset($data['document_type']) ? $data['document_type'] : null,
-                'due_at' => isset($data['due_at']) ? $data['due_at'] : null
+                'due_at' => isset($data['due_at']) ? $data['due_at'] : null,
+                'rules' => isset($data['rules']) ? $data['rules'] : null
             ]);
-
-            // attach rules here?
             
             $this->attachRequirementToModel($requirement->id);
 

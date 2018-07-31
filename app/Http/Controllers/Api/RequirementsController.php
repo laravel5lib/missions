@@ -25,9 +25,34 @@ class RequirementsController extends Controller
      */
     public function index($requireableType, $requireableId)
     {
-        $requirements = $this->requireable($requireableType, $requireableId)
-            ->requireables()
-            ->withCount(['groups', 'trips', 'reservations'])
+        $requireable = $this->requireable($requireableType, $requireableId);
+        
+        $requirements = $requireable->requireables()
+            ->withCount([
+                'groups' => function ($query) use ($requireable) {
+                    $query->where('campaign_id', $requireable->id);
+                }, 
+                'trips' => function ($query) use ($requireable, $requireableType) {
+                    $query->when($requireableType == 'campaigns', function ($query) use ($requireable) {
+                        $query->where('campaign_id', $requireable->id);
+                    })
+                    ->when($requireableType == 'campaign-groups', function ($query) use ($requireable) {
+                        $query->where('campaign_id', $requireable->campaign_id)
+                              ->where('group_id', $requireable->group_id);
+                    });
+                }, 
+                'reservations' => function ($query) use ($requireable, $requireableType) {
+                    $query->when($requireableType == 'campaign-groups', function($query) use ($requireable) {
+                        $query->whereHas('trip', function ($trip) use ($requireable) {
+                            return $trip->where('group_id', $requireable->group_id)
+                                        ->where('campaign_id', $requireable->campaign_id);
+                        });
+                    })
+                    ->when($requireableType == 'trips', function($query) use ($requireable) {
+                        $query->where('trip_id', $requireable->id);
+                    });
+                }
+            ])
             ->paginate(request()->input('per_page', 25));
 
         return RequirementResource::collection($requirements);

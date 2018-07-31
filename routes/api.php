@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Storage;
 */
 // Requirements
 Route::apiResource('{requireableType}/{requireableId}/requirements', 'RequirementsController');
+Route::post('campaigns/{campaign}/requirements/{requirement}/add', 'BulkAddCampaignRequirementController');
+Route::post('campaign-groups/{campaignGroup}/requirements/{requirement}/add', 'BulkAddCampaignGroupRequirementController');
+Route::post('trips/{trip}/requirements/{requirement}/add', 'BulkAddTripRequirementController');
 
 // Campaigns
 Route::apiResource('campaigns/{campaignId}/groups', 'CampaignGroupController');

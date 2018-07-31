@@ -23,9 +23,15 @@ class TripRequirementController extends Controller
 
     public function show($tripId, $requirementId)
     {
-        $trip = Trip::findOrFail($tripId);
+        $trip = Trip::withCount(['reservations'])->findOrFail($tripId);
 
-        $requirement = $trip->requireables()->findOrFail($requirementId);
+        $requirement = $trip->requireables()
+            ->withCount([
+                'reservations' => function ($query) use ($trip) {
+                    $query->where('trip_id', $trip->id);
+                }
+            ])
+            ->findOrFail($requirementId);
 
         $group = CampaignGroup::query()
             ->where('campaign_id', $trip->campaign_id)

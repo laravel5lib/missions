@@ -31,9 +31,9 @@ class CampaignRequirementController extends Controller
      */
     public function show($campaignId, $id)
     {
-        $campaign = Campaign::findOrFail($campaignId);
+        $campaign = Campaign::withCount(['groups', 'trips', 'reservations'])->findOrFail($campaignId);
 
-        $requirement = $campaign->requireables()->findOrFail($id);
+        $requirement = $campaign->requireables()->withCount(['groups', 'trips', 'reservations'])->findOrFail($id);
 
         return view('admin.campaigns.tabs.requirements.show', compact('campaign', 'requirement'));
     }

@@ -19,7 +19,18 @@ class CampaignGroupRequirementController extends Controller
     {
         $group = CampaignGroup::whereUuid($groupId)->firstOrFail();
 
-        $requirement = $group->requireables()->findOrFail($id);
+        $requirement = $group->requireables()
+            ->withCount([
+                'trips' => function ($query) use ($group) {
+                    $query->where('campaign_id', $group->campaign_id)->where('group_id', $group->group_id);
+                }, 
+                'reservations' => function ($query) use ($group) {
+                    $query->whereHas('trip', function ($trip) use ($group) {
+                        return $trip->where('campaign_id', $group->campaign_id)->where('group_id', $group->group_id);
+                    });
+                }
+            ])
+            ->findOrFail($id);
 
         return view('admin.campaigns.groups.tabs.requirements.show', compact('group', 'requirement'));
     }

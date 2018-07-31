@@ -19,6 +19,36 @@
                 @component('panel')
                     @slot('title')
                         <div class="row">
+                            <div class="col-xs-6">
+                                <h5>Usage</h5>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#addOnDemand">Add to existing</button>
+                            </div>
+                        </div>
+                    @endslot
+
+                    @slot('body')
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h4 class="text-primary">
+                                    {{ $requirement->trips_count }} <span class="text-muted">/ {{ $group->tripsCount() }}</span>
+                                </h4>
+                                <p class="small text-muted"><strong>Trips</strong></p>
+                            </div>
+                            <div class="col-md-3">
+                                <h4 class="text-primary">
+                                    {{ $requirement->reservations_count }} <span class="text-muted">/ {{ $group->reservationsCount() }}</span>
+                                </h4>
+                                <p class="small text-muted"><strong>Reservations</strong></p>
+                            </div>
+                        </div>
+                    @endslot
+                @endcomponent
+
+                @component('panel')
+                    @slot('title')
+                        <div class="row">
                             <div class="col-xs-8">
                                 <h5>Details</h5>
                             </div>
@@ -86,5 +116,11 @@
             </div>
         </div>
     </div>
+
+    <bulk-add-requirement-modal 
+        id="addOnDemand" 
+        url="campaign-groups/{{ $group->uuid }}/requirements/{{ $requirement->id }}/add" 
+        :options="['trips', 'reservations']"
+    ></bulk-add-requirement-modal>
 
 @endsection

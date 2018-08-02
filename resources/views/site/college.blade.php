@@ -133,7 +133,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 			<div class="row">
 				<div class="col-sm-6 col-sm-offset-3 text-center">
 					<h2 class="text-serif" style="display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">The Vision</h2>
-					<p>To create a movement of young leaders to <span class="text-primary text-serif"><em>Live The Impossible</em></span> through world-class leadership training, innovative academic instruction, real-world experience, and global outreach opportunities.</p>
+                    <p>Our vision is to create a movement of young leaders who <span class="text-primary text-serif"><em>Live The Impossible</em></span>.  We do this using world-class leadership training and innovative academic instruction. Each student will get real-world experience and global outreach opportunities.</p>
 				</div><!-- end col -->
 			</div><!-- end row -->
 		</div><!-- end content-section -->
@@ -145,8 +145,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 			<div class="row">
 				<div class="col-sm-6 col-sm-offset-3 text-center">
 					<h2 class="text-serif text-lightweight" style="display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">Location Matters</h2>
-                    <p>The Missions.Me College will be kicking off it's Fall 2017 semester
-					{{-- <p>Nestled --}} in sunny Southern California, {{-- the Missions.Me College is --}} providing an inspirational and disruptive environment that allows students to discover their divine design in beautiful natural surroundings and with friends that also want to change the world.</p>
+                    <p>The Missions.Me College is in sunny Southern California. Our location provides an inspirational and disruptive environment. Students can discover their divine design in a beautiful natural surrounding with friends who also want to change the world.</p>
 				</div>
 				<div class="col-sm-4 col-sm-offset-2">
 						<h1 class="text-hero text-serif text-lightweight text-primary" style="margin:0 0 15px;line-height:1em;">40</h1>

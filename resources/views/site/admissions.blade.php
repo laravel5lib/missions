@@ -49,7 +49,7 @@
 					<div class="panel panel-default text-center">
 						<div class="panel-body">
 							<h6 class="text-uppercase">Apply Now For</h6>
-							<h2 class="text-serif" style="margin-top:10px;">Fall 2018</h2>
+							<h2 class="text-serif" style="margin-top:10px;">Fall 2019</h2>
 							<p><a class="btn btn-primary" target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Online</a></p>
 						</div><!-- end panel-body -->
 					</div><!-- end panel -->
@@ -129,7 +129,7 @@
 						    </div>
 						    <div id="collapseEleven" class="panel-collapse collapse">
 						      <div class="panel-body">
-						        <p class="small">Missions.Me College is currently accepting applications for Fall 2018. There are a limited number of spots in our program, so completing the application as possible is encouraged. Admission will be closed once the spots are filled.</p>
+						        <p class="small">Missions.Me College is currently accepting applications for Fall 2019. There are a limited number of spots in our program, so completing the application as possible is encouraged. Admission will be closed once the spots are filled.</p>
 						      </div>
 						    </div>
 						</div><!-- end panel -->

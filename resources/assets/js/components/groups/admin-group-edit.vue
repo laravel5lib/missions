@@ -155,7 +155,7 @@
                             <span class="input-group-addon">www.missions.me/</span>
                             <input type="text" id="url" v-model="url" class="form-control" name="url" v-validate="!!public ? 'required' : ''"/>
                         </div>
-                        <!--<span class="help-block" v-if="errors.url" v-text="errors.url"></span>-->
+                        <span class="help-block" v-if="serverErrors.url" v-text="serverErrors.url"></span>
                     </div>
                 </div>
             </template>
@@ -220,6 +220,8 @@
                 avatar_upload_id: null,
                 selectedBanner: null,
                 banner_upload_id: null,
+
+                serverErrors: []
             }
         },
         computed: {
@@ -255,7 +257,7 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = '/admin/groups/' + this.groupId;
+                window.location.href = '/admin/organizations/' + this.groupId;
             },
             forceBack(){
                 return this.back(true);
@@ -290,8 +292,10 @@
                             this.avatar = group.avatar;
                             this.banner = group.banner;
                             this.$root.$emit('showSuccess', 'Group updated!');
-                        }, (error) =>  {
-                            this.errors = error.data.errors;
+                        }).catch((error) =>  {
+                            this.$refs.spinner.hide();
+                            console.log(error.errors);
+                            this.serverErrors = error.data.errors;
                             this.$root.$emit('showError', 'There are errors on the form.');
                         });
                     } else {

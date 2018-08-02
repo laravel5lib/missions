@@ -69,12 +69,6 @@
                             </div>
                         </div>
                     @endunless
-
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <admin-group-managers group-id="{{ $group->id }}"></admin-group-managers>
-                        </div>
-                    </div>
                     
                     @can('delete', $group)
                     <div class="row">
@@ -101,20 +95,6 @@
                     </div>
                     @endcan
 
-                </div>
-                <div role="tabpanel" class="tab-pane" id="trips">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h5>Group Trips</h5>
-                                </div>
-                                <div class="panel-body">
-                                    <admin-group-trips group-id="{{ $group->id }}"></admin-group-trips>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -149,5 +129,4 @@
         </div>
     </div>
 </div>
-<admin-group-delete group-id="{{ $group->id }}"></admin-group-delete>
 @endsection

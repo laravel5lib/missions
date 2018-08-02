@@ -88,7 +88,7 @@ class GroupsController extends Controller
     {
         $group = $this->group->create($request->except('url'));
 
-        $url = $request->get('url') ? $request->get('url') : generate_slug($group->name);
+        $url = $request->filled('url') ? $request->get('url') : generate_slug($group->name);
 
         $group->slug()->create(['url' => $url]);
 
@@ -150,7 +150,9 @@ class GroupsController extends Controller
 
         $group->update($request->except('url'));
 
-        $group->slug()->update(['url' => $request->get('url')]);
+        if ($request->filled('url')) {
+            $group->slug()->update(['url' => $request->get('url')]);
+        }
 
         $group->syncmanagers($request->get('managers'));
 

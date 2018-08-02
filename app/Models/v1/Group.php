@@ -59,7 +59,7 @@ class Group extends Model
      *
      * @var array
      */
-    protected $casts = [];
+    protected $casts = ['public' => 'boolean'];
 
     /**
      * Set default values.
@@ -67,6 +67,13 @@ class Group extends Model
      * @var array
      */
     protected $attributes = ['status' => 'approved'];
+
+    protected $appends = ['url'];
+
+    public function getUrlAttribute()
+    {
+        return $this->slug ? $this->slug->url : null;
+    }
 
     /**
      * Set the status attribute.

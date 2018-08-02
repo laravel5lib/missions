@@ -204,7 +204,7 @@
                             url: this.url,
                             email: this.email
                         }).then((resp) => {
-                            window.location.href = '/admin' + resp.data.data.links[0].uri;
+                            window.location.href = '/admin/organizations/' + resp.data.data.id;
                             // this.$refs.spinner.hide();
                         }, (error) => {
                             this.errors = error.data.errors;

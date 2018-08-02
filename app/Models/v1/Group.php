@@ -68,11 +68,21 @@ class Group extends Model
      */
     protected $attributes = ['status' => 'approved'];
 
-    protected $appends = ['url'];
+    protected $appends = ['url', 'avatar_url', 'banner_url'];
 
     public function getUrlAttribute()
     {
         return $this->slug ? $this->slug->url : null;
+    }
+
+    public function getAvatarUrlAttribute()
+    {
+        return $this->avatar ? image($this->avatar->source) : url('/images/placeholders/logo-placeholder.png');
+    }
+
+    public function getBannerUrlAttribute()
+    {
+        return $this->banner ? image($this->banner->source) : null;
     }
 
     /**

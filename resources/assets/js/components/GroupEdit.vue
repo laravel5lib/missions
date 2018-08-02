@@ -28,7 +28,7 @@
                                             :ui-selector="2" 
                                             is-child 
                                             :tags="['Group']" 
-                                            :is-update="true" 
+                                            :is-update="group.avatar_upload_id ? true : false" 
                                             :upload-id="group.avatar_upload_id"
                                             @uploads-complete="uploadsComplete"></upload-create-update>
                                     </div>

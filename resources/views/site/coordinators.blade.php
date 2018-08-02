@@ -69,76 +69,88 @@ $('.launch-modal').on('click', function(e){
           <div class="row">
             <div class="col-sm-12 col-sm-offset-0">
               <div class="row">
-                <div class="col-sm-4 col-xs-12">
+                <div class="col-sm-6 col-md-3 col-xs-12">
                   <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
                     <div class="panel-body text-center">
                       <hr class="divider inv">
                       <img src="/images/coordinators/docs-icon.png" width="50px" height="50px">
-                      <h6 class="text-uppercase">1N1D19 Launch Media</h6>
-                      <p class="small hidden-xs">Including logos, graphics, posters, signage and more</p>
+                      <h6 class="text-uppercase">Launch Media</h6>
+                      <p class="small">Including logos, graphics, posters, signage and more</p>
                       <a href="https://www.dropbox.com/s/f9ughy785agop7j/1N1D19-promo-pack.zip?dl=1" class="btn btn-sm btn-primary-hollow">Download</a>
                       <hr class="divider inv">
                     </div>
                   </div>
                 </div><!-- end col -->
-                <div class="col-sm-4 col-xs-12">
+                <div class="col-sm-6 col-md-3 col-xs-12">
                   <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
                     <div class="panel-body text-center">
                       <hr class="divider inv">
                       <img src="/images/coordinators/vid-icon.png" width="50px" height="50px">
-                      <h6 class="text-uppercase">1N1D19 Promo Video</h6>
-                      <p class="small hidden-xs">Great for assisting in delivering the full vision on your Launch Day</p>
+                      <h6 class="text-uppercase">Promo Video</h6>
+                      <p class="small">Great for assisting in delivering the full vision on your Launch Day</p>
                       <a href="https://www.dropbox.com/s/hasb44papw6kz3l/1N1D19-Full-Promo.zip?dl=1" class="btn btn-sm btn-primary-hollow">Download</a>
                       <hr class="divider inv">
                     </div>
                   </div>
                 </div><!-- end col -->
-                <div class="col-sm-4 col-xs-12">
+                <div class="col-sm-6 col-md-3 col-xs-12">
                   <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
                     <div class="panel-body text-center">
                       <hr class="divider inv">
                       <img src="/images/coordinators/vid-icon.png" width="50px" height="50px">
-                      <h6 class="text-uppercase">1N1D19 Teaser Video</h6>
-                      <p class="small hidden-xs">Great for announcements in the weeks prior to launch</p>
+                      <h6 class="text-uppercase">Teaser Video</h6>
+                      <p class="small">Great for announcements in the weeks prior to launch</p>
                       <a href="https://www.dropbox.com/s/pgetlm50v4kiw56/1N1D19-Teaser.zip?dl=1" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <hr class="divider inv">
+                    </div>
+                  </div>
+                </div><!-- end col -->
+                <div class="col-sm-6 col-md-3 col-xs-12">
+                  <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
+                    <div class="panel-body text-center">
+                      <hr class="divider inv">
+                      <img src="/images/coordinators/vid-icon.png" width="50px" height="50px">
+                      <h6 class="text-uppercase">Short Trailer</h6>
+                      <p class="small">Great for announcements in the weeks following launch</p>
+                      <a href="https://www.dropbox.com/s/0ayszte3zexos9i/1N1D19-Short-Trailer.zip?dl=1" class="btn btn-sm btn-primary-hollow">Download</a>
                       <hr class="divider inv">
                     </div>
                   </div>
                 </div><!-- end col -->
               </div><!-- end row -->
               <div class="row">
-                <div class="col-sm-4 col-xs-12">
-                  <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
-                    <div class="panel-body text-center">
-                      <hr class="divider inv">
-                      <img src="/images/coordinators/vid-icon.png" width="50px" height="50px">
-                      <h6 class="text-uppercase">1N1D19 Short Trailer</h6>
-                      <p class="small hidden-xs">Great for announcements in the weeks following launch</p>
-                      <a href="https://www.dropbox.com/s/0ayszte3zexos9i/1N1D19-Short-Trailer.zip?dl=1" class="btn btn-sm btn-primary-hollow">Download</a>
-                      <hr class="divider inv">
-                    </div>
-                  </div>
-                </div><!-- end col -->
-                <div class="col-sm-4 col-xs-12">
+                <div class="col-sm-6 col-md-3 col-xs-12">
                   <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
                     <div class="panel-body text-center">
                       <hr class="divider inv">
                       <img src="/images/coordinators/cam-icon.png" width="50px" height="50px">
-                      <h6 class="text-uppercase">1N1D19 Launch Capture</h6>
-                      <p class="small hidden-xs">Instructions for your media team to capture your launch</p>
+                      <h6 class="text-uppercase">Launch Capture</h6>
+                      <p class="small">Instructions for your media team to capture your launch</p>
                       <a href="https://www.dropbox.com/s/swt4hp5ib409dg4/1N1D19-Launch-Media-Guide.pdf?dl=1" class="btn btn-sm btn-primary-hollow">Download</a>
                       <hr class="divider inv">
                     </div>
                   </div>
                 </div><!-- end col -->
-                <div class="col-sm-4 col-xs-12">
+                <div class="col-sm-6 col-md-3 col-xs-12">
                   <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
                     <div class="panel-body text-center">
                       <hr class="divider inv">
                       <img src="/images/coordinators/vision-doc-icon.png" width="50px" height="50px">
-                      <h6 class="text-uppercase">1N1D19 Vision Booklet</h6>
-                      <p class="small hidden-xs">Print ready booklet file ready to submit to your printer</p>
+                      <h6 class="text-uppercase">Vision Booklet</h6>
+                      <p class="small">Print ready booklet file ready to submit to your printer</p>
                       <a href="{{ download_file('resources/coordinators/vision-packet-v2_final.pdf.zip') }}" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <hr class="divider inv">
+                    </div>
+                  </div>
+                </div><!-- end col -->
+                <div class="col-sm-6 col-md-3 col-xs-12">
+                  <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
+                    <div class="panel-body text-center">
+                      <hr class="divider inv">
+                      <img src="/images/coordinators/docs-icon.png" width="50px" height="50px">
+                      <h6 class="text-uppercase">Sample Schedule</h6>
+                      <p class="small">What a typical week of ministry will look like in country.</p>
+                      <a href="{{ download_file('resources/coordinators/2019_schedule.pdf') }}" class="btn btn-sm btn-primary-hollow">Download</a>
                       <hr class="divider inv">
                     </div>
                   </div>

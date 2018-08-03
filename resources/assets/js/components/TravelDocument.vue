@@ -3,20 +3,44 @@
         <div class="panel-heading"><h5>{{ docType | underscoreToSpace | titleCase }}</h5></div>
         <template v-if="documents.length && !selectedDocument">
                 
-            <div class="panel-body">
-                <div class="alert alert-warning">Click on an existing {{ docType }} to use it.</div>
+            <!-- <div class="panel-body"> -->
+                <div class="alert alert-warning" style="margin: 0; border-radius: 0;">Choose a {{ docType }} to use.</div>
                 
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                             <tr class="active">
+                                <th><i class="fa fa-cog"></i></th>
                                 <th v-for="(value, key) in headings" v-if="key != 'id'">
                                     {{ key | underscoreToSpace | titleCase }}
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="document in mapRows(documents)" @click="addDocument(document)">
+                            <tr v-for="document in mapRows(documents)" :class="{ 'text-danger': document.expired == 'Yes' }">
+                                <td>
+                                    <div class="btn-group">
+                                        <a role="button" class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown">
+                                            <i class="fa fa-ellipsis-h"></i>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <template v-if="document.expired != 'Yes' || !document.expired">
+                                                <li>
+                                                    <a role="button" @click="addDocument(document)">
+                                                        Use this {{ docType }}
+                                                    </a>
+                                                </li>
+                                                <li role="separator" class="divider"></li>
+                                            </template>
+                                            <li>
+                                                <a :href="`/${firstUrlSegment}/records/${type}/${document.id}/edit?requirement=${requirement.id}`">
+                                                    Edit
+                                                </a>
+                                            </li>
+                                            <li><a href="#">Delete</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
                                 <td v-for="(value, key) in document" v-if="key != 'id'">
                                     {{ value }}
                                 </td>
@@ -24,7 +48,7 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
+            <!-- </div> -->
             
             <div class="panel-body text-right">
                 <button class="btn btn-link" @click="documents = []">Cancel</button>
@@ -100,6 +124,9 @@ export default {
     },
 
     methods: {
+        selectDocument(document) {
+
+        },
         addDocument(document) {
             this.$http
                 .post(`reservations/${this.reservationId}/${this.type}`, { 'document_id': document.id })
@@ -174,7 +201,6 @@ export default {
 <style lang="css" scoped>
     tr:hover {
         background-color: #fcf8e3 !important;
-        cursor: pointer;
     }
     th, td {
         white-space: nowrap;

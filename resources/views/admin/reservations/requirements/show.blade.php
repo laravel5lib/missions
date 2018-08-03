@@ -13,9 +13,9 @@
     
     <hr class="divider inv lg">
 
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
-            <div class="col-xs-12 col-md-8">
+            <div class="col-xs-12 col-md-10 col-md-offset-1">
                 <travel-document 
                     type="{{ $requirement->document_type }}" 
                     reservation-id="{{ $reservation->id }}"
@@ -25,10 +25,10 @@
                 @component('panel')
                     @slot('title')
                         <div class="row">
-                            <div class="col-xs-8">
+                            <div class="col-xs-6">
                                 <h5>Details</h5>
                             </div>
-                            <div class="col-xs-4 text-right">
+                            <div class="col-xs-6 text-right">
                                 @if($requirement->isCustom('reservations', $reservation->id))
                                 <a href="{{ url('/admin/reservations/'.$reservation->id.'/requirements/'.$requirement->id.'/edit') }}" 
                                    class="btn btn-link btn-sm"
@@ -76,34 +76,6 @@
                         </delete-form>
                     @endslot
                 @endcomponent     
-            </div>
-            <div class="col-xs-12 col-md-3 col-md-offset-1 small">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active">
-                        <a href="#notes" aria-controls="notes" role="tab" data-toggle="tab">Notes</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#tasks" aria-controls="tasks" role="tab" data-toggle="tab">Tasks</a>
-                    </li>
-                </ul>
-
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="notes">
-                        <notes type="requirements"
-                            id="{{ $requirement->id }}"
-                            user_id="{{ auth()->user()->id }}"
-                            :per_page="10"
-                            :can-modify="{{ auth()->user()->can('modify-notes')?1:0 }}">
-                        </notes>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="tasks">
-                        <todos type="requirements"
-                            id="{{ $requirement->id }}"
-                            user_id="{{ auth()->user()->id }}"
-                            :can-modify="{{ auth()->user()->can('modify-todos')?1:0 }}">
-                        </todos>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

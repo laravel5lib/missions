@@ -9,6 +9,7 @@ use App\Models\v1\Reservation;
 use Laravel\Passport\Passport;
 use App\Jobs\ApplyGroupPricing;
 use App\Models\v1\CampaignGroup;
+use App\Jobs\ApplyGroupRequirements;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -81,6 +82,39 @@ class TripTest extends TestCase
         ])->assertStatus(201);
 
         Queue::assertPushed(ApplyGroupPricing::class);
+
+        $this->assertDatabaseHas('trips', [
+            'campaign_id' => $group->campaign_id, 
+            'group_id' => $group->group_id
+        ]);
+    }
+
+    /** @test */
+    public function creates_new_trip_with_default_group_requirements()
+    {
+        Passport::actingAs(factory(User::class, 'admin')->create());
+        
+        $group = factory(CampaignGroup::class)->create();
+
+        Queue::fake();
+
+        $this->json('POST', '/api/trips', [
+            'campaign_id' => $group->campaign_id,
+            'group_id' => $group->group_id,
+            'country_code' => $group->campaign->country_code,
+            'type' => 'ministry',
+            'difficulty' => 'level_1',
+            'started_at' => $group->campaign->started_at->toDateString(),
+            'ended_at' => $group->campaign->ended_at->toDateString(),
+            'companion_limit' => 0,
+            'spots' => 25,
+            'closed_at' => null,
+            'default_requirements' => true,
+            'team_roles' => ['MISS'],
+            'prospects' => ['adults', 'young adults (18-29)', 'men', 'women']
+        ])->assertStatus(201);
+
+        Queue::assertPushed(ApplyGroupRequirements::class);
 
         $this->assertDatabaseHas('trips', [
             'campaign_id' => $group->campaign_id, 

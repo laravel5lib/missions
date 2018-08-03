@@ -37,7 +37,7 @@ class ApplyGroupRequirements implements ShouldQueue
             ->whereGroupId($this->trip->group_id)
             ->firstOrFail();
 
-        $group->requirements->each(function($requirement) {
+        $group->requireables->each(function($requirement) {
             $this->trip->attachRequirementToModel($requirement->id);
         });
     }

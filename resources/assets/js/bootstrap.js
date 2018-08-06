@@ -129,6 +129,17 @@ Vue.use(require('vue-autosize/src/index'));
 Vue.use(require('vue-truncate'));
 
 /**
+ * Sentry support
+ */
+import Raven from 'raven-js';
+import RavenVue from 'raven-js/plugins/vue';
+
+Raven
+    .config('https://dc893d3a903c4b0083e105597fcc2815@sentry.io/1257230')
+    .addPlugin(RavenVue, Vue)
+    .install();
+
+/**
  * Mask form inputs
  */
 import VueTheMask from 'vue-the-mask'

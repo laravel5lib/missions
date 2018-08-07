@@ -9,35 +9,56 @@
 </div><!-- end c-page-header -->
 <div class="white-bg">
 	<div class="container">
-	<div class="content-section">
-		<div class="row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<h2 class="text-center">Squad Leader Training</h2>
-                <hr class="divider red-small">
-                <hr class="divider inv sm">
-                <p class="text-center">Congratulations, you have been nominated to lead a squad! As an official "Squad Leader", you'll need to view the four-part training series with the Missions.Me Country Directors at your convenience.  All four parts will be viewable here.</p>
-                <p class="text-center"><strong>It is imperative that you view these sessions as well as read the Squad Leader Manual PDF document which can be downloaded below.</strong></p>
-				<hr class="divider inv">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-10 col-sm-offset-1 text-center">
-                        <a class="btn btn-primary" href="downloads/SLmanual2018_hond.pdf">
-                           	<i class="fa fa-file-pdf-o icon-left"></i> Honduras Squad Leader Manual
-                            <small>(6.4MB)</small>
-                        </a>
+    	<div class="content-section">
+    		<div class="row">
+    			<div class="col-sm-6 col-sm-offset-3">
+    				<h2 class="text-center">Squad Leader Training</h2>
+                    <hr class="divider red-small">
+                    <hr class="divider inv sm">
+                    <p class="text-center">Congratulations, you have been nominated to lead a squad! As an official "Squad Leader", you'll need to view the four-part training series with the Missions.Me Country Directors at your convenience.  All four parts will be viewable here.</p>
+                    <p class="text-center"><strong>It is imperative that you view these sessions as well as read the Squad Leader Manual PDF document which can be downloaded below.</strong></p>
+    				<hr class="divider inv">
+                </div><!-- end col -->
+            </div><!-- end row -->
+        </div>
+    </div>
+</div>
+
+<div class="grey-bg">
+    <div class="container">
+        <div class="content-section">
+            <div class="row">
+                <div class="col-sm-12 col-md-4 text-center">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                        <p><i class="fa fa-file-pdf-o fa-2x"></i></p>
+                        <p><strong>Honduras Squad Leader Manual</strong></p>
+                        <a href="downloads/SLmanual2018_hond.pdf" target="_blank">Download <small>(6.4MB)</small></a>
+                        </div>
                     </div>
                 </div>
-                <hr class="divider inv">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-10 col-sm-offset-1 text-center">
-                        <a class="btn btn-primary" href="downloads/SLmanual2018_dr.pdf">
-                           	<i class="fa fa-file-pdf-o icon-left"></i> Dominican Squad Leader Manual
-                            <small>(6.4MB)</small>
-                        </a>
+                <div class="col-sm-12 col-md-4 text-center">
+                    <div class="panel panel-default panel-body">
+                        <p><i class="fa fa-file-pdf-o fa-2x"></i></p>
+                        <p><strong>Dominican Squad Leader Manual</strong></p>
+                        <a href="downloads/SLmanual2018_dr.pdf" target="_blank">Download <small>(6.4MB)</small></a>
                     </div>
                 </div>
-                <hr class="divider inv lg">
-            </div><!-- end col -->
-        </div><!-- end row -->
+                <div class="col-sm-12 col-md-4 text-center">
+                    <div class="panel panel-default panel-body">
+                        <p><i class="fa fa-file-pdf-o fa-2x"></i></p>
+                        <p><strong>Ministry Training Guide</strong></p>
+                        <a href="downloads/MinistryTrainingGuide2018.pdf" target="_blank">Download <small>(529kb)</small></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="white-bg">
+    <div class="container">
+    <div class="content-section">
 				<div class="row">
 					<div class="col-xs-12 col-sm-6">
 						<div class="panel panel-default">
@@ -63,34 +84,25 @@
 							</div><!-- end panel-body -->
 						</div><!-- end panel -->
 					</div><!-- end col -->
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="panel panel-default">
+                            <div class="video-outer">
+                                <div class="video-inner">
+                                    <iframe src="https://player.vimeo.com/video/279937027?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                                </div><!-- end video-inner -->
+                            </div><!-- end video-outer -->
+                            <div class="panel-body text-center">
+                                <h6 class="text-uppercase">Squad Leader &middot; Session 3</h6>
+                            </div><!-- end panel-body -->
+                        </div><!-- end panel -->
+                    </div><!-- end col -->
 					<div class="col-xs-12 col-sm-6">
 						<div class="panel panel-default">
-							<div>
-								<div style="background: #f5f5f5;">
-									<div style="min-height: 315px; display: flex; align-items: center; justify-content: center;">
-										<h1 class="text-muted">COMING SOON</h1>
-									</div>
-								</div><!-- end video-inner -->
-							</div><!-- end video-outer -->
-							<div class="panel-body text-center">
-								<h6 class="text-uppercase">Squad Leader &middot; Session 3</h6>
-							</div><!-- end panel-body -->
-						</div><!-- end panel -->
-					</div><!-- end col -->
-					<div class="col-xs-12 col-sm-6">
-						<div class="panel panel-default">
-							<div>
-								<div style="background: #f5f5f5;">
-									<div style="min-height: 315px; display: flex; align-items: center;">
-										<div class="text-center text-muted" style="padding: 5px">
-											<h2>LIVE ON ZOOM</h2>
-											<h5>Monday July 16 at 9pm eastern</h5>
-											<p>Link to Join Call: <a href="https://zoom.us/j/155334666">https://zoom.us/j/155334666</a></p>
-											<p>Be sure to attend to get last minute details and ask questions about being a Squad Leader!</p>
-										</div>
-									</div>
-								</div><!-- end video-inner -->
-							</div><!-- end video-outer -->
+							<div class="video-outer">
+                                <div class="video-inner">
+                                    <iframe src="https://player.vimeo.com/video/280297722?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                                </div><!-- end video-inner -->
+                            </div><!-- end video-outer -->
 							<div class="panel-body text-center">
 								<h6 class="text-uppercase">Squad Leader &middot; Session 4</h6>
 							</div><!-- end panel-body -->

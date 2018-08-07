@@ -45,6 +45,8 @@ class TripInterestTest extends TestCase
                         'email', 
                         'phone', 
                         'communication_preferences', 
+                        'total_tasks_count',
+                        'complete_tasks_count',
                         'created_at', 
                         'updated_at'
                     ]
@@ -127,5 +129,17 @@ class TripInterestTest extends TestCase
                         'total' => 3
                     ]
                 ]);
+    }
+
+    /** @test */
+    public function delete_a_trip_interest_and_remove_from_storage()
+    {
+        $interest = factory(TripInterest::class)->create();
+
+        $response = $this->deleteJson("/api/interests/{$interest->id}");
+
+        $response->assertStatus(204);
+
+        $this->assertNotNull($interest->fresh()->deleted_at);
     }
 }

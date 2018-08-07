@@ -76,7 +76,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 			<div class="row">
 				<div class="col-sm-6 col-sm-offset-3 text-center">
 					<h2 class="text-serif" style="display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">The Vision</h2>
-					<p>To create a movement of young leaders to <span class="text-primary text-serif"><em>Live The Impossible</em></span> through world-class leadership training, innovative academic instruction, real-world experience, and global outreach opportunities.</p>
+					<p>Our vision is to create a movement of young leaders who <span class="text-primary text-serif"><em>Live The Impossible</em></span>.  We do this using world-class leadership training and innovative academic instruction. Each student will get real-world experience and global outreach opportunities.</p>
 				</div><!-- end col -->
 			</div><!-- end row -->
 		</div><!-- end content-section -->

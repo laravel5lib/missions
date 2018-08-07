@@ -5,8 +5,8 @@
 				<div class="col-sm-6 col-md-4 col-md-offset-2">
 					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">Have Questions?</h2>
 					<p class="small">Please contact our Missions.Me College Director</p>
-					<p class="small">If you are interested in applying to Missions.Me College and would like to request more info:</p>
-					<p class="small"><a class="btn btn-primary btn-sm" href="http://partners.seu.edu/info/?site=MISME">Request More Info</a></p>
+					<p class="small">If you're interested in applying to Missions.Me College and would like to request more information:</p>
+					<p class="small"><a class="btn btn-primary btn-sm" href="http://partners.seu.edu/info/?site=MISME">Request More Information</a></p>
 				</div><!-- end col -->
 				<div class="col-sm-6 col-md-4">
 					<div class="panel panel-default text-center">

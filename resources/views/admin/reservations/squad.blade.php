@@ -51,13 +51,13 @@
             </div>
         </div>
     </div>
+    @include('partials.reservations.squad-leadership')
+
+    @include('partials.reservations.squad-group')
+
     @else
         @slot('body')<p class="text-muted text-center">No squad assignment. @endslot
     @endif
 @endcomponent
-
-@include('partials.reservations.squad-leadership')
-
-@include('partials.reservations.squad-group')
 
 @endsection

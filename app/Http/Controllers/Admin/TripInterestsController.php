@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Models\v1\Campaign;
-use App\Models\v1\TripInterest;
 use App\Http\Controllers\Controller;
+use App\Models\v1\Campaign;
+use App\Models\v1\Reservation;
+use App\Models\v1\TripInterest;
 
 class TripInterestsController extends Controller
 {
@@ -59,7 +60,15 @@ class TripInterestsController extends Controller
         $campaign = Campaign::findOrFail($campaignId);
         $interest = TripInterest::findOrFail($id);
 
-        return view('admin.trips.interests.show', compact('interest', 'campaign'));
+        $reservations = Reservation::current()
+            ->where(function ($query) use ($interest) {
+                $query->where('email', $interest->email)
+                      ->orWhere('given_names', 'LIKE', "$interest->name%");
+            })
+            ->with('trip.campaign', 'trip.group')
+            ->get();
+
+        return view('admin.trips.interests.show', compact('interest', 'campaign', 'reservations'));
     }
 
     public function edit($campaignId, $id)

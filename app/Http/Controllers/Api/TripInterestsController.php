@@ -39,9 +39,7 @@ class TripInterestsController extends Controller
             ])
             ->allowedIncludes(['trip.campaign', 'trip.group'])
             ->withCount([
-                'todos as incomplete_tasks_count' => function ($query) {
-                    return $query->whereNull('completed_at');
-                },
+                'todos as total_tasks_count',
                 'todos as complete_tasks_count' => function ($query) {
                     return $query->whereNotNull('completed_at');
                 }

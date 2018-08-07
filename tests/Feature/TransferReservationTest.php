@@ -2,14 +2,15 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\v1\Cost;
-use App\Models\v1\Trip;
 use App\Models\v1\Price;
 use App\Models\v1\Requirement;
 use App\Models\v1\Reservation;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\v1\SquadMember;
+use App\Models\v1\Trip;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class TransferReservationTest extends TestCase
 {
@@ -48,6 +49,10 @@ class TransferReservationTest extends TestCase
         
         // verify new tasks
         $this->assertEquals(4, $reservation->todos()->count());
+
+        // verify removed from all squads
+        $this->assertEmpty($reservation->squadMemberships->toArray());
+        
     }
 
     private function setupReservation()
@@ -77,6 +82,8 @@ class TransferReservationTest extends TestCase
 
         $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
         $reservation->process($roomingPriceUuid);
+
+        factory(SquadMember::class)->create(['reservation_id' => $reservation->id]);
 
         return $reservation;
     }

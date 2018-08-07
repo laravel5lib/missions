@@ -12,7 +12,7 @@
     @endbreadcrumbs
 
 @if($reservation->deleted_at)
-<div class="darker-bg-primary">
+<div class="bg-primary">
     <div class="container-fluid">
         <div class="col-sm-8 text-center">
             <hr class="divider inv sm">

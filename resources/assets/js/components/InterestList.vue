@@ -134,7 +134,7 @@
                         </td>
                         <td v-if="!filters.filter.group">{{ interest.trip.group.name }}</td>
                         <td v-if="!filters.filter.trip_type">{{ interest.trip.type | capitalize }}</td>
-                        <td><strong>{{ interest.complete_tasks_count }}</strong> / {{ interest.incomplete_tasks_count }}</td>
+                        <td><strong>{{ interest.complete_tasks_count }}</strong> / {{ interest.total_tasks_count }}</td>
                         <td><strong><a :href="`mailto:${interest.email}`">{{ interest.email }}</a></strong></td>
                         <td>{{ interest.phone }}</td>
                         <td>

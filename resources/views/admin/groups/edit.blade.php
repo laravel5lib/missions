@@ -1,11 +1,4 @@
-@extends('admin.layouts.default')
-
-@section('styles')
-    <link rel="stylesheet" href="/css/slim.css" type="text/css">
-@endsection
-@section('scripts')
-    <script src="/js/slim.js"></script>
-@endsection
+@extends('layouts.admin')
 
 @section('content')
 @breadcrumbs([ 'links' => [
@@ -15,16 +8,20 @@
     'active' => 'Edit'
 ]])
 @endbreadcrumbs
+
+<alert-error>
+    <template slot="title">Oops!</template>
+    <template slot="message">Please check the form for errors and try again.</template>
+</alert-error>
+
+<alert-success redirect="/admin/organizations/{{ $group->id }}">
+    <template slot="title">Saved</template>
+    <template slot="message">The organization was updated.</template>
+    <template slot="cancel">Keep Working</template>
+    <template slot="confirm">Done</template>
+</alert-success>
+
 <hr class="divider inv lg">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
-            	<div class="panel panel-default">
-            		<div class="panel-body">
-		               <admin-group-edit group-id="{{ $group->id }}"></admin-group-edit>
-		            </div>
-            </div>
-        </div>
-    </div>
+    <group-edit :group="{{ json_encode($group) }}"></group-edit>
 <hr class="divider inv xlg">    
 @endsection

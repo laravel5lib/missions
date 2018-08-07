@@ -62,7 +62,7 @@ class ReservationsController extends Controller
      */
     public function show($id, $tab = "details")
     {
-        $reservation = Reservation::findOrFail($id);
+        $reservation = Reservation::withTrashed()->findOrFail($id);
 
         $this->authorize('view', $reservation);
 
@@ -120,6 +120,8 @@ class ReservationsController extends Controller
                 ->squadMemberships()
                 ->with('squad.members.reservation.user')
                 ->first();
+
+        if (! $membership) return ['membership' => null, 'leaders' => collect([]), 'groupMembers' => collect([])];
         
         $squadLeaders = SquadMember::where('squad_id', $membership->squad_id)->whereHas('reservation', function ($query) {
             return $query->whereIn('desired_role', ['TMLR', 'MCDR']);

@@ -48,6 +48,8 @@
                         </div>
                     </div>
 
+                    <admin-group-managers group-id="{{ $group->id }}"></admin-group-managers>
+
                     @unless( ! $group->slug)
                         <div class="row">
                             <div class="col-xs-12">

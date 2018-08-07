@@ -17,7 +17,7 @@ class TripTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'campaign', 'group', 'deadlines', 'requirements', 'facilitators', 'rep'
+        'campaign', 'group', 'deadlines', 'requireables', 'facilitators', 'rep'
     ];
 
     /**
@@ -120,9 +120,9 @@ class TripTransformer extends TransformerAbstract
      * @param Trip $trip
      * @return \League\Fractal\Resource\Collection
      */
-    public function includeRequirements(Trip $trip)
+    public function includeRequireables(Trip $trip)
     {
-        $requirements = $trip->requirements;
+        $requirements = $trip->requireables;
 
         return $this->collection($requirements, new RequirementTransformer);
     }

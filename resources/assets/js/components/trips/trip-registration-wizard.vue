@@ -289,7 +289,7 @@
 		mounted(){
             let self = this;
             //get trip costs
-			let resource = this.$resource('trips{/id}', { include: 'priceables.cost,priceables.payments,requirements' });
+			let resource = this.$resource('trips{/id}', { include: 'priceables.cost,priceables.payments,requireables' });
 			resource.query({id: this.tripId}).then((trip) => {
 				this.trip = trip.data.data;
 				// requirements, and companion_limit

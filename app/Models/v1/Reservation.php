@@ -444,66 +444,28 @@ class Reservation extends Model
      */
     public function syncRequirements($requirements)
     {
-        if (! $requirements) {
-            return;
-        }
+        foreach($requirements as $requirement) {
 
-        if (! $requirements instanceof Collection) {
-            $requirements = collect($requirements);
-        }
+            if (isset($requirement->rules['roles'])) {
 
-        $requirements->map(function ($item, $key) {
-            return [
-                'requirement_id' => $item->id,
-                'document_type' => $item->document_type,
-                'grace_period' => $item->grace_period,
-                'status' => $item->status ? $item->status : 'incomplete',
-                'completed_at' => $item->completed_at ? $item->completed_at : null
-            ];
-        })->each(function ($requirement) {
+                if (in_array($this->desired_role, $requirement->rules['roles'])) {
+                    $this->attachRequirementToModel($requirement->id);
+                }
 
-
-            if ($requirement['document_type'] === 'minor_releases') {
-
-                $this->age < 19 ? $this->requirements()->create($requirement) : null;
-            
-            } elseif ($requirement['document_type'] === 'media_credentials') {
-
-                $this->desired_role === 'MEDI' ? $this->requirements()->create($requirement) : null;
-
-            } elseif ($requirement['document_type'] === 'medical_credentials') {
-
-                in_array($this->desired_role, array_keys(TeamRole::medical())) 
-                ? $this->requirements()->create($requirement) 
-                : null;
-                
-            } else {
-                $this->requirements()->create($requirement);
+                return;
             }
 
-            // if conditions apply
-            // if (RequirementCondition::where('requirement_id', $requirement['requirement_id'])->count()) {
-            //         $matches = collect([]);
+            if (isset($requirement->rules['age'])) {
 
-            //         RequirementCondition::where('requirement_id', $requirement['requirement_id'])->get()->each(function ($condition) use ($matches) {
-            //             if ($condition->type === 'role') {
-            //                 $matches->push(in_array($this->desired_role, $condition->applies_to));
-            //             } elseif ($condition->type === 'age') {
-            //                 $matches->push($this->age < (int) $condition->applies_to[0]);
-            //             } else {
-            //                 $matches->push(false);
-            //             }
-            //         });
+                if ($this->age < $requirement->rules['age']) {
+                    $this->attachRequirementToModel($requirement->id);
+                }
 
-            //         // if all conditions match
-            //     if (! in_array(false, $matches->all())) {
-            //         $this->requirements()->create($requirement);
-            //     }
-            // } else {
-            //     // if not conditions apply
-            //     $this->requirements()->create($requirement);
-            // }
-        });
+                return;
+            }
+
+            $this->attachRequirementToModel($requirement->id);
+        }
     }
 
     /**
@@ -996,8 +958,7 @@ class Reservation extends Model
             $this->addPrice(['price_id' => $roomingPriceUuid]);
         }
 
-        $this->syncRequirements($this->trip->requirements);
-        $this->syncDeadlines($this->trip->deadlines);
+        $this->syncRequirements($this->trip->requireables);
         $this->addTodos($this->trip->todos);
 
         event(new ReservationWasProcessed($this));

@@ -1,4 +1,4 @@
-@extends('admin.layouts.default')
+@extends('layouts.admin')
 
 @section('styles')
     <link rel="stylesheet" href="/css/slim.css" type="text/css">
@@ -32,7 +32,11 @@
             <div class="col-sm-8 col-sm-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <passport-create-update :for-admin="true"></passport-create-update>
+                        <passport-create-update 
+                            :for-admin="true" 
+                            reservation-id="{{ request()->get('reservation') }}" 
+                            requirement-id="{{ request()->get('requirement') }}"
+                        ></passport-create-update>
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->
             </div>

@@ -32,7 +32,12 @@
         <div class="col-sm-8 col-sm-offset-2">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <passport-create-update :is-update="true" id="{{ $id }}"></passport-create-update>
+                    <passport-create-update 
+                        :is-update="true" 
+                        id="{{ $id }}"
+                        reservation-id="{{ request()->get('reservation') }}" 
+                        requirement-id="{{ request()->get('requirement') }}"
+                    ></passport-create-update>
                 </div><!-- end panel-body -->
             </div><!-- end panel -->
         </div>

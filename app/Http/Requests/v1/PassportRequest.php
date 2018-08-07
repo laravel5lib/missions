@@ -30,7 +30,7 @@ class PassportRequest extends FormRequest
             'expires_at' => 'required|date|after:now',
             'birth_country' => 'required|string',
             'citizenship' => 'required|string',
-            'upload_id' => 'string',
+            'upload_id' => 'nullable|string',
             'user_id' => 'required|exists:users,id'
         ];
 

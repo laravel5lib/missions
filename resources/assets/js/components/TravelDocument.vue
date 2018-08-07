@@ -33,7 +33,7 @@
                                                 <li role="separator" class="divider"></li>
                                             </template>
                                             <li>
-                                                <a :href="`/${firstUrlSegment}/records/${type}/${document.id}/edit?requirement=${requirement.id}`">
+                                                <a :href="`/${firstUrlSegment}/records/${type}/${document.id}/edit?reservation=${reservationId}&amp;requirement=${requirement.id}`">
                                                     Edit
                                                 </a>
                                             </li>
@@ -52,7 +52,7 @@
             
             <div class="panel-body text-right">
                 <button class="btn btn-link" @click="documents = []">Cancel</button>
-                <a class="btn btn-primary" :href="`/${firstUrlSegment}/records/${type}/create?requirement=${requirement.id}`">Add New {{ docType }}</a>
+                <a class="btn btn-primary" :href="`/${firstUrlSegment}/records/${type}/create?reservation=${reservationId}&amp;requirement=${requirement.id}`">Add New {{ docType }}</a>
             </div>
     
         </template>

@@ -5,10 +5,11 @@ namespace App\Models\v1;
 use App\UuidForKey;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\InteractsWithReservations;
 
 class Passport extends Model
 {
-    use Filterable, UuidForKey;
+    use Filterable, UuidForKey, InteractsWithReservations;
     
     protected $table = 'passports';
 

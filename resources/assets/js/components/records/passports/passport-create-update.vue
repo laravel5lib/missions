@@ -106,9 +106,8 @@
 
             <div class="form-group">
                 <div class="col-sm-12 text-center">
-                    <a v-if="!isUpdate" :href="'/' + firstUrlSegment + '/records/passports'" class="btn btn-default">Cancel</a>
+                    <a @click="forceBack" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit" class="btn btn-primary">Create</a>
-                    <a v-if="isUpdate" @click="back" class="btn btn-default">Cancel</a>
                     <a v-if="isUpdate" @click="update" class="btn btn-primary">Update</a>
                 </div>
             </div>
@@ -142,6 +141,14 @@
             forAdmin: {
                 type: Boolean,
                 default: false
+            },
+            reservationId: {
+                type: String,
+                default: null
+            },
+            requirementId: {
+                type: String,
+                default: null
             }
         },
         data(){
@@ -202,7 +209,12 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = `/${this.firstUrlSegment}/records/passports/${this.id}`;
+
+                if (this.reservationId && this.requirementId) {
+                    window.location.href = `/${this.firstUrlSegment}/reservations/${this.reservationId}/requirements/${this.requirementId}`;
+                } else {
+                    window.location.href = `/${this.firstUrlSegment}/records/passports/${this.id}`;
+                }
             },
             forceBack(){
                 return this.back(true);
@@ -222,11 +234,19 @@
                         citizenship: this.citizenship,
                         upload_id: this.upload_id,
                         user_id: this.user_id,
+                        requirement_id: this.requirementId,
+                        reservation_id: this.reservationId
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Passport created.');
                         let that = this;
                         setTimeout(() =>  {
-                            window.location.href = '/' + that.firstUrlSegment + '/records/passports/' + resp.data.data.id;
+
+                            if (that.reservationId && that.requirementId) {
+                                window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                            } else {
+                                window.location.href = '/' + that.firstUrlSegment + '/records/passports/' + resp.data.data.id;
+                            }
+
                         }, 1000);
                     }, (error) =>  {
                         this.errors = error.data.errors;
@@ -249,11 +269,19 @@
                         citizenship: this.citizenship,
                         upload_id: this.upload_id,
                         user_id: this.user_id,
+                        requirement_id: this.requirementId,
+                        reservation_id: this.reservationId
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(() =>  {
-                            window.location.href = '/' + that.firstUrlSegment + '/records/passports/' + that.id;
+
+                            if (that.reservationId && that.requirementId) {
+                                window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                            } else {
+                                window.location.href = '/' + that.firstUrlSegment + '/records/passports/' + that.id;
+                            }
+
                         }, 1000);
                     }, (error) =>  {
                         this.errors = error.data.errors;

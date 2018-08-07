@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests;
-use Dingo\Api\Contract\Http\Request;
-use App\Http\Requests\v1\PassportRequest;
-use App\Http\Transformers\v1\PassportTransformer;
 use App\Models\v1\Passport;
-use App\Http\Requests\v1\ExportRequest;
 use App\Jobs\ExportPassports;
+use App\Http\Controllers\Controller;
+use Dingo\Api\Contract\Http\Request;
+use App\Http\Requests\v1\ExportRequest;
 use App\Http\Requests\v1\ImportRequest;
+use App\Http\Requests\v1\PassportRequest;
 use App\Services\Importers\PassportListImport;
+use App\Http\Transformers\v1\PassportTransformer;
 
 class PassportsController extends Controller
 {
@@ -68,6 +68,8 @@ class PassportsController extends Controller
     {
         $passport = $this->passport->create($request->all());
 
+        $passport->attachToReservation($request->input('reservation_id'));
+
         return $this->response->item($passport, new PassportTransformer);
     }
 
@@ -83,6 +85,8 @@ class PassportsController extends Controller
         $passport = $this->passport->findOrFail($id);
 
         $passport->update($request->all());
+
+        $passport->attachToReservation($request->input('reservation_id'));
 
         return $this->response->item($passport, new PassportTransformer);
     }

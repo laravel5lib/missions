@@ -71,7 +71,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel-body text-right">
+                <div class="panel-body text-right" v-if="requirement.pivot.status != 'complete'">
                     <button @click="removeDocument(selectedDocument)" class="btn btn-sm btn-link">Choose a different {{ docType }}</button>
                 </div>
             </template>

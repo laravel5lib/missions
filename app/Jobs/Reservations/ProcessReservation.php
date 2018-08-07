@@ -41,7 +41,5 @@ class ProcessReservation extends Job
     public function handle()
     {
         $this->reservation->process($this->costs);
-
-        event(new ReservationWasProcessed($this->reservation));
     }
 }

@@ -7,7 +7,6 @@ use App\Jobs\ExportUsers;
 use App\Jobs\ExportCauses;
 use App\Jobs\ExportDonors;
 use App\Jobs\ExportGroups;
-use App\Jobs\ExportCampaigns;
 use App\Jobs\ExportReservations;
 use App\Http\Requests\v1\ExportRequest;
 
@@ -30,9 +29,6 @@ trait Exportable
                 break;
             case 'trips':
                 $this->dispatch(new ExportTrips($request->all()));
-                break;
-            case 'campaigns':
-                $this->dispatch(new ExportCampaigns($request->all()));
                 break;
             case 'groups':
                 $this->dispatch(new ExportGroups($request->all()));

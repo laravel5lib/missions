@@ -1,28 +1,24 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Api\Campaigns;
 
 use Tests\TestCase;
-use App\Models\v1\Trip;
-use App\Models\v1\User;
 use App\Models\v1\Campaign;
-use App\Models\v1\Reservation;
-use Laravel\Passport\Passport;
 use App\Models\v1\CampaignGroup;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class CampaignTest extends TestCase
+class ViewCampaignTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     /** @test */
-    public function gets_all_campaigns()
+    public function get_all_campaigns()
     {
         factory(Campaign::class, 2)->create();
 
-        $this->json('GET', '/api/campaigns')
-             ->assertStatus(200)
+        $this->getJson('/api/campaigns')
+             ->assertOk()
              ->assertJsonStructure([
                 'data' => [
                     [
@@ -48,14 +44,14 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    public function gets_all_campaigns_for_an_organization()
+    public function get_all_campaigns_for_an_organization()
     {
         factory(CampaignGroup::class)->create();
 
         $group = factory(CampaignGroup::class)->create();
 
         $this->json('GET', "/api/campaigns?filter[organization]=$group->group_id")
-             ->assertStatus(200)
+             ->assertOk()
              ->assertJson([
                  'data' => [ ['id' => $group->campaign_id] ],
                  'meta' => ['total' => 1]
@@ -63,23 +59,32 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    public function deletes_campaign_removes_groups_deletes_trips_and_drops_reservations()
+    public function get_campaign_by_id()
     {
-        Passport::actingAs(factory(User::class)->create());
-        
-        $group = factory(CampaignGroup::class)->create();
-        $campaign = Campaign::findOrFail($group->campaign_id);
-        $trip = factory(Trip::class)->create(['campaign_id' => $group->campaign_id, 'group_id' => $group->group_id]);
-        $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
+        $campaign = factory(Campaign::class)->create(['name' => '1Nation1Day']);
 
-        $this->json('DELETE', "/api/campaigns/$group->campaign_id")->assertStatus(204);
+        $this->getJson("/api/campaigns/{$campaign->id}")
+             ->assertOk()
+             ->assertJson([
+                'data' => [
+                    'name' => '1Nation1Day'
+                ]
+             ]);
+    }
 
-        $this->assertNotNull($campaign->fresh()->deleted_at);
-        $this->assertNotNull($trip->fresh()->deleted_at);
-        $this->assertNotNull($reservation->fresh()->deleted_at);
+    /** @test */
+    public function get_campaign_by_slug()
+    {
+        $campaign = factory(Campaign::class)->create(['name' => '1Nation1Day']);
+        $campaign->slug()->create(['url' => '1nation1day']);
 
-        $this->assertDatabaseMissing('campaign_group', [
-            'campaign_id' => $group->campaign_id, 'group_id' => $group->group_id
-        ]);
+        $this->getJson("/api/campaigns/{$campaign->slug->url}")
+             ->assertOk()
+             ->assertJson([
+                'data' => [
+                    'name' => '1Nation1Day',
+                    'page_url' => '1nation1day'
+                ]
+             ]);
     }
 }

@@ -72,6 +72,9 @@ Route::apiResource('squad-members', 'SquadMemberController');
 // Medical Releases
 Route::apiResource('medical-releases', 'MedicalReleaseController');
 
+// Passports
+Route::apiResource('passports', 'PassportsController');
+
 // Dingo API routes
 $api = app('Dingo\Api\Routing\Router');
 
@@ -163,9 +166,9 @@ $api->version('v1', [
         $api->post('donors/export', 'DonorsController@export');
         $api->resource('donations', 'DonationsController');
         $api->post('donations/authorize', 'DonationsController@authorizeCard');
-        $api->resource('passports', 'PassportsController');
-        $api->post('passports/export', 'PassportsController@export');
-        $api->post('passports/import', 'PassportsController@import');
+        // $api->resource('passports', 'PassportsController');
+        // $api->post('passports/export', 'PassportsController@export');
+        // $api->post('passports/import', 'PassportsController@import');
         $api->resource('visas', 'VisasController');
         $api->resource('visas/export', 'VisasController@export');
         $api->resource('visas/import', 'VisasController@import');

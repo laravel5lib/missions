@@ -21,7 +21,8 @@ class MedicalReleaseController extends Controller
         $releases = QueryBuilder::for(MedicalRelease::class)
             ->allowedFilters(
                 'name', 'ins_provider', 'ins_policy_no',
-                Filter::scope('managed_by')
+                Filter::scope('managed_by'),
+                Filter::exact('user_id')
             )
             ->allowedIncludes(
                 'user', 'conditions', 'allergies', 'uploads'

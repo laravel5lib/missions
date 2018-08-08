@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests;
 use App\Models\v1\Passport;
 use App\Jobs\ExportPassports;
+use Spatie\QueryBuilder\Filter;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 use App\Http\Requests\v1\ExportRequest;
 use App\Http\Requests\v1\ImportRequest;
+use App\Http\Resources\PassportResource;
 use App\Http\Requests\v1\PassportRequest;
 use App\Services\Importers\PassportListImport;
 use App\Http\Transformers\v1\PassportTransformer;
@@ -31,18 +34,22 @@ class PassportsController extends Controller
     }
 
     /**
-     * Get all passports.
+     * View a list of passports.
      *
-     * @param Request $request
-     * @return \Dingo\Api\Http\Response
+     * @return Resource
      */
-    public function index(Request $request)
+    public function index()
     {
-        $passports = $this->passport
-                        ->filter($request->all())
-                        ->paginate($request->get('per_page', 10));
+        $passports = QueryBuilder::for(Passport::class)
+            ->allowedFilters(
+                'given_names', 'surname', 'number',
+                Filter::scope('managed_by'),
+                Filter::exact('user_id')
+            )
+            ->allowedIncludes('user')
+            ->paginate(request()->input('per_page', 10));
 
-        return $this->response->paginator($passports, new PassportTransformer);
+        return PassportResource::collection($passports);
     }
 
     /**
@@ -53,9 +60,9 @@ class PassportsController extends Controller
      */
     public function show($id)
     {
-        $passport = $this->passport->findOrFail($id);
+        $passport = Passport::findOrFail($id);
 
-        return $this->response->item($passport, new PassportTransformer);
+        return new PassportResource($passport);
     }
 
     /**

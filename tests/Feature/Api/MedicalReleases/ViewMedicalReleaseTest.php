@@ -203,6 +203,24 @@ class ViewMedicalReleaseTest extends TestCase
     }
 
     /** @test */
+    public function filter_medical_releases_by_user_id()
+    {
+        $user = factory(User::class)->create();
+        factory(MedicalRelease::class)->create(['user_id' => $user->id]);
+        factory(MedicalRelease::class)->create();
+
+        $response = $this->getJson("/api/medical-releases?filter[user_id]={$user->id}");
+
+        $response->assertOk()
+                 ->assertJson([
+                    'data' => [
+                        ['user_id' => $user->id]
+                    ],
+                     'meta' => ['total' => 1]
+                 ]);
+    }
+
+    /** @test */
     public function get_medical_releases_only_for_users_with_reservations_managed_by_team_coordinator()
     {
         $coordinator = factory(User::class)->create();

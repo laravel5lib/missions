@@ -3,13 +3,13 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
-use EloquentFilter\Filterable;
+use App\Traits\Manageable;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\InteractsWithReservations;
 
 class Passport extends Model
 {
-    use Filterable, UuidForKey, InteractsWithReservations;
+    use UuidForKey, InteractsWithReservations, Manageable;
     
     protected $table = 'passports';
 

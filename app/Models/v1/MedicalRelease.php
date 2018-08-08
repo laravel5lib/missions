@@ -5,10 +5,11 @@ namespace App\Models\v1;
 use App\UuidForKey;
 use App\Traits\Manageable;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\InteractsWithReservations;
 
 class MedicalRelease extends Model
 {
-    use UuidForKey, Manageable;
+    use UuidForKey, InteractsWithReservations, Manageable;
 
     /**
      * Table used by the model.

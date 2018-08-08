@@ -3,12 +3,12 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
-use EloquentFilter\Filterable;
+use App\Traits\Manageable;
 use Illuminate\Database\Eloquent\Model;
 
 class MedicalRelease extends Model
 {
-    use Filterable, UuidForKey;
+    use UuidForKey, Manageable;
 
     /**
      * Table used by the model.
@@ -107,7 +107,7 @@ class MedicalRelease extends Model
      */
     public function conditions()
     {
-        return $this->hasMany(MedicalCondition::class);
+        return $this->hasMany(MedicalCondition::class)->orderBy('name');
     }
 
     /**
@@ -117,7 +117,7 @@ class MedicalRelease extends Model
      */
     public function allergies()
     {
-        return $this->hasMany(MedicalAllergy::class);
+        return $this->hasMany(MedicalAllergy::class)->orderBy('name');
     }
 
     public function getHeightStandardAttribute()

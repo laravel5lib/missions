@@ -69,6 +69,9 @@ Route::put('squads/published', 'SquadPublicationController@update');
 Route::apiResource('squads', 'SquadController');
 Route::apiResource('squad-members', 'SquadMemberController');
 
+// Medical Releases
+Route::apiResource('medical-releases', 'MedicalReleaseController');
+
 // Dingo API routes
 $api = app('Dingo\Api\Routing\Router');
 
@@ -242,9 +245,9 @@ $api->version('v1', [
         });
 
         $api->group(['prefix' => 'medical'], function ($api) {
-            $api->resource('releases', 'Medical\ReleasesController');
-            $api->post('releases/export', 'Medical\ReleasesController@export');
-            $api->post('releases/import', 'Medical\ReleasesController@import');
+            // $api->resource('releases', 'Medical\ReleasesController');
+            // $api->post('releases/export', 'Medical\ReleasesController@export');
+            // $api->post('releases/import', 'Medical\ReleasesController@import');
             $api->get('conditions', function () {
                 return ['data' => \App\Models\v1\MedicalCondition::available()];
             });

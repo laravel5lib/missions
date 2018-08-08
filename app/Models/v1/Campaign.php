@@ -331,6 +331,20 @@ class Campaign extends Model implements HasMedia
     }
 
     /**
+     * Scope a query by id or slug
+     * 
+     * @param  Builder $query
+     * @param  string $param
+     * @return Builder
+     */
+    public function scopeByIdOrSlug($query, $param)
+    {
+        $query->whereId($param)->orWhereHas('slug', function ($slug) use ($param) {
+            return $slug->where('url', $param);
+        });
+    }
+
+    /**
      * Get the campaign's avatar
      *
      * @return Object
@@ -355,5 +369,25 @@ class Campaign extends Model implements HasMedia
     public function isPublished()
     {
         return $this->published_at && ! $this->published_at->isFuture();
+    }
+
+    /**
+     * Update Campaign Slug
+     * 
+     * @param  string $url
+     * @return Campaign
+     */
+    public function updateSlug($url)
+    {
+        if ($url) {
+            $this->slug()->updateOrCreate(
+                [ 'slugable_id' => $this->id, 'slugable_type' => 'campaigns' ],
+                [ 'url' => $url ]
+            );
+
+            $this->fresh(['slug']);
+        }
+
+        return $this;
     }
 }

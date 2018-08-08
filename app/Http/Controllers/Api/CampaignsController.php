@@ -4,17 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests;
 use App\Models\v1\Campaign;
-use App\Jobs\ExportCampaigns;
 use Spatie\QueryBuilder\Filter;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
-use App\Http\Requests\v1\ExportRequest;
-use App\Http\Requests\v1\ImportRequest;
 use App\Http\Resources\CampaignResource;
 use App\Http\Requests\v1\CampaignRequest;
-use App\Services\Importers\CampaignListImport;
 use App\Http\Transformers\v1\CampaignTransformer;
 
 class CampaignsController extends Controller
@@ -47,9 +43,7 @@ class CampaignsController extends Controller
      */
     public function show($param)
     {
-        $campaign = Campaign::whereId($param)->orWhereHas('slug', function ($slug) use ($param) {
-            return $slug->where('url', $param);
-        })->first();
+        $campaign = Campaign::byIdOrSlug($param)->firstOrFail();
 
         return $this->response->item($campaign, new CampaignTransformer);
     }
@@ -80,12 +74,7 @@ class CampaignsController extends Controller
 
         $campaign->update($request->all());
 
-        if($request->has('page_url')) {
-            $campaign->slug()->updateOrCreate([
-                'url' => $request->get('page_url', ($campaign->slug ? $campaign->slug->url : null))
-            ]);
-            $campaign->load(['slug']);
-        }
+        $campaign = $campaign->updateSlug($request->get('page_url'));
 
         return $this->response->item($campaign, new CampaignTransformer);
     }
@@ -105,33 +94,5 @@ class CampaignsController extends Controller
         });
 
         return $this->response->noContent();
-    }
-
-    /**
-     * Export Campaigns.
-     *
-     * @param ExportRequest $request
-     * @return mixed
-     */
-    public function export(ExportRequest $request)
-    {
-        $this->dispatch(new ExportCampaigns($request->all()));
-
-        return $this->response()->created(null, [
-            'message' => 'Report is being generated and will be available shortly.'
-        ]);
-    }
-
-    /**
-     * Import a list of Campaigns.
-     *
-     * @param  CampaignListImport $import
-     * @return response
-     */
-    public function import(ImportRequest $request, CampaignListImport $import)
-    {
-        $response = $import->handleImport();
-
-        return $this->response()->created(null, $response);
     }
 }

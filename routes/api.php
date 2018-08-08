@@ -139,8 +139,6 @@ $api->version('v1', [
         $api->post('groups/export', 'GroupsController@export');
         $api->post('groups/import', 'GroupsController@import');
         $api->resource('campaigns', 'CampaignsController', ['except' => ['show']]);
-        $api->post('campaigns/export', 'CampaignsController@export');
-        $api->post('campaigns/import', 'CampaignsController@import');
         $api->resource('trips', 'TripsController', ['except' => ['show']]);
         $api->post('trips/export', 'TripsController@export');
         $api->post('trips/import', 'TripsController@import');

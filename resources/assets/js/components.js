@@ -84,7 +84,6 @@ Vue.component('trip-details-missionaries', require('./components/trips/trip-deta
 Vue.component('trip-registration-wizard', require('./components/trips/trip-registration-wizard.vue'));
 Vue.component('campaign-create', require('./components/campaigns/admin-campaign-create.vue'));
 Vue.component('campaign-edit', require('./components/campaigns/admin-campaign-edit.vue'));
-Vue.component('admin-campaigns-list', require('./components/campaigns/admin-campaigns-list.vue'));
 Vue.component('campaign-trip-create-wizard', require('./components/trips/admin-trip-create.vue'));
 Vue.component('campaign-trip-edit-wizard', require('./components/trips/admin-trip-edit.vue'));
 Vue.component('admin-campaign-trips', require('./components/campaigns/admin-campaign-trips.vue'));

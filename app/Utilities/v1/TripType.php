@@ -18,7 +18,8 @@ class TripType
         'medical' => 'Medical',
         'leader' => 'Leader',
         'sports' => 'Sports',
-        'water' => 'Water'
+        'water' => 'Water',
+        'firefighter' => 'Firefighter'
     ];
 
     /**

@@ -6,5 +6,6 @@
     {"value": "ministry", "label": "Ministry"},
     {"value": "leader", "label": "Leader"},
     {"value": "sports", "label": "Sports"},
-    {"value": "water", "label": "Water"}
+    {"value": "water", "label": "Water"},
+    {"value": "firefighter", "label": "Firefighter"}
 ]

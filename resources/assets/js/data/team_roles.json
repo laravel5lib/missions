@@ -68,6 +68,10 @@
         "label": "Athlete"
     },
     {
+        "value": "FIRE",
+        "label": "Firefighter"
+    },
+    {
         "value": "MDSG",
         "label": "Medical Student"
     },

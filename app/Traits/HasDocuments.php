@@ -36,7 +36,7 @@ trait HasDocuments
      */
     public function removeDocument($type, $id)
     {
-        $this->{$type}()->detach($id);
+        $this->{camel_case($type)}()->detach($id);
 
         return $this->changeRequirementStatus('incomplete', $type);
     }

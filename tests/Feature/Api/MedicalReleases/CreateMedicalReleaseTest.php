@@ -232,6 +232,39 @@ class CreateMedicalReleaseTest extends TestCase
                  ->assertJsonValidationErrors(['emergency_contact.relationship']);
     }
 
+    /** @test */
+    public function height_is_required_to_create_a_new_medical_release()
+    {
+        $data = array_except($this->getFormData(), ['height']);
+
+        $response = $this->postJson('/api/medical-releases', $data);
+
+        $response->assertStatus(422)
+                 ->assertJsonValidationErrors(['height']);
+    }
+
+     /** @test */
+    public function weight_is_required_to_create_a_new_medical_release()
+    {
+        $data = array_except($this->getFormData(), ['weight']);
+
+        $response = $this->postJson('/api/medical-releases', $data);
+
+        $response->assertStatus(422)
+                 ->assertJsonValidationErrors(['weight']);
+    }
+
+     /** @test */
+    public function pregnant_must_be_valid_to_create_a_new_medical_release()
+    {
+        $data = $this->getFormData(['pregnant' => 'invalid']);
+
+        $response = $this->postJson('/api/medical-releases', $data);
+
+        $response->assertStatus(422)
+                 ->assertJsonValidationErrors(['pregnant']);
+    }
+
     /**
      * Build an array of form data.
      * 

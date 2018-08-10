@@ -47,13 +47,6 @@ class MedicalRelease extends Model
     ];
 
     /**
-     * The parent model of the timestamps to be updated.
-     *
-     * @var array
-     */
-    protected $touches = ['user'];
-
-    /**
      * Attributes to be cast to native types.
      *
      * @var array
@@ -82,19 +75,9 @@ class MedicalRelease extends Model
     }
 
     /**
-     * The reservations associated with the release.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function reservations()
-    {
-        return $this->hasMany(Reservation::class);
-    }
-
-    /**
      * The notes associated with the release.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphManyclear
      */
     public function notes()
     {

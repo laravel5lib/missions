@@ -13,7 +13,7 @@ class UpdateMedicalReleaseRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,8 +26,8 @@ class UpdateMedicalReleaseRequest extends FormRequest
         return [
             'user_id'                        => 'sometimes|required|exists:users,id',
             'name'                           => 'sometimes|required|string',
-            'ins_provider'                   => 'nullable|required_with:ins_provider|string',
-            'ins_policy_no'                  => 'nullable|required_with:ins_policy_no|string',
+            'ins_provider'                   => 'nullable|required_with:ins_policy_no|string',
+            'ins_policy_no'                  => 'nullable|required_with:ins_provider|string',
             'takes_medication'               => 'sometimes|required|boolean',
             'conditions'                     => 'array',
             'conditions.*.name'              => 'sometimes|required|string',

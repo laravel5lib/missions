@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\v1\Medical;
+namespace App\Http\Requests;
 
 use Dingo\Api\Http\FormRequest;
 
-class ReleaseRequest extends FormRequest
+class CreateMedicalReleaseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,8 +26,8 @@ class ReleaseRequest extends FormRequest
         return [
             'user_id'                        => 'required|exists:users,id',
             'name'                           => 'required|string',
-            'ins_provider'                   => 'nullable|required_with:ins_provider|string',
-            'ins_policy_no'                  => 'nullable|required_with:ins_policy_no|string',
+            'ins_provider'                   => 'nullable|required_with:ins_policy_no|string',
+            'ins_policy_no'                  => 'nullable|required_with:ins_provider|string',
             'takes_medication'               => 'required|boolean',
             'conditions'                     => 'array',
             'conditions.*.name'              => 'required|string',

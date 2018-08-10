@@ -6,6 +6,7 @@ use App\Models\v1\Visa;
 use App\Models\v1\Essay;
 use App\Models\v1\Passport;
 use App\Models\v1\Referral;
+use App\Models\v1\MedicalRelease;
 
 trait HasDocuments
 {   
@@ -21,7 +22,7 @@ trait HasDocuments
         // TODO: check for missing array indexes
         // TODO: check for a non-existent method to match given document type
         
-        $this->{$type}()->attach($data['document_id']);
+        $this->{camel_case($type)}()->attach($data['document_id']);
 
         return $this->changeRequirementStatus('reviewing', $type, $data);
     }
@@ -80,6 +81,16 @@ trait HasDocuments
         return $this->morphedByMany(Referral::class, 'documentable', $this->getTableName());
     }
 
+    /**
+     * Get medical releases related to the model.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function medicalReleases()
+    {
+        return $this->morphedByMany(MedicalRelease::class, 'documentable', $this->getTableName());
+    }
+
     // TODO: add all possible document types
 
     /**
@@ -99,9 +110,9 @@ trait HasDocuments
             ->when($requirementId, function ($query) use ($requirementId) {
                 return $query->where('id', $requirementId);
             })
-            ->firstOrFail();
+            ->first();
 
-        return $this->requireables()->updateExistingPivot($requirement->id, ['status' => $status]);
+        return !$requirement ? true : $this->requireables()->updateExistingPivot($requirement->id, ['status' => $status]);
     }
 
     /**

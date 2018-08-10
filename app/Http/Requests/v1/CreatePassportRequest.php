@@ -4,7 +4,7 @@ namespace App\Http\Requests\v1;
 
 use Dingo\Api\Http\FormRequest;
 
-class PassportRequest extends FormRequest
+class CreatePassportRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,7 @@ class PassportRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
+        return [
             'given_names' => 'required|string',
             'surname' => 'required|string',
             'number' => 'required|string',
@@ -33,11 +33,5 @@ class PassportRequest extends FormRequest
             'upload_id' => 'nullable|string',
             'user_id' => 'required|exists:users,id'
         ];
-
-        if ($this->isMethod('put')) {
-            $rules['user_id'] = 'exists:users,id';
-        }
-
-        return $rules;
     }
 }

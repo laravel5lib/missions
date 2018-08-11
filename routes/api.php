@@ -75,6 +75,9 @@ Route::apiResource('medical-releases', 'MedicalReleaseController');
 // Passports
 Route::apiResource('passports', 'PassportsController');
 
+// Referrals
+Route::apiResource('referrals', 'ReferralsController');
+
 // Dingo API routes
 $api = app('Dingo\Api\Routing\Router');
 
@@ -94,7 +97,6 @@ $api->version('v1', [
     $api->post('speaker', 'UtilitiesController@sendSpeakerRequestEmail');
     $api->post('sponsor-project', 'UtilitiesController@sendProjectSponsorEmail');
     $api->post('groups/submit', 'GroupsController@submit');
-    $api->get('referrals/{id}', 'ReferralsController@show');
 
     $api->put('representatives/{id}/avatar', 'RepresentativeAvatarController@update');
     $api->resource('representatives', 'RepresentativeController');
@@ -115,8 +117,6 @@ $api->version('v1', [
     })->where('path', '.+');
 
     $api->post('fundraisers/{id}/remind', 'FundraiserReminderController@store');
-
-    $api->resource('referrals', 'ReferralsController');
 
     $api->group(['middleware' => ['api.auth']], function ($api) {
 
@@ -154,7 +154,6 @@ $api->version('v1', [
         $api->post('trips/{id}/promo', 'TripsController@checkPromoCode');
         $api->post('interests/export', 'TripInterestsController@export');
         $api->resource('reservations', 'ReservationsController');
-        // $api->post('reservations/export', 'ReservationsController@export');
         $api->put('reservations/{id}/restore', 'ReservationsController@restore');
         $api->get('reservations/{reservations}/companions', 'CompanionsController@index');
         $api->post('reservations/{reservations}/companions', 'CompanionsController@store');
@@ -166,14 +165,9 @@ $api->version('v1', [
         $api->post('donors/export', 'DonorsController@export');
         $api->resource('donations', 'DonationsController');
         $api->post('donations/authorize', 'DonationsController@authorizeCard');
-        // $api->resource('passports', 'PassportsController');
-        // $api->post('passports/export', 'PassportsController@export');
-        // $api->post('passports/import', 'PassportsController@import');
         $api->resource('visas', 'VisasController');
         $api->resource('visas/export', 'VisasController@export');
         $api->resource('visas/import', 'VisasController@import');
-        $api->post('referrals/export', 'ReferralsController@export');
-        $api->post('referrals/import', 'ReferralsController@import');
 
         $api->group(['namespace' => 'Teams'], function ($api) {
             $api->resource('teams/types', 'TeamTypesController');
@@ -208,7 +202,6 @@ $api->version('v1', [
         $api->post('influencers/export', 'EssaysController@export');
         $api->post('influencers/import', 'EssaysController@import');
         $api->resource('reservations.dues', 'ReservationDuesController');
-        // $api->resource('requirements.conditions', 'RequirementConditionsController');
         $api->resource('deadlines', 'DeadlinesController');
         $api->resource('questionnaires', 'QuestionnairesController');
         $api->resource('permissions/roles', 'PermissionRolesController');
@@ -248,9 +241,6 @@ $api->version('v1', [
         });
 
         $api->group(['prefix' => 'medical'], function ($api) {
-            // $api->resource('releases', 'Medical\ReleasesController');
-            // $api->post('releases/export', 'Medical\ReleasesController@export');
-            // $api->post('releases/import', 'Medical\ReleasesController@import');
             $api->get('conditions', function () {
                 return ['data' => \App\Models\v1\MedicalCondition::available()];
             });

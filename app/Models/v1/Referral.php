@@ -3,12 +3,12 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
-use EloquentFilter\Filterable;
+use App\Traits\Manageable;
 use Illuminate\Database\Eloquent\Model;
 
 class Referral extends Model
 {
-    use Filterable, UuidForKey;
+    use UuidForKey, Manageable;
     
     protected $table = 'referrals';
 
@@ -40,6 +40,15 @@ class Referral extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function scopeStatus($query, $status)
+    {
+        if (! in_array($status, ['draft', 'sent', 'received'])) {
+            return $this;
+        }
+
+        return $this->{$status}();
     }
 
     public function scopeDraft($query)

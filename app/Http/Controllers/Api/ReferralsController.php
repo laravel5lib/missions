@@ -5,59 +5,52 @@ namespace App\Http\Controllers\Api;
 use Carbon\Carbon;
 use App\Models\v1\Referral;
 use App\Jobs\ExportReferrals;
+use Spatie\QueryBuilder\Filter;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 use App\Jobs\SendReferralRequestEmail;
 use App\Http\Requests\v1\ExportRequest;
 use App\Http\Requests\v1\ImportRequest;
+use App\Http\Resources\ReferralResource;
 use App\Http\Requests\v1\ReferralRequest;
 use App\Services\Importers\ReferralListImport;
 use App\Http\Transformers\v1\ReferralTransformer;
 
 class ReferralsController extends Controller
 {
-
     /**
-     * @var Referral
-     */
-    private $referral;
-
-    /**
-     * ReferralsController constructor.
-     * @param Referral $referral
-     */
-    public function __construct(Referral $referral)
-    {
-        $this->referral = $referral;
-        $this->middleware('auth:api', ['only' => ['index', 'store', 'destroy']]);
-    }
-
-    /**
-     * Get all referrals.
+     * View a list of referrals.
      *
-     * @param Request $request
-     * @return \Dingo\Api\Http\Response
+     * @return Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $referrals = $this->referral
-                        ->filter($request->all())
-                        ->paginate($request->get('per_page', 10));
+        $referrals = QueryBuilder::for(Referral::class)
+            ->allowedFilters([
+                'applicant_name', 'attention_to', 'recipient_email',
+                Filter::scope('status'),
+                Filter::exact('type'),
+                Filter::exact('user_id'),
+                Filter::scope('managed_by')
+            ])
+            ->allowedIncludes(['user'])
+            ->paginate(request()->input('per_page', 10));
 
-        return $this->response->paginator($referrals, new ReferralTransformer);
+        return ReferralResource::collection($referrals);
     }
 
     /**
-     * Get the specified referral.
+     * View a specific referral.
      *
      * @param $id
      * @return \Dingo\Api\Http\Response
      */
     public function show($id)
     {
-        $referral = $this->referral->findOrFail($id);
+        $referral = Referral::findOrFail($id);
 
-        return $this->response->item($referral, new ReferralTransformer);
+        return new ReferralResource($referral);
     }
 
     /**

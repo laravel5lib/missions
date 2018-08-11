@@ -1,11 +1,16 @@
 <?php
 
+use App\Models\v1\User;
+use App\Models\v1\Referral;
+
 /**
  * Generic Pastoral Referral
  */
-$factory->define(App\Models\v1\Referral::class, function (Faker\Generator $faker) {
+$factory->define(Referral::class, function (Faker\Generator $faker) {
     return [
-        'user_id' => $faker->uuid,
+        'user_id' => function () {
+            return factory(User::class)->create()->id;
+        },
         'applicant_name' => $faker->firstName. ' '. $faker->lastName,
         'type' => 'pastoral',
         'attention_to' => $faker->name,
@@ -50,8 +55,8 @@ $factory->define(App\Models\v1\Referral::class, function (Faker\Generator $faker
 /**
  * Response to Generic Pastoral Referral
  */
-$factory->defineAs(App\Models\v1\Referral::class, 'response', function (Faker\Generator $faker) use ($factory) {
-    $referral = $factory->raw(App\Models\v1\Referral::class);
+$factory->defineAs(Referral::class, 'response', function (Faker\Generator $faker) use ($factory) {
+    $referral = $factory->raw(Referral::class);
 
     return array_merge($referral, [
         'response' => [

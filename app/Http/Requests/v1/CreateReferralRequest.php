@@ -4,7 +4,7 @@ namespace App\Http\Requests\v1;
 
 use Dingo\Api\Http\FormRequest;
 
-class ReferralRequest extends FormRequest
+class CreateReferralRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,13 +25,14 @@ class ReferralRequest extends FormRequest
     {
         return [
             'applicant_name' => 'required|string',
-            'type' => 'required|in:pastoral',
+            'type' => 'required',
             'user_id' => 'required|exists:users,id',
             'attention_to' => 'required|string',
             'recipient_email' => 'required|email',
             'referrer' => 'required|array',
-            'sent_at' => 'date',
-            'responded_at' => 'date'
+            'referrer.name' => 'required|string',
+            'referrer.title' => 'required|string',
+            'referrer.phone' => 'required|string'
         ];
     }
 }

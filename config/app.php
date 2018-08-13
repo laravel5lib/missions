@@ -176,6 +176,7 @@ return [
         App\Providers\BackendServiceProvider::class,
         App\Providers\AccountingServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
+        App\Providers\ReferralServiceProvider::class,
     ],
 
     /*

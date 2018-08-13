@@ -55,7 +55,6 @@ class AppServiceProvider extends ServiceProvider
             'essays' => \App\Models\v1\Essay::class,
             'influencer_applications' => \App\Models\v1\Essay::class,
             'medical_releases' => \App\Models\v1\MedicalRelease::class,
-            'referrals' => \App\Models\v1\Referral::class,
             'questionnaires' => \App\Models\v1\Questionnaire::class,
             'arrival_designations' => \App\Models\v1\Questionnaire::class,
             'airport_preferences' => \App\Models\v1\Questionnaire::class,

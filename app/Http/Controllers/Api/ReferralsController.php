@@ -9,6 +9,7 @@ use Dingo\Api\Contract\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Http\Resources\ReferralResource;
 use App\Http\Requests\v1\CreateReferralRequest;
+use App\Http\Requests\v1\UpdateReferralRequest;
 
 class ReferralsController extends Controller
 {
@@ -64,27 +65,19 @@ class ReferralsController extends Controller
     /**
      * Update the specified referral in storage.
      *
-     * @param ReferralRequest $request
+     * @param UpdateReferralRequest $request
      * @param $id
      * @return \Dingo\Api\Http\Response
      */
     public function update(UpdateReferralRequest $request, $id)
     {
-        // $referral = $this->referral->findOrFail($id);
+        $referral = Referral::findOrFail($id);
 
-        // $referral->update([
-        //     'user_id' => $request->get('user_id', $referral->user_id),
-        //     'applicant_name' => $request->get('applicant_name', $referral->applicant_name),
-        //     'attention_to' => $request->get('attention_to', $referral->attention_to),
-        //     'recipient_email' => $request->get('recipient_email', $referral->recipient_email),
-        //     'type' => $request->get('type', $referral->type),
-        //     'referrer' => $request->get('referrer', $referral->referrer),
-        //     'sent_at' => $request->get('sent_at', $referral->sent_at),
-        //     'responded_at' => $request->get('responded_at', $referral->responded_at),
-        //     'response' => $request->get('response', $referral->response)
-        // ]);
+        $referral->update($request->all());
 
-        // return $this->response->item($referral, new ReferralTransformer);
+        $referral->attachToReservation($request->input('reservation_id'));
+
+        return new ReferralResource($referral);
     }
 
     /**
@@ -95,10 +88,10 @@ class ReferralsController extends Controller
      */
     public function destroy($id)
     {
-        // $referral = $this->referral->findOrFail($id);
+        $referral = Referral::findOrFail($id);
 
-        // $referral->delete();
+        $referral->delete();
 
-        // return $this->response->noContent();
+        return response()->json([], 204);
     }
 }

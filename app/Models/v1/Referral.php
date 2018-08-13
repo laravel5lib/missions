@@ -42,6 +42,7 @@ class Referral extends Model
 
     /**
      * Get the user the referral belongs to.
+     * 
      * @return Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
@@ -78,6 +79,7 @@ class Referral extends Model
 
     /**
      * Scope a query to sent status.
+     * 
      * @param  Illuminate\Database\Eloquent\Builder $query
      * @return Illuminate\Database\Eloquent\Builder       
      */
@@ -88,6 +90,7 @@ class Referral extends Model
 
     /**
      * Scope a query to received status.
+     * 
      * @param  Illuminate\Database\Eloquent\Builder $query
      * @return Illuminate\Database\Eloquent\Builder       
      */

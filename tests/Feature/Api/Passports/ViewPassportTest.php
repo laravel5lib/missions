@@ -3,8 +3,11 @@
 namespace Tests\Feature\Api\Passports;
 
 use Tests\TestCase;
+use App\Models\v1\Trip;
 use App\Models\v1\User;
+use App\Models\v1\Group;
 use App\Models\v1\Passport;
+use App\Models\v1\Reservation;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -185,6 +188,36 @@ class ViewPassportTest extends TestCase
                         ]
                     ],
                     'meta' => ['total' => 1]
+                 ]);
+    }
+
+    /** @test */
+    public function get_passports_only_for_users_with_reservations_managed_by_team_coordinator()
+    {
+        $coordinator = factory(User::class)->create();
+        $group = factory(Group::class)->create();
+        $group->managers()->attach($coordinator->id);
+        $trip = factory(Trip::class)->create(['group_id' => $group->id]);
+        $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
+        $passport = factory(Passport::class)->create(['user_id' => $reservation->user_id, 'given_names' => 'John Michael', 'surname' => 'Doe']);
+        factory(Passport::class)->create(['given_names' => 'Jane Michelle', 'surname' => 'Doe']);
+
+        $response = $this->getJson("/api/passports?filter[managed_by]={$coordinator->id}");
+
+        $response->assertOk()
+                 ->assertJson([
+                    'data' => [
+                        [
+                            'given_names' => 'John Michael',
+                            'surname' => 'Doe',
+                            'user_id' => $reservation->user_id
+                        ]
+                    ]
+                 ])
+                 ->assertJsonMissing([
+                    'data' => [
+                        ['given_names' => 'Jane Michelle', 'surname' => 'Doe']
+                    ]
                  ]);
     }
 }

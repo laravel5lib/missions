@@ -88,8 +88,6 @@ class PassportsController extends Controller
     {
         $passport = Passport::findOrFail($id);
 
-        $passport->detachFromAllReservations();
-
         $passport->delete();
 
         return response()->json([], 204);

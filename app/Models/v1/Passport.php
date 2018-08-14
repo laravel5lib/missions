@@ -10,8 +10,6 @@ use App\Traits\InteractsWithReservations;
 class Passport extends Model
 {
     use UuidForKey, InteractsWithReservations, Manageable;
-    
-    protected $table = 'passports';
 
     protected $fillable = [
         'given_names', 'surname', 'number',
@@ -23,8 +21,6 @@ class Passport extends Model
         'expires_at', 'created_at', 'updated_at'
     ];
 
-    public $timestamps = true;
-
     /**
      * Get the passport's user.
      *
@@ -35,6 +31,11 @@ class Passport extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Get the passport's upload.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function upload()
     {
         return $this->belongsTo(Upload::class);

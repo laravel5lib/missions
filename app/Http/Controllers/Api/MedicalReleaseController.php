@@ -110,8 +110,6 @@ class MedicalReleaseController extends Controller
     {
         $release = MedicalRelease::findOrFail($id);
 
-        $release->detachFromAllReservations();
-
         $release->delete();
 
         return response()->json([], 204);

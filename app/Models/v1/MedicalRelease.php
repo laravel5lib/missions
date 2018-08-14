@@ -12,13 +12,6 @@ class MedicalRelease extends Model
     use UuidForKey, InteractsWithReservations, Manageable;
 
     /**
-     * Table used by the model.
-     *
-     * @var string
-     */
-    protected $table = 'medical_releases';
-
-    /**
      * Attributes that can be mass assigned.
      *
      * @var array
@@ -29,13 +22,6 @@ class MedicalRelease extends Model
         'created_at', 'updated_at', 'takes_medication',
         'height', 'weight', 'pregnant'
     ];
-
-    /**
-     * Attributes that should be hidden from JSON output.
-     *
-     * @var array
-     */
-    protected $hidden = [];
 
     /**
      * Attributes that should be cast as date objects.
@@ -56,13 +42,6 @@ class MedicalRelease extends Model
         'takes_medication' => 'boolean',
         'pregnant' => 'boolean'
     ];
-
-    /**
-     * Enable timestamps.
-     *
-     * @var bool
-     */
-    public $timestamps = true;
 
     /**
      * The user the release belongs to.

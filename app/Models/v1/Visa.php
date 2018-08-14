@@ -3,20 +3,13 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
-use EloquentFilter\Filterable;
+use App\Traits\Manageable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\InteractsWithReservations;
 
 class Visa extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey;
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'visas';
+    use UuidForKey, InteractsWithReservations, Manageable;
 
     /**
      * The attributes that are mass assignable.
@@ -29,40 +22,11 @@ class Visa extends Model
     ];
 
     /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = [];
-
-    /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
     protected $dates = ['issued_at', 'expires_at', 'created_at', 'updated_at'];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [];
-
-    /**
-     * All of the relationships to be touched.
-     * Update the parent's timestamp.
-     *
-     * @var array
-     */
-    protected $touches = ['user'];
-
-    /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = true;
 
     /**
      * The the visa's owner.
@@ -85,52 +49,12 @@ class Visa extends Model
     }
 
     /**
-     * Get all visa's reservations.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function reservations()
-    {
-        return $this->hasMany(Reservation::class);
-    }
-
-    /**
-     * Set the visa's given names.
-     *
-     * @param $value
-     */
-    public function setGivenNamesAttribute($value)
-    {
-        $this->attributes['given_names'] = trim($value);
-    }
-
-    /**
-     * Set the visa's surname.
-     *
-     * @param $value
-     */
-    public function setSurnameAttribute($value)
-    {
-        $this->attributes['surname'] = trim($value);
-    }
-
-    /**
      * Set the visa's number.
      *
      * @param $value
      */
     public function setNumberAttribute($value)
     {
-        $this->attributes['number'] = trim(strtoupper($value));
-    }
-
-    /**
-     * Set the visa's scan source.
-     *
-     * @param $value
-     */
-    public function setScanSrcAttribute($value)
-    {
-        $this->attributes['scan_src'] = trim($value);
+        $this->attributes['number'] = strtoupper($value);
     }
 }

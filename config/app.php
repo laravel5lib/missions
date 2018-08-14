@@ -179,6 +179,7 @@ return [
         App\Providers\ReferralServiceProvider::class,
         App\Providers\PassportServiceProvider::class,
         App\Providers\MedicalReleaseServiceProvider::class,
+        App\Providers\VisaServiceProvider::class,
     ],
 
     /*

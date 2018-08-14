@@ -11,7 +11,9 @@ $factory->define(App\Models\v1\Visa::class, function (Faker\Generator $faker) {
         'issued_at'    => \Carbon\Carbon::yesterday(),
         'expires_at'   => \Carbon\Carbon::now()->addYears(5),
         'country_code' => strtolower($faker->countryCode),
-        'user_id'      => $faker->uuid,
+        'user_id'      => function () {
+            return factory(App\Models\v1\User::class)->create()->id;
+        },
         'upload_id'    => null
     ];
 });

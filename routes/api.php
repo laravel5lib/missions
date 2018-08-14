@@ -75,6 +75,9 @@ Route::apiResource('medical-releases', 'MedicalReleaseController');
 // Passports
 Route::apiResource('passports', 'PassportsController');
 
+// Visas
+Route::apiResource('visas', 'VisasController');
+
 // Referrals
 Route::apiResource('referrals', 'ReferralsController');
 
@@ -165,9 +168,6 @@ $api->version('v1', [
         $api->post('donors/export', 'DonorsController@export');
         $api->resource('donations', 'DonationsController');
         $api->post('donations/authorize', 'DonationsController@authorizeCard');
-        $api->resource('visas', 'VisasController');
-        $api->resource('visas/export', 'VisasController@export');
-        $api->resource('visas/import', 'VisasController@import');
 
         $api->group(['namespace' => 'Teams'], function ($api) {
             $api->resource('teams/types', 'TeamTypesController');

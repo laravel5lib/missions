@@ -49,64 +49,14 @@ $('.video-modal').on('hide.bs.modal', function(e) {
         <div class="row">
           <hr class="divider inv xlg">
           <div class="col-xs-12 col-sm-8 col-md-3 col-xs-offset-0 col-sm-offset-2 col-md-offset-3 text-center">
-              <a href="{{ url('1n1d19') }}" class="btn btn-primary btn-lg btn-block" style="margin-bottom:10px;background-color:#44f0a7;border-color:#44f0a7;">Learn More</a>
+              <a href="{{ url('1n1d19') }}" class="btn btn-primary btn-lg btn-block" style="color:#44f0a7!important;margin-bottom:10px;background-color:#fff;border-color:#fff;">Learn More</a>
           </div><!-- end col -->
           <div class="col-xs-12 col-sm-8 col-md-3 col-sm-offset-2 col-md-offset-0 text-center">
-              <a href="{{ url('teams') }}" class="btn btn-primary btn-lg btn-block" style="margin-bottom:10px;background-color:#44f0a7;border-color:#44f0a7;">Bring My Group</a>
+              <a href="{{ url('teams') }}" class="btn btn-primary btn-lg btn-block" style="margin-bottom:10px;background-color:#44f0a7;border-color:#44f0a7;">Take a Team</a>
           </div><!-- end col -->
         </div><!-- end row -->
     </div><!-- end container -->
 </div><!-- end onenation-header -->
-<div class="home-campaign-header">
-  <div class="container">
-      <div class="col-xs-12 col-sm-10 col-md-6 col-xs-offset-0 col-sm-offset-1 col-md-offset-0">
-          <h6 class="text-uppercase">2018 Campaign</h6>
-          <h2 style="display:inline-block;border-bottom:6px solid #f6323e;line-height:0.6em;">Advance</h2>
-          <h4>3 Nations 1 Generation</h4>
-          <p style="font-size:12px;margin-right:20px;">1Nation1Day was never the end, it's just the beginning. It's a movement of young people following their dreams; teachers mentoring their students; the Body of Christ united across borders and denominations; pastors equiped; the church mobilized to lead; women empowered to stand for justice; millions encountering God!</p>
-          <hr class="divider inv">
-          <a href="{{ url('trips') }}" class="btn btn-default btn-sm hidden-xs">Go On Advance</a>
-          <div class="row visible-xs">
-            <div class="col-xs-8">
-              <a href="{{ url('trips') }}" class="btn btn-primary btn-block">Go On A Trip</a>
-            </div><!-- end col -->
-          </div><!-- end row -->
-      </div><!-- end col -->
-      <div class="col-xs-12 col-sm-10 col-md-6 col-xs-offset-0 col-sm-offset-1 col-md-offset-0">
-        <div class="video-outer">
-          <div class="video-inner">
-            <iframe src="https://player.vimeo.com/video/234077014" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-          </div><!-- end vid-inner -->
-        </div><!-- end vid-outer -->
-      </div><!-- end col -->
-  </div><!-- end container -->
-</div><!-- end home-campign-header -->
-<!-- <div class="vid-bg">
-  <video muted autoplay loop poster="video/video-placeholder.jpg" class="vid-bg-video">
-    <source src="video/mm-homepage-bg.webm" type="video/webm">
-    <source src="video/mm-homepage-bg.mp4" type="video/mp4">
-    <source src="video/mm-homepage-bg.ogv" type="video/ogg">
-  </video>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-8 col-md-offset-2 text-center">
-        <div class="vid-bg-caption">
-          <h1 class="text-white text-hero">Where <span class="text-primary">you</span> can change the world.</h1>
-          <hr class="divider inv">
-          <a href="{{ url('campaigns') }}" class="btn btn-primary hidden-xs">Go On A Trip</a>
-          <a href="{{ url('fundraisers') }}" class="btn btn-white-hollow hidden-xs">Support A Cause</a>
-          <div class="row visible-xs">
-            <div class="col-xs-8 col-xs-offset-2">
-              <a href="{{ url('campaigns') }}" class="btn btn-primary btn-block">Go On A Trip</a>
-              <hr class="divider inv visible-xs">
-              <a href="{{ url('fundraisers') }}" class="btn btn-white-hollow btn-block">Support A Cause</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>-->
 <div class="gray-lighter-bg" style="border-top:4px solid #f6323e;">
     <div class="content-section" style="padding:0;">
       <div class="row" style="margin-left:0;margin-right:0;">
@@ -133,7 +83,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
           <h1>Mobilize A Team</h1>
           <hr class="divider red-small">
           <hr class="divider inv">
-          <p class="large-line-height">Missions.Me produces the most exciting, highest impact team missions experiences in the world.  Let us provide your team a "once in a life-time” level outreach.</p>
+          <p class="large-line-height">Missions.Me produces exciting and impactful team missions experiences.  Let us provide your team a "once in a life-time” level outreach.</p>
           <hr class="divider inv">
           <a href="{{ url('teams') }}" class="btn btn-info">Take Your Team</a>
         </div><!-- end col -->
@@ -152,7 +102,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
           </div><!-- end col -->
           <div class="col-sm-6 home-half-section">
             <h1 class="dash-trailing">1Nation1Day</h1>
-            <p class="large-line-height large-type">We are now living in a new missions era.  The vision of 1Nation1Day is to unite the global church for the salvation and transformation of nations.</p>
+            <p class="large-line-height large-type">We are living in a new missions era.  The vision of 1Nation1Day is to unite the global church for the salvation and transformation of nations.</p>
             <hr class="divider inv">
             <a href="/1nation1day" class="btn btn-info">Learn More</a>
           </div><!-- end col -->
@@ -167,7 +117,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
       <div class="row">
         <div class="col-sm-6 home-half-section">
           <h1 class="dash-trailing">Angel House</h1>
-          <p class="large-line-height large-type">Our mission is to bring abandoned children from the slum to safety and into the loving arms of caretakers that will educate, love and raise them to become future leaders in their generation.</p>
+          <p class="large-line-height large-type">Life change beings with a home. Angel House has built hundreds of homes and rescued thousands of abandonded children. With your help, we can see 100,000 children rescued in our lifetime!</p>
           <hr class="divider inv">
           <a href="https://angelhouse.me/" class="btn btn-info">Learn More</a>
         </div><!-- end col -->
@@ -194,7 +144,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
         <h1 class="home-college-header text-white">Missions.Me College</h1>
         <hr class="divider red-small">
         <hr class="divider inv">
-        <p class="large-line-height text-white">To create a movement of young leaders to <em>Live The Impossible</em> through world-class leadership training, innovative academic instruction, real-world experience, and global outreach opportunities.</p>
+        <p class="large-line-height text-white">Learn to do what others say is impossible. Get an innovative education with world class leadership training. Take part in global outreach opportunities and gain real-world experience!</p>
         <hr class="divider inv">
         <a href="{{ url('college') }}" class="btn btn-white-hollow">Learn More</a>
         <hr class="divider inv xlg">

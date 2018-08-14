@@ -7,7 +7,7 @@
             <div class="carousel-caption">
                 <h6 class="text-uppercase">Peru</h6>
                 <h3>1Nation1Day 2019</h3>
-                <p>On June 20-July 2, 2019, 5,000 missionaries will ascend on Peru, marking the largest missions movement in History.</p>
+                <p>On June 20-July 2, 2019, 5,000 missionaries will descend on Peru, marking the largest missions movement in History.</p>
             </div><!-- end carousel -->
         </div><!-- end item -->
     @endcomponent
@@ -17,8 +17,9 @@
     <div class="container">
     <div class="row">
         <div class="col-sm-offset-2 col-sm-8 col-xs-12">
-            <h4>Current Trips</h4>
-	        <hr class="divider">
+            <h1 class="text-center">Upcoming Trips</h1>
+            <hr class="divider red-small lg">
+            <hr class="divider inv lg">
             @foreach($campaigns as $campaign)
             
                 <div class="panel panel-default">
@@ -56,7 +57,7 @@
     @component('section', ['class' => 'white-bg'])
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center">
-                <h2 class="text-primary">Missions.Me provides a custom opportunity. We create experiences that maximize your gifts and are tailored to your passion.</h2>
+                <h2 class="text-primary">Missions.Me provides a custom opportunity for you and your team. We tailor experiences that maximize your gifts and passion.</h2>
             </div><!-- end col -->
         </div><!-- end row -->
     @endcomponent
@@ -112,7 +113,7 @@
             <div class="col-xs-12 col-xs-offset-0">
                 <div class="row">
                     <div class="col-xs-12">
-                        <h6 class="text-uppercase text-center">A Trip For Everyone</h6>
+                        <h6 class="text-uppercase text-center">There's a Trip For Everyone</h6>
                         <h1 class="text-center">Team Roles</h1>
                         <hr class="divider red-small lg">
                         <hr class="divider inv lg">
@@ -227,11 +228,11 @@
             <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
                 <h6 class="text-uppercase text-primary">It's So Easy</h6>
                 <h1 class="text-primary dash-trailing">We've Got You</h1>
-                <p class="large-type">Logistics, we got it covered. Missions.Me makes missions simple by taking
+                <p class="large-type">Logistics? We got it covered! Missions.Me makes missions simple by taking
                     care of all of your transportation, hotel, food, training, translators and ministry schedule
                     needs.</p>
                 <hr class="divider inv">
-                <a class="btn btn-primary" href="/contact">Speak To A Rep</a>
+                <a class="btn btn-primary" href="/contact">Speak to a Representative</a>
                 <hr class="divider inv visible-xs visible-sm">
             </div><!-- end col -->
             <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
@@ -254,8 +255,8 @@
     @component('section', ['class' => 'bg-primary'])
         <div class="row">
             <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-                <h1 class="text-primary-darker dash-trailing-dark">Level Of Impact</h1>
-                <p class="large-type">We are interested in the transformation of individuals, communities, cities, and nations. Every outreach we produce is measured through the lens of measurable transformation.  In one week's time, you and your team will speak to entire schools, impact neighborhoods, empower churches, and even fill stadiums. We believe a short-term team must serve a long-term, sustainable goal. That’s why when your team leaves our international partners continue to serve the communities you impacted, so that we make disciples.</p>
+                <h1 class="text-primary-darker dash-trailing-dark">Level of Impact</h1>
+                <p class="large-type">We want to see individuals, communities, cities, and nations transformed. Every outreach gets measured through the lens of measurable transformation. A short-term team should serve a long-term, sustainable goal.  In one week's time, you might speak to entire schools, impact neighborhoods, empower churches, and even fill stadiums! When your team leaves, our international partners continue to serve the communities you reached.</p>
                 <hr class="divider inv visible-xs visible-sm">
             </div><!-- end col -->
             <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
@@ -271,9 +272,7 @@
             </div><!-- end col -->
             <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
                 <h1 class="text-primary dash-trailing">Safety and Security</h1>
-                <p>Missions.Me's first priority is safety. Our partners have successfully hosted thousands of
-                    missionaries for over 25 years. Our projects are managed in cooperation with the
-                    local police and hired security so that each ministry context is safe.</p>
+                <p>Missions.Me's first priority is safety. Our partners have hosted thousands of missionaries for over 25 years. We manage our projects in cooperation with local police and hired security so that every trip is safe.</p>
                 <blockquote>"I have traveled with Missions.Me in many countries and have witnessed first-hand
                     their organization and safety measures. I am completely confident recommending a Missions.Me experience to families."
                     <footer>Sue, Mother from Lancaster, PA</footer>
@@ -285,7 +284,7 @@
     @component('section', ['class' => 'gray-light-bg'])
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
-                <h1 class="text-center">Trip Difficulty Ratings</h1>
+                <h1 class="text-center">Difficulty Rating</h1>
                 <hr class="divider red-small lg">
                 <hr class="divider inv lg">
             </div><!-- end col -->
@@ -302,14 +301,14 @@
                 <img class="img-lg" src="images/why-mm/level2.png" alt="">
                 <hr class="divider inv">
                 <p>If Level 1 proved to be a piece of cake, you’re ready for a Level 2 adventure. A little
-                    tougher, a little sweatier, but much more sweeter.</p>
+                    tougher, a little sweatier, but much sweeter.</p>
                 <hr class="divider inv lg visible-xs">
             </div>
             <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
                 <img class="img-lg" src="images/why-mm/level3.png" alt="">
                 <hr class="divider inv">
                 <p>Chuck Norris. Mr. T. Annie Oakley. Yep, they’re all level 3 missionaries. It may not be
-                    physically tough, but it’ll be a challenge.</p>
+                    physically tough, but it will be a challenge.</p>
                 <hr class="divider inv lg visible-xs">
             </div>
         </div>

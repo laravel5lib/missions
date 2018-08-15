@@ -81,6 +81,13 @@ Route::apiResource('visas', 'VisasController');
 // Referrals
 Route::apiResource('referrals', 'ReferralsController');
 
+// Credentials
+Route::apiResource('medical-credentials', 'MedicalCredentialsController');
+Route::apiResource('media-credentials', 'MediaCredentialsController');
+
+// Forms
+Route::apiResource('testimonies', 'FormSubmissionController');
+
 // Dingo API routes
 $api = app('Dingo\Api\Routing\Router');
 
@@ -195,15 +202,8 @@ $api->version('v1', [
         $api->post('projects/export', 'ProjectsController@export');
         $api->resource('notes', 'NotesController');
         $api->resource('todos', 'TodosController');
-        $api->resource('essays', 'EssaysController');
-        $api->post('essays/export', 'EssaysController@export');
-        $api->post('essays/import', 'EssaysController@import');
-        $api->resource('influencers', 'EssaysController');
-        $api->post('influencers/export', 'EssaysController@export');
-        $api->post('influencers/import', 'EssaysController@import');
         $api->resource('reservations.dues', 'ReservationDuesController');
         $api->resource('deadlines', 'DeadlinesController');
-        $api->resource('questionnaires', 'QuestionnairesController');
         $api->resource('permissions/roles', 'PermissionRolesController');
         $api->resource('permissions/abilities', 'PermissionAbilitiesController');
         $api->resource('promotionals', 'PromotionalsController');
@@ -234,11 +234,6 @@ $api->version('v1', [
         $api->resource('transports.activities', 'TransportActivitiesController');
         $api->resource('hubs', 'HubsController');
         $api->resource('hubs.activities', 'HubActivitiesController');
-
-        $api->group(['prefix' => 'credentials'], function ($api) {
-            $api->resource('medical', 'MedicalCredentialsController');
-            $api->resource('media', 'MediaCredentialsController');
-        });
 
         $api->group(['prefix' => 'medical'], function ($api) {
             $api->get('conditions', function () {

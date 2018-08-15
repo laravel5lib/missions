@@ -11,28 +11,28 @@ trait InteractsWithReservations {
         return $this->morphToMany(Reservation::class, 'documentable', 'reservation_documents');
     }
 
-    public function attachToReservation($reservationId)
+    public function attachToReservation($reservationId, $type = null)
     {
         if ($reservationId) {
             $reservation = Reservation::findOrFail($reservationId);
 
-            $reservation->addDocument($this->getMorphClass(), ['document_id' => $this->id]);
+            $reservation->addDocument($type ?? $this->getMorphClass(), ['document_id' => $this->id]);
         }
     }
 
-    public function detachFromAllReservations()
+    public function detachFromAllReservations($type = null)
     {
-        $this->reservations->each(function ($reservation) {
-            $reservation->removeDocument($this->getMorphClass(), $this->id);
+        $this->reservations->each(function ($reservation) use ($type) {
+            $reservation->removeDocument($type ?? $this->getMorphClass(), $this->id);
         });
     }
 
-    public function detachFromReservation($reservationId)
+    public function detachFromReservation($reservationId, $type = null)
     {
         if ($reservationId) {
             $reservation = Reservation::findOrFail($reservationId);
 
-            $reservation->removeDocument($this->getMorphClass(), $this->id);
+            $reservation->removeDocument($type ?? $this->getMorphClass(), $this->id);
         }
     }
 }

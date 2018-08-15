@@ -118,33 +118,4 @@ class EssaysController extends Controller
 
         return $this->response->noContent();
     }
-
-    /**
-     * Export essays.
-     *
-     * @param ExportRequest $request
-     * @return mixed
-     */
-    public function export(ExportRequest $request)
-    {
-        $this->dispatch(new ExportEssays($request->all()));
-
-        return $this->response()->created(null, [
-            'message' => 'Report is being generated and will be available shortly.'
-        ]);
-    }
-
-    /**
-     * Import essays.
-     *
-     * @param  ImportRequest   $request
-     * @param  EssayListImport $import
-     * @return response
-     */
-    public function import(ImportRequest $request, EssayListImport $import)
-    {
-        $response = $import->handleImport();
-
-        return $this->response()->created(null, $response);
-    }
 }

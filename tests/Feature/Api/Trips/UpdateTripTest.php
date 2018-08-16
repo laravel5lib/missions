@@ -77,4 +77,20 @@ class UpdateTripTest extends TestCase
         $response->assertStatus(422)
                  ->assertJsonValidationErrors(['tags']);
     }
+
+    /** @test */
+    public function remove_all_tags_from_trip()
+    {
+        $trip = factory(Trip::class)->create();
+        $trip->syncTagsWithType(['amazon region', 'flight included'], 'trip');
+
+        $response = $this->json('PUT', "/api/trips/{$trip->id}", ['tags' => []]);
+
+        $response->assertStatus(200)
+                ->assertJson([
+                    'data' => [
+                        'tags' => []
+                    ]
+                ]);
+    }
 }

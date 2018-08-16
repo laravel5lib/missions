@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Queue;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class TripTest extends TestCase
+class CreateTripTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -47,29 +47,6 @@ class TripTest extends TestCase
         $this->assertDatabaseHas('trips', [
             'campaign_id' => $group->campaign_id, 
             'group_id' => $group->group_id
-        ]);
-    }
-
-    /** @test */
-    public function updates_a_trip()
-    {
-        Passport::actingAs(factory(User::class, 'admin')->create());
-
-        $trip = factory(Trip::class)->create([
-            'type' => 'ministry', 
-            'difficulty' => 'level_2'
-        ]);
-
-        $this->json('PUT', "/api/trips/{$trip->id}", [
-            'type' => 'family',
-            'difficulty' => 'level_1'
-        ])
-        ->assertStatus(200)
-        ->assertJson([
-            'data' => [
-                'type' => 'family',
-                'difficulty' => 'level_1'
-            ]
         ]);
     }
 
@@ -227,24 +204,4 @@ class TripTest extends TestCase
             'published_at'
         ]);
     }
-
-    /** @test */
-    public function deletes_trip_and_drops_its_reservations()
-    {
-        Passport::actingAs(factory(User::class, 'admin')->create());
-
-        $trip = factory(Trip::class)->create();
-        $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
-        $otherReservation = factory(Reservation::class)->create();
-
-        $this->json('DELETE', "/api/trips/$trip->id")
-             ->assertStatus(204);
-        
-        $this->assertDatabaseHas('trips', ['id' => $trip->id]);
-        $this->assertDatabaseHas('reservations', ['id' => $reservation->id]);
-        $this->assertNotNull($trip->fresh()->deleted_at);
-        $this->assertNotNull($reservation->fresh()->deleted_at);
-        $this->assertNull($otherReservation->fresh()->deleted_at);
-    }
-    
 }

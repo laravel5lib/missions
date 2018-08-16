@@ -9,6 +9,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ViewTagTest extends TestCase
 {
+    use RefreshDatabase;
+    
     /** @test */
     public function get_a_list_of_all_tags()
     {

@@ -51,6 +51,37 @@ class CreateTripTest extends TestCase
     }
 
     /** @test */
+    public function create_trip_with_tags()
+    {
+        Passport::actingAs(factory(User::class, 'admin')->create());
+
+        $tags = ['flight included', 'amazon region'];
+
+        $data = array_merge(factory(Trip::class)->make()->toArray(), ['tags' => $tags]);
+
+        $response = $this->json('POST', '/api/trips', $data);
+
+        $response->assertStatus(201);
+
+        $this->assertEquals(Trip::first()->tagsWithType('trip')->count(), 2);
+    }
+
+    /** @test */
+    public function tags_must_be_in_array_format_to_create_trip()
+    {
+        Passport::actingAs(factory(User::class, 'admin')->create());
+
+        $tags = 'invalid';
+
+        $data = array_merge(factory(Trip::class)->make()->toArray(), ['tags' => $tags]);
+
+        $response = $this->json('POST', '/api/trips', $data);
+
+        $response->assertStatus(422)
+                 ->assertJsonValidationErrors(['tags']);
+    }
+
+    /** @test */
     public function requires_specific_fields_to_create_trip()
     {
         Passport::actingAs(factory(User::class, 'admin')->create());

@@ -32,6 +32,7 @@ class TripRequest extends FormRequest
             'started_at'   => 'required|date|before:ended_at',
             'ended_at'     => 'required|date|after:started_at',
             'team_roles'   => 'required|array',
+            'tags'         => 'array'
         ];
 
         if ($this->isMethod('put')) {

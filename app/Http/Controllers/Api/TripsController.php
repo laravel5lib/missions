@@ -51,6 +51,10 @@ class TripsController extends Controller
             ApplyGroupPricing::dispatch($trip);
         }
 
+        if ($request->input('tags')) {
+            $trip->syncTagsWithType($request->input('tags'), 'trip');
+        }
+
         return response()->json(['message' => 'New trip created.'], 201);
     }
 

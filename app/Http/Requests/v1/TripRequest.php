@@ -31,8 +31,7 @@ class TripRequest extends FormRequest
             'difficulty'   => 'required|in:level_1,level_2,level_3',
             'started_at'   => 'required|date|before:ended_at',
             'ended_at'     => 'required|date|after:started_at',
-            'team_roles'   => 'required|array',
-            'tags'         => 'array'
+            'team_roles'   => 'required|array'
         ];
 
         if ($this->isMethod('put')) {
@@ -56,7 +55,8 @@ class TripRequest extends FormRequest
             'published_at'    => 'nullable|date',
             'companion_limit' => 'nullable|numeric',
             'closed_at'       => 'nullable|date|before:started_at',
-            'public'          => 'boolean'
+            'public'          => 'boolean',
+            'tags'            => 'array'
         ];
 
         $rules = $required + $optional;

@@ -55,6 +55,27 @@ class ViewTagTest extends TestCase
     }
 
     /** @test */
+    public function get_tags_of_a_specific_type()
+    {
+        factory(Tag::class)->create(['name' => 'flight included', 'type' => 'trip']);
+        factory(Tag::class)->create(['name' => 'vip', 'type' => 'reservation']);
+
+        $response = $this->getJson('/api/tags/trip');
+
+        $response->assertOk()
+                 ->assertJson([
+                    'data' => [
+                        ['name' => 'flight included', 'type' => 'trip']
+                    ]
+                 ])
+                 ->assertJsonMissing([
+                    'data' => [
+                        ['name' => 'vip', 'type' => 'reservation']
+                    ]
+                 ]);
+    }
+
+    /** @test */
     public function filter_tags_by_name()
     {
         factory(Tag::class)->create(['name' => 'flight included', 'type' => 'trip']);

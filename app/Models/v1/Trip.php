@@ -50,7 +50,7 @@ class Trip extends Model
      * @var array
      */
     protected $dates = [
-        'closed_at', 'created_at', 'deleted_at', 'ended_at', 'started_at', 'updated_at'
+        'closed_at', 'created_at', 'deleted_at', 'ended_at', 'started_at', 'updated_at', 'published_at'
     ];
 
     /**
@@ -258,32 +258,6 @@ class Trip extends Model
     public function setTeamRolesAttribute($value)
     {
         $this->attributes['team_roles'] = json_encode($value);
-    }
-
-    /**
-     * Set the published at attribute
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setPublishedAtAttribute($value)
-    {
-        $this->attributes['published_at'] = $value ? Carbon::parse($value) : null;
-    }
-
-    /**
-     * Get the published at attribute
-     *
-     * @param string $value
-     * @return Carbon
-     */
-    public function getPublishedAtAttribute($value)
-    {
-        if (! is_null($value)) {
-            return Carbon::parse($value);
-        }
-
-        return;
     }
 
     /**

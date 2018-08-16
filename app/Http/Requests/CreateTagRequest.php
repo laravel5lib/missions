@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Spatie\Tags\Tag;
 use Dingo\Api\Http\FormRequest;
 
-class UpdateTagRequest extends FormRequest
+class CreateTagRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +14,6 @@ class UpdateTagRequest extends FormRequest
      */
     public function authorize()
     {
-        // return $this->user->hasAnyRole('super_admin|admin'));
         return true;
     }
 
@@ -27,7 +26,7 @@ class UpdateTagRequest extends FormRequest
     {
         return [
             'name' => [
-                'sometimes', 'required', 'string', 
+                'required', 'string', 
                 function($attribute, $value, $fail) {
                     if ($this->isUnique($attribute, $value)) {
                         return $fail($attribute.' is already in use.');

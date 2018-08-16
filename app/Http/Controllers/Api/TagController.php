@@ -8,6 +8,7 @@ use Spatie\QueryBuilder\Filter;
 use App\Http\Resources\TagResource;
 use App\Http\Controllers\Controller;
 use Spatie\QueryBuilder\QueryBuilder;
+use App\Http\Requests\CreateTagRequest;
 use App\Http\Requests\UpdateTagRequest;
 
 class TagController extends Controller
@@ -24,6 +25,13 @@ class TagController extends Controller
         return TagResource::collection($tags);
     }
 
+    public function store(CreateTagRequest $request, $type)
+    {
+        $tag = Tag::create(['name' => $request->input('name'), 'type' => $type]);
+
+        return response()->json(['message' => 'New tag created.'], 201);
+    }
+
     public function update(UpdateTagRequest $request, $type, $id)
     {
         $tag = Tag::whereType($type)->findOrFail($id);
@@ -31,5 +39,14 @@ class TagController extends Controller
         $tag->update($request->all());
 
         return new TagResource($tag);
+    }
+
+    public function destroy($id)
+    {
+        $tag = Tag::findOrFail($id);
+
+        $tag->delete();
+
+        return response()->json([], 204);
     }
 }

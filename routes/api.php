@@ -62,8 +62,10 @@ Route::apiResource('squad-members', 'SquadMemberController');
 
 // Tags
 Route::get('tags/{type?}', 'TagController@index');
+Route::post('tags/{type}', 'TagController@store');
 Route::put('tags/{type}/{tag}', 'TagController@update');
 Route::patch('tags/{type}/{tag}', 'TagController@update');
+Route::delete('/tags/{tag}', 'TagController@destroy');
 
 // Dingo API routes
 $api = app('Dingo\Api\Routing\Router');

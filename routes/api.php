@@ -60,6 +60,9 @@ Route::put('squads/published', 'SquadPublicationController@update');
 Route::apiResource('squads', 'SquadController');
 Route::apiResource('squad-members', 'SquadMemberController');
 
+// Tags
+Route::apiResource('tags', 'TagController');
+
 // Dingo API routes
 $api = app('Dingo\Api\Routing\Router');
 

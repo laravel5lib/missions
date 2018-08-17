@@ -130,7 +130,7 @@
                     </h6>
                     <p>
                     @foreach($trip->prospects as $prospect)
-                        <span class="label label-default">{{ $prospect }}</span>
+                        <span class="label label-filter">{{ $prospect }}</span>
                     @endforeach
                     </p>
             	</div>

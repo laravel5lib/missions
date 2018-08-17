@@ -5,7 +5,7 @@ namespace App\Models\v1;
 use Carbon\Carbon;
 use App\UuidForKey;
 use App\Models\v1\Fund;
-use Spatie\Tags\HasTags;
+use App\Traits\HasTags;
 use App\Traits\HasPricing;
 use App\Traits\Promoteable;
 use EloquentFilter\Filterable;

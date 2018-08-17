@@ -88,7 +88,8 @@ class TripsController extends Controller
             'published_at' => optional($trip->published_at)->toDateTimeString(),
             'spots' => $trip->spots,
             'companion_limit' => $trip->companion_limit,
-            'closed_at' => optional($trip->closed_at)->toDateTimeString()
+            'closed_at' => optional($trip->closed_at)->toDateTimeString(),
+            'tags' => $trip->tags->toArray()
         ]);
 
         return view('admin.trips.edit', compact('tripId', 'trip', 'group', 'formData'));

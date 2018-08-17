@@ -31,12 +31,6 @@
                     <i class="fa fa-chevron-left icon-left"></i> More Options
                 </a>
             </div>
-            <div class="col-xs-12 text-center visible-xs">
-                <a href="{{ url($trip->campaign->slug->url.'/teams/'.$trip->group_id.'/trips') }}" class="btn btn-default-hollow" style="color: white; border-color: white;">
-                    <i class="fa fa-chevron-left icon-left"></i> More Options
-                </a>
-                <hr class="divider inv">
-            </div>
             @endif
         </div>
     </div>
@@ -139,8 +133,13 @@
                 @include('site.trips.partials._requirements', ['trip' => $trip])
             @endif
 
-            @if($trip->deadlines->count())
-                @include('site.trips.partials._deadlines', ['trip' => $trip])
+            @if($trip->campaign->slug)
+                <div class="col-xs-12 text-center visible-xs">
+                    <a href="{{ url($trip->campaign->slug->url.'/teams/'.$trip->group_id.'/trips') }}" class="btn btn-default-hollow">
+                        <i class="fa fa-chevron-left icon-left"></i> More Options
+                    </a>
+                    <hr class="divider inv">
+                </div>
             @endif
         </div>
     </div>

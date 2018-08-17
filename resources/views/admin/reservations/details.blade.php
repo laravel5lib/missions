@@ -45,6 +45,11 @@
         'Country' => country($reservation->trip->campaign->country_code),
         'Group' => '<a href="/admin/campaign-groups/'.$group->uuid.'"><strong>'.$reservation->trip->group->name.'</strong></a>',
         'Trip Type' => '<a href="'.url('/admin/trips/'. $reservation->trip->id).'"><strong>'.ucfirst($reservation->trip->type).'</strong></a>',
+        'Tags' => function() use($reservation) {
+            foreach($reservation->trip->tags as $tag) {
+                echo '<span class="label label-filter">'.ucwords($tag->name).'</span>';
+            }
+        },
         'Start Date' => $reservation->trip->started_at->format('F j, Y'),
         'End Date' => $reservation->trip->ended_at->format('F j, Y')
     ]])

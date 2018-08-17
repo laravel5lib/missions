@@ -17,9 +17,9 @@
                 <hr class="divider xlg inv">
                 <h1 style="margin-bottom: 0;">{{ ucwords($trip->type) }} Trip</h1>
                 <h4 style="line-height: 2em;">
-                    <span class="label" style="background-color: white; color: #f52330;">Amazon Region</span>
-                    <span class="label" style="background-color: white; color: #f52330;">Flight Included</span>
-                    <span class="label" style="background-color: white; color: #f52330;">With Maccu Picchu</span>
+                    @foreach($trip->tags as $tag)
+                    <span class="label" style="background-color: white; color: #f52330;">{{ ucwords($tag->name) }}</span>
+                    @endforeach
                 </h4>
                 <hr class="divider xlg inv">
             </div><!-- end col -->

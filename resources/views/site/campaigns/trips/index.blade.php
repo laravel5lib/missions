@@ -2,12 +2,12 @@
 
 @section('content')
 
-<fetch-json url="trips" :parameters="{{ json_encode([
+<fetch-json url="trips?include=tags" :parameters="{{ json_encode([
     'filter' => [
         'campaign_id' => $campaign->id,
         'group_id' => $group->id,
         'public' => true,
-        'published' => true
+        'published' => true,
     ]
 ]) }}" v-cloak>
 <div slot-scope="{ json:trips, loading, pagination, filters, addFilter, removeFilter, changePage }">
@@ -119,7 +119,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <hr class="divider inv">
-                                            <span class="label label-filter">Tag Name</span>
+                                            <span class="label label-filter" v-for="tag in trip.tags">{{ tag.name | capitalize }}</span>
                                         </div>
                                     </div>
                                 </div>

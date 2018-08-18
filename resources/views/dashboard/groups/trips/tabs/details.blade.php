@@ -30,6 +30,11 @@
         'Campaign' => $trip->campaign->name,
         'Country' => country($trip->country_code),
         'Type' => '<strong>'.ucfirst($trip->type).'</strong>',
+        'Tags' => function() use($trip) {
+            foreach($trip->tags as $tag) {
+                echo '<span class="label label-filter">'.ucwords($tag->name).'</span>';
+            }
+        },
         'Start Date' => $trip->started_at->format('F d, Y'),
         'End Date' => $trip->ended_at->format('F d, Y'),
         'Difficulty' => $trip->difficulty,

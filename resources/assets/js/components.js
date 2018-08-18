@@ -240,6 +240,7 @@ Vue.component('group-interest-list', require('./components/GroupInterestList.vue
 Vue.component('squad-manager', require('./components/SquadManager.vue'));
 Vue.component('group-squad-member-list', require('./components/GroupSquadMemberList.vue'));
 Vue.component('group-edit', require('./components/GroupEdit.vue'));
+Vue.component('tag-list', require('./components/TagList.vue'));
 
 /**
  * Utility Components
@@ -271,6 +272,7 @@ Vue.component('select-cost', require('./components/select-cost.vue'));
 Vue.component('select-price', require('./components/select-price.vue'));
 Vue.component('select-user', require('./components/select-user.vue'));
 Vue.component('select-timezone', require('./components/select-timezone.vue'));
+Vue.component('select-tags', require('./components/select-tags.vue'));
 Vue.component('alert-error', require('./components/alert-error.vue'));
 Vue.component('alert-success', require('./components/alert-success.vue'));
 Vue.component('datetime-formatted', require('./components/datetime-formatted.vue'));

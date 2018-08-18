@@ -20,6 +20,9 @@ class TagController extends Controller
                 'name',
                 Filter::exact('type')
             ])
+            ->when($type, function ($query) use ($type) {
+                return $query->where('type', $type);
+            })
             ->paginate(request()->input('per_page', 25));
 
         return TagResource::collection($tags);

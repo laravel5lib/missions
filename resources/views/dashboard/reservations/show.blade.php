@@ -14,6 +14,10 @@
                 @yield('tab')
             </div>
             <div class="col-sm-3">
+                @include('dashboard.reservations._trip_overview')
+
+                @component('panel')
+                @slot('body')
                 @if($rep)
                     <div style="display:inline-block;">
                         <img class="img-circle img-sm" src="{{ $rep->avatar_url }}" width="50" height="50">
@@ -37,6 +41,8 @@
                     </div>
                     <hr class="divider">
                 @endforeach
+                @endslot
+                @endcomponent
             </div>
         </div>
     </div>

@@ -26,18 +26,19 @@ class TripRequest extends FormRequest
         $required = [
             'campaign_id'  => 'required|exists:campaigns,id',
             'group_id'     => 'required|exists:groups,id',
-            'country_code' => 'required',
+            'country_code' => 'required|country',
             'type'         => 'required|string',
             'difficulty'   => 'required|in:level_1,level_2,level_3',
             'started_at'   => 'required|date|before:ended_at',
             'ended_at'     => 'required|date|after:started_at',
-            'team_roles'   => 'required|array',
+            'team_roles'   => 'required|array'
         ];
 
         if ($this->isMethod('put')) {
             $required = [
                 'campaign_id'  => 'sometimes|required|exists:campaigns,id',
                 'group_id'     => 'sometimes|required|exists:groups,id',
+                'country_code' => 'sometimes|required|country',
                 'type'         => 'sometimes|required|string',
                 'difficulty'   => 'sometimes|required|in:level_1,level_2,level_3',
                 'started_at'   => 'sometimes|required|date|before:ended_at',
@@ -55,7 +56,8 @@ class TripRequest extends FormRequest
             'published_at'    => 'nullable|date',
             'companion_limit' => 'nullable|numeric',
             'closed_at'       => 'nullable|date|before:started_at',
-            'public'          => 'boolean'
+            'public'          => 'boolean',
+            'tags'            => 'array'
         ];
 
         $rules = $required + $optional;

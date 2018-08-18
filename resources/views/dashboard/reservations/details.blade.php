@@ -1,7 +1,6 @@
 @extends('dashboard.reservations.show')
 
 @section('tab')
-    @include('dashboard.reservations._trip_overview')
 
     @include('dashboard.reservations._funding_progress')
 
@@ -9,7 +8,7 @@
         @slot('title')
             <div class="row">
                 <div class="col-xs-8">
-                    <h5>Traveler Info</h5>
+                    <h5>Traveler Details</h5>
                 </div>
                 <div class="col-xs-4 text-right">
                 </div>

@@ -117,7 +117,7 @@
                         <select-tags name="tags" v-model="form.tags">
                             <label slot="label">Select Tag(s)</label>
                             <span class="help-block" slot="help-text">
-                                <a href="#"><i class="fa fa-edit"></i> Manage tags</a>
+                                <a href="{{ url('admin/tags/trip') }}"><i class="fa fa-edit"></i> Manage tags</a>
                             </span>
                         </select-tags>
                     </div>

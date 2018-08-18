@@ -240,6 +240,7 @@ Vue.component('group-interest-list', require('./components/GroupInterestList.vue
 Vue.component('squad-manager', require('./components/SquadManager.vue'));
 Vue.component('group-squad-member-list', require('./components/GroupSquadMemberList.vue'));
 Vue.component('group-edit', require('./components/GroupEdit.vue'));
+Vue.component('tag-list', require('./components/TagList.vue'));
 
 /**
  * Utility Components

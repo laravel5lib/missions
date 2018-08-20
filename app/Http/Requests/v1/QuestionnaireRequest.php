@@ -24,7 +24,7 @@ class QuestionnaireRequest extends FormRequest
     public function rules()
     {
         return [
-            'type' => 'required|in:airport_preference,arrival_designation',
+            'type' => 'required',
             'content' => 'required|array',
             'reservation_id' => 'required|exists:reservations,id'
         ];

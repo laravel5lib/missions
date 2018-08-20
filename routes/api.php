@@ -85,6 +85,9 @@ Route::apiResource('referrals', 'ReferralsController');
 Route::apiResource('essays', 'EssaysController');
 Route::apiResource('influencer-applications', 'EssaysController');
 
+// Questionnaires
+Route::apiResource('questionnaires', 'QuestionnairesController');
+
 // Tags
 Route::get('tags/{type?}', 'TagController@index');
 Route::post('tags/{type}', 'TagController@store');
@@ -208,7 +211,6 @@ $api->version('v1', [
         $api->resource('todos', 'TodosController');
         $api->resource('reservations.dues', 'ReservationDuesController');
         $api->resource('deadlines', 'DeadlinesController');
-        $api->resource('questionnaires', 'QuestionnairesController');
         $api->resource('permissions/roles', 'PermissionRolesController');
         $api->resource('permissions/abilities', 'PermissionAbilitiesController');
         $api->resource('promotionals', 'PromotionalsController');

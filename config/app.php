@@ -181,6 +181,7 @@ return [
         App\Providers\MedicalReleaseServiceProvider::class,
         App\Providers\VisaServiceProvider::class,
         App\Providers\EssayServiceProvider::class,
+        App\Providers\QuestionnaireServiceProvider::class,
     ],
 
     /*

@@ -50,7 +50,7 @@ class TripResource extends JsonResource
             'group'           => new GroupResource($this->whenLoaded('group')),
             'campaign'        => new CampaignResource($this->whenLoaded('campaign')),
             'requirements'    => RequirementResource::collection($this->whenLoaded('requireables')),
-            // 'rep'             => new RepresentativeResource($this->whenLoaded('rep'))
+            'tags'            => TagResource::collection($this->whenLoaded('tags'))
         ];
     }
 }

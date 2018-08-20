@@ -85,6 +85,13 @@ Route::apiResource('referrals', 'ReferralsController');
 Route::apiResource('essays', 'EssaysController');
 Route::apiResource('influencer-applications', 'EssaysController');
 
+// Tags
+Route::get('tags/{type?}', 'TagController@index');
+Route::post('tags/{type}', 'TagController@store');
+Route::put('tags/{type}/{tag}', 'TagController@update');
+Route::patch('tags/{type}/{tag}', 'TagController@update');
+Route::delete('/tags/{tag}', 'TagController@destroy');
+
 // Dingo API routes
 $api = app('Dingo\Api\Routing\Router');
 

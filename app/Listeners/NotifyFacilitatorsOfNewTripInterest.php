@@ -33,18 +33,18 @@ class NotifyFacilitatorsOfNewTripInterest implements ShouldQueue
      */
     public function handle(TripInterestWasCreated $event)
     {
-        if (! $event->interest->trip->facilitators->count()) {
+        if (! $event->interest->trip->group->managers->count()) {
             return;
         }
 
-        $event->interest->trip->facilitators->each(function ($facilitator) use ($event) {
+        $event->interest->trip->group->managers->each(function ($manager) use ($event) {
             $this->mailer->send(
                 'emails.interests.notification',
                 ['interest' => $event->interest],
-                function ($m) use ($facilitator) {
+                function ($m) use ($manager) {
                     $m->to(
-                        $facilitator->email,
-                        $facilitator->name
+                        $manager->email,
+                        $manager->name
                     )
                         ->subject('New Trip Interest!');
                 }

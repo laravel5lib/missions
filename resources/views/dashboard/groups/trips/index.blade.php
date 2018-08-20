@@ -57,7 +57,7 @@
             @endcomponent
 
 
-            <fetch-json url="/trips" :parameters="{{ json_encode([
+            <fetch-json url="/trips?include=tags" :parameters="{{ json_encode([
                     'filter' => [
                         'group_id' => $group->id,
                         'campaign_id' => $campaign->id
@@ -89,8 +89,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(trip, index) in trips" :key="trip.id">
-                                <td>@{{ index+1 }}</td>
+                            <template v-for="(trip, index) in trips" :key="trip.id">
+                            <tr>
+                                <td rowspan="2">@{{ index+1 }}</td>
                                 <td>
                                     <strong><a :href="'/dashboard/groups/' + trip.group_id +'/trips/' + trip.id">@{{ trip.type | capitalize }}</a></strong>
                                 </td>
@@ -105,6 +106,15 @@
                                     @{{ trip.status | capitalize }}
                                 </td>
                             </tr>
+                            <tr>
+                                <td colspan="4" style="border-top: none; padding-top: 0;">
+                                    <span class="label label-filter" 
+                                          style="padding: 5px;"
+                                          v-for="tag in trip.tags" 
+                                          style="margin-right: 1em;">@{{ tag.name | capitalize }}</span>
+                                </td>
+                            </tr>
+                            </template>
                         </tbody>
                     </table>
                     <div class="panel-body text-center" v-else>

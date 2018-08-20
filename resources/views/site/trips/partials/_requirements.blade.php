@@ -1,11 +1,14 @@
-<ul class="list-group">
-    <li class="list-group-item">
+<div class="panel panel-default">
+    <div class="panel-heading">
         <h5>Travel Requirements</h5>
-    </li>
+    </div>
+    <div class="panel-body">
     @foreach($trip->requirements as $req)
-        <li class="list-group-item">
-            <h5 class="list-group-item-heading">{{ $req->name }}</h5>
-            <p class="list-group-item-text">{{ $req->short_desc }}</p>
-        </li>
+        <h5 class="list-group-item-heading">{{ $req->name }}</h5>
+        <p class="list-group-item-text">{{ $req->short_desc }}</p>
+        @if ( ! $loop->last)
+            <hr class="divider">
+        @endif
     @endforeach
-</ul>
+    </div>
+</div>

@@ -16,7 +16,7 @@
         'Registration Closes' => ($trip->closed_at ? $trip->closed_at->format('F d, Y h:i a') : null),
         'Roles Available' => function() use($trip) {
             foreach($trip->team_roles as $role) {
-                echo '<span class="label label-default">'.teamRole($role).'</span> ';
+                echo '<span class="label label-filter">'.teamRole($role).'</span> ';
             }
         }
     ]])
@@ -41,12 +41,17 @@
         'Country' => country($trip->country_code),
         'Organization' => '<a href="'.url('admin/groups/'.$trip->group->id).'"><strong>'.$trip->group->name.'</strong></a>',
         'Type' => ucfirst($trip->type),
+        'Tags' => function() use($trip) {
+            foreach($trip->tags as $tag) {
+                echo '<span class="label label-filter">'.ucwords($tag->name).'</span>';
+            }
+        },
         'Start Date' => $trip->started_at->format('F d, Y'),
         'End Date' => $trip->ended_at->format('F d, Y'),
         'Difficulty' => $trip->difficulty,
         'Ideal for' => function() use($trip) {
             foreach($trip->prospects as $prospect) {
-                echo '<span class="label label-default">'.$prospect.'</span> ';
+                echo '<span class="label label-filter">'.ucwords($prospect).'</span> ';
             }
         },
         'Default Trip Rep' => '<a href="'.url('admin/representatives/'.optional($trip->rep)->id).'"><strong>'.optional($trip->rep)->name.'</strong></a>',

@@ -2,7 +2,6 @@
 
 namespace App\Jobs\Reservations;
 
-use App\Events\ReservationWasProcessed;
 use App\Jobs\Job;
 use App\Models\v1\Reservation;
 use Illuminate\Http\Request;

@@ -42,7 +42,8 @@
     'default_prices' => true,
     'default_requirements' => true,
     'team_roles' => ['MISS'],
-    'prospects' => ['adults', 'young adults (18-29)', 'men', 'women']
+    'prospects' => ['adults', 'young adults (18-29)', 'men', 'women'],
+    'tags' => []
 ]) }}">
 
 <template slot-scope="{ form }">
@@ -92,6 +93,33 @@
                         <input-date name="ended_at" v-model="form.ended_at">
                             <label slot="label">End Date</label>
                         </input-date>
+                    </div>
+                </div>
+                @endslot
+            @endcomponent
+        </div>
+    </div>
+</div>
+
+<hr class="divider inv">
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h5>Tags</h5>
+            <p class="text-muted">Tags provide additional identifying information and will help you better organize trips. These tags are seen by the end-user.</p>
+        </div>
+        <div class="col-md-8">
+            @component('panel')
+                @slot('body')
+                <div class="row">
+                    <div class="col-xs-12">
+                        <select-tags name="tags" v-model="form.tags">
+                            <label slot="label">Select Tag(s)</label>
+                            <span class="help-block" slot="help-text">
+                                <a href="{{ url('admin/tags/trip') }}"><i class="fa fa-edit"></i> Manage tags</a>
+                            </span>
+                        </select-tags>
                     </div>
                 </div>
                 @endslot

@@ -146,23 +146,6 @@ class TripTest extends TestCase
     }
 
     /** @test */
-    public function requires_specific_fields_to_create_trip()
-    {
-        Passport::actingAs(factory(User::class, 'admin')->create());
-
-        $this->json('POST', '/api/trips', [
-            'companion_limit' => 0,
-            'spots' => 25,
-            'closed_at' => null,
-            'default_prices' => false,
-            'prospects' => ['adults', 'young adults (18-29)', 'men', 'women']
-        ])
-        ->assertJsonValidationErrors([
-            'campaign_id', 'group_id', 'country_code', 'type', 'difficulty', 'started_at', 'ended_at', 'team_roles'
-        ]);
-    }
-
-    /** @test */
     public function campaign_and_group_ids_must_be_valid_to_create_trip()
     {
         Passport::actingAs(factory(User::class, 'admin')->create());
@@ -186,61 +169,6 @@ class TripTest extends TestCase
         ])
         ->assertJsonValidationErrors([
             'campaign_id', 'group_id'
-        ]);
-    }
-
-    /** @test */
-    public function dates_must_be_in_logical_order_to_create_trip()
-    {
-        Passport::actingAs(factory(User::class, 'admin')->create());
-        
-        $group = factory(CampaignGroup::class)->create();
-
-        $this->json('POST', '/api/trips', [
-            'campaign_id' => $group->campaign_id,
-            'group_id' => $group->group_id,
-            'country_code' => $group->campaign->country_code,
-            'type' => 'ministry',
-            'difficulty' => 'level_1',
-            'started_at' => today()->addDays(5)->toDateString(),
-            'ended_at' => today()->toDateString(),
-            'companion_limit' => 0,
-            'spots' => 25,
-            'closed_at' => today()->addDays(10)->toDateString(),
-            'default_prices' => false,
-            'team_roles' => ['MISS'],
-            'prospects' => ['adults', 'young adults (18-29)', 'men', 'women']
-        ])
-        ->assertJsonValidationErrors([
-            'started_at', 'ended_at', 'closed_at'
-        ]);
-    }
-
-    /** @test */
-    public function team_roles_and_todos_and_prospects_must_be_in_array_format_to_create_trip()
-    {
-        Passport::actingAs(factory(User::class, 'admin')->create());
-        
-        $group = factory(CampaignGroup::class)->create();
-
-        $this->json('POST', '/api/trips', [
-            'campaign_id' => $group->campaign_id,
-            'group_id' => $group->group_id,
-            'country_code' => $group->campaign->country_code,
-            'type' => 'ministry',
-            'difficulty' => 'level_1',
-            'started_at' => $group->campaign->started_at->toDateString(),
-            'ended_at' => $group->campaign->ended_at->toDateString(),
-            'companion_limit' => 0,
-            'spots' => 25,
-            'closed_at' => null,
-            'default_prices' => false,
-            'team_roles' => 'invalid',
-            'prospects' => 'invalid',
-            'todos' => 'invalid'
-        ])
-        ->assertJsonValidationErrors([
-            'team_roles', 'prospects', 'todos'
         ]);
     }
 
@@ -269,34 +197,6 @@ class TripTest extends TestCase
         ])
         ->assertJsonValidationErrors([
             'rep_id'
-        ]);
-    }
-    
-    /** @test */
-    public function published_at_must_be_a_valid_date_to_create_trip()
-    {
-        Passport::actingAs(factory(User::class, 'admin')->create());
-        
-        $group = factory(CampaignGroup::class)->create();
-
-        $this->json('POST', '/api/trips', [
-            'published_at' => 'invalid',
-            'campaign_id' => $group->campaign_id,
-            'group_id' => $group->group_id,
-            'country_code' => $group->campaign->country_code,
-            'type' => 'ministry',
-            'difficulty' => 'level_1',
-            'started_at' => $group->campaign->started_at->toDateString(),
-            'ended_at' => $group->campaign->ended_at->toDateString(),
-            'companion_limit' => 0,
-            'spots' => 25,
-            'closed_at' => null,
-            'default_prices' => true,
-            'team_roles' => ['MISS'],
-            'prospects' => ['adults', 'young adults (18-29)', 'men', 'women']
-        ])
-        ->assertJsonValidationErrors([
-            'published_at'
         ]);
     }
 

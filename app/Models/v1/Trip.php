@@ -5,6 +5,7 @@ namespace App\Models\v1;
 use Carbon\Carbon;
 use App\UuidForKey;
 use App\Models\v1\Fund;
+use App\Traits\HasTags;
 use App\Traits\HasPricing;
 use App\Traits\Promoteable;
 use EloquentFilter\Filterable;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Trip extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey, Promoteable, HasPricing, HasRequirements;
+    use SoftDeletes, Filterable, UuidForKey, Promoteable, HasPricing, HasRequirements, HasTags;
 
     /**
      * The attributes that are mass assignable
@@ -50,7 +51,7 @@ class Trip extends Model
      * @var array
      */
     protected $dates = [
-        'closed_at', 'created_at', 'deleted_at', 'ended_at', 'started_at', 'updated_at'
+        'closed_at', 'created_at', 'deleted_at', 'ended_at', 'started_at', 'updated_at', 'published_at'
     ];
 
     /**
@@ -258,32 +259,6 @@ class Trip extends Model
     public function setTeamRolesAttribute($value)
     {
         $this->attributes['team_roles'] = json_encode($value);
-    }
-
-    /**
-     * Set the published at attribute
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setPublishedAtAttribute($value)
-    {
-        $this->attributes['published_at'] = $value ? Carbon::parse($value) : null;
-    }
-
-    /**
-     * Get the published at attribute
-     *
-     * @param string $value
-     * @return Carbon
-     */
-    public function getPublishedAtAttribute($value)
-    {
-        if (! is_null($value)) {
-            return Carbon::parse($value);
-        }
-
-        return;
     }
 
     /**

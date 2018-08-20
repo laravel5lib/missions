@@ -2,7 +2,7 @@
 
 @section('tab')
 
-<fetch-json url="/trips" :parameters="{{ json_encode([
+<fetch-json url="/trips?include=tags" :parameters="{{ json_encode([
     'filter' => [
         'group_id' => $group->group_id,
         'campaign_id' => $group->campaign_id
@@ -23,6 +23,7 @@
                 </div>
             </div>
         </div>
+        <div class="table-responsive">
         <table class="table" v-if="trips && trips.length">
             <thead>
                 <tr class="active">
@@ -34,8 +35,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(trip, index) in trips" :key="trip.id">
-                    <td>@{{ index+1 }}</td>
+                <template v-for="(trip, index) in trips" :key="trip.id">
+                <tr>
+                    <td rowspan="2">@{{ index+1 }}</td>
                     <td>
                         <strong><a :href="'/admin/trips/' + trip.id">@{{ trip.type | capitalize }}</a></strong>
                     </td>
@@ -49,8 +51,18 @@
                         @{{ trip.status | capitalize }}
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="4" style="border-top: none; padding-top: 0;">
+                        <span class="label label-filter" 
+                              style="padding: 5px;"
+                              v-for="tag in trip.tags" 
+                              style="margin-right: 1em;">@{{ tag.name | capitalize }}</span>
+                    </td>
+                </tr>
+                </template>
             </tbody>
         </table>
+        </div>
         <div class="panel-body text-center" v-else>
             <span class="lead">No Trips</span>
             <p>Create a trip for this group to get started.</p>

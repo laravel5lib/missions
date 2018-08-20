@@ -37,7 +37,7 @@ class SendFacilitatorNotificationEmail extends Job implements ShouldQueue
     {
         $reservation = $this->reservation;
 
-        $emails = $reservation->trip->facilitators()->pluck('email')->toArray();
+        $emails = $reservation->trip->group->managers()->pluck('email')->toArray();
 
         // admin monitors
         $emails = $emails + ['matt@missions.me', 'neil@missions.me'];

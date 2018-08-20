@@ -25,7 +25,8 @@ class TeamRole
         'MEDI' => 'Media Professional',
         'MDPF' => 'Medical Professional',
         'WATR' => 'Clean Water Team Member',
-        'ATHL' => 'Athlete'
+        'ATHL' => 'Athlete',
+        'FIRE' => 'Firefighter'
     ];
 
     protected static $medical = [
@@ -44,7 +45,6 @@ class TeamRole
         'OTEC' => 'Optometry Tech',
         'ODOC' => 'Optometry Doctor',
         'OAST' => 'Optical Assistant',
-        // 'NULC' => 'Nutrionist/Lactation',
         'DIET' => 'Dietitian',
         'NUTR' => 'Nutrionist',
         'LACT' => 'Lactation Consultant',

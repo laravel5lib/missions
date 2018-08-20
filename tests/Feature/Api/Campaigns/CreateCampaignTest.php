@@ -15,7 +15,7 @@ class CreateCampaignTest extends TestCase
     /** @test */
     public function create_new_campaign_and_save_in_storage()
     {
-        Passport::actingAs(factory(User::class)->create());
+        Passport::actingAs(factory(User::class)->make());
 
         $data = [
             'name' => '1Nation1Day',

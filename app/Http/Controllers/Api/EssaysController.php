@@ -56,7 +56,11 @@ class EssaysController extends Controller
      */
     public function store(EssayRequest $request)
     {
+        $request->merge(['subject' => $this->getSubject($request)]);
+
         $essay = Essay::create($request->all());
+
+        $essay->attachToReservation($request->input(['reservation_id']));
 
         if ($request->has('upload_ids')) {
             $essay->uploads()->sync($request->get('upload_ids'));
@@ -76,12 +80,9 @@ class EssaysController extends Controller
     {
         $essay = Essay::findOrFail($id);
 
-        $essay->update([
-            'author_name' => $request->get('author_name'),
-            'subject'     => $request->get('subject'),
-            'content'     => $request->get('content'),
-            'user_id'     => $request->get('user_id')
-        ]);
+        $essay->update($request->all());
+
+        $essay->attachToReservation($request->input(['reservation_id']));
 
         if ($request->has('upload_ids')) {
             $essay->uploads()->sync($request->get('upload_ids'));
@@ -103,5 +104,18 @@ class EssaysController extends Controller
         $essay->delete();
 
         return response()->json([], 204);
+    }
+
+    private function getSubject($request)
+    {
+        if ($request->segment(2) === 'essays') {
+            return 'Testimony';
+        }
+
+        if ($request->segment(2) === 'influencer-applications') {
+            return 'Influencer';
+        }
+
+        return 'Essay';
     }
 }

@@ -9,11 +9,10 @@ use App\Traits\Manageable;
 use App\Models\v1\Reservation;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\InteractsWithReservations;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Essay extends Model
 {
-    use UuidForKey, SoftDeletes, InteractsWithReservations, Manageable;
+    use UuidForKey, InteractsWithReservations, Manageable;
 
     protected $fillable = ['author_name', 'subject', 'content', 'user_id'];
 
@@ -22,7 +21,7 @@ class Essay extends Model
      *
      * @var [type]
      */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = ['created_at', 'updated_at'];
 
     /**
      * Attributes that should be cast to native types.

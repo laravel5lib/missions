@@ -50,8 +50,6 @@ class AppServiceProvider extends ServiceProvider
             'funds' => \App\Models\v1\Fund::class,
             'donors' => \App\Models\v1\Donor::class,
             'trip_interests' => \App\Models\v1\TripInterest::class,
-            'essays' => \App\Models\v1\Essay::class,
-            'influencer_applications' => \App\Models\v1\Essay::class,
             'questionnaires' => \App\Models\v1\Questionnaire::class,
             'arrival_designations' => \App\Models\v1\Questionnaire::class,
             'airport_preferences' => \App\Models\v1\Questionnaire::class,

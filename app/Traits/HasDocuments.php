@@ -6,7 +6,6 @@ use App\Models\v1\Visa;
 use App\Models\v1\Essay;
 use App\Models\v1\Passport;
 use App\Models\v1\Referral;
-use App\Models\v1\FormSubmission;
 use App\Models\v1\MedicalRelease;
 
 trait HasDocuments
@@ -90,16 +89,6 @@ trait HasDocuments
     public function medicalReleases()
     {
         return $this->morphedByMany(MedicalRelease::class, 'documentable', $this->getTableName());
-    }
-
-    /**
-     * Get form submissions related to the model.
-     * 
-     * @return Illuminate\Database\Eloquent\Relations\MorphTo
-     */
-    public function formSubmissions()
-    {
-        return $this->morphedByMany(FormSubmission::class, 'documentable', $this->getTableName());
     }
 
     // TODO: add all possible document types

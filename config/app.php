@@ -180,7 +180,6 @@ return [
         App\Providers\PassportServiceProvider::class,
         App\Providers\MedicalReleaseServiceProvider::class,
         App\Providers\VisaServiceProvider::class,
-        App\Providers\FormServiceProvider::class,
     ],
 
     /*

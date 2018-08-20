@@ -5,17 +5,17 @@ namespace App\Models\v1;
 use App\UuidForKey;
 use App\Models\v1\User;
 use App\Models\v1\Upload;
+use App\Traits\Manageable;
 use App\Models\v1\Reservation;
-use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\InteractsWithReservations;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Essay extends Model
 {
-    use UuidForKey, SoftDeletes, Filterable, InteractsWithReservations;
+    use UuidForKey, SoftDeletes, InteractsWithReservations, Manageable;
 
-    protected $guarded = [];
+    protected $fillable = ['author_name', 'subject', 'content', 'user_id'];
 
     /**
      * Attributes that should mutated to date instances.
@@ -30,26 +30,6 @@ class Essay extends Model
      * @var array
      */
     protected $casts = ['content' => 'array'];
-
-    /**
-     * Set the essay's content attribute
-     *
-     * @param Array $value
-     */
-    public function setContentAttribute($value)
-    {
-        $this->attributes['content'] = json_encode($value);
-    }
-
-    /**
-     * Get the essay's attached reservations
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function reservations()
-    {
-        return $this->hasMany(Reservation::class);
-    }
 
     /**
      * Get the essay's parent user

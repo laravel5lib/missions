@@ -11,7 +11,7 @@ class ReservationDocumentController extends Controller
 {
     public function index($reservationId, $docType)
     {
-        $documents = Reservation::findOrFail($reservationId)->{$docType}()->get();
+        $documents = Reservation::findOrFail($reservationId)->{camel_case($docType)}()->get();
 
         return DocumentResource::collection($documents);
     }

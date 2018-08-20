@@ -68,7 +68,17 @@ trait HasDocuments
      */
     public function essays()
     {
-        return $this->morphedByMany(Essay::class, 'documentable', $this->getTableName());
+        return $this->morphedByMany(Essay::class, 'documentable', $this->getTableName())->where('subject', 'Testimony');
+    }
+
+    /**
+     * Get influencer applications related to the model.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function influencerApplications()
+    {
+        return $this->morphedByMany(Essay::class, 'documentable', $this->getTableName())->where('subject', 'Influencer');
     }
 
     /**

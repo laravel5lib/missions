@@ -38,7 +38,7 @@ class DocumentTransformer {
             }
         }
 
-        if (this.type == 'essays') {
+        if (this.type == 'essays' || 'influencer-applications') {
             let essay = {
                 id: this.document.id,
                 name: this.document.author_name,

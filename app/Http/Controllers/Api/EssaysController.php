@@ -38,6 +38,12 @@ class EssaysController extends Controller
     public function index(Request $request)
     {
         $essays = $this->essay
+                       ->when($request->segment(2) === 'essays', function ($query) {
+                            return $query->where('subject', 'Testimony');
+                       })
+                       ->when($request->segment(2) === 'influencer-applications', function ($query) {
+                            return $query->where('subject', 'Influencer');
+                       })
                        ->filter($request->all())
                        ->paginate($request->get('per_page', 10));
 

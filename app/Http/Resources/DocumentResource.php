@@ -65,6 +65,17 @@ class DocumentResource extends JsonResource
                 ];
                 break;
 
+            case 'influencer-applications':
+                return [
+                    'id' => $this->id,
+                    'author_name' => $this->author_name,
+                    'subject' => $this->subject,
+                    'content' => $this->content,
+                    'created_at' => $this->created_at->toIso8601String(),
+                    'updated_at' => $this->updated_at->toIso8601String()
+                ];
+                break;
+
             case 'referrals':
                 return [
                     'id' => $this->id,

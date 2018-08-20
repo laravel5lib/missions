@@ -8,11 +8,12 @@ use App\Models\v1\Upload;
 use App\Models\v1\Reservation;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\InteractsWithReservations;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Essay extends Model
 {
-    use UuidForKey, SoftDeletes, Filterable;
+    use UuidForKey, SoftDeletes, Filterable, InteractsWithReservations;
 
     protected $guarded = [];
 

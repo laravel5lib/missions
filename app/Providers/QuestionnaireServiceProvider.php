@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\v1\MinorRelease;
 use App\Models\v1\Questionnaire;
+use App\Models\v1\AirportPreference;
+use App\Models\v1\ArrivalDesignation;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
@@ -17,13 +20,9 @@ class QuestionnaireServiceProvider extends ServiceProvider
     {
         Relation::morphMap([
             'questionnaires' => Questionnaire::class,
-            'arrival_designations' => Questionnaire::class,
-            'airport_preferences' => Questionnaire::class,
-            'minor_releases' => Questionnaire::class
+            'arrival_designations' => ArrivalDesignation::class,
+            'airport_preferences' => AirportPreference::class,
+            'minor_releases' => MinorRelease::class
         ]);
-
-        Questionnaire::deleting(function ($questionnaire) {
-            $questionnaire->detachFromAllReservations();
-        });
     }
 }

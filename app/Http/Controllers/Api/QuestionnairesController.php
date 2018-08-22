@@ -2,30 +2,26 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\v1\QuestionnaireRequest;
-use App\Http\Transformers\v1\QuestionnaireTransformer;
-use App\Models\v1\Questionnaire;
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
+use Illuminate\Http\Request;
+use App\Models\v1\MinorRelease;
+use Spatie\QueryBuilder\Filter;
+use App\Models\v1\Questionnaire;
 use App\Http\Controllers\Controller;
+use App\Models\v1\AirportPreference;
+use App\Models\v1\ArrivalDesignation;
+use Spatie\QueryBuilder\QueryBuilder;
+use App\Http\Resources\QuestionnaireResource;
+use App\Http\Requests\v1\QuestionnaireRequest;
 
 class QuestionnairesController extends Controller
 {
-
-    /**
-     * @var Questionnaire
-     */
-    private $questionnaire;
-
-    /**
-     * QuestionnairesController constructor.
-     * @param Questionnaire $questionnaire
-     */
-    public function __construct(Questionnaire $questionnaire)
-    {
-        $this->questionnaire = $questionnaire;
-    }
+    public $types = [
+        'questionnaires' => Questionnaire::class,
+        'arrival-designations' => ArrivalDesignation::class,
+        'airport-preferences' => AirportPreference::class,
+        'minor-releases' => MinorRelease::class
+    ];
 
     /**
      * Get all questionnaires.
@@ -35,11 +31,14 @@ class QuestionnairesController extends Controller
      */
     public function index(Request $request)
     {
-        $questionnaires = $this->questionnaire
-                               ->filter($request->all())
-                               ->paginate($request->get('per_page', 10));
+        $questionnaires = QueryBuilder::for($this->types[$request->segment(2)])
+            ->allowedFilters([
+                Filter::exact('reservation_id'),
+                Filter::scope('managed_by')
+            ])
+            ->paginate($request->get('per_page', 25));
 
-        return $this->response->paginator($questionnaires, new QuestionnaireTransformer);
+        return QuestionnaireResource::collection($questionnaires);
     }
 
     /**
@@ -50,9 +49,9 @@ class QuestionnairesController extends Controller
      */
     public function show($id)
     {
-        $questionnaire = $this->questionnaire->findOrFail($id);
+        $questionnaire = (new $this->types[$request->segment(2)])->findOrFail($id);
 
-        return $this->response->item($questionnaire, new QuestionnaireTransformer);
+        return new QuestionnaireResource($questionnaire);
     }
 
     /**
@@ -63,13 +62,11 @@ class QuestionnairesController extends Controller
      */
     public function store(QuestionnaireRequest $request)
     {
-        $questionnaire = $this->questionnaire->create([
-            'type' => $request->get('type'),
-            'content' => $request->get('content'),
-            'reservation_id' => $request->get('reservation_id')
-        ]);
+        $questionnaire = (new $this->types[$request->segment(2)])->create($request->all());
 
-        return $this->response->item($questionnaire, new QuestionnaireTransformer);
+        // change requirement status
+
+        return response()->json(['message' => 'New questionnaire created.'], 201);
     }
 
     /**
@@ -80,10 +77,12 @@ class QuestionnairesController extends Controller
      */
     public function destroy($id)
     {
-        $questionnaire = $this->questionnaire->findOrFail($id);
+        $questionnaire = (new $this->types[request()->segment(2)])->findOrFail($id);
+
+        // change requirement status
 
         $questionnaire->delete();
 
-        return $this->response->noContent();
+        return response()->json([], 204);
     }
 }

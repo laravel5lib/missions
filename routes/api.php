@@ -87,6 +87,9 @@ Route::apiResource('influencer-applications', 'EssaysController');
 
 // Questionnaires
 Route::apiResource('questionnaires', 'QuestionnairesController');
+Route::apiResource('airport-preferences', 'QuestionnairesController');
+Route::apiResource('arrival-designations', 'QuestionnairesController');
+Route::apiResource('minor-releases', 'QuestionnairesController');
 
 // Credentials
 Route::apiResource('medical-credentials', 'MedicalCredentialsController');

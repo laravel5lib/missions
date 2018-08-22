@@ -49,8 +49,6 @@ class AppServiceProvider extends ServiceProvider
             'funds' => \App\Models\v1\Fund::class,
             'donors' => \App\Models\v1\Donor::class,
             'trip_interests' => \App\Models\v1\TripInterest::class,
-            'medical_credentials' => \App\Models\v1\Credential::class,
-            'media_credentials' => \App\Models\v1\Credential::class,
             'notes' => \App\Models\v1\Note::class,
             'todos' => \App\Models\v1\Todo::class,
             'transports' => \App\Models\v1\Transport::class,

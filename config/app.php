@@ -182,6 +182,7 @@ return [
         App\Providers\VisaServiceProvider::class,
         App\Providers\EssayServiceProvider::class,
         App\Providers\QuestionnaireServiceProvider::class,
+        App\Providers\CredentialServiceProvider::class,
     ],
 
     /*

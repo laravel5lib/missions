@@ -1,19 +1,24 @@
 <?php
 
-$factory->defineAs(App\Models\v1\Credential::class, 'medical', function (Faker\Generator $faker) {
+use App\Models\v1\User;
+use App\Models\v1\Credential;
+
+$factory->defineAs(Credential::class, 'medical', function (Faker\Generator $faker) {
     return [
-        'holder_id' => $faker->uuid,
-        'holder_type' => 'users',
+        'user_id' => function() {
+            return factory(User::class)->create()->id;
+        },
         'type' => 'medical',
         'applicant_name' => $faker->name,
         'content' => $faker->sentences(4)
     ];
 });
 
-$factory->defineAs(App\Models\v1\Credential::class, 'media', function (Faker\Generator $faker) {
+$factory->defineAs(Credential::class, 'media', function (Faker\Generator $faker) {
     return [
-        'holder_id' => $faker->uuid,
-        'holder_type' => 'users',
+        'user_id' => function() {
+            return factory(User::class)->create()->id;
+        },
         'type' => 'media',
         'applicant_name' => $faker->name,
         'content' => $faker->sentences(4)

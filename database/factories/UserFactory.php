@@ -28,12 +28,8 @@ $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker) {
         'bio'              => $faker->optional(0.5)->realText(120),
         'public'           => $faker->boolean(50),
         'remember_token'   => str_random(10),
-        'avatar_upload_id' => function () {
-            return factory(App\Models\v1\Upload::class, 'avatar')->create()->id;
-        },
-        'banner_upload_id' => function () {
-            return factory(App\Models\v1\Upload::class, 'banner')->create()->id;
-        },
+        'avatar_upload_id' => null,
+        'banner_upload_id' => null,
         'created_at' => \Carbon\Carbon::now(),
         'updated_at' => \Carbon\Carbon::now()
     ];

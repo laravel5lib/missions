@@ -7,6 +7,8 @@ use App\Models\v1\Essay;
 use App\Models\v1\Passport;
 use App\Models\v1\Referral;
 use App\Models\v1\MedicalRelease;
+use App\Models\v1\MediaCredential;
+use App\Models\v1\MedicalCredential;
 
 trait HasDocuments
 {   
@@ -99,6 +101,26 @@ trait HasDocuments
     public function medicalReleases()
     {
         return $this->morphedByMany(MedicalRelease::class, 'documentable', $this->getTableName());
+    }
+
+    /**
+     * Get medical credentials related to the model.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function medicalCredentials()
+    {
+        return $this->morphedByMany(MedicalCredential::class, 'documentable', $this->getTableName());
+    }
+
+    /**
+     * Get media credentials related to the model.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function mediaCredentials()
+    {
+        return $this->morphedByMany(MediaCredential::class, 'documentable', $this->getTableName());
     }
 
     // TODO: add all possible document types

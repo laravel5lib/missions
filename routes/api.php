@@ -88,6 +88,10 @@ Route::apiResource('influencer-applications', 'EssaysController');
 // Questionnaires
 Route::apiResource('questionnaires', 'QuestionnairesController');
 
+// Credentials
+Route::apiResource('medical-credentials', 'MedicalCredentialsController');
+Route::apiResource('media-credentials', 'MediaCredentialsController');
+
 // Tags
 Route::get('tags/{type?}', 'TagController@index');
 Route::post('tags/{type}', 'TagController@store');
@@ -241,11 +245,6 @@ $api->version('v1', [
         $api->resource('transports.activities', 'TransportActivitiesController');
         $api->resource('hubs', 'HubsController');
         $api->resource('hubs.activities', 'HubActivitiesController');
-
-        $api->group(['prefix' => 'credentials'], function ($api) {
-            $api->resource('medical', 'MedicalCredentialsController');
-            $api->resource('media', 'MediaCredentialsController');
-        });
 
         $api->group(['prefix' => 'medical'], function ($api) {
             $api->get('conditions', function () {

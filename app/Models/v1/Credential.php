@@ -3,22 +3,24 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
-use EloquentFilter\Filterable;
+use App\Traits\Manageable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\InteractsWithReservations;
 
 class Credential extends Model
 {
-    use UuidForKey, SoftDeletes, Filterable;
+    use UuidForKey, InteractsWithReservations, Manageable;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'type', 'applicant_name', 'content', 'expired_at', 'user_id'
+    ];
 
     /**
      * Attributes that should be cast to date objects
      *
      * @var array
      */
-    protected $dates = ['expired_at', 'created_at', 'updated_at', 'deleted_at'];
+    protected $dates = ['expired_at', 'created_at', 'updated_at'];
 
     /**
      * Attributes that should be cast to native types
@@ -28,23 +30,13 @@ class Credential extends Model
     protected $casts = ['content' => 'array'];
 
     /**
-     * Set the content attribute
+     * Get the user of this credential
      *
-     * @param Array $value
+     * @return Belongs To
      */
-    public function setContentAttribute($value)
+    public function user()
     {
-        $this->attributes['content'] = json_encode($value);
-    }
-
-    /**
-     * Get the holder of this credential
-     *
-     * @return MorphTo
-     */
-    public function holder()
-    {
-        return $this->morphTo();
+        return $this->belongsTo(User::class);
     }
 
     /**

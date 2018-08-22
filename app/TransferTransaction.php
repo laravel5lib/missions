@@ -17,7 +17,7 @@ class TransferTransaction extends TransactionHandler
     public function create($request)
     {
         // abstract to custom validation rule
-        $from_fund = $this->fund->findOrFail($request->get('from_fund_id'));
+        $from_fund = $this->fund->withTrashed()->findOrFail($request->get('from_fund_id'));
         if ($from_fund->balance < $request->get('amount')) {
             throw new ValidationHttpException(['Insufficient funds.']);
         }

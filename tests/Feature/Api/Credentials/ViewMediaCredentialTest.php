@@ -6,7 +6,8 @@ use Tests\TestCase;
 use App\Models\v1\Trip;
 use App\Models\v1\User;
 use App\Models\v1\Group;
-use App\Models\v1\Credential;
+use App\Models\v1\MediaCredential;
+use App\Models\v1\MedicalCredential;
 use App\Models\v1\Reservation;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,8 +19,8 @@ class ViewMediaCredentialTest extends TestCase
     /** @test */
     public function get_list_of_media_credentials()
     {
-        factory(Credential::class, 'medical')->create();
-        factory(Credential::class, 'media')->create();
+        factory(MedicalCredential::class)->create();
+        factory(MediaCredential::class)->create();
 
         $response = $this->getJson('/api/media-credentials');
 
@@ -50,7 +51,7 @@ class ViewMediaCredentialTest extends TestCase
     /** @test */
     public function get_media_credential_by_id()
     {
-        $credential = factory(Credential::class, 'media')->create();
+        $credential = factory(MediaCredential::class)->create();
 
         $response = $this->getJson("/api/media-credentials/{$credential->id}");
 
@@ -63,8 +64,8 @@ class ViewMediaCredentialTest extends TestCase
     /** @test */
     public function filter_list_of_media_credentials_by_applicant_name()
     {
-        factory(Credential::class, 'media')->create(['applicant_name' => 'John Doe']);
-        factory(Credential::class, 'media')->create(['applicant_name' => 'James Smith']);
+        factory(MediaCredential::class)->create(['applicant_name' => 'John Doe']);
+        factory(MediaCredential::class)->create(['applicant_name' => 'James Smith']);
 
         $response = $this->getJson('/api/media-credentials?filter[applicant_name]=john');
 
@@ -84,8 +85,8 @@ class ViewMediaCredentialTest extends TestCase
     /** @test */
     public function filter_list_of_media_credentials_by_user_id()
     {
-        $johnsCredentials = factory(Credential::class, 'media')->create(['applicant_name' => 'John Doe']);
-        $jamesCredentials = factory(Credential::class, 'media')->create(['applicant_name' => 'James Smith']);
+        $johnsCredentials = factory(MediaCredential::class)->create(['applicant_name' => 'John Doe']);
+        $jamesCredentials = factory(MediaCredential::class)->create(['applicant_name' => 'James Smith']);
 
         $response = $this->getJson("/api/media-credentials?filter[user_id]={$johnsCredentials->user_id}");
 
@@ -110,8 +111,8 @@ class ViewMediaCredentialTest extends TestCase
         $group->managers()->attach($coordinator->id);
         $trip = factory(Trip::class)->create(['group_id' => $group->id]);
         $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
-        $credential = factory(Credential::class, 'media')->create(['user_id' => $reservation->user_id, 'applicant_name' => 'John Doe']);
-        factory(Credential::class, 'media')->create(['applicant_name' => 'Jane Doe']);
+        $credential = factory(MediaCredential::class)->create(['user_id' => $reservation->user_id, 'applicant_name' => 'John Doe']);
+        factory(MediaCredential::class)->create(['applicant_name' => 'Jane Doe']);
 
         $response = $this->getJson("/api/media-credentials?filter[managed_by]={$coordinator->id}");
 

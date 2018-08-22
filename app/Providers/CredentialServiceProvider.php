@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\v1\Credential;
 use App\Models\v1\MediaCredential;
 use App\Models\v1\MedicalCredential;
 use Illuminate\Support\ServiceProvider;
@@ -22,7 +21,11 @@ class CredentialServiceProvider extends ServiceProvider
             'media_credentials' => MediaCredential::class,
         ]);
 
-        Credential::deleting(function ($credential) {
+        MedicalCredential::deleting(function ($credential) {
+            $credential->detachFromAllReservations();
+        });
+
+        MediaCredential::deleting(function ($credential) {
             $credential->detachFromAllReservations();
         });
     }

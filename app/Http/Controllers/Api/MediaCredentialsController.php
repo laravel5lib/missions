@@ -75,7 +75,7 @@ class MediaCredentialsController extends Controller
     {
         $credential = Credential::media()->findOrFail($id);
 
-        $credential->update($request->all()->merge(['type' => 'media']));
+        $credential->update($request->merge(['type' => 'media'])->all());
 
         $credential->attachToReservation($request->input('reservation_id'));
 

@@ -6,8 +6,9 @@ use Tests\TestCase;
 use App\Models\v1\Trip;
 use App\Models\v1\User;
 use App\Models\v1\Group;
-use App\Models\v1\Credential;
 use App\Models\v1\Reservation;
+use App\Models\v1\MediaCredential;
+use App\Models\v1\MedicalCredential;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -18,8 +19,8 @@ class ViewMedicalCredentialTest extends TestCase
     /** @test */
     public function get_list_of_medical_credentials()
     {
-        factory(Credential::class, 'medical')->create();
-        factory(Credential::class, 'media')->create();
+        factory(MedicalCredential::class)->create();
+        factory(MediaCredential::class)->create();
 
         $response = $this->getJson('/api/medical-credentials');
 
@@ -50,7 +51,7 @@ class ViewMedicalCredentialTest extends TestCase
     /** @test */
     public function get_medical_credential_by_id()
     {
-        $credential = factory(Credential::class, 'medical')->create();
+        $credential = factory(MedicalCredential::class)->create();
 
         $response = $this->getJson("/api/medical-credentials/{$credential->id}");
 
@@ -63,8 +64,8 @@ class ViewMedicalCredentialTest extends TestCase
     /** @test */
     public function filter_list_of_medical_credentials_by_applicant_name()
     {
-        factory(Credential::class, 'medical')->create(['applicant_name' => 'John Doe']);
-        factory(Credential::class, 'medical')->create(['applicant_name' => 'James Smith']);
+        factory(MedicalCredential::class)->create(['applicant_name' => 'John Doe']);
+        factory(MedicalCredential::class)->create(['applicant_name' => 'James Smith']);
 
         $response = $this->getJson('/api/medical-credentials?filter[applicant_name]=john');
 
@@ -84,8 +85,8 @@ class ViewMedicalCredentialTest extends TestCase
     /** @test */
     public function filter_list_of_medical_credentials_by_user_id()
     {
-        $johnsCredentials = factory(Credential::class, 'medical')->create(['applicant_name' => 'John Doe']);
-        $jamesCredentials = factory(Credential::class, 'medical')->create(['applicant_name' => 'James Smith']);
+        $johnsCredentials = factory(MedicalCredential::class)->create(['applicant_name' => 'John Doe']);
+        $jamesCredentials = factory(MedicalCredential::class)->create(['applicant_name' => 'James Smith']);
 
         $response = $this->getJson("/api/medical-credentials?filter[user_id]={$johnsCredentials->user_id}");
 
@@ -110,8 +111,8 @@ class ViewMedicalCredentialTest extends TestCase
         $group->managers()->attach($coordinator->id);
         $trip = factory(Trip::class)->create(['group_id' => $group->id]);
         $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
-        $credential = factory(Credential::class, 'medical')->create(['user_id' => $reservation->user_id, 'applicant_name' => 'John Doe']);
-        factory(Credential::class, 'medical')->create(['applicant_name' => 'Jane Doe']);
+        $credential = factory(MedicalCredential::class)->create(['user_id' => $reservation->user_id, 'applicant_name' => 'John Doe']);
+        factory(MedicalCredential::class)->create(['applicant_name' => 'Jane Doe']);
 
         $response = $this->getJson("/api/medical-credentials?filter[managed_by]={$coordinator->id}");
 

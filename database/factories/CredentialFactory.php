@@ -1,9 +1,10 @@
 <?php
 
 use App\Models\v1\User;
-use App\Models\v1\Credential;
+use App\Models\v1\MedicalCredential;
+use App\Models\v1\MediaCredential;
 
-$factory->defineAs(Credential::class, 'medical', function (Faker\Generator $faker) {
+$factory->define(MedicalCredential::class, function (Faker\Generator $faker) {
     return [
         'user_id' => function() {
             return factory(User::class)->create()->id;
@@ -14,7 +15,7 @@ $factory->defineAs(Credential::class, 'medical', function (Faker\Generator $fake
     ];
 });
 
-$factory->defineAs(Credential::class, 'media', function (Faker\Generator $faker) {
+$factory->define(MediaCredential::class, function (Faker\Generator $faker) {
     return [
         'user_id' => function() {
             return factory(User::class)->create()->id;

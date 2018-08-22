@@ -75,7 +75,7 @@ class MedicalCredentialsController extends Controller
     {
         $credential = Credential::medical()->findOrFail($id);
 
-        $credential->update($request->all()->merge(['type' => 'medical']));
+        $credential->update($request->merge(['type' => 'medical'])->all());
 
         $credential->attachToReservation($request->input('reservation_id'));
 

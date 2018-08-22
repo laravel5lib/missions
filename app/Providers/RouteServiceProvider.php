@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\v1\Fund;
 use App\Models\v1\Lead;
 use App\Models\v1\Fundraiser;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,10 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
+
+        Route::bind('fund', function ($value) {
+            return Fund::withTrashed()->findOrFail($value);
+        });
 
         Route::bind('fundraiser', function ($value) {
             return Fundraiser::whereUuid($value)->first();

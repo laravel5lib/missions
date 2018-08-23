@@ -55,6 +55,11 @@
                         </li>
                         <li>
                             <a type="button" 
+                                @click="openFilterModal(filterConfiguration.card_last_four)"
+                            >Card Last Four</a>
+                        </li>
+                        <li>
+                            <a type="button" 
                                 @click="openFilterModal(filterConfiguration.created_between)"
                             >Date</a>
                         </li>
@@ -240,6 +245,11 @@ export default {
                         {value: 'check', label: 'Check'},
                         {value: 'cash', label: 'Cash'}
                     ]
+                },
+                card_last_four: {
+                    component: 'filter-search',
+                    title: 'Card Last Four',
+                    field: 'card_last_four'
                 },
                 created_between: {
                     component: 'filter-radio',

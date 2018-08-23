@@ -117,7 +117,7 @@
                             'Card Holder' => $transaction->details['cardholder'],
                             'Card Brand' => $transaction->details['brand'],
                             'Last Four' => $transaction->details['last_four'],
-                            'Stripe Charge ID' => '<code>'.$transaction->details['charge_id'].'</code>'
+                            'Stripe Charge ID' => '<code>'.(isset($transaction->details['charge_id']) ? $transaction->details['charge_id'] : 'n/a').'</code>'
                         ]])
                         @endcomponent
                     @endif

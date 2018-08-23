@@ -36,6 +36,7 @@ class TransactionsController extends Controller
                 Filter::scope('donor_email'),
                 Filter::scope('fund_name'),
                 Filter::scope('payment_method'),
+                Filter::scope('card_last_four'),
                 Filter::scope('created_between'),
                 Filter::scope('accounting_class'),
                 Filter::scope('accounting_item')

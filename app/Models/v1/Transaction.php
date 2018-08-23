@@ -191,6 +191,11 @@ class Transaction extends Model
         return $query->where('details->type', $method);
     }
 
+    public function scopeCardLastFour($query, $numbers)
+    {
+        return $query->where('details->last_four', $numbers);
+    }
+
     public function scopeCreatedBetween($query, ...$dates)
     {
         return $query->whereDate('created_at', '>=', $dates[0])

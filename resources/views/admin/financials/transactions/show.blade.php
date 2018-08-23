@@ -129,6 +129,16 @@
                         ]])
                         @endcomponent
                     @endif
+                    @slot('footer')
+                        <div class="text-right">
+                            <send-email label="Email Receipt"
+                                icon="fa fa-envelope icon-left"
+                                classes="btn btn-default btn-sm"
+                                command="email:send-receipt"
+                                :parameters="{id: '{{ $transaction->id }}', email: '{{ $transaction->donor->email }}'}">
+                            </send-email>
+                        </div>
+                    @endslot
                 @endcomponent
 
             @endif

@@ -1,17 +1,14 @@
 <template>
     <div class="panel panel-default" style="border-top: 5px solid #f6323e">
-        <div class="panel-heading"><h5>{{ docType | underscoreToSpace | titleCase }}</h5></div>
         <template v-if="documents.length && !selectedDocument">
-                
-            <!-- <div class="panel-body"> -->
-                <div class="alert alert-warning" style="margin: 0; border-radius: 0;">Choose a {{ docType }} to use.</div>
+            <div class="panel-heading"><h5>Find an existing {{ docType | underscoreToSpace }}:</h5></div>
                 
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                             <tr class="active">
                                 <th><i class="fa fa-cog"></i></th>
-                                <th v-for="(value, key) in headings" v-if="key != 'id'">
+                                <th v-for="(value, key) in headings" v-if="keyIsAllowed(key)">
                                     {{ key | underscoreToSpace | titleCase }}
                                 </th>
                             </tr>
@@ -41,23 +38,25 @@
                                         </ul>
                                     </div>
                                 </td>
-                                <td v-for="(value, key) in document" v-if="key != 'id'">
+                                <td v-for="(value, key) in document" v-if="keyIsAllowed(key)">
                                     {{ value }}
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-            <!-- </div> -->
             
             <div class="panel-body text-right">
                 <button class="btn btn-link" @click="documents = []">Cancel</button>
                 <a class="btn btn-primary" :href="`/${firstUrlSegment}/records/${slug}/create?reservation=${reservationId}&amp;requirement=${requirement.id}`">Add New {{ docType | underscoreToSpace | titleCase }}</a>
             </div>
+            <div class="panel-footer" v-if="pagination.total > pagination.per_page">
+                <pager :pagination="pagination" :callback="changePage"></pager>
+            </div>
     
         </template>
         <template v-else>
-
+            <div class="panel-heading"><h5>{{ docType | underscoreToSpace | titleCase }}</h5></div>
             <template v-if="selectedDocument">
                 <div class="list-group">
                     <div class="list-group-item" v-for="(value, key) in selectedDocument" v-if="key != 'id'">
@@ -113,7 +112,11 @@ export default {
     data () {
         return {
             selectedDocument: null,
-            documents: []
+            documents: [],
+            pagination: {
+                total: 0,
+                per_page: 25
+            }
         }
     },
 
@@ -165,11 +168,17 @@ export default {
                 });
         },
         fetchDocument() {
+            let params = {};
+
             // replace underscores with dashes
             let type = this.type.replace(/_/g, '-');
 
+            if (type == 'medical-releases') {
+                params = {include: 'conditions,allergies'};
+            }
+
             this.$http
-                .get(`reservations/${this.reservationId}/${type}`)
+                .get(`reservations/${this.reservationId}/${type}`, {params})
                 .then((response) => {
                     this.selectedDocument = _.first(this.mapRows(response.data.data));
                 })
@@ -177,18 +186,27 @@ export default {
                     this.handleError(error)
                 });
         },
-        fetchDocuments() {
+        fetchDocuments(params = {}) {
             // replace underscores with dashes
             let type = this.type.replace(/_/g, '-');
 
+            if (type == 'medical-releases') {
+                params = {include: 'conditions,allergies'};
+            }
+
             this.$http
-                .get(`${type}`)
+                .get(`${type}`, {params})
                 .then((response) => {
                     this.documents = response.data.data;
+                    this.pagination = response.data.meta;
                 })
                 .catch((error) => {
                     this.handleError(error)
                 });
+        },
+        changePage(page) {
+            let params = {page: page, per_page: this.pagination.per_page};
+            this.fetchDocuments(params);
         },
         mapRows(documents) {
             let that = this;
@@ -198,6 +216,9 @@ export default {
         },
         handleError(error) {
             swal('Oops!', error, 'error');
+        },
+        keyIsAllowed(key) {
+            return _.contains(['name', 'number', 'country', 'expired', 'last_updated', 'sent', 'replied', 'has_conditions', 'has_allergies'], key)
         }
     },
 

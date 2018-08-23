@@ -1,24 +1,24 @@
 <template>
     <!-- Minor Release -->
-    <div>
-        <div class="row">
-            <div class="col-xs-12">
-                <h6 class="text-uppercase">Minor Release Form</h6>
-                <hr class="divider lg">
+    <div class="panel panel-default" style="border-top: 5px solid #f6323e">
+        <div class="panel-heading">
+            <h6>Minor Release</h6>
+        </div>
+        <div class="panel-body">
+            <p>Anyone traveling under the age of 18 is required to have a legal guardian complete this form. This document must be <strong>completed, signed and notarized</strong>. Please mail the orginal (photocopies not accepted) notarized document to the below address:<p>
 
-                <p>Anyone traveling under the age of 18 is required to have a legal guardian complete this form. This document must be <strong>completed, signed and notarized</strong>. Please mail the orginal (photocopies not accepted) notarized document to the below address:<p>
+            <p>
+                Missions.Me<br>
+                34270 Pacific Coast Hwy.<br> 
+                Suite C<br>
+                Dana Point, CA 92629
+            </p>
 
-                <p>
-                    Missions.Me<br>
-                    34270 Pacific Coast Hwy.<br> 
-                    Suite C<br>
-                    Dana Point, CA 92629
-                </p>
+            <hr class="divider">
 
-                <p class="text-center"><a class="btn btn-primary btn-sm" href="/downloads/minors_release.pdf" target="_blank">
-                    <i class="fa fa-file-pdf-o icon-left"></i> Download Minor Release Form
-                </a></p>
-            </div>
+            <p><a class="btn btn-primary" href="/downloads/minors_release.pdf" target="_blank">
+                <i class="fa fa-file-pdf-o icon-left"></i> Download Minor Release Form
+            </a></p>
         </div>
     </div>
     <!-- end Minor Release -->

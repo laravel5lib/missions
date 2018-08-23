@@ -22,7 +22,7 @@ class DocumentTransformer {
             'influencer_applications': EssayTransformer,
             'medical_credentials': MedicalCredentialTransformer,
             'media_credentials': MediaCredentialTransformer,
-            'referrals': ReferralTransformer,
+            'referrals': ReferralTransformer
         }
 
         if ( ! types[this.type]) throw "Unrecognized document type";

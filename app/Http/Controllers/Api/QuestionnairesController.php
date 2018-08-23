@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use App\Models\v1\Reservation;
 use App\Models\v1\MinorRelease;
 use Spatie\QueryBuilder\Filter;
 use App\Models\v1\Questionnaire;
@@ -65,6 +66,8 @@ class QuestionnairesController extends Controller
         $questionnaire = (new $this->types[$request->segment(2)])->create($request->all());
 
         // change requirement status
+        Reservation::findOrFail($request->input('reservation_id'))
+            ->changeRequirementStatus('reviewing', $request->segment(2));
 
         return response()->json(['message' => 'New questionnaire created.'], 201);
     }
@@ -80,6 +83,8 @@ class QuestionnairesController extends Controller
         $questionnaire = (new $this->types[request()->segment(2)])->findOrFail($id);
 
         // change requirement status
+        Reservation::findOrFail($questionnaire->reservation_id)
+            ->changeRequirementStatus('incomplete', request()->segment(2));
 
         $questionnaire->delete();
 

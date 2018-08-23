@@ -14,7 +14,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="document in mapRows(documents)" :class="{ 'text-danger': document.expired == 'Yes' }">
+                            <tr v-for="document in documents" :class="{ 'text-danger': document.expired == 'Yes' }">
                                 <td>
                                     <div class="btn-group">
                                         <a role="button" class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown">
@@ -53,7 +53,6 @@
             <div class="panel-footer" v-if="pagination.total > pagination.per_page">
                 <pager :pagination="pagination" :callback="changePage"></pager>
             </div>
-    
         </template>
         <template v-else>
             <div class="panel-heading"><h5>{{ docType | underscoreToSpace | titleCase }}</h5></div>
@@ -130,16 +129,13 @@ export default {
         },
         headings() {
             // grab the first document so we can use it's keys as table headings
-            return _.first(this.mapRows(this.documents));
+            return _.first(this.documents);
         }
     },
 
     methods: {
         isArray(value) {
             return _.isArray(value);
-        },
-        selectDocument(document) {
-
         },
         addDocument(document) {
             this.$http
@@ -197,7 +193,7 @@ export default {
             this.$http
                 .get(`${type}`, {params})
                 .then((response) => {
-                    this.documents = response.data.data;
+                    this.documents = this.mapRows(response.data.data);
                     this.pagination = response.data.meta;
                 })
                 .catch((error) => {

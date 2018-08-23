@@ -16,11 +16,36 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-md-10 col-md-offset-1">
+                @if($requirement->document_type == 'airport_preferences')
+
+                    <airport-preference 
+                        reservation-id="{{ $reservation->id }}"
+                        :document="{{ json_encode($reservation->airportPreference) }}"
+                    ></airport-preference>
+
+                @elseif($requirement->document_type == 'arrival_designations')
+
+                    <arrival-designation 
+                        reservation-id="{{ $reservation->id }}"
+                        :document="{{ json_encode($reservation->arrivalDesignation) }}"
+                    ></arrival-designation>
+
+                @elseif($requirement->document_type == 'minor_releases')
+
+                    <minor-release 
+                        reservation-id="{{ $reservation->id }}"
+                        :document="{{ json_encode($reservation->minorRelease) }}"
+                    ></minor-release>
+
+                @else
+
                 <travel-document 
                     type="{{ $requirement->document_type }}" 
                     reservation-id="{{ $reservation->id }}"
                     :requirement="{{ json_encode($requirement) }}"
                 ></travel-document>
+
+                @endif
                 
                 @component('panel')
                     @slot('title')

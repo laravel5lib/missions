@@ -6,9 +6,12 @@ use App\Models\v1\Visa;
 use App\Models\v1\Essay;
 use App\Models\v1\Passport;
 use App\Models\v1\Referral;
+use App\Models\v1\MinorRelease;
 use App\Models\v1\MedicalRelease;
 use App\Models\v1\MediaCredential;
+use App\Models\v1\AirportPreference;
 use App\Models\v1\MedicalCredential;
+use App\Models\v1\ArrivalDesignation;
 
 trait HasDocuments
 {   
@@ -123,7 +126,35 @@ trait HasDocuments
         return $this->morphedByMany(MediaCredential::class, 'documentable', $this->getTableName());
     }
 
-    // TODO: add all possible document types
+    /**
+     * Get airport preference related to the model.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function airportPreference()
+    {
+        return $this->hasOne(AirportPreference::class);
+    }
+
+    /**
+     * Get arrival designation related to the model.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function arrivalDesignation()
+    {
+        return $this->hasOne(ArrivalDesignation::class);
+    }
+
+    /**
+     * Get minor release related to the model.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function minorRelease()
+    {
+        return $this->hasOne(MinorRelease::class);
+    }
 
     /**
      * Change the status of the requirement this document satisfies.
@@ -133,7 +164,7 @@ trait HasDocuments
      * @param  array  $data 
      * @return boolean
      */
-    private function changeRequirementStatus($status, $type, $data = [])
+    public function changeRequirementStatus($status, $type, $data = [])
     {
         $requirementId = isset($data['requirement_id']) ? $data['requirement_id'] : null;
         

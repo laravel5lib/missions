@@ -184,6 +184,9 @@ Vue.component('essay-create-update', require('./components/records/essays/essay-
 Vue.component('influencer-questionnaire-create-update', require('./components/records/influencers/influencer-questionnaire-create-update.vue'));
 Vue.component('referral-create-update', require('./components/records/referrals/referral-create-update.vue'));
 Vue.component('referral-response', require('./components/referrals/referral-response.vue'));
+Vue.component('airport-preference', require('./components/reservations/airport-preference.vue'));
+Vue.component('arrival-designation', require('./components/reservations/arrival-designation.vue'));
+Vue.component('minor-release', require('./components/reservations/minor-release.vue'));
 
 /**
  * Uploads Components

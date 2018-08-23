@@ -51,6 +51,10 @@ class DocumentResource extends JsonResource
                 return new CredentialResource($this);
                 break;
 
+            case 'airport-preferences':
+                return new QuestionnaireResource($this);
+                break;
+
             default:
                 return [
                     'message' => 'Undefined or unrecognized document type'

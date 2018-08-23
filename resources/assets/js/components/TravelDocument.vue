@@ -27,13 +27,13 @@
                                             <template v-if="document.expired != 'Yes' || !document.expired">
                                                 <li>
                                                     <a role="button" @click="addDocument(document)">
-                                                        Use this {{ docType }}
+                                                        Use this {{ docType | underscoreToSpace | titleCase }}
                                                     </a>
                                                 </li>
                                                 <li role="separator" class="divider"></li>
                                             </template>
                                             <li>
-                                                <a :href="`/${firstUrlSegment}/records/${type}/${document.id}/edit?reservation=${reservationId}&amp;requirement=${requirement.id}`">
+                                                <a :href="`/${firstUrlSegment}/records/${slug}/${document.id}/edit?reservation=${reservationId}&amp;requirement=${requirement.id}`">
                                                     Edit
                                                 </a>
                                             </li>
@@ -52,7 +52,7 @@
             
             <div class="panel-body text-right">
                 <button class="btn btn-link" @click="documents = []">Cancel</button>
-                <a class="btn btn-primary" :href="`/${firstUrlSegment}/records/${type}/create?reservation=${reservationId}&amp;requirement=${requirement.id}`">Add New {{ docType }}</a>
+                <a class="btn btn-primary" :href="`/${firstUrlSegment}/records/${slug}/create?reservation=${reservationId}&amp;requirement=${requirement.id}`">Add New {{ docType | underscoreToSpace | titleCase }}</a>
             </div>
     
         </template>
@@ -66,13 +66,18 @@
                                 {{ key | underscoreToSpace | titleCase }}
                             </div>
                             <div class="col-xs-8">
-                                {{ value }}
+                                <ul v-if="isArray(value)">
+                                    <li v-for="item in value">
+                                        {{ item }}
+                                    </li>
+                                </ul>
+                                <span v-else>{{ value }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="panel-body text-right" v-if="requirement.pivot.status != 'complete'">
-                    <button @click="removeDocument(selectedDocument)" class="btn btn-sm btn-link">Choose a different {{ docType }}</button>
+                    <button @click="removeDocument(selectedDocument)" class="btn btn-sm btn-link">Choose a different {{ docType | underscoreToSpace }}</button>
                 </div>
             </template>
             <template v-else>
@@ -113,6 +118,9 @@ export default {
     },
 
     computed: {
+        slug() {
+            return this.type.replace(/_/g, '-');
+        },
         docType() {
             // make it singular
             return this.type.substring(0, this.type.length - 1);
@@ -124,6 +132,9 @@ export default {
     },
 
     methods: {
+        isArray(value) {
+            return _.isArray(value);
+        },
         selectDocument(document) {
 
         },

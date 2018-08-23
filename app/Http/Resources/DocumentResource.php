@@ -43,6 +43,14 @@ class DocumentResource extends JsonResource
                 return new MedicalReleaseResource($this);
                 break;
 
+            case 'medical-credentials':
+                return new CredentialResource($this);
+                break;
+
+            case 'media-credentials':
+                return new CredentialResource($this);
+                break;
+
             default:
                 return [
                     'message' => 'Undefined or unrecognized document type'

@@ -57,23 +57,11 @@ Vue.component('anchored-heading', {
  * Group components
  */
 Vue.component('groups', require('./components/groups/groups.vue'));
-Vue.component('groups-list', require('./components/groups/groups-list.vue'));
-Vue.component('group-trips', require('./components/campaigns/group-trips.vue'));
-Vue.component('group-profile-trips', require('./components/groups/group-profile-trips.vue'));
 Vue.component('group-profile-stories', require('./components/groups/group-profile-stories.vue'));
-Vue.component('group-trip-wrapper', require('./components/campaigns/groups-trips-selection-wrapper.vue'));
 Vue.component('group-interest-signup', require('./components/groups/group-interest-signup.vue'));
-Vue.component('group-profile-fundraisers', require('./components/groups/group-profile-fundraisers.vue'));
-Vue.component('dashboard-group-trips', require('./components/groups/dashboard-group-trips.vue'));
-Vue.component('dashboard-group-reservations', require('./components/groups/dashboard-group-reservations.vue'));
-Vue.component('dashboard-interests-list', require('./components/interests/dashboard-interests-list.vue'));
-Vue.component('admin-group-trips', require('./components/groups/admin-group-trips-list.vue'));
-Vue.component('admin-groups', require('./components/groups/admin-groups-list.vue'));
 Vue.component('admin-group-create', require('./components/groups/admin-group-create.vue'));
 Vue.component('admin-group-edit', require('./components/groups/admin-group-edit.vue'));
-Vue.component('admin-group-delete', require('./components/groups/admin-group-delete.vue'));
 Vue.component('admin-group-managers', require('./components/groups/admin-group-managers.vue'));
-Vue.component('admin-transactions-list', require('./components/AdminTransactionList.vue'));
 
 /**
  * Campaign and Trip Components
@@ -247,6 +235,7 @@ Vue.component('requirements-manager', require('./components/RequirementsManager.
 Vue.component('travel-document', require('./components/TravelDocument.vue'));
 Vue.component('bulk-add-requirement-modal', require('./components/BulkAddRequirementModal.vue'));
 Vue.component('tag-list', require('./components/TagList.vue'));
+Vue.component('admin-transactions-list', require('./components/AdminTransactionList.vue'));
 
 /**
  * Utility Components

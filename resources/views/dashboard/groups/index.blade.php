@@ -44,9 +44,6 @@
                     </table>
                 </div>
             </fetch-json>
-
-
-                <!-- <groups-list user-id="{{ auth()->check() ? auth()->id() : null }}" :select-ui="false"></groups-list> -->
             </div>
         </div>
     </div>

@@ -68,12 +68,6 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-sm-12 col-md-6">
-									<div class="form-group" :class="{ 'has-error': errors.has('email') }">
-										<label for="infoEmailAddress">Billing Email Address</label>
-										<input type="text" class="form-control" v-model="cardEmail" name="email" id="infoEmailAddress" v-validate="'required|email'">
-									</div>
-								</div>
 							</div>
 							<div class="row">
 								<div class="col-xs-12">

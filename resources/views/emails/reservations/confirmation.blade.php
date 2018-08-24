@@ -49,36 +49,6 @@
                     </tr>
                 @endforeach
             @endif
-            @if($reservation->deadlines->count())
-                <tr>
-                    <td style="font-size:10px;letter-spacing:2px;text-transform:uppercase;border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;text-align:center;" colspan="2">Other Deadlines</td>
-                </tr>
-                @foreach($reservation->deadlines as $deadline)
-                    <tr>
-                        <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">
-                            {{ $deadline->name }}
-                        </td>
-                        <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;">
-                            {{ $deadline->date->format('F j, Y') }}
-                        </td>
-                    </tr>
-                @endforeach
-            @endif
-            @if($reservation->dues->count())
-                <tr>
-                    <td style="font-size:10px;letter-spacing:2px;text-transform:uppercase;border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;text-align:center;" colspan="2">Payments Due</td>
-                </tr>
-                @foreach($reservation->dues as $payment)
-                    <tr>
-                        <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">
-                            ${{ number_format($payment->outstandingBalanceInDollars(), 2) }} - {{ $payment->payment->percent_owed }}% {{ $payment->payment->cost->name }}
-                        </td>
-                        <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;">
-                            {{ $payment->due_at->format('F j, Y') }}
-                        </td>
-                    </tr>
-                @endforeach
-            @endif
         </tbody>
     </table></p>
 

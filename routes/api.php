@@ -216,7 +216,6 @@ $api->version('v1', [
         $api->post('projects/export', 'ProjectsController@export');
         $api->resource('notes', 'NotesController');
         $api->resource('todos', 'TodosController');
-        $api->resource('reservations.dues', 'ReservationDuesController');
         $api->resource('deadlines', 'DeadlinesController');
         $api->resource('permissions/roles', 'PermissionRolesController');
         $api->resource('permissions/abilities', 'PermissionAbilitiesController');

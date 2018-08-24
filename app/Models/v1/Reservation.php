@@ -25,7 +25,6 @@ use App\Events\ReservationWasProcessed;
 use App\Models\v1\RequirementCondition;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use App\Jobs\Reservations\SyncPaymentsDue;
 use Illuminate\Database\Eloquent\Collection;
 use App\Jobs\Reservations\ProcessReservation;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -204,16 +203,6 @@ class Reservation extends Model
     public function companions()
     {
         return $this->hasMany(Companion::class, 'reservation_id');
-    }
-
-    /**
-     * Get all the reservation's payments due.
-     *
-     * @return Illuminate\Database\Eloquent\Reservations\MorphMany
-     */
-    public function dues()
-    {
-        return $this->morphMany(Due::class, 'payable')->sortRecent();
     }
 
     /**

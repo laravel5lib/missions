@@ -170,7 +170,7 @@ class ReservationsController extends Controller
 
         $reservation->payments()->reconcile();
 
-        return $this->response->item($reservation, new ReservationTransformer, ['include' => 'dues']);
+        return $this->response->item($reservation, new ReservationTransformer);
     }
 
     /**

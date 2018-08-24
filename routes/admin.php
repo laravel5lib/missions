@@ -153,7 +153,7 @@ Route::prefix('records')->group(function () {
         'only' => ['create', 'show', 'edit']
     ]);
 
-    Route::resource('influencers', 'InfluencersController', [
+    Route::resource('influencer-applications', 'InfluencersController', [
         'only' => ['create', 'show', 'edit']
     ]);
 });

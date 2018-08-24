@@ -60,6 +60,13 @@ class ViewMedicalReleaseTest extends TestCase
         $response = $this->getJson("/api/medical-releases/{$release->id}");
 
         $response->assertOk()
+                 ->assertJsonStructure([
+                    'data' => [
+                        'user',
+                        'conditions',
+                        'allergies'
+                    ]
+                 ])
                  ->assertJson([
                     'data' => [
                         'id' => $release->id,

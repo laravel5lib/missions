@@ -475,8 +475,7 @@
 						</ol>
 					</div>
 					<div class="col-sm-6 text-right">
-						<a :href="`/${firstUrlSegment}/records/medical-releases/${id}`" class="btn btn-link" v-if="id">Cancel</a>
-						<a :href="`/${firstUrlSegment}/records/medical-releases`" class="btn btn-link" v-else>Cancel</a>
+						<a @click="back" class="btn btn-link">Cancel</a>
 						<button v-if="currentStep !== 1" type="button" class="btn btn-default" @click="backStep">
 							<i class="fa fa-chevron-left"></i> Previous
 						</button>
@@ -522,18 +521,26 @@
     components: {vSelect, 'upload-create-update': uploadCreateUpdate},
     mixins: [errorHandler],
     props: {
-      isUpdate: {
-        type: Boolean,
-        default: false
-      },
-      id: {
-        type: String,
-        default: null
-      },
-      forAdmin: {
-        type: Boolean,
-        default: false
-      }
+		isUpdate: {
+			type: Boolean,
+			default: false
+		},
+		id: {
+			type: String,
+			default: null
+		},
+		forAdmin: {
+			type: Boolean,
+			default: false
+		},
+		reservationId: {
+			type: String,
+			default: null
+		},
+		requirementId: {
+			type: String,
+			default: null
+		}
     },
     data() {
       return {
@@ -577,7 +584,7 @@
         today: moment().format('YYYY-MM-DD'),
         yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
         tomorrow: moment().add(1, 'days').format('YYYY-MM-DD'),
-        resource: this.$resource('medical/releases{/id}'),
+        resource: this.$resource('medical-releases{/id}'),
 
         currentStep: 1,
         weightA: 0,
@@ -764,7 +771,12 @@
           this.showSaveAlert = true;
           return false;
         }
-        window.location.href = '/' + this.firstUrlSegment + '/records/medical-releases/' + this.id;
+
+        if (this.reservationId && this.requirementId) {
+            window.location.href = `/${this.firstUrlSegment}/reservations/${this.reservationId}/requirements/${this.requirementId}`;
+        } else {
+            window.location.href = `/${this.firstUrlSegment}/records/medical-releases/${this.id}`;
+        }
       },
       forceBack() {
         return this.back(true);
@@ -826,13 +838,18 @@
             user_id: this.user_id,
             takes_medication: !!(this.takesMedication ? true : (this.takesConditionMedication || this.takesAllergyMedication)),
             upload_ids: _.uniq(this.upload_ids),
+            reservation_id: this.reservationId
           };
 
           this.resource.post({}, data).then((resp) => {
             this.$root.$emit('showSuccess', 'Medical Release created.');
             let that = this;
             setTimeout(() => {
-              window.location.href = '/' + that.firstUrlSegment + '/records/medical-releases/' + resp.data.data.id;
+            	if (that.reservationId && that.requirementId) {
+                    window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                } else {
+                    window.location.href = '/' + that.firstUrlSegment + '/records/medical-releases/' + resp.data.data.id;
+                }
             }, 1000);
           }, (error) => {
             this.errors = error.data.errors;
@@ -862,12 +879,19 @@
             is_risk: this.is_risk,
             user_id: this.user_id,
             upload_ids: _.uniq(this.upload_ids),
+            reservation_id: this.reservationId
           };
           this.resource.put({id: this.id, include: 'uploads'}, data).then((resp) => {
             this.$root.$emit('showSuccess', 'Changes saved.');
             let that = this;
             setTimeout(() => {
-              window.location.href = '/' + that.firstUrlSegment + '/records/medical-releases/' + that.id;
+              	
+              	if (that.reservationId && that.requirementId) {
+                    window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                } else {
+                    window.location.href = '/' + that.firstUrlSegment + '/records/medical-releases/' + that.id;
+                }
+
             }, 1000);
           }, (error) => {
             this.errors = error.data.errors;
@@ -894,13 +918,13 @@
     },
     mounted() {
       if (this.isUpdate) {
-        this.$http.get(`medical/releases/${this.id}`, {params: {include: 'conditions,allergies,uploads,user'}}).then((response) => {
+        this.$http.get(`medical-releases/${this.id}`).then((response) => {
           this.user_id = response.data.data.id;
           let medical_release = response.data.data;
-          medical_release.uploads = medical_release.uploads.data;
+          medical_release.uploads = medical_release.uploads;
           this.upload_ids = _.pluck(medical_release.uploads, 'id');
-          this.uploadCounter = medical_release.uploads.length + 1;
-          this.userObj = medical_release.user.data;
+          this.uploadCounter = medical_release.uploads ? medical_release.uploads.length + 1 : 0;
+          this.userObj = medical_release.user;
           this.usersArr.push(this.userObj);
           $.extend(this, medical_release);
 	          this.takesMedication = medical_release.takes_medication || false;
@@ -934,7 +958,9 @@
           });
           this.$http.get('medical/allergies').then((response) => {
             // prepare conditions for UI
-            let med_allergies = medical_release.allergies.data;
+            let med_allergies = medical_release.allergies;
+
+            console.log(med_allergies);
             _.each(response.data.data, (allergy) => {
               let obj = {name: allergy, medication: false, diagnosed: false, selected: false};
               let match = _.find(med_allergies, function (a, i) {

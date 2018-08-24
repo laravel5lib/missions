@@ -70,7 +70,7 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
     $this->resource('records/essays', 'Dashboard\EssaysController', [
         'except' => ['index', 'destroy']
     ]);
-    $this->resource('records/influencers', 'Dashboard\InfluencersController', [
+    $this->resource('records/influencer-applications', 'Dashboard\InfluencersController', [
         'except' => ['index', 'destroy']
     ]);
     $this->resource('records/referrals', 'Dashboard\ReferralsController', [

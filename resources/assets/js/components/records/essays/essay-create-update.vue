@@ -31,9 +31,8 @@
             <hr class="divider inv">
             <div class="row">
                 <div class="col-sm-12 text-center">
-                    <a v-if="!isUpdate" :href="'/'+ firstUrlSegment +'/records/essays'" class="btn btn-default">Cancel</a>
+                    <a @click="back" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
-                    <a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
                 </div>
             </div>
@@ -62,6 +61,14 @@
             forAdmin: {
                 type: Boolean,
                 default: false
+            },
+            reservationId: {
+                type: String,
+                default: null
+            },
+            requirementId: {
+                type: String,
+                default: null
             }
         },
         data(){
@@ -100,7 +107,12 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = '/'+ this.firstUrlSegment + '/records/essays/' + this.id;
+                
+                if (this.reservationId && this.requirementId) {
+                    window.location.href = `/${this.firstUrlSegment}/reservations/${this.reservationId}/requirements/${this.requirementId}`;
+                } else {
+                    window.location.href = `/${this.firstUrlSegment}/records/essays/${this.id}`;
+                }
             },
             forceBack(){
                 return this.back(true);
@@ -117,11 +129,18 @@
                         subject: this.subject,
                         content: this.content,
                         user_id: this.user_id,
+                        reservation_id: this.reservationId
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Essay created.');
                         let that = this;
                         setTimeout(() =>  {
-                            window.location.href = '/'+ that.firstUrlSegment +'/records/essays/' + resp.data.data.id;
+                            
+                            if (that.reservationId && that.requirementId) {
+                                window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                            } else {
+                                window.location.href = '/' + that.firstUrlSegment + '/records/essays/' + resp.data.data.id;
+                            }
+
                         }, 1000);
                     }, (error) =>  {
                         this.errors = error.data.errors;
@@ -140,11 +159,18 @@
                         subject: this.subject,
                         content: this.content,
                         user_id: this.user_id,
+                        reservation_id: this.reservationId
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(() =>  {
-                            window.location.href = '/'+ that.firstUrlSegment + '/records/essays/' + that.id; 
+                            
+                            if (that.reservationId && that.requirementId) {
+                                window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                            } else {
+                                window.location.href = '/' + that.firstUrlSegment + '/records/essays/' + that.id;
+                            }
+
                         }, 1000);
                     }, (error) =>  {
                         this.errors = error.data.errors;
@@ -161,7 +187,7 @@
                     this.author_name = essay.author_name;
                     this.subject = essay.subject;
                     this.content = essay.content;
-                    this.userObj = essay.user.data;
+                    this.userObj = essay.user;
                     this.usersArr.push(this.userObj);
                 });
             }

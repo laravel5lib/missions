@@ -15,11 +15,22 @@
 @endsection
 
 @section('content')
+    @breadcrumbs(['links' => [
+        'admin' => 'Dashboard',
+        'admin/records/medical-releases' => 'Travel Documents',
+        'active' => 'Medial Releases'
+    ]])
+    @endbreadcrumbs
     <hr class="divider inv lg">
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <medical-create-update :is-update="true" id="{{ $id }}" :for-admin="true"></medical-create-update>
+                <medical-create-update 
+                    :is-update="true" id="{{ $id }}" 
+                    :for-admin="true"
+                    reservation-id="{{ request()->get('reservation') }}" 
+                    requirement-id="{{ request()->get('requirement') }}"
+                ></medical-create-update>
             </div>
         </div>
     </div>

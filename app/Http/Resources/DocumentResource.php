@@ -40,6 +40,7 @@ class DocumentResource extends JsonResource
                 break;
 
             case 'medical-releases':
+                $this->load(['conditions', 'allergies']);
                 return new MedicalReleaseResource($this);
                 break;
 

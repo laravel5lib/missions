@@ -43,7 +43,10 @@ class MedicalReleaseController extends Controller
      */
     public function show($id)
     {
-        $release = MedicalRelease::with(['conditions', 'allergies'])->findOrFail($id);
+        $release = MedicalRelease::query()
+            ->with(['conditions', 'allergies', 'user'])
+            ->withCount(['allergies', 'conditions'])
+            ->findOrFail($id);
 
         return new MedicalReleaseResource($release);
     }

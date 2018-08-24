@@ -52,7 +52,9 @@ class ViewVisasTest extends TestCase
 
         $response = $this->getJson("/api/visas/{$visa->id}");
 
-        $response->assertOk()->assertJson(['data' => ['id' => $visa->id]]);
+        $response->assertOk()
+                 ->assertJsonStructure(['data' => ['user']])
+                 ->assertJson(['data' => ['id' => $visa->id]]);
     }
 
     /** @test */

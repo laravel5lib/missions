@@ -46,7 +46,7 @@ class VisasController extends Controller
      */
     public function show($id)
     {
-        $visa = Visa::findOrFail($id);
+        $visa = Visa::with('user')->findOrFail($id);
 
         return new VisaResource($visa);
     }

@@ -76,7 +76,7 @@ class CreateEssayTest extends TestCase
 
         $this->assertDatabaseHas(
             'reservation_documents', 
-            ['reservation_id' => $reservation->id, 'documentable_type' => 'essays']
+            ['reservation_id' => $reservation->id, 'documentable_type' => 'influencer_applications']
         );
     }
 

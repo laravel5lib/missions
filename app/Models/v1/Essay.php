@@ -16,6 +16,10 @@ class Essay extends Model
 
     protected $fillable = ['author_name', 'subject', 'content', 'user_id'];
 
+    protected $attributes = [
+        'subject' => 'Testimony'
+    ];
+
     /**
      * Attributes that should mutated to date instances.
      *

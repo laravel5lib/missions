@@ -12,6 +12,7 @@ use App\Models\v1\MediaCredential;
 use App\Models\v1\AirportPreference;
 use App\Models\v1\MedicalCredential;
 use App\Models\v1\ArrivalDesignation;
+use App\Models\v1\InfluencerApplication;
 
 trait HasDocuments
 {   
@@ -83,7 +84,7 @@ trait HasDocuments
      */
     public function influencerApplications()
     {
-        return $this->morphedByMany(Essay::class, 'documentable', $this->getTableName())->where('subject', 'Influencer');
+        return $this->morphedByMany(InfluencerApplication::class, 'documentable', $this->getTableName())->where('subject', 'Influencer');
     }
 
     /**

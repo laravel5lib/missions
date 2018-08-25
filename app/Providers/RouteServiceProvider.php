@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\v1\Lead;
 use App\Models\v1\Fundraiser;
 use Illuminate\Support\Facades\Route;
+use App\Models\v1\InfluencerApplication;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
@@ -33,6 +34,10 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind('lead', function ($value) {
             return Lead::whereUuid($value)->firstOrFail();
+        });
+
+        Route::bind('influencer_application', function ($value) {
+            return InfluencerApplication::findOrFail($value);
         });
     }
 

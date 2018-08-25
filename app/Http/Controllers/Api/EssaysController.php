@@ -9,9 +9,14 @@ use Dingo\Api\Contract\Http\Request;
 use App\Http\Resources\EssayResource;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Http\Requests\v1\EssayRequest;
+use App\Models\v1\InfluencerApplication;
 
 class EssaysController extends Controller
 {
+    public $types = [
+        'essays' => Essay::class,
+        'influencer-applications' => InfluencerApplication::class,
+    ];
 
     /**
      * Get all essays.
@@ -21,12 +26,9 @@ class EssaysController extends Controller
      */
     public function index(Request $request)
     {
-        $essays = QueryBuilder::for(Essay::class)
+        $essays = QueryBuilder::for($this->types[$request->segment(2)])
             ->when($request->segment(2) === 'essays', function ($query) {
                 return $query->where('subject', 'Testimony');
-            })
-            ->when($request->segment(2) === 'influencer-applications', function ($query) {
-                return $query->where('subject', 'Influencer');
             })
             ->allowedFilters(['author_name', Filter::exact('user_id'), Filter::scope('managed_by'),])
             ->allowedIncludes(['user'])
@@ -43,7 +45,7 @@ class EssaysController extends Controller
      */
     public function show($id)
     {
-        $essay = Essay::with(['user'])->findOrFail($id);
+        $essay = (new $this->types[request()->segment(2)])->with(['user'])->findOrFail($id);
 
         return new EssayResource($essay);
     }
@@ -56,9 +58,7 @@ class EssaysController extends Controller
      */
     public function store(EssayRequest $request)
     {
-        $request->merge(['subject' => $this->getSubject($request)]);
-
-        $essay = Essay::create($request->all());
+        $essay = (new $this->types[$request->segment(2)])->create($request->all());
 
         $essay->attachToReservation($request->input(['reservation_id']));
 
@@ -78,7 +78,7 @@ class EssaysController extends Controller
      */
     public function update($id, EssayRequest $request)
     {
-        $essay = Essay::findOrFail($id);
+        $essay = (new $this->types[$request->segment(2)])->findOrFail($id);
 
         $essay->update($request->all());
 
@@ -99,23 +99,10 @@ class EssaysController extends Controller
      */
     public function destroy($id)
     {
-        $essay = Essay::findOrFail($id);
+        $essay = (new $this->types[request()->segment(2)])->findOrFail($id);
 
         $essay->delete();
 
         return response()->json([], 204);
-    }
-
-    private function getSubject($request)
-    {
-        if ($request->segment(2) === 'essays') {
-            return 'Testimony';
-        }
-
-        if ($request->segment(2) === 'influencer-applications') {
-            return 'Influencer';
-        }
-
-        return 'Essay';
     }
 }

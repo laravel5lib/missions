@@ -63,15 +63,6 @@
                         
                         <!-- checkbox -->
 						<template v-if="QA.type === 'checkbox' && QA.id === 'certifications'">
-
-							<!--<template v-for="role in QA.roleOptions" v-show="role.id === selectedRole">
-								<div class="checkbox col-sm-6 col-xs-12" v-for="choice in role.options">
-									<label>
-										&lt;!&ndash;<checkbox :checked="choice.value" :value="true">{{ choice.name }}</checkbox>&ndash;&gt;
-										<input type="checkbox" :value="true" v-model="choice.value"> {{ choice.name }}
-                                    </label>
-								</div>
-							</template>-->
                             
                             <!-- start certification checklist -->
 							<template v-if="selectedRoleObj && !!isCertified && !isStudent">
@@ -187,7 +178,6 @@
 								</div>
 								<div class="panel-body">
 									<date-picker v-model="QA.a" :view-format="['YYYY-MM-DD']" type="date" :name="'date' + indexQA"></date-picker>
-									<!--<input type="datetime" class="form-control hidden" v-model="QA.a | moment('LLLL')" id="started_at" required :name="'date' + $index" v-validate="''">-->
 								</div>
 								<div class="panel-footer" v-show= "errors.has('date' + indexQA)">
 									<div class="errors-block"></div>
@@ -240,10 +230,8 @@
 											<label class="control-label">Expires</label>
 											<div>
 												<date-picker :has-error="errors.has('licenseexpires', 'upload-license-form') || dateIsValid(expires.license)" v-model="expires.license" :view-format="['YYYY-MM-DD']" type="date" ></date-picker>
-												<!--<input type="datetime" class="form-control hidden" name="licenseexpires="['required']" v-model="expires.license" id" v-validate="licenseexpires" required>-->
 											</div>
 										</div>
-										<!-- </div> -->
 									</form>
 
 							</div>
@@ -268,7 +256,6 @@
 										<label class="control-label">Expires</label>
 										<div>
 											<date-picker :has-error="errors.has('certexpires', 'upload-certification-form') || dateIsValid(expires.certification)" v-model="expires.certification" :view-format="['YYYY-MM-DD']" type="date" ></date-picker>
-											<!--<input type="datetime" class="form-control hidden" name="certexpires="['required']" v-model="expires.certification" id" v-validate="certexpires" required>-->
 										</div>
 									</div>
 								</form>
@@ -294,7 +281,6 @@
 										<label class="control-label">Expires</label>
 										<div>
 											<date-picker :has-error="errors.has('diplomaexpires', 'upload-diploma-form') || dateIsValid(expires.diploma)" v-model="expires.diploma" :view-format="['YYYY-MM-DD']" type="date" ></date-picker>
-											<!--<input type="datetime" class="form-control hidden" name="diplomaexpires="['required']" v-model="expires.diploma" id" v-validate="diplomaexpires" required>-->
 										</div>
 									</div>
 								</form>
@@ -321,7 +307,6 @@
 											<label class="control-label">Expires</label>
 											<div>
 												<date-picker :has-error="errors.has('letterexpires', 'upload-letter-form') || dateIsValid(expires.letter)" v-model="expires.letter" :view-format="['YYYY-MM-DD']" type="date" ></date-picker>
-												<!--<input type="datetime" class="form-control hidden" name="letterexpires="['required']" v-model="expires.letter" id" v-validate="letterexpires" required>-->
 											</div>
 										</div>
 									</form>
@@ -347,7 +332,6 @@
 											<label class="control-label">Expires</label>
 											<div>
 												<date-picker :has-error="errors.has('resumeexpires', 'upload-resume-form') || dateIsValid(expires.resume)" v-model="expires.resume" :view-format="['YYYY-MM-DD']" type="date" ></date-picker>
-												<!--<input type="datetime" class="form-control hidden" name="resumeexpires="['required']" v-model="expires.resume" id" v-validate="resumeexpires" required>-->
 											</div>
 										</div>
 									</form>
@@ -360,7 +344,7 @@
 				<div class="form-group text-center">
 					<div class="col-xs-12">
 						<template v-if="!isUpdate">
-							<a :href="'/' + firstUrlSegment + '/records/medical-credentials'" class="btn btn-default">Cancel</a>
+							<a @click="back" class="btn btn-default">Cancel</a>
 							<a @click="submit" class="btn btn-primary">Create</a>
 						</template>
 						<template v-else>
@@ -371,13 +355,6 @@
 				</div>
 			</form>
 
-			<!--<modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" :small="true">
-				<div slot="modal-body" class="modal-body text-center" v-if="selectedItem">Delete {{ selectedItem.name }}?</div>
-				<div slot="modal-footer" class="modal-footer">
-					<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
-					<button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Delete</button>
-				</div>
-			</modal>-->
 			<modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
 				<div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
 			</modal>
@@ -406,6 +383,14 @@
             forAdmin: {
                 type: Boolean,
                 default: false
+            },
+            reservationId: {
+                type: String,
+                default: null
+            },
+            requirementId: {
+                type: String,
+                default: null
             }
         },
         data(){
@@ -534,7 +519,7 @@
                 today: moment().format('YYYY-MM-DD'),
                 yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
                 tomorrow: moment().add(1, 'days').format('YYYY-MM-DD'),
-                resource: this.$resource('credentials/medical{/id}', { 'include': 'uploads'})
+                resource: this.$resource('medical-credentials{/id}', { 'include': 'uploads'})
             }
         },
         computed: {
@@ -598,14 +583,17 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = '/'+ this.firstUrlSegment +'/records/medical-credentials/';
+                
+                if (this.reservationId && this.requirementId) {
+                    window.location.href = `/${this.firstUrlSegment}/reservations/${this.reservationId}/requirements/${this.requirementId}`;
+                } else {
+                    window.location.href = `/${this.firstUrlSegment}/records/medical-credentials/${this.id}`;
+                }
             },
             forceBack(){
                 return this.back(true);
             },
             submit(){
-
-//                let checkboxTest = _.findWhere(this.content, {id:'certifications'}).certifiedOptions && _.findWhere(this.content, {id:'certifications'}).allOptions;
                 this.$validator.validateAll().then(result => {
                     if (!result) {
                         this.showError = true;
@@ -620,11 +608,18 @@
                         content: this.content,
                         expired_at: moment(this.expired_at).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
                         uploads: _.uniq(this.upload_ids),
+                        reservation_id: this.reservationId
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Medical Credential created.');
                         let that = this;
                         setTimeout(() =>  {
-                            window.location.href = '/'+ that.firstUrlSegment +'/records/medical-credentials/' + resp.data.data.id;
+                            
+                            if (that.reservationId && that.requirementId) {
+                                window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                            } else {
+                                window.location.href = '/' + that.firstUrlSegment + '/records/medical-credentials/' + resp.data.data.id;
+                            }
+
                         }, 1000);
                     }, (error) =>  {
                         this.errors = error.data.errors;
@@ -646,11 +641,18 @@
                         content: this.content,
                         expired_at: moment(this.expired_at).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
                         uploads: _.uniq(this.upload_ids),
+                        reservation_id: this.reservationId
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(() =>  {
-                            window.location.href = '/'+ that.firstUrlSegment +'/records/medical-credentials/' + that.id;
+                            
+                            if (that.reservationId && that.requirementId) {
+                                window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                            } else {
+                                window.location.href = '/' + that.firstUrlSegment + '/records/medical-credentials/' + that.id;
+                            }
+
                         }, 1000);
                     }, (error) =>  {
                         this.errors = error.data.errors;
@@ -763,37 +765,15 @@
 
         },
         mounted(){
-            // set user data
-            // this.userId = this.holder_id = this.$root.user.id;
-            // this.holder_type = 'users';
-            /*let teamRolesPromise = this.$http.get('utilities/team-roles/medical').then((response) => {
-                _.each(response.data.roles, function (name, key) {
-                    this.roles.push({ value: key, name: name});
-                });
-            });*/
-
-            // this.$refs.spinner.show();
-            //Promise.all([teamRolesPromise]).then((values) => {
                 if (this.isUpdate) {
                     this.resource.get({ id: this.id, include: 'holder'}).then((response) => {
                         let credential = response.data.data;
                         this.applicant_name = credential.applicant_name;
-                        // this.holder_id = credential.holder_id;
-                        // this.holder_type = credential.holder_type;
                         this.content = credential.content;
-                        // thisCheckboxes();
                         this.expired_at = credential.expired_at;
-                        this.userObj = credential.holder.data;
+                        this.userObj = credential.user;
                         this.usersArr.push(this.userObj);
-
-                        //assign fields from content data
-                        //console.log(_.findWhere(credential.content, { id: 'role'}));
                         this.selectedRoleObj = _.findWhere(this.roles, { value: _.findWhere(credential.content, { id: 'role'}).a});
-
-                        // this.$activateValidator();
-                        // until uploads relationship is added...
-                        // gather all uploads ids
-                        // let ids = [];
                         let filesArr = _.findWhere(credential.content, { id: 'files'}).a;
                         _.each(filesArr, (list, index) => {
 	                        _.each(list, (obj) => {
@@ -803,10 +783,7 @@
                             })
                         });
                     });
-                } else {
-                    // this.$activateValidator();
                 }
-            //});
         }
     }
 </script>

@@ -1,4 +1,3 @@
-import teamRoles from '../data/team_roles.json';
 import PassportTransformer from './transformers/PassportTransformer';
 import MedicalReleaseTransformer from './transformers/MedicalReleaseTransformer';
 import VisaTransformer from './transformers/VisaTransformer';

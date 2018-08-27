@@ -155,11 +155,11 @@
             },
             save() {
                 if(this.document) {
-                    this.$http.delete('questionnaires/' + this.document.id).then((response) => {
+                    this.$http.delete('airport-preferences/' + this.document.id).then((response) => {
                         console.log('old removed');
                     });
                 }
-                this.$http.post('questionnaires/', {
+                this.$http.post('airport-preferences/', {
                     content: [this.choice_one, this.choice_two, this.choice_three],
                     reservation_id: this.reservationId,
                     type: 'airport_preference'

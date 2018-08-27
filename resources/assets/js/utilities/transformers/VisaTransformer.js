@@ -12,6 +12,7 @@ class VisaTransformer {
             expired: this.document.expired ? 'Yes' : 'No',
             issued: moment(this.document.issued_at).format('ll'),
             expiration: moment(this.document.expires_at).format('ll'),
+            file: this.document.upload ? `<strong><a href="${this.document.upload.source}" target="_blank">${this.document.upload.name}</a></strong>` : 'n/a',
             last_updated: moment(this.document.updated_at).format('ll')
         }
     }

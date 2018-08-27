@@ -42,6 +42,16 @@ class MedicalReleaseTransformer {
             return allergy.name + diagnosed + medication;
         });
 
+        data['files'] = 'n/a';
+
+        if(this.document.uploads && this.document.uploads.length) {
+            let files = _.map(this.document.uploads, function (upload) {
+                return `<strong><a href="${upload.source}" target="_blank">${upload.name}</a></strong>`;
+            });
+            
+            data['files'] = files;
+        }
+
         return data;
     }
 }

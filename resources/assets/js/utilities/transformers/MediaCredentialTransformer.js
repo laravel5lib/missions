@@ -29,6 +29,16 @@ class MediaCredentialTransformer {
             credential[item.q] = answer;
         });
 
+        credential['files'] = 'n/a';
+
+        if(this.document.uploads && this.document.uploads.length) {
+            let files = _.map(this.document.uploads, function (upload) {
+                return `<strong><a href="${upload.source}" target="_blank">${upload.name}</a></strong>`;
+            });
+            
+            credential['files'] = files;
+        }
+
         return credential;
     }
 }

@@ -1,3 +1,5 @@
+import teamRoles from '../../data/team_roles.json';
+
 class MedicalCredentialTransformer {
     constructor(document) {
         this.document = document;
@@ -22,6 +24,16 @@ class MedicalCredentialTransformer {
         _.each(this.document.content, function (item) {
             if (!item.id) credential[item.q] = item.a;
         });
+
+        credential['files'] = 'n/a';
+
+        if(this.document.uploads && this.document.uploads.length) {
+            let files = _.map(this.document.uploads, function (upload) {
+                return `<strong><a href="${upload.source}" target="_blank">${upload.name}</a></strong>`;
+            });
+            
+            credential['files'] = files;
+        }
 
         return credential;
     }

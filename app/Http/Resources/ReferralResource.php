@@ -28,6 +28,7 @@ class ReferralResource extends JsonResource
             'responded_at' => optional($this->responded_at)->toIso8601String(),
             'created_at' => $this->created_at->toIso8601String(),
             'updated_at' => $this->updated_at->toIso8601String(),
+            'user' => new UserResource($this->whenLoaded('user'))
         ];
     }
 }

@@ -42,7 +42,7 @@ class ReferralsController extends Controller
      */
     public function show($id)
     {
-        $referral = Referral::findOrFail($id);
+        $referral = Referral::with(['user'])->findOrFail($id);
 
         return new ReferralResource($referral);
     }

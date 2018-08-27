@@ -105,11 +105,11 @@
             },
             save() {
                 if(this.document) {
-                    this.$http.delete('questionnaires/' + this.document.id).then((response) => {
+                    this.$http.delete('arrival-designations/' + this.document.id).then((response) => {
                         console.log('old removed');
                     });
                 }
-                this.$http.post('questionnaires/', {
+                this.$http.post('arrival-designations/', {
                     content: [this.designation.content],
                     reservation_id: this.reservationId,
                     type: 'arrival_designation'

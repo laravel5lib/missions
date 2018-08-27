@@ -28,7 +28,8 @@ class VisaResource extends JsonResource
             'created_at'   => $this->created_at->toIso8601String(),
             'updated_at'   => $this->updated_at->toIso8601String(),
             'expired'      => $this->expires_at->isPast(),
-            'user'         => new UserResource($this->whenLoaded('user'))
+            'user'         => new UserResource($this->whenLoaded('user')),
+            'upload'       => new MediaResource($this->whenLoaded('upload'))
         ];
     }
 }

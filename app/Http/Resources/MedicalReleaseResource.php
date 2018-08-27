@@ -32,7 +32,8 @@ class MedicalReleaseResource extends JsonResource
             'updated_at'        => $this->updated_at->toIso8601String(),
             'conditions'        => MedicalConditionResource::collection($this->whenLoaded('conditions')),
             'allergies'         => MedicalAllergyResource::collection($this->whenLoaded('allergies')),
-            'user'              => new UserResource($this->whenLoaded('user'))
+            'user'              => new UserResource($this->whenLoaded('user')),
+            'uploads'           => MediaResource::collection($this->whenLoaded('uploads'))
         ];
     }
 }

@@ -23,7 +23,8 @@ class CredentialResource extends JsonResource
             'expired_at'     => optional($this->expired_at)->toIso8601String(),
             'created_at'     => $this->created_at->toIso8601String(),
             'updated_at'     => $this->updated_at->toIso8601String(),
-            'user'           => new UserResource($this->whenLoaded('user'))
+            'user'           => new UserResource($this->whenLoaded('user')),
+            'uploads'        => MediaResource::collection($this->whenLoaded('uploads'))
         ];
     }
 }

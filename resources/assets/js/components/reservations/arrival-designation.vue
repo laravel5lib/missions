@@ -116,11 +116,12 @@
                 }).then((response) => {
                     this.designation = response.data.data;
                     this.editMode = false;
-                    this.setDesignation(response.data.data);
+                    
+                    swal('Nice Work!', 'Document has been added.', 'success', {
+                      buttons: false,
+                      timer: 3000,
+                    }).then(window.location.reload());
                 });
-            },
-            setDesignation(designation) {
-              this.$emit('set-document', designation);
             },
             cancel() {
                 this.editMode = false;

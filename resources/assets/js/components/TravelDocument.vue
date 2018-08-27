@@ -1,9 +1,17 @@
 <template>
     <div class="panel panel-default" style="border-top: 5px solid #f6323e">
-        <template v-if="documents.length && !selectedDocument">
-            <div class="panel-heading"><h5>Find an existing {{ docType | underscoreToSpace }}:</h5></div>
-                
-                <div class="table-responsive">
+        <template v-if="!selectedDocument">
+            <template v-if="!fetched">
+                <div class="panel-heading"><h5>{{ docType | underscoreToSpace | titleCase }}</h5></div>
+                <div class="panel-body text-center">
+                    <span class="lead">No {{ docType | underscoreToSpace | titleCase }} Found</span>
+                    <p>Attach an existing {{ docType | underscoreToSpace }} or create a new one.</p>
+                    <p><button class="btn btn-primary-hollow" @click="fetchDocuments">Add {{ docType | underscoreToSpace | titleCase }}</button></p>
+                </div>
+            </template>
+            <template v-else>
+                <div class="panel-heading"><h5>Find an existing {{ docType | underscoreToSpace }}:</h5></div>
+                <div class="table-responsive" v-if="documents.length">
                     <table class="table table-striped">
                         <thead>
                             <tr class="active">
@@ -45,47 +53,39 @@
                         </tbody>
                     </table>
                 </div>
-            
-            <div class="panel-body text-right">
-                <button class="btn btn-link" @click="documents = []">Cancel</button>
-                <a class="btn btn-primary" :href="`/${firstUrlSegment}/records/${slug}/create?reservation=${reservationId}&amp;requirement=${requirement.id}`">Add New {{ docType | underscoreToSpace | titleCase }}</a>
-            </div>
-            <div class="panel-footer" v-if="pagination.total > pagination.per_page">
-                <pager :pagination="pagination" :callback="changePage"></pager>
-            </div>
+                <div class="panel-body" v-if="!documents.length">
+                    <p class="lead text-center text-muted">No {{ type | underscoreToSpace }} found</p>
+                    <hr class="divider">
+                </div>
+                <div class="panel-body text-right">
+                    <button class="btn btn-link" @click="documents = [], fetched = false">Cancel</button>
+                    <a class="btn btn-primary" :href="`/${firstUrlSegment}/records/${slug}/create?reservation=${reservationId}&amp;requirement=${requirement.id}`">Add New {{ docType | underscoreToSpace | titleCase }}</a>
+                </div>
+                <div class="panel-footer" v-if="pagination.total > pagination.per_page">
+                    <pager :pagination="pagination" :callback="changePage"></pager>
+                </div>
+            </template>
         </template>
         <template v-else>
             <div class="panel-heading"><h5>{{ docType | underscoreToSpace | titleCase }}</h5></div>
-            <template v-if="selectedDocument">
-                <div class="list-group">
-                    <div class="list-group-item" v-for="(value, key) in selectedDocument" v-if="key != 'id'">
-                        <div class="row">
-                            <div class="col-xs-4 text-muted text-right">
-                                {{ key | underscoreToSpace | titleCase }}
-                            </div>
-                            <div class="col-xs-8">
-                                <ul v-if="isArray(value)">
-                                    <li v-for="item in value">
-                                        {{ item }}
-                                    </li>
-                                </ul>
-                                <span v-else>{{ value }}</span>
-                            </div>
+            <div class="list-group">
+                <div class="list-group-item" v-for="(value, key) in selectedDocument" v-if="key != 'id'">
+                    <div class="row">
+                        <div class="col-xs-4 text-muted text-right">
+                            {{ key | underscoreToSpace | titleCase }}
+                        </div>
+                        <div class="col-xs-8">
+                            <ul v-if="isArray(value)">
+                                <li v-for="item in value" v-html="item"></li>
+                            </ul>
+                            <span v-else v-html="value"></span>
                         </div>
                     </div>
                 </div>
-                <div class="panel-body text-right" v-if="requirement.pivot.status != 'complete'">
-                    <button @click="removeDocument(selectedDocument)" class="btn btn-sm btn-link">Choose a different {{ docType | underscoreToSpace }}</button>
-                </div>
-            </template>
-            <template v-else>
-                <div class="panel-body text-center">
-                    <span class="lead">No {{ docType | underscoreToSpace | titleCase }} Found</span>
-                    <p>Attach an existing {{ docType | underscoreToSpace }} or create a new one.</p>
-                    <p><button class="btn btn-primary-hollow" @click="fetchDocuments">Add {{ docType | underscoreToSpace | titleCase }}</button></p>
-                </div>
-            </template>
-
+            </div>
+            <div class="panel-body text-right" v-if="requirement.pivot.status != 'complete'">
+                <button @click="removeDocument(selectedDocument)" class="btn btn-sm btn-link">Choose a different {{ docType | underscoreToSpace }}</button>
+            </div>
         </template>
     </div>
 </template>
@@ -115,7 +115,8 @@ export default {
             pagination: {
                 total: 0,
                 per_page: 25
-            }
+            },
+            fetched: false
         }
     },
 
@@ -142,7 +143,10 @@ export default {
                 .post(`reservations/${this.reservationId}/${this.type}`, { 'document_id': document.id })
                 .then((response) => {
                     this.selectedDocument = document;
-                    swal('Nice Work!', 'Document has been added.', 'success');
+                    swal('Nice Work!', 'Document has been added.', 'success', {
+                      buttons: false,
+                      timer: 3000,
+                    }).then(window.location.reload());
                 })
                 .catch((error) => {
                     this.handleError(error)
@@ -183,6 +187,7 @@ export default {
                 });
         },
         fetchDocuments(params = {}) {
+            this.fetched = true;
             // replace underscores with dashes
             let type = this.type.replace(/_/g, '-');
 
@@ -191,7 +196,7 @@ export default {
             }
 
             this.$http
-                .get(`${type}`, {params})
+                .get(`${type}?filter[user_id]=${this.$root.user.id}`, {params})
                 .then((response) => {
                     this.documents = this.mapRows(response.data.data);
                     this.pagination = response.data.meta;
@@ -235,5 +240,8 @@ export default {
     }
     .panel-heading {
         border-color: #e6e6e6;
+    }
+    .btn-group {  
+        position:absolute;          
     }
 </style>

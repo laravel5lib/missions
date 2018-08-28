@@ -19,9 +19,11 @@ class ReferralTransformer {
         referral['referrer_phone'] = this.document.referrer.phone;
         referral['referrer_organization'] = this.document.referrer.organization;
 
-        _.each(this.document.response, function (item) {
-            referral[item.q] = item.a;
-        });
+        if (document.location.pathname.split("/").slice(1, 2).toString() == 'admin') {
+            _.each(this.document.response, function (item) {
+                referral[item.q] = item.a;
+            });
+        }
 
         return referral;
     }

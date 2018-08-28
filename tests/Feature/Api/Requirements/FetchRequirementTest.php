@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api;
+namespace Tests\Feature\Api\Requirements;
 
 use App\Models\v1\Campaign;
 use App\Models\v1\CampaignGroup;

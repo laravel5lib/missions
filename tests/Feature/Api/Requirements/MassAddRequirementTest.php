@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Requirements;
 
 use Tests\TestCase;
 use App\Models\v1\Trip;

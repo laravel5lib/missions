@@ -13,7 +13,7 @@ trait Manageable
      */
     public function scopeManagedBy($query, $managerId)
     {
-        return $query->whereHas('user', function($user) use($managerId) {
+        $userIds = static::whereHas('user', function($user) use($managerId) {
             return $user->whereHas('reservations', function ($reservation) use($managerId) {
                 return $reservation->whereHas('trip', function ($trip) use($managerId) {
                     return $trip->whereHas('group', function ($group) use($managerId) {
@@ -23,6 +23,10 @@ trait Manageable
                     });
                 });
             });
-        });
+        })->pluck('user_id')->toArray();
+
+        array_push($userIds, $managerId);
+
+        return $query->whereIn('user_id', $userIds);
     }
 }

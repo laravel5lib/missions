@@ -196,7 +196,7 @@ export default {
             }
 
             this.$http
-                .get(`${type}?filter[user_id]=${this.$root.user.id}`, {params})
+                .get(`${type}?filter[managed_by]=${this.$root.user.id}`, {params})
                 .then((response) => {
                     this.documents = this.mapRows(response.data.data);
                     this.pagination = response.data.meta;

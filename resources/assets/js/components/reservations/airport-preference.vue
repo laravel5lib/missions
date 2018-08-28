@@ -7,7 +7,7 @@
                     <h5>Preferred Airports</h5>
                 </div>
                 <div class="col-xs-4 text-right">
-                    <button class="btn btn-sm btn-link" @click="editMode = true" v-if="! editMode && ! isLocked">
+                    <button class="btn btn-sm btn-link" @click="editMode = true" v-if="! editMode && ! locked">
                         Edit
                     </button>
                 </div>
@@ -128,12 +128,6 @@
         computed: {
             formComplete: function() {
                 return !(!!this.choice_one && !!this.choice_two && !!this.choice_three);
-            },
-            'isLocked': function() {
-                if (this.isAdminRoute)
-                    return false;
-
-                return this.locked;
             }
         },
         methods: {

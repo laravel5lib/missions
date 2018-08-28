@@ -6,7 +6,7 @@
                     <h5>Arrival Designation</h5>
                 </div>
                 <div class="col-xs-4 text-right" v-if="! editMode">
-                    <button class="btn btn-sm btn-link" @click="editMode = true" v-if="! isLocked">
+                    <button class="btn btn-sm btn-link" @click="editMode = true" v-if="!locked">
                         Edit
                     </button>
                 </div>
@@ -68,12 +68,6 @@
                     }
                 },
                 set() {}
-            },
-            isLocked() {
-                if (this.isAdminRoute)
-                    return false;
-
-                return this.locked;
             }
         },
         data() {

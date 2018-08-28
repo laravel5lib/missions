@@ -21,6 +21,7 @@
                     <airport-preference 
                         reservation-id="{{ $reservation->id }}"
                         :document="{{ json_encode($reservation->airportPreference) }}"
+                        :locked="{{ json_encode($requirement->pivot->status === 'complete') }}"
                     ></airport-preference>
 
                 @elseif($requirement->document_type == 'arrival_designations')
@@ -28,6 +29,7 @@
                     <arrival-designation 
                         reservation-id="{{ $reservation->id }}"
                         :document="{{ json_encode($reservation->arrivalDesignation) }}"
+                        :locked="{{ json_encode($requirement->pivot->status === 'complete') }}"
                     ></arrival-designation>
 
                 @elseif($requirement->document_type == 'minor_releases')

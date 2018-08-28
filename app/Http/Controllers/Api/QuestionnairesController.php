@@ -67,7 +67,7 @@ class QuestionnairesController extends Controller
 
         // change requirement status
         Reservation::findOrFail($request->input('reservation_id'))
-            ->changeRequirementStatus('reviewing', $request->segment(2));
+            ->changeRequirementStatus('reviewing', $questionnaire->getMorphClass());
 
         return response()->json(['message' => 'New questionnaire created.'], 201);
     }
@@ -84,7 +84,7 @@ class QuestionnairesController extends Controller
 
         // change requirement status
         Reservation::findOrFail($questionnaire->reservation_id)
-            ->changeRequirementStatus('incomplete', request()->segment(2));
+            ->changeRequirementStatus('incomplete', $questionnaire->getMorphClass());
 
         $questionnaire->delete();
 

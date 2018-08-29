@@ -15,12 +15,14 @@
 			<div class="col-sm-8 col-sm-offset-2">
                 <h3 class="text-primary">Greetings Legacy Partners,</h3>
 
-				<p>1Nation1Day has officially launched in Peru. Check this exciting update from Lima.</p>
+				<p>We pray your summer has been a blessed one!</p>
+
+                <p>Our summer has been full; from our Peru launch, to Advance campaigns in the Dominican Republic and Honduras, to the start of our Missions.Me College Fall Semester.  In our video update this month, we would love to share a testimony with you from one of our MMC Masters’ Students.</p>
+
+                <p>We are so expectant for this fall - not only for what God is doing through MM, but for what He is doing through you and your families.  Please let us know how we can be standing with you!</p>
 				<hr class="divider inv">
 				<p>Blessings,</p>
 				<h5 class="text-primary"><em>Gabe</em></h5>
-
-				{{--<p>We are so thankful for each and every one of you!</p>--}}
 			</div>
 		</div><!-- end row -->
 	</div><!-- end content-section -->
@@ -35,7 +37,7 @@
 				<hr class="divider inv">
 				<div class="video-outer">
 					<div class="video-inner">
-						<iframe src="https://player.vimeo.com/video/280295072?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+						<iframe src="https://player.vimeo.com/video/286445579?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 					</div>
 				</div>
 			</div><!-- end col -->

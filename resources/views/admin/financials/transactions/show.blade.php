@@ -117,7 +117,7 @@
                             'Card Holder' => $transaction->details['cardholder'],
                             'Card Brand' => $transaction->details['brand'],
                             'Last Four' => $transaction->details['last_four'],
-                            'Stripe Charge ID' => '<code>'.$transaction->details['charge_id'].'</code>'
+                            'Stripe Charge ID' => '<code>'.(isset($transaction->details['charge_id']) ? $transaction->details['charge_id'] : 'n/a').'</code>'
                         ]])
                         @endcomponent
                     @endif
@@ -129,6 +129,16 @@
                         ]])
                         @endcomponent
                     @endif
+                    @slot('footer')
+                        <div class="text-right">
+                            <send-email label="Email Receipt"
+                                icon="fa fa-envelope icon-left"
+                                classes="btn btn-default btn-sm"
+                                command="email:send-receipt"
+                                :parameters="{id: '{{ $transaction->id }}', email: '{{ $transaction->donor->email }}'}">
+                            </send-email>
+                        </div>
+                    @endslot
                 @endcomponent
 
             @endif

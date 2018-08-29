@@ -36,32 +36,6 @@ class MakeDeposit extends Job
      */
     public function handle(PaymentGateway $gateway, Donor $donor)
     {
-        // // create customer with the token and donor details
-        // $customer = $gateway
-        //     ->createCustomer($this->params['donor'], $this->params['token']);
-
-        // // merge the customer id with donor details
-        // $this->params['donor'] = $this->params['donor'] + ['customer_id' => $customer['id']];
-
-        // // create the charge with customer id, token, and donation details
-        // $charge = $gateway->createCharge(
-        //     $this->params,
-        //     $customer['default_source'],
-        //     $customer['id']
-        // );
-
-        // // capture the charge
-        // $gateway->captureCharge($charge['id']);
-
-        // rebuild the payment array with new details
-        // $request['details'] = [
-        //     'type' => 'card',
-        //     'charge_id' => $charge['id'],
-        //     'brand' => $charge['source']['brand'],
-        //     'last_four' => $charge['source']['last4'],
-        //     'cardholder' => $charge['source']['name'],
-        // ];
-
         // we can pass donor details to try and find a match
         // or to create a new donor if a match isn't found.
         if (isset($this->params['donor'])) {

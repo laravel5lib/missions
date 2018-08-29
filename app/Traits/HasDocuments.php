@@ -186,6 +186,6 @@ trait HasDocuments
      */
     private function getTableName()
     {
-        return class_basename($this).'_documents';
+        return strtolower(class_basename($this).'_documents');
     }
 }

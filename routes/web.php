@@ -47,10 +47,11 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
 
     // Records Routes...
     $this->get('records/{tab?}', function ($tab = 'passports') {
-        $title = title_case(str_replace("-", " ", $tab));
-        SEOMeta::setTitle($title);
+        return view('errors.503');
+        // $title = title_case(str_replace("-", " ", $tab));
+        // SEOMeta::setTitle($title);
 
-        return view('dashboard.'.$tab.'.index', compact('tab'));
+        // return view('dashboard.'.$tab.'.index', compact('tab'));
     });
     $this->resource('records/passports', 'Dashboard\PassportsController', [
         'except' => ['index', 'destroy']

@@ -5,17 +5,22 @@
 @endsection()
 
 @section('layout')
-  
-  @include('_adminnav')
-  
 
-  @yield('content')
+<div style="min-height: 100vh; display: flex; flex-direction: column;">
+  
+    @include('_adminnav') 
+    
+    <div style="flex: 1;">
+        @yield('content')
+    </div>
+    
+    <div class="text-center">
+        <hr class="divider">
+        <p class="text-muted">Copyright &copy; {{ date('Y') }} Missions.Me. All Rights Reserved.</p>
+        <hr class="divider lg inv">
+    </div>
 
-  <div class="text-center">
-    <hr class="divider">
-    <p class="text-muted">Copyright &copy; {{ date('Y') }} Missions.Me. All Rights Reserved.</p>
-    <hr class="divider lg inv">
-  </div>
+</div>
 
 @endsection
 

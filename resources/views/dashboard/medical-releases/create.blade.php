@@ -8,11 +8,20 @@
 @endsection
 
 @section('content')
+@breadcrumbs(['links' => [
+    'dashboard' => 'Dashboard',
+    'dashboard/records/medical-releases' => 'Travel Documents',
+    'active' => 'Medical Releases'
+]])
+@endbreadcrumbs
 <hr class="divider inv lg">
 <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <medical-create-update></medical-create-update>
+                <medical-create-update
+                    reservation-id="{{ request()->get('reservation') }}" 
+                    requirement-id="{{ request()->get('requirement') }}"
+                ></medical-create-update>
             </div>
         </div>
 </div>

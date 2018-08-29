@@ -50,6 +50,10 @@ export default {
                 if (value || timer) {
                     this.$emit('form:redirect', data)
                 }
+
+                if (this.timer) {
+                    this.$emit('form:redirect', data)
+                }
             })
 
         });

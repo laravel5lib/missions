@@ -70,7 +70,7 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
     $this->resource('records/essays', 'Dashboard\EssaysController', [
         'except' => ['index', 'destroy']
     ]);
-    $this->resource('records/influencers', 'Dashboard\InfluencersController', [
+    $this->resource('records/influencer-applications', 'Dashboard\InfluencersController', [
         'except' => ['index', 'destroy']
     ]);
     $this->resource('records/referrals', 'Dashboard\ReferralsController', [
@@ -79,6 +79,8 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
 
     // Reservation Routes...
     $this->get('reservations', 'Dashboard\ReservationsController@index');
+    $this->get('reservations/{id}/requirements', 'Dashboard\ReservationRequirementController@index');
+    $this->get('reservations/{id}/requirements/{requirement}', 'Dashboard\ReservationRequirementController@show');
     $this->get('reservations/{id}/{tab?}', 'Dashboard\ReservationsController@show');
 
     // Project Routes...

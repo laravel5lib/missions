@@ -49,7 +49,7 @@ class TripResource extends JsonResource
             'prices'          => PriceResource::collection($this->whenLoaded('priceables')),
             'group'           => new GroupResource($this->whenLoaded('group')),
             'campaign'        => new CampaignResource($this->whenLoaded('campaign')),
-            'requirements'    => RequirementResource::collection($this->whenLoaded('requirements')),
+            'requirements'    => RequirementResource::collection($this->whenLoaded('requireables')),
             'tags'            => TagResource::collection($this->whenLoaded('tags'))
         ];
     }

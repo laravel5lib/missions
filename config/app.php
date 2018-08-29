@@ -176,6 +176,13 @@ return [
         App\Providers\BackendServiceProvider::class,
         App\Providers\AccountingServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
+        App\Providers\ReferralServiceProvider::class,
+        App\Providers\PassportServiceProvider::class,
+        App\Providers\MedicalReleaseServiceProvider::class,
+        App\Providers\VisaServiceProvider::class,
+        App\Providers\EssayServiceProvider::class,
+        App\Providers\QuestionnaireServiceProvider::class,
+        App\Providers\CredentialServiceProvider::class,
     ],
 
     /*

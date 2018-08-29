@@ -357,6 +357,18 @@ function airline($flight_no)
     return Airline::where('iata', $iata)->first();
 }
 
+function requirementStatusLabel($status)
+{
+    $label = [
+        'incomplete' => '<span class="badge badge-error">Incomplete</span>',
+        'attention'  => '<span class="badge badge-info">Needs Attention</span>',
+        'reviewing'  => '<span class="badge badge-muted">Under Review</span>',
+        'complete'   => '<span class="badge badge-success">Completed</span>'
+    ];
+
+    return $label[$status] ?? $label['incomplete'];
+}
+
 /**
  * Generate a raw DB query to search for a JSON field.
  *

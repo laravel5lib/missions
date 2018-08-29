@@ -66,8 +66,6 @@
             @endif
         @endslot
     @endcomponent
-        
-    <visibility-controls campaign-id="{{ $campaign->id }}"></visibility-controls>
 
     @component('panel')
         @slot('title')

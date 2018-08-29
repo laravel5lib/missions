@@ -31,8 +31,6 @@ class UploadsController extends Controller
     public function __construct(Upload $upload, Server $server)
     {
         $this->upload = $upload;
-//        $this->middleware('api.auth', ['except' => ['show']]);
-//        $this->middleware('jwt.refresh', ['except' => ['show']]);
         $this->server = $server;
     }
 

@@ -307,25 +307,17 @@
 				<div class="form-group text-center">
 					<div class="col-xs-12">
 						<template v-if="!isUpdate">
-							<a href="/dashboard/records/media-credentials" class="btn btn-default">Cancel</a>
+							<a @click="back" class="btn btn-default">Cancel</a>
 							<a @click="submit" class="btn btn-primary">Create</a>
 						</template>
 						<template v-else>
 							<a @click="back" class="btn btn-default">Cancel</a>
 							<a @click="update" class="btn btn-primary">Update</a>
-
 						</template>
 					</div>
 				</div>
 			</form>
 
-			<!--<modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Credential" :small="true">
-				<div slot="modal-body" class="modal-body text-center" v-if="selectedItem">Delete {{ selectedItem.name }}?</div>
-				<div slot="modal-footer" class="modal-footer">
-					<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
-					<button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Delete</button>
-				</div>
-			</modal>-->
 			<modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
 				<div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
 			</modal>
@@ -355,6 +347,14 @@
             forAdmin: {
                 type: Boolean,
                 default: false
+            },
+            reservationId: {
+                type: String,
+                default: null
+            },
+            requirementId: {
+                type: String,
+                default: null
             }
         },
         data(){
@@ -369,19 +369,18 @@
                         {value: false, name: 'Videographer', proficiency: ''},
                         {value: false, name: 'Photographer', proficiency: ''},
                         {value: false, name: 'Video Editor', proficiency: ''},
-                        {value: false, name: 'Web Developer', proficiency: ''},
+                        {value: false, name: 'Director', proficiency: ''},
                         {value: false, name: 'Social Media', proficiency: ''},
                         {value: false, name: 'Motion Graphics Artist', proficiency: ''},
-                        {value: false, name: 'Drone Operator', proficiency: ''},
-                        {value: false, name: 'Graphic Designer', proficiency: ''},
-                        {value: false, name: 'Producer/Writer', proficiency: ''},
-                        {value: false, name: 'Translator (Spanish)', proficiency: ''},
+                        {value: false, name: 'Drone Operator', proficiency: ''}
                     ]},
                     { id: 'equipment', q: 'Please select any equipment listed that you plan to bring:', a:{}, type: 'checkbox', options: [
 	                    {value: false, name: 'Camcorder/video camera for video', brand: ''},
 	                    {value: false, name: 'Camera for photo', brand: ''},
+	                    {value: false, name: 'Camcorder/video camera for video (4K capable)', brand: ''},
 	                    {value: false, name: 'DSLR or mirrorless camera', brand: ''},
 	                    {value: false, name: 'Mountable action camera', brand: ''},
+	                    {value: false, name: 'DSLR or mirrorless camera (4K capable)', brand: ''},
 	                    {value: false, name: 'Audio Tech recorder / microphone operator', brand: ''},
 	                    {value: false, name: 'Drone', brand: ''},
 	                    {value: false, name: 'Lenses', brand: ''},
@@ -409,7 +408,7 @@
                 today: moment().format('YYYY-MM-DD'),
                 yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
                 tomorrow: moment().add(1, 'days').format('YYYY-MM-DD'),
-                resource: this.$resource('credentials/media{/id}', { 'include': 'uploads'})
+                resource: this.$resource('media-credentials{/id}', { 'include': 'uploads'})
             }
         },
         computed: {
@@ -474,7 +473,12 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = '/'+ this.firstUrlSegment +'/records/media-credentials/';
+                
+                if (this.reservationId && this.requirementId) {
+                    window.location.href = `/${this.firstUrlSegment}/reservations/${this.reservationId}/requirements/${this.requirementId}`;
+                } else {
+                    window.location.href = `/${this.firstUrlSegment}/records/media-credentials/${this.id}`;
+                }
             },
             forceBack(){
                 return this.back(true);
@@ -491,12 +495,18 @@
                         holder_type: 'users',
                         content: this.content,
                         expired_at: moment(this.expired_at).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
-//                        uploads: _.uniq(this.upload_ids),
+                        reservation_id: this.reservationId
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Media Credential created.');
                         let that = this;
                         setTimeout(() =>  {
-                            window.location.href = '/'+ that.firstUrlSegment +'/records/media-credentials/' + resp.data.data.id;
+                            
+                        	if (that.reservationId && that.requirementId) {
+                                window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                            } else {
+                                window.location.href = '/' + that.firstUrlSegment + '/records/media-credentials/' + resp.data.data.id;
+                            }
+
                         }, 1000);
                     }, (error) =>  {
                         this.errors = error.data.errors;
@@ -515,12 +525,18 @@
                         holder_type: 'users',
                         content: this.content,
                         expired_at: moment(this.expired_at).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
-//                        uploads: _.uniq(this.upload_ids),
+                        reservation_id: this.reservationId
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(() =>  {
-                            window.location.href = '/'+ that.firstUrlSegment +'/records/media-credentials/' + that.id;
+                            
+                            if (that.reservationId && that.requirementId) {
+                                window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                            } else {
+                                window.location.href = '/' + that.firstUrlSegment + '/records/media-credentials/' + that.id;
+                            }
+
                         }, 1000);
                     }, (error) =>  {
                         this.errors = error.data.errors;
@@ -560,14 +576,14 @@
             // this.userId = this.holder_id = this.$root.user.id;
             // this.holder_type = 'users';
             if (this.isUpdate) {
-                this.resource.get({ id: this.id, include: 'holder'}).then((response) => {
+                this.resource.get({ id: this.id}).then((response) => {
                     let credential = response.data.data;
                     this.applicant_name = credential.applicant_name;
                     this.holder_id = credential.holder_id;
                     this.holder_type = credential.holder_type;
                     this.content = credential.content;
                     this.expired_at = credential.expired_at;
-                    this.userObj = credential.holder.data;
+                    this.userObj = credential.user;
                     this.usersArr.push(this.userObj);
 
                     this.disclaimer = _.findWhere(this.content, { id: 'disclaimer'}).a;

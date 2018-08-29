@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\api;
 
 use App\Models\v1\Cost;
-use App\Jobs\UpdateDues;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\PaymentRequest;
@@ -80,8 +79,6 @@ class CostPaymentsController extends Controller
             'grace_period' => $request->get('grace_period', 0)
         ]);
 
-        $this->dispatch(new UpdateDues($payment));
-
         return $this->response->item($payment, new PaymentTransformer);
     }
 
@@ -105,8 +102,6 @@ class CostPaymentsController extends Controller
             'upfront' => $request->get('upfront', false),
             'grace_period' => $request->get('grace_period', 0)
         ]);
-
-        $this->dispatch(new UpdateDues($payment));
 
         return $this->response->item($payment, new PaymentTransformer);
     }

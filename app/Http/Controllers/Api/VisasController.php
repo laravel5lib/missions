@@ -2,131 +2,100 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\v1\Visa;
-use Dingo\Api\Contract\Http\Request;
-use App\Http\Requests\v1\VisaRequest;
-use App\Http\Transformers\v1\VisaTransformer;
-use App\Http\Requests\v1\ExportRequest;
-use App\Jobs\ExportVisas;
-use App\Http\Requests\v1\ImportRequest;
-use App\Services\Importers\VisaListImport;
+use Spatie\QueryBuilder\Filter;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\VisaResource;
+use Spatie\QueryBuilder\QueryBuilder;
+use App\Http\Requests\UpdateVisaRequest;
+use App\Http\Requests\v1\CreateVisaRequest;
 
 class VisasController extends Controller
 {
     /**
-     * @var Visa
-     */
-    private $visa;
-
-    /**
-     * VisasController constructor.
-     *
-     * @param Visa $visa
-     */
-    public function __construct(Visa $visa)
-    {
-        $this->visa = $visa;
-    }
-
-    /**
-     * Get all visas.
+     * Get a list of visas.
      *
      * @param Request $request
-     * @return \Dingo\Api\Http\Response
+     * @return Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $visas = $this->visa
-                    ->filter($request->all())
-                    ->paginate($request->get('per_page', 10));
+        $visas = QueryBuilder::for(Visa::class)
+            ->allowedFilters([
+                'given_names', 
+                'surname',
+                Filter::exact('number'),
+                Filter::exact('country_code'),
+                Filter::exact('user_id'),
+                Filter::scope('managed_by')
+            ])
+            ->allowedIncludes(['user'])
+            ->paginate(
+                request()->input('per_page', 25)
+            );
 
-        return $this->response->paginator($visas, new VisaTransformer);
+        return VisaResource::collection($visas);
     }
 
     /**
      * Get the specified visa.
      *
      * @param $id
-     * @return \Dingo\Api\Http\Response
+     * @return Response
      */
     public function show($id)
     {
-        $visa = $this->visa->findOrFail($id);
+        $visa = Visa::with('user')->findOrFail($id);
 
-        return $this->response->item($visa, new VisaTransformer);
+        return new VisaResource($visa);
     }
 
     /**
      * Create a new visa and save in storage.
      *
-     * @param VisaRequest $request
-     * @return \Dingo\Api\Http\Response
+     * @param CreateVisaRequest $request
+     * @return Response
      */
-    public function store(VisaRequest $request)
+    public function store(CreateVisaRequest $request)
     {
-        $visa = $this->visa->create($request->all());
+        $visa = Visa::create($request->all());
 
-        return $this->response->item($visa, new VisaTransformer);
+        $visa->attachToReservation($request->input('reservation_id'));
+
+        return response()->json(['message' => 'New visa created.'], 201);
     }
 
     /**
      * Update the specified visa in storage.
      *
-     * @param VisaRequest $request
+     * @param UpdateVisaRequest $request
      * @param $id
-     * @return \Dingo\Api\Http\Response
+     * @return Response
      */
-    public function update(VisaRequest $request, $id)
+    public function update(UpdateVisaRequest $request, $id)
     {
-        $visa = $this->visa->findOrFail($id);
+        $visa = Visa::findOrFail($id);
 
         $visa->update($request->all());
 
-        return $this->response->item($visa, new VisaTransformer);
+        $visa->attachToReservation($request->input('reservation_id'));
+
+        return new VisaResource($visa);
     }
 
     /**
      * Remove the specified visa from storage.
      *
      * @param $id
-     * @return \Dingo\Api\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {
-        $visa = $this->visa->findOrFail($id);
+        $visa = Visa::findOrFail($id);
 
         $visa->delete();
 
-        return $this->response->noContent();
-    }
-
-    /**
-     * Export Visas.
-     *
-     * @param ExportRequest $request
-     * @return mixed
-     */
-    public function export(ExportRequest $request)
-    {
-        $this->dispatch(new ExportVisas($request->all()));
-
-        return $this->response()->created(null, [
-            'message' => 'Report is being generated and will be available shortly.'
-        ]);
-    }
-
-    /**
-     * Import a list of Visas.
-     *
-     * @param  VisaListImport $import
-     * @return response
-     */
-    public function import(ImportRequest $request, VisaListImport $import)
-    {
-        $response = $import->handleImport();
-
-        return $this->response()->created(null, $response);
+        return response()->json([], 204);
     }
 }

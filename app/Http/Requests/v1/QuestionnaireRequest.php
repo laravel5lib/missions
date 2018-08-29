@@ -23,10 +23,16 @@ class QuestionnaireRequest extends FormRequest
      */
     public function rules()
     {
+        if ($this->isMethod('post')) {
+            return [
+                'content' => 'required|array',
+                'reservation_id' => 'required|exists:reservations,id'
+            ];
+        }
+
         return [
-            'type' => 'required|in:airport_preference,arrival_designation',
-            'content' => 'required|array',
-            'reservation_id' => 'required|exists:reservations,id'
-        ];
+            'content' => 'sometimes|required|array',
+            'reservation_id' => 'sometimes|required|exists:reservations,id'
+        ]; 
     }
 }

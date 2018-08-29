@@ -23,13 +23,22 @@ class EssayRequest extends FormRequest
      */
     public function rules()
     {
+        if ($this->isMethod('post')) {
+            return [
+                'author_name'  => 'required|string',
+                'content'      => 'required|array',
+                'user_id'      => 'required|exists:users,id',
+                'upload_ids'   => 'array',
+                'upload_ids.*' => 'required|exists:uploads,id'
+            ];
+        }
+
         return [
-            'author_name'  => 'required|string',
-            'subject'      => 'required|string',
-            'content'      => 'required|array',
-            'user_id'      => 'required|exists:users,id',
+            'author_name'  => 'sometimes|required|string',
+            'content'      => 'sometimes|required|array',
+            'user_id'      => 'sometimes|required|exists:users,id',
             'upload_ids'   => 'array',
-            'upload_ids.*' => 'required|exists:uploads,id'
+            'upload_ids.*' => 'sometimes|required|exists:uploads,id'
         ];
     }
 }

@@ -3,19 +3,13 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
-use EloquentFilter\Filterable;
+use App\Traits\Manageable;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\InteractsWithReservations;
 
 class MedicalRelease extends Model
 {
-    use Filterable, UuidForKey;
-
-    /**
-     * Table used by the model.
-     *
-     * @var string
-     */
-    protected $table = 'medical_releases';
+    use UuidForKey, InteractsWithReservations, Manageable;
 
     /**
      * Attributes that can be mass assigned.
@@ -30,13 +24,6 @@ class MedicalRelease extends Model
     ];
 
     /**
-     * Attributes that should be hidden from JSON output.
-     *
-     * @var array
-     */
-    protected $hidden = [];
-
-    /**
      * Attributes that should be cast as date objects.
      *
      * @var array
@@ -44,13 +31,6 @@ class MedicalRelease extends Model
     protected $dates = [
         'created_at', 'updated_at'
     ];
-
-    /**
-     * The parent model of the timestamps to be updated.
-     *
-     * @var array
-     */
-    protected $touches = ['user'];
 
     /**
      * Attributes to be cast to native types.
@@ -64,13 +44,6 @@ class MedicalRelease extends Model
     ];
 
     /**
-     * Enable timestamps.
-     *
-     * @var bool
-     */
-    public $timestamps = true;
-
-    /**
      * The user the release belongs to.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -81,19 +54,9 @@ class MedicalRelease extends Model
     }
 
     /**
-     * The reservations associated with the release.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function reservations()
-    {
-        return $this->hasMany(Reservation::class);
-    }
-
-    /**
      * The notes associated with the release.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphManyclear
      */
     public function notes()
     {
@@ -107,7 +70,7 @@ class MedicalRelease extends Model
      */
     public function conditions()
     {
-        return $this->hasMany(MedicalCondition::class);
+        return $this->hasMany(MedicalCondition::class)->orderBy('name');
     }
 
     /**
@@ -117,7 +80,7 @@ class MedicalRelease extends Model
      */
     public function allergies()
     {
-        return $this->hasMany(MedicalAllergy::class);
+        return $this->hasMany(MedicalAllergy::class)->orderBy('name');
     }
 
     public function getHeightStandardAttribute()

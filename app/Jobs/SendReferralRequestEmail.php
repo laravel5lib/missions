@@ -2,20 +2,22 @@
 
 namespace App\Jobs;
 
-use App\Jobs\Job;
 use App\Models\v1\Referral;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 
-class SendReferralRequestEmail extends Job implements ShouldQueue
+class SendReferralRequestEmail implements ShouldQueue
 {
-    use InteractsWithQueue, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    
     /**
      * @var Referral
      */
-    private $referral;
+    public $referral;
 
     /**
      * Create a new job instance.
@@ -36,9 +38,16 @@ class SendReferralRequestEmail extends Job implements ShouldQueue
     {
         $referral = $this->referral;
 
-        $mailer->send('emails.referrals.request', ['referral' => $referral], function ($m) use ($referral) {
-            $m->to($referral->recipient_email, $referral->referral_name)
-                ->subject('Your referral is needed to send ' . $referral->name . ' on a mission trip.');
-        });
+        $mailer->send(
+            'emails.referrals.request', 
+            ['referral' => $referral], 
+            function ($message) use ($referral) {
+                $message
+                    ->to($referral->recipient_email, $referral->referral_name)
+                    ->subject("Your recommendation is needed.");
+            });
+
+        $referral->sent_at = now();
+        $referral->save();
     }
 }

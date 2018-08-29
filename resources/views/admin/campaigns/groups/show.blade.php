@@ -18,6 +18,7 @@
                 @sidenav(['links' => [
                     'admin/campaign-groups/'.$group->uuid => 'Overview',
                     'admin/campaign-groups/'.$group->uuid.'/prices' => 'Pricing',
+                    'admin/campaign-groups/'.$group->uuid.'/requirements' => 'Requirements',
                     'admin/campaign-groups/'.$group->uuid.'/trips' => 'Trips'
                 ]])
                 @endsidenav

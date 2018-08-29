@@ -54,9 +54,9 @@ class TransferReservation
     public function swapRequirements($trip)
     {
         // remove existing
-        $this->reservation->requirements()->delete();
+        $this->reservation->requireables()->delete();
         // add new
-        $this->reservation->syncRequirements($trip->requirements);
+        $this->reservation->syncRequirements($trip->requireables);
     }
 
     public function addNewTasks($trip)

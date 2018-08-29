@@ -7,6 +7,7 @@ use App\Jobs\ApplyGroupPricing;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TripResource;
+use App\Jobs\ApplyGroupRequirements;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\TripRequest;
 
@@ -47,6 +48,10 @@ class TripsController extends Controller
 
         if ($request->input('default_prices')) {
             ApplyGroupPricing::dispatch($trip);
+        }
+
+        if ($request->input('default_requirements')) {
+            ApplyGroupRequirements::dispatch($trip);
         }
 
         if ($request->input('tags')) {

@@ -5,7 +5,9 @@
  */
 $factory->define(App\Models\v1\MedicalRelease::class, function (Faker\Generator $faker) {
     return [
-        'user_id'       => $faker->uuid,
+        'user_id'       => function () {
+            return factory(App\Models\v1\User::class)->create()->id;
+        },
         'name'          => $faker->firstName . ' ' . $faker->lastName,
         'ins_provider'  => $faker->company,
         'ins_policy_no' => $faker->ean8,

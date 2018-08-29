@@ -1,16 +1,22 @@
 <template>
-    <div>
-        <div class="row">
-            <div class="col-xs-12" v-if="! editMode">
-                <h6 class="text-uppercase">
-                    <i class="fa fa-map-marker"></i> {{ designation.content }} Arrival
-                    <button class="btn btn-xs btn-default-hollow pull-right" @click="editMode = true" v-if="! isLocked"><i class="fa fa-pencil"></i> Change</button>
-                </h6>
+    <div class="panel panel-default" style="border-top: 5px solid #f6323e">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-8">
+                    <h5>Arrival Designation</h5>
+                </div>
+                <div class="col-xs-4 text-right" v-if="! editMode">
+                    <button class="btn btn-sm btn-link" @click="editMode = true" v-if="!locked">
+                        Edit
+                    </button>
+                </div>
             </div>
-            <div class="col-xs-12" v-else>
-                <div class="alert alert-warning"><i class="fa fa-warning icon-left"></i> Please verify your arrival designation with your team facilitator and travel companions <strong>before</strong> submitting a selection.</div>
+        </div>
+        <div class="panel-body">
+            <template v-if="editMode">
+                <div class="alert alert-warning"><i class="fa fa-warning icon-left"></i> Please verify your arrival designation with your team coordinator and travel companions <strong>before</strong> submitting a selection.</div>
 
-                <h6 class="text-uppercase"><i class="fa fa-map-marker"></i>Select designation</h6>
+                <label>Select designation</label>
                 <select v-model="designation.content" @change="updateInfo" class="form-control">
                     <option value="">Select</option>
                     <option value="eastern">Eastern Missionary</option>
@@ -19,16 +25,19 @@
                     <option value="weekend" v-if="isAdminRoute">Weekend</option>
                     <option value="other" v-if="isAdminRoute">Other</option>
                 </select>
-            </div>
+            </template>
+            <template v-else>
+                <h5>{{ designation.content }}</h5>
+            </template>
+
+            <hr class="divider lg">
+            <p class="small" v-text="moreInfo"></p>
         </div>
-        <hr class="divider lg">
-        <p class="small" v-text="moreInfo"></p>
-        <div class="row" v-if="editMode">
-            <div class="col-sm-12 text-center">
-                <hr class="divider inv">
-                <button class="btn btn-default" @click="cancel()">Cancel</button>
-                <button class="btn btn-primary" @click="save()">Update</button>
-            </div>
+        <div class="panel-footer text-right" v-if="editMode">
+            <hr class="divider sm inv">
+            <button class="btn btn-default" @click="cancel()">Cancel</button>
+            <button class="btn btn-primary" @click="save()">Save Changes</button>
+            <hr class="divider sm inv">
         </div>
     </div>
 </template>
@@ -59,12 +68,6 @@
                     }
                 },
                 set() {}
-            },
-            isLocked() {
-                if (this.isAdminRoute)
-                    return false;
-
-                return this.locked;
             }
         },
         data() {
@@ -96,22 +99,23 @@
             },
             save() {
                 if(this.document) {
-                    this.$http.delete('questionnaires/' + this.document.id).then((response) => {
+                    this.$http.delete('arrival-designations/' + this.document.id).then((response) => {
                         console.log('old removed');
                     });
                 }
-                this.$http.post('questionnaires/', {
+                this.$http.post('arrival-designations/', {
                     content: [this.designation.content],
                     reservation_id: this.reservationId,
                     type: 'arrival_designation'
                 }).then((response) => {
                     this.designation = response.data.data;
                     this.editMode = false;
-                    this.setDesignation(response.data.data);
+                    
+                    swal('Nice Work!', 'Document has been added.', 'success', {
+                      buttons: false,
+                      timer: 3000,
+                    }).then(window.location.reload());
                 });
-            },
-            setDesignation(designation) {
-              this.$emit('set-document', designation);
             },
             cancel() {
                 this.editMode = false;

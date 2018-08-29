@@ -45,10 +45,16 @@ Route::prefix('campaigns')->group(function () {
     // Campaign details
     Route::get('{id}/{tab?}', 'CampaignsController@show');
     Route::get('{id}/costs/{cost}', 'CampaignCostController@show');
+    Route::get('{id}/requirements/create', 'CampaignRequirementController@create');
+    Route::get('{id}/requirements/{requirement}', 'CampaignRequirementController@show');
+    Route::get('{id}/requirements/{requirement}/edit', 'CampaignRequirementController@edit');
 });
 Route::get('campaign-groups/{group}/edit', 'CampaignGroupController@edit');
 Route::get('campaign-groups/{group}/{tab?}', 'CampaignGroupController@show');
 Route::get('campaign-groups/{group}/prices/{price}', 'CampaignGroupPriceController@show');
+Route::get('campaign-groups/{group}/requirements/create', 'CampaignGroupRequirementController@create');
+Route::get('campaign-groups/{group}/requirements/{requirement}', 'CampaignGroupRequirementController@show');
+Route::get('campaign-groups/{group}/requirements/{requirement}/edit', 'CampaignGroupRequirementController@edit');
 Route::get('campaign-groups/{group}/trips/create', 'CampaignGroupTripController@create');
 
 Route::get('flights/{flight}', 'FlightController@show');
@@ -56,6 +62,9 @@ Route::get('flights/{flight}/edit', 'FlightController@edit');
 
 Route::get('trips/{id}/{tab?}', 'TripsController@show');
 Route::get('trips/{id}/prices/{price}', 'TripPriceController@show');
+Route::get('trips/{id}/requirements/create', 'TripRequirementController@create');
+Route::get('trips/{id}/requirements/{requirement}', 'TripRequirementController@show');
+Route::get('trips/{id}/requirements/{requirement}/edit', 'TripRequirementController@edit');
 Route::get('/trips/{id}/reservations/create', 'ReservationsController@create');
 Route::resource('trips', 'TripsController');
 
@@ -67,6 +76,9 @@ Route::prefix('reservations')->group(function () {
     Route::get('{id}/transfer', 'ReservationsController@transfer');
     Route::get('{id}/{tab?}', 'ReservationsController@show');
     Route::get('{id}/prices/{price}', 'ReservationPriceController@show');
+    Route::get('{id}/requirements/create', 'ReservationRequirementController@create');
+    Route::get('{id}/requirements/{requirement}', 'ReservationRequirementController@show');
+    Route::get('{id}/requirements/{requirement}/edit', 'ReservationRequirementController@edit');
 });
 
 Route::get('/funds/{fund}/fundraisers/create', '\App\Http\Controllers\Web\FundraisersController@create');
@@ -141,7 +153,7 @@ Route::prefix('records')->group(function () {
         'only' => ['create', 'show', 'edit']
     ]);
 
-    Route::resource('influencers', 'InfluencersController', [
+    Route::resource('influencer-applications', 'InfluencersController', [
         'only' => ['create', 'show', 'edit']
     ]);
 });

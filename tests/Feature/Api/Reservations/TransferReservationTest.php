@@ -27,7 +27,7 @@ class TransferReservationTest extends TestCase
 
         $this->assertEquals(2200, $reservation->getCurrentRate()->amount);
         $this->assertEquals(2, $reservation->todos()->count());
-        $requirements = $reservation->requirements()->pluck('document_type')->toArray();
+        $requirements = $reservation->requireables()->pluck('document_type')->toArray();
         $this->assertContains('passports', $requirements);
         $this->assertContains('medical_releases', $requirements);
 
@@ -42,7 +42,7 @@ class TransferReservationTest extends TestCase
         $this->assertEquals(1800, $reservation->getCurrentRate()->amount);
 
         // verify all requirements
-        $requirements = $reservation->requirements()->pluck('document_type')->toArray();
+        $requirements = $reservation->requireables()->pluck('document_type')->toArray();
         $this->assertContains('passports', $requirements);
         $this->assertContains('visas', $requirements);
         $this->assertNotContains('medical_releases', $requirements);
@@ -75,8 +75,12 @@ class TransferReservationTest extends TestCase
         $this->generatePrice($trip, $costs['flight'], 800);
         $this->generatePrice($trip, $costs['lateFee'], 200, today()->addYear()->toDateTimeString());
 
-        factory(Requirement::class, 'passport')->create(['requester_id' => $trip->id]);
-        factory(Requirement::class, 'medical')->create(['requester_id' => $trip->id]);
+        $trip->addRequirement([
+            'requirement_id' => factory(Requirement::class, 'passport')->create(['requester_id' => $trip->id])->id
+        ]);
+        $trip->addRequirement([
+            'requirement_id' => factory(Requirement::class, 'medical')->create(['requester_id' => $trip->id])->id
+        ]);
 
         $roomingPriceUuid = $this->generatePrice($trip, $costs['standardRoom'], 0)->uuid;
 
@@ -108,8 +112,12 @@ class TransferReservationTest extends TestCase
         $this->generatePrice($trip, $costs['lateFee'], 200, today()->addYear()->toDateTimeString());
         $this->generatePrice($trip, $costs['standardRoom'], 0);
 
-        factory(Requirement::class, 'passport')->create(['requester_id' => $trip->id]);
-        factory(Requirement::class, 'visa')->create(['requester_id' => $trip->id]);
+        $trip->addRequirement([
+            'requirement_id' => factory(Requirement::class, 'passport')->create(['requester_id' => $trip->id])->id
+        ]);
+        $trip->addRequirement([
+            'requirement_id' => factory(Requirement::class, 'visa')->create(['requester_id' => $trip->id])->id
+        ]);
 
         return $trip;
     }

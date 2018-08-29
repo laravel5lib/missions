@@ -85,3 +85,11 @@ Vue.filter('capitalize', (string) => {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
 });
+
+Vue.filter('titleCase', function (string) {  
+    if (!string) return string;
+    if (!_.isString(string)) string = string.toString();
+    return string.split(' ').map(function (txt) {
+        return txt.charAt(0).toUpperCase() + txt.substring(1);
+    }).join(' ');
+});

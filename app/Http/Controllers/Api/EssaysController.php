@@ -3,31 +3,20 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\v1\Essay;
-use App\Jobs\ExportEssays;
+use Spatie\QueryBuilder\Filter;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
+use App\Http\Resources\EssayResource;
+use Spatie\QueryBuilder\QueryBuilder;
 use App\Http\Requests\v1\EssayRequest;
-use App\Http\Requests\v1\ExportRequest;
-use App\Http\Requests\v1\ImportRequest;
-use App\Services\Importers\EssayListImport;
-use App\Http\Transformers\v1\EssayTransformer;
+use App\Models\v1\InfluencerApplication;
 
 class EssaysController extends Controller
 {
-
-    /**
-     * @var Essay
-     */
-    private $essay;
-
-    /**
-     * EssaysController constructor.
-     * @param Essay $essay
-     */
-    public function __construct(Essay $essay)
-    {
-        $this->essay = $essay;
-    }
+    public $types = [
+        'essays' => Essay::class,
+        'influencer-applications' => InfluencerApplication::class,
+    ];
 
     /**
      * Get all essays.
@@ -37,11 +26,15 @@ class EssaysController extends Controller
      */
     public function index(Request $request)
     {
-        $essays = $this->essay
-                       ->filter($request->all())
-                       ->paginate($request->get('per_page', 10));
+        $essays = QueryBuilder::for($this->types[$request->segment(2)])
+            ->when($request->segment(2) === 'essays', function ($query) {
+                return $query->where('subject', 'Testimony');
+            })
+            ->allowedFilters(['author_name', Filter::exact('user_id'), Filter::scope('managed_by'),])
+            ->allowedIncludes(['user'])
+            ->paginate($request->get('per_page', 25));
 
-        return $this->response->paginator($essays, new EssayTransformer);
+        return EssayResource::collection($essays);
     }
 
     /**
@@ -52,9 +45,9 @@ class EssaysController extends Controller
      */
     public function show($id)
     {
-        $essay = $this->essay->findOrFail($id);
+        $essay = (new $this->types[request()->segment(2)])->with(['user'])->findOrFail($id);
 
-        return $this->response->item($essay, new EssayTransformer);
+        return new EssayResource($essay);
     }
 
     /**
@@ -65,18 +58,15 @@ class EssaysController extends Controller
      */
     public function store(EssayRequest $request)
     {
-        $essay = $this->essay->create([
-            'author_name' => $request->get('author_name'),
-            'subject'     => $request->get('subject'),
-            'content'     => $request->get('content'),
-            'user_id'     => $request->get('user_id')
-        ]);
+        $essay = (new $this->types[$request->segment(2)])->create($request->all());
+
+        $essay->attachToReservation($request->input(['reservation_id']));
 
         if ($request->has('upload_ids')) {
             $essay->uploads()->sync($request->get('upload_ids'));
         }
 
-        return $this->response->item($essay, new EssayTransformer);
+        return response()->json(['message' => 'New essay created.'], 201);
     }
 
     /**
@@ -88,20 +78,17 @@ class EssaysController extends Controller
      */
     public function update($id, EssayRequest $request)
     {
-        $essay = $this->essay->findOrFail($id);
+        $essay = (new $this->types[$request->segment(2)])->findOrFail($id);
 
-        $essay->update([
-            'author_name' => $request->get('author_name'),
-            'subject'     => $request->get('subject'),
-            'content'     => $request->get('content'),
-            'user_id'     => $request->get('user_id')
-        ]);
+        $essay->update($request->all());
+
+        $essay->attachToReservation($request->input(['reservation_id']));
 
         if ($request->has('upload_ids')) {
             $essay->uploads()->sync($request->get('upload_ids'));
         }
 
-        return $this->response->item($essay, new EssayTransformer);
+        return new EssayResource($essay);
     }
 
     /**
@@ -112,39 +99,10 @@ class EssaysController extends Controller
      */
     public function destroy($id)
     {
-        $essay = $this->essay->findOrFail($id);
+        $essay = (new $this->types[request()->segment(2)])->findOrFail($id);
 
         $essay->delete();
 
-        return $this->response->noContent();
-    }
-
-    /**
-     * Export essays.
-     *
-     * @param ExportRequest $request
-     * @return mixed
-     */
-    public function export(ExportRequest $request)
-    {
-        $this->dispatch(new ExportEssays($request->all()));
-
-        return $this->response()->created(null, [
-            'message' => 'Report is being generated and will be available shortly.'
-        ]);
-    }
-
-    /**
-     * Import essays.
-     *
-     * @param  ImportRequest   $request
-     * @param  EssayListImport $import
-     * @return response
-     */
-    public function import(ImportRequest $request, EssayListImport $import)
-    {
-        $response = $import->handleImport();
-
-        return $this->response()->created(null, $response);
+        return response()->json([], 204);
     }
 }

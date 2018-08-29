@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\v1\Essay;
 use App\Http\Controllers\Controller;
 use Artesaos\SEOTools\Traits\SEOTools;
+use App\Models\v1\InfluencerApplication;
 
 class InfluencersController extends Controller
 {
@@ -19,7 +20,7 @@ class InfluencersController extends Controller
         return view('admin.records.influencers.create');
     }
 
-    public function show(Essay $influencer)
+    public function show(InfluencerApplication $influencer)
     {
         $this->authorize('view', $influencer);
 
@@ -28,7 +29,7 @@ class InfluencersController extends Controller
         return view('admin.records.influencers.show')->with('essay', $influencer);
     }
 
-    public function edit(Essay $influencer)
+    public function edit(InfluencerApplication $influencer)
     {
         $this->authorize('update', $influencer);
 

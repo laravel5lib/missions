@@ -46,6 +46,11 @@ class TripRegistrationTest extends TestCase
 
         $this->assertNotNull($reservation->fund->id);
         $this->assertNotEmpty($reservation->todos);
+        $this->assertNotEmpty($reservation->priceables);
+        $this->assertEquals($reservation->requireables->count(), 4);
+        $requirements = $reservation->requireables()->pluck('document_type')->toArray();
+        $this->assertNotContains('influencer_applications', $requirements);
+        $this->assertNotContains('refferals', $requirements);
     }
 
     /** @test */
@@ -462,11 +467,12 @@ class TripRegistrationTest extends TestCase
     {
         $trip = factory(Trip::class)->create();
         $this->setupTripPricing($trip);
-        $trip->requirements()->saveMany([
-            factory(Requirement::class, 'passport')->make(),
-            factory(Requirement::class, 'medical')->make(),
-            factory(Requirement::class, 'testimony')->make()
-        ]);
+        $trip->addRequirement(factory(Requirement::class, 'passport')->make()->toArray());
+        $trip->addRequirement(factory(Requirement::class, 'medical')->make()->toArray());
+        $trip->addRequirement(factory(Requirement::class, 'testimony')->make()->toArray());
+        $trip->addRequirement(factory(Requirement::class, 'media-credentials')->make(['rules' => ['roles' => ['MEDI']]])->toArray());
+        $trip->addRequirement(factory(Requirement::class, 'influencer-application')->make(['rules' => ['roles' => ['INFL']]])->toArray());
+        $trip->addRequirement(factory(Requirement::class, 'referral')->make(['rules' => ['age' => 100]])->toArray());
 
         return $trip;
     }
@@ -485,6 +491,7 @@ class TripRegistrationTest extends TestCase
             'status'             => 'single',
             'shirt_size'         => 'M',
             'birthday'           => '1987-07-28',
+            'desired_role'       => 'MEDI',
             'user_id'            => $this->user->id,
             'address'            => '123 Some Place Rd.',
             'zip'                => '12345',

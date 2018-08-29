@@ -66,8 +66,8 @@
             <div class="row">
                 <div class="col-sm-12 text-center">
                     <template v-if="!isUpdate">
-                        <a :href="'/'+ firstUrlSegment +'/records/referrals'" class="btn btn-default">Cancel</a>
-                        <a  @click="submit" class="btn btn-primary">Create</a>
+                        <a @click="back" class="btn btn-default">Cancel</a>
+                        <a @click="submit" class="btn btn-primary">Create</a>
                     </template>
                     <template v-else>
                         <a @click="back" class="btn btn-default">Cancel</a>
@@ -102,6 +102,14 @@
             forAdmin: {
                 type: Boolean,
                 default: false
+            },
+            reservationId: {
+                type: String,
+                default: null
+            },
+            requirementId: {
+                type: String,
+                default: null
             }
         },
         data(){
@@ -149,7 +157,12 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = '/'+ this.firstUrlSegment +'/records/referrals/';
+
+                if (this.reservationId && this.requirementId) {
+                    window.location.href = `/${this.firstUrlSegment}/reservations/${this.reservationId}/requirements/${this.requirementId}`;
+                } else {
+                    window.location.href = `/${this.firstUrlSegment}/records/referrals/${this.id}`;
+                }
             },
             forceBack(){
                 return this.back(true);
@@ -168,12 +181,19 @@
                         type: this.type,
                         response: this.response,
                         user_id: this.user_id,
-                        attention_to: this.attention_to
+                        attention_to: this.attention_to,
+                        reservation_id: this.reservationId
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Referral created and sent.');
                         let that = this;
                         setTimeout(() =>  {
-                            window.location.href = '/'+ that.firstUrlSegment + '/records/referrals/' + resp.data.data.id;
+                            
+                            if (that.reservationId && that.requirementId) {
+                                window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                            } else {
+                                window.location.href = '/' + that.firstUrlSegment + '/records/referrals/' + resp.data.data.id;
+                            }
+
                         }, 1000);
                     }, (error) =>  {
                         this.errors = error.data.errors;
@@ -196,10 +216,18 @@
                         type: this.type,
                         response: this.response,
                         user_id: this.user_id,
+                        reservation_id: this.reservationId
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
+                        let that = this;
                         setTimeout(() =>  {
-                            window.location.href = '/'+ this.firstUrlSegment +'/records/referrals/' + this.id;
+                            
+                            if (that.reservationId && that.requirementId) {
+                                window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                            } else {
+                                window.location.href = '/' + that.firstUrlSegment + '/records/referrals/' + that.id;
+                            }
+
                         }, 1000);
                     }, (error) =>  {
                         this.errors = error.data.errors;
@@ -210,11 +238,11 @@
         },
         mounted(){
             if (this.isUpdate) {
-                this.$http.get('referrals/' + this.id + '?include=user').then((response) => {
+                this.$http.get('referrals/' + this.id).then((response) => {
 
                     let referral = response.data.data;
                     $.extend(this, referral);
-                    this.userObj = referral.user.data;
+                    this.userObj = referral.user;
                     this.usersArr.push(this.userObj);
                 });
             }

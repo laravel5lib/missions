@@ -82,7 +82,7 @@
             <div class="form-group">
                 <div class="col-sm-12 text-center">
                     <template v-if="!isUpdate">
-                        <a :href="'/'+ this.firstUrlSegment +'/records/visas'" class="btn btn-default">Cancel</a>
+                        <a @click="back" class="btn btn-default">Cancel</a>
                         <a @click="submit" class="btn btn-primary">Create</a>
                     </template>
                     <template v-else>
@@ -134,6 +134,14 @@
             forAdmin: {
                 type: Boolean,
                 default: false
+            },
+            reservationId: {
+                type: String,
+                default: null
+            },
+            requirementId: {
+                type: String,
+                default: null
             }
         },
         data(){
@@ -183,7 +191,13 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = '/' + this.firstUrlSegment + '/records/visas/' + this.id;
+
+                if (this.reservationId && this.requirementId) {
+                    window.location.href = `/${this.firstUrlSegment}/reservations/${this.reservationId}/requirements/${this.requirementId}`;
+                } else {
+                    window.location.href = `/${this.firstUrlSegment}/records/visas/${this.id}`;
+                }
+
             },
             forceBack(){
                 return this.back(true);
@@ -204,10 +218,18 @@
                         country_code: this.country_code,
                         upload_id: this.upload_id,
                         user_id: this.user_id,
+                        reservation_id: this.reservationId
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Visa created.');
+                        let that = this;
                         setTimeout(() => {
-                            window.location.href = '/' + this.firstUrlSegment + '/records/visas/' + resp.data.data.id;
+                            
+                            if (that.reservationId && that.requirementId) {
+                                window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                            } else {
+                                window.location.href = '/' + that.firstUrlSegment + '/records/visas/' + resp.data.data.id;
+                            }
+
                         }, 1000);
                     }, (error) => {
                         this.errors = error.data.errors;
@@ -230,11 +252,18 @@
                         country_code: this.country_code,
                         upload_id: this.upload_id,
                         user_id: this.user_id,
+                        reservation_id: this.reservationId
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(() =>  {
-                            window.location.href = '/' + that.firstUrlSegment + '/records/visas/' + that.id;
+                            
+                            if (that.reservationId && that.requirementId) {
+                                window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                            } else {
+                                window.location.href = '/' + that.firstUrlSegment + '/records/visas/' + that.id;
+                            }
+
                         }, 1000);
                     }, (error) =>  {
                         this.errors = error.data.errors;
@@ -261,7 +290,7 @@
                         let visa = response.data.data;
                         $.extend(this, visa);
                         this.countryObj = _.findWhere(this.UTILITIES.countries, {code: visa.country_code});
-                        this.userObj = visa.user.data;
+                        this.userObj = visa.user;
                         this.usersArr.push(this.userObj);
                     });
                 }

@@ -1,7 +1,7 @@
 <div class="navbar navbar-default" style="padding-left: 0; border-bottom: 1px solid #eee;">
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-3 col-sm-6 col-xs-6">
+    <div style="display: flex; justify-content: space-between;">
+      <div>
         <a href="{{ url('/admin') }}" class="navbar-brand visible-xs">
           <img class="db-brand-xs" src="/images/mm-icon-red.png" alt="MM">
         </a>
@@ -12,7 +12,7 @@
           </a>
         </div>
       </div>
-      <div class="col-md-6 hidden-xs hidden-sm" style="text-align: center">
+      <div class="hidden-xs hidden-sm" style="text-align: center">
         <div class="nav navbar-nav navbar-center" style="float: none; display:inline-block; vertical-align: middle;">
           <li class="{{ in_array(request()->segment(2), ['campaigns', 'campaign-groups', 'trips']) ? 'active' : '' }}">
             <a href="{{ url('/admin/campaigns') }}">Trips</a>
@@ -46,7 +46,7 @@
           </li>
         </div>
       </div>
-      <div class="col-md-3 col-sm-6 col-xs-6">
+      <div>
         <ul class="nav navbar-nav navbar-right dropdown" style="margin-left:75px;">
 
           @if(auth()->check())

@@ -62,7 +62,7 @@
                 <div class="row">
                     <div class="col-sm-12 text-center">
                         <template v-if="!isUpdate">
-                            <a href="/dashboard/records/influencers" class="btn btn-default">Cancel</a>
+                            <a @click="back()" class="btn btn-default">Cancel</a>
                             <a @click="submit()" class="btn btn-primary">Create</a>
                         </template>
                         <template v-else>
@@ -100,6 +100,14 @@
             forAdmin: {
                 type: Boolean,
                 default: false
+            },
+            reservationId: {
+                type: String,
+                default: null
+            },
+            requirementId: {
+                type: String,
+                default: null
             }
         },
         data(){
@@ -124,7 +132,7 @@
                 userObj: null,
 
                 // logic vars
-                resource: this.$resource('essays{/id}'),
+                resource: this.$resource('influencer-applications{/id}'),
                 today: moment().format('YYYY-MM-DD'),
                 showSaveAlert: false,
             }
@@ -147,7 +155,12 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = '/'+ this.firstUrlSegment +'/records/influencers/';
+
+                if (this.reservationId && this.requirementId) {
+                    window.location.href = `/${this.firstUrlSegment}/reservations/${this.reservationId}/requirements/${this.requirementId}`;
+                } else {
+                    window.location.href = `/${this.firstUrlSegment}/records/influencer-applications/${this.id}`;
+                }
             },
             forceBack(){
                 return this.back(true);
@@ -167,11 +180,18 @@
                         content: this.content,
                         user_id: this.user_id,
                         upload_ids: this.upload_ids,
+                        reservation_id: this.reservationId
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Influencer created.');
                         let that = this;
                         setTimeout(() =>  {
-                            window.location.href = '/'+ that.firstUrlSegment +'/records/influencers/' + resp.data.data.id;
+                            
+                            if (that.reservationId && that.requirementId) {
+                                window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                            } else {
+                                window.location.href = '/' + that.firstUrlSegment + '/records/influencer-applications/' + resp.data.data.id;
+                            }
+
                         }, 1000);
                     }, (error) =>  {
                         this.errors = error.data.errors;
@@ -193,11 +213,18 @@
                         content: this.content,
                         user_id: this.user_id,
                         upload_ids: this.upload_ids,
+                        reservation_id: this.reservationId
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(() =>  {
-                            window.location.href = '/'+ that.firstUrlSegment +'/records/influencers/' + that.id; 
+                            
+                            if (that.reservationId && that.requirementId) {
+                                window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                            } else {
+                                window.location.href = '/' + that.firstUrlSegment + '/records/influencer-applications/' + that.id;
+                            }
+
                         }, 1000);
                     }, (error) =>  {
                         this.errors = error.data.errors;
@@ -229,7 +256,7 @@
                     this.author_name = influencer.author_name;
                     this.subject = influencer.subject;
                     this.content = influencer.content;
-                    this.userObj = influencer.user.data;
+                    this.userObj = influencer.user;
                     this.usersArr.push(this.userObj);
 
                     // TODO Find better reference to this data

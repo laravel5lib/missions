@@ -57,59 +57,42 @@ Vue.component('anchored-heading', {
  * Group components
  */
 Vue.component('groups', require('./components/groups/groups.vue'));
-Vue.component('groups-list', require('./components/groups/groups-list.vue'));
-Vue.component('group-trips', require('./components/campaigns/group-trips.vue'));
-Vue.component('group-profile-trips', require('./components/groups/group-profile-trips.vue'));
 Vue.component('group-profile-stories', require('./components/groups/group-profile-stories.vue'));
-Vue.component('group-trip-wrapper', require('./components/campaigns/groups-trips-selection-wrapper.vue'));
 Vue.component('group-interest-signup', require('./components/groups/group-interest-signup.vue'));
-Vue.component('group-profile-fundraisers', require('./components/groups/group-profile-fundraisers.vue'));
-Vue.component('dashboard-group-trips', require('./components/groups/dashboard-group-trips.vue'));
-Vue.component('dashboard-group-reservations', require('./components/groups/dashboard-group-reservations.vue'));
-Vue.component('dashboard-interests-list', require('./components/interests/dashboard-interests-list.vue'));
-Vue.component('admin-group-trips', require('./components/groups/admin-group-trips-list.vue'));
-Vue.component('admin-groups', require('./components/groups/admin-groups-list.vue'));
 Vue.component('admin-group-create', require('./components/groups/admin-group-create.vue'));
 Vue.component('admin-group-edit', require('./components/groups/admin-group-edit.vue'));
-Vue.component('admin-group-delete', require('./components/groups/admin-group-delete.vue'));
 Vue.component('admin-group-managers', require('./components/groups/admin-group-managers.vue'));
-Vue.component('admin-transactions-list', require('./components/AdminTransactionList.vue'));
 
 /**
  * Campaign and Trip Components
  */
-Vue.component('campaigns', require('./components/campaigns/campaigns.vue'));
-Vue.component('campaign-groups', require('./components/campaigns/campaign-groups.vue'));
-Vue.component('visibility-controls', require('./components/campaigns/visibility-controls.vue'));
-Vue.component('trip-details-missionaries', require('./components/trips/trip-details-missionaries.vue'));
 Vue.component('trip-registration-wizard', require('./components/trips/trip-registration-wizard.vue'));
-Vue.component('campaign-create', require('./components/campaigns/admin-campaign-create.vue'));
-Vue.component('campaign-edit', require('./components/campaigns/admin-campaign-edit.vue'));
-Vue.component('campaign-trip-create-wizard', require('./components/trips/admin-trip-create.vue'));
-Vue.component('campaign-trip-edit-wizard', require('./components/trips/admin-trip-edit.vue'));
 Vue.component('admin-campaign-trips', require('./components/campaigns/admin-campaign-trips.vue'));
-Vue.component('admin-trip-reservations', require('./components/trips/admin-trip-reservations-list.vue'));
-Vue.component('admin-trip-facilitators', require('./components/trips/admin-trip-facilitators.vue'));
-Vue.component('campaign-trip-form', require('./components/trips/CampaignTripForm.vue'));
-Vue.component('cost-manager', require('./components/admin/cost-manager.vue'));
-Vue.component('deadlines-manager', require('./components/admin/deadlines-manager.vue'));
-Vue.component('admin-trip-requirements', require('./components/trips/admin-trip-requirements.vue'));
 Vue.component('admin-trip-todos', require('./components/trips/admin-trip-todos.vue'));
 Vue.component('promotionals', require('./components/admin/promotionals.vue'));
+// @todo remove with facilitators view
+Vue.component('admin-trip-facilitators', require('./components/trips/admin-trip-facilitators.vue'));
+// @todo remove with projects
+Vue.component('cost-manager', require('./components/admin/cost-manager.vue'));
+// @todo remove with deadlines manager tab in trips and projects
+Vue.component('deadlines-manager', require('./components/admin/deadlines-manager.vue'));
 
 /**
+ * @todo  REMOVE ALL TRANSPORTS LOGIC
  * Transportation Components
  */
 Vue.component('transports', require('./components/admin/transports.vue'));
 Vue.component('transports-details', require('./components/admin/transports-details.vue'));
 
 /**
+ * @todo REMOVE ALL ACCOMMODATION CODE
  * Accommodation Components
  */
 Vue.component('rooming-accommodations', require('./components/rooms/rooming-accommodations.vue'));
 Vue.component('regions-accommodations', require('./components/regions/regions-accommodations.vue'));
 
 /**
+ * @todo  REMOVE ALL TEAMS CODE
  * Teams Components
  */
 Vue.component('team-manager', require('./components/teams/team-manager.vue'));
@@ -117,6 +100,7 @@ Vue.component('team-type-manager', require('./components/teams/team-type-manager
 Vue.component('regions-manager', require('./components/regions/regions-manager.vue'));
 
 /**
+ * @todo REMOVE ALL ROOMING CODE
  * Rooming Components
  */
 Vue.component('rooming-wizard', require('./components/rooms/rooming-wizard.vue'));
@@ -125,21 +109,13 @@ Vue.component('rooming-type-manager', require('./components/rooms/rooming-type-m
 /**
  * Reservation Components
  */
-Vue.component('reservations-list', require('./components/reservations/reservations-list.vue'));
 Vue.component('restore-reservation', require('./components/reservations/restore-reservation.vue'));
 Vue.component('transfer-reservation', require('./components/reservations/transfer-reservation.vue'));
-Vue.component('reservation-avatar', require('./components/reservations/reservation-avatar.vue'));
-Vue.component('reservation-costs', require('./components/reservations/reservation-costs.vue'));
-Vue.component('reservation-dues', require('./components/reservations/reservation-dues.vue'));
-Vue.component('reservation-requirements', require('./components/reservations/reservation-requirements.vue'));
-Vue.component('admin-reservations-list', require('./components/reservations/admin-reservations-list.vue'));
+Vue.component('companion-manager', require('./components/reservations/companion-manager.vue'));
 Vue.component('admin-reservation-create', require('./components/reservations/admin-reservation-create.vue'));
 Vue.component('admin-reservation-edit', require('./components/reservations/admin-reservation-edit.vue'));
-Vue.component('admin-reservation-costs', require('./components/reservations/admin-reservation-costs.vue'));
-Vue.component('admin-reservation-dues', require('./components/reservations/admin-reservation-dues.vue'));
-Vue.component('admin-reservation-deadlines', require('./components/reservations/admin-reservation-deadlines.vue'));
+// @todo delete with rooming, transports, etc.
 Vue.component('reservations-filters', require('./components/filters/reservations-filters.vue'));
-Vue.component('companion-manager', require('./components/reservations/companion-manager.vue'));
 
 /**
  * User Components
@@ -185,6 +161,9 @@ Vue.component('essay-create-update', require('./components/records/essays/essay-
 Vue.component('influencer-questionnaire-create-update', require('./components/records/influencers/influencer-questionnaire-create-update.vue'));
 Vue.component('referral-create-update', require('./components/records/referrals/referral-create-update.vue'));
 Vue.component('referral-response', require('./components/referrals/referral-response.vue'));
+Vue.component('airport-preference', require('./components/reservations/airport-preference.vue'));
+Vue.component('arrival-designation', require('./components/reservations/arrival-designation.vue'));
+Vue.component('minor-release', require('./components/reservations/minor-release.vue'));
 
 /**
  * Uploads Components
@@ -194,6 +173,7 @@ Vue.component('admin-uploads-list', require('./components/uploads/admin-uploads-
 Vue.component('admin-upload-create-update', require('./components/uploads/admin-upload-create-update.vue'));
 
 /**
+ * @todo DELETE WITH PROJECTS CODE
  * Projects Components
  */
 Vue.component('project-causes', require('./components/admin/project-causes.vue'));
@@ -215,7 +195,6 @@ Vue.component('notes', require('./components/notes.vue'));
 Vue.component('todos', require('./components/todos.vue'));
 Vue.component('send-email', require('./components/send-email.vue'));
 Vue.component('reports-list', require('./components/reports/reports-list.vue'));
-Vue.component('avatar-uploader', require('./components/avatar-uploader.vue'));
 
 /**
  * Wrapper Components
@@ -240,7 +219,12 @@ Vue.component('group-interest-list', require('./components/GroupInterestList.vue
 Vue.component('squad-manager', require('./components/SquadManager.vue'));
 Vue.component('group-squad-member-list', require('./components/GroupSquadMemberList.vue'));
 Vue.component('group-edit', require('./components/GroupEdit.vue'));
+Vue.component('travel-requirement-form', require('./components/TravelRequirementForm.vue'));
+Vue.component('requirements-manager', require('./components/RequirementsManager.vue'));
+Vue.component('travel-document', require('./components/TravelDocument.vue'));
+Vue.component('bulk-add-requirement-modal', require('./components/BulkAddRequirementModal.vue'));
 Vue.component('tag-list', require('./components/TagList.vue'));
+Vue.component('admin-transactions-list', require('./components/AdminTransactionList.vue'));
 
 /**
  * Utility Components

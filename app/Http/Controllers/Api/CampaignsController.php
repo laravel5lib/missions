@@ -30,6 +30,8 @@ class CampaignsController extends Controller
                 Filter::scope('inactive'),
                 Filter::scope('organization')
             ])
+            ->defaultSort('-started_at')
+            ->allowedSorts('started_at', 'name')
             ->paginate($request->get('per_page', 25));
 
         return CampaignResource::collection($campaigns);

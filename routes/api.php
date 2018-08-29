@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Storage;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+// Requirements
+Route::apiResource('{requireableType}/{requireableId}/requirements', 'RequirementsController');
+Route::post('campaigns/{campaign}/requirements/{requirement}/add', 'BulkAddCampaignRequirementController');
+Route::post('campaign-groups/{campaignGroup}/requirements/{requirement}/add', 'BulkAddCampaignGroupRequirementController');
+Route::post('trips/{trip}/requirements/{requirement}/add', 'BulkAddTripRequirementController');
+
 // Campaigns
 Route::apiResource('campaigns/{campaignId}/groups', 'CampaignGroupController');
 Route::apiResource('campaigns/{campaignId}/costs', 'CampaignCostController')->middleware('auth:api');
@@ -33,6 +39,9 @@ Route::post('reservations/{reservationId}/prices/lock', 'ReservationPriceLockCon
 Route::delete('reservations/{reservationId}/prices/lock', 'ReservationPriceLockController@destroy');
 Route::apiResource('reservations/{reservationId}/prices', 'ReservationPriceController');
 Route::post('reservations/{id}/transfer', 'ReservationTransfersController@store');
+Route::get('reservations/{reservationId}/{documentType}', 'ReservationDocumentController@index');
+Route::post('reservations/{reservationId}/{documentType}', 'ReservationDocumentController@store');
+Route::delete('reservations/{reservationId}/{documentType}/{documentId}', 'ReservationDocumentController@destroy');
 
 // Companions
 Route::get('companions', 'CompanionController@index');
@@ -60,6 +69,32 @@ Route::put('squads/published', 'SquadPublicationController@update');
 Route::apiResource('squads', 'SquadController');
 Route::apiResource('squad-members', 'SquadMemberController');
 
+// Medical Releases
+Route::apiResource('medical-releases', 'MedicalReleaseController');
+
+// Passports
+Route::apiResource('passports', 'PassportsController');
+
+// Visas
+Route::apiResource('visas', 'VisasController');
+
+// Referrals
+Route::apiResource('referrals', 'ReferralsController');
+
+// Essays
+Route::apiResource('essays', 'EssaysController');
+Route::apiResource('influencer-applications', 'EssaysController');
+
+// Questionnaires
+Route::apiResource('questionnaires', 'QuestionnairesController');
+Route::apiResource('airport-preferences', 'QuestionnairesController');
+Route::apiResource('arrival-designations', 'QuestionnairesController');
+Route::apiResource('minor-releases', 'QuestionnairesController');
+
+// Credentials
+Route::apiResource('medical-credentials', 'MedicalCredentialsController');
+Route::apiResource('media-credentials', 'MediaCredentialsController');
+
 // Tags
 Route::get('tags/{type?}', 'TagController@index');
 Route::post('tags/{type}', 'TagController@store');
@@ -86,7 +121,6 @@ $api->version('v1', [
     $api->post('speaker', 'UtilitiesController@sendSpeakerRequestEmail');
     $api->post('sponsor-project', 'UtilitiesController@sendProjectSponsorEmail');
     $api->post('groups/submit', 'GroupsController@submit');
-    $api->get('referrals/{id}', 'ReferralsController@show');
 
     $api->put('representatives/{id}/avatar', 'RepresentativeAvatarController@update');
     $api->resource('representatives', 'RepresentativeController');
@@ -107,8 +141,6 @@ $api->version('v1', [
     })->where('path', '.+');
 
     $api->post('fundraisers/{id}/remind', 'FundraiserReminderController@store');
-
-    $api->resource('referrals', 'ReferralsController');
 
     $api->group(['middleware' => ['api.auth']], function ($api) {
 
@@ -146,9 +178,7 @@ $api->version('v1', [
         $api->post('trips/{id}/promo', 'TripsController@checkPromoCode');
         $api->post('interests/export', 'TripInterestsController@export');
         $api->resource('reservations', 'ReservationsController');
-        // $api->post('reservations/export', 'ReservationsController@export');
         $api->put('reservations/{id}/restore', 'ReservationsController@restore');
-        $api->resource('reservations.requirements', 'ReservationRequirementsController');
         $api->get('reservations/{reservations}/companions', 'CompanionsController@index');
         $api->post('reservations/{reservations}/companions', 'CompanionsController@store');
         $api->delete('reservations/{reservations}/companions', 'CompanionsController@destroy');
@@ -159,14 +189,6 @@ $api->version('v1', [
         $api->post('donors/export', 'DonorsController@export');
         $api->resource('donations', 'DonationsController');
         $api->post('donations/authorize', 'DonationsController@authorizeCard');
-        $api->resource('passports', 'PassportsController');
-        $api->post('passports/export', 'PassportsController@export');
-        $api->post('passports/import', 'PassportsController@import');
-        $api->resource('visas', 'VisasController');
-        $api->resource('visas/export', 'VisasController@export');
-        $api->resource('visas/import', 'VisasController@import');
-        $api->post('referrals/export', 'ReferralsController@export');
-        $api->post('referrals/import', 'ReferralsController@import');
 
         $api->group(['namespace' => 'Teams'], function ($api) {
             $api->resource('teams/types', 'TeamTypesController');
@@ -194,17 +216,7 @@ $api->version('v1', [
         $api->post('projects/export', 'ProjectsController@export');
         $api->resource('notes', 'NotesController');
         $api->resource('todos', 'TodosController');
-        $api->resource('essays', 'EssaysController');
-        $api->post('essays/export', 'EssaysController@export');
-        $api->post('essays/import', 'EssaysController@import');
-        $api->resource('influencers', 'EssaysController');
-        $api->post('influencers/export', 'EssaysController@export');
-        $api->post('influencers/import', 'EssaysController@import');
-        $api->resource('reservations.dues', 'ReservationDuesController');
-        $api->resource('requirements', 'RequirementsController');
-        $api->resource('requirements.conditions', 'RequirementConditionsController');
         $api->resource('deadlines', 'DeadlinesController');
-        $api->resource('questionnaires', 'QuestionnairesController');
         $api->resource('permissions/roles', 'PermissionRolesController');
         $api->resource('permissions/abilities', 'PermissionAbilitiesController');
         $api->resource('promotionals', 'PromotionalsController');
@@ -236,15 +248,7 @@ $api->version('v1', [
         $api->resource('hubs', 'HubsController');
         $api->resource('hubs.activities', 'HubActivitiesController');
 
-        $api->group(['prefix' => 'credentials'], function ($api) {
-            $api->resource('medical', 'MedicalCredentialsController');
-            $api->resource('media', 'MediaCredentialsController');
-        });
-
         $api->group(['prefix' => 'medical'], function ($api) {
-            $api->resource('releases', 'Medical\ReleasesController');
-            $api->post('releases/export', 'Medical\ReleasesController@export');
-            $api->post('releases/import', 'Medical\ReleasesController@import');
             $api->get('conditions', function () {
                 return ['data' => \App\Models\v1\MedicalCondition::available()];
             });

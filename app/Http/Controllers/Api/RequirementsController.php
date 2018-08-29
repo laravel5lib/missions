@@ -1,44 +1,61 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\Api;
 
+use App\Models\v1\Trip;
+use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
 use App\Models\v1\Requirement;
+use App\Models\v1\Reservation;
+use Spatie\QueryBuilder\Filter;
+use App\Models\v1\CampaignGroup;
 use App\Http\Controllers\Controller;
-use App\Jobs\UpdateReservationRequirements;
-use App\Http\Requests\v1\RequirementRequest;
-use App\Http\Transformers\v1\RequirementTransformer;
+use Spatie\QueryBuilder\QueryBuilder;
+use App\Http\Resources\RequirementResource;
+use App\Http\Requests\UpdateRequirementRequest;
+use App\Http\Requests\v1\CreateRequirementRequest;
 
 class RequirementsController extends Controller
 {
-
-    /**
-     * @var Requirement
-     */
-    private $requirement;
-
-    /**
-     * RequirementsController constructor.
-     * @param Requirement $requirement
-     */
-    public function __construct(Requirement $requirement)
-    {
-        $this->requirement = $requirement;
-    }
-
     /**
      * Get all requirements.
      *
      * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
-    public function index(Request $request)
+    public function index($requireableType, $requireableId)
     {
-        $requirements = $this->requirement
-                             ->filter($request->all())
-                             ->paginate($request->get('per_page', 10));
+        $requireable = $this->requireable($requireableType, $requireableId);
+        
+        $requirements = $requireable->requireables()
+            ->withCount([
+                'groups' => function ($query) use ($requireable) {
+                    $query->where('campaign_id', $requireable->id);
+                }, 
+                'trips' => function ($query) use ($requireable, $requireableType) {
+                    $query->when($requireableType == 'campaigns', function ($query) use ($requireable) {
+                        $query->where('campaign_id', $requireable->id);
+                    })
+                    ->when($requireableType == 'campaign-groups', function ($query) use ($requireable) {
+                        $query->where('campaign_id', $requireable->campaign_id)
+                              ->where('group_id', $requireable->group_id);
+                    });
+                }, 
+                'reservations' => function ($query) use ($requireable, $requireableType) {
+                    $query->when($requireableType == 'campaign-groups', function($query) use ($requireable) {
+                        $query->whereHas('trip', function ($trip) use ($requireable) {
+                            return $trip->where('group_id', $requireable->group_id)
+                                        ->where('campaign_id', $requireable->campaign_id);
+                        });
+                    })
+                    ->when($requireableType == 'trips', function($query) use ($requireable) {
+                        $query->where('trip_id', $requireable->id);
+                    });
+                }
+            ])
+            ->paginate(request()->input('per_page', 25));
 
-        return $this->response->paginator($requirements, new RequirementTransformer);
+        return RequirementResource::collection($requirements);
     }
 
     /**
@@ -47,34 +64,24 @@ class RequirementsController extends Controller
      * @param $id
      * @return \Dingo\Api\Http\Response
      */
-    public function show($id)
+    public function show($requireableType, $requireableId, $id)
     {
-        $requirement = $this->requirement->findOrFail($id);
+        $requirement = $this->requireable($requireableType, $requireableId)->requireables()->findOrFail($id);
 
-        return $this->response->item($requirement, new RequirementTransformer);
+        return new RequirementResource($requirement);
     }
 
     /**
      * Create a new requirement.
      *
-     * @param RequirementRequest $request
+     * @param CreateRequirementRequest $request
      * @return \Dingo\Api\Http\Response
      */
-    public function store(RequirementRequest $request)
+    public function store($requireableType, $requireableId, CreateRequirementRequest $request)
     {
-        $requirement = $this->requirement->create([
-            'requester_type' => $request->get('requester_type'),
-            'requester_id' => $request->get('requester_id'),
-            'name' => $request->get('name'),
-            'document_type' => $request->get('document_type'),
-            'short_desc' => $request->get('short_desc', null),
-            'due_at' => $request->get('due_at'),
-            'grace_period' => $request->get('grace_period', 0)
-        ]);
+        $this->requireable($requireableType, $requireableId)->addRequirement($request->all());
 
-        $this->dispatch(new UpdateReservationRequirements($requirement));
-
-        return $this->response->item($requirement, new RequirementTransformer);
+        return response()->json(['message' => 'Requirement created.'], 201);
     }
 
     /**
@@ -84,23 +91,12 @@ class RequirementsController extends Controller
      * @param $id
      * @return \Dingo\Api\Http\Response
      */
-    public function update(RequirementRequest $request, $id)
+    public function update(UpdateRequirementRequest $request, $requireableType, $requireableId, $id)
     {
-        $requirement = $this->requirement->findOrFail($id);
+        $requirement = $this->requireable($requireableType, $requireableId)
+                            ->updateRequirement($id, $request->all());
 
-        $requirement->update([
-            'requester_type' => $request->get('requester_type', $requirement->requester_type),
-            'requester_id' => $request->get('requester_id', $requirement->requester_id),
-            'name' => $request->get('name'),
-            'document_type' => $request->get('document_type'),
-            'short_desc' => $request->get('short_desc', $requirement->short_desc),
-            'due_at' => $request->get('due_at'),
-            'grace_period' => $request->get('grace_period', $requirement->grace_period)
-        ]);
-
-        $this->dispatch(new UpdateReservationRequirements($requirement));
-
-        return $this->response->item($requirement, new RequirementTransformer);
+        return new RequirementResource($requirement);
     }
 
     /**
@@ -109,12 +105,40 @@ class RequirementsController extends Controller
      * @param $id
      * @return \Dingo\Api\Http\Response
      */
-    public function destroy($id)
+    public function destroy($requireableType, $requireableId, $id)
     {
-        $requirement = $this->requirement->findOrFail($id);
+        $requireable = $this->requireable($requireableType, $requireableId);
+        $requirement = $requireable->requireables()->findOrFail($id);
 
-        $requirement->delete();
+        $requireable->requireables()->detach($id);
 
-        return $this->response->noContent();
+        if ($requirement->requester_id === $requireableId && $requirement->requester_type === $requireableType) {
+            $requirement->delete();
+        }
+
+        return response()->json([], 204);
+    }
+
+    /**
+     * Get the requireable model for the requirement.
+     * 
+     * @param  string $type
+     * @param  string $id
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    private function requireable($type, $id)
+    {
+        $requireables = [
+            'campaigns' => Campaign::class,
+            'campaign-groups' => CampaignGroup::class,
+            'trips' => Trip::class,
+            'reservations' => Reservation::class
+        ];
+
+        if ($type == 'campaign-groups') {
+            return $requireables[$type]::whereUuid($id)->firstOrFail();
+        }
+
+        return $requireables[$type]::findOrFail($id);
     }
 }

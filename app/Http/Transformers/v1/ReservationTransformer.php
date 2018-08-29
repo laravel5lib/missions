@@ -22,7 +22,7 @@ class ReservationTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'user', 'trip', 'rep', 'deadlines', 'priceables',
         'requirements', 'notes', 'todos', 'companions',
-        'fundraisers', 'dues', 'fund', 'transports', 'squads'
+        'fundraisers', 'fund', 'transports', 'squads'
     ];
 
     /**
@@ -89,29 +89,6 @@ class ReservationTransformer extends TransformerAbstract
         }
 
         return $data;
-    }
-
-    /**
-     * Include Dues
-     *
-     * @param Reservation $reservation
-     * @param ParamBag|null $params ( i.e dues:status(active|extended) )
-     * @return \League\Fractal\Resource\Collection
-     */
-    public function includeDues(Reservation $reservation, ParamBag $params = null)
-    {
-        // Optional params validation
-        if (! is_null($params)) {
-            $this->validateParams($params);
-
-            $dues = $reservation->dues->filter(function ($value) use ($params) {
-                return in_array($value->getStatus(), $params->get('status'));
-            });
-        } else {
-            $dues = $reservation->dues;
-        }
-
-        return $this->collection($dues, new DueTransformer);
     }
 
     /**

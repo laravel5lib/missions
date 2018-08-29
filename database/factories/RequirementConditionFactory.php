@@ -4,7 +4,6 @@ use App\Utilities\v1\TeamRole;
 
 $factory->define(App\Models\v1\RequirementCondition::class, function (Faker\Generator $faker) {
     return [
-        'id'              => $faker->unique()->uuid,
         'requirement_id'  => $faker->uuid,
         'type'            => $faker->randomElement(config('requirements.conditions.types')),
         'operator'        => $faker->randomElement(config('requirements.conditions.operators')),

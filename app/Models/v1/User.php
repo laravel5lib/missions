@@ -704,50 +704,6 @@ class User extends Authenticatable
         return $accolade->items;
     }
 
-    public function upcomingPayments()
-    {
-        $dues = Due::whereIn(
-            'payable_id',
-            $this->reservations()->current()->pluck('id')->toArray()
-        )->where('payable_type', 'reservations')
-         ->withBalance()
-         ->sortRecent()
-         ->get();
-
-        return $dues;
-    }
-
-    public function outstandingRequirements()
-    {
-        $requirements = $this->reservations()
-             ->current()
-             ->with('requirements')
-             ->get()
-             ->pluck('requirements')
-             ->flatten()
-             ->reject(function ($item) {
-                 return $item->status == 'complete';
-             })
-             ->sortBy('due_at');
-
-        return $requirements;
-    }
-
-    public function recentDonations()
-    {
-        $donations = $this->reservations()
-            ->current()
-            ->with('fund.donations')
-            ->get()
-            ->pluck('donations')
-            ->flatten()
-            ->sortBy('created_at')
-            ->take(5);
-
-
-        return $donations;
-    }
-
     public function withAvailableRegions()
     {
         $reservations = $this->where('id', $this->id)->with(['reservations' => function ($query) {

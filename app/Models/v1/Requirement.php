@@ -3,7 +3,10 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use App\Models\v1\Trip;
+use App\RequirementRules;
 use EloquentFilter\Filterable;
+use App\Models\v1\CampaignGroup;
 use Illuminate\Database\Eloquent\Model;
 
 class Requirement extends Model
@@ -22,7 +25,7 @@ class Requirement extends Model
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $fillable = ['name', 'short_desc', 'document_type', 'requester_id', 'requester_type', 'due_at', 'rules'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -33,13 +36,7 @@ class Requirement extends Model
         'created_at', 'updated_at', 'deleted_at', 'due_at'
     ];
 
-    /**
-     * All of the relationships to be touched.
-     * Update the parent's timestamp.
-     *
-     * @var array
-     */
-    protected $touches = ['reservations'];
+    protected $casts = ['rules' => 'array'];
 
     /**
      * Indicates if the model should be timestamped.
@@ -59,25 +56,50 @@ class Requirement extends Model
     }
 
     /**
+     * Get all the groups assigned to this requirement.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function groups()
+    {
+        return $this->morphedByMany(CampaignGroup::class, 'requireable', 'requireables', 'requirement_id', 'requireable_id', 'id', 'uuid');
+    }
+
+    /**
+     * Get all the groups assigned to this requirement.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function trips()
+    {
+        return $this->morphedByMany(Trip::class, 'requireable');
+    }
+
+    /**
      * Get all the requirement's reservations
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function reservations()
     {
-        return $this->belongsToMany(Reservation::class, 'reservation_requirements')
-                    ->withPivot('grace_period', 'status', 'document_type', 'id')
-                    ->withTrashed()
-                    ->withTimestamps();
+        return $this->morphedByMany(Reservation::class, 'requireable');
     }
 
     /**
-     * Get the requirement's conditions
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Scope query to requirements belonging to a campaign.
+     * 
+     * @param  Illuminate\Database\Eloquent\Builder $query 
+     * @param  String $id
+     * @return Illuminate\Database\Eloquent\Builder
      */
-    public function conditions()
+    public function scopeCampaignId($query, $id)
     {
-        return $this->hasMany(RequirementCondition::class);
+        return $query->whereRequesterType('campaigns')->whereRequesterId($id);
+    }
+
+    public function isCustom($type, $id)
+    {
+        return $this->requester_id === $id 
+            && $this->requester_type === $type;
     }
 }

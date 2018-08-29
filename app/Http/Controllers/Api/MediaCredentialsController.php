@@ -4,20 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
-use App\Models\v1\Credential;
+use App\Models\v1\MediaCredential as Credential;
+use Spatie\QueryBuilder\Filter;
 use App\Http\Controllers\Controller;
+use Spatie\QueryBuilder\QueryBuilder;
+use App\Http\Resources\CredentialResource;
 use App\Http\Requests\v1\MediaCredentialRequest;
-use App\Http\Transformers\v1\CredentialTransformer;
 
 class MediaCredentialsController extends Controller
 {
-    private $credential;
-
-    public function __construct(Credential $credential)
-    {
-        $this->credential = $credential;
-    }
-
     /**
      * Get a list of media credentials
      *
@@ -25,12 +20,12 @@ class MediaCredentialsController extends Controller
      */
     public function index(Request $request)
     {
-        $credentials = $this->credential
-                           ->media()
-                           ->filter($request->all())
-                           ->paginate($request->get('per_page', 10));
+        $credentials = QueryBuilder::for(Credential::media())
+            ->allowedFilters(['applicant_name', Filter::exact('user_id'), Filter::scope('managed_by')])
+            ->allowedIncludes(['user'])
+            ->paginate($request->get('per_page', 10));
 
-        return $this->response->paginator($credentials, new CredentialTransformer);
+        return CredentialResource::collection($credentials);
     }
 
     /**
@@ -41,9 +36,9 @@ class MediaCredentialsController extends Controller
      */
     public function show($id)
     {
-        $credential = $this->credential->media()->findOrFail($id);
+        $credential = Credential::media()->with(['user'])->findOrFail($id);
 
-        return $this->response->item($credential, new CredentialTransformer);
+        return new CredentialResource($credential);
     }
 
     /**
@@ -54,16 +49,19 @@ class MediaCredentialsController extends Controller
      */
     public function store(MediaCredentialRequest $request)
     {
-        $credential = $this->credential->create([
-            'type' => 'media',
-            'holder_id' => $request->get('holder_id'),
-            'holder_type' => $request->get('holder_type'),
-            'applicant_name' => $request->get('applicant_name'),
-            'content' => $request->get('content'),
-            'expired_at' => $request->get('expired_at')
-        ]);
+        $credential = Credential::create(
+            $request->merge(['type' => 'media'])->all()
+        );
 
-        return $this->response->item($credential, new CredentialTransformer);
+        $credential->attachToReservation(
+            $request->input('reservation_id')
+        );
+
+        if ($request->has('upload_ids')) {
+            $credential->uploads()->sync($request->get('upload_ids'));
+        }
+
+        return new CredentialResource($credential);
     }
 
     /**
@@ -75,18 +73,17 @@ class MediaCredentialsController extends Controller
      */
     public function update(MediaCredentialRequest $request, $id)
     {
-        $credential = $this->credential->media()->findOrFail($id);
+        $credential = Credential::media()->findOrFail($id);
 
-        $credential->update([
-            'type' => 'media',
-            'holder_id' => $request->get('holder_id', $credential->holder_id),
-            'holder_type' => $request->get('holder_type', $credential->holder_type),
-            'applicant_name' => $request->get('applicant_name', $credential->applicant_name),
-            'content' => $request->get('content', $credential->content),
-            'expired_at' => $request->get('expired_at', $credential->expired_at)
-        ]);
+        $credential->update($request->merge(['type' => 'media'])->all());
 
-        return $this->response->item($credential, new CredentialTransformer);
+        $credential->attachToReservation($request->input('reservation_id'));
+
+        if ($request->has('upload_ids')) {
+            $credential->uploads()->sync($request->get('upload_ids'));
+        }
+
+        return new CredentialResource($credential);
     }
 
     /**
@@ -97,10 +94,10 @@ class MediaCredentialsController extends Controller
      */
     public function destroy($id)
     {
-        $credential = $this->credential->media()->findOrFail($id);
+        $credential = Credential::media()->findOrFail($id);
 
         $credential->delete();
 
-        return $this->response->noContent();
+        return response()->json([], 204);
     }
 }

@@ -34,14 +34,14 @@ class Trip extends TripModel
                 Filter::scope('public'),
                 Filter::scope('published')
             )
-            ->allowedIncludes(['tags', 'group', 'priceables.cost', 'priceables.payments', 'campaign', 'requirements'])
+            ->allowedIncludes(['tags', 'group', 'priceables.cost', 'priceables.payments', 'campaign', 'requireables'])
             ->withCount('reservations');
     }
 
     public static function getById($id)
     {
         return QueryBuilder::for(static::class)
-            ->with(['tags', 'group', 'priceables.cost', 'priceables.payments', 'campaign', 'requirements'])
+            ->allowedIncludes(['tags', 'group', 'priceables.cost', 'priceables.payments', 'campaign', 'requireables'])
             ->withCount('reservations')
             ->findOrFail($id);
     }

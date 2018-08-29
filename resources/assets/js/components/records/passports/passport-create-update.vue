@@ -20,12 +20,6 @@
                         <input type="text" class="form-control" id="given_names" v-model="given_names"
                                placeholder="Given Names" name="givennames" v-validate="'required|min:1|max:100'"
                                maxlength="150" minlength="1" required>
-                        <!--<div class="errors-block"></div>-->
-                        <!--<span v-if="errors.has('givennames')" class="help-block">
-                            &lt;!&ndash;<span class="help-block">
-
-                            </span>&ndash;&gt;
-                        </span>-->
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -54,10 +48,6 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <date-picker :has-error= "errors.has('expires')" v-model="expires_at" :view-format="['YYYY-MM-DD', false, true]" type="date" name="expires" v-validate="'required'"></date-picker>
-                            <!--<input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
-                                   name="expires" v-validate="'required'" required>-->
-                            <!--<span v-if="attemptSubmit" class="help-block">
-                        </span>-->
                         </div>
                     </div>
                 </div>
@@ -67,18 +57,12 @@
                 <div class="col-sm-12">
                     <label for="birth" class="control-label">Nationality</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="birth" v-model="birthCountryObj" :options="UTILITIES.countries" label="name" name="birth" v-validate="'required'"></v-select>
-                    <!--<select hidden name="birth" id="birth" class="hidden" v-model="birth_country" v-validate="'required'">
-                        <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
-                    </select>-->
                 </div>
             </div>
             <div class="form-group" v-error-handler="{ value: citizenship, handle: 'citizenship', messages: { req: 'Please select country of citizenship.'} }">
                 <div class="col-sm-12">
                     <label for="citizenship" class="control-label">Citizenship</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="citizenshipObj" :options="UTILITIES.countries" label="name" name="citizenship" v-validate="'required'"></v-select>
-                    <!--<select hidden name="citizenship" id="citizenship" class="hidden" v-model="citizenship" v-validate="'required'">
-                        <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
-                    </select>-->
                 </div>
             </div>
             <div class="row">
@@ -106,9 +90,8 @@
 
             <div class="form-group">
                 <div class="col-sm-12 text-center">
-                    <a v-if="!isUpdate" :href="'/' + firstUrlSegment + '/records/passports'" class="btn btn-default">Cancel</a>
+                    <a @click="forceBack" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit" class="btn btn-primary">Create</a>
-                    <a v-if="isUpdate" @click="back" class="btn btn-default">Cancel</a>
                     <a v-if="isUpdate" @click="update" class="btn btn-primary">Update</a>
                 </div>
             </div>
@@ -142,6 +125,14 @@
             forAdmin: {
                 type: Boolean,
                 default: false
+            },
+            reservationId: {
+                type: String,
+                default: null
+            },
+            requirementId: {
+                type: String,
+                default: null
             }
         },
         data(){
@@ -150,8 +141,6 @@
                 surname: '',
                 number: '',
                 expires_at: null,
-//                birth_country: null,
-//                citizenship: null,
                 upload_id: null,
                 usersArr: [],
                 userObj: null,
@@ -202,7 +191,12 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = `/${this.firstUrlSegment}/records/passports/${this.id}`;
+
+                if (this.reservationId && this.requirementId) {
+                    window.location.href = `/${this.firstUrlSegment}/reservations/${this.reservationId}/requirements/${this.requirementId}`;
+                } else {
+                    window.location.href = `/${this.firstUrlSegment}/records/passports/${this.id}`;
+                }
             },
             forceBack(){
                 return this.back(true);
@@ -222,11 +216,19 @@
                         citizenship: this.citizenship,
                         upload_id: this.upload_id,
                         user_id: this.user_id,
+                        requirement_id: this.requirementId,
+                        reservation_id: this.reservationId
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Passport created.');
                         let that = this;
                         setTimeout(() =>  {
-                            window.location.href = '/' + that.firstUrlSegment + '/records/passports/' + resp.data.data.id;
+
+                            if (that.reservationId && that.requirementId) {
+                                window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                            } else {
+                                window.location.href = '/' + that.firstUrlSegment + '/records/passports/' + resp.data.data.id;
+                            }
+
                         }, 1000);
                     }, (error) =>  {
                         this.errors = error.data.errors;
@@ -249,11 +251,19 @@
                         citizenship: this.citizenship,
                         upload_id: this.upload_id,
                         user_id: this.user_id,
+                        requirement_id: this.requirementId,
+                        reservation_id: this.reservationId
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(() =>  {
-                            window.location.href = '/' + that.firstUrlSegment + '/records/passports/' + that.id;
+
+                            if (that.reservationId && that.requirementId) {
+                                window.location.href = `/${that.firstUrlSegment}/reservations/${that.reservationId}/requirements/${that.requirementId}`;
+                            } else {
+                                window.location.href = '/' + that.firstUrlSegment + '/records/passports/' + that.id;
+                            }
+
                         }, 1000);
                     }, (error) =>  {
                         this.errors = error.data.errors;

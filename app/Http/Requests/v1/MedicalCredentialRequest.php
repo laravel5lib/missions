@@ -23,24 +23,20 @@ class MedicalCredentialRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
-            'holder_id' => 'required|string',
-            'holder_type' => 'required|in:users,reservations',
-            'applicant_name' => 'required|string|max:255',
-            'content' => 'required|array',
-            'expired_at' => 'date'
-        ];
-
-        if ($this->isMethod('put')) {
-            $rules = [
-                'holder_id' => 'sometimes|required|string',
-                'holder_type' => 'sometimes|required|in:users,reservations',
-                'applicant_name' => 'sometimes|required|string|max:255',
-                'content' => 'sometimes|required|array',
-                'expired_at' => 'date'
+        if ($this->isMethod('post')) {
+            return [
+                'user_id' => 'required|exists:users,id',
+                'applicant_name' => 'required|string|max:255',
+                'content' => 'required|array',
+                'expired_at' => 'nullable|date'
             ];
         }
 
-        return $rules;
+        return [
+            'user_id' => 'sometimes|required|exists:users,id',
+            'applicant_name' => 'sometimes|required|string|max:255',
+            'content' => 'sometimes|required|array',
+            'expired_at' => 'nullable|date'
+        ];
     }
 }

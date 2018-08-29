@@ -8,8 +8,10 @@ use App\Models\v1\Price;
 use App\Models\v1\Region;
 use App\Traits\Rewardable;
 use App\Traits\Promoteable;
+use App\Models\v1\Requirement;
 use EloquentFilter\Filterable;
 use App\Models\v1\TripInterest;
+use App\Traits\HasRequirements;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\Models\Media;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +21,7 @@ use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
 class Campaign extends Model implements HasMedia
 {
-    use SoftDeletes, Filterable, UuidForKey, Promoteable, HasMediaTrait;
+    use SoftDeletes, Filterable, UuidForKey, Promoteable, HasMediaTrait, HasRequirements;
 
     /**
      * The table associated with the model.

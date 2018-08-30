@@ -20,7 +20,7 @@ class ReservationRequirementController extends Controller
         $complete = $requirements->where('pivot.status', 'complete')->count();
         $reviewing = $requirements->where('pivot.status', 'reviewing')->count();
         $attention = $requirements->where('pivot.status', 'attention')->count();
-        $percentage = ($complete/$total)*100; 
+        $percentage = $total > 0 ? ($complete/$total)*100 : 0;
 
         return view(
             'dashboard.reservations.requirements.index', 

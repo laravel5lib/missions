@@ -222,6 +222,7 @@ Vue.component('group-edit', require('./components/GroupEdit.vue'));
 Vue.component('travel-requirement-form', require('./components/TravelRequirementForm.vue'));
 Vue.component('requirements-manager', require('./components/RequirementsManager.vue'));
 Vue.component('travel-document', require('./components/TravelDocument.vue'));
+Vue.component('travel-documents-list', require('./components/TravelDocumentsList.vue'));
 Vue.component('bulk-add-requirement-modal', require('./components/BulkAddRequirementModal.vue'));
 Vue.component('tag-list', require('./components/TagList.vue'));
 Vue.component('admin-transactions-list', require('./components/AdminTransactionList.vue'));

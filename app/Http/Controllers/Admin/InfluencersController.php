@@ -17,7 +17,7 @@ class InfluencersController extends Controller
 
         $this->seo()->setTitle('Add Influencer Application');
 
-        return view('admin.records.influencers.create');
+        return view('admin.records.influencer-applications.create');
     }
 
     public function show(InfluencerApplication $influencer)
@@ -26,7 +26,7 @@ class InfluencersController extends Controller
 
         $this->seo()->setTitle($influencer->author_name . ' - Influencer Application');
 
-        return view('admin.records.influencers.show')->with('essay', $influencer);
+        return view('admin.records.influencer-applications.show')->with('essay', $influencer);
     }
 
     public function edit(InfluencerApplication $influencer)
@@ -35,6 +35,6 @@ class InfluencersController extends Controller
 
         $this->seo()->setTitle('Edit Influencer Application');
 
-        return view('admin.records.influencers.edit')->with('id', $influencer->id);
+        return view('admin.records.influencer-applications.edit')->with('id', $influencer->id);
     }
 }

@@ -78,6 +78,10 @@ Vue.filter('underscoreToSpace', (value) => {
     return value.replace(/_/g, ' ');
 });
 
+Vue.filter('dashToSpace', (value) => {
+    return value.replace(/-/g, ' ');
+});
+
 Vue.filter('capitalize', (string) => {
     if (!string) return string;
     if (!_.isString(string)) string = string.toString();

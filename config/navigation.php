@@ -63,7 +63,7 @@ return [
             ],
             [
                 'label' => 'Influencer Applications',
-                'url' => 'influencers'
+                'url' => 'influencer-applications'
             ]
         ],
         'project' => [
@@ -214,7 +214,7 @@ return [
             ],
             [
                 'label' => 'Influencer Applications',
-                'url' => 'influencers',
+                'url' => 'influencer-applications',
                 'action' => 'view',
                 'policy' => 'App\Models\v1\Essay'
             ]

@@ -15,7 +15,7 @@ class InfluencersController extends Controller
     {
         $this->seo()->setTitle('Add Influencer Application');
 
-        return view('dashboard.influencers.create');
+        return view('dashboard.influencer-applications.create');
     }
 
     public function show($id)
@@ -24,13 +24,13 @@ class InfluencersController extends Controller
 
          $this->seo()->setTitle($essay->author_name . ' - Influencer Application');
 
-        return view('dashboard.influencers.show', compact('essay'));
+        return view('dashboard.influencer-applications.show', compact('essay'));
     }
 
     public function edit($id)
     {
          $this->seo()->setTitle('Edit Influencer Application');
 
-        return view('dashboard.influencers.edit', compact('id'));
+        return view('dashboard.influencer-applications.edit', compact('id'));
     }
 }

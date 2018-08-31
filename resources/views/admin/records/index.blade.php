@@ -2,7 +2,13 @@
 
 @section('content')
 
-    @yield('header')
+    @breadcrumbs(['links' => [
+        'admin' => 'Dashboard',
+        '/admin/records/' => 'Records',
+        'active' => ucwords($tab)
+    ]])
+    @endbreadcrumbs
+
     <hr class="divider inv lg">
 
     <div class="container">
@@ -13,7 +19,11 @@
                 ])
             </div>
             <div class="col-sm-9">
-                @yield('tab')
+                <travel-documents-list 
+                    url="{{ $tab }}"
+                    type="{{ $tab }}"
+                ></travel-documents-list>
+                <hr class="divider inv lg">
             </div>
         </div>
     </div>

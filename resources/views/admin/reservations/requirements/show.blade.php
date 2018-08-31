@@ -4,9 +4,10 @@
 
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
-        'admin/reservations' => 'Reservations',
-        'admin/reservations/'.$reservation->id => $reservation->name,
-        'admin/reservations/'.$reservation->id.'/requirements' => 'Requirements',
+        'admin/campaigns' => 'Campaigns',
+        '/admin/campaigns/'.$reservation->trip->campaign->id.'/groups' => $reservation->trip->campaign->name.' - '.country($reservation->trip->country_code),
+        '/admin/campaigns/'.$reservation->trip->campaign->id.'/reservations/missionaries' => 'Reservations',
+        '/admin/reservations/'.$reservation->id.'/requirements' => $reservation->name,
         'active' => $requirement->name
     ]])
     @endbreadcrumbs

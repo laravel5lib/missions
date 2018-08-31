@@ -53,7 +53,7 @@ class NoteTransformer extends TransformerAbstract
      */
     public function includeUser(Note $note)
     {
-        $user = $note->user;
+        $user = $note->user ?? return null;
 
         return $this->item($user, new UserTransformer);
     }

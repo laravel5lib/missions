@@ -26,7 +26,6 @@
         </div>
         <div class="panel-body" v-if="!documents.length">
             <p class="lead text-center text-muted">No {{ type | underscoreToSpace }} found</p>
-            <hr class="divider">
         </div>
         <div class="panel-footer" v-if="pagination.total > pagination.per_page">
             <pager :pagination="pagination" :callback="changePage"></pager>

@@ -50,7 +50,7 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
         $title = title_case(str_replace("-", " ", $tab));
         SEOMeta::setTitle($title);
 
-        return view('dashboard.'.$tab.'.index', compact('tab'));
+        return view('dashboard.records.index', compact('tab'));
     });
     $this->resource('records/passports', 'Dashboard\PassportsController', [
         'except' => ['index', 'destroy']

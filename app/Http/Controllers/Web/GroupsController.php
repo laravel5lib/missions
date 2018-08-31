@@ -52,7 +52,7 @@ class GroupsController extends Controller
                ->pluck('slugable_id')
                ->first();
 
-        $group = $this->api->get('/groups/'.$id);
+        $group = Group::findOrFail($id);
 
         $this->seo()->setTitle('Sign up with ' . $group->name);
 

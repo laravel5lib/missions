@@ -6,7 +6,7 @@
                 {!! ucfirst(str_replace('_', ' ', $key)) !!}
             </div>
             <div class="col-xs-8">
-                @if(is_callable($value))
+                @if(is_object($value) && ($value instanceof Closure))
                     {{ $value() }}
                 @elseif(is_bool($value))
                     {{ $value ? 'Yes' : 'No' }}

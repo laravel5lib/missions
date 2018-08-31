@@ -128,9 +128,6 @@ class ReservationsController extends Controller
             'trip_id' => $request->get('trip_id', $reservation->trip_id)
         ]);
 
-        $reservation->syncRequirements($request->get('requirements'));
-        $reservation->syncDeadlines($request->get('deadlines'));
-
         return $this->response->item($reservation, new ReservationTransformer);
     }
 

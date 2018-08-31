@@ -138,7 +138,7 @@ $this->get('/1n1d19-interest', function () {
 */
 
 Auth::routes();
-Route::get('/verify/email', 'Auth\VerifyEmailController@verify')->name('verify.email');
+Route::middleware('auth')->get('/verify/email', 'Auth\VerifyEmailController@verify')->name('verify.email');
 Route::post('/verify/email/resend', 'Auth\VerifyEmailController@sendEmail')->name('verify.email.resend');
 Route::get('/verify/continue/{userId}', 'Auth\VerifyEmailController@continue')->name('verify.email.continue');
 Route::get('/verify/email/{token}', 'Auth\VerifyEmailController@confirm')->name('verify.email.token');

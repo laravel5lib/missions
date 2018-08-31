@@ -143,15 +143,6 @@ Vue.component('representative-edit-form', require('./components/representatives/
 /**
  * Records Components
  */
-Vue.component('records-list', require('./components/records/records-list.vue'));
-Vue.component('visas-list', require('./components/records/visas/visas-list.vue'));
-Vue.component('medicals-list', require('./components/records/medicals/medicals-list.vue'));
-Vue.component('medical-credentials-list', require('./components/records/credentials/medical-credentials-list.vue'));
-Vue.component('media-credentials-list', require('./components/records/credentials/media-credentials-list.vue'));
-Vue.component('passports-list', require('./components/records/passports/passports-list.vue'));
-Vue.component('essays-list', require('./components/records/essays/essays-list.vue'));
-Vue.component('influencer-questionnaires-list', require('./components/records/influencers/influencer-questionnaires-list.vue'));
-Vue.component('referrals-list', require('./components/records/referrals/referrals-list.vue'));
 Vue.component('passport-create-update', require('./components/records/passports/passport-create-update.vue'));
 Vue.component('visa-create-update', require('./components/records/visas/visa-create-update.vue'));
 Vue.component('medical-create-update', require('./components/records/medicals/medical-create-update.vue'));

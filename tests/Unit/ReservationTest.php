@@ -7,6 +7,7 @@ use App\Models\v1\Cost;
 use App\Models\v1\Trip;
 use App\Models\v1\Price;
 use App\Models\v1\Payment;
+use App\Models\v1\Requirement;
 use App\Models\v1\Reservation;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,6 +15,30 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class ReservationTest extends TestCase
 {
     use RefreshDatabase;
+
+    /** @test */
+    public function add_requirements_based_on_rules()
+    {
+        $reservation = factory(Reservation::class)->create([
+            'birthday' => today()->subYears(50)->toDateString(),
+            'desired_role' => 'MEDI'
+        ]);
+        $mediaCredential = factory(Requirement::class, 'media-credentials')->create([
+            'rules' => ['roles' => ['MEDI']],
+            'requester_id' => $reservation->trip->id
+        ]);
+        $minorRelease = factory(Requirement::class)->create([
+            'rules' => ['age' => 18],
+            'requester_id' => $reservation->trip->id
+        ]);
+
+        $reservation->addRequirementToReservation($mediaCredential);
+        $reservation->addRequirementToReservation($minorRelease);
+
+        $ids = $reservation->requireables->pluck('id')->toArray();
+        $this->assertContains($mediaCredential->id, $ids);
+        $this->assertNotContains($minorRelease->id, $ids);
+    }
 
     /** @test */
     public function adds_trip_prices_to_reservation()

@@ -4,7 +4,6 @@
 
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
-        '/admin/records/' => 'Records',
         'active' => ucwords($tab)
     ]])
     @endbreadcrumbs

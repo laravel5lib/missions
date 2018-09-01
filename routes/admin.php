@@ -125,36 +125,43 @@ Route::prefix('records')->group(function () {
         return view('admin.records.index', compact('tab'));
     });
 
+    Route::get('{tab}/{id}', function($tab, $id) {
+        SEOMeta::setTitle(
+            title_case(str_replace("-", " ", $tab))
+        );
+        return view('admin.records.show', compact('tab', 'id'));
+    });
+
     Route::resource('passports', 'PassportsController', [
-        'only' => ['create', 'show', 'edit']
+        'only' => ['create', 'edit']
     ]);
 
     Route::resource('visas', 'VisasController', [
-        'only' => ['create', 'show', 'edit']
+        'only' => ['create', 'edit']
     ]);
 
     Route::resource('essays', 'EssaysController', [
-        'only' => ['create', 'show', 'edit']
+        'only' => ['create', 'edit']
     ]);
 
     Route::resource('medical-releases', 'MedicalReleasesController', [
-        'only' => ['create', 'show', 'edit']
+        'only' => ['create', 'edit']
     ]);
 
     Route::resource('referrals', 'ReferralsController', [
-        'only' => ['create', 'show', 'edit']
+        'only' => ['create', 'edit']
     ]);
 
     Route::resource('medical-credentials', 'MedicalCredentialsController', [
-        'only' => ['create', 'show', 'edit']
+        'only' => ['create', 'edit']
     ]);
 
     Route::resource('media-credentials', 'MediaCredentialsController', [
-        'only' => ['create', 'show', 'edit']
+        'only' => ['create', 'edit']
     ]);
 
     Route::resource('influencer-applications', 'InfluencersController', [
-        'only' => ['create', 'show', 'edit']
+        'only' => ['create', 'edit']
     ]);
 });
 

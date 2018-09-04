@@ -52,29 +52,37 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
 
         return view('dashboard.records.index', compact('tab'));
     });
+
+    Route::get('records/{tab}/{id}', function($tab, $id) {
+        SEOMeta::setTitle(
+            title_case(str_replace("-", " ", $tab))
+        );
+        return view('dashboard.records.show', compact('tab', 'id'));
+    });
+
     $this->resource('records/passports', 'Dashboard\PassportsController', [
-        'except' => ['index', 'destroy']
+        'only' => ['create', 'edit']
     ]);
     $this->resource('records/visas', 'Dashboard\VisasController', [
-        'except' => ['index', 'destroy']
+        'only' => ['create', 'edit']
     ]);
     $this->resource('records/medical-releases', 'Dashboard\MedicalReleasesController', [
-        'except' => ['index', 'destroy']
+        'only' => ['create', 'edit']
     ]);
     $this->resource('records/medical-credentials', 'Dashboard\MedicalCredentialsController', [
-        'except' => ['index', 'destroy']
+        'only' => ['create', 'edit']
     ]);
     $this->resource('records/media-credentials', 'Dashboard\MediaCredentialsController', [
-        'except' => ['index', 'destroy']
+        'only' => ['create', 'edit']
     ]);
     $this->resource('records/essays', 'Dashboard\EssaysController', [
-        'except' => ['index', 'destroy']
+        'only' => ['create', 'edit']
     ]);
     $this->resource('records/influencer-applications', 'Dashboard\InfluencersController', [
-        'except' => ['index', 'destroy']
+        'only' => ['create', 'edit']
     ]);
     $this->resource('records/referrals', 'Dashboard\ReferralsController', [
-        'except' => ['index', 'destroy']
+        'only' => ['create', 'edit']
     ]);
 
     // Reservation Routes...
@@ -82,10 +90,6 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
     $this->get('reservations/{id}/requirements', 'Dashboard\ReservationRequirementController@index');
     $this->get('reservations/{id}/requirements/{requirement}', 'Dashboard\ReservationRequirementController@show');
     $this->get('reservations/{id}/{tab?}', 'Dashboard\ReservationsController@show');
-
-    // Project Routes...
-    // $this->get('projects', 'Dashboard\ProjectsController@index');
-    // $this->get('projects/{id}/{tab?}', 'Dashboard\ProjectsController@show');
 
     $this->get('/funds/{fund}/fundraisers/create', 'FundraisersController@create');
     $this->get('/fundraisers/{fundraiser}/edit', 'FundraisersController@edit');

@@ -18,15 +18,6 @@ class ReferralsController extends Controller
         return view('dashboard.referrals.create');
     }
 
-    public function show($id)
-    {
-        $referral = $this->api->get('referrals/' . $id);
-
-        $this->seo()->setTitle($referral->applicant_name . ' - Referral');
-
-        return view('dashboard.referrals.show', compact('referral'));
-    }
-
     public function edit($id)
     {
         $this->seo()->setTitle('Edit Referral');

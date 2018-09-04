@@ -18,15 +18,6 @@ class EssaysController extends Controller
         return view('dashboard.essays.create');
     }
 
-    public function show($id)
-    {
-        $essay = $this->api->get('essays/' . $id.'?include=uploads,user');
-
-        $this->seo()->setTitle($essay->author_name . ' - Testimony');
-
-        return view('dashboard.essays.show', compact('essay'));
-    }
-
     public function edit($id)
     {
         $this->seo()->setTitle('Edit Testimony');

@@ -18,15 +18,6 @@ class InfluencersController extends Controller
         return view('dashboard.influencer-applications.create');
     }
 
-    public function show($id)
-    {
-        $essay = $this->api->get('essays/' . $id);
-
-         $this->seo()->setTitle($essay->author_name . ' - Influencer Application');
-
-        return view('dashboard.influencer-applications.show', compact('essay'));
-    }
-
     public function edit($id)
     {
          $this->seo()->setTitle('Edit Influencer Application');

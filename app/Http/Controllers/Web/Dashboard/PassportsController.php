@@ -21,17 +21,6 @@ class PassportsController extends Controller
         return view('dashboard.passports.create');
     }
 
-    public function show($id)
-    {
-        $passport = Passport::findOrFail($id);
-
-        $this->authorize('view', $passport);
-
-        $this->seo()->setTitle($passport->given_names . ' ' . $passport->surname . ' - ' . 'Passport');
-
-        return view('dashboard.passports.show', compact('passport'));
-    }
-
     public function edit($id)
     {
         $passport = Passport::findOrFail($id);

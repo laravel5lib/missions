@@ -21,17 +21,6 @@ class VisasController extends Controller
         return view('dashboard.visas.create');
     }
 
-    public function show($id)
-    {
-        $visa = Visa::findOrFail($id);
-
-        $this->authorize('view', $visa);
-
-        $this->seo()->setTitle($visa->given_names . ' ' . $visa->surname .' - Visa');
-
-        return view('dashboard.visas.show', compact('visa'));
-    }
-
     public function edit($id)
     {
         $this->authorize('delete', Visa::class);

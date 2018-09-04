@@ -18,15 +18,6 @@ class MedicalReleasesController extends Controller
         return view('dashboard.medical-releases.create');
     }
 
-    public function show($id)
-    {
-        $release = $this->api->get('medical/releases/' . $id);
-
-        $this->seo()->setTitle($release->name . ' - Medical Release');
-
-        return view('dashboard.medical-releases.show', compact('release'));
-    }
-
     public function edit($id)
     {
         $this->seo()->setTitle('Edit Medical Release');

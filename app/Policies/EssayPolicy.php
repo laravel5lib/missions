@@ -15,15 +15,10 @@ class EssayPolicy extends BasePolicy
      * @param  \App\Models\v1\Essay  $essay
      * @return mixed
      */
-    public function view(User $user, Essay $essay = null)
+    public function view(User $user, Essay $essay)
     {
-        // has permission?
         if ($user->can('view_essays')) {
             return true;
-        }
-
-        if (! $essay) {
-            return false;
         }
 
         // is manager, facilitator, or owner?

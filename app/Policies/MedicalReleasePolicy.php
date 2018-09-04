@@ -15,15 +15,11 @@ class MedicalReleasePolicy extends BasePolicy
      * @param  \App\Models\v1\MedicalRelease  $medicalRelease
      * @return mixed
      */
-    public function view(User $user, MedicalRelease $medicalRelease = null)
+    public function view(User $user, MedicalRelease $medicalRelease)
     {
         // has permission?
         if ($user->can('view_medical_releases')) {
             return true;
-        }
-
-        if (! $medicalRelease) {
-            return false;
         }
 
         // is manager, facilitator, or owner?

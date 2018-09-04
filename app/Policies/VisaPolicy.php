@@ -15,15 +15,10 @@ class VisaPolicy extends BasePolicy
      * @param  \App\Models\v1\Visa  $visa
      * @return mixed
      */
-    public function view(User $user, Visa $visa = null)
+    public function view(User $user, Visa $visa)
     {
-        // has permission?
         if ($user->can('view_visas')) {
             return true;
-        }
-
-        if (! $visa) {
-            return false;
         }
 
         // is manager, facilitator, or owner?

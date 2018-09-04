@@ -46,19 +46,8 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
     $this->get('groups/{groupId}/rooms', 'Dashboard\GroupsController@rooms');
 
     // Records Routes...
-    $this->get('records/{tab?}', function ($tab = 'passports') {
-        $title = title_case(str_replace("-", " ", $tab));
-        SEOMeta::setTitle($title);
-
-        return view('dashboard.records.index', compact('tab'));
-    });
-
-    Route::get('records/{tab}/{id}', function($tab, $id) {
-        SEOMeta::setTitle(
-            title_case(str_replace("-", " ", $tab))
-        );
-        return view('dashboard.records.show', compact('tab', 'id'));
-    });
+    Route::get('records/{tab?}', 'Dashboard\DocumentController@index');
+    Route::get('records/{tab}/{id}', 'Dashboard\DocumentController@show');
 
     $this->resource('records/passports', 'Dashboard\PassportsController', [
         'only' => ['create', 'edit']

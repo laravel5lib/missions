@@ -19,15 +19,6 @@ class VisasController extends Controller
         return view('admin.records.visas.create');
     }
 
-    public function show(Visa $visa)
-    {
-        $this->authorize('view', $visa);
-
-        $this->seo()->setTitle($visa->given_names . ' ' . $visa->surname .' - Visa');
-
-        return view('admin.records.visas.show', compact('visa'));
-    }
-
     public function edit(Visa $visa)
     {
         $this->authorize('update', $visa);

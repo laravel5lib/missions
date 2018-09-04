@@ -19,15 +19,6 @@ class PassportsController extends Controller
         return view('admin.records.passports.create');
     }
 
-    public function show(Passport $passport)
-    {
-        $this->authorize('create', $passport);
-
-        $this->seo()->setTitle($passport->given_names . ' ' . $passport->surname . ' - Passport');
-
-        return view('admin.records.passports.show', compact('passport'));
-    }
-
     public function edit(Passport $passport)
     {
         $this->authorize('update', $passport);

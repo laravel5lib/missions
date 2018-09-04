@@ -20,15 +20,6 @@ class InfluencersController extends Controller
         return view('admin.records.influencer-applications.create');
     }
 
-    public function show(InfluencerApplication $influencer)
-    {
-        $this->authorize('view', $influencer);
-
-        $this->seo()->setTitle($influencer->author_name . ' - Influencer Application');
-
-        return view('admin.records.influencer-applications.show')->with('essay', $influencer);
-    }
-
     public function edit(InfluencerApplication $influencer)
     {
         $this->authorize('update', $influencer);

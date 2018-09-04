@@ -20,15 +20,6 @@ class EssaysController extends Controller
         return view('admin.records.essays.create');
     }
 
-    public function show(Essay $essay)
-    {
-        $this->authorize('view', $essay);
-
-        $this->seo()->setTitle($essay->author_name . ' - Testimony');
-
-        return view('admin.records.essays.show', compact('essay'));
-    }
-
     public function edit(Essay $essay)
     {
         $this->authorize('update', $essay);

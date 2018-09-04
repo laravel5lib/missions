@@ -19,15 +19,6 @@ class MedicalReleasesController extends Controller
         return view('admin.records.medical-releases.create');
     }
 
-    public function show(MedicalRelease $medicalRelease)
-    {
-        $this->authorize('view', $medicalRelease);
-
-        $this->seo()->setTitle($medicalRelease->name . ' - Medical Release');
-
-        return view('admin.records.medical-releases.show')->with(['release' => $medicalRelease]);
-    }
-
     public function edit(MedicalRelease $medicalRelease)
     {
         $this->authorize('update', $medicalRelease);

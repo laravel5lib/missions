@@ -37,7 +37,7 @@ class ViewDocumentTest extends TestCase
     protected $forms = [
         'airport-preferences'     => AirportPreference::class,
         'arrival-designations'    => ArrivalDesignation::class,
-        'minor-release'           => MinorRelease::class
+        'minor-releases'          => MinorRelease::class
     ];
 
     /** @test */

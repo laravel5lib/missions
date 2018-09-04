@@ -111,19 +111,8 @@ Route::resource('funds', 'FundsController');
 Route::resource('transactions', 'TransactionsController');
 
 Route::prefix('records')->group(function () {
-    Route::get('{tab?}', function ($tab = 'passports') {
-        $title = title_case(str_replace("-", " ", $tab));
-        SEOMeta::setTitle($title);
-
-        return view('admin.records.index', compact('tab'));
-    });
-
-    Route::get('{tab}/{id}', function($tab, $id) {
-        SEOMeta::setTitle(
-            title_case(str_replace("-", " ", $tab))
-        );
-        return view('admin.records.show', compact('tab', 'id'));
-    });
+    Route::get('{tab?}', 'DocumentController@index');
+    Route::get('{tab}/{id}', 'DocumentController@show');
 
     Route::resource('passports', 'PassportsController', [
         'only' => ['create', 'edit']

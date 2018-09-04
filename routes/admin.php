@@ -93,13 +93,6 @@ Route::get('/fundraisers/{fundraiser}/sharing', function(Fundraiser $fundraiser)
     return view('site.fundraisers.sharing', compact('fundraiser'));
 });
 
-Route::get('causes/{cause_id}/projects/create', 'ProjectsController@create');
-Route::get('causes/{cause_id}/initiatives/create', 'ProjectInitiativesController@create');
-Route::get('causes/{id}/{tab?}', 'ProjectCausesController@show')->where('tab', '.+');
-Route::resource('causes', 'ProjectCausesController');
-Route::get('initiatives/{id}', 'ProjectInitiativesController@show');
-Route::get('projects/{id}/{tab?}', 'ProjectsController@show');
-
 Route::resource('users', 'UsersController');
 Route::get('users/{id}/{tab?}', 'UsersController@show')->where('tab', 'details|permissions');
 

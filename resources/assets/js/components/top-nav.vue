@@ -33,7 +33,6 @@
 					<li><a href="/admin/users">People</a></li>
 					<li><a href="/admin/transactions">Donations</a></li>
 					<li><a href="/admin/groups">Organizations</a></li>
-					<li><a href="/admin/causes">Projects</a></li>
 					<li><a href="/admin/records">Travel Documents</a></li>
 					<li><a href="/admin/reports">Reports</a></li>
 				</template>

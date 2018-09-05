@@ -143,23 +143,6 @@ Vue.component('representative-edit-form', require('./components/representatives/
 /**
  * Records Components
  */
-Vue.component('records-list', require('./components/records/records-list.vue'));
-Vue.component('visas-list', require('./components/records/visas/visas-list.vue'));
-Vue.component('medicals-list', require('./components/records/medicals/medicals-list.vue'));
-Vue.component('medical-credentials-list', require('./components/records/credentials/medical-credentials-list.vue'));
-Vue.component('media-credentials-list', require('./components/records/credentials/media-credentials-list.vue'));
-Vue.component('passports-list', require('./components/records/passports/passports-list.vue'));
-Vue.component('essays-list', require('./components/records/essays/essays-list.vue'));
-Vue.component('influencer-questionnaires-list', require('./components/records/influencers/influencer-questionnaires-list.vue'));
-Vue.component('referrals-list', require('./components/records/referrals/referrals-list.vue'));
-Vue.component('passport-create-update', require('./components/records/passports/passport-create-update.vue'));
-Vue.component('visa-create-update', require('./components/records/visas/visa-create-update.vue'));
-Vue.component('medical-create-update', require('./components/records/medicals/medical-create-update.vue'));
-Vue.component('medical-credential-create-update', require('./components/records/credentials/medical-credential-create-update.vue'));
-Vue.component('media-credential-create-update', require('./components/records/credentials/media-credential-create-update.vue'));
-Vue.component('essay-create-update', require('./components/records/essays/essay-create-update.vue'));
-Vue.component('influencer-questionnaire-create-update', require('./components/records/influencers/influencer-questionnaire-create-update.vue'));
-Vue.component('referral-create-update', require('./components/records/referrals/referral-create-update.vue'));
 Vue.component('referral-response', require('./components/referrals/referral-response.vue'));
 Vue.component('airport-preference', require('./components/reservations/airport-preference.vue'));
 Vue.component('arrival-designation', require('./components/reservations/arrival-designation.vue'));
@@ -222,6 +205,9 @@ Vue.component('group-edit', require('./components/GroupEdit.vue'));
 Vue.component('travel-requirement-form', require('./components/TravelRequirementForm.vue'));
 Vue.component('requirements-manager', require('./components/RequirementsManager.vue'));
 Vue.component('travel-document', require('./components/TravelDocument.vue'));
+Vue.component('travel-document-detail', require('./components/TravelDocumentDetail.vue'));
+Vue.component('travel-documents-list', require('./components/TravelDocumentsList.vue'));
+Vue.component('travel-document-form', require('./components/TravelDocumentForm.vue'));
 Vue.component('bulk-add-requirement-modal', require('./components/BulkAddRequirementModal.vue'));
 Vue.component('tag-list', require('./components/TagList.vue'));
 Vue.component('admin-transactions-list', require('./components/AdminTransactionList.vue'));

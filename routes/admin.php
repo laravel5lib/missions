@@ -93,13 +93,6 @@ Route::get('/fundraisers/{fundraiser}/sharing', function(Fundraiser $fundraiser)
     return view('site.fundraisers.sharing', compact('fundraiser'));
 });
 
-Route::get('causes/{cause_id}/projects/create', 'ProjectsController@create');
-Route::get('causes/{cause_id}/initiatives/create', 'ProjectInitiativesController@create');
-Route::get('causes/{id}/{tab?}', 'ProjectCausesController@show')->where('tab', '.+');
-Route::resource('causes', 'ProjectCausesController');
-Route::get('initiatives/{id}', 'ProjectInitiativesController@show');
-Route::get('projects/{id}/{tab?}', 'ProjectsController@show');
-
 Route::resource('users', 'UsersController');
 Route::get('users/{id}/{tab?}', 'UsersController@show')->where('tab', 'details|permissions');
 
@@ -118,45 +111,10 @@ Route::resource('funds', 'FundsController');
 Route::resource('transactions', 'TransactionsController');
 
 Route::prefix('records')->group(function () {
-    Route::get('{tab?}', function ($tab = 'passports') {
-        return view('errors.503');
-        // $title = title_case(str_replace("-", " ", $tab));
-        // SEOMeta::setTitle($title);
-
-        // return view('admin.records.'.$tab.'.index', compact('tab'));
-    });
-
-    Route::resource('passports', 'PassportsController', [
-        'only' => ['create', 'show', 'edit']
-    ]);
-
-    Route::resource('visas', 'VisasController', [
-        'only' => ['create', 'show', 'edit']
-    ]);
-
-    Route::resource('essays', 'EssaysController', [
-        'only' => ['create', 'show', 'edit']
-    ]);
-
-    Route::resource('medical-releases', 'MedicalReleasesController', [
-        'only' => ['create', 'show', 'edit']
-    ]);
-
-    Route::resource('referrals', 'ReferralsController', [
-        'only' => ['create', 'show', 'edit']
-    ]);
-
-    Route::resource('medical-credentials', 'MedicalCredentialsController', [
-        'only' => ['create', 'show', 'edit']
-    ]);
-
-    Route::resource('media-credentials', 'MediaCredentialsController', [
-        'only' => ['create', 'show', 'edit']
-    ]);
-
-    Route::resource('influencer-applications', 'InfluencersController', [
-        'only' => ['create', 'show', 'edit']
-    ]);
+    Route::get('{tab?}', 'DocumentController@index');
+    Route::get('{tab}/create', 'DocumentController@create');
+    Route::get('{tab}/{id}', 'DocumentController@show');
+    Route::get('{tab}/{id}/edit', 'DocumentController@edit');
 });
 
 Route::get('reports', function () {

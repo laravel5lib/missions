@@ -434,27 +434,36 @@ class Reservation extends Model
     public function syncRequirements($requirements)
     {
         foreach($requirements as $requirement) {
-
-            if (isset($requirement->rules['roles'])) {
-
-                if (in_array($this->desired_role, $requirement->rules['roles'])) {
-                    $this->attachRequirementToModel($requirement->id);
-                }
-
-                return;
-            }
-
-            if (isset($requirement->rules['age'])) {
-
-                if ($this->age < $requirement->rules['age']) {
-                    $this->attachRequirementToModel($requirement->id);
-                }
-
-                return;
-            }
-
-            $this->attachRequirementToModel($requirement->id);
+            $this->addRequirementToReservation($requirement);
         }
+    }
+
+    /**
+     * Add a requirement to the reservation.
+     * 
+     * @param $requirement
+     */
+    public function addRequirementToReservation($requirement)
+    {
+        if (isset($requirement->rules['roles'])) {
+
+            if (in_array($this->desired_role, $requirement->rules['roles'])) {
+                $this->attachRequirementToModel($requirement->id);
+            }
+
+            return;
+        }
+
+        if (isset($requirement->rules['age'])) {
+
+            if ($this->age < $requirement->rules['age']) {
+                $this->attachRequirementToModel($requirement->id);
+            }
+
+            return;
+        }
+
+        $this->attachRequirementToModel($requirement->id);
     }
 
     /**

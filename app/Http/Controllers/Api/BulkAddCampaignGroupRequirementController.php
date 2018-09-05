@@ -26,7 +26,7 @@ class BulkAddCampaignGroupRequirementController extends Controller
 
                 if (request()->reservations) {
                     $trip->reservations->each(function ($reservation) use ($requirement) {
-                        $reservation->addRequirement(['requirement_id' => $requirement->id]);
+                        $reservation->addRequirementToReservation($requirement);
                     });
                 }
             });

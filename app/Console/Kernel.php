@@ -21,10 +21,7 @@ class Kernel extends ConsoleKernel
         Commands\UsePromoCode::class, //Commands/PromoCodes/UseCode
         Commands\AddRoleToTrips::class, //Commands/Roles/Add
         Commands\AddTodoToTrips::class, //Commands/Tasks/Add
-        Commands\AddRequirementToTrips::class, //Commands/Requirements/Add
         Commands\ArchiveOldFunds::class, //Commands/Funds/Archive
-        Commands\Requirements\Add::class,
-        Commands\Requirements\Remove::class,
         Commands\Utilities\UpdateRoomingPlansToMultiGroups::class,
         Commands\Utilities\ExportReservationProfilePics::class,
         \Bugsnag\BugsnagLaravel\Commands\DeployCommand::class,

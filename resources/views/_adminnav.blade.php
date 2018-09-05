@@ -32,9 +32,6 @@
               <li class="{{ in_array(request()->segment(2), ['records']) ? 'active' : '' }}">
                 <a href="{{ url('/admin/records/passports') }}">Travel Documents</a>
               </li>
-              <li class="{{ in_array(request()->segment(2), ['causes']) ? 'active' : '' }}">
-                <a href="{{ url('/admin/causes') }}">Projects</a>
-              </li>
               <li role="separator" class="divider"></li>
               <li class="{{ in_array(request()->segment(2), ['reports']) ? 'active' : '' }}">
                 <a href="{{ url('/admin/reports') }}">Reports</a>

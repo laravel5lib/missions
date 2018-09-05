@@ -1,5 +1,10 @@
 <template >
-    <div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5 v-if="isUpdate">Edit Visa</h5>
+            <h5 v-else>New Visa</h5>
+        </div>
+        <div class="panel-body">
         <form id="CreateUpdateVisa" class="form-horizontal" novalidate>
             <spinner ref="spinner" global size="sm" text="Loading"></spinner>
 
@@ -107,6 +112,7 @@
         <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
+        </div>
     </div>
 
 

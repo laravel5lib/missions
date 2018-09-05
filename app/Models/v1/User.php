@@ -777,7 +777,7 @@ class User extends Authenticatable
         $class = get_class($resource);
 
         $resourceIds = (new $class)
-            ->filter(['manager' => $this->id])
+            ->managedBy($this->id)
             ->pluck('id')
             ->toArray();
 

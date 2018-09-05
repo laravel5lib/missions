@@ -14,15 +14,10 @@ class PassportPolicy extends BasePolicy
      * @param  \App\Models\v1\Passport  $passport
      * @return mixed
      */
-    public function view(User $user, Passport $passport = null)
+    public function view(User $user, Passport $passport)
     {
-        // has permission?
         if ($user->can('view_passports')) {
             return true;
-        }
-
-        if (! $passport) {
-            return false;
         }
 
         // is manager, facilitator, or owner?

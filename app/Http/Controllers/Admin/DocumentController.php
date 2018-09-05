@@ -53,7 +53,7 @@ class DocumentController extends Controller
     {
         $document = $this->document($tab, $id);
 
-        $this->authorize('view', $document);
+        $this->authorize('update', $document);
 
         SEOMeta::setTitle(
             'Edit '.title_case(str_replace("-", " ", $tab))

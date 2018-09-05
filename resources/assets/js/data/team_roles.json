@@ -226,5 +226,13 @@
     {
         "value": "PRAY",
         "label": "Prayer Team"
+    },
+    {
+        "value": "PHLE",
+        "label": "Phlebotomist"
+    },
+    {
+        "value": "STEC",
+        "label": "Surgical Tech"
     }
 ]

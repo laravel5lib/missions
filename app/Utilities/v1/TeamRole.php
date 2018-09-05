@@ -69,7 +69,9 @@ class TeamRole
         'RDIO' => 'Radiologist',
         'CRDO' => 'Cardiologist',
         'ANES' => 'Anesthesiologist',
-        'PRAY' => 'Prayer Team'
+        'PRAY' => 'Prayer Team',
+        'PHLE' => 'Phlebotomist',
+        'STEC' => 'Surgical Tech'
     ];
 
     /**

@@ -439,11 +439,13 @@
                     {value: 'RDIO', name: 'Radiologist', required: ['license', 'diploma', 'resume'], optional: []},
                     {value: 'CRDO', name: 'Cardiologist', required: ['license', 'diploma', 'resume'], optional: []},
                     {value: 'ANES', name: 'Anesthesiologist', required: ['license', 'diploma', 'resume'], optional: []},
-                    {value: 'PRAY', name: 'Prayer Team', required: [], optional: []}
+                    {value: 'PRAY', name: 'Prayer Team', required: [], optional: []},
+                    {value: 'PHLE', name: 'Phlebotomist', required: ['license', 'diploma'], optional: []}
+                    {value: 'STEC', name: 'Surgical Tech', required: ['license', 'diploma'], optional: []}
                 ],
                 certified: ['MDPF','RESP','PHYS','PHYA','PHAT','PHAA','PHAR','OTEC','ODOC','OAST','DIET','NUTR','LACT','NAST',
 	                'NTEC','NPRC','REGN','LPNN','MEDA','LVNN','HEDU','ETEC','MDFG','MDOC','DDOC','DENT','DENH','DENA',
-	                'CHRA','CHRO','RDIO','CRDO','ANES'],
+	                'CHRA','CHRO','RDIO','CRDO','ANES', 'PHLE', 'STEC'],
                 student: ['HEDU', 'MDSG', 'MDSN', 'MDSP', 'MDSD'],
                 content: [
                     { id: 'role', q: 'Medical role', a:'', type: 'select', options: []},

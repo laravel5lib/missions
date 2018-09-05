@@ -192,13 +192,13 @@ return [
                 'label' => 'Media Credentials',
                 'url' => 'media-credentials',
                 'action' => 'view',
-                'policy' => 'App\Models\v1\Credential'
+                'policy' => 'App\Models\v1\MediaCredential'
             ],
             [
                 'label' => 'Medical Credentials',
                 'url' => 'medical-credentials',
                 'action' => 'view',
-                'policy' => 'App\Models\v1\Credential'
+                'policy' => 'App\Models\v1\MedicalCredential'
             ],
             [
                 'label' => 'Referrals',
@@ -216,7 +216,7 @@ return [
                 'label' => 'Influencer Applications',
                 'url' => 'influencer-applications',
                 'action' => 'view',
-                'policy' => 'App\Models\v1\Essay'
+                'policy' => 'App\Models\v1\InfluencerApplication'
             ]
         ]
     ]

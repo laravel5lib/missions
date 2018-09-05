@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Dashboard;
 use App\Models\v1\Visa;
 use App\Models\v1\Essay;
 use App\Models\v1\Passport;
+use App\Models\v1\Referral;
 use Illuminate\Http\Request;
 use App\Models\v1\MinorRelease;
 use App\Models\v1\MedicalRelease;
@@ -74,7 +75,8 @@ class DocumentController extends Controller
             'medical-credentials'     => MedicalCredential::class,
             'airport-preferences'     => AirportPreference::class,
             'arrival-designations'    => ArrivalDesignation::class,
-            'minor-release'           => MinorRelease::class
+            'minor-release'           => MinorRelease::class,
+            'referrals'               => Referral::class
         ];
 
         return $documents[$type]::findOrFail($id);

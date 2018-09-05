@@ -4,13 +4,13 @@
 
     @breadcrumbs(['links' => [
         'admin' => 'Dashboard',
-        'active' => ucwords($tab)
+        'active' => ucwords(str_replace("-", " ", $tab))
     ]])
     @endbreadcrumbs
 
     <hr class="divider inv lg">
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-sm-3">
                 @include('admin.records.layouts.menu', [

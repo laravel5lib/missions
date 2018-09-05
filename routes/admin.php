@@ -112,39 +112,9 @@ Route::resource('transactions', 'TransactionsController');
 
 Route::prefix('records')->group(function () {
     Route::get('{tab?}', 'DocumentController@index');
+    Route::get('{tab}/create', 'DocumentController@create');
     Route::get('{tab}/{id}', 'DocumentController@show');
-
-    Route::resource('passports', 'PassportsController', [
-        'only' => ['create', 'edit']
-    ]);
-
-    Route::resource('visas', 'VisasController', [
-        'only' => ['create', 'edit']
-    ]);
-
-    Route::resource('essays', 'EssaysController', [
-        'only' => ['create', 'edit']
-    ]);
-
-    Route::resource('medical-releases', 'MedicalReleasesController', [
-        'only' => ['create', 'edit']
-    ]);
-
-    Route::resource('referrals', 'ReferralsController', [
-        'only' => ['create', 'edit']
-    ]);
-
-    Route::resource('medical-credentials', 'MedicalCredentialsController', [
-        'only' => ['create', 'edit']
-    ]);
-
-    Route::resource('media-credentials', 'MediaCredentialsController', [
-        'only' => ['create', 'edit']
-    ]);
-
-    Route::resource('influencer-applications', 'InfluencersController', [
-        'only' => ['create', 'edit']
-    ]);
+    Route::get('{tab}/{id}/edit', 'DocumentController@edit');
 });
 
 Route::get('reports', function () {

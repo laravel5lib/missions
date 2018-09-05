@@ -47,32 +47,9 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
 
     // Records Routes...
     Route::get('records/{tab?}', 'Dashboard\DocumentController@index');
+    Route::get('records/{tab}/create', 'Dashboard\DocumentController@create');
     Route::get('records/{tab}/{id}', 'Dashboard\DocumentController@show');
-
-    $this->resource('records/passports', 'Dashboard\PassportsController', [
-        'only' => ['create', 'edit']
-    ]);
-    $this->resource('records/visas', 'Dashboard\VisasController', [
-        'only' => ['create', 'edit']
-    ]);
-    $this->resource('records/medical-releases', 'Dashboard\MedicalReleasesController', [
-        'only' => ['create', 'edit']
-    ]);
-    $this->resource('records/medical-credentials', 'Dashboard\MedicalCredentialsController', [
-        'only' => ['create', 'edit']
-    ]);
-    $this->resource('records/media-credentials', 'Dashboard\MediaCredentialsController', [
-        'only' => ['create', 'edit']
-    ]);
-    $this->resource('records/essays', 'Dashboard\EssaysController', [
-        'only' => ['create', 'edit']
-    ]);
-    $this->resource('records/influencer-applications', 'Dashboard\InfluencersController', [
-        'only' => ['create', 'edit']
-    ]);
-    $this->resource('records/referrals', 'Dashboard\ReferralsController', [
-        'only' => ['create', 'edit']
-    ]);
+    Route::get('records/{tab}/{id}/edit', 'Dashboard\DocumentController@edit');
 
     // Reservation Routes...
     $this->get('reservations', 'Dashboard\ReservationsController@index');

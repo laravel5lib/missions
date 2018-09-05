@@ -7,9 +7,9 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-8">
-                    <h5>{{ docType | underscoreToSpace | titleCase }}</h5>
+                    <h5>{{ docType | underscoreToSpace | dashToSpace | titleCase }}</h5>
                 </div>
-                <div class="col-xs-4 text-right">
+                <div class="col-xs-4 text-right" v-if="canEdit">
                     <a :href="`/${firstUrlSegment}/records/${slug}/${travelDocument.id}/edit`" class="btn btn-sm btn-primary">Edit</a>
                 </div>
             </div>
@@ -56,6 +56,10 @@ export default {
         type: {
             type: String,
             required: true
+        },
+        canEdit: {
+            type: Boolean,
+            default: false
         }
     },
     

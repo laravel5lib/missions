@@ -1,7 +1,14 @@
 <template>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h5>{{ type | dashToSpace | titleCase }}</h5>
+            <div class="row">
+                <div class="col-xs-8">
+                    <h5>{{ type | dashToSpace | titleCase }}</h5>
+                </div>
+                <div class="col-xs-4 text-right">
+                    <a :href="`/${firstUrlSegment}/records/${slug}/create`" class="btn btn-primary btn-sm">Add New</a>
+                </div>
+            </div>
         </div>
         <div class="table-responsive" v-if="documents.length">
             <table class="table table-striped">
@@ -25,7 +32,7 @@
             </table>
         </div>
         <div class="panel-body" v-if="!documents.length">
-            <p class="lead text-center text-muted">No {{ type | underscoreToSpace }} found</p>
+            <p class="lead text-center text-muted">No {{ type | dashToSpace }} found</p>
         </div>
         <div class="panel-footer" v-if="pagination.total > pagination.per_page">
             <pager :pagination="pagination" :callback="changePage"></pager>
@@ -48,6 +55,10 @@ export default {
     type: {
         type: String,
         required: true
+    },
+    canCreate: {
+        type: Boolean,
+        default: false
     }
   },
 

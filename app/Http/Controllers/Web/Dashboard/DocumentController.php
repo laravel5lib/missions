@@ -29,13 +29,37 @@ class DocumentController extends Controller
 
     public function show($tab, $id)
     {
-        $this->authorize('view', $this->document($tab, $id));
+        $document = $this->document($tab, $id);
+
+        $this->authorize('view', $document);
 
         SEOMeta::setTitle(
             title_case(str_replace("-", " ", $tab))
         );
 
-        return view('dashboard.records.show', compact('tab', 'id'));
+        return view('dashboard.records.show', compact('tab', 'id', 'document'));
+    }
+
+    public function create($tab)
+    {
+        SEOMeta::setTitle(
+            'Create New '.title_case(str_replace("-", " ", $tab))
+        );
+
+        return view('dashboard.records.create', compact('tab'));
+    }
+
+    public function edit($tab, $id)
+    {
+        $document = $this->document($tab, $id);
+
+        $this->authorize('update', $document);
+
+        SEOMeta::setTitle(
+            'Edit '.title_case(str_replace("-", " ", $tab))
+        );
+
+        return view('dashboard.records.edit', compact('tab', 'id', 'document'));
     }
 
     private function document($type, $id)

@@ -440,7 +440,7 @@
                     {value: 'CRDO', name: 'Cardiologist', required: ['license', 'diploma', 'resume'], optional: []},
                     {value: 'ANES', name: 'Anesthesiologist', required: ['license', 'diploma', 'resume'], optional: []},
                     {value: 'PRAY', name: 'Prayer Team', required: [], optional: []},
-                    {value: 'PHLE', name: 'Phlebotomist', required: ['license', 'diploma'], optional: []}
+                    {value: 'PHLE', name: 'Phlebotomist', required: ['license', 'diploma'], optional: []},
                     {value: 'STEC', name: 'Surgical Tech', required: ['license', 'diploma'], optional: []}
                 ],
                 certified: ['MDPF','RESP','PHYS','PHYA','PHAT','PHAA','PHAR','OTEC','ODOC','OAST','DIET','NUTR','LACT','NAST',

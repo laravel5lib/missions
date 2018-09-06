@@ -91,6 +91,7 @@
     </div>
 </div>
 
+@can('update', $price->cost)
 @if($price->model_type === 'campaign-groups' && $price->model_id === $group->uuid)
 <hr class="divider inv">
 
@@ -113,9 +114,11 @@
     </div>
 </div>
 @endif
+@endcan
 
 <hr class="divider inv">
 
+@can('delete', $price->cost)
 <div class="container">
     <div class="row">
         <div class="col-md-4">
@@ -135,5 +138,6 @@
         </div>
     </div>
 </div>
+@endcan
 
 @endsection

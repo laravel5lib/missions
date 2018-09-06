@@ -58,24 +58,26 @@
     @endcomponent
 @endcomponent
 
-@component('panel')
-    @slot('title')
-        <h5>Remove Group</h5>
-    @endslot
-    @slot('body')
-        <div class="alert alert-warning">
-            <div class="row">
-                <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
-                <div class="col-xs-11">USE CAUTION! This is a destructive action that cannot be undone. This will disassociate the group from the campaign but also delete trips and drop reservations.</div>
+@can('delete', $group->organization)
+    @component('panel')
+        @slot('title')
+            <h5>Remove Group</h5>
+        @endslot
+        @slot('body')
+            <div class="alert alert-warning">
+                <div class="row">
+                    <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
+                    <div class="col-xs-11">USE CAUTION! This is a destructive action that cannot be undone. This will disassociate the group from the campaign but also delete trips and drop reservations.</div>
+                </div>
             </div>
-        </div>
-        <delete-form url="campaigns/{{ $group->campaign_id }}/groups/{{ $group->group_id }}" 
-                        redirect="/admin/campaigns/{{ $group->campaign_id }}/groups"
-                        label="Enter the group name to remove it"
-                        button="Remove"
-                        match-value="{{ $group->organization->name }}">
-        </delete-form>
-    @endslot
-@endcomponent
+            <delete-form url="campaigns/{{ $group->campaign_id }}/groups/{{ $group->group_id }}" 
+                            redirect="/admin/campaigns/{{ $group->campaign_id }}/groups"
+                            label="Enter the group name to remove it"
+                            button="Remove"
+                            match-value="{{ $group->organization->name }}">
+            </delete-form>
+        @endslot
+    @endcomponent
+@endcan
 
 @endsection

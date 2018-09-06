@@ -69,25 +69,27 @@
                     @endslot
                     @include('admin.partials._requirement')
                 @endcomponent
-
-                @component('panel')
-                    @slot('title')
-                        <h5>Delete Requirement</h5>
-                    @endslot
-                    @slot('body')
-                        <div class="alert alert-warning">
-                            <div class="row">
-                                <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
-                                <div class="col-xs-11">USE CAUTION! This is a destructive action that cannot be undone. The requirement will be deleted and removed from all groups, trips, and reservations it is assigned to.</div>
+                
+                @can('delete', $requirement)
+                    @component('panel')
+                        @slot('title')
+                            <h5>Delete Requirement</h5>
+                        @endslot
+                        @slot('body')
+                            <div class="alert alert-warning">
+                                <div class="row">
+                                    <div class="col-xs-1 text-center"><i class="fa fa-exclamation-circle fa-lg"></i></div>
+                                    <div class="col-xs-11">USE CAUTION! This is a destructive action that cannot be undone. The requirement will be deleted and removed from all groups, trips, and reservations it is assigned to.</div>
+                                </div>
                             </div>
-                        </div>
-                        <delete-form url="campaigns/{{ $campaign->id }}/requirements/{{ $requirement->id }}" 
-                                     redirect="/admin/campaigns/{{ $campaign->id }}/requirements"
-                                     label="Enter the requirement name to delete it"
-                                     match-value="{{ $requirement->name }}">
-                        </delete-form>
-                    @endslot
-                @endcomponent     
+                            <delete-form url="campaigns/{{ $campaign->id }}/requirements/{{ $requirement->id }}" 
+                                         redirect="/admin/campaigns/{{ $campaign->id }}/requirements"
+                                         label="Enter the requirement name to delete it"
+                                         match-value="{{ $requirement->name }}">
+                            </delete-form>
+                        @endslot
+                    @endcomponent  
+                @endcan   
             </div>
             <div class="col-xs-12 col-md-3 col-md-offset-1 small">
                 <ul class="nav nav-tabs" role="tablist">

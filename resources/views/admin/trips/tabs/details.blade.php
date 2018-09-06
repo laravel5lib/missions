@@ -63,6 +63,7 @@
 @endcomponent
 
 
+@can('delete', $trip)
 @component('panel')
     @slot('title')
         <h5>Delete Trip</h5>
@@ -81,3 +82,4 @@
         </delete-form>
     @endslot
 @endcomponent
+@endcan

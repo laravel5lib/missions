@@ -81,6 +81,7 @@
 
 <hr class="divider inv">
 
+@can('delete', $cost)
 <div class="container">
     <div class="row">
         <div class="col-md-4">
@@ -106,5 +107,6 @@
         </div>
     </div>
 </div>
+@endcan
 
 @endsection

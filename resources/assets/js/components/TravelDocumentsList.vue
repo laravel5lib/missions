@@ -90,14 +90,12 @@ export default {
         isArray(value) {
             return _.isArray(value);
         },
-        fetchDocuments(params = {}) {
-            params = {per_page: this.pagination.per_page};
-
+        fetchDocuments(params) {
             // replace underscores with dashes
             let type = this.type.replace(/_/g, '-');
 
             if (type == 'medical-releases') {
-                params = {include: 'conditions,allergies'};
+                params = $.extend(params, {include: 'conditions,allergies'});
             }
 
             this.$http
@@ -129,7 +127,8 @@ export default {
     },
 
     created() {
-        this.fetchDocuments();
+        let params = {page: 1, per_page: this.pagination.per_page};
+        this.fetchDocuments(params);
     }
 }
 </script>

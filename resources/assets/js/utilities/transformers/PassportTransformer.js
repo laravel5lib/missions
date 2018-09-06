@@ -4,7 +4,6 @@ class PassportTransformer {
     }
 
     transform() {
-        console.log(this.document);
         return {
             id: this.document.id,
             name: this.document.given_names + ' ' + this.document.surname,

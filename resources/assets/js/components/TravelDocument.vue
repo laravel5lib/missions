@@ -186,17 +186,23 @@ export default {
                     this.handleError(error)
                 });
         },
-        fetchDocuments(params = {}) {
+        fetchDocuments(params) {
             this.fetched = true;
             // replace underscores with dashes
             let type = this.type.replace(/_/g, '-');
 
             if (type == 'medical-releases') {
-                params = {include: 'conditions,allergies'};
+                params = $.extend(params, {include: 'conditions,allergies'});
+            }
+
+            if (this.firstUrlSegment != 'admin') {
+                params = $.extend(params, {'filter[managed_by]': this.$root.user.id});
             }
 
             this.$http
-                .get(`${type}?filter[managed_by]=${this.$root.user.id}`, {params})
+                .get(type, {
+                    params
+                })
                 .then((response) => {
                     this.documents = this.mapRows(response.data.data);
                     this.pagination = response.data.meta;
@@ -226,7 +232,8 @@ export default {
     mounted() {
         // check if a document has already 
         // been attached and retrieve it
-        this.fetchDocument();
+        let params = {page: 1, per_page: this.pagination.per_page};
+        this.fetchDocument(params);
     }
 }
 </script>

@@ -19,34 +19,7 @@ class ReservationsExport implements FromQuery, WithHeadings, WithMapping, Should
 
     public function query()
     {
-        return QueryBuilder::for(Reservation::class)
-                ->allowedFilters([
-                    'surname', 'given_names', 'email', 'phone_one', 'phone_two',
-                    'address', 'city', 'zip', 'state', 'trip_id',
-                    Filter::exact('gender'),
-                    Filter::exact('status'),
-                    Filter::exact('shirt_size'),
-                    Filter::exact('desired_role'),
-                    Filter::exact('country_code'),
-                    Filter::scope('group'),
-                    Filter::scope('trip_type'),
-                    Filter::scope('campaign'),
-                    Filter::scope('has_flight'),
-                    Filter::scope('passport_number'),
-                    Filter::scope('cost'),
-                    Filter::scope('age_range'),
-                    Filter::scope('percent_raised_range'),
-                    Filter::scope('registered_between'),
-                    Filter::scope('dropped'),
-                    Filter::scope('dropped_between'),
-                    Filter::scope('deposited'),
-                    Filter::scope('in_process'),
-                    Filter::scope('funded'),
-                    Filter::scope('ready'),
-                    Filter::scope('funnel')
-                ])
-                ->allowedIncludes(['trip.group', 'passport', 'requirements'])
-                ->with(['trip.group', 'priceables.cost']);
+        return Reservation::getQuery();
     }
 
     public function headings(): array

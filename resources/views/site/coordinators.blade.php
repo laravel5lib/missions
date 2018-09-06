@@ -155,6 +155,18 @@ $('.launch-modal').on('click', function(e){
                     </div>
                   </div>
                 </div><!-- end col -->
+                <div class="col-sm-6 col-md-3 col-xs-12">
+                  <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
+                    <div class="panel-body text-center">
+                      <hr class="divider inv">
+                      <img src="/images/coordinators/docs-icon.png" width="50px" height="50px">
+                      <h6 class="text-uppercase">Role Brochures</h6>
+                      <p class="small">All the role brochures in PDF format ready for print.</p>
+                      <a href="https://www.dropbox.com/s/iqq0icdktbyxtr3/role-brochures-dwnld.zip?dl=0" class="btn btn-sm btn-primary-hollow">Download</a>
+                      <hr class="divider inv">
+                    </div>
+                  </div>
+                </div><!-- end col -->
               </div><!-- end row -->
             </div><!-- end col -->
           </div>

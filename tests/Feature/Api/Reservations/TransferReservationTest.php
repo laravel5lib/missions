@@ -30,6 +30,7 @@ class TransferReservationTest extends TestCase
         $requirements = $reservation->requireables()->pluck('document_type')->toArray();
         $this->assertContains('passports', $requirements);
         $this->assertContains('medical_releases', $requirements);
+        $this->assertContains('essays', $requirements); // custom requirement
 
         $this->json('POST', "/api/reservations/{$reservation->id}/transfer", [
             'trip_id' => $trip->id, 
@@ -42,9 +43,10 @@ class TransferReservationTest extends TestCase
         $this->assertEquals(1800, $reservation->getCurrentRate()->amount);
 
         // verify all requirements
-        $requirements = $reservation->requireables()->pluck('document_type')->toArray();
+        $requirements = $reservation->fresh()->requireables()->pluck('document_type')->toArray();
         $this->assertContains('passports', $requirements);
         $this->assertContains('visas', $requirements);
+        $this->assertContains('essays', $requirements); // custom requirement
         $this->assertNotContains('medical_releases', $requirements);
         
         // verify new tasks
@@ -86,6 +88,9 @@ class TransferReservationTest extends TestCase
 
         $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
         $reservation->process($roomingPriceUuid);
+        $reservation->addRequirement([
+            'requirement_id' => factory(Requirement::class, 'testimony')->create(['requester_id' => $reservation->id])->id
+        ]);
 
         factory(SquadMember::class)->create(['reservation_id' => $reservation->id]);
 

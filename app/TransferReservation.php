@@ -53,8 +53,14 @@ class TransferReservation
     
     public function swapRequirements($trip)
     {
-        // remove existing
-        $this->reservation->requireables()->delete();
+        // remove existing non-custom
+        $requirementIds = $this->reservation
+             ->requireables()
+             ->where('requester_id', '<>', $this->reservation->id)
+             ->pluck('id');
+
+        $this->reservation->requireables()->detach($requirementIds);
+
         // add new
         $this->reservation->syncRequirements($trip->requireables);
     }

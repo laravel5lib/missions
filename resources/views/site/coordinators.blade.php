@@ -18,7 +18,64 @@ $('.launch-modal').on('click', function(e){
     	<h1 class="text-uppercase dash-trailing">1N1D 2019 Coordinators</h1>
     </div><!-- end c-page-header-content -->
 </div><!-- end c-page-header -->
-    <div class="gray-bg-lighter" style="background:url('/images/college/map-bg.png') no-repeat bottom fixed;">
+    <div class="gray-lighter-bg">
+      <div class="container">
+        <div class="content-section">
+          <div class="row">
+            <div class="col-xs-10 col-xs-offset-1">
+              <h2 class="text-center">Campaign Materials</h2>
+              <h5 class="text-center">All Creation Waits Vision - September Campaign</h5>
+              <hr class="divider red-small xlg">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 col-md-4 col-xs-12">
+              <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
+                <div class="panel-body text-center">
+                  <hr class="divider inv">
+                  <img src="/images/coordinators/vid-icon.png" width="50px" height="50px">
+                  <h6 class="text-uppercase">Videos</h6>
+                  <p class="small">Full length vision video from Dominic Russo and a 60 second version for announcements or social media.</p>
+                  <a href="https://www.dropbox.com/s/ljuxlgxyhb2pgdn/Announcement%20Videos.zip?dl=0" class="btn btn-sm btn-primary-hollow" target="_blank">Download</a>
+                  <hr class="divider inv">
+                </div>
+              </div>
+            </div><!-- end col -->
+            <div class="col-sm-6 col-md-4 col-xs-12">
+              <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
+                <div class="panel-body text-center">
+                  <hr class="divider inv">
+                  <img src="/images/coordinators/cam-icon.png" width="50px" height="50px">
+                  <h6 class="text-uppercase">Social Media Graphics</h6>
+                  <p class="small">Instagram, Facebook, and Instagram Stories sized graphics and videos to help continue the hype!</p>
+                  <a href="https://www.dropbox.com/s/dz34lr6uxxrwyh4/Social%20Media.zip?dl=0" class="btn btn-sm btn-primary-hollow" target="_blank">Download</a>
+                  <hr class="divider inv">
+                </div>
+              </div>
+            </div><!-- end col -->
+            <div class="col-sm-6 col-md-4 col-xs-12">
+              <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
+                <div class="panel-body text-center">
+                  <hr class="divider inv">
+                  <img src="/images/coordinators/docs-icon.png" width="50px" height="50px">
+                  <h6 class="text-uppercase">Screen Slides</h6>
+                  <p class="small">1920x1080 sized graphics for your pre-post service slides or your message background.</p>
+                  <a href="https://www.dropbox.com/s/hyoz4s96vpi6s2i/Screens.zip?dl=0" class="btn btn-sm btn-primary-hollow" target="_blank">Download</a>
+                  <hr class="divider inv">
+                </div>
+              </div>
+            </div><!-- end col -->
+            <div class="row">
+              <div class="col-xs-12 text-center">
+                <hr class="divider inv lg">
+                <a href="https://www.dropbox.com/s/t7pavs4fkmhyao9/1N1D19-ACW-Pkg-All.zip?dl=0" class="btn btn-primary" target="_blank">Download All Campaign Materials</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="gray-bg-lighter" style="border-top: 1px solid #ddd;background:url('/images/college/map-bg.png') no-repeat bottom fixed;">
       <div class="container">
         <div class="content-section">
           <div class="row">
@@ -247,64 +304,7 @@ $('.launch-modal').on('click', function(e){
         </div>
       </div>
     </div>
-    <div class="gray-lighter-bg">
-      <div class="container">
-        <div class="content-section">
-          <div class="row">
-            <div class="col-xs-10 col-xs-offset-1">
-              <h2 class="text-center">Campaign Materials</h2>
-              <h5 class="text-center">All Creation Waits Vision - September Campaign</h5>
-              <hr class="divider red-small xlg">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-6 col-md-4 col-xs-12">
-              <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
-                <div class="panel-body text-center">
-                  <hr class="divider inv">
-                  <img src="/images/coordinators/vid-icon.png" width="50px" height="50px">
-                  <h6 class="text-uppercase">Videos</h6>
-                  <p class="small">Full length vision video from Dominic Russo and a 60 second version for announcements or social media.</p>
-                  <a href="https://www.dropbox.com/s/ljuxlgxyhb2pgdn/Announcement%20Videos.zip?dl=0" class="btn btn-sm btn-primary-hollow" target="_blank">Download</a>
-                  <hr class="divider inv">
-                </div>
-              </div>
-            </div><!-- end col -->
-            <div class="col-sm-6 col-md-4 col-xs-12">
-              <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
-                <div class="panel-body text-center">
-                  <hr class="divider inv">
-                  <img src="/images/coordinators/cam-icon.png" width="50px" height="50px">
-                  <h6 class="text-uppercase">Social Media Graphics</h6>
-                  <p class="small">Instagram, Facebook, and Instagram Stories sized graphics and videos to help continue the hype!</p>
-                  <a href="https://www.dropbox.com/s/dz34lr6uxxrwyh4/Social%20Media.zip?dl=0" class="btn btn-sm btn-primary-hollow" target="_blank">Download</a>
-                  <hr class="divider inv">
-                </div>
-              </div>
-            </div><!-- end col -->
-            <div class="col-sm-6 col-md-4 col-xs-12">
-              <div class="panel panel-default" style="border-style:solid;border-width:4px 0 0;border-color:#f6323e;">
-                <div class="panel-body text-center">
-                  <hr class="divider inv">
-                  <img src="/images/coordinators/docs-icon.png" width="50px" height="50px">
-                  <h6 class="text-uppercase">Screen Slides</h6>
-                  <p class="small">1920x1080 sized graphics for your pre-post service slides or your message background.</p>
-                  <a href="https://www.dropbox.com/s/hyoz4s96vpi6s2i/Screens.zip?dl=0" class="btn btn-sm btn-primary-hollow" target="_blank">Download</a>
-                  <hr class="divider inv">
-                </div>
-              </div>
-            </div><!-- end col -->
-            <div class="row">
-              <div class="col-xs-12 text-center">
-                <hr class="divider inv lg">
-                <a href="https://www.dropbox.com/s/t7pavs4fkmhyao9/1N1D19-ACW-Pkg-All.zip?dl=0" class="btn btn-primary" target="_blank">Download All Campaign Materials</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="gray-lighter-bg" style="border-top: 1px solid #ddd;background:url('/images/college/map-bg.png') no-repeat bottom fixed;">
+    <div class="gray-lighter-bg" style="background:url('/images/college/map-bg.png') no-repeat bottom fixed;">
       <div class="container">
         <div class="content-section">
           <div class="row">

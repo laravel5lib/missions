@@ -26,7 +26,9 @@ class InterestsExport implements FromQuery, WithHeadings, WithMapping, ShouldAut
                 Filter::scope('campaign'),
                 Filter::scope('trip_type'),
                 Filter::scope('group'),
-                Filter::scope('received_between')
+                Filter::scope('received_between'),
+                Filter::scope('incomplete_task'),
+                Filter::scope('complete_task')
             ])
             ->allowedIncludes(['trip.campaign', 'trip.group']);
     }

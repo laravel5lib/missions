@@ -1,7 +1,7 @@
 <template>
 <div>
     <fetch-json :url="`tags?filter[type]=${tagType}`">
-        <div class="panel panel-default" slot-scope="{json:tags}">
+        <div class="panel panel-default" slot-scope="{json:tags, pagination, changePage}">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-6"><h5>{{ tagType | capitalize }} Tags</h5></div>
@@ -35,6 +35,9 @@
             </div>
             <div class="panel-body text-center text-muted lead" v-else>
                 <p>No tags found.</p>
+            </div>
+            <div class="panel-footer" v-if="pagination.total > pagination.per_page">
+                <pager :pagination="pagination" :callback="changePage"></pager>
             </div>
         </div>
     </fetch-json>

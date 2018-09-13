@@ -106,7 +106,13 @@ export default {
     methods: {
         getTags(search = null, loading){
             loading ? loading(true) : void 0;
-            this.$http.get('tags/' + this.type, { params: {search: search} }).then((response) => {
+            let params = {filter: {name: search}};
+            this.$http.get('tags/' + this.type, {
+                    params,
+                    paramsSerializer: function(params) {
+                        return decodeURIComponent($.param(params));
+                    }
+                }).then((response) => {
                 this.tagOptions = response.data.data;
                 loading ? loading(false) : void 0;
             });

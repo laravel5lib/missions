@@ -3,8 +3,11 @@
 namespace Tests\Feature\Api;
 
 use Tests\TestCase;
+use App\Models\v1\User;
 use App\Models\v1\Campaign;
+use Laravel\Passport\Passport;
 use App\Models\v1\TripTemplate;
+use Spatie\Permission\Models\Role;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -15,6 +18,10 @@ class ViewTripTemplateTest extends TestCase
     /** @test */
     public function get_all_trip_templates_for_a_campaign()
     {
+        $user = factory(User::class)->create();
+        $user->assignRole(Role::create(['name' => 'admin'])->name);
+        Passport::actingAs($user);
+
         $campaign = factory(Campaign::class)->create();
         factory(TripTemplate::class)->create(['campaign_id' => $campaign->id]);
 
@@ -35,6 +42,10 @@ class ViewTripTemplateTest extends TestCase
     /** @test */
     public function get_trip_template_by_id()
     {
+        $user = factory(User::class)->create();
+        $user->assignRole(Role::create(['name' => 'admin'])->name);
+        Passport::actingAs($user);
+
         $campaign = factory(Campaign::class)->create();
         $template = factory(TripTemplate::class)->create(['campaign_id' => $campaign->id]);
 
@@ -45,5 +56,16 @@ class ViewTripTemplateTest extends TestCase
                 'id' => $template->id
             ]
         ]);
+    }
+
+    /** @test */
+    public function only_admins_can_view_trip_templates()
+    {
+        Passport::actingAs(factory(User::class)->make());
+
+        $campaign = factory(Campaign::class)->create();
+        $response = $this->getJson("/api/campaigns/{$campaign->id}/trip-templates/");
+
+        $response->assertStatus(500);
     }
 }

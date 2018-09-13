@@ -16,6 +16,8 @@ class TripTemplateController extends Controller
      */
     public function index($campaignId)
     {
+        $this->authorize('view', TripTemplate::class);
+
         $templates = TripTemplate::whereCampaignId($campaignId)->paginate(25);
 
         return TripTemplateResource::collection($templates);
@@ -41,6 +43,8 @@ class TripTemplateController extends Controller
     public function show($campaignId, $id)
     {
         $template = TripTemplate::whereCampaignId($campaignId)->findOrFail($id);
+
+        $this->authorize('view', $template);
 
         return new TripTemplateResource($template);
     }

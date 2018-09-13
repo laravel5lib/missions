@@ -31,4 +31,19 @@ class ViewTripTemplateTest extends TestCase
             'meta'
         ]);
     }
+
+    /** @test */
+    public function get_trip_template_by_id()
+    {
+        $campaign = factory(Campaign::class)->create();
+        $template = factory(TripTemplate::class)->create(['campaign_id' => $campaign->id]);
+
+        $response = $this->getJson("/api/campaigns/{$campaign->id}/trip-templates/{$template->id}");
+
+        $response->assertOk()->assertJson([
+            'data' => [
+                'id' => $template->id
+            ]
+        ]);
+    }
 }

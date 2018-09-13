@@ -29,7 +29,7 @@ class TripTemplateController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // 
     }
 
     /**
@@ -38,9 +38,11 @@ class TripTemplateController extends Controller
      * @param  \App\TripTemplate  $tripTemplate
      * @return \Illuminate\Http\Response
      */
-    public function show(TripTemplate $tripTemplate)
+    public function show($campaignId, $id)
     {
-        //
+        $template = TripTemplate::whereCampaignId($campaignId)->findOrFail($id);
+
+        return new TripTemplateResource($template);
     }
 
 

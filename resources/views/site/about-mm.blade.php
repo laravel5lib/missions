@@ -254,15 +254,15 @@
             <h6 class="bold uppercaseit"><a class="branding-red" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Read More <i class="fa fa-angle-down"></i></a></h6>
             <ul class="list-unstyled list-inline">
               <li><h6>D &middot;</h6></li>
-              <li><a href="http://dominicrusso.com"><i class="fa fa-globe"></i></a></li>
-              <li><a href="http://facebook.com/dominic.russo"><i class="fa fa-facebook"></i></a></li>
-              <li><a href="http://twitter.com/dominicrusso"><i class="fa fa-twitter"></i></a></li>
-              <li><a href="http://instgram.com/dominicjrusso"><i class="fa fa-instagram"></i></a></li>
+              <li><a href="https://dominicrusso.com" target="_blank"><i class="fa fa-globe"></i></a></li>
+              <li><a href="https://www.facebook.com/Dominic-Russo-129305547108336/" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/dominicrusso" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://instgram.com/dominicjrusso" target="_blank"><i class="fa fa-instagram"></i></a></li>
               <li>/</li>
               <li><h6>L &middot;</h6></li>
-              <li><a href="http://angelhouse.me"><i class="fa fa-globe"></i></a></li>
-              <li><a href="http://twitter.com/lindsayrusso"><i class="fa fa-twitter"></i></a></li>
-              <li><a href="http://instgram.com/lindsy_russo"><i class="fa fa-instagram"></i></a></li>
+              <li><a href="https://angelhouse.me" target="_blank"><i class="fa fa-globe"></i></a></li>
+              <li><a href="https://twitter.com/lindsayrusso" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://instgram.com/lindsay_russo" target="_blank"><i class="fa fa-instagram"></i></a></li>
               <li>/</li>
               <li><h6><a href="https://vimeo.com/260853749" target="_blank">Watch 1N1D19 Video</a></h6></li>
             </ul>

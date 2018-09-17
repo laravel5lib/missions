@@ -140,12 +140,14 @@
                             <input type="checkbox" name="default_prices" v-model="form.default_prices">
                             Use Default Group Pricing
                         </label>
+                        <span class="help-block">This will use the group's pricing as the trip's default pricing.</span>
                     </div>
                     <div class="col-sm-6">
                         <label>
                             <input type="checkbox" name="default_requirements" v-model="form.default_requirements">
                             Use Default Group Requirements
                         </label>
+                        <span class="help-block">This will add the group's requirements as the default requirements for the trip.</span>
                     </div>
                 </div>
             </div>
@@ -167,5 +169,15 @@
         </ajax-form>
     </div>
 </div>
+
+<alert-error>
+    <template slot="title">Oops!</template>
+    <template slot="message">Something went wrong. We could not add a new trip.</template>
+</alert-error>
+
+<alert-success :reload="true" :timer="3000">
+    <template slot="title">Nice Work!</template>
+    <template slot="message">A new trip was added.</template>
+</alert-success>
 
 @endsection

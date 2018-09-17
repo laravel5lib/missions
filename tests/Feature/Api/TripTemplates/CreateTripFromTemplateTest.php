@@ -8,6 +8,7 @@ use App\Models\v1\User;
 use Laravel\Passport\Passport;
 use App\Models\v1\TripTemplate;
 use App\Models\v1\CampaignGroup;
+use App\Models\v1\Representative;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -28,10 +29,12 @@ class CreateTripFromTemplateTest extends TestCase
         $group = factory(CampaignGroup::class)->create();
         $template = factory(TripTemplate::class)->create(['campaign_id' => $group->campaign_id]);
         $template->attachTags(['Amazon Region', 'Flight Included']);
+        $rep = factory(Representative::class)->create();
 
         $formData = [
             'group_id' => $group->group_id,
             'campaign_id' => $group->campaign_id,
+            'rep_id' => $rep->id,
             'template_id' => $template->id,
             'default_prices' => true,
             'default_requirements' => true,
@@ -46,6 +49,7 @@ class CreateTripFromTemplateTest extends TestCase
             'country_code' => $template->country_code,
             'group_id' => $group->group_id,
             'campaign_id' => $group->campaign_id,
+            'rep_id' => $rep->id,
             'spots' => $template->spots,
             'companion_limit' => $template->companion_limit,
             'difficulty' => $template->difficulty,

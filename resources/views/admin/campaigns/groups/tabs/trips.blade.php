@@ -108,12 +108,12 @@
                    method="post" 
                    :initial="{{ json_encode([
                         'template_id' => null, 
+                        'rep_id' => null,
                         'group_id' => $group->group_id, 
                         'campaign_id' => $group->campaign_id,
                         'default_prices' => true,
                         'default_requirements' => true
                     ])}}"
-                   {{-- @form:success="updateList" --}}
         >
         <div class="modal-content" slot-scope="{ form }">
             <div class="modal-header">
@@ -134,6 +134,12 @@
                 >
                     <label slot="label">Choose Template</label>
                 </input-select>
+                <select-rep name="rep_id" v-model="form.rep_id">
+                    <label slot="label">Default Trip Rep (optional)</label>
+                    <span class="help-block" slot="help-text">
+                        Search trip rep by entering an email. Select the rep to assign them.
+                    </span>
+                </select-rep>
                 <div class="row">
                     <div class="col-sm-6">
                         <label>

@@ -24,6 +24,7 @@ class TripTemplateTripController extends Controller
         $trip = Trip::create([
             'group_id' => $request->input('group_id'),
             'campaign_id' => $request->input('campaign_id'),
+            'rep_id' => $request->input('rep_id'),
             'type' => $template->type,
             'country_code' => $template->country_code,
             'spots' => $template->spots,

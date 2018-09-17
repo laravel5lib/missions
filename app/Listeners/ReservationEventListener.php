@@ -19,6 +19,7 @@ class ReservationEventListener
     public function register($event)
     {
         $this->process($event);
+        $this->updateSpotsAvailable($event);
 
         $params = $event->request->only(
             'donor',

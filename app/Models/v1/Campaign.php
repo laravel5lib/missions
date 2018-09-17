@@ -11,6 +11,7 @@ use App\Traits\Promoteable;
 use App\Models\v1\Requirement;
 use EloquentFilter\Filterable;
 use App\Models\v1\TripInterest;
+use App\Models\v1\TripTemplate;
 use App\Traits\HasRequirements;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\Models\Media;
@@ -171,6 +172,16 @@ class Campaign extends Model implements HasMedia
     public function trips()
     {
         return $this->hasMany(Trip::class);
+    }
+
+    /**
+     * Get all the campaign's trip templates.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tripTemplates()
+    {
+        return $this->hasMany(TripTemplate::class);
     }
 
     public function reservationsCount()

@@ -42,9 +42,15 @@ Route::prefix('campaigns')->group(function () {
     Route::get('{campaignId}/regions/{region}/edit', 'RegionController@edit');
     // Interests
     Route::resource('{campaignId}/reservations/interests', 'TripInterestsController');
+    // Trip Templates
+    Route::get('{id}/trip-templates/create', 'TripTemplateController@create');
+    Route::get('{id}/trip-templates/{template}', 'TripTemplateController@show');
+    Route::get('{id}/trip-templates/{template}/edit', 'TripTemplateController@edit');
     // Campaign details
     Route::get('{id}/{tab?}', 'CampaignsController@show');
+    // Costs
     Route::get('{id}/costs/{cost}', 'CampaignCostController@show');
+    // Requirements
     Route::get('{id}/requirements/create', 'CampaignRequirementController@create');
     Route::get('{id}/requirements/{requirement}', 'CampaignRequirementController@show');
     Route::get('{id}/requirements/{requirement}/edit', 'CampaignRequirementController@edit');

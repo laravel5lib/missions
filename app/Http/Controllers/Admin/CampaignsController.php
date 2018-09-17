@@ -65,6 +65,7 @@ class CampaignsController extends Controller
             'admin/campaigns/'.$campaign->id => 'Overview',
             'admin/campaigns/'.$campaign->id.'/costs' => 'Costs',
             'admin/campaigns/'.$campaign->id.'/requirements' => 'Requirements',
+            'admin/campaigns/'.$campaign->id.'/trip-templates' => 'Trip Templates',
             'admin/campaigns/'.$campaign->id.'/groups' => 'Groups ',
             'admin/campaigns/'.$campaign->id.'/reservations/missionaries' => 'Reservations'
         ];

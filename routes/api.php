@@ -21,6 +21,7 @@ Route::post('campaign-groups/{campaignGroup}/requirements/{requirement}/add', 'B
 Route::post('trips/{trip}/requirements/{requirement}/add', 'BulkAddTripRequirementController');
 
 // Campaigns
+Route::apiResource('campaigns/{campaignId}/trip-templates', 'TripTemplateController')->middleware('auth:api');
 Route::apiResource('campaigns/{campaignId}/groups', 'CampaignGroupController');
 Route::apiResource('campaigns/{campaignId}/costs', 'CampaignCostController')->middleware('auth:api');
 Route::post('campaign-groups/{groupId}/prices/{priceId}/push', 'CampaignGroupPriceableController@store');
@@ -33,6 +34,7 @@ Route::get('campaigns/{campaignId}/groups/{groupId}/prices', function($campaignI
 // Trips
 Route::post('trips/{tripId}/prices/{priceId}/push', 'TripPriceableController@store');
 Route::apiResource('trips/{tripId}/prices', 'TripPriceController');
+Route::post('trip-templates/trips', 'TripTemplateTripController@store');
 
 // Reservations
 Route::post('reservations/{reservationId}/prices/lock', 'ReservationPriceLockController@store');

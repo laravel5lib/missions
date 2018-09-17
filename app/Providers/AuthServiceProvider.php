@@ -45,6 +45,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\v1\Representative' => 'App\Policies\RepresentativePolicy',
         'App\Models\v1\Upload' => 'App\Policies\UploadPolicy',
         'App\Models\v1\Lead' => 'App\Policies\LeadPolicy',
+        'App\Models\v1\TripTemplate' => 'App\Policies\TripTemplatePolicy',
     ];
 
     /**

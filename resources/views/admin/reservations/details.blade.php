@@ -51,7 +51,8 @@
             }
         },
         'Start Date' => $reservation->trip->started_at->format('F j, Y'),
-        'End Date' => $reservation->trip->ended_at->format('F j, Y')
+        'End Date' => $reservation->trip->ended_at->format('F j, Y'),
+        'Trip Rep' => '<a href="'.url('admin/representatives/'.optional($reservation->getRep())->id).'"><strong>'.optional($reservation->getRep())->name.'</strong></a>',
     ]])
     @endcomponent
 @endcomponent

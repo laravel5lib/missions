@@ -17,6 +17,7 @@ use App\Utilities\v1\TeamRole;
 use EloquentFilter\Filterable;
 use App\Traits\HasRequirements;
 use Spatie\QueryBuilder\Filter;
+use App\Models\v1\Representative;
 use App\Events\ReservationCreated;
 use App\Models\v1\FlightItinerary;
 use Illuminate\Support\Facades\DB;
@@ -171,7 +172,7 @@ class Reservation extends Model
      */
     public function rep()
     {
-        return $this->belongsTo(User::class)->withTrashed();
+        return $this->belongsTo(Representative::class);
     }
 
     /**

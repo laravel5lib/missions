@@ -125,7 +125,8 @@ class ReservationsController extends Controller
             'desired_role' => $request->get('desired_role', $reservation->desired_role),
             'shirt_size' => $request->get('shirt_size', $reservation->shirt_size),
             'companion_limit' => $request->get('companion_limit', $reservation->companion_limit),
-            'trip_id' => $request->get('trip_id', $reservation->trip_id)
+            'trip_id' => $request->get('trip_id', $reservation->trip_id),
+            'rep_id' => $request->get('rep_id', $reservation->rep_id)
         ]);
 
         return $this->response->item($reservation, new ReservationTransformer);

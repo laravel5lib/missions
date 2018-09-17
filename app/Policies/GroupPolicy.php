@@ -21,7 +21,7 @@ class GroupPolicy extends BasePolicy
         }
 
         // only group managers can view the group.
-        return $group ? in_array($user->id, $group->managers()->get(['id'])->toArray()) : false;
+        return $group ? $this->isManager($user, $group) : false;
     }
 
     /**
@@ -49,7 +49,7 @@ class GroupPolicy extends BasePolicy
         }
 
         // only group managers can update the group.
-        return in_array($user->id, $group->managers()->get('id')->toArray());
+        return $this->isManager($user, $group);
     }
 
     /**
@@ -62,5 +62,19 @@ class GroupPolicy extends BasePolicy
     public function delete(User $user, Group $group)
     {
         return $user->can('delete_groups');
+    }
+
+    /**
+     * Determine if the user is a group manager.
+     * 
+     * @param  User  $user
+     * @param  Group  $group
+     * @return boolean
+     */
+    private function isManager($user, $group)
+    {
+        $managers = $group->managers()->get(['id'])->toArray() ?? [];
+
+        return in_array($user->id, $managers);
     }
 }

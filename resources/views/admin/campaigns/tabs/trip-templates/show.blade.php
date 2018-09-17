@@ -82,7 +82,7 @@
                             <div class="col-xs-11">USE CAUTION! This is a destructive action that cannot be undone.</div>
                         </div>
                     </div>
-                    <delete-form url="trip-templates/{{ $template->id }}" 
+                    <delete-form url="campaigns/{{ $campaign->id }}/trip-templates/{{ $template->id }}" 
                                 redirect="/admin/campaigns/{{ $campaign->id }}/trip-templates" 
                                 label="Enter the name to delete it" 
                                 match-value="{{ ucfirst($template->name) }}">

@@ -69,8 +69,9 @@ class TripTemplateController extends Controller
     {
         $template = Campaign::findOrFail($campaignId)
             ->tripTemplates()
-            ->findOrFail($templateId)
-            ->update($request->all());
+            ->findOrFail($templateId);
+
+        $template->update($request->all());
 
         if ($request->input('tags')) {
             $template->syncTagsWithType($request->input('tags'), 'trip');

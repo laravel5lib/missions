@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api;
+namespace Tests\Feature\Api\TripTemplates;
 
 use Tests\TestCase;
 use App\Models\v1\User;

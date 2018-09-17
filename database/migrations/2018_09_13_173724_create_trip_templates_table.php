@@ -27,8 +27,8 @@ class CreateTripTemplatesTable extends Migration
             $table->json('todos')->nullable();
             $table->json('prospects')->nullable();
             $table->json('team_roles')->nullable();
-            $table->text('description');
-            $table->dateTime('closed_at');
+            $table->text('description')->nullable();
+            $table->dateTime('closed_at')->nullable();
             $table->timestamps();
         });
     }

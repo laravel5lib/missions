@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
 use App\Models\v1\TripTemplate;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TripTemplateRequest;
 use App\Http\Resources\TripTemplateResource;
 
 class TripTemplateController extends Controller
@@ -18,7 +20,7 @@ class TripTemplateController extends Controller
     {
         $this->authorize('view', TripTemplate::class);
 
-        $templates = TripTemplate::whereCampaignId($campaignId)->paginate(25);
+        $templates = TripTemplate::whereCampaignId($campaignId)->with('tags')->paginate(25);
 
         return TripTemplateResource::collection($templates);
     }
@@ -29,9 +31,15 @@ class TripTemplateController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($campaignId, TripTemplateRequest $request)
     {
-        // 
+        $template = Campaign::findOrFail($campaignId)->tripTemplates()->create($request->all());
+
+        if ($request->input('tags')) {
+            $template->syncTagsWithType($request->input('tags'), 'trip');
+        }
+
+        return response()->json(['message' => 'Trip template created'], 201);
     }
 
     /**
@@ -57,9 +65,18 @@ class TripTemplateController extends Controller
      * @param  \App\TripTemplate  $tripTemplate
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TripTemplate $tripTemplate)
+    public function update(TripTemplateRequest $request, $campaignId, $templateId)
     {
-        //
+        $template = Campaign::findOrFail($campaignId)
+            ->tripTemplates()
+            ->findOrFail($templateId)
+            ->update($request->all());
+
+        if ($request->input('tags')) {
+            $template->syncTagsWithType($request->input('tags'), 'trip');
+        }
+
+        return new TripTemplateResource($template);
     }
 
     /**
@@ -68,8 +85,14 @@ class TripTemplateController extends Controller
      * @param  \App\TripTemplate  $tripTemplate
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TripTemplate $tripTemplate)
+    public function destroy($campaignId, $templateId)
     {
-        //
+        $template = Campaign::findOrFail($campaignId)
+            ->tripTemplates()
+            ->findOrFail($templateId);
+
+        $template->delete();
+
+        return response()->json([], 204);
     }
 }

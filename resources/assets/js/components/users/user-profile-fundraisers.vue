@@ -4,8 +4,8 @@
 		<div class="text-muted text-center" v-if="fundraisers.length < 1">
 			<template v-if="isUser">
 				<em><h4>Start Fundraising</h4>
-					<p>Join a trip or sponsor a project to start fundraising.</p></em>
-				<p class="text-center"><a class="btn btn-primary" href="/campaigns">Go On A Trip</a> <a class="btn btn-default" href="/sponsor-a-project">Sponsor A Project</a></p>
+					<p>Join a trip to start fundraising.</p></em>
+				<p class="text-center"><a class="btn btn-primary" href="/campaigns">Go On A Trip</a></p>
 			</template>
 			<template v-else>
 				<em><h4>Currently No Fundraisers</h4>

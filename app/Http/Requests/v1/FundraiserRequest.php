@@ -29,7 +29,7 @@ class FundraiserRequest extends FormRequest
             'name'             => 'required|string',
             'short_desc'       => 'nullable|string',
             'type'             => 'required|string',
-            'url'              => 'required|string|unique:slugs',
+            'url'              => 'required|string|unique:slugs|alpha_dash',
             'fund_id'          => 'required|exists:funds,id',
             'public'           => 'boolean',
             'description'      => 'nullable|string',

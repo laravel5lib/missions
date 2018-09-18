@@ -3,6 +3,7 @@
 namespace Tests\Feature\Api\Reservations;
 
 use Tests\TestCase;
+use App\Models\v1\Trip;
 use App\Models\v1\User;
 use App\Models\v1\Reservation;
 use App\Models\v1\SquadMember;
@@ -54,6 +55,31 @@ class GetReservationTest extends TestCase
                 [ 'id' => $member->reservation_id ]
             ],
             'meta' => ['total' => 1]
+        ]);
+    }
+
+    /** @test */
+    public function filters_reservations_by_trip_tags()
+    {   
+        $trip = factory(Trip::class)->create();
+        $trip->syncTagsWithType(['Location: Lima', 'Peru Flight Included'], 'trip');
+        $taggedReservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
+        $untaggedReservation = factory(Reservation::class)->create();
+
+        $this->assertContains('Location: Lima', $trip->tags->pluck('name')->toArray());
+
+        $response = $this->getJson("/api/reservations?filter[trip_tags]=Location:+Lima,Peru+Flight+Included");
+
+        $response->assertJson([
+            'data' => [
+                ['id' => $taggedReservation->id]
+            ]
+        ]);
+
+        $response->assertJsonMissing([
+            'data' => [
+                ['id' => $untaggedReservation->id]
+            ]
         ]);
     }
 }

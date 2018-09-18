@@ -19,7 +19,7 @@ class ReservationsExport implements FromQuery, WithHeadings, WithMapping, Should
 
     public function query()
     {
-        return Reservation::getQuery();
+        return Reservation::getQuery()->with(['trip.group', 'trip.tags', 'trip.campaign']);
     }
 
     public function headings(): array
@@ -29,6 +29,7 @@ class ReservationsExport implements FromQuery, WithHeadings, WithMapping, Should
             'Given Names',
             'Group',
             'Trip',
+            'Tags',
             'Role',
             'Age',
             'Birthday',
@@ -58,6 +59,7 @@ class ReservationsExport implements FromQuery, WithHeadings, WithMapping, Should
             $reservation->given_names,
             $reservation->trip->group->name,
             $reservation->trip->type,
+            implode(', ', $reservation->trip->tags->pluck('name')->toArray()),
             teamRole($reservation->desired_role),
             $reservation->age,
             $reservation->birthday->toDateString(),

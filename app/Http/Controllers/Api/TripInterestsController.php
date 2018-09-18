@@ -26,18 +26,7 @@ class TripInterestsController extends Controller
      */
     public function index(Request $request)
     {
-        $interests = QueryBuilder::for(TripInterest::class)
-            ->allowedFilters([
-                'name', 'status', 'email',
-                Filter::exact('trip_id'),
-                Filter::scope('campaign'),
-                Filter::scope('trip_type'),
-                Filter::scope('group'),
-                Filter::scope('received_between'),
-                Filter::scope('incomplete_task'),
-                Filter::scope('complete_task')
-            ])
-            ->allowedIncludes(['trip.campaign', 'trip.group'])
+        $interests = TripInterest::buildQuery()
             ->withCount([
                 'todos as total_tasks_count',
                 'todos as complete_tasks_count' => function ($query) {

@@ -2,8 +2,11 @@
 
 namespace App\Models\v1;
 
+use App\FilterTags;
 use App\UuidForKey;
 use EloquentFilter\Filterable;
+use Spatie\QueryBuilder\Filter;
+use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -47,6 +50,24 @@ class TripInterest extends Model
     public function todos()
     {
         return $this->morphMany(Todo::class, 'todoable');
+    }
+
+
+    public static function buildQuery()
+    {
+        return QueryBuilder::for(static::class)
+            ->allowedFilters([
+                'name', 'status', 'email',
+                Filter::exact('trip_id'),
+                Filter::scope('campaign'),
+                Filter::scope('trip_type'),
+                Filter::scope('group'),
+                Filter::scope('received_between'),
+                Filter::scope('incomplete_task'),
+                Filter::scope('complete_task'),
+                Filter::custom('trip_tags', FilterTags::class)
+            ])
+            ->allowedIncludes(['trip.campaign', 'trip.group', 'trip.tags']);
     }
 
     public function scopeCurrent($query)

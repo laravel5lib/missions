@@ -1,5 +1,5 @@
 <template>
-    <fetch-json :url="`reservations?filter[campaign]=${campaignId}&include=trip.group&per_page=50`" 
+    <fetch-json :url="`reservations?filter[campaign]=${campaignId}&include=trip.group,trip.tags&per_page=50`" 
                 ref="list" 
                 :parameters="{filter: {}}" 
                 @filter:removed="removeActiveFilter"
@@ -151,6 +151,11 @@
                                 @click="openFilterModal(filterConfiguration.shirt_size)"
                                 >+ Shirt Size</a>
                             </li>
+                            <li>
+                                <a type="button" 
+                                @click="openFilterModal(filterConfiguration.trip_tags)"
+                                >+ Trip Tags</a>
+                            </li>
                         </ul>
                     </div>
                     <div class="col-sm-4">
@@ -252,6 +257,7 @@
                         <th>Given Names</th>
                         <th v-if="!filters.filter.group">Group</th>
                         <th v-if="!filters.filter.trip_type">Trip</th>
+                        <th>Tags</th>
                         <template v-if="view === 'missionary'">
                             <th v-if="!filters.filter.desired_role">Role</th>
                             <th>Age</th>
@@ -288,6 +294,14 @@
                         <td>{{ reservation.given_names }}</td>
                         <td v-if="!filters.filter.group">{{ reservation.trip.group.name }}</td>
                         <td v-if="!filters.filter.trip_type">{{ reservation.trip.type }}</td>
+                        <td>
+                            <span class="label label-default" 
+                                  style="margin-right: 1em;" 
+                                  v-for="tag in reservation.trip.tags"
+                            >
+                                {{ tag.name }}
+                            </span>
+                        </td>
                         <template v-if="view === 'missionary'">
                             <td v-if="!filters.filter.desired_role">{{ reservation.desired_role.name }}</td>
                             <td>{{ reservation.age }}</td>
@@ -341,6 +355,7 @@ import percentageRanges from '../data/percentage_ranges.json';
 import FilterSearch from '../components/FilterSearch';
 import FilterRadio from '../components/FilterRadio';
 import FilterSelect from '../components/FilterSelect';
+import FilterCheckbox from '../components/FilterCheckbox';
 export default {
     props: {
         campaignId: String,
@@ -356,7 +371,8 @@ export default {
     components: {
         'filter-search': FilterSearch,
         'filter-radio': FilterRadio,
-        'filter-select': FilterSelect
+        'filter-select': FilterSelect,
+        'filter-checkbox': FilterCheckbox,
     },
 
     data() {
@@ -493,7 +509,7 @@ export default {
                     component: 'filter-select',
                     title: 'Country',
                     field: 'country_code',
-                    options: countries
+                options: countries
                 },
                 registered_between: {
                     component: 'filter-radio',
@@ -519,6 +535,16 @@ export default {
                         url: `todos?type=reservations&unique=true&per_page=200`, // old api
                         value: 'task',
                         label: 'task'
+                    }
+                },
+                trip_tags: {
+                    component: 'filter-checkbox',
+                    title: 'Trip Tags',
+                    field: 'trip_tags',
+                    ajax: {
+                        url: `tags?filter[type]=trip&per_page=999`,
+                        value: 'name',
+                        label: 'name'
                     }
                 },
             }

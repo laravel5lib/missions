@@ -77,22 +77,6 @@
 
 <hr class="divider inv xlg">
 
-{{-- @if($campaign->slug)
-            <div class="col-sm-4 text-right hidden-xs">
-                <hr class="divider inv">
-                <hr class="divider inv sm">
-                <a href="{{ url($campaign->slug->url.'/teams') }}" class="btn btn-link">
-                    <i class="fa fa-chevron-left icon-left"></i> Change Teams
-                </a>
-            </div>
-            <div class="col-xs-12 text-center visible-xs">
-                <a href="{{ url($campaign->slug->url.'/teams') }}" class="btn btn-link">
-                    <i class="fa fa-chevron-left icon-left"></i> Change Teams
-                </a>
-                <hr class="divider inv">
-            </div>
-            @endif --}}
-
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
@@ -145,6 +129,9 @@
             </div>
             <div class="text-center text-muted" v-if="loading">
                 <p class="lead"><i class="fa fa-spinner fa-spin"></i> Loading...</p>
+            </div>
+            <div v-if="pagination.total > pagination.per_page">
+                <pager :pagination="pagination" :callback="changePage"></pager>
             </div>
         </div>
     </div>

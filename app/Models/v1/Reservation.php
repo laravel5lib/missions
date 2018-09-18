@@ -3,6 +3,7 @@
 namespace App\Models\v1;
 
 use Carbon\Carbon;
+use App\FilterTags;
 use App\UuidForKey;
 use App\ItemizedPricing;
 use App\Models\v1\Squad;
@@ -823,6 +824,11 @@ class Reservation extends Model
         });
     }
 
+    /**
+     * Get the trip rep for the reservation.
+     * 
+     * @return App\Models\v1\Representative
+     */
     public function getRep()
     {
         return $this->rep ?? $this->trip->rep;
@@ -1056,9 +1062,10 @@ class Reservation extends Model
                     Filter::scope('squads_count'),
                     Filter::scope('companions_count'),
                     Filter::scope('incomplete_task'),
-                    Filter::scope('complete_task')
+                    Filter::scope('complete_task'),
+                    Filter::custom('trip_tags', FilterTags::class)
                 ])
-                ->allowedIncludes(['trip.group', 'trip.campaign', 'passport', 'requirements', 'companion-reservations'])
+                ->allowedIncludes(['trip.group', 'trip.tags', 'trip.campaign', 'passport', 'requirements', 'companion-reservations'])
                 ->with('priceables.cost')
                 ->withCount('companions');
     }

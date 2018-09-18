@@ -132,6 +132,33 @@ class TripInterestTest extends TestCase
     }
 
     /** @test */
+    public function filter_interests_by_trip_tags()
+    {
+        $trip = factory(Trip::class)->create();
+        $trip->syncTagsWithType(['Location: Lima', 'Flight Included'], 'trip');
+
+        $this->assertContains('Location: Lima', $trip->tags->pluck('name')->toArray());
+        $this->assertContains('Flight Included', $trip->tags->pluck('name')->toArray());
+
+        $taggedInterest = factory(TripInterest::class)->create(['trip_id' => $trip->id]);
+        $untaggedInterest = factory(TripInterest::class)->create();
+
+        $response = $this->getJson("/api/interests?filter[trip_tags]=Location:+Lima,Flight+Included");
+
+        $response->assertOk()
+                 ->assertJson([
+                    'data' => [
+                        ['id' => $taggedInterest->id]
+                    ]
+                 ])
+                 ->assertJsonMissing([
+                    'data' => [
+                        ['id' => $untaggedInterest->id]
+                    ]
+                 ]);
+    }
+
+    /** @test */
     public function delete_a_trip_interest_and_remove_from_storage()
     {
         $interest = factory(TripInterest::class)->create();

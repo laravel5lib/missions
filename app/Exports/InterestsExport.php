@@ -19,18 +19,7 @@ class InterestsExport implements FromQuery, WithHeadings, WithMapping, ShouldAut
 
     public function query()
     {
-        return $interests = QueryBuilder::for(TripInterest::class)
-            ->allowedFilters([
-                'name', 'status', 'email',
-                Filter::exact('trip_id'),
-                Filter::scope('campaign'),
-                Filter::scope('trip_type'),
-                Filter::scope('group'),
-                Filter::scope('received_between'),
-                Filter::scope('incomplete_task'),
-                Filter::scope('complete_task')
-            ])
-            ->allowedIncludes(['trip.campaign', 'trip.group']);
+        return TripInterest::buildQuery()->with(['trip.campaign', 'trip.group', 'trip.tags']);
     }
 
     public function headings(): array
@@ -40,6 +29,7 @@ class InterestsExport implements FromQuery, WithHeadings, WithMapping, ShouldAut
             'Group',
             'Campaign',
             'Trip',
+            'Tags',
             'Status',
             'Email',
             'Phone',
@@ -55,6 +45,7 @@ class InterestsExport implements FromQuery, WithHeadings, WithMapping, ShouldAut
             $interest->trip->group->name,
             $interest->trip->campaign->name,
             $interest->trip->type,
+            implode(', ', $interest->trip->tags->pluck('name')->toArray()),
             $interest->status,
             $interest->email,
             $interest->phone,

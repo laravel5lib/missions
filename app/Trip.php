@@ -128,12 +128,5 @@ class Trip extends TripModel
         }
 
         return $this->published_at <= Carbon::now() ? true : false;
-    }
-
-    public function updateSpots($number = -1)
-    {
-        $this->spots = $this->spots + $number;
-
-        $this->save();
-    }   
+    }  
 }

@@ -44,11 +44,11 @@
                     @component('list-group', ['data' => [
                         'status' => function() use ($interest) {
                             if ($interest->status === 'converted') {
-                                echo '<i class="fa fa-check-circle text-success"></i><em>'.$interest->status.'</em>';
+                                echo '<i class="fa fa-check-circle text-success"></i> <em>'.$interest->status.'</em>';
                             } elseif ($interest->status == 'declined') {
-                                echo '<i class="fa fa-times-circle text-danger"></i><em>'.$interest->status.'</em>';
+                                echo '<i class="fa fa-times-circle text-danger"></i> <em>'.$interest->status.'</em>';
                             } else {
-                                echo '<i class="fa fa-question-circle text-muted"></i><em>'.$interest->status.'</em>';
+                                echo '<i class="fa fa-question-circle text-muted"></i> <em>'.$interest->status.'</em>';
                             }
                         },
                         'name' => $interest->name,
@@ -56,10 +56,15 @@
                         'phone' => '<strong><a href="tel:'.stripPhone($interest->phone).'">'.$interest->phone.'</a></strong>',
                         'prefers' => function () use ($interest) {
                             foreach($interest->communication_preferences as $value) {
-                                echo '<span class="label label-default">'.ucfirst($value).'</span> ';
+                                echo '<span class="label label-filter">'.ucfirst($value).'</span> ';
                             }
                         },
                         'trip_of_interest' => $interest->trip->campaign->name.'<br /><em>'.ucfirst($interest->trip->type).' Trip</em>',
+                        'trip_tags' => function () use ($interest) {
+                            foreach($interest->trip->tags as $tag) {
+                                echo '<span class="label label-filter">'.($tag->name).'</span> ';
+                            }
+                        },
                         'group' => '<strong><a href="'.url('/admin/organizations/'.$interest->trip->group_id).'">'.$interest->trip->group->name.'</a></strong>',
                         'Received' => '<datetime-formatted value="'.$interest->created_at->toIso8601String().'" />',
                         'Last Updated' => '<datetime-formatted value="'.$interest->updated_at->toIso8601String().'" />'

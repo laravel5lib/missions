@@ -31,6 +31,11 @@
                         </li>
                         <li>
                             <a type="button" 
+                            @click="openFilterModal(filterConfiguration.trip_tags)"
+                            >Trip Tags</a>
+                        </li>
+                        <li>
+                            <a type="button" 
                             @click="openFilterModal(filterConfiguration.received_between)"
                             >Received</a>
                         </li>
@@ -76,6 +81,7 @@
                         <th>#</th>
                         <th>Name</th>
                         <th v-if="!filters.filter.trip_type">Trip</th>
+                        <th>Tags</th>
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Preference</th>
@@ -87,6 +93,14 @@
                         <td>{{ index+1 }}</td>
                         <td>{{ interest.name }}</td>
                         <td v-if="!filters.filter.trip_type">{{ interest.trip.type | capitalize }}</td>
+                        <td>
+                            <span class="label label-default" 
+                                  style="margin-right: 1em;" 
+                                  v-for="tag in interest.trip.tags"
+                            >
+                                {{ tag.name }}
+                            </span>
+                        </td>
                         <td><strong><a :href="`mailto:${interest.email}`">{{ interest.email }}</a></strong></td>
                         <td>{{ interest.phone }}</td>
                         <td>
@@ -126,6 +140,7 @@ import tripTypes from '../data/trip_types.json';
 import FilterSearch from '../components/FilterSearch';
 import FilterRadio from '../components/FilterRadio';
 import FilterSelect from '../components/FilterSelect';
+import FilterCheckbox from '../components/FilterCheckbox';
 export default {
     props: {
         campaignId: String,
@@ -138,7 +153,8 @@ export default {
     components: {
         'filter-search': FilterSearch,
         'filter-radio': FilterRadio,
-        'filter-select': FilterSelect
+        'filter-select': FilterSelect,
+        'filter-checkbox': FilterCheckbox,
     },
 
     data() {
@@ -169,6 +185,16 @@ export default {
                     field: 'trip_type',
                     options: tripTypes
                 },
+                trip_tags: {
+                    component: 'filter-checkbox',
+                    title: 'Trip Tags',
+                    field: 'trip_tags',
+                    ajax: {
+                        url: `tags?filter[type]=trip&per_page=999`,
+                        value: 'name',
+                        label: 'name'
+                    }
+                },
                 received_between: {
                     component: 'filter-radio',
                     title: 'Received',
@@ -181,7 +207,7 @@ export default {
 
     computed: {
         url() {
-            return `interests?filter[campaign]=${this.campaignId}&filter[group]=${this.groupId}&include=trip.group`;
+            return `interests?filter[campaign]=${this.campaignId}&filter[group]=${this.groupId}&include=trip.group,trip.tags`;
         },
         receivedBetween() {
             return [

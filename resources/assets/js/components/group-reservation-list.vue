@@ -122,6 +122,11 @@
                             </li>
                             <li>
                                 <a type="button" 
+                                @click="openFilterModal(filterConfiguration.trip_tags)"
+                                >+ Trip Tags</a>
+                            </li>
+                            <li>
+                                <a type="button" 
                                 @click="openFilterModal(filterConfiguration.desired_role)"
                                 >+ Role</a>
                             </li>
@@ -232,6 +237,7 @@
                         <th>Surname</th>
                         <th>Given Names</th>
                         <th v-if="!filters.filter.trip_type">Trip</th>
+                        <th>Tags</th>
                         <template v-if="view === 'missionary'">
                             <th v-if="!filters.filter.desired_role">Role</th>
                             <th>Age</th>
@@ -266,6 +272,14 @@
                         </td>
                         <td>{{ reservation.given_names }}</td>
                         <td v-if="!filters.filter.trip_type">{{ reservation.trip.type }}</td>
+                        <td>
+                            <span class="label label-default" 
+                                  style="margin-right: 1em;" 
+                                  v-for="tag in reservation.trip.tags"
+                            >
+                                {{ tag.name }}
+                            </span>
+                        </td>
                         <template v-if="view === 'missionary'">
                             <td v-if="!filters.filter.desired_role">{{ reservation.desired_role.name }}</td>
                             <td>{{ reservation.age }}</td>
@@ -318,6 +332,7 @@ import percentageRanges from '../data/percentage_ranges.json';
 import FilterSearch from '../components/FilterSearch';
 import FilterRadio from '../components/FilterRadio';
 import FilterSelect from '../components/FilterSelect';
+import FilterCheckbox from '../components/FilterCheckbox';
 export default {
     props: {
         totals: Object, 
@@ -328,7 +343,8 @@ export default {
     components: {
         'filter-search': FilterSearch,
         'filter-radio': FilterRadio,
-        'filter-select': FilterSelect
+        'filter-select': FilterSelect,
+        'filter-checkbox': FilterCheckbox
     },
 
     mixins: [state, dates, activeFilter],
@@ -361,6 +377,16 @@ export default {
                     title: 'Trip', 
                     field: 'trip_type',
                     options: tripTypes
+                },
+                trip_tags: {
+                    component: 'filter-checkbox',
+                    title: 'Trip Tags',
+                    field: 'trip_tags',
+                    ajax: {
+                        url: `tags?filter[type]=trip&per_page=999`,
+                        value: 'name',
+                        label: 'name'
+                    }
                 },
                 gender: {
                     component: 'filter-radio',
@@ -471,7 +497,7 @@ export default {
 
     computed: {
         url() {
-            return `/reservations?filter[campaign]=${this.campaignId}&filter[group]=${this.groupId}&include=trip.group`
+            return `/reservations?filter[campaign]=${this.campaignId}&filter[group]=${this.groupId}&include=trip.group,trip.tags`
         },
         registeredBetween() {
             return [

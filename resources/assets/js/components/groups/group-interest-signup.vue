@@ -20,7 +20,7 @@
           <label>Trip Type</label>
           <select name="trip_id" v-model="interest.trip_id" class="form-control" v-validate="'required'">
             <option v-for="trip in trips" :value="trip.id" :key="trip.id">
-              {{ trip.type | capitalize }} Trip
+              {{ trip.type | capitalize }} Trip <template v-for="tag in trip.tags">[{{ tag.name }}] </template>
             </option>
           </select>
         </div>
@@ -176,7 +176,7 @@
         this.interest.trip_id = this.preselected;
       }
 
-      this.$http.get('trips?filter[group_id]=' + this.id + '&filter[current]=true&include=group,campaign')
+      this.$http.get('trips?filter[group_id]=' + this.id + '&filter[current]=true&include=group,campaign,tags')
       .then((response) => {
         // this.group = response.data.data.group.data;
         this.allTrips = response.data.data;

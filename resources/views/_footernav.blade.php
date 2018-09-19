@@ -32,6 +32,14 @@
         <h6 class="text-uppercase">Mailing Address</h6>
         <ul class="list-unstyled">
           <address>
+            145 S. Livernois Rd. <br>
+            Suite 308 <br>
+            Rochester Hills, MI 48307 <br>
+          </address>
+        </ul>
+        <h6 class="text-uppercase">Office Location</h6>
+        <ul class="list-unstyled">
+          <address>
             34270 Pacific Coast Hwy. <br />Suite C <br />Dana Point, CA 92629
           </address>
         </ul>

@@ -124,6 +124,8 @@ class AppServiceProvider extends ServiceProvider
 
         Blade::component('components.breadcrumbs', 'breadcrumbs');
         Blade::component('components.sidenav', 'sidenav');
+        Blade::component('components.ContentSection', 'ContentSection');
+        Blade::component('components.ResourceCard', 'ResourceCard');
 
         Blade::directive('prod', function ($beta) {
             return "<?php if (app()->environment('production')): ?>";

@@ -128,7 +128,7 @@ export default {
                 name: this.requirement ? this.requirement.name : null, 
                 short_desc: this.requirement ? this.requirement.short_desc : null, 
                 document_type: this.requirement ? this.requirement.document_type : null, 
-                upfront: false,
+                upfront: this.requirement ? this.requirement.upfront : false,
                 due_at: this.requirement ? this.requirement.due_at : null, 
                 requester_type: this.requesterType, 
                 requester_id: this.requesterId,

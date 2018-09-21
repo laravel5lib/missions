@@ -54,14 +54,21 @@ trait HasRequirements
     public function createNewRequirementAndAttachToModel(array $data)
     {
         return DB::transaction(function() use($data) {
-            $requirement = $this->requirements()->create([
+
+            $array = [
                 'name' => isset($data['name']) ? $data['name'] : null,
                 'short_desc' => isset($data['short_desc']) ? $data['short_desc'] : null,
                 'document_type' => isset($data['document_type']) ? $data['document_type'] : null,
                 'due_at' => isset($data['due_at']) ? $data['due_at'] : null,
                 'rules' => isset($data['rules']) ? $data['rules'] : null,
                 'upfront' => isset($data['upfront']) ? $data['upfront'] : null
-            ]);
+            ];
+
+            if (isset($array['upfront']) && $array['upfront']) {
+                $array['due_at'] = null;
+            }
+
+            $requirement = $this->requirements()->create($array);
             
             $this->attachRequirementToModel($requirement->id);
 
@@ -91,7 +98,7 @@ trait HasRequirements
     {
         $requirement = $this->requireables()->findOrFail($id);
 
-        if (isset($data['upfront'])) {
+        if (isset($data['upfront']) && $data['upfront']) {
             $data['due_at'] = null;
         }
 

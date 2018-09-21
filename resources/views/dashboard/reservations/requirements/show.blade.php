@@ -39,5 +39,13 @@
         ></travel-document>
 
     @endif
+    
+    @if(session('alert'))
+        @push('scripts')
+            <script>
+                swal ("One More Thing!" ,  "Please provide the following information so we can complete your reservation." ,  "warning" )
+            </script>
+        @endpush
+    @endif
 
 @endsection

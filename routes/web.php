@@ -55,7 +55,8 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
     $this->get('reservations', 'Dashboard\ReservationsController@index');
     $this->get('reservations/{id}/requirements', 'Dashboard\ReservationRequirementController@index');
     $this->get('reservations/{id}/requirements/{requirement}', 'Dashboard\ReservationRequirementController@show');
-    $this->get('reservations/{id}/{tab?}', 'Dashboard\ReservationsController@show');
+    $this->get('reservations/{id}/{tab?}', 'Dashboard\ReservationsController@show')
+         ->middleware(['hasUpfrontRequirement']);
 
     $this->get('/funds/{fund}/fundraisers/create', 'FundraisersController@create');
     $this->get('/fundraisers/{fundraiser}/edit', 'FundraisersController@edit');

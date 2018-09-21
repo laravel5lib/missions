@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
         'impersonate' => \App\Http\Middleware\Impersonate::class,
         'lowercase' => \App\Http\Middleware\RedirectToLowercase::class,
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
-        'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class
+        'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+        'hasUpfrontRequirement' => \App\Http\Middleware\RedirectIfHasUpfrontRequirement::class,
     ];
 }

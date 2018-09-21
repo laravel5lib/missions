@@ -22,7 +22,8 @@ class CreateRequirementTest extends TestCase
             'name' => 'Passport',
             'short_desc' => 'A passport document is required to travel.',
             'document_type' => 'passport',
-            'due_at' => '2019-05-01'
+            'due_at' => '2019-05-01',
+            'upfront' => false
         ];
 
         $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);
@@ -66,7 +67,8 @@ class CreateRequirementTest extends TestCase
         $data = [
             'short_desc' => 'A passport document is required to travel.',
             'document_type' => 'passport',
-            'due_at' => '2019-05-01'
+            'due_at' => '2019-05-01',
+            'upfront' => false
         ];
 
         $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);
@@ -86,7 +88,8 @@ class CreateRequirementTest extends TestCase
             'name' => 'Passport',
             'short_desc' => 'A passport document is required to travel.',
             'document_type' => 'passport',
-            'due_at' => '2019-05-01'
+            'due_at' => '2019-05-01',
+            'upfront' => false
         ];
 
         $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);
@@ -102,7 +105,8 @@ class CreateRequirementTest extends TestCase
         $data = [
             'name' => 'Passport',
             'short_desc' => 'A passport document is required to travel.',
-            'due_at' => '2019-05-01'
+            'due_at' => '2019-05-01',
+            'upfront' => false
         ];
 
         $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);
@@ -111,14 +115,15 @@ class CreateRequirementTest extends TestCase
     }
 
     /** @test */
-    public function due_date_is_required_to_create_requirement()
+    public function due_date_is_required_when_not_upfront_to_create_requirement()
     {
         $campaign = factory(Campaign::class)->create();
         
         $data = [
             'name' => 'Passport',
             'short_desc' => 'A passport document is required to travel.',
-            'document_type' => 'passport'
+            'document_type' => 'passport',
+            'upfront' => false
         ];
 
         $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);

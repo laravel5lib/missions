@@ -38,6 +38,27 @@ class CreateRequirementTest extends TestCase
     }
 
     /** @test */
+    public function create_upfront_requirement_for_campaign_and_save_in_storage()
+    {
+        $campaign = factory(Campaign::class)->create();
+        
+        $data = [
+            'name' => 'Passport',
+            'short_desc' => 'A passport document is required to travel.',
+            'document_type' => 'passport',
+            'upfront' => true
+        ];
+
+        $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);
+
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('requirements', [
+            'name' => 'Passport', 'requester_id' => $campaign->id, 'requester_type' => 'campaigns', 'upfront' => 1
+        ]);
+    }
+
+    /** @test */
     public function name_is_required_to_create_a_requirement()
     {
         $campaign = factory(Campaign::class)->create();

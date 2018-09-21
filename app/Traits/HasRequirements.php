@@ -59,7 +59,8 @@ trait HasRequirements
                 'short_desc' => isset($data['short_desc']) ? $data['short_desc'] : null,
                 'document_type' => isset($data['document_type']) ? $data['document_type'] : null,
                 'due_at' => isset($data['due_at']) ? $data['due_at'] : null,
-                'rules' => isset($data['rules']) ? $data['rules'] : null
+                'rules' => isset($data['rules']) ? $data['rules'] : null,
+                'upfront' => isset($data['upfront']) ? $data['upfront'] : null
             ]);
             
             $this->attachRequirementToModel($requirement->id);
@@ -89,6 +90,10 @@ trait HasRequirements
     public function updateRequirement($id, array $data)
     {
         $requirement = $this->requireables()->findOrFail($id);
+
+        if (isset($data['upfront'])) {
+            $data['due_at'] = null;
+        }
 
         $requirement->update($data);
 

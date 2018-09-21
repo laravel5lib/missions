@@ -38,7 +38,8 @@ class UpdateRequirementRequest extends FormRequest
             'document_type' => 'sometimes|required|string',
             'short_desc' => 'nullable|string|max:225',
             'due_at' => 'sometimes|required|date',
-            'grace_period' => 'nullable|numeric'
+            'grace_period' => 'nullable|numeric',
+            'upfront' => 'sometimes|required|boolean'
         ];
     }
 }

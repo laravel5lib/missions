@@ -176,7 +176,7 @@
         this.interest.trip_id = this.preselected;
       }
 
-      this.$http.get('trips?filter[group_id]=' + this.id + '&filter[current]=true&include=group,campaign,tags')
+      this.$http.get('trips?filter[group_id]=' + this.id + '&filter[current]=true&include=group,campaign,tags&per_page=100')
       .then((response) => {
         // this.group = response.data.data.group.data;
         this.allTrips = response.data.data;

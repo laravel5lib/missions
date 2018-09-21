@@ -52,6 +52,34 @@ class UpdateRequirementTest extends TestCase
     }
 
     /** @test */
+    public function update_requirement_as_upfront()
+    {
+        $campaign = factory(Campaign::class)->create();
+
+        $requirement = factory(Requirement::class)->create([
+            'requester_id' => $campaign->id, 
+            'requester_type' => 'campaigns',
+            'due_at' => today()->addYear(),
+            'upfront' => false
+        ]);
+
+        $campaign->requireables()->attach($requirement->id);
+
+        $this->putJson("/api/campaigns/{$campaign->id}/requirements/{$requirement->id}", [
+            'upfront' => true
+        ])
+        ->assertStatus(200)
+        ->assertJson([
+            'data' => [
+                'id' => $requirement->id,
+                'due_at' => null,
+                'upfront' => true
+            ]
+        ]);
+
+    }
+
+    /** @test */
     public function requirement_name_cannot_be_null_or_blank_to_update_requirement()
     {
         $campaign = factory(Campaign::class)->create();

@@ -22,7 +22,8 @@ class CreateRequirementTest extends TestCase
             'name' => 'Passport',
             'short_desc' => 'A passport document is required to travel.',
             'document_type' => 'passport',
-            'due_at' => '2019-05-01'
+            'due_at' => '2019-05-01',
+            'upfront' => false
         ];
 
         $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);
@@ -38,6 +39,27 @@ class CreateRequirementTest extends TestCase
     }
 
     /** @test */
+    public function create_upfront_requirement_for_campaign_and_save_in_storage()
+    {
+        $campaign = factory(Campaign::class)->create();
+        
+        $data = [
+            'name' => 'Passport',
+            'short_desc' => 'A passport document is required to travel.',
+            'document_type' => 'passport',
+            'upfront' => true
+        ];
+
+        $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);
+
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('requirements', [
+            'name' => 'Passport', 'requester_id' => $campaign->id, 'requester_type' => 'campaigns', 'upfront' => 1
+        ]);
+    }
+
+    /** @test */
     public function name_is_required_to_create_a_requirement()
     {
         $campaign = factory(Campaign::class)->create();
@@ -45,7 +67,8 @@ class CreateRequirementTest extends TestCase
         $data = [
             'short_desc' => 'A passport document is required to travel.',
             'document_type' => 'passport',
-            'due_at' => '2019-05-01'
+            'due_at' => '2019-05-01',
+            'upfront' => false
         ];
 
         $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);
@@ -65,7 +88,8 @@ class CreateRequirementTest extends TestCase
             'name' => 'Passport',
             'short_desc' => 'A passport document is required to travel.',
             'document_type' => 'passport',
-            'due_at' => '2019-05-01'
+            'due_at' => '2019-05-01',
+            'upfront' => false
         ];
 
         $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);
@@ -81,7 +105,8 @@ class CreateRequirementTest extends TestCase
         $data = [
             'name' => 'Passport',
             'short_desc' => 'A passport document is required to travel.',
-            'due_at' => '2019-05-01'
+            'due_at' => '2019-05-01',
+            'upfront' => false
         ];
 
         $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);
@@ -90,14 +115,15 @@ class CreateRequirementTest extends TestCase
     }
 
     /** @test */
-    public function due_date_is_required_to_create_requirement()
+    public function due_date_is_required_when_not_upfront_to_create_requirement()
     {
         $campaign = factory(Campaign::class)->create();
         
         $data = [
             'name' => 'Passport',
             'short_desc' => 'A passport document is required to travel.',
-            'document_type' => 'passport'
+            'document_type' => 'passport',
+            'upfront' => false
         ];
 
         $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);

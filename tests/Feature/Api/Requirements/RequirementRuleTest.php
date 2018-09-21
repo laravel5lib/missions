@@ -22,7 +22,8 @@ class RequirementRuleTest extends TestCase
             'short_desc' => 'A passport document is required to travel.',
             'document_type' => 'passport',
             'due_at' => '2019-05-01',
-            'rules' => ['age' => '18', 'roles' => ['MEDI', 'MISS']]
+            'rules' => ['age' => '18', 'roles' => ['MEDI', 'MISS']],
+            'upfront' => false
         ];
 
         $response = $this->postJson("/api/campaigns/{$campaign->id}/requirements", $data);

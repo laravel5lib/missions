@@ -41,7 +41,8 @@ class CreateRequirementRequest extends FormRequest
             ],
             'document_type' => 'required|string',
             'short_desc' => 'nullable|string|max:225',
-            'due_at' => 'required|date',
+            'upfront' => 'required|boolean',
+            'due_at' => 'required_if:upfront,false|nullable|date',
             'grace_period' => 'nullable|numeric'
         ];
     }

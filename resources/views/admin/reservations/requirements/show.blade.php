@@ -79,7 +79,15 @@
                             'Name' => $requirement->name,
                             'Short Description' => $requirement->short_desc,
                             'Document Type' => '<code>'.$requirement->document_type.'</code>',
-                            'Due Date' => '<datetime-formatted value="'.$requirement->due_at->toIso8601String().'"></datetime-formatted>'
+                            'Due Date' => function () use($requirement) {
+                                if ($requirement->due_at) {
+                                    echo '<datetime-formatted value="'.$requirement->due_at->toIso8601String().'"></datetime-formatted>';
+                                } elseif($requirement->upfront) {
+                                    echo 'Upfront';
+                                } else {
+                                    echo 'n/a';
+                                }
+                            }
                         ]
                     ])
                     @endcomponent

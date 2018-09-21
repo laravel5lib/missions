@@ -33,7 +33,11 @@
                                     <label slot="label" class="control-label col-md-4">Document Type</label>
                                 </input-select>
 
-                                <input-date name="due_at" :horizontal="true" classes="col-md-8" v-model="form.due_at">
+                                <input-checkbox name="upfront" v-model="form.upfront" :horizontal="true" classes="col-md-8">
+                                    <label slot="label" class="control-label col-md-4">Due Upfront</label>
+                                </input-checkbox>
+                                
+                                <input-date name="due_at" :horizontal="true" classes="col-md-8" v-model="form.due_at" v-if="!form.upfront">
                                     <label slot="label" class="control-label col-md-4">Due Date &amp; Time</label>
                                 </input-date>
                             </div>
@@ -124,6 +128,7 @@ export default {
                 name: this.requirement ? this.requirement.name : null, 
                 short_desc: this.requirement ? this.requirement.short_desc : null, 
                 document_type: this.requirement ? this.requirement.document_type : null, 
+                upfront: this.requirement ? this.requirement.upfront : false,
                 due_at: this.requirement ? this.requirement.due_at : null, 
                 requester_type: this.requesterType, 
                 requester_id: this.requesterId,

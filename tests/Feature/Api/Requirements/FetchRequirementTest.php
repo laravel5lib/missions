@@ -42,6 +42,7 @@ class FetchRequirementTest extends TestCase
                             'name', 
                             'short_desc', 
                             'document_type', 
+                            'upfront',
                             'due_at', 
                             'grace_period', 
                             'requester' => ['id', 'type'], 

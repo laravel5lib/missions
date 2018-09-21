@@ -25,7 +25,7 @@ class Requirement extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'short_desc', 'document_type', 'requester_id', 'requester_type', 'due_at', 'rules'];
+    protected $fillable = ['name', 'short_desc', 'document_type', 'requester_id', 'requester_type', 'due_at', 'rules', 'upfront'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -36,7 +36,7 @@ class Requirement extends Model
         'created_at', 'updated_at', 'deleted_at', 'due_at'
     ];
 
-    protected $casts = ['rules' => 'array'];
+    protected $casts = ['rules' => 'array', 'upfront' => 'boolean'];
 
     /**
      * Indicates if the model should be timestamped.

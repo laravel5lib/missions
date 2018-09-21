@@ -49,7 +49,18 @@
                     >
                         <div class="panel-body">
                             <p>{!! requirementStatusLabel($requirement->pivot->status) !!}</p>
-                            <p class="small text-muted"><strong>Due before {{ $requirement->due_at->format('M d, Y') }}</strong></p>
+                            
+                            @unless(!$requirement->due_at && !$requirement->upfront)
+                                <p class="small text-muted"><strong>
+                                    @if($requirement->upfront)
+                                        Immedately
+                                    @else
+                                        Due before {{ $requirement->due_at->format('M d, Y') }}
+                                    @endif
+                                </strong></p>
+                            @endunless
+
+
                             <hr class="divider inv">
                             <h5 class="text-uppercase">{{ $requirement->name }}</h5>
                             <p>{{ $requirement->short_desc }}</p>

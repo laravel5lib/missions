@@ -9,9 +9,16 @@ class RequirementListGroup extends ViewComponent
         $data = [
             'Name' => $this->name,
             'Short Description' => $this->short_desc,
-            'Document Type' => '<code>'.$this->document_type.'</code>',
-            'Due Date' => '<datetime-formatted value="'.$this->due_at->toIso8601String().'"></datetime-formatted>'
+            'Document Type' => '<code>'.$this->document_type.'</code>'
         ];
+
+        if ($this->due_at) {
+            $data['Due Date'] = '<datetime-formatted value="'.$this->due_at->toIso8601String().'"></datetime-formatted>';
+        } elseif($this->upfront) {
+            $data['Due Date'] = 'Upfront';
+        } else {
+            $data['Due Date'] = 'n/a';
+        }
 
         if (request()->segment(1) === 'admin') {
             if (isset($this->rules['roles'])) {

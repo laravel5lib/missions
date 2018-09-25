@@ -20,7 +20,7 @@
 @foreach($septemberCollection->chunk(4) as $chunk)
   <div class="row" style="display: flex; flex-wrap: wrap;">
     @foreach($chunk as $download)
-      <div class="col-sm-6 col-md-4 col-xs-12" style="display: flex;">
+      <div class="col-sm-6 col-md-3 col-xs-12" style="display: flex;">
         @ResourceCard
           @slot('icon', $download['icon'])
           @slot('title', $download['title'])

@@ -1,9 +1,15 @@
 [
   {
     "icon": "/images/coordinators/vid-icon.png",
-    "title": "Videos",
-    "description": "Full length vision video from Dominic Russo and a 60 second version for announcements or social media.",
-    "url": "https://www.dropbox.com/s/ljuxlgxyhb2pgdn/Announcement%20Videos.zip?dl=0"
+    "title": "Full Vision Video",
+    "description": "Full length vision video for announcements or social media. This video can be downloaded from Vimeo.",
+    "url": "https://vimeo.com/287819282"
+  },
+  {
+    "icon": "/images/coordinators/vid-icon.png",
+    "title": "60 Second Video",
+    "description": "60 second version of the vision video for announcements or social media. This video can be downloaded from Vimeo.",
+    "url": "https://vimeo.com/288424160"
   },
   {
     "icon": "/images/coordinators/cam-icon.png",

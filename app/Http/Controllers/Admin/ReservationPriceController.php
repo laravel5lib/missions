@@ -11,7 +11,10 @@ class ReservationPriceController extends Controller
     public function show($id, $price)
     {
         $reservation = Reservation::findOrFail($id);
-        $price = $reservation->priceables()->whereUuid($price)->firstOrFail();
+        $price = $reservation->priceables()
+                             ->whereUuid($price)
+                             ->with('payments')
+                             ->firstOrFail();
 
         return view('admin.reservations.prices.show', compact('reservation', 'price'));
     }

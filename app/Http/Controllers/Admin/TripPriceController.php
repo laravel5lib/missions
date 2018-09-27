@@ -12,7 +12,11 @@ class TripPriceController extends Controller
     public function show($id, $price)
     {
         $trip = Trip::withCount('reservations')->findOrFail($id);
-        $price = $trip->priceables()->whereUuid($price)->withCount('reservations')->firstOrFail();
+        $price = $trip->priceables()
+                      ->whereUuid($price)
+                      ->with('payments')
+                      ->withCount('reservations')
+                      ->firstOrFail();
 
         $group = CampaignGroup::where('campaign_id', $trip->campaign_id)
             ->where('group_id', $trip->group_id)

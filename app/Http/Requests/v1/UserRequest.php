@@ -53,7 +53,7 @@ class UserRequest extends FormRequest
             'first_name'       => 'sometimes|required|string|max:100',
             'last_name'        => 'sometimes|required|string|max:100',
             'email'            => 'sometimes|required|email|unique:users,email,' . $user_id . ',id,deleted_at,NULL',
-            'password'         => 'sometimes|required|confirmed|min:8',
+            'password'         => 'nullable|confirmed|min:8',
             'alt_email'        => 'nullable|email',
             'gender'           => 'sometimes|required|in:Male,male,Female,female',
             'status'           => 'nullable|string',

@@ -104,9 +104,12 @@ class UsersController extends Controller
 
         if ($request->filled('password')) {
             $request->merge(['password' => bcrypt($request->input('password'))]);
+            $data = $request->except('url');
+        } else {
+            $data = $request->except('url', 'password');
         }
 
-        $user->update($request->except('url'));
+        $user->update($data);
 
         if ($request->filled('links')) {
             $user->syncLinks($request->input('links'));

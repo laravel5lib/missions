@@ -44,7 +44,7 @@
         </div>
       </div>
       <div>
-        <ul class="nav navbar-nav navbar-right dropdown" style="margin-left:75px;">
+        <ul class="nav navbar-nav navbar-right dropdown">
 
           @if(auth()->check())
             <li id="userMenu" class="dropdown-toggle hidden-xs text-capitalize" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

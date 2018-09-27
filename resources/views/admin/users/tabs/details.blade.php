@@ -3,6 +3,16 @@
 @section('tab')
 
 @component('panel')
+    @slot('body')
+        <user-upload 
+            :user="{{ $user }}" 
+            :avatar="{{ $user->getAvatar() }}" 
+            :banner="{{ $user->getBanner() }}"
+        ></user-upload>
+    @endslot
+@endcomponent
+
+@component('panel')
     @slot('title')
         <div class="row">
             <div class="col-xs-8">
@@ -22,7 +32,7 @@
         'Last Name' => $user->last_name,
         'Gender' => $user->gender,
         'Marital Status' => $user->status,
-        'Birthday' => $user->birthday->toFormattedDateString(),
+        'Birthday' => optional($user->birthday)->toFormattedDateString(),
         'Email' => $user->email,
         'Alternate Email' => $user->alt_email,
         'Primary Phone' => $user->phone_one,
@@ -30,7 +40,8 @@
         'Address' => $user->address.'<br />'.$user->city.', '.$user->state.' '.$user->zip,
         'Country' => country($user->country_code),
         'Timezone' => $user->timezone,
-        'Profile' => ($user->public ? 'Public' : 'Private')
+        'Profile' => ($user->public ? 'Public' : 'Private'),
+        'URL' => $user->slug ? '<strong><a href="'.url($user->slug->url).'" target="_blank">'.url($user->slug->url).'</a></strong>' : null
     ]])
     @endcomponent
     @slot('footer')
@@ -59,7 +70,7 @@
             </div>
             <delete-form url="users/{{ $user->id }}" 
                 redirect="/admin/users"
-                label="Enter the user's name to delete them"
+                label="Enter the user's full name to delete them"
                 match-value="{{ $user->name }}"
             ></delete-form>
         @endslot

@@ -19,11 +19,10 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <admin-user-edit user-id="{{ $user->id }}"></admin-user-edit>
-                    </div><!-- end panel-body -->
-                </div><!-- end panel -->
+                
+                <h1>Edit User</h1>
+                <user-form :user="{{ $user }}"></user-form>
+
             </div>
         </div>
     </div>

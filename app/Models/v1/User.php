@@ -40,6 +40,11 @@ class User extends Authenticatable
         'weight', 'email_token'
     ];
 
+    protected $casts = [
+        'public' => 'boolean',
+        'verified' => 'boolean'
+    ];
+
     /**
      * The attributes that should be mutated to dates.
      *
@@ -57,6 +62,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    protected $appends = ['url'];
 
     /**
      * All of the relationships to be touched.
@@ -331,6 +338,16 @@ class User extends Authenticatable
     public function getStateAttribute($value)
     {
         return $value ? ucwords($value) : $value;
+    }
+
+    /**
+     * Get the user's url
+     * 
+     * @return stirng|null
+     */
+    public function getUrlAttribute()
+    {
+        return optional($this->slug)->url;
     }
 
     /**

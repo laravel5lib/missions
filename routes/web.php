@@ -21,7 +21,10 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
     $this->get('settings', function () {
         SEOMeta::setTitle('Settings');
 
-        return view('dashboard.settings');
+        $user = auth()->user();
+        $user->load(['avatar', 'banner']);
+
+        return view('dashboard.settings', compact('user'));
     });
 
     $this->get('reports', function () {

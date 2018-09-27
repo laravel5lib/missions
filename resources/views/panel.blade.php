@@ -1,5 +1,4 @@
-<div class="panel panel-default" style="border-top: 5px solid #f6323e">
-    @if(isset($title))
+<div class="panel panel-default" style="border-top: 5px solid #f6323e">    @if(isset($title))
         <div class="panel-heading">
             {{ $title }}
         </div>

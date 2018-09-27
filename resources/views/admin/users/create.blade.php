@@ -18,11 +18,10 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <admin-user-create></admin-user-create>
-                    </div><!-- end panel-body -->
-                </div><!-- end panel -->
+                
+                <h1>Create New User</h1>
+                <user-form></user-form>            
+    
             </div>
         </div>
     </div>

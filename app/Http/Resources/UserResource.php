@@ -36,7 +36,7 @@ class UserResource extends JsonResource
             'shirt_size'   => strtoupper($this->shirt_size),
             'timezone'     => $this->timezone,
             'bio'          => $this->bio,
-            'url'          => optional($this->slug)->url,
+            'url'          => $this->url,
             'avatar'       => $this->avatar ? image($this->avatar->source) : url('/images/placeholders/user-placeholder.png'),
             'avatar_upload_id' => $this->avatar_upload_id,
             'banner'       => $this->banner ? image($this->banner->source) : null,

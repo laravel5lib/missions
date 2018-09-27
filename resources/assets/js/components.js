@@ -211,6 +211,8 @@ Vue.component('travel-document-form', require('./components/TravelDocumentForm.v
 Vue.component('bulk-add-requirement-modal', require('./components/BulkAddRequirementModal.vue'));
 Vue.component('tag-list', require('./components/TagList.vue'));
 Vue.component('admin-transactions-list', require('./components/AdminTransactionList.vue'));
+Vue.component('user-form', require('./components/UserForm.vue'));
+Vue.component('user-upload', require('./components/UserUpload.vue'));
 
 /**
  * Utility Components
@@ -222,6 +224,7 @@ Vue.component('pager', require('./components/pager.vue'));
 Vue.component('data-list', require('./components/data-list.vue'));
 Vue.component('ajax-form', require('./components/ajax-form.vue'));
 Vue.component('input-text', require('./components/input-text.vue'));
+Vue.component('input-password', require('./components/input-password.vue'));
 Vue.component('input-textarea', require('./components/input-textarea.vue'));
 Vue.component('input-date', require('./components/input-date.vue'));
 Vue.component('input-time', require('./components/input-time.vue'));

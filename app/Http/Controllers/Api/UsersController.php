@@ -75,8 +75,12 @@ class UsersController extends Controller
         $user->save();
 
         $user->slug()->create([
-            'url' => $request->get('url', generate_slug($request->get('name')))
+            'url' => $request->filled('url') ? $request->input('url') : generate_slug($request->input('first_name'))
         ]);
+
+        if ($request->filled('links')) {
+            $user->syncLinks($request->input('links'));
+        }
 
         dispatch(new SendWelcomeEmail($user));
 
@@ -98,20 +102,20 @@ class UsersController extends Controller
             $user = $this->auth()->user();
         }
 
-        if ($request->get('password')) {
-            $request->merge(['password' => bcrypt($request->get('password'))]);
+        if ($request->filled('password')) {
+            $request->merge(['password' => bcrypt($request->input('password'))]);
         }
 
         $user->update($request->except('url'));
 
-        if ($request->has('links')) {
-            $user->syncLinks($request->get('links'));
+        if ($request->filled('links')) {
+            $user->syncLinks($request->input('links'));
         }
 
-        $user->slug()->update(['url' => $request->get('url', $user->slug->url)]);
+        $user->slug()->update(['url' => $request->input('url', $user->slug->url)]);
 
         // immedately update on user object
-        $user->slug->url = $request->get('url', $user->slug->url);
+        $user->slug->url = $request->input('url', $user->slug->url);
 
         return $this->response->item($user, new UserTransformer);
     }

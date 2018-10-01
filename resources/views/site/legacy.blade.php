@@ -15,14 +15,11 @@
 			<div class="col-sm-8 col-sm-offset-2">
                 <h3 class="text-primary">Greetings Legacy Partners,</h3>
 
-				<p>We pray your summer has been a blessed one!</p>
+				<p>We recently kicked off our new class of students at the Missions.Me College and we wanted to update you with some exciting things happening from one of our team members Cat Keena. Check out this update.</p>
 
-                <p>Our summer has been full; from our Peru launch, to Advance campaigns in the Dominican Republic and Honduras, to the start of our Missions.Me College Fall Semester.  In our video update this month, we would love to share a testimony with you from one of our MMC Masters’ Students.</p>
-
-                <p>We are so expectant for this fall - not only for what God is doing through MM, but for what He is doing through you and your families.  Please let us know how we can be standing with you!</p>
 				<hr class="divider inv">
 				<p>Blessings,</p>
-				<h5 class="text-primary"><em>Gabe</em></h5>
+				<h5 class="text-primary"><em>The Missions.Me Team</em></h5>
 			</div>
 		</div><!-- end row -->
 	</div><!-- end content-section -->
@@ -37,7 +34,7 @@
 				<hr class="divider inv">
 				<div class="video-outer">
 					<div class="video-inner">
-						<iframe src="https://player.vimeo.com/video/286445579?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+						<iframe src="https://player.vimeo.com/video/291020433?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 					</div>
 				</div>
 			</div><!-- end col -->

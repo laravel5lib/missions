@@ -46,5 +46,11 @@
         "title": "Role Brochures",
         "description": "All the role brochures in PDF format ready for print.",
         "url": "https://www.dropbox.com/s/iqq0icdktbyxtr3/role-brochures-dwnld.zip?dl=0"
+    },
+    {
+        "icon": "/images/coordinators/docs-icon.png",
+        "title": "Fundraiser Setup",
+        "description": "Step by step instructions on how to setup a fundraising page.",
+        "url": "resources/coordinators/fundraiser-setup.pdf"
     }
 ]

@@ -9,9 +9,9 @@
         <hr class="divider inv lg">
         <div class="container">
             <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12 text-center">
-                <label>Find a Missionary or Project to Support</label>
+                <label>Find a Missionary to Support</label>
                 <div class="form-group form-group-md">
-                    <input type="text" class="form-control" placeholder="Start typing..." v-model="search" @keyup="debouncedSearch">
+                    <input type="text" class="form-control" placeholder="Search by fundraiser name..." v-model="search" @keyup="debouncedSearch">
                 </div><!-- /input-group -->
             </div>
         </div>

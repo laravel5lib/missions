@@ -408,7 +408,7 @@
                 today: moment().format('YYYY-MM-DD'),
                 yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
                 tomorrow: moment().add(1, 'days').format('YYYY-MM-DD'),
-                resource: this.$resource('media-credentials{/id}', { 'include': 'uploads'})
+                resource: this.$resource('media-credentials{/id}')
             }
         },
         computed: {
@@ -491,8 +491,7 @@
                     }
                     this.resource.post({}, {
                         applicant_name: this.applicant_name,
-                        holder_id: this.user_id,
-                        holder_type: 'users',
+                        user_id: this.user_id,
                         content: this.content,
                         expired_at: moment(this.expired_at).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
                         reservation_id: this.reservationId

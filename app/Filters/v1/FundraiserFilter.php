@@ -20,12 +20,10 @@ class FundraiserFilter extends Filter
      */
     public $sortable = ['created_at'];
 
-    /**
-     * Fields that are searchable.
-     *
-     * @var array
-     */
-    public $searchable = ['name'];
+    public function search($value)
+    {
+        return $this->where('name', 'LIKE', "%$value%");
+    }
 
     /**
      * Find public fundraisers.

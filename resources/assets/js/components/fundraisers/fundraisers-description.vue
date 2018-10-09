@@ -129,6 +129,18 @@
 							</div>
 						</div>
 					</div>
+          <div class="form-group">
+            <div class="col-xs-12">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" v-model="form.public" :disabled="!form.description">
+                  Show Fundraiser to the Public (Highly Recommended)
+                </label>
+                <span class="help-block text-danger" v-if="!form.description">Your fundraiser must have content before you can make it public.</span>
+                <span class="help-block" v-else>Private fundraisers can only be seen by you and cannot be shared.</span>
+              </div>
+            </div>
+          </div>
 				</div>
 			</div>
 			<hr class="divider">
@@ -196,7 +208,8 @@
           short_desc: '',
           description: '',
           show_donors: true,
-          sponsor_id: null
+          sponsor_id: null,
+          public: false
         }),
         users: [],
         userObj: null,
@@ -302,6 +315,40 @@
           return false;
         }
 
+        if ( !this.form.public) {
+          swal('WAIT!', 'Your fundraiser is currently set to private and not visible to the public. Do you want to make it public?', 'warning', {
+                closeOnClickOutside: false,
+                buttons: {
+                    cancel: {
+                        text: "No, Keep it Private",
+                        value: null,
+                        visible: true,
+                        closeModal: true,
+                    },
+                    confirm: {
+                        text: "Yes, Make it Public",
+                        value: true,
+                        visible: true,
+                        closeModal: true
+                    }
+                },
+                dangerMode: true
+            }).then((value) => {
+                if (value) {
+                    this.form.public = true;
+                    this.save();
+                    return false;
+                } else {
+                    this.save();
+                    return false;
+                }
+            })
+            return false;
+        }
+
+        this.save();
+      },
+      save() {
         this.$root.$emit('Save:DISABLED');
 
         this.form.submit('put', '/fundraisers/'+this.fundraiser.uuid)
@@ -332,6 +379,7 @@
       this.form.description = this.fundraiser.description;
       this.form.show_donors = this.fundraiser.show_donors;
       this.form.sponsor_id = this.fundraiser.sponsor_id;
+      this.form.public = this.fundraiser.public;
 
       this.$http.get('users/' + this.fundraiser.sponsor_id).then((response) => {
         this.userObj = response.data.data;

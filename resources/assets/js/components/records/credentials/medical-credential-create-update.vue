@@ -605,8 +605,7 @@
 
                     this.resource.post({}, {
                         applicant_name: this.applicant_name,
-                        holder_id: this.user_id,
-                        holder_type: 'users',
+                        user_id: this.user_id,
                         content: this.content,
                         expired_at: moment(this.expired_at).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
                         uploads: _.uniq(this.upload_ids),
@@ -638,8 +637,7 @@
 
                     this.resource.put({id:this.id, include: 'uploads'}, {
                         applicant_name: this.applicant_name,
-                        holder_id: this.user_id,
-                        holder_type: 'users',
+                        user_id: this.user_id,
                         content: this.content,
                         expired_at: moment(this.expired_at).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
                         uploads: _.uniq(this.upload_ids),

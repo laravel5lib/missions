@@ -9,6 +9,12 @@
         </a>
     </p>
 
+    @if($requirement->upfront && $requirement->pivot->status <> 'complete')
+        <div class="alert alert-warning">
+            <strong>One More Thing!</strong> Please provide the following information so we can complete your reservation.
+        </div>
+    @endif
+
     @if($requirement->document_type == 'airport_preferences')
 
         <airport-preference 

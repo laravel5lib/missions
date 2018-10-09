@@ -23,9 +23,13 @@ class RedirectIfHasUpfrontRequirement
                 return $requirement->upfront && ($requirement->pivot->status == 'incomplete' || is_null($requirement->pivot->status));
             })->first();
 
-            return $requirement ? 
-                redirect("dashboard/reservations/{$reservation->id}/requirements/{$requirement->id}")->with('alert', true) : 
-                $next($request);
+            if ($requirement) {
+                $request->session()->flash('alert', true);
+
+                return redirect("dashboard/reservations/{$reservation->id}/requirements/{$requirement->id}");
+            }
+
+            return $next($request);
         }
 
         return $next($request);

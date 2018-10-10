@@ -63,7 +63,7 @@
 				<!-- M.Me -->
 				<li class="navlabel">About</li>
 				<li><a href="/about-mm">Missions.Me</a></li>
-				<li><a href="/partnership">Partnership</a></li>
+				<li><a href="/monthly-partners">Monthly Partners</a></li>
 				<li><a href="/contact">Contact Us</a></li>
 			</ul>
 		</mm-aside>

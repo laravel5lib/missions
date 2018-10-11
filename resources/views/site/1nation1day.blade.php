@@ -228,7 +228,7 @@
 		<div class="row">
 			<div class="col-sm-6 col-sm-offset-3 text-center">
 				<h5 class="text-uppercase">Leaders Equipped</h5>
-				<p>We believe that in order to open the door to a nations heart you must reach the practical needs of the nation. Here’s how, together, we healed nations.</p>
+				<p>When entering a country we don’t ask what local churches can do for us, we ask what we can do for them. We meet their needs through relationships and partnerships with the global church, businesses, and organizations. The 1Nation1Day campaign is simply the spark that ignites a movement carried on by the local leadership and churches united together.</p>
 				<hr class="divider inv lg">
 				<hr class="divider inv lg">
 			</div><!-- end col -->

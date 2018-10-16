@@ -24,7 +24,8 @@ class PassportsController extends Controller
             ->allowedFilters(
                 'given_names', 'surname', 'number',
                 Filter::scope('managed_by'),
-                Filter::exact('user_id')
+                Filter::exact('user_id'),
+                Filter::scope('name')
             )
             ->allowedIncludes('user')
             ->paginate(request()->input('per_page', 10));

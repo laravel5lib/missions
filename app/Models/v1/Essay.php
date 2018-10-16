@@ -53,4 +53,16 @@ class Essay extends Model
     {
         return $this->morphToMany(Upload::class, 'uploadable');
     }
+
+    /**
+     * Scope query by name.
+     * 
+     * @param  Builder $query
+     * @param  String $value
+     * @return Builder
+     */
+    public function scopeName($query, $value)
+    {
+        return $query->where("author_name", "LIKE", "%$value%");
+    }
 }

@@ -26,7 +26,8 @@ class ReferralsController extends Controller
                 Filter::scope('status'),
                 Filter::exact('type'),
                 Filter::exact('user_id'),
-                Filter::scope('managed_by')
+                Filter::scope('managed_by'),
+                Filter::scope('name')
             ])
             ->allowedIncludes(['user'])
             ->paginate(request()->input('per_page', 10));

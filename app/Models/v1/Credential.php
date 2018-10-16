@@ -58,6 +58,18 @@ class Credential extends Model
     {
         return $query->where('type', 'media');
     }
+
+    /**
+     * Scope query by name.
+     * 
+     * @param  Builder $query
+     * @param  String $value
+     * @return Builder
+     */
+    public function scopeName($query, $value)
+    {
+        return $query->where("applicant_name", "LIKE", "%$value%");
+    }
     
     /**
      * Get the credential's uploads.

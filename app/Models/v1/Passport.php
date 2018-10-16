@@ -4,6 +4,7 @@ namespace App\Models\v1;
 
 use App\UuidForKey;
 use App\Traits\Manageable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\InteractsWithReservations;
 
@@ -20,6 +21,19 @@ class Passport extends Model
     protected $dates = [
         'expires_at', 'created_at', 'updated_at'
     ];
+
+    /**
+     * Scope query by name
+     * @param  Illuminate\Database\Eloquent\Builder $query
+     * @param  String $value
+     * @return Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeName($query, $value)
+    {
+        return $query->selectRaw("MATCH(given_names,surname) AGAINST('$value') as score")
+                     ->whereRaw("MATCH(given_names,surname) AGAINST('$value') > 0")
+                     ->orderBy('score', 'desc');
+    }
 
     /**
      * Get the passport's user.

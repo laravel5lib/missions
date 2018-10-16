@@ -21,7 +21,7 @@ class MedicalCredentialsController extends Controller
     public function index(Request $request)
     {
         $credentials = QueryBuilder::for(Credential::medical())
-            ->allowedFilters(['applicant_name', Filter::exact('user_id'), Filter::scope('managed_by')])
+            ->allowedFilters(['applicant_name', Filter::exact('user_id'), Filter::scope('managed_by'), Filter::scope('name')])
             ->allowedIncludes(['user'])
             ->paginate($request->get('per_page', 10));
 

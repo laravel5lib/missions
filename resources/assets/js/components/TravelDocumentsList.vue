@@ -10,6 +10,12 @@
                 </div>
             </div>
         </div>
+        <div class="panel-body" style="display:flex; align-items: center;">
+            <label>Search by Name</label>
+            <div class="col-xs-12 col-md-6">
+                <input class="form-control" placeholder="start typing..." v-model="searchTerms" @keydown="search">
+            </div>
+        </div>
         <div class="table-responsive" v-if="documents.length">
             <table class="table table-striped">
                 <thead>
@@ -68,7 +74,8 @@ export default {
         pagination: {
             total: 0,
             per_page: 25
-        }
+        },
+        searchTerms: null
     }
   },
 
@@ -87,6 +94,10 @@ export default {
     },
 
     methods: {
+        search: _.debounce(function () {
+            this.fetchDocuments({page: 1, per_page: this.pagination.per_page});
+        }, 500),
+
         isArray(value) {
             return _.isArray(value);
         },
@@ -96,6 +107,10 @@ export default {
 
             if (type == 'medical-releases') {
                 params = $.extend(params, {include: 'conditions,allergies'});
+            }
+
+            if (this.searchTerms) {
+                params = $.extend(params, {'filter[name]': this.searchTerms});
             }
 
             this.$http

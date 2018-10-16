@@ -57,4 +57,17 @@ class Visa extends Model
     {
         $this->attributes['number'] = strtoupper($value);
     }
+
+    /**
+     * Scope query by name
+     * @param  Illuminate\Database\Eloquent\Builder $query
+     * @param  String $value
+     * @return Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeName($query, $value)
+    {
+        return $query->selectRaw("MATCH(given_names,surname) AGAINST('$value') as score")
+                     ->whereRaw("MATCH(given_names,surname) AGAINST('$value') > 0")
+                     ->orderBy('score', 'desc');
+    }
 }

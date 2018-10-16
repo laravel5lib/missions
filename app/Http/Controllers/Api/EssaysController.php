@@ -30,7 +30,7 @@ class EssaysController extends Controller
             ->when($request->segment(2) === 'essays', function ($query) {
                 return $query->where('subject', 'Testimony');
             })
-            ->allowedFilters(['author_name', Filter::exact('user_id'), Filter::scope('managed_by'),])
+            ->allowedFilters(['author_name', Filter::exact('user_id'), Filter::scope('managed_by'), Filter::scope('name')])
             ->allowedIncludes(['user'])
             ->paginate($request->get('per_page', 25));
 

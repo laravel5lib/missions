@@ -10,7 +10,16 @@
                 </div>
             </template>
             <template v-else>
-                <div class="panel-heading"><h5>Find an existing {{ docType | underscoreToSpace }}:</h5></div>
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h5>Find an existing {{ docType | underscoreToSpace }}:</h5>
+                        </div>
+                        <div class="col-sm-6">
+                            <input class="form-control" placeholder="search by name" v-model="searchTerms" @keydown="search">
+                        </div>
+                    </div>
+                </div>
                 <div class="table-responsive" v-if="documents.length">
                     <table class="table table-striped">
                         <thead>
@@ -116,7 +125,8 @@ export default {
                 total: 0,
                 per_page: 25
             },
-            fetched: false
+            fetched: false,
+            searchTerms: null
         }
     },
 
@@ -135,6 +145,10 @@ export default {
     },
 
     methods: {
+        search: _.debounce(function () {
+            this.fetchDocuments({page: 1, per_page: this.pagination.per_page});
+        }, 500),
+
         isArray(value) {
             return _.isArray(value);
         },
@@ -197,6 +211,10 @@ export default {
 
             if (this.firstUrlSegment != 'admin') {
                 params = $.extend(params, {'filter[managed_by]': this.$root.user.id});
+            }
+
+            if (this.searchTerms) {
+                params = $.extend(params, {'filter[name]': this.searchTerms});
             }
 
             this.$http

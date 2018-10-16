@@ -28,7 +28,8 @@ class VisasController extends Controller
                 Filter::exact('number'),
                 Filter::exact('country_code'),
                 Filter::exact('user_id'),
-                Filter::scope('managed_by')
+                Filter::scope('managed_by'),
+                Filter::scope('name')
             ])
             ->allowedIncludes(['user'])
             ->paginate(

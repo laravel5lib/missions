@@ -98,4 +98,16 @@ class Referral extends Model
     {
         return $query->whereNotNull('responded_at');
     }
+
+    /**
+     * Scope query by name.
+     * 
+     * @param  Builder $query
+     * @param  String $value
+     * @return Builder
+     */
+    public function scopeName($query, $value)
+    {
+        return $query->where("applicant_name", "LIKE", "%$value%");
+    }
 }

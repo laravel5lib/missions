@@ -46,9 +46,15 @@ export default {
             this.$http
                 .get(this.config.ajax.url)
                 .then(response => {
-                    this.options = _.map(response.data.data, function (item) {
+                    let data = _.map(response.data.data, function (item) {
                         return { value: item[that.config.ajax.value], label: item[that.config.ajax.label] }
                     });
+
+                    if (this.config.staticOptions) {
+                        this.options = _.union(this.config.staticOptions, data);
+                    } else {
+                        this.options = data;
+                    }
                 })
                 .catch(error => {
                     console.log(error);

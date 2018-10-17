@@ -241,6 +241,29 @@
                                 >+ Complete</a>
                             </li>
                         </ul>
+                        <label>Filter By Requirement</label>
+                        <ul class="list-unstyled">
+                            <li>
+                                <a type="button" 
+                                @click="openFilterModal(filterConfiguration.incomplete_requirement)"
+                                >+ Incomplete</a>
+                            </li>
+                            <li>
+                                <a type="button" 
+                                @click="openFilterModal(filterConfiguration.reviewing_requirement)"
+                                >+ Reviewing</a>
+                            </li>
+                            <li>
+                                <a type="button" 
+                                @click="openFilterModal(filterConfiguration.attention_requirement)"
+                                >+ Attention</a>
+                            </li>
+                            <li>
+                                <a type="button" 
+                                @click="openFilterModal(filterConfiguration.complete_requirement)"
+                                >+ Complete</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
@@ -535,6 +558,58 @@ export default {
                         url: `todos?type=reservations&unique=true&per_page=200`, // old api
                         value: 'task',
                         label: 'task'
+                    }
+                },
+                incomplete_requirement: {
+                    component: 'filter-select',
+                    title: 'Incomplete Requirement',
+                    field: 'incomplete_requirement',
+                    staticOptions: [
+                        {value: '*', label: 'Any'}
+                    ],
+                    ajax: {
+                        url: `campaigns/${this.campaignId}/requirements`,
+                        value: 'id',
+                        label: 'name'
+                    }
+                },
+                reviewing_requirement: {
+                    component: 'filter-select',
+                    title: 'Reviewing Requirement',
+                    field: 'reviewing_requirement',
+                    staticOptions: [
+                        {value: '*', label: 'Any'}
+                    ],
+                    ajax: {
+                        url: `campaigns/${this.campaignId}/requirements`,
+                        value: 'id',
+                        label: 'name'
+                    }
+                },
+                attention_requirement: {
+                    component: 'filter-select',
+                    title: 'Attention Requirement',
+                    field: 'attention_requirement',
+                    staticOptions: [
+                        {value: '*', label: 'Any'}
+                    ],
+                    ajax: {
+                        url: `campaigns/${this.campaignId}/requirements`,
+                        value: 'id',
+                        label: 'name'
+                    }
+                },
+                complete_requirement: {
+                    component: 'filter-select',
+                    title: 'Complete Requirement',
+                    field: 'complete_requirement',
+                    staticOptions: [
+                        {value: '*', label: 'All'}
+                    ],
+                    ajax: {
+                        url: `campaigns/${this.campaignId}/requirements`,
+                        value: 'id',
+                        label: 'name'
                     }
                 },
                 trip_tags: {

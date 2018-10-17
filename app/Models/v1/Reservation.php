@@ -825,6 +825,102 @@ class Reservation extends Model
     }
 
     /**
+     * Scope query to reservations having an incomplete requirement.
+     * 
+     * @param  Builder $query         
+     * @param  String $requirementId
+     * @return Builder                
+     */
+    public function scopeIncompleteRequirement($query, $requirementId)
+    {
+        if ($requirementId == '*') {
+            return $query->whereHas('requireables', function ($subQuery) {
+                $subQuery->where(function($q) {
+                    $q->where('requireables.status', '=', 'incomplete')
+                      ->orWhereNull('requireables.status');
+                });
+            });
+        }
+
+        return $query->whereHas('requireables', function ($subQuery) use ($requirementId) {
+            $subQuery->whereId($requirementId)->where(function($q) {
+                $q->where('requireables.status', '=', 'incomplete')
+                  ->orWhereNull('requireables.status');
+            });
+        });
+    }
+
+    /**
+     * Scope query to reservations having a reviewing requirement.
+     * 
+     * @param  Builder $query         
+     * @param  String $requirementId
+     * @return Builder                
+     */
+    public function scopeReviewingRequirement($query, $requirementId)
+    {
+        if ($requirementId == '*') {
+            return $query->whereHas('requireables', function ($subQuery) {
+                $subQuery->where('requireables.status', '=', 'reviewing');
+            });
+        }
+
+        return $query->whereHas('requireables', function ($subQuery) use ($requirementId) {
+            $subQuery->whereId($requirementId)->where('requireables.status', '=', 'reviewing');
+        });
+    }
+
+    /**
+     * Scope query to reservations having an attention requirement.
+     * 
+     * @param  Builder $query         
+     * @param  String $requirementId
+     * @return Builder                
+     */
+    public function scopeAttentionRequirement($query, $requirementId)
+    {
+        if ($requirementId == '*') {
+            return $query->whereHas('requireables', function ($subQuery) {
+                $subQuery->where('requireables.status', '=', 'attention');
+            });
+        }
+
+        return $query->whereHas('requireables', function ($subQuery) use ($requirementId) {
+            $subQuery->whereId($requirementId)->where('requireables.status', '=', 'attention');
+        });
+    }
+
+    /**
+     * Scope query to reservations having an complete requirement.
+     * 
+     * @param  Builder $query         
+     * @param  String $requirementId
+     * @return Builder                
+     */
+    public function scopeCompleteRequirement($query, $requirementId)
+    {
+        if ($requirementId == '*') {
+            return $query->whereHas('requireables', function ($subQuery) {
+                $subQuery->where(function($q) {
+                    $q->where('requireables.status', '<>', 'incomplete')
+                      ->where('requireables.status', '<>', 'reviewing')
+                      ->where('requireables.status', '<>', 'attention')
+                      ->whereNotNull('requireables.status');
+                });
+            })->whereDoesntHave('requireables', function ($subQuery) {
+                $subQuery->where(function($q) {
+                    $q->where('requireables.status', '=', 'incomplete')
+                      ->orWhereNull('requireables.status');
+                });
+            });
+        }
+
+        return $query->whereHas('requireables', function ($subQuery) use ($requirementId) {
+            $subQuery->whereId($requirementId)->where('requireables.status', '=', 'complete');
+        });
+    }
+
+    /**
      * Get the trip rep for the reservation.
      * 
      * @return App\Models\v1\Representative
@@ -1063,6 +1159,10 @@ class Reservation extends Model
                     Filter::scope('companions_count'),
                     Filter::scope('incomplete_task'),
                     Filter::scope('complete_task'),
+                    Filter::scope('incomplete_requirement'),
+                    Filter::scope('reviewing_requirement'),
+                    Filter::scope('attention_requirement'),
+                    Filter::scope('complete_requirement'),
                     Filter::custom('trip_tags', FilterTags::class)
                 ])
                 ->allowedIncludes(['trip.group', 'trip.tags', 'trip.campaign', 'passport', 'requirements', 'companion-reservations'])

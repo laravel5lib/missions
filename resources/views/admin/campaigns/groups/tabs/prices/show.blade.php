@@ -71,7 +71,6 @@
                                 </div>
                             </price-push>
                         </div>
-                        @if($price->cost->type != 'incremental')
                         <div class="col-sm-6">
                             <p class="small text-muted">You can add this price to any existing trips and reservations where it has not been assigned yet.</p>
                             <price-push url="campaign-groups/{{ $group->uuid }}/prices/{{ $price->uuid }}/push" :params="{ with_reservations: true }">
@@ -83,7 +82,6 @@
                                 </div>
                             </price-push>
                         </div>
-                        @endif
                     </div>
                 @endslot
             @endcomponent

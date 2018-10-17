@@ -2,15 +2,16 @@
 
 namespace Tests\Feature\Api\Interests;
 
-use App\Models\v1\Campaign;
+use Tests\TestCase;
 use App\Models\v1\Todo;
 use App\Models\v1\Trip;
-use App\Models\v1\TripInterest;
 use App\Models\v1\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\v1\Campaign;
 use Laravel\Passport\Passport;
-use Tests\TestCase;
+use App\Models\v1\TripInterest;
+use Spatie\Activitylog\Models\Activity;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TripInterestTest extends TestCase
 {
@@ -168,5 +169,35 @@ class TripInterestTest extends TestCase
         $response->assertStatus(204);
 
         $this->assertNotNull($interest->fresh()->deleted_at);
+    }
+
+    /** @test */
+    public function log_status_changes()
+    {
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+
+        $interest = factory(TripInterest::class)->create(['status' => 'undecided']);
+
+        $response = $this->putJson("/api/interests/{$interest->id}", [
+            'trip_id' => $interest->trip_id,
+            'name' => $interest->name,
+            'email' => $interest->email,
+            'phone' => $interest->phone,
+            'status' => 'converted'
+        ]);
+
+        $response->assertOk();
+
+        $record = Activity::where([
+            ['causer_id', '=', $user->id],
+            ['causer_type', '=', 'users'],
+            ['subject_id', '=', $interest->id],
+            ['subject_type', '=', 'trip_interests'],
+            ['properties->attributes->status', '=', 'converted']
+        ])
+        ->first();
+
+        $this->assertNotNull($record);
     }
 }

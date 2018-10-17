@@ -12,7 +12,7 @@ $factory->define(App\Models\v1\TripInterest::class, function (Faker\Generator $f
         'status' => 'undecided',
         'name' => $faker->firstName. ' ' .$faker->lastName,
         'email' => $faker->safeEmail,
-        'phone' => $faker->optional(0.5)->phoneNumber,
+        'phone' => $faker->phoneNumber,
         'communication_preferences' => $faker->randomElements(['email', 'phone', 'text'], 2),
         'created_at' => \Carbon\Carbon::now(),
         'updated_at' => \Carbon\Carbon::now()

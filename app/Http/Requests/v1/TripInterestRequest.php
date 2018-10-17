@@ -29,7 +29,7 @@ class TripInterestRequest extends FormRequest
             'email' => 'required|email',
             'phone' => 'required|string',
             'communication_preferences' => 'nullable|array',
-            'communication_preferences.*' => 'in:email,phone,text',
+            'communication_preferences.*' => 'nullable|in:email,phone,text',
             'status' => 'nullable|string'
         ];
     }

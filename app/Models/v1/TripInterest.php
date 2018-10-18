@@ -8,32 +8,67 @@ use EloquentFilter\Filterable;
 use Spatie\QueryBuilder\Filter;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TripInterest extends Model
 {
-    use UuidForKey, Filterable, SoftDeletes;
+    use UuidForKey, Filterable, SoftDeletes, LogsActivity;
 
+    /**
+     * The attributes that can be mass assigned.
+     * 
+     * @var array
+     */
     protected $fillable = [
         'name', 'email', 'phone', 'communication_preferences', 'trip_id', 'status'
     ];
 
+    /**
+     * Indicates if all fillable attributes should be logged. 
+     * 
+     * @var boolean
+     */
+    protected static $logFillable = true;
+
+    /**
+     * The model events that should be logged.
+     * 
+     * @var array
+     */
+    protected static $recordEvents = ['updated', 'deleted'];
+
+    /**
+     * The attributes cast to native types.
+     * 
+     * @var array
+     */
     protected $casts = [
         'communication_preferences' => 'array'
     ];
 
+    /**
+     * Set the communication preferences attribute.
+     * 
+     * @param array $value
+     */
     public function setCommunicationPreferencesAttribute($value)
     {
         $this->attributes['communication_preferences'] = json_encode($value);
     }
 
+    /**
+     * The trip the interest belongs to.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function trip()
     {
         return $this->belongsTo(Trip::class);
     }
 
     /**
-     * Get all of the reservation's notes
+     * The interest's notes
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
@@ -43,7 +78,7 @@ class TripInterest extends Model
     }
 
     /**
-     * Get all of the reservation's todos
+     * The interest's todos
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
@@ -52,7 +87,11 @@ class TripInterest extends Model
         return $this->morphMany(Todo::class, 'todoable');
     }
 
-
+    /**
+     * Build a query to get interests.
+     * 
+     * @return Illuminate\Database\Eloquent\Builder
+     */
     public static function buildQuery()
     {
         return QueryBuilder::for(static::class)
@@ -70,6 +109,12 @@ class TripInterest extends Model
             ->allowedIncludes(['trip.campaign', 'trip.group', 'trip.tags']);
     }
 
+    /**
+     * Scope query to interests belonging to current trips.
+     * 
+     * @param  Builder $query
+     * @return Builder
+     */
     public function scopeCurrent($query)
     {
         return $query->whereHas('trip', function ($trip) {
@@ -77,6 +122,13 @@ class TripInterest extends Model
         });
     }
 
+    /**
+     * Scope query to interests belonging to the campaign.
+     * 
+     * @param  Builder $query
+     * @param  String $campaignId
+     * @return Builder
+     */
     public function scopeCampaign($query, $campaignId)
     {
         return $query->whereHas('trip', function ($trip) use ($campaignId) {
@@ -84,6 +136,13 @@ class TripInterest extends Model
         });
     }
 
+    /**
+     * Scope query to interests belonging to a specific trip type.
+     * 
+     * @param  Builder $query
+     * @param  String $type
+     * @return Builder
+     */
     public function scopeTripType($query, $type)
     {
         return $query->whereHas('trip', function ($trip) use ($type) {
@@ -91,6 +150,13 @@ class TripInterest extends Model
         });
     }
 
+    /**
+     * Scope query to interests belonging to a specific group.
+     * 
+     * @param  Builder $query
+     * @param  String $groupId
+     * @return Builder
+     */
     public function scopeGroup($query, $groupId)
     {
         return $query->whereHas('trip', function ($trip) use ($groupId) {
@@ -98,12 +164,26 @@ class TripInterest extends Model
         });
     }
 
+    /**
+     * Scope query to interests created between two dates.
+     * 
+     * @param  Builder $query
+     * @param  Array|String $dates
+     * @return Builder
+     */
     public function scopeReceivedBetween($query, ...$dates)
     {
         $query->whereDate('created_at', '>=', $dates[0])
               ->whereDate('created_at', '<=', $dates[1]);
     }
 
+    /**
+     * Scope query to interests with incomplete tasks.
+     * 
+     * @param  Builder $query
+     * @param  String $task
+     * @return Builder
+     */
     public function scopeIncompleteTask($query, $task)
     {
         return $query->whereHas('todos', function ($subQuery) use ($task) {
@@ -111,6 +191,13 @@ class TripInterest extends Model
         });
     }
 
+    /**
+     * Scope query to interests with completed.
+     * 
+     * @param  Builder $query
+     * @param  String $campaignId
+     * @return Builder
+     */
     public function scopeCompleteTask($query, $task)
     {
         return $query->whereHas('todos', function ($subQuery) use ($task) {

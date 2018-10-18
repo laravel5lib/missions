@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Storage;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+// Metrics
+Route::get('metrics/interests/conversions-by-user', 'InterestConversionMetricController@byUser');
+
 // Requirements
 Route::apiResource('{requireableType}/{requireableId}/requirements', 'RequirementsController');
 Route::post('campaigns/{campaign}/requirements/{requirement}/add', 'BulkAddCampaignRequirementController');
@@ -257,10 +261,6 @@ $api->version('v1', [
             $api->get('allergies', function () {
                 return ['data' => \App\Models\v1\MedicalAllergy::available()];
             });
-        });
-
-        $api->group(['prefix' => 'metrics'], function ($api) {
-            $api->get('teams', 'Metrics\TeamsController@index');
         });
 
         $api->group(['prefix' => 'reports'], function ($api) {

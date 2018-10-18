@@ -213,6 +213,7 @@ Vue.component('tag-list', require('./components/TagList.vue'));
 Vue.component('admin-transactions-list', require('./components/AdminTransactionList.vue'));
 Vue.component('user-form', require('./components/UserForm.vue'));
 Vue.component('user-upload', require('./components/UserUpload.vue'));
+Vue.component('conversion-scoreboard', require('./components/ConversionScoreboard.vue'));
 
 /**
  * Utility Components

@@ -5,7 +5,8 @@
                 @filter:removed="removeActiveFilter"
                 :cache-key="`interestList.admin.campaign.${campaignId}`"
     >
-        <div class="panel panel-default" 
+        <div class="panel panel-default"
+             style="border-top: 5px solid #f6323e" 
              slot-scope="{ json:interests, addFilter, removeFilter, filters, sort, changePage, pagination, loading }"
         >
             <div class="panel-heading">
@@ -320,7 +321,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     tr.selected, tr:hover {
         background-color: #fcf8e3 !important;
     }

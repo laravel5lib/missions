@@ -1,18 +1,22 @@
 <?php
 
 use Carbon\Carbon;
-use App\Models\v1\ActivityType;
+use App\Models\v1\User;
+use App\Models\v1\TripInterest;
+use Spatie\Activitylog\Models\Activity;
 
-$factory->define(App\Models\v1\Activity::class, function (Faker\Generator $faker) {
+$factory->define(Activity::class, function (Faker\Generator $faker) {
     return [
-        'id'                => $faker->unique()->uuid,
-        'activity_type_id'  => function () {
-            return factory(ActivityType::class)->create()->id;
+        'description' => $faker->sentence,
+        'subject_type' => 'trip_interests',
+        'subject_id' => function() {
+            return factory(TripInterest::class)->create()->id;
         },
-        'name'              => $faker->sentence(3),
-        'description'       => $faker->paragraph(3),
-        'participant_id'    => $faker->uuid,
-        'participant_type'  => $faker->randomElement(['reservations', 'groups', 'trips', 'campaigns']),
-        'occurred_at'        => Carbon::now()->addMonths(6)
+        'causer_type' => 'users',
+        'causer_id' => function() {
+            return factory(User::class)->create()->id;
+        },
+        'created_at' => $this->faker->dateTimeThisMonth(),
+        'properties' => ['attributes' => ['status' => 'converted']]
     ];
 });

@@ -24,7 +24,8 @@
         "url": "https://vimeo.com/290796923/bdffec855d"
     },
     {
-        "date": "October 17 at 4pm EST"
+        "date": "October 17 at 4pm EST",
+        "mute": true
     },
     {
         "date": "November 14 at 4pm EST"

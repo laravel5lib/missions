@@ -1,0 +1,26 @@
+[
+  {
+    "icon": "/images/coordinators/vid-icon.png",
+    "title": "Instagram Stories Videos",
+    "description": "Short video clips designed for instagram stories.",
+    "url": "https://www.dropbox.com/s/faqs0h8wx69z0hy/IG-stories-dwnlds.zip?dl=1"
+  },
+  {
+    "icon": "/images/coordinators/vid-icon.png",
+    "title": "Social Media Videos",
+    "description": "Small video clips ideal for social media posts.",
+    "url": "https://www.dropbox.com/s/elabjbaw9ildjhp/sm-videos.zip?dl=1"
+  },
+  {
+    "icon": "/images/coordinators/vid-icon.png",
+    "title": "Full Length Video",
+    "description": "A full length version of the video.",
+    "url": "https://www.dropbox.com/s/thfcadkg87tn4lm/Do%20More-Main%20Video.mp4?dl=1"
+  },
+  {
+    "icon": "/images/coordinators/vid-icon.png",
+    "title": "60s Video",
+    "description": "A shorter, 60 second version of the video",
+    "url": "https://www.dropbox.com/s/dm4cmzo927zkjz6/Do%20More-IG60s.mp4?dl=1"
+  }
+]

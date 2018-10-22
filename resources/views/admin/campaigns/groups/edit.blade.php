@@ -45,7 +45,7 @@
         <div class="col-md-8">
             @component('panel')
                 @slot('body')
-                <ajax-form method="put" action="/campaigns/{{ $group->campaign_id }}/groups/{{ $group->group_id }}" :horizontal="true" :initial="{{ json_encode($group->only(['status_id'])) }}">
+                <ajax-form method="put" action="/campaigns/{{ $group->campaign_id }}/groups/{{ $group->group_id }}" :horizontal="true" :initial="{{ json_encode($group->only(['status_id', 'commitment'])) }}">
                     <template slot-scope="{ form }">
                         <input-select name="status" 
                                       :horizontal="true" 
@@ -54,6 +54,14 @@
                         >
                             <label slot="label" class="control-label col-sm-4">Status</label>
                         </input-select>
+                        <input-number 
+                            name="commitment"
+                            :horizontal="true" 
+                            classes="col-sm-8"
+                            v-model="form.commitment"
+                        >
+                            <label slot="label" class="control-label col-sm-4">Commitment</label>
+                        </input-number>
                         <hr class="divider">
                         <div class="from-group text-right">
                             <button type="submit" class="btn btn-primary">Update</button>

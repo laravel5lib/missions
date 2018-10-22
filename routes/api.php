@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
 
 // Metrics
 Route::get('metrics/interests/conversions-by-user', 'InterestConversionMetricController@byUser');
+Route::get('metrics/reservations/percent-of-commitment', 'ReservationMetricController@percentOfCommitment');
 
 // Requirements
 Route::apiResource('{requireableType}/{requireableId}/requirements', 'RequirementsController');

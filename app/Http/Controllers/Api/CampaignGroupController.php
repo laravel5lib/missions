@@ -86,6 +86,7 @@ class CampaignGroupController extends Controller
 
         $campaign->groups()->updateExistingPivot($groupId, [
             'status_id' => $request->input('status_id', $group->pivot->status_id),
+            'commitment' => $request->input('commitment', $group->pivot->commitment),
             'meta' => $request->input('meta', $group->pivot->meta)
         ]);
 

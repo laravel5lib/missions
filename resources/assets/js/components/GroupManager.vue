@@ -120,7 +120,7 @@
             <tr class="active">
                 <th>#</th>
                 <th>Name</th>
-                <th>Reservations</th>
+                <th>Reservations/Commitment</th>
                 <th>Trips</th>
                 <th>Status</th>
             </tr>
@@ -132,7 +132,8 @@
                     <strong><a :href="'/admin/campaign-groups/' + group.group_id">{{ group.name }}</a></strong>
                 </td>
                 <td class="col-sm-1 text-right">
-                    <code>{{ group.reservations }}</code>
+                    <strong><code>{{ group.reservations }}</code></strong>/<code>{{ group.commitment }}</code> 
+                    ({{ percentageOfCommitment(group.reservations, group.commitment) }}%)
                 </td>
                 <td class="col-sm-1 text-right">
                     <code>{{ group.trips }}</code>
@@ -222,6 +223,13 @@ export default {
     },
 
     methods: {
+        percentageOfCommitment(reservations, commitment) {
+
+            if (reservations == 0 || commitment == 0) return 0;
+
+            return Math.round((reservations/commitment)*100);
+
+        },
         updateList(params) {
             this.$refs.groupList.fetch(params);
         },

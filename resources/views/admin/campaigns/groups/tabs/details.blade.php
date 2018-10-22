@@ -33,7 +33,7 @@
         </div>
     @endslot
     @component('list-group', [
-        'data' => array_merge(['Status' => $group->status], ($meta ?: []))
+        'data' => array_merge(['Status' => $group->status, 'Commitment' => $group->commitment], ($meta ?: []))
     ])
     @endcomponent
 @endcomponent

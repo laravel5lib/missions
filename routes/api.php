@@ -49,6 +49,9 @@ Route::get('reservations/{reservationId}/{documentType}', 'ReservationDocumentCo
 Route::post('reservations/{reservationId}/{documentType}', 'ReservationDocumentController@store');
 Route::delete('reservations/{reservationId}/{documentType}/{documentId}', 'ReservationDocumentController@destroy');
 
+// Interests
+Route::apiResource('interests', 'TripInterestsController')->middleware('auth:api');
+
 // Companions
 Route::get('companions', 'CompanionController@index');
 
@@ -122,7 +125,6 @@ $api->version('v1', [
 
     $api->get('campaigns/{campaign}', 'CampaignsController@show');
     $api->get('trips/{trip}', 'TripsController@show');
-    $api->resource('interests', 'TripInterestsController');
     $api->post('contact', 'UtilitiesController@sendContactEmail');
     $api->post('speaker', 'UtilitiesController@sendSpeakerRequestEmail');
     $api->post('sponsor-project', 'UtilitiesController@sendProjectSponsorEmail');

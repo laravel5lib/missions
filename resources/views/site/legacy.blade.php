@@ -15,7 +15,7 @@
 			<div class="col-sm-8 col-sm-offset-2">
                 <h3 class="text-primary">Greetings Legacy Partners,</h3>
 
-				<p>We recently kicked off our new class of students at the Missions.Me College and we wanted to update you with some exciting things happening from one of our team members Cat Keena. Check out this update.</p>
+				<p>We are so excited about what is happening this month at Missions.Me. Please check out this video update from Dominic.</p>
 
 				<hr class="divider inv">
 				<p>Blessings,</p>
@@ -34,7 +34,7 @@
 				<hr class="divider inv">
 				<div class="video-outer">
 					<div class="video-inner">
-						<iframe src="https://player.vimeo.com/video/291020433?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+						<iframe src="https://player.vimeo.com/video/295443958?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 					</div>
 				</div>
 			</div><!-- end col -->

@@ -19,7 +19,7 @@ class CoordinatorScoreboardTest extends TestCase
 
         factory(CampaignGroup::class, 10)->create([
             'campaign_id' => $campaign->id,
-            'commitment' => 10
+            'commitment' => 25
         ]);
 
         factory(CampaignGroup::class, 10)->create([
@@ -33,13 +33,13 @@ class CoordinatorScoreboardTest extends TestCase
                  ->assertJsonStructure([
                     'data' => [
                         [
-                            'id', 'group', 'commitment', 'reservations', 'percentage'
+                            'id', 'group' => ['managers'], 'campaign', 'commitment', 'reservations', 'percentage'
                         ]
                     ]
                  ])
                  ->assertJson([
                     'data' => [
-                        ['commitment' => 10]
+                        ['commitment' => 25]
                     ]
                  ])
                  ->assertJsonMissing([

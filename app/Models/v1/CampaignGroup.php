@@ -2,13 +2,14 @@
 
 namespace App\Models\v1;
 
-use App\Models\v1\Campaign;
+use Ramsey\Uuid\Uuid;
 use App\Models\v1\Group;
 use App\Models\v1\Price;
+use App\Models\v1\Campaign;
 use App\Models\v1\Reservation;
 use App\Traits\HasRequirements;
+use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Relations\Pivot;
-use Ramsey\Uuid\Uuid;
 
 class CampaignGroup extends Pivot
 {
@@ -84,6 +85,44 @@ class CampaignGroup extends Pivot
     public function prices()
     {
         return $this->morphMany(Price::class, 'model', 'model_type', 'model_id', 'uuid');
+    }
+
+    /**
+     * Get the percentages of commitments per campaign for each group.
+     * 
+     * @return Array
+     */
+    public static function getPercentagesOfCommitments($commitment = null, $campaignId = null)
+    {
+        return QueryBuilder::for(Static::class)
+            ->allowedFilters(['commitment', 'campaign_id'])
+            ->when($commitment, function ($query, $commitment) {
+                return $query->whereBetween('commitment', explode(',', $commitment));
+            })
+            ->when($campaignId, function ($query, $campaignId) {
+                return $query->where('campaign_id', $campaignId);
+            })
+            ->with(['organization.trips', 'campaign', 'organization.managers'])
+            ->get()
+            ->map(function ($group) {
+                $reservationCount = $group->reservationsCount();
+
+                $percentage = ($reservationCount == 0 || $group->commitment == 0) 
+                    ? 0 
+                    : round(($reservationCount/$group->commitment) * 100);
+
+                return [
+                    'id' => $group->id,
+                    'group' => $group->organization,
+                    'campaign' => $group->campaign,
+                    'commitment' => $group->commitment,
+                    'reservations' => $reservationCount,
+                    'percentage' => $percentage
+                ];
+            })
+            ->sortByDesc('percentage')
+            ->values()
+            ->all();
     }
 
     /**

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
 use App\Models\v1\Slug;
 use Conner\Tagging\Taggable;
+use App\Models\v1\Reservation;
 use EloquentFilter\Filterable;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\Models\Media;
@@ -191,6 +192,21 @@ class Fundraiser extends Model implements HasMedia
     public function setGoalAmountAttribute($value)
     {
         $this->attributes['goal_amount'] = $value*100; // convert to cents
+    }
+
+    /**
+     * Get the goal amount for the fundraiser.
+     * @param  float $value
+     * @return float
+     */
+    public function getGoalAmountAttribute($value)
+    {
+        // temporary fix
+        if ($this->fund && $this->fund->fundable instanceOf Reservation) {
+            return $this->fund->fundable->getTotalCost();
+        }
+
+        return $value;
     }
 
     /**

@@ -37,7 +37,7 @@
 
         <div class="col-sm-6 col-xs-12">
             <div class="panel panel-default" style="border-style: solid; border-width: 4px 0px 0px; border-color: rgb(246, 50, 62);">
-            <div class="panel-body text-center"><hr class="divider inv"> <i class="fa fa-file-text-o fa-3x"></i> <h6 class="text-uppercase">Travel Requirements</h6> <p class="small hidden-xs">Passports, medical releases, and more.</p> <a href="{{ url('/dashboard/reservations?target=requirements') }}" class="btn btn-sm btn-primary-hollow">Get Started</a> <hr class="divider inv"></div>
+            <div class="panel-body text-center"><hr class="divider inv"> <i class="fa fa-file-text-o fa-3x"></i> <h6 class="text-uppercase">Trip Requirements</h6> <p class="small hidden-xs">Passports, medical releases, and more.</p> <a href="{{ url('/dashboard/reservations?target=requirements') }}" class="btn btn-sm btn-primary-hollow">Get Started</a> <hr class="divider inv"></div>
             </div>
         </div>
 

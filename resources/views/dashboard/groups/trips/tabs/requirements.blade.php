@@ -24,7 +24,7 @@
         window.pageSteps = [
             {
                 id: 'requirements',
-                title: 'Travel Requirements',
+                title: 'Trip Requirements',
                 text: 'Every trip requires certain travel documents and information in order to clear a reservation for travel. These requirements assigned to the trip will be listed here.'
             },
         ];

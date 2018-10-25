@@ -6,7 +6,7 @@
     <div class="panel-body">
         <div class="row">
             <div class="col-xs-12">
-                <div class="alert alert-warning"><i class="fa fa-info-circle"></i> <strong>USE CAUTION!</strong> Transferring a reservation will reset it's travel requirements (custom requirements will not be affected), change pricing (custom prices will not be affected), and remove it from any squads it may already be assigned to. <strong>This action cannot be reversed.</strong></div>
+                <div class="alert alert-warning"><i class="fa fa-info-circle"></i> <strong>USE CAUTION!</strong> Transferring a reservation will reset it's trip requirements (custom requirements will not be affected), change pricing (custom prices will not be affected), and remove it from any squads it may already be assigned to. <strong>This action cannot be reversed.</strong></div>
             </div>
         </div>
         <div class="row">

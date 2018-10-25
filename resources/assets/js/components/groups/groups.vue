@@ -219,7 +219,7 @@
                     <img class="img-responsive" src="/images/groups/groups-slide-3.jpg">
                     <div class="carousel-caption">
                         <h3 class="dash-trailing">Trip Management Made Easy</h3>
-                        <p>See who's coming and track his or her fundraising progress. Monitor or directly assist in completing a missionary's travel requirements - even contact them directly.</p>
+                        <p>See who's coming and track his or her fundraising progress. Monitor or directly assist in completing a missionary's trip requirements - even contact them directly.</p>
                     </div>
                 </div><!-- end item -->
             </div>
@@ -274,7 +274,7 @@
                         </div><!-- end col -->
                         <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
                             <h3 class="dash-trailing">Trip Management Made Easy</h3>
-                            <p>See who's coming and track his or her fundraising progress. Monitor or directly assist in completing a missionary's travel requirements - even contact them directly.</p>
+                            <p>See who's coming and track his or her fundraising progress. Monitor or directly assist in completing a missionary's trip requirements - even contact them directly.</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
                 </div><!-- end content-section -->

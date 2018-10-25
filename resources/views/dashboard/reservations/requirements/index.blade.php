@@ -23,7 +23,7 @@
                             </div>
                         </div>
                         <div class="col-sm-8">
-                            <h4>Travel Requirements</h4>
+                            <h4>Trip Requirements</h4>
                             <p class="text-muted">To make sure you're ready to travel, the following requirements must be completed.</p>
                             <hr class="divider">
                             <p class="small text-muted">

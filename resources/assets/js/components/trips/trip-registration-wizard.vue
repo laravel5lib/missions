@@ -67,7 +67,7 @@
 					{name: 'Traveler Information', view: 'step4', complete:false},
 					{name: 'Rooming Options', view: 'step5', complete:false},
 					{name: 'Financial Agreement', view: 'paymentAgreement', complete:false},
-					{name: 'Travel Requirements', view: 'requirements', complete:false},
+					{name: 'Trip Requirements', view: 'requirements', complete:false},
                     {name: 'Review & Deposit', view: 'payment', complete:false},
                 ],
 				currentStep: null,

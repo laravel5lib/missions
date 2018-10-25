@@ -1,6 +1,6 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h5>Travel Requirements</h5>
+        <h5>Trip Requirements</h5>
     </div>
     <div class="panel-body">
     @foreach($trip->requirements as $req)

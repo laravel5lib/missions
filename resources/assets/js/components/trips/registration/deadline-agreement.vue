@@ -49,7 +49,7 @@
 		name: 'deadline-agreement',
 		data(){
 			return {
-				title: 'Travel Requirements',
+				title: 'Trip Requirements',
 				deadlineAgree: false,
 			}
 		},

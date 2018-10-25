@@ -448,7 +448,7 @@
 							I agree to release this information.
 						</label>
 						<p class="help-block">
-							I herby release all medical information, prescription information, insurance information and physician information completed in this portion of my registration to Missions.Me and Rescue International. I understand that this information will also be shared with my Trip Representative, Project Director and/or my Squad Leader to ensure my safety during the duration of my trip.
+							I hereby release all medical information, prescription information, insurance information and physician information completed in this portion of my registration to Missions.Me and Rescue International. I understand that this information will also be shared with my Trip Representative, Project Director and/or my Squad Leader to ensure my safety during the duration of my trip.
 						</p>
 					</div>
 

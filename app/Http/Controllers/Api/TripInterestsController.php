@@ -18,6 +18,12 @@ use App\Http\Transformers\v1\TripInterestTransformer;
 
 class TripInterestsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:api')->except('store');
+    }
+    
     /**
      * Get all trip interests.
      *

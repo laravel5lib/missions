@@ -51,7 +51,7 @@ Route::post('reservations/{reservationId}/{documentType}', 'ReservationDocumentC
 Route::delete('reservations/{reservationId}/{documentType}/{documentId}', 'ReservationDocumentController@destroy');
 
 // Interests
-Route::apiResource('interests', 'TripInterestsController')->middleware('auth:api');
+Route::apiResource('interests', 'TripInterestsController');
 
 // Companions
 Route::get('companions', 'CompanionController@index');

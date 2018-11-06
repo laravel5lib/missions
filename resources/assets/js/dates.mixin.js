@@ -35,6 +35,22 @@ export default {
         endOfLastMonth() {
             var time = moment().subtract(1, 'month').startOf('month');
             return time.clone().endOf('month').format();
+        },
+        start30Days() {
+            return moment().subtract(30, 'day').startOf('day').format();
+        },
+        start60Days() {
+            return moment().subtract(60, 'day').startOf('day').format();
+        },
+        start90Days() {
+            return moment().subtract(90, 'day').startOf('day').format();
+        },
+        startSixMonths() {
+            var time = moment().endOf('month');
+            return time.clone().subtract(6, 'month').startOf('month').startOf('day').format();
+        },
+        startOfYear() {
+            return moment().startOf('year').format();
         }
     }
 }

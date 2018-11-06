@@ -278,7 +278,12 @@ export default {
                 {value: `${this.startOfYesterday},${this.endOfYesterday}`, label: 'Yesterday'},
                 {value: `${this.startOfWeek},${this.endOfWeek}`, label: 'This Week'},
                 {value: `${this.startOfMonth},${this.endOfMonth}`, label: 'This Month'},
-                {value: `${this.startOfLastMonth},${this.endOfLastMonth}`, label: 'Last Month'}
+                {value: `${this.startOfLastMonth},${this.endOfLastMonth}`, label: 'Last Month'},
+                {value: `${this.start30Days},${this.endOfToday}`, label: 'Last 30 Days'},
+                {value: `${this.start60Days},${this.endOfToday}`, label: 'Last 60 Days'},
+                {value: `${this.start90Days},${this.endOfToday}`, label: 'Last 90 Days'},
+                {value: `${this.startSixMonths},${this.endOfToday}`, label: '6 Months to Date'},
+                {value: `${this.startOfYear},${this.endOfToday}`, label: 'Year to Date'}
             ];
         }
     },
